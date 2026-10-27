@@ -1,0 +1,244 @@
+schema: axiom_oracles.dispositions.v1
+suite: ak-apa-state-supplement
+updated: '2026-07-30'
+entries:
+- id: ak-apa-a-individual-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard
+  case_id: ak-apa-state-supplement-a_individual_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Quantity-definition difference over the same authoritative document
+      (Alaska DPA APA Need and Maximum Payment Standards, 1/1/2026). Axiom's
+      concept is the total APA payment standard for code A1E ($1,356: federal
+      SSI plus state supplement); PolicyEngine's
+      gov/states/ak/dpa/ssp/payment_standard stores only the monthly state
+      supplementation portion ($362). The residual equals the 2026 SSI A
+      Individual payment standard ($994) from the same document. Axiom's own
+      derived a_individual_monthly_state_supplement (1356 - 994 = 362) equals
+      PolicyEngine's value exactly, so both engines agree on the supplement.
+    arithmetic:
+    - expression: 1356 - 362
+      equals: 994.0
+    - expression: 1356 - 994
+      equals: 362.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+    - https://www.ssa.gov/policy/docs/progdesc/ssi_st_asst/2011/ak.pdf
+  expires_on_source_change: true
+  pinned:
+    left: 1356.0
+    right: 362.0
+- id: ak-apa-a-couple-one-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code A2S ($1,515); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($521).
+      The residual equals the 2026 SSI A Individual standard ($994) applied
+      to a couple with one eligible member. Axiom's derived
+      a_couple_one_eligible_monthly_state_supplement (1515 - 994 = 521)
+      equals PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 1515 - 521
+      equals: 994.0
+    - expression: 1515 - 994
+      equals: 521.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1515.0
+    right: 521.0
+- id: ak-apa-a-couple-both-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code A2C ($2,019); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($528).
+      The residual equals the 2026 SSI A Couple Both Eligible standard
+      ($1,491) from the same document. Axiom's derived
+      a_couple_both_eligible_monthly_state_supplement (2019 - 1491 = 528)
+      equals PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 2019 - 528
+      equals: 1491.0
+    - expression: 2019 - 1491
+      equals: 528.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 2019.0
+    right: 528.0
+- id: ak-apa-b-individual-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard
+  case_id: ak-apa-state-supplement-b_individual_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code B1E ($1,031); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($368,
+      the whole-dollar amount published in SSA's state assistance table).
+      The residual ($663) is the 2026 SSI B Individual standard $662.67
+      from the same document plus the $0.33 whole-dollar rounding of the
+      supplement (1031 - 662.67 = 368.33, published/stored as 368). Axiom's
+      derived b_individual_monthly_state_supplement equals 368.33 versus
+      PolicyEngine's 368.
+    arithmetic:
+    - expression: 1031 - 368
+      equals: 663.0
+    - expression: 1031 - 662.67 - 368
+      equals: 0.33
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+    - https://www.ssa.gov/policy/docs/progdesc/ssi_st_asst/2011/ak.pdf
+  expires_on_source_change: true
+  pinned:
+    left: 1031.0
+    right: 368.0
+- id: ak-apa-b-couple-one-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code B2S ($1,127); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($464,
+      whole-dollar). The residual ($663) is the 2026 SSI B Individual
+      standard $662.67 from the same document plus the $0.33 whole-dollar
+      rounding of the supplement (1127 - 662.67 = 464.33, stored as 464).
+    arithmetic:
+    - expression: 1127 - 464
+      equals: 663.0
+    - expression: 1127 - 662.67 - 464
+      equals: 0.33
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1127.0
+    right: 464.0
+- id: ak-apa-b-couple-both-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code B2C ($1,537); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($543).
+      The residual equals the 2026 SSI B Couple Both Eligible standard
+      ($994.00) from the same document. Axiom's derived
+      b_couple_both_eligible_monthly_state_supplement (1537 - 994 = 543)
+      equals PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 1537 - 543
+      equals: 994.0
+    - expression: 1537 - 994
+      equals: 543.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1537.0
+    right: 543.0
+- id: ak-apa-alh-individual-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard
+  case_id: ak-apa-state-supplement-alh_individual_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code H1E, assisted living home
+      ($1,094); PolicyEngine's ak/dpa/ssp/payment_standard stores the state
+      supplement only ($100). The residual equals the 2026 SSI A Individual
+      standard ($994) from the same document. Axiom's derived
+      alh_individual_monthly_state_supplement (1094 - 994 = 100) equals
+      PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 1094 - 100
+      equals: 994.0
+    - expression: 1094 - 994
+      equals: 100.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1094.0
+    right: 100.0
+- id: ak-apa-alh-couple-one-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code H2S, assisted living home couple
+      with one eligible member ($1,094); PolicyEngine's
+      ak/dpa/ssp/payment_standard stores the state supplement only ($100).
+      The residual equals the 2026 SSI A Individual standard ($994) from
+      the same document. Axiom's derived
+      alh_couple_one_eligible_monthly_state_supplement (1094 - 994 = 100)
+      equals PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 1094 - 100
+      equals: 994.0
+    - expression: 1094 - 994
+      equals: 100.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1094.0
+    right: 100.0
+- id: ak-apa-alh-couple-both-eligible-total-vs-supplement
+  concept: us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard
+  case_id: ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Same-document quantity-definition difference. Axiom's concept is the
+      total APA payment standard for code H2C, assisted living home couple
+      both eligible ($1,691); PolicyEngine's ak/dpa/ssp/payment_standard
+      stores the state supplement only ($200). The residual equals the 2026
+      SSI A Couple Both Eligible standard ($1,491) from the same document.
+      Axiom's derived alh_couple_both_eligible_monthly_state_supplement
+      (1691 - 1491 = 200) equals PolicyEngine's value exactly.
+    arithmetic:
+    - expression: 1691 - 200
+      equals: 1491.0
+    - expression: 1691 - 1491
+      equals: 200.0
+    upstream_url: http://dpaweb.hss.state.ak.us/POLICY/PDF/APA-Standards.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-ak-apa-state-supplement.json
+  expires_on_source_change: true
+  pinned:
+    left: 1691.0
+    right: 200.0

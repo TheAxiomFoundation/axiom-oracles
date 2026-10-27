@@ -361,12 +361,18 @@
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
-  "right": "policyengine"
+  "right": "policyengine",
+  "versions": {
+   "axiom_rules_engine": "0.1.0",
+   "policyengine": "4.18.9",
+   "policyengine_core": "3.30.3",
+   "policyengine_us": "1.767.3"
+  }
  },
  "mismatch_concepts": [
   "us:statutes/7/2014/o#snap_eligible",
   "us:statutes/7/2014/u#snap_benefit"
  ],
- "source": "axiom-policyengine-az-snap-ecps-0-2026-07-26.json",
+ "source": "axiom-policyengine-az-snap-ecps-0-2026-07-28.json",
  "total_cases": 1341
 }

@@ -1,0 +1,35 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule_reference.v1",
+  "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+  "rds_path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/timeseries/rate_timeseries.rds",
+  "rds_sha256": "724a0be1dce45d423d5ce599bb56f2ab81cbf78b637ba59a3287738bfc488a35",
+  "window": {
+    "start": "2026-02-15",
+    "end": "2026-08-01"
+  },
+  "legal_date_mode": true,
+  "invocation": "/Library/Frameworks/R.framework/Resources/bin/exec/R --no-echo --no-restore --file=scripts/extract_us_tariff_schedule.R --args /Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert /Users/maxghenis/TheAxiomFoundation/_tariff-yale",
+  "extractor_sha256": "5ad47ab101eb64bc409f7175caa1d03719bc613655729e61944f903f776fe8b4",
+  "bridge_sha256": "4a5a96988c92f51938326cffa16fb5cdb3dd7ce81a56a941f287c8b7a0ffe6f7",
+  "bridge_additions_sha256": "3bceda1c45aa5a358dcaea0ce21814ab2bfd8f3b03fd6d5fadcf9344d2e5b48c",
+  "regime_table_sha256": "1f322eac52a39fee2ca3380021fc3da3e298caf02dbfcc9c0c21692dbe7821c8",
+  "selected_extract_sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826",
+  "class_map_sha256": "2afe78180ffe146d6eaa58b6ded0d2e87bb9f16e9cd262384edb5d2dcac014de",
+  "counts": {
+    "full_interval_cells": 68417040,
+    "full_lines": 20508,
+    "full_countries": 240,
+    "full_revisions": 14,
+    "trajectory_classes": 480580,
+    "representative_interval_cells": 6713128,
+    "guard_interval_cells": 3200176,
+    "evaluated_interval_cells": 9913304,
+    "cap": 12000000,
+    "guard_dropped_for_cap": false,
+    "under_cap": true,
+    "selected_pairs": 709659,
+    "guard_pairs": 229079
+  },
+  "extracted_at": "2026-08-17 04:27:51 UTC",
+  "wall_clock_seconds": 668.522
+}

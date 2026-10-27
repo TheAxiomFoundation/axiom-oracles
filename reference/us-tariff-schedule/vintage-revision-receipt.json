@@ -1,0 +1,362 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule.vintage_revision_receipt.v1",
+  "china_301": {
+    "current_instrument": "HTS Revision 15 U.S. note 20 membership union",
+    "modification_instrument": "USTR four-year-review modifications",
+    "predicate": "not in current note-20 union AND Yale statutory_rate_301 positive AND delta equals the Yale removed-list rate",
+    "census": [
+      {
+        "revision": "2026_rev_10",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_10",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_10",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_10",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_11",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_11",
+        "delta": -0.5,
+        "units": 136,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_11",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_11",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_12",
+        "delta": -1,
+        "units": 35,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_12",
+        "delta": -0.5,
+        "units": 68,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_12",
+        "delta": -0.25,
+        "units": 888,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_12",
+        "delta": -0.1625,
+        "units": 1,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_3",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_3",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_3",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_3",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_4",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_4",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_4",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_4",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_5",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_5",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_5",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_5",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_6",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_6",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_6",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_6",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_7",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_7",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_7",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_7",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "2026_rev_9",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "2026_rev_9",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "2026_rev_9",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "2026_rev_9",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "bnd_2026-02-20",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "bnd_2026-02-20",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "bnd_2026-02-20",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "bnd_2026-02-20",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "bnd_2026-04-01",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "bnd_2026-04-01",
+        "delta": -0.5,
+        "units": 130,
+        "lines": 20
+      },
+      {
+        "revision": "bnd_2026-04-01",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "bnd_2026-04-01",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "bnd_2026-07-22",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "bnd_2026-07-22",
+        "delta": -0.5,
+        "units": 136,
+        "lines": 20
+      },
+      {
+        "revision": "bnd_2026-07-22",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "bnd_2026-07-22",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "bnd_2026-07-24",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "bnd_2026-07-24",
+        "delta": -0.5,
+        "units": 136,
+        "lines": 20
+      },
+      {
+        "revision": "bnd_2026-07-24",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "bnd_2026-07-24",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      },
+      {
+        "revision": "bnd_2026-07-31",
+        "delta": -1,
+        "units": 70,
+        "lines": 11
+      },
+      {
+        "revision": "bnd_2026-07-31",
+        "delta": -0.5,
+        "units": 136,
+        "lines": 20
+      },
+      {
+        "revision": "bnd_2026-07-31",
+        "delta": -0.25,
+        "units": 1776,
+        "lines": 366
+      },
+      {
+        "revision": "bnd_2026-07-31",
+        "delta": -0.1625,
+        "units": 2,
+        "lines": 1
+      }
+    ]
+  },
+  "section_232": {
+    "current_instrument": "HTS Revision 15 U.S. note 19",
+    "predicate": {
+      "hts10": "7616995120",
+      "iso2": "RU",
+      "delta": 2
+    },
+    "intervals": [
+      "2026_rev_3",
+      "bnd_2026-02-20",
+      "2026_rev_4",
+      "bnd_2026-04-01"
+    ],
+    "units": 24,
+    "disposition": "changed-rate vintage, admitted; not a non-metal residue"
+  }
+}

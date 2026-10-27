@@ -1,0 +1,137 @@
+{
+  "compiled_artifact": {
+    "byte_count": 703295,
+    "compile_contract": "compile-composed",
+    "path": "conformance/executable/nz-treasury-incomeexplorer/compiled-program.json",
+    "sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33"
+  },
+  "composition": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/composition.yaml",
+    "sha256": "af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0"
+  },
+  "engine": {
+    "ci_replay_build": "cargo build --locked --release --bin axiom-rules-engine",
+    "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+    "historical_capture_binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
+    "repository": "TheAxiomFoundation/axiom-rules-engine"
+  },
+  "execution_period": "2026-04-01/2027-03-31",
+  "execution_trace": {
+    "evaluation_count": 883,
+    "path": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
+    "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+  },
+  "full_responses": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/full-responses.json",
+    "sha256": "085daf12c203e0d1431234deaf733cf02caed725e3fd609e77f9f9ca803960eb"
+  },
+  "generated_by": "scripts/nz_executable_reproduction.py",
+  "independent_expected": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
+    "sha256": "3dd39c348339d733562cd810e514dc34b42c0c69bf79a2b06393e64458f1d7f7"
+  },
+  "program": "nz/treasury-incomeexplorer-comparison-composition",
+  "programs": [
+    "nz/acc-earners-levy",
+    "nz/accommodation-supplement",
+    "nz/income-tax",
+    "nz/independent-earner-tax-credit",
+    "nz/main-benefits",
+    "nz/winter-energy-payment",
+    "nz/working-for-families"
+  ],
+  "reducer": {
+    "path": "scripts/nz_executable_reducer.py",
+    "sha256": "0e6badefe6ab63340cae5a6bdc74fb7417512595942008555186bdb6f9457623",
+    "source": "TheAxiomFoundation/ops/nz-lane/emtr_reproduction/run.py@bcf631b59968be4907e679b4704f5e029e2188ab"
+  },
+  "request_set": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
+    "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+  },
+  "rulespec": {
+    "repository": "TheAxiomFoundation/rulespec-nz",
+    "sha": "89a7d25dc03a4d045348620283332de10b1047da"
+  },
+  "schema": "axiom_oracles.executable_reproduction.v2",
+  "source_report": {
+    "compiled_artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+    "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  },
+  "summary": {
+    "all_independent_cells_reproduced": true,
+    "all_trace_responses_reproduced": true,
+    "comparison_cell_count": 22,
+    "executable": true,
+    "program_count": 7,
+    "programs": {
+      "nz/acc-earners-levy": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 2,
+        "requested_root_count": 1
+      },
+      "nz/accommodation-supplement": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 4,
+        "requested_root_count": 3
+      },
+      "nz/income-tax": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 3,
+        "requested_root_count": 1
+      },
+      "nz/independent-earner-tax-credit": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 2,
+        "requested_root_count": 1
+      },
+      "nz/main-benefits": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 3,
+        "requested_root_count": 2
+      },
+      "nz/winter-energy-payment": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 2,
+        "executable": true,
+        "request_count": 1,
+        "requested_root_count": 1
+      },
+      "nz/working-for-families": {
+        "all_independent_cells_reproduced": true,
+        "all_trace_responses_reproduced": true,
+        "comparison_cell_count": 10,
+        "executable": true,
+        "request_count": 4,
+        "requested_root_count": 10
+      }
+    },
+    "request_count": 19,
+    "response_count": 19
+  },
+  "transcript": {
+    "path": "conformance/executable/nz-treasury-incomeexplorer/transcript.json",
+    "sha256": "646030d17c500cc86ba16e9669dc46d53b8f60e03f32a8a68a7b35b5ad873a35"
+  },
+  "treasury_snapshot": {
+    "path": "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json",
+    "sha256": "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
+  }
+}

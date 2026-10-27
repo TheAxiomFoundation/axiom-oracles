@@ -1,0 +1,67 @@
+# Federal saver’s credit — Axiom vs PolicyEngine-US, tax year 2026.
+#
+# Axiom boundary: the section 25B composition exposes the statutory credit
+# before section 26's nonrefundable-credit liability limit. It applies Notice
+# 2025-67's 2026 filing-status ceilings using section 25B(b)'s inclusive
+# "not over" grammar, adds sections 911/931/933 exclusions back to AGI, screens
+# each individual for age/student/dependent status, and caps each eligible
+# individual's completed net contributions at $2,000.
+# Code: rulespec-us main@dcbae4344
+# us/policies/income_tax/savers_credit_pipeline.yaml;
+# us/policies/irs/notice-2025-67/savers-credit.yaml.
+# Sources:
+# https://www.irs.gov/irb/2025-49_IRB
+# https://www.law.cornell.edu/uscode/text/26/25B
+#
+# PolicyEngine binding decision: compare `savers_credit_potential`, the
+# TaxUnit sum of separately capped eligible-person amounts before the public
+# `savers_credit` applies its section 26 credit limit. mappings/us.yaml maps
+# the Axiom final directly to that same pre-section-26 legal quantity. The
+# public PE credit and its section 26 limit remain diagnostics, not compared
+# outputs.
+#
+# PE-US 1.767.3 carries the correct Notice dollar values, but Core 3.30.3's
+# scale digitization switches tiers at equality. The 11 exact-ceiling cases
+# therefore remain source-backed PolicyEngine #9151 divergences; the cases one
+# dollar below and above each of the nine principal ceilings prove both
+# neighboring tiers.
+#
+# The section 911 diagnostic is an observed match only because two PE behaviors
+# offset: PE does not add the exclusion to saver-credit AGI, while #9151 moves
+# the exact $24,250 value into the 20-percent tier. It does not establish PE
+# parity for the statutory section 25B(e) add-back.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-savers-grid --summary
+
+name: us-savers-grid
+title: Federal saver’s credit — Axiom vs PolicyEngine
+description: >-
+  Compares the 2026 statutory saver’s credit before section 26 across 34
+  reviewed cases: five filing statuses, all nine principal tier ceilings with
+  B-1 and B+1 probes, per-person contribution caps, a section 911 add-back,
+  and the age/student/dependent screens.
+
+runner:
+  type: federal-tax-liability-grid
+  parameters:
+    policy: savers_credit
+    period: "2026"
+    concept: >-
+      us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+    rulespec_upstream_sha: dcbae4344c522b4ad8004169316266cbc153186f
+    rulespec_upstream_tree: 7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb
+
+artifacts:
+  report_basename: axiom-policyengine-us-savers-grid
+
+dashboard:
+  filename: axiom-policyengine-us-savers-grid.json
+  suite: us-savers-grid

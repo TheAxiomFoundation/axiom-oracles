@@ -38,13 +38,71 @@ from .be_worker import (
     be_article_51_forfait_cases,
     be_employer_ssc_cases,
     be_marital_quotient_cases,
+    be_pensioner_pit_cases,
     be_pit_work_bonus_credit_cases,
+    be_replacement_income_pit_cases,
+    be_self_employment_pit_cases,
     be_worker_disposable_income_list_cases,
     be_worker_pit_cases,
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
-from .dk_child_youth_benefit import dk_child_youth_benefit_cases
+from .et_dispy import et_dispy_cases
+from .et_core import (
+    et_business_mat_cases,
+    et_paye_rate_schedule_cases,
+    et_pension_contributions_cases,
+    et_presumptive_cases,
+    et_vat_cases,
+)
+from .gh_income_tax import (
+    gh_income_tax_rate_schedule_cases,
+    gh_personal_reliefs_cases,
+)
+from .gh_capital_income import gh_capital_income_cases
+from .gh_dispy import gh_dispy_cases
+from .gh_excise_transfers import gh_excise_cases, gh_transfers_cases
+from .gh_presumptive import gh_presumptive_turnover_cases
+from .gh_ssnit import gh_ssnit_contributions_cases
+from .gh_vat_levies import gh_vat_levies_cases
+from .ug_income_tax import ug_paye_rate_schedule_cases
+from .ug_dispy import ug_dispy_cases
+from .zm_consumption import (
+    zm_excise_ad_valorem_cases,
+    zm_vat_cases,
+)
+from .rw_dispy import rw_dispy_cases
+from .rw_core import (
+    rw_cbhi_tiers_cases,
+    rw_contributions_cases,
+    rw_excise_cases,
+    rw_lump_sum_cases,
+    rw_paye_rate_schedule_cases,
+    rw_rental_cases,
+    rw_vat_cases,
+)
+from .zm_dispy import zm_dispy_cases
+from .zm_sct import zm_sct_cases
+from .zm_core import (
+    zm_napsa_contributions_cases,
+    zm_nhima_contributions_cases,
+    zm_paye_rate_schedule_cases,
+    zm_turnover_cases,
+)
+from .ug_final_four import (
+    ug_fuel_excise_cases,
+    ug_lst_cases,
+    ug_scg_cases,
+    ug_vat_cases,
+)
+from .ug_nssf import ug_nssf_contributions_cases
+from .ug_rental_presumptive import ug_presumptive_cases, ug_rental_cases
+from .dk_child_youth_benefit import (
+    dk_child_youth_benefit_2023_cases,
+    dk_child_youth_benefit_cases,
+    dk_child_youth_benefit_couple_cases,
+)
+from .de_kindergeld import de_kindergeld_eligibility_cases
 from .de_worker import de_worker_dual_oracle_cases
 from .nyc_basic import nyc_basic_cases
 from .nyc_synthetic import nyc_synthetic_cases
@@ -84,6 +142,7 @@ from .uk_worker import (
     uk_worker_nic_cases,
     uk_worker_pit_cases,
 )
+from .us_tariff import us_tariff_cases
 
 
 def available_suites() -> tuple[str, ...]:
@@ -96,6 +155,9 @@ def available_suites() -> tuple[str, ...]:
         "be-article-51-forfait",
         "be-work-bonus-credit",
         "be-marital-quotient",
+        "be-pensioner-pit",
+        "be-self-employment-pit",
+        "be-replacement-income-pit",
         "be-worker-tax-income-list",
         "be-worker-disposable-income-list",
         "be-worker-ssc",
@@ -123,7 +185,10 @@ def available_suites() -> tuple[str, ...]:
         "be-unemployment",
         "be-pensioner-contributions",
         "dk-child-youth-benefit",
+        "dk-child-youth-benefit-2023",
+        "dk-child-youth-benefit-couple",
         "de-worker-dual-oracle",
+        "de-kindergeld-eligibility",
         "uk-worker-pit",
         "uk-personal-allowance",
         "uk-worker-nic",
@@ -150,6 +215,47 @@ def available_suites() -> tuple[str, ...]:
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
+        "gh-income-tax-rate-schedule",
+        "gh-personal-reliefs",
+        "gh-ssnit-contributions",
+        "gh-capital-income",
+        "gh-presumptive-turnover",
+        "gh-vat-levies",
+        "gh-excise",
+        "gh-transfers",
+        "gh-dispy",
+        "ug-paye-rate-schedule",
+        "ug-rental",
+        "ug-presumptive",
+        "ug-nssf-contributions",
+        "ug-lst",
+        "ug-scg",
+        "ug-vat",
+        "ug-fuel-excise",
+        "ug-dispy",
+        "zm-paye-rate-schedule",
+        "zm-turnover",
+        "zm-napsa-contributions",
+        "zm-nhima-contributions",
+        "zm-vat",
+        "zm-excise-ad-valorem",
+        "zm-sct",
+        "zm-dispy",
+        "et-paye-rate-schedule",
+        "et-presumptive",
+        "et-business-mat",
+        "et-pension-contributions",
+        "et-vat",
+        "rw-paye-rate-schedule",
+        "rw-lump-sum",
+        "rw-rental",
+        "rw-contributions",
+        "rw-vat",
+        "rw-excise",
+        "rw-cbhi-tiers",
+        "rw-dispy",
+        "et-dispy",
+        "us-tariff",
     )
 
 
@@ -170,6 +276,12 @@ def load_suite(name: str):
         return be_pit_work_bonus_credit_cases()
     if name == "be-marital-quotient":
         return be_marital_quotient_cases()
+    if name == "be-pensioner-pit":
+        return be_pensioner_pit_cases()
+    if name == "be-self-employment-pit":
+        return be_self_employment_pit_cases()
+    if name == "be-replacement-income-pit":
+        return be_replacement_income_pit_cases()
     if name == "be-worker-tax-income-list":
         return be_worker_tax_income_list_cases()
     if name == "be-worker-disposable-income-list":
@@ -224,8 +336,14 @@ def load_suite(name: str):
         return be_pensioner_contributions_cases()
     if name == "dk-child-youth-benefit":
         return dk_child_youth_benefit_cases()
+    if name == "dk-child-youth-benefit-2023":
+        return dk_child_youth_benefit_2023_cases()
+    if name == "dk-child-youth-benefit-couple":
+        return dk_child_youth_benefit_couple_cases()
     if name == "de-worker-dual-oracle":
         return de_worker_dual_oracle_cases()
+    if name == "de-kindergeld-eligibility":
+        return de_kindergeld_eligibility_cases()
     if name == "uk-worker-pit":
         return uk_worker_pit_cases()
     if name == "uk-personal-allowance":
@@ -278,6 +396,88 @@ def load_suite(name: str):
         return uk_income_tax_dividend_cases()
     if name == "uk-income-tax-mixed":
         return uk_income_tax_mixed_cases()
+    if name == "gh-income-tax-rate-schedule":
+        return gh_income_tax_rate_schedule_cases()
+    if name == "gh-personal-reliefs":
+        return gh_personal_reliefs_cases()
+    if name == "gh-ssnit-contributions":
+        return gh_ssnit_contributions_cases()
+    if name == "gh-capital-income":
+        return gh_capital_income_cases()
+    if name == "gh-presumptive-turnover":
+        return gh_presumptive_turnover_cases()
+    if name == "gh-vat-levies":
+        return gh_vat_levies_cases()
+    if name == "gh-excise":
+        return gh_excise_cases()
+    if name == "gh-transfers":
+        return gh_transfers_cases()
+    if name == "gh-dispy":
+        return gh_dispy_cases()
+    if name == "ug-paye-rate-schedule":
+        return ug_paye_rate_schedule_cases()
+    if name == "ug-rental":
+        return ug_rental_cases()
+    if name == "ug-presumptive":
+        return ug_presumptive_cases()
+    if name == "ug-nssf-contributions":
+        return ug_nssf_contributions_cases()
+    if name == "ug-lst":
+        return ug_lst_cases()
+    if name == "ug-scg":
+        return ug_scg_cases()
+    if name == "ug-vat":
+        return ug_vat_cases()
+    if name == "ug-fuel-excise":
+        return ug_fuel_excise_cases()
+    if name == "ug-dispy":
+        return ug_dispy_cases()
+    if name == "zm-paye-rate-schedule":
+        return zm_paye_rate_schedule_cases()
+    if name == "zm-turnover":
+        return zm_turnover_cases()
+    if name == "zm-napsa-contributions":
+        return zm_napsa_contributions_cases()
+    if name == "zm-nhima-contributions":
+        return zm_nhima_contributions_cases()
+    if name == "zm-vat":
+        return zm_vat_cases()
+    if name == "zm-excise-ad-valorem":
+        return zm_excise_ad_valorem_cases()
+    if name == "zm-sct":
+        return zm_sct_cases()
+    if name == "zm-dispy":
+        return zm_dispy_cases()
+    if name == "et-paye-rate-schedule":
+        return et_paye_rate_schedule_cases()
+    if name == "et-presumptive":
+        return et_presumptive_cases()
+    if name == "et-business-mat":
+        return et_business_mat_cases()
+    if name == "et-pension-contributions":
+        return et_pension_contributions_cases()
+    if name == "et-vat":
+        return et_vat_cases()
+    if name == "rw-paye-rate-schedule":
+        return rw_paye_rate_schedule_cases()
+    if name == "rw-lump-sum":
+        return rw_lump_sum_cases()
+    if name == "rw-rental":
+        return rw_rental_cases()
+    if name == "rw-contributions":
+        return rw_contributions_cases()
+    if name == "rw-vat":
+        return rw_vat_cases()
+    if name == "rw-excise":
+        return rw_excise_cases()
+    if name == "rw-cbhi-tiers":
+        return rw_cbhi_tiers_cases()
+    if name == "rw-dispy":
+        return rw_dispy_cases()
+    if name == "et-dispy":
+        return et_dispy_cases()
+    if name == "us-tariff":
+        return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
 
 
@@ -301,19 +501,62 @@ __all__ = [
     "be_local_municipal_pit_cases",
     "be_maternity_leave_cases",
     "be_pensioner_contributions_cases",
+    "be_pensioner_pit_cases",
     "be_pit_work_bonus_credit_cases",
     "be_cadastral_income_indexation_cases",
     "be_property_tax_cases",
     "be_regional_pit_surcharge_cases",
     "be_self_employed_ssc_cases",
+    "be_self_employment_pit_cases",
     "be_special_social_security_contribution_cases",
     "be_social_assistance_cases",
     "be_study_allowance_cases",
     "be_unemployment_cases",
+    "be_replacement_income_pit_cases",
     "be_worker_disposable_income_list_cases",
     "be_worker_pit_cases",
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
+    "gh_income_tax_rate_schedule_cases",
+    "gh_capital_income_cases",
+    "gh_dispy_cases",
+    "et_business_mat_cases",
+    "et_dispy_cases",
+    "et_paye_rate_schedule_cases",
+    "et_pension_contributions_cases",
+    "et_presumptive_cases",
+    "et_vat_cases",
+    "rw_cbhi_tiers_cases",
+    "rw_dispy_cases",
+    "rw_contributions_cases",
+    "rw_excise_cases",
+    "rw_lump_sum_cases",
+    "rw_paye_rate_schedule_cases",
+    "rw_rental_cases",
+    "rw_vat_cases",
+    "gh_excise_cases",
+    "gh_personal_reliefs_cases",
+    "gh_presumptive_turnover_cases",
+    "gh_ssnit_contributions_cases",
+    "gh_transfers_cases",
+    "gh_vat_levies_cases",
+    "ug_dispy_cases",
+    "zm_dispy_cases",
+    "zm_excise_ad_valorem_cases",
+    "zm_napsa_contributions_cases",
+    "zm_nhima_contributions_cases",
+    "zm_paye_rate_schedule_cases",
+    "zm_sct_cases",
+    "zm_turnover_cases",
+    "zm_vat_cases",
+    "ug_fuel_excise_cases",
+    "ug_lst_cases",
+    "ug_nssf_contributions_cases",
+    "ug_scg_cases",
+    "ug_vat_cases",
+    "ug_paye_rate_schedule_cases",
+    "ug_presumptive_cases",
+    "ug_rental_cases",
     "dk_child_youth_benefit_cases",
     "de_worker_dual_oracle_cases",
     "load_suite",
@@ -345,4 +588,5 @@ __all__ = [
     "uk_universal_credit_cases",
     "uk_worker_nic_cases",
     "uk_worker_pit_cases",
+    "us_tariff_cases",
 ]

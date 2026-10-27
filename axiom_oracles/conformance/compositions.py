@@ -12,8 +12,9 @@ population run cannot reuse the identical program without re-deriving it.
 This module makes that composition an explicit, machine-readable artifact.
 :func:`composition_for_suite` derives the same import-set the CLI runner builds
 (:func:`rulespec_imports_for_concepts` is the single shared source both use),
-plus the query entity and the supplied-input surface, straight from the suite
-definition. :mod:`scripts.generate_conformance_compositions` serialises the set
+plus the query entity, flat/record supplied-input surface, relations, and bridge
+targets, straight from the suite definition.
+:mod:`scripts.generate_conformance_compositions` serialises the set
 into ``conformance/compositions/<jur>.yaml`` and a CI ``--check`` fails if the
 committed record drifts from the suites — so the record cannot silently diverge
 from what actually runs.
@@ -21,15 +22,16 @@ from what actually runs.
 The composition for every committed EUROMOD-lane BE suite is a **single**
 top-level RuleSpec module (which transitively imports its own stages); the one
 exception is ``be-worker-ssc``, whose three outputs span two modules
-(``employee_contributions`` + ``work_bonus``). Notably the marital-quotient
-slice is *not* front-chained with the SSC/forfait stages — it runs the lone
-``couple_pit_oracle_pipeline`` module and its residual against EUROMOD ``tin_s``
-is carried by dispositions, not by a wider program (see
-``conformance/README.md`` § "Recorded program compositions").
+(``employee_contributions`` + ``work_bonus``). The marital-quotient suite still
+imports only ``couple_pit_oracle_pipeline``, but now records the related Person
+input rows, spouse-to-TaxUnit relation, and record-targeted bridges that let the
+module run its transitively imported worker stages (see ``conformance/README.md``
+§ "Recorded program compositions").
 """
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Mapping
@@ -39,7 +41,7 @@ import yaml
 from axiom_oracles.bridges.repo_routing import jurisdiction_country
 
 
-COMPOSITIONS_SCHEMA_VERSION = "axiom_oracles.compositions.v1"
+COMPOSITIONS_SCHEMA_VERSION = "axiom_oracles.compositions.v2"
 
 #: Single env var naming one rulespec checkout (or the workspace holding the
 #: ``rulespec-<country>`` checkouts). Distinct from the harness's existing
@@ -52,7 +54,10 @@ AXIOM_RULESPEC_ROOT_ENV = "AXIOM_RULESPEC_ROOT"
 _AXIOM_ENTITY_KEY = "axiom_entity"
 _AXIOM_ENTITY_ID_KEY = "axiom_entity_id"
 _AXIOM_INPUTS_KEY = "axiom_inputs"
+_AXIOM_INPUT_RECORDS_KEY = "axiom_input_records"
+_AXIOM_RELATIONS_KEY = "axiom_relations"
 _INPUT_BRIDGE_KEY = "euromod_to_axiom_input_bridge"
+_BRIDGE_TRANSFORM_KEYS = ("divide_by", "multiply_by", "add")
 
 
 def rulespec_imports_for_concepts(concept_ids: tuple[str, ...]) -> tuple[str, ...]:
@@ -107,11 +112,18 @@ class SuiteComposition:
       case (``TaxUnit`` for the marital-quotient couple, ``Person`` for a
       single worker, ``Household`` / ``Family`` / ``Property`` elsewhere).
     * ``supplied_input_boundaries`` — the ``module#input.name`` refs the suite
-      supplies as case inputs (the program's expected supplied surface).
+      supplies as flat inputs or input records (the program's expected supplied
+      surface).
+    * ``axiom_input_records`` — value-free ``name`` / ``entity`` / ``entity_id``
+      targets from the suite's explicit input records. Values remain in the case
+      definitions because a suite-level composition records structure, not each
+      case's data.
+    * ``axiom_relations`` — normalized relation records (``name`` + ordered
+      ``tuple``) from either metadata's mapping or list representation.
     * ``input_bridge`` — the engine-output → supplied-input map the harness
-      applies on top of the static case inputs (the supplied defaults *beyond*
-      the suite's own ``axiom_inputs``; e.g. EUROMOD ``yem`` overriding the
-      Article-89 professional-income boundary).
+      applies on top of static case inputs. It preserves flat targets, record
+      targets, and the runner's ``divide_by`` / ``multiply_by`` / ``add``
+      transforms.
     """
 
     suite: str
@@ -122,7 +134,9 @@ class SuiteComposition:
     paths: tuple[str, ...]
     outputs: tuple[str, ...]
     supplied_input_boundaries: tuple[str, ...]
-    input_bridge: dict[str, tuple[str, ...]]
+    axiom_input_records: tuple[dict[str, object], ...]
+    axiom_relations: tuple[dict[str, object], ...]
+    input_bridge: dict[str, dict[str, object]]
     policy: str | None = None
 
     def to_row(self) -> dict:
@@ -139,10 +153,18 @@ class SuiteComposition:
         row["outputs"] = list(self.outputs)
         if self.supplied_input_boundaries:
             row["supplied_input_boundaries"] = list(self.supplied_input_boundaries)
+        if self.axiom_input_records:
+            row["axiom_input_records"] = [
+                _mapping_to_row(record) for record in self.axiom_input_records
+            ]
+        if self.axiom_relations:
+            row["axiom_relations"] = [
+                _mapping_to_row(relation) for relation in self.axiom_relations
+            ]
         if self.input_bridge:
             row["input_bridge"] = {
-                engine_var: list(refs)
-                for engine_var, refs in sorted(self.input_bridge.items())
+                engine_var: _bridge_spec_to_row(spec)
+                for engine_var, spec in sorted(self.input_bridge.items())
             }
         return row
 
@@ -150,6 +172,14 @@ class SuiteComposition:
     def from_row(cls, row: Mapping) -> "SuiteComposition":
         program = row.get("program") or {}
         bridge_raw = row.get("input_bridge") or {}
+        input_records = _normalize_input_record_targets(
+            row.get("axiom_input_records") or (),
+            label="composition axiom_input_records",
+        )
+        relations = _normalize_relation_records(
+            row.get("axiom_relations") or (),
+            label="composition axiom_relations",
+        )
         return cls(
             suite=row["suite"],
             policy=row.get("policy"),
@@ -162,9 +192,12 @@ class SuiteComposition:
             supplied_input_boundaries=tuple(
                 row.get("supplied_input_boundaries") or ()
             ),
-            input_bridge={
-                str(k): tuple(v) for k, v in bridge_raw.items()
-            },
+            axiom_input_records=input_records,
+            axiom_relations=relations,
+            input_bridge=_normalize_input_bridge(
+                bridge_raw,
+                label="composition input_bridge",
+            ),
         )
 
     def resolve(self, rulespec_root: str | Path) -> "ResolvedComposition":
@@ -227,14 +260,264 @@ def _single_metadata_value(cases, key: str, suite: str) -> str:
     return next(iter(values))
 
 
+def _stable_json(value: object) -> str:
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+
+
+def _dedupe_sorted_mappings(
+    records: list[dict[str, object]],
+) -> tuple[dict[str, object], ...]:
+    by_key = {_stable_json(record): record for record in records}
+    return tuple(by_key[key] for key in sorted(by_key))
+
+
+def _mapping_to_row(record: Mapping[str, object]) -> dict[str, object]:
+    """Convert internal tuple containers to deterministic YAML-safe lists."""
+
+    row: dict[str, object] = {}
+    for key, value in record.items():
+        if isinstance(value, tuple):
+            row[str(key)] = [
+                _mapping_to_row(item) if isinstance(item, Mapping) else item
+                for item in value
+            ]
+        elif isinstance(value, Mapping):
+            row[str(key)] = _mapping_to_row(value)
+        else:
+            row[str(key)] = value
+    return row
+
+
+def _normalize_input_record_target(
+    raw_record: object,
+    *,
+    label: str,
+) -> dict[str, object]:
+    if not isinstance(raw_record, Mapping):
+        raise ValueError(f"{label} records must be mappings")
+    missing = {"name", "entity", "entity_id"} - set(raw_record)
+    if missing:
+        raise ValueError(f"{label} record is missing {sorted(missing)}")
+    record: dict[str, object] = {
+        "name": str(raw_record["name"]),
+        "entity": str(raw_record["entity"]),
+        "entity_id": str(raw_record["entity_id"]),
+    }
+    if "interval" in raw_record:
+        interval = raw_record["interval"]
+        if not isinstance(interval, Mapping):
+            raise ValueError(f"{label} record interval must be a mapping")
+        record["interval"] = {
+            str(key): value for key, value in sorted(interval.items())
+        }
+    return record
+
+
+def _normalize_input_record_targets(
+    raw_records: object,
+    *,
+    label: str,
+) -> tuple[dict[str, object], ...]:
+    if raw_records is None:
+        return ()
+    if not isinstance(raw_records, list | tuple):
+        raise ValueError(f"{label} must be a list")
+    return _dedupe_sorted_mappings(
+        [
+            _normalize_input_record_target(record, label=label)
+            for record in raw_records
+        ]
+    )
+
+
+def _relation_tuples(value: object) -> list[object]:
+    if isinstance(value, list | tuple):
+        if not value:
+            return []
+        if all(isinstance(item, list | tuple) for item in value):
+            return list(value)
+        return [value]
+    return [[value]]
+
+
+def _normalize_relation_records(
+    raw_relations: object,
+    *,
+    label: str,
+) -> tuple[dict[str, object], ...]:
+    if raw_relations is None:
+        return ()
+    relation_rows: list[object]
+    if isinstance(raw_relations, Mapping):
+        relation_rows = [
+            {"name": name, "tuple": tuple_value}
+            for name, tuples in raw_relations.items()
+            for tuple_value in _relation_tuples(tuples)
+        ]
+    elif isinstance(raw_relations, list | tuple):
+        relation_rows = list(raw_relations)
+    else:
+        raise ValueError(f"{label} must be a list or mapping")
+
+    normalized: list[dict[str, object]] = []
+    for raw_relation in relation_rows:
+        if not isinstance(raw_relation, Mapping):
+            raise ValueError(f"{label} records must be mappings")
+        missing = {"name", "tuple"} - set(raw_relation)
+        if missing:
+            raise ValueError(f"{label} record is missing {sorted(missing)}")
+        tuple_value = raw_relation["tuple"]
+        if not isinstance(tuple_value, list | tuple):
+            raise ValueError(f"{label} record tuple must be a list")
+        normalized.append(
+            {
+                "name": str(raw_relation["name"]),
+                "tuple": tuple(str(value) for value in tuple_value),
+            }
+        )
+    return _dedupe_sorted_mappings(normalized)
+
+
+def _normalize_bridge_inputs(raw_inputs: object, *, label: str) -> tuple[str, ...]:
+    if raw_inputs is None:
+        return ()
+    if isinstance(raw_inputs, str):
+        return (raw_inputs,)
+    if not isinstance(raw_inputs, list | tuple):
+        raise ValueError(f"{label} inputs must be a string or list")
+    return tuple(sorted({str(input_name) for input_name in raw_inputs}))
+
+
+def _normalize_bridge_spec(raw_spec: object, *, label: str) -> dict[str, object]:
+    if isinstance(raw_spec, str | list | tuple):
+        inputs = _normalize_bridge_inputs(raw_spec, label=label)
+        if not inputs:
+            raise ValueError(f"{label} must target at least one input or record")
+        return {"inputs": inputs}
+    if not isinstance(raw_spec, Mapping):
+        raise ValueError(f"{label} must be a string, list, or mapping")
+
+    allowed = {
+        "input",
+        "inputs",
+        "input_records",
+        "records",
+        *_BRIDGE_TRANSFORM_KEYS,
+    }
+    unknown = set(raw_spec) - allowed
+    if unknown:
+        raise ValueError(f"{label} has unknown keys {sorted(unknown)}")
+    if "input" in raw_spec and "inputs" in raw_spec:
+        raise ValueError(f"{label} cannot set both input and inputs")
+    if "input_records" in raw_spec and "records" in raw_spec:
+        raise ValueError(f"{label} cannot set both input_records and records")
+
+    inputs = _normalize_bridge_inputs(
+        raw_spec.get("inputs", raw_spec.get("input")),
+        label=label,
+    )
+    raw_records = raw_spec.get("records", raw_spec.get("input_records"))
+    records = _normalize_input_record_targets(raw_records, label=f"{label} records")
+    if not inputs and not records:
+        raise ValueError(f"{label} must target at least one input or record")
+
+    spec: dict[str, object] = {}
+    if inputs:
+        spec["inputs"] = inputs
+    if records:
+        spec["records"] = records
+    for key in _BRIDGE_TRANSFORM_KEYS:
+        if key in raw_spec:
+            spec[key] = raw_spec[key]
+    return spec
+
+
+def _normalize_input_bridge(
+    raw_bridge: object,
+    *,
+    label: str,
+) -> dict[str, dict[str, object]]:
+    if raw_bridge is None:
+        return {}
+    if not isinstance(raw_bridge, Mapping):
+        raise ValueError(f"{label} must be a mapping")
+    return {
+        str(engine_var): _normalize_bridge_spec(
+            raw_spec,
+            label=f"{label}[{engine_var!r}]",
+        )
+        for engine_var, raw_spec in sorted(raw_bridge.items(), key=lambda item: str(item[0]))
+    }
+
+
+def _merge_bridge_spec(
+    current: dict[str, object],
+    incoming: dict[str, object],
+    *,
+    label: str,
+) -> dict[str, object]:
+    current_transforms = {
+        key: current[key] for key in _BRIDGE_TRANSFORM_KEYS if key in current
+    }
+    incoming_transforms = {
+        key: incoming[key] for key in _BRIDGE_TRANSFORM_KEYS if key in incoming
+    }
+    if current_transforms != incoming_transforms:
+        raise ValueError(
+            f"{label} mixes incompatible bridge transforms across cases: "
+            f"{current_transforms!r} != {incoming_transforms!r}"
+        )
+
+    merged: dict[str, object] = {}
+    inputs = {
+        *current.get("inputs", ()),
+        *incoming.get("inputs", ()),
+    }
+    if inputs:
+        merged["inputs"] = tuple(sorted(str(value) for value in inputs))
+    record_values = [
+        *current.get("records", ()),
+        *incoming.get("records", ()),
+    ]
+    if record_values:
+        merged["records"] = _dedupe_sorted_mappings(
+            [dict(record) for record in record_values]
+        )
+    merged.update(current_transforms)
+    return merged
+
+
+def _bridge_spec_to_row(spec: Mapping[str, object]) -> object:
+    """Use the old list shorthand only for an untransformed flat bridge."""
+
+    if set(spec) == {"inputs"}:
+        return list(spec["inputs"])
+    row: dict[str, object] = {}
+    if spec.get("inputs"):
+        row["inputs"] = list(spec["inputs"])
+    if spec.get("records"):
+        row["records"] = [
+            _mapping_to_row(record) for record in spec["records"]
+        ]
+    for key in _BRIDGE_TRANSFORM_KEYS:
+        if key in spec:
+            row[key] = spec[key]
+    return row
+
+
 def composition_for_suite(suite: str) -> SuiteComposition:
     """Derive the runnable composition a suite's cases request.
 
     Loads the suite's cases (pure data — no engine) and reads off the same
     facts the CLI runner uses: the output concepts, the import-set
     (:func:`rulespec_imports_for_concepts`), the pinned query entity, the
-    supplied-input surface, and the engine→input bridge. Import-only; safe to
-    call in tests and generators.
+    flat and record-targeted supplied-input surface, relations, and the
+    engine→input bridge. Import-only; safe to call in tests and generators.
     """
 
     from axiom_oracles.suites import load_suite
@@ -257,12 +540,59 @@ def composition_for_suite(suite: str) -> SuiteComposition:
         )
 
     supplied: set[str] = set()
-    bridge: dict[str, set[str]] = {}
+    input_records: list[dict[str, object]] = []
+    relations: list[dict[str, object]] = []
+    bridge: dict[str, dict[str, object]] = {}
     for case in cases:
-        for name in (case.metadata.get(_AXIOM_INPUTS_KEY) or {}):
+        raw_inputs = case.metadata.get(_AXIOM_INPUTS_KEY) or {}
+        if not isinstance(raw_inputs, Mapping):
+            raise ValueError(
+                f"suite {suite!r} case {case.case_id!r} metadata "
+                f"{_AXIOM_INPUTS_KEY!r} must be a mapping"
+            )
+        for name in raw_inputs:
             supplied.add(str(name))
-        for engine_var, refs in (case.metadata.get(_INPUT_BRIDGE_KEY) or {}).items():
-            bridge.setdefault(str(engine_var), set()).update(str(r) for r in refs)
+
+        case_records = _normalize_input_record_targets(
+            case.metadata.get(_AXIOM_INPUT_RECORDS_KEY) or (),
+            label=(
+                f"suite {suite!r} case {case.case_id!r} "
+                f"metadata[{_AXIOM_INPUT_RECORDS_KEY!r}]"
+            ),
+        )
+        input_records.extend(case_records)
+        supplied.update(str(record["name"]) for record in case_records)
+
+        case_relations = _normalize_relation_records(
+            case.metadata.get(_AXIOM_RELATIONS_KEY) or (),
+            label=(
+                f"suite {suite!r} case {case.case_id!r} "
+                f"metadata[{_AXIOM_RELATIONS_KEY!r}]"
+            ),
+        )
+        relations.extend(case_relations)
+
+        case_bridge = _normalize_input_bridge(
+            case.metadata.get(_INPUT_BRIDGE_KEY) or {},
+            label=(
+                f"suite {suite!r} case {case.case_id!r} "
+                f"metadata[{_INPUT_BRIDGE_KEY!r}]"
+            ),
+        )
+        for engine_var, spec in case_bridge.items():
+            if engine_var in bridge:
+                bridge[engine_var] = _merge_bridge_spec(
+                    bridge[engine_var],
+                    spec,
+                    label=f"suite {suite!r} bridge {engine_var!r}",
+                )
+            else:
+                bridge[engine_var] = spec
+            supplied.update(str(name) for name in spec.get("inputs", ()))
+            supplied.update(
+                str(record["name"])
+                for record in spec.get("records", ())
+            )
 
     return SuiteComposition(
         suite=suite,
@@ -273,7 +603,9 @@ def composition_for_suite(suite: str) -> SuiteComposition:
         paths=tuple(repo_relative_program_path(ref) for ref in imports),
         outputs=tuple(outputs),
         supplied_input_boundaries=tuple(sorted(supplied)),
-        input_bridge={var: tuple(sorted(refs)) for var, refs in bridge.items()},
+        axiom_input_records=_dedupe_sorted_mappings(input_records),
+        axiom_relations=_dedupe_sorted_mappings(relations),
+        input_bridge=bridge,
     )
 
 
@@ -345,8 +677,8 @@ _HEADER = (
     "# The runnable Axiom program behind each conformance-covered suite: the\n"
     "# RuleSpec import-set the harness composes (identical to what\n"
     "# axiom_oracles.cli builds when --axiom-program is omitted), its\n"
-    "# repo-relative files, the query entity, the supplied-input surface, and\n"
-    "# the engine->input bridge. Regenerate with\n"
+    "# repo-relative files, query entity, supplied flat/record inputs,\n"
+    "# relations, and flat/record-target engine bridges. Regenerate with\n"
     "# `uv run scripts/generate_conformance_compositions.py <jur>`; CI fails if\n"
     "# this drifts from the suites (scripts/generate_conformance_compositions.py --check).\n"
 )

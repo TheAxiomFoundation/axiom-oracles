@@ -5,11 +5,22 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .comparator import HouseholdComparison, VariableComparison
+from .comparator import (
+    HouseholdComparison,
+    VariableComparison,
+    require_same_ids,
+    require_unique_ids,
+)
 from .mappings import ProgramMapping
+from ..conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
+from ..bridges.relation_binding import (
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 
 
 COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2"
@@ -90,6 +101,9 @@ class ComparisonReportAccumulator:
         self.locales = set(locales)
         self.scope = scope
         self.mappings = list(mappings)
+        require_unique_ids(
+            [mapping.concept_id for mapping in self.mappings], "mapping concepts"
+        )
         self._mappings_by_id = {
             mapping.concept_id: mapping for mapping in self.mappings
         }
@@ -107,10 +121,17 @@ class ComparisonReportAccumulator:
         self._match_weight = 0.0
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
+        self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
         self._right_engine: str | None = None
+        self._seen_case_ids: set[int | str] = set()
+        self._relation_binding_diagnostics: dict = {}
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -121,11 +142,65 @@ class ComparisonReportAccumulator:
         cases: list[Case],
         comparisons: list[HouseholdComparison],
     ) -> None:
+        # Validate before mutating counters or appending rows: a partial batch
+        # must never replace the submitted-case denominator with its survivors.
+        case_ids = [case.case_id for case in cases]
+        comparison_ids = [item.household_id for item in comparisons]
+        require_unique_ids(case_ids, "submitted case IDs")
+        require_unique_ids(comparison_ids, "comparison household IDs")
+        require_same_ids(case_ids, comparison_ids, "comparison household IDs")
+        repeated = self._seen_case_ids.intersection(case_ids)
+        if repeated:
+            raise ValueError(
+                f"Case IDs repeated across batches: {sorted(repeated, key=repr)[:10]!r}"
+            )
         cases_by_id = {case.case_id: case for case in cases}
+        engine_pair = (
+            (self._left_engine, self._right_engine)
+            if self._left_engine is not None
+            else _engine_pair(comparisons)
+        )
+        for item in comparisons:
+            if (item.left_engine, item.right_engine) != engine_pair:
+                raise ValueError("Comparison engine pair changed within the report")
+            if not item.comparisons:
+                raise ValueError(
+                    f"No output comparisons for submitted case {item.household_id!r}"
+                )
+            actual_outputs = [value.variable for value in item.comparisons]
+            require_unique_ids(actual_outputs, "compared output concepts")
+            case = cases_by_id[item.household_id]
+            available_outputs = [
+                mapping.concept_id
+                for mapping in self.mappings
+                if mapping.target_for_engine(item.left_engine)
+                and mapping.target_for_engine(item.right_engine)
+            ]
+            expected_outputs = list(case.outputs) if case.outputs else available_outputs
+            unsupported = set(expected_outputs) - set(available_outputs)
+            if unsupported:
+                raise ValueError(
+                    f"Unmapped requested outputs for case {item.household_id!r}: "
+                    f"{sorted(unsupported)!r}"
+                )
+            require_unique_ids(expected_outputs, "requested output concepts")
+            require_same_ids(
+                expected_outputs,
+                actual_outputs,
+                f"output concepts for case {item.household_id!r}",
+            )
+
+        self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
 
-        self._case_count += len(comparisons)
+        self._case_count += len(cases)
+        for item in comparisons:
+            for diagnostics in item.relation_binding_diagnostics.values():
+                merge_relation_binding_diagnostics(
+                    self._relation_binding_diagnostics,
+                    public_relation_binding_diagnostics(diagnostics),
+                )
         self._match_count += sum(item.match_count for item in comparisons)
         self._mismatch_count += sum(item.mismatch_count for item in comparisons)
 
@@ -143,6 +218,22 @@ class ComparisonReportAccumulator:
                     comparison,
                     weight,
                 )
+                for engine, values in (
+                    (item.left_engine, comparison.left_output_values),
+                    (item.right_engine, comparison.right_output_values),
+                ):
+                    rows = [dict(case_id=item.household_id, engine=engine,
+                                 concept=comparison.variable, variable=variable, value=value)
+                            for variable, value in values]
+                    self._output_rows.extend(rows)
+                    evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
+                                "errors": list(item.left_errors) + list(item.right_errors)}
+                    for row in rows:
+                        if observed_output_value(
+                            evidence, case_id=item.household_id, engine=engine,
+                            concept=comparison.variable, output=row["variable"], value=row["value"],
+                        ):
+                            self._output_counts[(comparison.variable, engine, row["variable"])] += 1
 
         self._mismatch_rows.extend(
             _mismatch_rows(comparisons, cases_by_id, self._mappings_by_id)
@@ -158,7 +249,10 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
+            **({"provenance": {
+                "relation_binding_diagnostics": self._relation_binding_diagnostics,
+            }} if self._relation_binding_diagnostics.get("count") else {}),
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -186,15 +280,48 @@ class ComparisonReportAccumulator:
                     "scenario",
                 ),
                 "error_count": len(self._error_rows),
-                "errors_by_engine": _count_rows(self._error_rows, "engine"),
+                "errors_by_engine": _count_object(self._error_rows, "engine"),
             },
             "aggregates": _aggregate_rows_from_buckets(
                 self._aggregate_buckets,
                 self.mappings,
             ),
+            "output_bindings": {
+                mapping.concept_id: {
+                    engine: mapping.target_for_engine(engine)
+                    for engine in (self._left_engine, self._right_engine) if engine
+                }
+                for mapping in self.mappings
+            },
+            "observed_outputs": list(self._output_rows),
+            "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
+        }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        return report
+
+    def _attestation(self) -> dict:
+        """Stamp what this run actually executed (axiom-oracles#355).
+
+        The conformance scoreboard reads this block to decide whether a report
+        can cover an in-scope policy. Counts come from the same accumulators the
+        summary is built from — a stamp that disagrees with the report body is
+        rejected — and ``outputs`` names, per compared concept, the ENGINE
+        VARIABLE each side was read from, so a covered policy's registered
+        outputs can be tied to comparisons that really happened rather than to
+        the suite's name.
+        """
+        return {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": self._case_count,
+            "comparison_count": self._comparison_count,
+            "error_count": len(self._error_rows),
+            "engines": {"left": self._left_engine, "right": self._right_engine},
+            "outputs": _attested_output_rows(self._output_counts),
         }
 
     def write_json(self, path: Path) -> None:
@@ -409,6 +536,15 @@ def _case_report_metadata(
         for key, value in metadata.items()
         if include_inputs or key not in stripped
     }
+    relations = compact.get("axiom_relations")
+    if isinstance(relations, (list, tuple)):
+        # Roles guide tuple construction; public evidence keeps the tuple
+        # and all other relation fields without changing producer metadata.
+        compact["axiom_relations"] = [
+            {key: value for key, value in record.items() if key != "roles"}
+            if isinstance(record, dict) else record
+            for record in relations
+        ]
     for key in stripped:
         value = metadata.get(key)
         if isinstance(value, (list, tuple, dict)):
@@ -515,6 +651,27 @@ def _update_aggregate_bucket(
         bucket["right_weighted_sum"] += _to_number(comparison.right_value) * weight
     if comparison.left_value is None and comparison.right_value is None:
         bucket["missing_both_count"] += 1
+
+
+def _attested_output_rows(
+    counts: Counter[tuple[str, str, str]],
+) -> list[dict]:
+    """Per-concept, per-engine evidence of which variables the run compared.
+
+    Counts include only targets with a nonmissing value in each engine result.
+    A missing list component makes its mapped value ``None``; other nonmissing
+    components remain evidence of the variables the engine returned.
+    """
+    return [
+        {
+            "concept": concept,
+            "engine": engine,
+            "variable": variable,
+            "comparisons": count,
+        }
+        for (concept, engine, variable), count in sorted(counts.items())
+        if count > 0
+    ]
 
 
 def _aggregate_rows_from_buckets(
@@ -717,6 +874,15 @@ def _count_rows(rows: list[dict], key: str) -> list[dict]:
             key=lambda item: (-item[1], item[0] or ""),
         )
     ]
+
+
+def _count_object(rows: list[dict], key: str) -> dict[str, int]:
+    """Return certificate-safe named counters instead of display rows."""
+
+    counts = Counter(
+        str(row[key]) for row in rows if row.get(key) is not None
+    )
+    return dict(sorted(counts.items()))
 
 
 def _to_number(value: Value) -> float:

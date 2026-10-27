@@ -1,0 +1,835 @@
+"""Full-evidence mode and batch failure isolation in the Axiom runner.
+
+The fixture program has the shape of 26 USC 21: a credit that reads its
+creditable expenses only when the claim is allowed, and creditable expenses
+whose requirements input is read only on that branch. Before the fix, full
+evidence queried the compared outputs' whole dependency closure, which forced
+creditable expenses for every unit whose claim was disallowed (a missing
+input), and any one case's engine error failed every case in its batch. A
+Case-surface Axiom-vs-PolicyEngine tax run therefore errored on every tax
+unit while the same concepts computed against TAXSIM, whose full-population
+run is too large to switch full evidence on.
+
+Invariants (property-tested over random batches below):
+
+- Evidence invariance: switching full evidence on never changes any
+  compared value or any error.
+- Batch independence: a case's result does not depend on its batch-mates,
+  its position in the batch or the batch size.
+- Error attribution: exactly the cases whose taken branch lacks an input
+  error, and their messages carry no ``case-<i>::`` batch namespace.
+- No forcing: every query asks only for the compared outputs; evidence
+  intermediates are exactly the rules the engine evaluated on the queried
+  entity.
+- Bounded isolation: a batch whose k failing cases each isolate costs at
+  most 3k + 1 engine runs (plus one per hint a confirming run does not bear
+  out); an error naming no case fails its batch in one.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import subprocess
+from copy import deepcopy
+from pathlib import Path
+
+import pytest
+from hypothesis import example, given, settings
+from hypothesis import strategies as st
+
+from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+from axiom_oracles.core.case import Case
+
+
+PROPERTY_SETTINGS = settings(max_examples=200, deadline=None, derandomize=True)
+OUTPUT = "credit"
+ABSENT = "absent"
+
+PROGRAM = """\
+format: rulespec/v1
+module:
+  kind: composition
+  summary: Guarded-branch fixture for full-evidence runner tests.
+rules:
+  - name: claim_allowed
+    kind: derived
+    entity: TaxUnit
+    dtype: Judgment
+    period: Year
+    versions:
+      - effective_from: '2026-01-01'
+        formula: claim_requirements_met
+  - name: creditable_expenses
+    kind: derived
+    entity: TaxUnit
+    dtype: Money
+    period: Year
+    unit: USD
+    versions:
+      - effective_from: '2026-01-01'
+        formula: |-
+          if expense_requirements_satisfied:
+              expenses_paid
+          else:
+              0
+  - name: credit
+    kind: derived
+    entity: TaxUnit
+    dtype: Money
+    period: Year
+    unit: USD
+    versions:
+      - effective_from: '2026-01-01'
+        formula: |-
+          if claim_allowed:
+              creditable_expenses * 0.2
+          else:
+              0
+"""
+
+
+@pytest.fixture(autouse=True)
+def _isolated_rulespec_roots(monkeypatch, tmp_path):
+    monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "no-roots"))
+
+
+def _case(
+    case_id: str,
+    claim: bool,
+    satisfied: bool | str,
+    expenses: int,
+    *,
+    entity_id: str = "tax_unit",
+) -> Case:
+    inputs: dict[str, object] = {
+        "claim_requirements_met": claim,
+        "expenses_paid": expenses,
+    }
+    if satisfied != ABSENT:
+        inputs["expense_requirements_satisfied"] = satisfied
+    return Case(
+        case_id=case_id,
+        period="2026",
+        metadata={
+            "axiom_entity_id": entity_id,
+            "axiom_input_records": [
+                {
+                    "name": name,
+                    "entity": "TaxUnit",
+                    "entity_id": entity_id,
+                    "value": value,
+                }
+                for name, value in inputs.items()
+            ],
+        },
+    )
+
+
+def _expected(claim: bool, satisfied: bool | str, expenses: int):
+    """Oracle: (credit, evaluated intermediates) or None when the case errors."""
+
+    if not claim:
+        return 0.0, {"claim_allowed": False}
+    if satisfied == ABSENT:
+        return None
+    creditable = expenses if satisfied else 0
+    return creditable * 0.2, {"claim_allowed": True, "creditable_expenses": creditable}
+
+
+def _scalar(value):
+    if isinstance(value, bool):
+        return {"kind": "judgment", "outcome": "holds" if value else "not_holds"}
+    return {"kind": "scalar", "value": {"kind": "decimal", "value": str(value)}}
+
+
+class _GuardedEngine:
+    """``run-compiled`` for PROGRAM: queries run in order, each derived rule
+    is evaluated lazily and cached per entity, the trace lists what was
+    evaluated for the query's entity, and the first error exits non-zero.
+
+    Like newer engines, the trace also lists an instance evaluated on a
+    related entity under ``<rule>@entity:<hex of that entity's id>``; the id
+    carries the batch namespace, so the key differs with batch position.
+    """
+
+    def __init__(self, *, global_error: str | None = None) -> None:
+        self.requests: list[dict] = []
+        self.global_error = global_error
+
+    def __call__(self, args, **kwargs):
+        request = json.loads(kwargs["input"])
+        self.requests.append(request)
+        if self.global_error is not None:
+            return subprocess.CompletedProcess(
+                args, 1, stdout="", stderr=self.global_error
+            )
+        inputs = {
+            (record["entity_id"], record["name"]): record["value"]["value"]
+            for record in request["dataset"]["inputs"]
+        }
+        results = []
+        for query in request["queries"]:
+            entity_id = query["entity_id"]
+            cache: dict[str, object] = {}
+
+            def read(name: str, entity_id: str = entity_id):
+                if (entity_id, name) not in inputs:
+                    raise LookupError(
+                        f"missing input `{name}` for entity `{entity_id}` "
+                        "over 2026-01-01..2026-12-31"
+                    )
+                return inputs[(entity_id, name)]
+
+            def evaluate(name: str, cache: dict = cache, read=read):
+                if name not in cache:
+                    if name == "claim_allowed":
+                        cache[name] = bool(read("claim_requirements_met"))
+                    elif name == "creditable_expenses":
+                        cache[name] = (
+                            read("expenses_paid")
+                            if read("expense_requirements_satisfied")
+                            else 0
+                        )
+                    elif name == "credit":
+                        cache[name] = (
+                            evaluate("creditable_expenses") * 0.2
+                            if evaluate("claim_allowed")
+                            else 0.0
+                        )
+                    else:
+                        raise LookupError(f"unknown derived output `{name}`")
+                return cache[name]
+
+            try:
+                outputs = {name: _scalar(evaluate(name)) for name in query["outputs"]}
+            except LookupError as error:
+                return subprocess.CompletedProcess(
+                    args, 1, stdout="", stderr=str(error)
+                )
+            related = f"{entity_id}/member".encode().hex()
+            results.append(
+                {
+                    "entity_id": entity_id,
+                    "outputs": outputs,
+                    "trace": {
+                        **{name: _scalar(value) for name, value in cache.items()},
+                        f"member_amount@entity:{related}": _scalar(1),
+                    },
+                }
+            )
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {"metadata": {"actual_mode": request["mode"]}, "results": results}
+            ),
+            stderr="",
+        )
+
+
+def _input(name: str) -> dict:
+    return {"kind": "input", "name": name}
+
+
+def _derived(name: str) -> dict:
+    return {"kind": "derived", "name": name}
+
+
+# PROGRAM's dependency structure, as the engine compiles it: a closure walk
+# from ``credit`` reaches ``creditable_expenses`` through the claim branch.
+DERIVED = [
+    {
+        "name": "claim_allowed",
+        "entity": "TaxUnit",
+        "expr": _input("claim_requirements_met"),
+    },
+    {
+        "name": "creditable_expenses",
+        "entity": "TaxUnit",
+        "expr": {
+            "kind": "if",
+            "condition": _input("expense_requirements_satisfied"),
+            "then_expr": _input("expenses_paid"),
+            "else_expr": {"kind": "literal", "value": 0},
+        },
+    },
+    {
+        "name": "credit",
+        "entity": "TaxUnit",
+        "expr": {
+            "kind": "if",
+            "condition": _derived("claim_allowed"),
+            "then_expr": {
+                "kind": "mul",
+                "left": _derived("creditable_expenses"),
+                "right": {"kind": "literal", "value": 0.2},
+            },
+            "else_expr": {"kind": "literal", "value": 0},
+        },
+    },
+]
+
+
+def _artifact(directory: Path, derived: list[dict] | None = None) -> Path:
+    path = directory / "program.compiled.json"
+    path.write_text(json.dumps({"program": {"derived": derived or DERIVED}}))
+    return path
+
+
+def _runner(
+    artifact: Path,
+    engine,
+    *,
+    full_evidence: bool,
+    batch_size: int = 5_000,
+    mode: str = "explain",
+):
+    return AxiomRulesRunner(
+        compiled_artifact_path=artifact,
+        binary_path=artifact.parent / "axiom-rules-engine",
+        record_all_outputs=full_evidence,
+        batch_size=batch_size,
+        mode=mode,
+        subprocess_run=engine,
+    )
+
+
+CASE_SPECS = st.lists(
+    st.tuples(
+        st.booleans(),
+        st.sampled_from([True, False, ABSENT]),
+        st.integers(min_value=0, max_value=20_000),
+    ),
+    min_size=1,
+    max_size=24,
+)
+
+
+@PROPERTY_SETTINGS
+@given(specs=CASE_SPECS, batch_size=st.integers(min_value=1, max_value=30))
+def test_full_evidence_and_isolation_invariants(tmp_path_factory, specs, batch_size):
+    artifact = _artifact(tmp_path_factory.mktemp("artifact"))
+    cases = [_case(f"case-{i}", *spec) for i, spec in enumerate(specs)]
+
+    by_mode = {}
+    for full_evidence in (False, True):
+        engine = _GuardedEngine()
+        results = _runner(
+            artifact, engine, full_evidence=full_evidence, batch_size=batch_size
+        ).run_cases(cases, [OUTPUT])
+        by_mode[full_evidence] = results
+
+        # No forcing: every query names only the compared output.
+        assert all(
+            query["outputs"] == [OUTPUT]
+            for request in engine.requests
+            for query in request["queries"]
+        )
+        # Bounded isolation, per batch chunk: <= 3k + 1 runs.
+        failing = sum(_expected(*spec) is None for spec in specs)
+        chunks = -(-len(cases) // batch_size)
+        assert len(engine.requests) <= 3 * failing + chunks
+
+        for spec, result in zip(specs, results, strict=True):
+            expected = _expected(*spec)
+            if expected is None:
+                assert result.values == {}
+                assert result.errors == (
+                    "missing input `expense_requirements_satisfied` for entity "
+                    "`tax_unit` over 2026-01-01..2026-12-31",
+                )
+                continue
+            credit, intermediates = expected
+            assert result.errors == ()
+            assert result.values[OUTPUT] == pytest.approx(credit)
+            if full_evidence:
+                # Evidence is exactly what the engine evaluated on the
+                # queried entity: no related-entity instance, no forced rule.
+                assert set(result.values) == {OUTPUT, *intermediates}
+                for name, value in intermediates.items():
+                    assert result.values[name] == value
+            else:
+                assert set(result.values) == {OUTPUT}
+
+    # Evidence invariance: compared values and errors do not move.
+    for without, with_evidence in zip(by_mode[False], by_mode[True], strict=True):
+        assert with_evidence.errors == without.errors
+        assert with_evidence.values.get(OUTPUT) == without.values.get(OUTPUT)
+
+    # Batch independence: each case matches its own single-case run.
+    for case, batched in zip(cases, by_mode[True], strict=True):
+        [alone] = _runner(artifact, _GuardedEngine(), full_evidence=True).run_cases(
+            [case], [OUTPUT]
+        )
+        assert alone.values == batched.values
+        assert alone.errors == batched.errors
+
+
+@PROPERTY_SETTINGS
+@example(repeats=[1, 1], failing_index=0, batch_size=2)
+@given(
+    repeats=st.lists(st.integers(min_value=1, max_value=25), min_size=2, max_size=10),
+    failing_index=st.integers(min_value=0, max_value=9),
+    batch_size=st.integers(min_value=1, max_value=12),
+)
+def test_relation_diagnostics_survive_case_error_isolation(
+    tmp_path_factory, repeats, failing_index, batch_size
+):
+    """Every case keeps its own ambiguities, including a failed confirming run.
+
+    Evidence mode and retry batching must change neither the compared result
+    nor diagnostic counts, and binding must leave caller metadata untouched.
+    """
+
+    artifact = _artifact(tmp_path_factory.mktemp("relation-artifact"))
+    compiled = json.loads(artifact.read_text())
+    compiled["program"]["relations"] = [{"name": "members", "arity": 2}]
+    compiled["program"]["derived"].append({
+        "name": "member_count",
+        "entity": "Household",
+        "expr": {
+            "kind": "count_related",
+            "relation": "members",
+            "current_slot": 0,
+            "related_slot": 1,
+        },
+    })
+    artifact.write_text(json.dumps(compiled))
+    failing_index %= len(repeats)
+    cases = []
+    for index, count in enumerate(repeats):
+        case = _case(
+            f"unit-{index}", True, ABSENT if index == failing_index else True, 1_000
+        )
+        # Neither endpoint has an input identity. The used relation preserves
+        # each supplied tuple and reports every occurrence as ambiguous.
+        case.metadata["axiom_relations"] = [
+            {"name": "members", "tuple": [f"member-{index}", f"owner-{index}"]}
+            for _ in range(count)
+        ]
+        cases.append(case)
+    metadata_before = deepcopy([case.metadata for case in cases])
+
+    for full_evidence in (False, True):
+        for size in dict.fromkeys((1, batch_size, len(cases))):
+            results = _runner(
+                artifact, _GuardedEngine(), full_evidence=full_evidence, batch_size=size
+            ).run_cases(cases, [OUTPUT])
+            for index, (count, result) in enumerate(zip(repeats, results, strict=True)):
+                if index == failing_index:
+                    assert result.values == {}
+                    assert result.errors == (
+                        "missing input `expense_requirements_satisfied` for entity "
+                        "`tax_unit` over 2026-01-01..2026-12-31",
+                    )
+                else:
+                    assert result.errors == ()
+                    assert result.values[OUTPUT] == pytest.approx(200.0)
+                diagnostics = result.raw["relation_binding_diagnostics"]
+                assert diagnostics["count"] == count
+                assert diagnostics["by_relation"] == {"members": count}
+                assert len(diagnostics["samples"]) == min(count, 20)
+                assert all(
+                    sample["relation"] == "members"
+                    and [value.partition("::")[2] for value in sample["tuple"]]
+                    == [f"member-{index}", f"owner-{index}"]
+                    for sample in diagnostics["samples"]
+                )
+            assert [case.metadata for case in cases] == metadata_before
+
+
+def test_untaken_branch_input_no_longer_fails_the_batch(tmp_path):
+    """The co-state-income-tax-ecps regression: a disallowed claim's missing
+    expense-requirements input is never read, with or without evidence."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("claims", True, True, 1_000),
+        _case("disallowed", False, ABSENT, 500),
+    ]
+    engine = _GuardedEngine()
+    claims, disallowed = _runner(artifact, engine, full_evidence=True).run_cases(
+        cases, [OUTPUT]
+    )
+
+    assert len(engine.requests) == 1
+    assert claims.errors == disallowed.errors == ()
+    assert claims.values == {
+        OUTPUT: 200.0,
+        "claim_allowed": True,
+        "creditable_expenses": 1_000.0,
+    }
+    assert disallowed.values == {OUTPUT: 0.0, "claim_allowed": False}
+
+
+def test_case_specific_error_stays_on_its_case(tmp_path):
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100 * i) for i in range(7)]
+    cases[4] = _case("unit-4", True, ABSENT, 400)
+    engine = _GuardedEngine()
+
+    results = _runner(artifact, engine, full_evidence=False).run_cases(cases, [OUTPUT])
+
+    assert [bool(result.errors) for result in results] == [
+        False,
+        False,
+        False,
+        False,
+        True,
+        False,
+        False,
+    ]
+    assert results[4].errors == (
+        "missing input `expense_requirements_satisfied` for entity `tax_unit` "
+        "over 2026-01-01..2026-12-31",
+    )
+    assert [result.values.get(OUTPUT) for result in results] == [
+        pytest.approx(20.0 * i) if i != 4 else None for i in range(7)
+    ]
+    # The failed batch, unit-4 alone to confirm it, then the two halves.
+    assert len(engine.requests) == 4
+    assert [len(request["queries"]) for request in engine.requests] == [7, 1, 3, 3]
+
+
+def test_error_naming_no_case_fails_the_batch_in_one_run(tmp_path):
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100) for i in range(50)]
+    error = (
+        "dataset input `expenses_paid` must use an absolute legal RuleSpec reference"
+    )
+    engine = _GuardedEngine(global_error=error)
+
+    results = _runner(artifact, engine, full_evidence=True).run_cases(cases, [OUTPUT])
+
+    assert len(engine.requests) == 1
+    assert all(result.errors == (error,) for result in results)
+
+
+def test_namespace_text_outside_the_entity_field_blames_no_case(tmp_path):
+    """Review finding: an input value that merely contains ``case-1::`` must
+    not send the error to the healthy case at batch index 1."""
+
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100) for i in range(4)]
+    error = "input `expenses_paid` has invalid decimal literal `case-1::oops`"
+    engine = _GuardedEngine(global_error=error)
+
+    results = _runner(artifact, engine, full_evidence=False).run_cases(cases, [OUTPUT])
+
+    assert len(engine.requests) == 1
+    assert all(result.errors == (error,) for result in results)
+
+
+def test_entity_id_that_looks_like_a_namespace_is_preserved(tmp_path):
+    """Review finding: a case whose own entity id starts with ``case-0::``
+    is still attributed by the generated outer prefix alone, and keeps its id."""
+
+    artifact = _artifact(tmp_path)
+    own_id = "case-0::tax_unit"
+    cases = [
+        _case("healthy-0", True, True, 100, entity_id=own_id),
+        _case("broken", True, ABSENT, 200, entity_id=own_id),
+        _case("healthy-2", True, True, 300, entity_id=own_id),
+    ]
+    engine = _GuardedEngine()
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, engine, full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert healthy_0.values[OUTPUT] == pytest.approx(20.0)
+    assert healthy_2.values[OUTPUT] == pytest.approx(60.0)
+    assert broken.errors == (
+        "missing input `expense_requirements_satisfied` for entity "
+        f"`{own_id}` over 2026-01-01..2026-12-31",
+    )
+
+
+def test_unconfirmed_attribution_keeps_the_failure_batch_wide(tmp_path):
+    """The entity field is only a hint: when the case it names computes
+    alone, no case is singled out and the batch fails as it did before."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("healthy-1", True, True, 200),
+        _case("broken", True, ABSENT, 300),
+    ]
+    inner = _GuardedEngine()
+
+    def blames_case_zero(args, **kwargs):
+        process = inner(args, **kwargs)
+        if process.returncode:
+            return subprocess.CompletedProcess(
+                args,
+                1,
+                stdout="",
+                stderr="missing input `x` for entity `case-0::tax_unit` over 2026",
+            )
+        return process
+
+    results = _runner(artifact, blames_case_zero, full_evidence=False).run_cases(
+        cases, [OUTPUT]
+    )
+
+    # The failed batch, then healthy-0 alone, which computes.
+    assert [len(request["queries"]) for request in inner.requests] == [3, 1]
+    assert all(
+        result.errors == ("missing input `x` for entity `case-0::tax_unit` over 2026",)
+        for result in results
+    )
+
+
+def _rewriting(inner: _GuardedEngine, rewrite):
+    """Wrap the fake engine, passing each failure's error through ``rewrite``."""
+
+    def run(args, **kwargs):
+        process = inner(args, **kwargs)
+        if process.returncode:
+            request = json.loads(kwargs["input"])
+            return subprocess.CompletedProcess(
+                args, 1, stdout="", stderr=rewrite(request, process.stderr)
+            )
+        return process
+
+    return run
+
+
+def test_unconfirmed_hint_in_a_rerun_half_fails_only_that_half(tmp_path):
+    """Review finding: isolation recurses into the halves, and a half whose
+    hint is not borne out fails as a unit while the rest stays isolated."""
+
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100) for i in range(7)]
+    cases[2] = _case("unit-2", True, ABSENT, 100)
+    cases[5] = _case("unit-5", True, ABSENT, 100)
+    inner = _GuardedEngine()
+
+    def misname_in_halves(request, error):
+        # In the three-case half the engine names its first, healthy case.
+        if len(request["queries"]) == 3:
+            return error.replace("`case-1::", "`case-0::")
+        return error
+
+    results = _runner(
+        artifact, _rewriting(inner, misname_in_halves), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    # Whole batch, unit-2 alone, half [0, 1, 3], half [4, 5, 6], unit-4 alone.
+    assert [len(request["queries"]) for request in inner.requests] == [7, 1, 3, 3, 1]
+    assert [bool(result.errors) for result in results] == [
+        False,
+        False,
+        True,
+        False,
+        True,
+        True,
+        True,
+    ]
+    assert "entity `tax_unit`" in results[2].errors[0]
+    assert all(
+        "entity `case-0::tax_unit`" in results[index].errors[0] for index in (4, 5, 6)
+    )
+
+
+def test_confirming_run_error_is_the_one_recorded(tmp_path):
+    """Review finding: the isolated case carries the error it raises alone,
+    even when that differs from what the batch reported."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("broken", True, ABSENT, 200),
+        _case("healthy-2", True, True, 300),
+    ]
+
+    def differ_when_alone(request, error):
+        if len(request["queries"]) == 1:
+            return error.replace("expense_requirements_satisfied", "another_input")
+        return error
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, _rewriting(_GuardedEngine(), differ_when_alone), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert broken.errors == (
+        "missing input `another_input` for entity `tax_unit` "
+        "over 2026-01-01..2026-12-31",
+    )
+
+
+def test_related_entity_field_attributes_its_case(tmp_path):
+    """Review finding: an error raised on a case's related entity
+    (``case-<i>::person-1``) still points at case i."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("broken", True, ABSENT, 200),
+        _case("healthy-2", True, True, 300),
+    ]
+
+    def on_a_member(request, error):
+        return error.replace("::tax_unit`", "::person-1`")
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, _rewriting(_GuardedEngine(), on_a_member), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert broken.errors == (
+        "missing input `expense_requirements_satisfied` for entity `person-1` "
+        "over 2026-01-01..2026-12-31",
+    )
+
+
+def _aliased_engine(calls: list[dict]):
+    """An artifact keys the compared credit by a qualified id and a different
+    intermediate by the bare name the caller requests."""
+
+    def run(args, **kwargs):
+        request = json.loads(kwargs["input"])
+        calls.append(request)
+        results = []
+        for query in request["queries"]:
+            assert query["outputs"] == ["us:statutes/example#credit"]
+            results.append(
+                {
+                    "entity_id": query["entity_id"],
+                    "outputs": {"us:statutes/example#credit": _scalar(200)},
+                    "trace": {
+                        "us:statutes/example#credit": _scalar(200),
+                        "credit": _scalar(1_000),
+                    },
+                }
+            )
+        return subprocess.CompletedProcess(
+            args, 0, stdout=json.dumps({"results": results}), stderr=""
+        )
+
+    return run
+
+
+ALIASED_DERIVED = [
+    {"name": "credit", "id": "us:statutes/example#credit", "entity": "TaxUnit"},
+    {"name": "creditable_expenses", "id": "credit", "entity": "TaxUnit"},
+]
+
+
+@pytest.mark.parametrize("full_evidence", [False, True])
+def test_trace_entry_cannot_shadow_a_compared_output_alias(tmp_path, full_evidence):
+    """Review finding: with evidence on, a trace entry keyed ``credit`` (a
+    different rule) must not replace the compared credit requested by that
+    name."""
+
+    artifact = _artifact(tmp_path, ALIASED_DERIVED)
+    [result] = _runner(
+        artifact, _aliased_engine([]), full_evidence=full_evidence
+    ).run_cases([_case("unit", True, True, 1_000)], [OUTPUT])
+
+    assert result.errors == ()
+    assert result.values[OUTPUT] == 200.0
+    assert result.values["us:statutes/example#credit"] == 200.0
+
+
+def test_trace_entry_cannot_shadow_an_alias_in_aggregation_components(tmp_path):
+    artifact = _artifact(tmp_path, ALIASED_DERIVED)
+    case = _case("unit", True, True, 1_000)
+    case = Case(
+        case_id=case.case_id,
+        period=case.period,
+        metadata={
+            **case.metadata,
+            "axiom_result_aggregation": {
+                "strategy": "sum",
+                "entity_ids": ["tax_unit", "second_unit"],
+            },
+        },
+    )
+
+    [result] = _runner(artifact, _aliased_engine([]), full_evidence=True).run_cases(
+        [case], [OUTPUT]
+    )
+
+    assert result.errors == ()
+    assert result.values[OUTPUT] == 400.0
+    assert [
+        component["values"][OUTPUT]
+        for component in result.raw["aggregation"]["components"]
+    ] == [200.0, 200.0]
+
+
+@pytest.mark.parametrize(
+    ("full_evidence", "expected_mode"), [(True, "explain"), (False, "fast")]
+)
+def test_full_evidence_always_executes_in_explain_mode(
+    tmp_path, full_evidence, expected_mode
+):
+    """Review finding: fast mode returns no trace, so a fast-mode runner
+    asked for full evidence would silently record no intermediates."""
+
+    engine = _GuardedEngine()
+    [result] = _runner(
+        _artifact(tmp_path), engine, full_evidence=full_evidence, mode="fast"
+    ).run_cases([_case("unit", True, True, 1_000)], [OUTPUT])
+
+    assert [request["mode"] for request in engine.requests] == [expected_mode]
+    assert ("creditable_expenses" in result.values) is full_evidence
+
+
+ENGINE_BINARY = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
+
+
+@pytest.mark.skipif(
+    not (ENGINE_BINARY and Path(ENGINE_BINARY).is_file()),
+    reason="AXIOM_RULES_ENGINE_BINARY not set to a built axiom-rules-engine",
+)
+def test_real_engine_matches_the_fake(tmp_path):
+    """Differential check: the real engine's explain trace and error text
+    behave as _GuardedEngine models them (verified on 0c39023e)."""
+
+    program = tmp_path / "program.yaml"
+    program.write_text(PROGRAM)
+    artifact = tmp_path / "program.compiled.json"
+    subprocess.run(
+        [
+            ENGINE_BINARY,
+            "compile",
+            "--program",
+            str(program),
+            "--output",
+            str(artifact),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    specs = [
+        (True, True, 1_000),
+        (False, ABSENT, 500),
+        (True, ABSENT, 700),
+        (True, False, 900),
+        (False, True, 300),
+    ]
+    cases = [_case(f"unit-{i}", *spec) for i, spec in enumerate(specs)]
+    for full_evidence in (False, True):
+        real = AxiomRulesRunner(
+            compiled_artifact_path=artifact,
+            binary_path=ENGINE_BINARY,
+            record_all_outputs=full_evidence,
+        ).run_cases(cases, [OUTPUT])
+        fake_dir = tmp_path / f"fake-{full_evidence}"
+        fake_dir.mkdir()
+        fake = _runner(
+            _artifact(fake_dir),
+            _GuardedEngine(),
+            full_evidence=full_evidence,
+        ).run_cases(cases, [OUTPUT])
+        for real_result, fake_result in zip(real, fake, strict=True):
+            assert real_result.errors == fake_result.errors
+            assert set(real_result.values) == set(fake_result.values)
+            for name, value in fake_result.values.items():
+                assert real_result.values[name] == pytest.approx(value)

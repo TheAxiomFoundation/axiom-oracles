@@ -6,7 +6,7 @@
    "comparison_count": 1292,
    "components": [],
    "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
-   "description": "State income tax liability over every routed tax unit in the pinned US Populace",
+   "description": "Oklahoma tax-year-2026 individual income tax before credits, computed from caller-supplied completed Oklahoma taxable income under the enacted single-or-separate or doubled-width joint, surviving-spouse, and head-of-household schedule over every routed tax unit in the pinned US Populace; this bounded suite excludes taxable-income construction, credits, payments, and final annual liability",
    "match_count": 1292,
    "match_rate": 100.0,
    "matched": 1292,
@@ -28,7 +28,7 @@
  "mismatches": [],
  "population": "populace-us",
  "provenance": {
-  "campaign_report": "state-tax-populace-campaign-2026-07-25.json",
+  "campaign_report": "state-tax-populace-campaign-2026-07-23.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",

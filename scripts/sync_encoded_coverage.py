@@ -67,6 +67,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "ar": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "az": [
         (r"^policies/des/ccap/", ("childcare_assistance", None)),
         (r"^policies/des/faa5/(ca-|two-parent)", ("tanf", None)),
@@ -107,6 +113,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "de": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "fl": [
         (r"ess-program-policy-manual/.*fs-tca", ("snap", None)),
         (r"ess-program-policy-manual/.*(cic-rap|tca)", ("tanf", None)),
@@ -126,6 +138,12 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "in": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "ks": [
         (r"^policies/dcf/keesm/", ("tanf", None)),
         (
@@ -139,6 +157,16 @@ STATE_RULES = {
     "mn": [
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),
         (r"^policies/dhs/combined-manual/0022", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "mt": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "ms": [
         (
@@ -161,6 +189,12 @@ STATE_RULES = {
     "nc": [
         (r"^policies/dhhs/fns/", ("snap", None)),
         (r"^regulations/10a-ncac/71u/", ("snap", None)),
+        (
+            r"^policies/income_tax/"
+            r"(pilot|resident_core)_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+        (r"^statutes/105/105-15[1-9]([./]|$)", ("state_income_tax", None)),
     ],
     "nh": [(r"^regulations/he-w-700/", ("snap", None))],
     "ny": [
@@ -179,8 +213,20 @@ STATE_RULES = {
             ("state_income_tax", None),
         ),
     ],
+    "pa": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "or": [(r"^policies/odhs/", ("snap", None))],
-    "sc": [(r"^(policies/dss/snap|regulations/114/)", ("snap", None))],
+    "sc": [
+        (r"^(policies/dss/snap|regulations/114/)", ("snap", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "tn": [
         (r"^policies/dhs/snap/", ("snap", None)),
         (r"^regulations/1240-01/", ("snap", None)),
@@ -212,7 +258,7 @@ SKIP_DIRS = re.compile(
 
 def git(repo: Path, *args: str) -> str:
     return subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
         capture_output=True,
         text=True,
         check=True,

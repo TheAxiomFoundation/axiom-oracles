@@ -1,0 +1,16 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/full_bound/dashboard/public/data/report.json",
+  "report_sha256": "4ac91017993dc750f7907009a308ea3828566a14ae4ec05d0dad6eca45d5cb1f",
+  "case_verdicts_sha256": "80390d54e1a5d528ac1c864a624acefe069590a6787926e577323bb6e3034767",
+  "suite": "full-bound",
+  "count": 2,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "8b2b7a370c642af0b6f640585660eb7b34adf8d75b3dd1822c34a0a5cec53268",
+      "cases": 2
+    }
+  ]
+}

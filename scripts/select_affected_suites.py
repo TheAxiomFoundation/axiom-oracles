@@ -4,8 +4,11 @@
 Given the current ``main`` HEAD SHA of each rulespec repo and the committed
 reports' provenance, emit the suites whose affected repos have moved past the
 SHA their report last ran against — i.e. the reports that are now stale because
-the rules underneath them changed. The 6-hourly workflow reruns only these,
-leaving the weekly full matrix as the backstop.
+the rules underneath them changed. The 6-hourly workflow reruns only these;
+the weekly full matrix is a CI signal (it uploads reports as artifacts and never
+commits them) for every suite that does not declare ``ci: manual``. A
+``ci: manual`` suite's committed report refreshes only through a supervised
+run.
 
 Inputs:
 
@@ -26,10 +29,20 @@ A suite is selected when, for any affected repo:
 * the report has no provenance at all (never stamped → must run), or
 * the report ran against a null/unknown SHA for that repo (can't prove fresh
   → run), or
-* the recorded SHA differs from the repo's current HEAD (rules moved → run).
+* the recorded SHA differs from the repo's current HEAD (rules moved → run) —
+  unless the map entry pins that repo (``pinned: {repo: sha}``, emitted for
+  suites declaring ``rulespec_upstream_sha``): a pinned suite replays one
+  reviewed snapshot, so it is judged against the PIN instead and goes stale
+  only when the pin itself changes, or
+* the report records that the repo's working tree was dirty or unverifiable
+  when it ran (``dirty: true`` / ``dirty: null`` on the entry): no commit
+  produced those numbers, so no SHA match, pin or unknown HEAD makes them
+  fresh. ``run_comparison.py`` publishes such a report only from a manual
+  run.
 
 A suite whose every affected repo's HEAD equals what its report already ran
-against is fresh and skipped. ``--force-all`` bypasses the staleness logic and
+against (or whose pin equals what it ran against, for pinned repos) is fresh
+and skipped. ``--force-all`` bypasses the staleness logic and
 selects every mapped entry (the workflow's force_all input) — the same
 validation, filtering, and dispatch rules apply, so the two workflow paths
 cannot drift.
@@ -104,6 +117,102 @@ def _report_ran_against(report: dict) -> dict[str, str | None]:
     return {r["repo"]: r.get("sha") for r in rulespecs if r.get("repo")}
 
 
+def _repository_mismatch(entry: dict) -> bool:
+    """Mirror provenance's root-identity predicate without package imports."""
+    if "sha_toplevel" not in entry and "worktree_toplevel" not in entry:
+        return False  # legacy reports did not record repository identities
+    sha_root = entry.get("sha_toplevel")
+    tree_root = entry.get("worktree_toplevel")
+    return not (
+        isinstance(sha_root, str)
+        and isinstance(tree_root, str)
+        and Path(sha_root).is_absolute()
+        and Path(tree_root).is_absolute()
+        and sha_root == tree_root
+    )
+
+
+def _report_unclean_trees(report: dict) -> dict[str, str]:
+    """{repo: reason} for entries whose SHA the report's numbers did not run.
+
+    Mirrors ``axiom_oracles.provenance.unclean_rulespecs`` (this script runs
+    with only PyYAML installed, so it cannot import the package): an entry
+    with a ``sha`` and ``dirty: true`` ran uncommitted rules, and one with
+    ``dirty: null`` could not show it did not. Either way its SHA cannot prove
+    the report fresh, even when it equals HEAD or the pin. Repository roots
+    must also identify the same absolute checkout. An entry with neither
+    roots nor a ``dirty`` key predates those fields and is judged on its SHA.
+    """
+    unclean: dict[str, str] = {}
+    for entry in (report.get("provenance") or {}).get("rulespecs") or []:
+        if not isinstance(entry, dict) or not entry.get("repo"):
+            continue
+        sha = entry.get("sha")
+        if not sha:
+            continue
+        if _repository_mismatch(entry):
+            unclean[entry["repo"]] = (
+                f"{entry['repo']}: report has a repository identity mismatch "
+                f"at {str(sha)[:12]}"
+            )
+            continue
+        if "dirty" not in entry or entry["dirty"] is False:
+            continue
+        state = "a dirty" if entry["dirty"] is True else "an unverifiable"
+        unclean[entry["repo"]] = (
+            f"{entry['repo']}: report ran against {state} working tree "
+            f"at {str(sha)[:12]}"
+        )
+    return unclean
+
+
+def _selector_report_path(value: object) -> Path | None:
+    """Resolve a committed selector report, failing loudly on unsafe paths.
+
+    Legacy map entries contain a bare dashboard filename.  New unified-record
+    entries contain a repo-relative ``comparisons/...`` path.  Supporting both
+    explicitly avoids overloading dashboard suite keys as registry names (the
+    #295 failure mode) or making certificate records masquerade as UI reports.
+    """
+
+    if value is None:
+        return None
+    if not isinstance(value, str) or not value.strip() or Path(value).is_absolute():
+        raise SystemExit(f"affected map has malformed report path {value!r}")
+    relative = Path(value)
+    if ".." in relative.parts:
+        raise SystemExit(f"affected map report path escapes the repo: {value!r}")
+    if len(relative.parts) == 1:
+        return DASHBOARD_DATA_DIR / relative
+    candidate = (REPO_ROOT / relative).resolve()
+    if REPO_ROOT.resolve() not in candidate.parents:
+        raise SystemExit(f"affected map report path escapes the repo: {value!r}")
+    return candidate
+
+
+def load_reports(affected_map: dict) -> dict[str, dict]:
+    """Load dashboard and explicitly mapped canonical selector records."""
+
+    reports_by_suite: dict[str, dict] = {}
+    paths = set(DASHBOARD_DATA_DIR.glob("*.json"))
+    for entry in affected_map.get("suites", []):
+        if not isinstance(entry, dict):
+            raise SystemExit("affected map suite entries must be objects")
+        path = _selector_report_path(entry.get("report"))
+        if path is not None:
+            paths.add(path)
+    for path in sorted(paths):
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text())
+        except json.JSONDecodeError:
+            continue
+        if isinstance(data, dict) and data.get("suite"):
+            reports_by_suite[str(data["suite"])] = data
+    return reports_by_suite
+
+
 def select(
     affected_map: dict,
     heads: dict[str, str],
@@ -139,13 +248,38 @@ def select(
                 }
             )
             continue
+        pinned = entry.get("pinned") or {}
+        unclean = _report_unclean_trees(report)
         reasons: list[str] = []
         for repo in repos:
+            if repo in unclean:
+                # Checked before the pin and HEAD: a dirty run is stale
+                # whatever SHA it recorded, and an unknown HEAD cannot excuse
+                # numbers no commit produces.
+                reasons.append(unclean[repo])
+                continue
+            pin = pinned.get(repo)
+            if pin is not None:
+                # A pinned suite replays one reviewed snapshot; its report can
+                # only ever stamp the pinned SHA, so freshness is judged
+                # against the PIN, not the repo's moving HEAD. It goes stale
+                # exactly when the pin changes (a deliberate re-pin PR) or the
+                # report predates pin stamping.
+                recorded = ran_against.get(repo)
+                if recorded is None:
+                    reasons.append(f"{repo}: report ran against unknown SHA")
+                # A roots-revision pin may be a SHA prefix (e.g. ca2d424f);
+                # reports always record the full SHA.
+                elif not (pin and recorded.startswith(pin)):
+                    reasons.append(
+                        f"{repo}: {recorded[:12]} → pin {pin[:12]}"
+                    )
+                continue
             head = heads.get(repo)
             if head is None:
                 # HEAD unknown (repo not queried) — cannot prove staleness, so
-                # do not force a rerun on missing data; the weekly backstop
-                # still covers it.
+                # do not force a rerun on missing data; a later sweep that can
+                # read the HEAD (or a supervised run) refreshes the report.
                 continue
             recorded = ran_against.get(repo)
             if recorded is None:
@@ -249,14 +383,7 @@ def main() -> int:
         if not args.heads_json:
             raise SystemExit("--heads-json is required unless --force-all")
         heads = _load_heads(args.heads_json)
-        reports_by_suite: dict[str, dict] = {}
-        for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
-            try:
-                data = json.loads(path.read_text())
-            except json.JSONDecodeError:
-                continue
-            if isinstance(data, dict) and data.get("suite"):
-                reports_by_suite[data["suite"]] = data
+        reports_by_suite = load_reports(affected_map)
         selected = select(affected_map, heads, reports_by_suite)
 
     names = runnable_names(selected)
@@ -264,7 +391,9 @@ def main() -> int:
     if manual:
         print(
             f"note: {len(manual)} stale suite(s) have no CI-runnable registry "
-            f"name and are left to the manual parameter lane: "
+            f"name and are left to the manual lane (parameter suites: "
+            f"run_parameter_comparisons.py; ci: manual suites: a supervised "
+            f"run_comparison.py run): "
             + ", ".join(manual),
             file=sys.stderr,
         )

@@ -1,0 +1,301 @@
+{
+  "class_census": {
+    "column2-gn3b": 683334,
+    "fed-false-family-brazil": 93198,
+    "fed-false-family-forced-labor": 1499038,
+    "legal-date-boundary-ieepa": 38392,
+    "non-metal-232-family": 754434,
+    "preference-entry-semantics": 5709,
+    "reciprocal-vintage-ieepa": 244,
+    "s122-ch98": 18848,
+    "s122-entry-status-lines": 779746,
+    "s122-gn6-lines": 687295,
+    "s201-stale-proxy": 9384,
+    "vintage-revision-232": 513556,
+    "vintage-revision-232-changed-rate": 24,
+    "vintage-revision-301": 4716,
+    "vintage-revision-301-removed-lines": 26730
+  },
+  "classified": 9503693,
+  "conservation": "PASS",
+  "derived_total_compositions": {
+    "column2-gn3b": 555579,
+    "column2-gn3b + fed-false-family-forced-labor": 44486,
+    "column2-gn3b + fed-false-family-forced-labor + s201-stale-proxy": 20,
+    "column2-gn3b + fed-false-family-forced-labor + vintage-revision-232": 4,
+    "column2-gn3b + legal-date-boundary-ieepa": 1436,
+    "column2-gn3b + legal-date-boundary-ieepa + non-metal-232-family": 66,
+    "column2-gn3b + non-metal-232-family": 22155,
+    "column2-gn3b + non-metal-232-family + s122-gn6-lines": 2482,
+    "column2-gn3b + reciprocal-vintage-ieepa": 4,
+    "column2-gn3b + s122-ch98": 38,
+    "column2-gn3b + s122-entry-status-lines": 19527,
+    "column2-gn3b + s122-entry-status-lines + vintage-revision-232": 7229,
+    "column2-gn3b + s122-entry-status-lines + vintage-revision-232-changed-rate": 12,
+    "column2-gn3b + s122-gn6-lines": 22934,
+    "column2-gn3b + s122-gn6-lines + vintage-revision-232": 2907,
+    "column2-gn3b + s201-stale-proxy": 262,
+    "column2-gn3b + vintage-revision-232": 2820,
+    "column2-gn3b + vintage-revision-232-changed-rate": 12,
+    "fed-false-family-brazil": 26488,
+    "fed-false-family-brazil + fed-false-family-forced-labor": 53752,
+    "fed-false-family-brazil + fed-false-family-forced-labor + preference-entry-semantics": 16,
+    "fed-false-family-brazil + fed-false-family-forced-labor + s201-stale-proxy": 36,
+    "fed-false-family-brazil + fed-false-family-forced-labor + vintage-revision-232": 4,
+    "fed-false-family-brazil + preference-entry-semantics": 8,
+    "fed-false-family-brazil + s122-entry-status-lines": 2,
+    "fed-false-family-brazil + s122-entry-status-lines + vintage-revision-232": 2,
+    "fed-false-family-brazil + s122-gn6-lines": 1046,
+    "fed-false-family-brazil + s201-stale-proxy": 18,
+    "fed-false-family-forced-labor": 1398320,
+    "fed-false-family-forced-labor + preference-entry-semantics": 380,
+    "fed-false-family-forced-labor + s201-stale-proxy": 860,
+    "fed-false-family-forced-labor + s201-stale-proxy + vintage-revision-301-removed-lines": 12,
+    "fed-false-family-forced-labor + vintage-revision-232": 100,
+    "fed-false-family-forced-labor + vintage-revision-301": 520,
+    "fed-false-family-forced-labor + vintage-revision-301-removed-lines": 284,
+    "legal-date-boundary-ieepa": 35118,
+    "legal-date-boundary-ieepa + non-metal-232-family": 1236,
+    "legal-date-boundary-ieepa + non-metal-232-family + vintage-revision-301": 2,
+    "legal-date-boundary-ieepa + non-metal-232-family + vintage-revision-301-removed-lines": 4,
+    "legal-date-boundary-ieepa + s201-stale-proxy": 14,
+    "legal-date-boundary-ieepa + vintage-revision-232": 14,
+    "legal-date-boundary-ieepa + vintage-revision-301": 22,
+    "legal-date-boundary-ieepa + vintage-revision-301-removed-lines": 228,
+    "non-metal-232-family": 656631,
+    "non-metal-232-family + preference-entry-semantics": 4004,
+    "non-metal-232-family + s122-gn6-lines": 62827,
+    "non-metal-232-family + s122-gn6-lines + vintage-revision-301": 101,
+    "non-metal-232-family + s122-gn6-lines + vintage-revision-301-removed-lines": 76,
+    "non-metal-232-family + vintage-revision-301": 566,
+    "non-metal-232-family + vintage-revision-301-removed-lines": 1007,
+    "preference-entry-semantics": 1249,
+    "reciprocal-vintage-ieepa": 230,
+    "reciprocal-vintage-ieepa + vintage-revision-232": 8,
+    "reciprocal-vintage-ieepa + vintage-revision-301-removed-lines": 2,
+    "s122-ch98": 11438,
+    "s122-entry-status-lines": 452135,
+    "s122-entry-status-lines + vintage-revision-232": 270667,
+    "s122-entry-status-lines + vintage-revision-232 + vintage-revision-301": 75,
+    "s122-entry-status-lines + vintage-revision-301": 39,
+    "s122-entry-status-lines + vintage-revision-301-removed-lines": 12844,
+    "s122-gn6-lines": 476967,
+    "s122-gn6-lines + vintage-revision-232": 106201,
+    "s122-gn6-lines + vintage-revision-232 + vintage-revision-301": 35,
+    "s122-gn6-lines + vintage-revision-301": 452,
+    "s122-gn6-lines + vintage-revision-301-removed-lines": 2033,
+    "s201-stale-proxy": 7877,
+    "s201-stale-proxy + vintage-revision-301-removed-lines": 69,
+    "vintage-revision-232": 108032,
+    "vintage-revision-232 + vintage-revision-301": 24,
+    "vintage-revision-301": 2853,
+    "vintage-revision-301-removed-lines": 10144
+  },
+  "derived_total_units": 4389045,
+  "engine_errors": 0,
+  "groups": {
+    "column2-gn3b": {
+      "per_slot": {
+        "base": 683334
+      },
+      "sample_signatures": [
+        "9a5675ceb14e5f50f49ece296243029babb0a63856ad0cd0b70a712ba8d9b27e",
+        "83c7bf2e5c9781e91aa28667a38b4281fb006f6d70ddae7b598cb2607e4dc59c",
+        "b0e96554063cedffc6cfb94fabdd084066d1d7e1a6c360ef376224ed15b57366",
+        "09b0a493843210386f70170ad25a6b87d165aea0ccca09d22ccd0db3f2bbce89",
+        "4ec741f4be0292167c00f11f546e9a0e2cf39dbf2802027ee0f94a747cddc52a"
+      ],
+      "units": 683334
+    },
+    "fed-false-family-brazil": {
+      "per_slot": {
+        "brazil_section_301": 93198
+      },
+      "sample_signatures": [
+        "6858f8c1a9c6ddca380cc2f545302eeca61e963219f270583afc1840792e7e8b",
+        "3f4b5ea5df435e9eba9ca7dc8d3a660c467552a18f30e70000cb6c32c5066430",
+        "2037ed4c4d7ca226861e1c65b3a34b7fddf3f0967267452c9e4eeebe737b4dc9",
+        "1aeba1b485dd4bf595b4805767683d09b8dd31985cd12315e3715eae0c9056ea",
+        "329e7f27a81f95ffd122c79279ec924e8c606122ccb5c747afae28914496d52d"
+      ],
+      "units": 93198
+    },
+    "fed-false-family-forced-labor": {
+      "per_slot": {
+        "forced_labor_section_301": 1499038
+      },
+      "sample_signatures": [
+        "62801327c951f50b4ee34eb2ca4650a9d52c685f2df9f4bddf8ba54111fd99e8",
+        "101e45bcbda3e8c838ed1fefaf951fc7254212b00512fa155b93f394afd2c941",
+        "faa644beb7e9dadb5fba084023e5055ac1c6e394662317e084ea7920d9c658c6",
+        "c9ea3738b9d50cf9713082e959af04365e446c659c806e4e288faa929332b80f",
+        "881228011112b79f5766a3e0ebe0ea04cad5cfc65e55d412d0907a87a5ee524c"
+      ],
+      "units": 1499038
+    },
+    "legal-date-boundary-ieepa": {
+      "per_slot": {
+        "ieepa": 38392
+      },
+      "sample_signatures": [
+        "f2e7e1914d7ae6dcdfca40927ab9696132c55a7a0f779cee4db6c4bd248fdee1",
+        "35f326e84c608b28aff4a8401f343d3e0d4a57010485b13ee041af9e36de75c6",
+        "c3b912f1949d9e016930b8043123672587e31ce5a6bd6b770bc59cae8fce75fe",
+        "3dc99ce67f5da3749f781f6f9beaa6814655a5ece9f0ac3a99be1802e16f72f2",
+        "bb6e3d12b484a2765c5acefcc00bf72ff8c742b8a3ec67ce6b3db9dbc9572038"
+      ],
+      "units": 38392
+    },
+    "non-metal-232-family": {
+      "per_slot": {
+        "section_232": 754434
+      },
+      "sample_signatures": [
+        "40ea256fbf87492c8ea6005b3c5515c8ff71b185382c423e2b280ca0e3f5f3a6",
+        "a027400b258a9db71dd7cbf5fd2b568c5d00691d387b812fe15881e9fe7be597",
+        "e93578456211d05594915a49c5ae5cbc29eae00f067a3db9cf240ff33b3795ff",
+        "44eec5471179a2278aad5854ae21f8f0c8fedb342555fb4459bb70af5d725a6e",
+        "52105723af0a3f00cdc86c6c29d3e90b3d46d0728c0d00d67800098a22710042"
+      ],
+      "units": 754434
+    },
+    "preference-entry-semantics": {
+      "per_slot": {
+        "base": 5709
+      },
+      "sample_signatures": [
+        "6bc2fc2cbc167d899cfab2c591931e6f108f75bd0bc3d84361c700a703d263a2",
+        "887f020d61ba62b3920c31dd295ab30e9bfddb798f821956aa033adc67c7a693",
+        "d7d22e12985d47f7a95c0c994df09e1fa5807b3ae7fa24c99a633ece1909fea1",
+        "51c70195d13ff285e2261d0f8ebeaff1afacffb2bdd30a28945c23a160a5a5af",
+        "4ee1e488c17b58fe9e47afaec96e7c6310690f7de8e0a8820c511cd4ec1373d8"
+      ],
+      "units": 5709
+    },
+    "reciprocal-vintage-ieepa": {
+      "per_slot": {
+        "ieepa": 244
+      },
+      "sample_signatures": [
+        "413690c1d579ee752dd79e43320e3591aec7a013d2eceef6eb48e15316443912",
+        "37985a35a1927741de50f2a7e039c03babc2ed674bcfcb84c792f3961a47285d",
+        "d48baf15cd775429851eda56bc74fc6d6920a956e2f5eb47e2a6802b4f6c6731",
+        "af0474aa0404b274789ecba8d73c7eca683075fec76af3cd431a70aabf5712b4",
+        "166c74d8b2ac6468e3a9ecb5e421afbb1b35a6f7455ae110a0959715d047abf0"
+      ],
+      "units": 244
+    },
+    "s122-ch98": {
+      "per_slot": {
+        "section_122": 18848
+      },
+      "sample_signatures": [
+        "7a527f36c770ef30e799ac45915a048995b778674e0bed78d8fe80e745d31c9a",
+        "c744629421bb24be4f60588ada16f57b72fc6414e0b9de42634b79e4bb29ac3d",
+        "2e2c266ac3390e47e3bc64a92ef642f2afdc893e493f353cdf52e534f244d411",
+        "10eb1bd7f424be4fea9aee94abbf92087f542edbafc6bfea5a3a2f9657961a48",
+        "aee5d1bf4a005f308379cb81620471935b09d7df70957a383f17c55e300dafa3"
+      ],
+      "units": 18848
+    },
+    "s122-entry-status-lines": {
+      "per_slot": {
+        "section_122": 779746
+      },
+      "sample_signatures": [
+        "ec0b40943ab0d28567ef17a8eb49ca6ed5bf040c41e416d132035454850f96d7",
+        "0ae6b1ece59769fbd8e16ce01bf44b66b288f2173ae7a26792885db2f0af2ef8",
+        "3f792c855c8bd00f80e4a71b5bb53a936a7f82e4b098409f1ff9f02aede594c5",
+        "7be3f25e70141992c1b113d95c783e0e26a60c3d47f846a7cb2b0728dbac7e74",
+        "bcd687001cc2faced2e7790b2762fed57d08df2c9a153360cd56a0f3806655a9"
+      ],
+      "units": 779746
+    },
+    "s122-gn6-lines": {
+      "per_slot": {
+        "section_122": 687295
+      },
+      "sample_signatures": [
+        "704c13a29b17a21a908828984f20e73ed1e654a73091d6dc9d3296e85820da02",
+        "cacfe22c849e37ad3f98b3ada7a047c0d68e6ad1d1d29d374e0a4fa7daf4e7ec",
+        "3def630a599e62859680dfa1369e6f978d8e003c0a8702e2b6b30efd4d637e6e",
+        "d3cedaf22d1f1617b6b89dab66dd098314a93f4d253b0a44a356f4f4747cebdc",
+        "2434de6c639a04b9f4970c5e4419374c4d7138f66a665d0fdb20129981e75e1e"
+      ],
+      "units": 687295
+    },
+    "s201-stale-proxy": {
+      "per_slot": {
+        "section_201": 9384
+      },
+      "sample_signatures": [
+        "919a4f6b44f5b97d00a73e04b2d1b16e521585df70fd5e37a4a345b059456d88",
+        "84ef7e22732a5fddff9b935f8ddf9f96eaf576155cbe06fdd8164ea8154f6fcb",
+        "c07853a8e4d3749a7ba7e1cc5c5e0eef5905ffb8b84e7b9b922f7d79797cf1d6",
+        "2b4e2f1b1e9f24c4b02bd9e45a617191adbff8bbf7047430ec5c545f12ce8035",
+        "9ed1d45ed296f132d9b2b9fc3c8be3f69c6bbdf78a99cb709e5dd75702f484f1"
+      ],
+      "units": 9384
+    },
+    "vintage-revision-232": {
+      "per_slot": {
+        "section_232": 513556
+      },
+      "sample_signatures": [
+        "f80b68692d9d4dff843af408838d35282dbdd8ab0328ea71603f785c11d25b7e",
+        "abd74f6cc182bca9b8042f29d918098d9ad453aefe3221cf092334dc869f51dd",
+        "9fd705c10e457187f50c4fd87a0cb3f5750bbaf17b4e21de988667efcd0bcf01",
+        "6a70b4e1785a3dd9f4d40278b1e56d4e3b3c6fbb8e3dbd0fa1e2f24c414dc7fd",
+        "32535857764b9c3e4b766e19191eb1434bcdad780def8535892f597d6878e604"
+      ],
+      "units": 513556
+    },
+    "vintage-revision-232-changed-rate": {
+      "per_slot": {
+        "section_232": 24
+      },
+      "sample_signatures": [
+        "f15614c03f82b277341a5fa99f116e81d0a4ec8c61a70f30d55c44bc9f525ab2",
+        "bff4e123d8bdd014f78769ba94c5436d34d67fa929fccd80b8fa01fe50fa710c",
+        "54a1077f319c5fd388bc8ee506cf2ad17bc276fe7a454d7cf4cf690bd15a5dd9",
+        "bdf4e33b90521cc1ae34b3ac6e841ea8edb05530cc7c1cdc85a8b13f37d81e8e"
+      ],
+      "units": 24
+    },
+    "vintage-revision-301": {
+      "per_slot": {
+        "china_section_301": 4716
+      },
+      "sample_signatures": [
+        "dc8f7ccfa2ed0317c2bf4b8c36fba02aeb0df6dd73e6b522147427896696d01a",
+        "a359c160944d312cdc92992814b6968af3654f1ed868bfec89b6261a57c334c8",
+        "61d9b2fab2b3df8d1620d054f993b188c93cfd5d44ccfaf2f60a615fdf1898e7",
+        "976363fbf8bc90b231024b0a7494bf952448ff768746e4173e581f3e8ca6c000",
+        "0f4172e18af56e46f74a6b3b58e9a6b2873f65613bdc754ac63035b782656a06"
+      ],
+      "units": 4716
+    },
+    "vintage-revision-301-removed-lines": {
+      "per_slot": {
+        "china_section_301": 26730
+      },
+      "sample_signatures": [
+        "0998dd01671f84ad108acabccfb262e38b43736ed8c9ca0676041bc540fbdf64",
+        "0c77e2823af084e6be8925b6365c98369c5e5d16f14b9b2019ed53e25342860c",
+        "199f6225630dafb4c25054581faea82a5a23186683000a965ba6389a423ef7a2",
+        "d8c9c482865427666d63e141e9bc5122d2ffdbadac88d57a129da30338c2e69f",
+        "2207f2f5a2488010e3554dd5cdb6a91b8b1ad90acf10ecb4e0e8d20364afa9d5"
+      ],
+      "units": 26730
+    }
+  },
+  "mismatches": 9503693,
+  "observed_signature_count": 880674,
+  "schema": "axiom_oracles.us_tariff_schedule.classification.v1",
+  "selector_count": 16,
+  "sidecar": {
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/.cache/us-tariff-c1/classify/2a/2a7df9289e4d6cadc1941127ba4e546662aaf7210c76d714b800e0ffbfadbdd9.jsonl.gz",
+    "sha256": "5731f3d8714da5e8644307260e07dab2b8f81460e19eba5bd34d7370a935bba8"
+  },
+  "unexplained": 0
+}

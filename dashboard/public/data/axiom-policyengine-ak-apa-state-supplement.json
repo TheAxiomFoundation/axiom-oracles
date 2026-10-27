@@ -1,688 +1,740 @@
 {
- "aggregates": [
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
-   "description": "AK APA state supplement, independent living, individual",
-   "left_weighted_sum": 1356.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 362.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 994.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, independent living, couple one eligible",
-   "left_weighted_sum": 1515.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 521.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 994.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, independent living, couple both eligible",
-   "left_weighted_sum": 2019.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 528.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 1491.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
-   "description": "AK APA state supplement, household of another, individual",
-   "left_weighted_sum": 1031.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 368.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 663.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, household of another, couple one eligible",
-   "left_weighted_sum": 1127.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 464.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 663.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, household of another, couple both eligible",
-   "left_weighted_sum": 1537.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 543.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 994.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
-   "description": "AK APA state supplement, assisted living home, individual",
-   "left_weighted_sum": 1094.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 100.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 994.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, assisted living home, couple one eligible",
-   "left_weighted_sum": 1094.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 100.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 994.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
-   "description": "AK APA state supplement, assisted living home, couple both eligible",
-   "left_weighted_sum": 1691.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 200.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 1491.0,
-   "weighted_match_rate": 0.0
-  }
- ],
- "case_count": 9,
- "cases": [
-  {
-   "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "a_individual_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.INDIVIDUAL",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+  "aggregates": [
     {
-     "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
-     "difference": 994.0,
-     "kind": "amount_difference",
-     "left": 1356.0,
-     "right": 362.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "a_couple_one_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_ONE_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+      "description": "AK APA state supplement, independent living, individual",
+      "left_weighted_sum": 1356.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 362.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 994.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
-     "difference": 994.0,
-     "kind": "amount_difference",
-     "left": 1515.0,
-     "right": 521.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "a_couple_both_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_BOTH_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, independent living, couple one eligible",
+      "left_weighted_sum": 1515.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 521.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 994.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
-     "difference": 1491.0,
-     "kind": "amount_difference",
-     "left": 2019.0,
-     "right": 528.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "b_individual_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.INDIVIDUAL",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, independent living, couple both eligible",
+      "left_weighted_sum": 2019.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 528.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 1491.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
-     "difference": 663.0,
-     "kind": "amount_difference",
-     "left": 1031.0,
-     "right": 368.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "b_couple_one_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_ONE_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
+      "description": "AK APA state supplement, household of another, individual",
+      "left_weighted_sum": 1031.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 368.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 663.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
-     "difference": 663.0,
-     "kind": "amount_difference",
-     "left": 1127.0,
-     "right": 464.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "b_couple_both_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_BOTH_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, household of another, couple one eligible",
+      "left_weighted_sum": 1127.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 464.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 663.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
-     "difference": 994.0,
-     "kind": "amount_difference",
-     "left": 1537.0,
-     "right": 543.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "alh_individual_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.INDIVIDUAL",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, household of another, couple both eligible",
+      "left_weighted_sum": 1537.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 543.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 994.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
-     "difference": 994.0,
-     "kind": "amount_difference",
-     "left": 1094.0,
-     "right": 100.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "alh_couple_one_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_ONE_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
+      "description": "AK APA state supplement, assisted living home, individual",
+      "left_weighted_sum": 1094.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 100.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 994.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
-     "difference": 994.0,
-     "kind": "amount_difference",
-     "left": 1094.0,
-     "right": 100.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "alh_couple_both_eligible_apa_payment_standard",
-    "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_BOTH_ELIGIBLE",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, assisted living home, couple one eligible",
+      "left_weighted_sum": 1094.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 100.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 994.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
-     "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
-     "difference": 1491.0,
-     "kind": "amount_difference",
-     "left": 1691.0,
-     "right": 200.0
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
+      "description": "AK APA state supplement, assisted living home, couple both eligible",
+      "left_weighted_sum": 1691.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 200.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 1491.0,
+      "weighted_match_rate": 0.0
     }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  }
- ],
- "concepts": [
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, independent living, individual",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, independent living, couple one eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, independent living, couple both eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, household of another, individual",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, household of another, couple one eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, household of another, couple both eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, assisted living home, individual",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, assisted living home, couple one eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "AK APA state supplement, assisted living home, couple both eligible",
-   "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
-   "parent": null,
-   "tolerance": 1e-09
-  }
- ],
- "engines": {
-  "left": "axiom",
-  "right": "policyengine"
- },
- "errors": [],
- "locales": [
-  "AK"
- ],
- "mismatches": [
-  {
-   "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
-   "difference": 994.0,
-   "kind": "amount_difference",
-   "left": 1356.0,
-   "right": 362.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
-   "difference": 994.0,
-   "kind": "amount_difference",
-   "left": 1515.0,
-   "right": 521.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
-   "difference": 1491.0,
-   "kind": "amount_difference",
-   "left": 2019.0,
-   "right": 528.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
-   "difference": 663.0,
-   "kind": "amount_difference",
-   "left": 1031.0,
-   "right": 368.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
-   "difference": 663.0,
-   "kind": "amount_difference",
-   "left": 1127.0,
-   "right": 464.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
-   "difference": 994.0,
-   "kind": "amount_difference",
-   "left": 1537.0,
-   "right": 543.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
-   "difference": 994.0,
-   "kind": "amount_difference",
-   "left": 1094.0,
-   "right": 100.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
-   "difference": 994.0,
-   "kind": "amount_difference",
-   "left": 1094.0,
-   "right": 100.0
-  },
-  {
-   "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
-   "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
-   "difference": 1491.0,
-   "kind": "amount_difference",
-   "left": 1691.0,
-   "right": 200.0
-  }
- ],
- "population": "rulespec-parameters",
- "schema_version": "axiom.comparison_report.v1",
- "scope": {
-  "period": "2026-01-01",
-  "source": "rulespec-us origin/main"
- },
- "suite": "ak-apa-state-supplement",
- "summary": {
-  "alarms": [],
-  "comparison_count": 9,
-  "error_count": 0,
-  "errors_by_engine": {},
-  "match_count": 0,
-  "mismatch_count": 9,
-  "mismatches_by_concept": [
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
-    "count": 1
-   },
-   {
-    "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
-    "count": 1
-   }
   ],
-  "mismatches_by_kind": [
-   {
-    "count": 9,
-    "kind": "amount_difference"
-   }
+  "case_count": 9,
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, independent living, individual",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, independent living, couple one eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, independent living, couple both eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, household of another, individual",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, household of another, couple one eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, household of another, couple both eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, assisted living home, individual",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, assisted living home, couple one eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "AK APA state supplement, assisted living home, couple both eligible",
+      "id": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
+      "parent": null,
+      "tolerance": 1e-09
+    }
   ],
-  "mismatches_by_scenario": {},
-  "weighted": {
-   "comparison_weight": 9,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_weight": 9
-  }
- }
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [
+    "AK"
+  ],
+  "mismatches": [
+    {
+      "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+      "difference": 994.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-a-individual-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1356.0,
+      "right": 362.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
+      "difference": 994.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-a-couple-one-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1515.0,
+      "right": 521.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
+      "difference": 1491.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-a-couple-both-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 2019.0,
+      "right": 528.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
+      "difference": 663.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-b-individual-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1031.0,
+      "right": 368.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
+      "difference": 663.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-b-couple-one-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1127.0,
+      "right": 464.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
+      "difference": 994.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-b-couple-both-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1537.0,
+      "right": 543.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
+      "difference": 994.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-alh-individual-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1094.0,
+      "right": 100.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
+      "difference": 994.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-alh-couple-one-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1094.0,
+      "right": 100.0
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
+      "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
+      "difference": 1491.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ak-apa-alh-couple-both-eligible-total-vs-supplement"
+      },
+      "kind": "amount_difference",
+      "left": 1691.0,
+      "right": 200.0
+    }
+  ],
+  "population": "rulespec-parameters",
+  "schema_version": "axiom.comparison_report.v1",
+  "scope": {
+    "period": "2026-01-01",
+    "source": "rulespec-us origin/main"
+  },
+  "suite": "ak-apa-state-supplement",
+  "summary": {
+    "alarms": [],
+    "comparison_count": 9,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 9,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/ak-apa-state-supplement.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 0,
+    "mismatch_count": 9,
+    "mismatches_by_concept": [
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
+        "count": 1
+      },
+      {
+        "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
+        "count": 1
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 9,
+        "kind": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {},
+    "weighted": {
+      "comparison_weight": 9,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_weight": 9
+    }
+  },
+  "cases": [
+    {
+      "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "a_individual_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.INDIVIDUAL",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-a_individual_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_individual_apa_payment_standard",
+          "difference": 994.0,
+          "kind": "amount_difference",
+          "left": 1356.0,
+          "right": 362.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "a_couple_one_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_ONE_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-a_couple_one_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_one_eligible_apa_payment_standard",
+          "difference": 994.0,
+          "kind": "amount_difference",
+          "left": 1515.0,
+          "right": 521.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "a_couple_both_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_BOTH_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-a_couple_both_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#a_couple_both_eligible_apa_payment_standard",
+          "difference": 1491.0,
+          "kind": "amount_difference",
+          "left": 2019.0,
+          "right": 528.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "b_individual_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.INDIVIDUAL",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-b_individual_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_individual_apa_payment_standard",
+          "difference": 663.0,
+          "kind": "amount_difference",
+          "left": 1031.0,
+          "right": 368.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "b_couple_one_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_ONE_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-b_couple_one_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_one_eligible_apa_payment_standard",
+          "difference": 663.0,
+          "kind": "amount_difference",
+          "left": 1127.0,
+          "right": 464.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "b_couple_both_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_BOTH_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-b_couple_both_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#b_couple_both_eligible_apa_payment_standard",
+          "difference": 994.0,
+          "kind": "amount_difference",
+          "left": 1537.0,
+          "right": 543.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "alh_individual_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.INDIVIDUAL",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-alh_individual_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_individual_apa_payment_standard",
+          "difference": 994.0,
+          "kind": "amount_difference",
+          "left": 1094.0,
+          "right": 100.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "alh_couple_one_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_ONE_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-alh_couple_one_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_one_eligible_apa_payment_standard",
+          "difference": 994.0,
+          "kind": "amount_difference",
+          "left": 1094.0,
+          "right": 100.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "alh_couple_both_eligible_apa_payment_standard",
+        "axiom_source": "rulespec-us origin/main: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_BOTH_ELIGIBLE",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "ak-apa-state-supplement-alh_couple_both_eligible_apa_payment_standard",
+          "concept": "us-ak:policies/dpa/apa/standards/2026/state-supplement-payment-standard#alh_couple_both_eligible_apa_payment_standard",
+          "difference": 1491.0,
+          "kind": "amount_difference",
+          "left": 1691.0,
+          "right": 200.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ]
 }

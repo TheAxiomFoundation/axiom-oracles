@@ -8,6 +8,11 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from axiom_oracles.adapters.taxsim.pins import (
+    TaxsimIdentityRecorder,
+    TaxsimLawYearError,
+    require_law_years,
+)
 from axiom_oracles.provenance import resolve_run_kind
 from axiom_oracles.bridges.population import load_populace_dataset, population_table
 from axiom_oracles.bridges.state_tax_populace import (
@@ -17,12 +22,16 @@ from axiom_oracles.bridges.state_tax_populace import (
 from axiom_oracles.bridges.state_tax_populace_runner import (
     DISPOSITION_READY,
     NO_BROAD_PIT_FIPS,
+    StateTaxPopulationRoutingError,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
+    calculate_taxsim_targets,
     compare_ready_state_tax_units,
     population_routing_report,
+    require_policyengine_us_floor,
     route_tax_units,
     runtime_provenance,
+    select_ready_tax_units,
     validate_campaign_dataset_identity,
 )
 
@@ -49,6 +58,18 @@ _IL_TAXABLE_INCOME_INPUT = (
 _IL_RECAPTURE_INPUT = (
     f"{_IL_INPUT_PREFIX}il_pit_pilot_recapture_of_investment_credit"
 )
+_IN_AGI_INPUT = (
+    "us-in:policies/income_tax/pilot_liability_pipeline#input."
+    "in_pit_pilot_indiana_adjusted_gross_income"
+)
+_PA_ADJUSTED_TAXABLE_INCOME_INPUT = (
+    "us-pa:policies/income_tax/pilot_liability_pipeline#input."
+    "pa_pit_pilot_state_taxable_income"
+)
+_SC_TAXABLE_INCOME_INPUT = (
+    "us-sc:policies/income_tax/pilot_liability_pipeline#input."
+    "sc_pit_pilot_state_taxable_income"
+)
 _NY_INPUT_PREFIX = (
     "us-ny:policies/income_tax/pilot_liability_pipeline#input."
 )
@@ -62,11 +83,36 @@ _NY_JOINT_OR_SURVIVING_INPUT = (
 _NY_HEAD_OF_HOUSEHOLD_INPUT = (
     f"{_NY_INPUT_PREFIX}ny_pit_pilot_filing_status_head_of_household"
 )
+_NC_INPUT_PREFIX = (
+    "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
+)
+_NC_BOOLEAN_INPUTS = {
+    "joint_or_surviving": "nc_pit_2026_filing_status_joint_or_surviving_spouse",
+    "head_of_household": "nc_pit_2026_filing_status_head_of_household",
+    "married_separately": "nc_pit_2026_filing_status_married_separately",
+    "standard_deduction_eligible": (
+        "nc_pit_2026_eligible_for_federal_standard_deduction"
+    ),
+}
+_NC_PRESENCE_INPUTS = {
+    "qualifying_children": "nc_pit_2026_federal_child_tax_credit_qualifying_children",
+    "charitable_contributions": "nc_pit_2026_charitable_contributions",
+    "qualified_residence_interest": "nc_pit_2026_qualified_residence_interest",
+    "real_estate_property_taxes": "nc_pit_2026_real_estate_property_taxes",
+    "medical_and_dental_expenses": "nc_pit_2026_medical_and_dental_expenses",
+    "united_states_obligation_interest": "nc_pit_2026_eligible_obligation_interest",
+    "taxable_social_security": (
+        "nc_pit_2026_taxable_social_security_and_railroad_retirement"
+    ),
+    "income_tax_refunds": "nc_pit_2026_income_tax_refunds",
+}
+_NC_AGI_INPUT = f"{_NC_INPUT_PREFIX}nc_pit_2026_federal_adjusted_gross_income"
 
 
 def _projection_branch_diagnostics(
     projection_inputs: dict,
     routes: tuple,
+    policyengine_targets: dict | None = None,
 ) -> dict[str, dict[str, int]]:
     """Summarize reviewed state branch exercise without exposing microdata."""
 
@@ -142,6 +188,134 @@ def _projection_branch_diagnostics(
             "zero_recapture_count": sum(value == 0 for value in recapture),
             "positive_recapture_count": sum(value > 0 for value in recapture),
         }
+    indiana = projection_inputs.get("IN")
+    if isinstance(indiana, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "IN" and route.disposition == DISPOSITION_READY
+        }
+        agi_values = indiana[_IN_AGI_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("IN")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "IN projection diagnostics require the reviewed in_agi_tax "
+                "target values"
+            )
+        missing_agi = sorted(ready_ids - set(agi_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_agi or missing_targets:
+            raise ValueError(
+                "IN projection diagnostics require AGI and output values for "
+                "every ready TaxUnit"
+            )
+        agi = [float(agi_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        diagnostics["IN"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "nonpositive_agi_count": sum(value <= 0 for value in agi),
+            "positive_agi_count": sum(value > 0 for value in agi),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
+        }
+    pennsylvania = projection_inputs.get("PA")
+    if isinstance(pennsylvania, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "PA" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = pennsylvania[_PA_ADJUSTED_TAXABLE_INCOME_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("PA")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "PA projection diagnostics require the reviewed "
+                "pa_income_tax_before_forgiveness target values"
+            )
+        missing_taxable = sorted(ready_ids - set(taxable_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_taxable or missing_targets:
+            raise ValueError(
+                "PA projection diagnostics require adjusted taxable income and "
+                "output values for every ready TaxUnit"
+            )
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "PA projection diagnostics require nonnegative adjusted "
+                "taxable income for every ready TaxUnit"
+            )
+        if any(value < 0 for value in outputs):
+            raise ValueError(
+                "PA projection diagnostics require nonnegative "
+                "before-forgiveness tax for every ready TaxUnit"
+            )
+        diagnostics["PA"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_adjusted_taxable_income_count": 0,
+            "zero_adjusted_taxable_income_count": sum(
+                value == 0 for value in taxable
+            ),
+            "positive_adjusted_taxable_income_count": sum(
+                value > 0 for value in taxable
+            ),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
+        }
+    south_carolina = projection_inputs.get("SC")
+    if isinstance(south_carolina, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "SC" and route.disposition == DISPOSITION_READY
+        }
+        taxable_values = south_carolina[_SC_TAXABLE_INCOME_INPUT]
+        target_values = (
+            (policyengine_targets or {}).get("SC")
+            if isinstance(policyengine_targets, dict)
+            else None
+        )
+        if not isinstance(target_values, dict):
+            raise ValueError(
+                "SC projection diagnostics require the reviewed "
+                "sc_income_tax_before_non_refundable_credits target values"
+            )
+        missing_taxable = sorted(ready_ids - set(taxable_values), key=str)
+        missing_targets = sorted(ready_ids - set(target_values), key=str)
+        if missing_taxable or missing_targets:
+            raise ValueError(
+                "SC projection diagnostics require taxable income and output "
+                "values for every ready TaxUnit"
+            )
+        taxable = [float(taxable_values[item]) for item in ready_ids]
+        outputs = [float(target_values[item]) for item in ready_ids]
+        if any(value < 0 for value in taxable):
+            raise ValueError(
+                "SC projection diagnostics require nonnegative South Carolina "
+                "taxable income for every ready TaxUnit"
+            )
+        if any(value < 0 for value in outputs):
+            raise ValueError(
+                "SC projection diagnostics require nonnegative tax before "
+                "nonrefundable credits for every ready TaxUnit"
+            )
+        diagnostics["SC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "negative_taxable_income_count": 0,
+            "zero_taxable_income_count": sum(value == 0 for value in taxable),
+            "positive_taxable_income_count": sum(value > 0 for value in taxable),
+            "zero_output_count": sum(value == 0 for value in outputs),
+            "positive_output_count": sum(value > 0 for value in outputs),
+        }
     new_york = projection_inputs.get("NY")
     if isinstance(new_york, dict):
         ready_ids = {
@@ -180,6 +354,57 @@ def _projection_branch_diagnostics(
             "joint_or_surviving_count": joint_or_surviving_count,
             "head_of_household_count": head_of_household_count,
             "single_or_separate_count": single_or_separate_count,
+        }
+    north_carolina = projection_inputs.get("NC")
+    if isinstance(north_carolina, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "NC" and route.disposition == DISPOSITION_READY
+        }
+        flags = {
+            label: [
+                north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]
+                for item in ready_ids
+            ]
+            for label, name in _NC_BOOLEAN_INPUTS.items()
+        }
+        if any(type(value) is not bool for values in flags.values() for value in values):
+            raise ValueError(
+                "NC projection diagnostics require strict Boolean filing-status "
+                "and eligibility values for every ready TaxUnit"
+            )
+        statuses = list(
+            zip(
+                flags["joint_or_surviving"],
+                flags["head_of_household"],
+                flags["married_separately"],
+                strict=True,
+            )
+        )
+        if any(sum(status) > 1 for status in statuses):
+            raise ValueError(
+                "NC projection diagnostics require mutually exclusive "
+                "filing-status values"
+            )
+        agi = [float(north_carolina[_NC_AGI_INPUT][item]) for item in ready_ids]
+        diagnostics["NC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "joint_or_surviving_count": sum(flags["joint_or_surviving"]),
+            "head_of_household_count": sum(flags["head_of_household"]),
+            "married_separately_count": sum(flags["married_separately"]),
+            "single_count": sum(not any(status) for status in statuses),
+            "standard_deduction_ineligible_count": sum(
+                not value for value in flags["standard_deduction_eligible"]
+            ),
+            "nonpositive_agi_count": sum(value <= 0 for value in agi),
+            **{
+                f"{label}_present_count": sum(
+                    float(north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]) > 0
+                    for item in ready_ids
+                )
+                for label, name in _NC_PRESENCE_INPUTS.items()
+            },
         }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):
@@ -231,6 +456,16 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rulespec-root", type=Path, required=True)
     parser.add_argument("--axiom-rules-path", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--no-taxsim",
+        action="store_true",
+        help=(
+            "Skip the TAXSIM oracle leg. By default every ready state is "
+            "also graded against the pinned policyengine-taxsim binary "
+            "(adapters/taxsim/taxsim_pins.json); the run fails if the "
+            "package is missing rather than silently dropping the leg."
+        ),
+    )
     return parser
 
 
@@ -271,6 +506,24 @@ def main(argv: list[str] | None = None) -> int:
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
+    if not args.no_taxsim:
+        # Before the dataset loads: the host's TAXSIM binary may stop short
+        # of the validation year (the pinned Linux build accepts 1960-2024).
+        try:
+            require_law_years([args.year])
+        except TaxsimLawYearError as exc:
+            raise SystemExit(str(exc)) from exc
+    # Before the dataset loads: a state whose projection relies on a
+    # policyengine-us fix refuses an older or missing oracle.
+    campaign_states = requested_states or {
+        state
+        for state, jurisdiction in contract.by_state().items()
+        if jurisdiction.status == "ready"
+    }
+    try:
+        require_policyengine_us_floor(campaign_states)
+    except StateTaxPopulationRoutingError as exc:
+        raise SystemExit(str(exc)) from exc
     identity: dict = {}
     dataset = load_populace_dataset(
         "us",
@@ -292,22 +545,71 @@ def main(argv: list[str] | None = None) -> int:
         if requested_states
         else routes
     )
+    # The comparison grades only the per-state selection; computing oracle
+    # targets for the full ready population would make a sampled smoke run
+    # as expensive as a full campaign (and the extra targets are discarded
+    # at grading time). Applying the same deterministic selection
+    # compare_ready_state_tax_units uses keeps the target legs and the
+    # graded set identical.
+    target_routes = select_ready_tax_units(
+        comparison_routes, sample_size_per_state=args.sample_size_per_state
+    )
+
+    # One Microsimulation shared across the three calculators: each builds
+    # its own by default, and two-to-three concurrent full-population sims
+    # OOM-killed every full campaign attempt on 2026-08-24. The calculators
+    # only ever .calculate() — sharing is read-only. Bound to the campaign
+    # dataset: any other source is a programming error, not a cache miss
+    # (a keyless memo here once silently served the first dataset to every
+    # caller). The import stays lazy so non-simulation paths run without
+    # the PolicyEngine extra.
+    _shared_sim: list = []
+
+    def _shared_microsimulation(source):
+        if source is not dataset:
+            raise ValueError(
+                "the shared campaign Microsimulation is bound to the loaded "
+                "Populace dataset; refusing to serve a different source"
+            )
+        if not _shared_sim:
+            from policyengine_us import Microsimulation
+
+            _shared_sim.append(Microsimulation(dataset=dataset))
+        return _shared_sim[0]
+
     targets = calculate_policyengine_targets(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
     projection_inputs = calculate_policyengine_projection_inputs(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
+    taxsim_targets = None
+    taxsim_unprojected_inputs = {}
+    taxsim_recorder = TaxsimIdentityRecorder()
+    if not args.no_taxsim:
+        taxsim_targets = calculate_taxsim_targets(
+            dataset=dataset,
+            raw_tax_units=raw_tax_units,
+            raw_persons=raw_persons,
+            routes=target_routes,
+            year=args.year,
+            contract=contract,
+            microsimulation_factory=_shared_microsimulation,
+            unprojected_inputs=taxsim_unprojected_inputs,
+            identity_recorder=taxsim_recorder,
+        )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -319,9 +621,12 @@ def main(argv: list[str] | None = None) -> int:
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
         ),
+        # Diagnostics describe the selected (graded) population — the same
+        # routes the projection inputs were computed for.
         "projection_diagnostics": _projection_branch_diagnostics(
             projection_inputs,
-            tuple(comparison_routes),
+            target_routes,
+            targets,
         ),
         "routing": population_routing_report(
             routes,
@@ -334,13 +639,20 @@ def main(argv: list[str] | None = None) -> int:
             known_tax_unit_ids={route.tax_unit_id for route in routes},
             policyengine_targets=targets,
             policyengine_projection_inputs=projection_inputs,
+            taxsim_targets=taxsim_targets,
+            taxsim_unprojected_inputs=taxsim_unprojected_inputs,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
             sample_size_per_state=args.sample_size_per_state,
             contract=contract,
         ),
+        "taxsim_leg": (
+            "skipped" if args.no_taxsim else "graded"
+        ),
     }
+    if taxsim_recorder.to_dict():
+        report["engine_identity"] = {"taxsim": taxsim_recorder.to_dict()}
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     return 0
 

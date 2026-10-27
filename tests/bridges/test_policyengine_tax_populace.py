@@ -693,6 +693,8 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
     assert projected["filing_status"] == 3
     assert "earned_income" not in projected
     assert projected["adjusted_gross_income"] == 22_000
+    # Pub. 596 Worksheet 1 over the filer only: lines 1-3 = 40 + 20 + 100 +
+    # 50; line 7 = max(0, 400 - 100) = 300; line 13 = max(0, 0) = 0.
     assert projected["eitc_relevant_investment_income"] == 510
     assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
     assert (
@@ -772,7 +774,12 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
     projected = project_eitc_tax_unit_inputs(row=row, persons=persons)
     contexts = project_tax_unit_person_contexts(persons)
 
-    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
+    # 26 USC 32(c)(1)(A)(ii)(II) tests "such individual (or, if the individual
+    # is married, either the individual or the individual's spouse)". The only
+    # filer here is 66, and the 34-year-old is a dependent, so the test fails.
+    # PolicyEngine-US 1.764.6 counted the dependent's age; PolicyEngine-US
+    # #9132 (first released in 1.779.8) restricts it to the filer and spouse.
+    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is False
     assert (
         projected["taxpayer_includes_required_social_security_number_on_return"] is True
     )
@@ -800,7 +807,23 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
     )
 
 
-def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible():
+@pytest.mark.parametrize(
+    ("ssn_card_type", "expected"),
+    [("CITIZEN", True), ("OTHER", False)],
+)
+def test_eitc_projection_identification_checks_the_fallback_filer(
+    ssn_card_type, expected
+):
+    """PolicyEngine names no head here: a 16-year-old alone, every role flag
+    false. ``tax_unit_filers`` still files the 16-year-old, and identification
+    reads that same filer, so the answer is that filer's own SSN.
+
+    26 USC 32(c)(1)(E): "No credit shall be allowed under this section to an
+    eligible individual who does not include on the return of tax for the
+    taxable year— (i) such individual's taxpayer identification number".
+    The person contexts still treat the 16-year-old as a dependent; moving
+    them onto the same filer list is axiom-oracles#633.
+    """
     row = {
         "filing_status": "HEAD_OF_HOUSEHOLD",
         "adjusted_gross_income": 0,
@@ -808,7 +831,7 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     persons = [
         {
             "age": 16,
-            "ssn_card_type": "CITIZEN",
+            "ssn_card_type": ssn_card_type,
             "is_tax_unit_head": False,
             "is_tax_unit_spouse": False,
             "is_tax_unit_head_or_spouse": False,
@@ -822,10 +845,12 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     context = project_tax_unit_person_contexts(persons)[0]
 
     assert (
-        projected["taxpayer_includes_required_social_security_number_on_return"] is True
+        projected["taxpayer_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert (
-        projected["spouse_includes_required_social_security_number_on_return"] is True
+        projected["spouse_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert context.is_tax_unit_dependent is True
     assert context.qualifying_child_under_section_152_c is True
@@ -985,6 +1010,8 @@ def test_section_152_c_projection_uses_leaf_child_facts():
 
 
 def test_eitc_relevant_investment_income_replaces_limited_loss_with_nonnegative_gain():
+    """Pub. 596 Worksheet 1: lines 1-3 = 10 + 20 + 30 + 40; line 5 is a loss
+    (200 - 1,000), so line 7 = 0; line 13 = max(0, 50) = 50; line 14 = 150."""
     assert (
         project_eitc_relevant_investment_income(
             row={"filing_status": "SINGLE"},
@@ -1075,6 +1102,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1084,6 +1118,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1357,6 +1398,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1366,6 +1414,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1536,6 +1591,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1545,6 +1607,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1982,7 +2051,7 @@ def test_build_contribution_and_benefit_base_request_queries_encoded_ssa_policy(
     request = build_contribution_and_benefit_base_request(year=2026)
 
     assert request == {
-        "mode": "explain",
+        "mode": "fast",
         "dataset": {"inputs": [], "relations": []},
         "queries": [
             {
@@ -2390,7 +2459,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
     assert request["dataset"]["inputs"] == [
         {
             "name": "us:statutes/26/3101/a#input.wages",
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "person_7",
             "interval": {
                 "period_kind": "tax_year",
@@ -2583,3 +2652,62 @@ def test_policyengine_data_certification_override_noop_for_populace(monkeypatch)
     tax_populace._install_policyengine_data_certification_override()
 
     assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+
+
+def test_engine_timeouts_default_without_an_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.delenv(tp.ENGINE_RUN_TIMEOUT_ENV, raising=False)
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "  ")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 600
+    assert tp.engine_timeout_seconds(tp.ENGINE_COMPILE_TIMEOUT_ENV, 60) == 60
+
+
+def test_engine_timeouts_take_a_positive_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 7200
+
+
+@pytest.mark.parametrize("raw", ["0", "-5", "1.5", "ten", "600s"])
+def test_engine_timeouts_refuse_a_malformed_override(monkeypatch, raw):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, raw)
+    with pytest.raises(SystemExit, match=tp.ENGINE_RUN_TIMEOUT_ENV):
+        tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600)
+
+
+def test_run_axiom_program_passes_the_configured_timeouts(monkeypatch, tmp_path):
+    """The override reaches both engine subprocesses: compile and run."""
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "90")
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    seen = []
+
+    class Stop(Exception):
+        pass
+
+    real_run = tp.subprocess.run
+
+    def fake_run(cmd, **kwargs):
+        if not str(cmd[0]).endswith("axiom-rules-engine"):
+            return real_run(cmd, **kwargs)
+        seen.append((cmd[1], kwargs.get("timeout")))
+        raise Stop
+
+    monkeypatch.setattr(tp.subprocess, "run", fake_run)
+    rulespec = tmp_path / "rulespec-us"
+    (rulespec / "us" / "statutes").mkdir(parents=True)
+    program = rulespec / "us" / "statutes" / "p.yaml"
+    program.write_text("format: rulespec/v1\n")
+    engine = tmp_path / "engine"
+    (engine / "target" / "release").mkdir(parents=True)
+    (engine / "target" / "release" / "axiom-rules-engine").write_text("")
+    with pytest.raises(Stop):
+        tp.run_axiom_program(
+            program=program, request={}, rulespec_root=rulespec, axiom_rules_path=engine
+        )
+    assert seen == [("compile", 90)]

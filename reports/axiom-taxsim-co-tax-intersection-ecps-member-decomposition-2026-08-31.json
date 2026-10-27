@@ -1,0 +1,507 @@
+{
+ "schema": "axiom_oracles.member_decomposition_receipt.v1",
+ "suite": "co-tax-intersection-taxsim",
+ "generated": "2026-08-31",
+ "method": "Full-evidence axiom closure run (record_all_outputs, 337 outputs/unit, all 48 units clean, compared concepts reproduce all 50 committed mismatch values exactly) + pinned-binary TAXSIM synthetic probes. Every row residual equals the sum of the named members below.",
+ "notes": {
+  "seca_ald": "TAXSIM SE ALD reproduced per row by isolated wages+SE synthetic probes of the pinned binary (probe v10 identity). Statutory ALD = 0.5*(0.124*max(0,min(0.9235*se, base-wages)) + 0.029*0.9235*se); axiom matches at the bridge base 186,000 (deliberate PolicyEngine-matching bridge parameter; SSA official 2026 base is 184,500 per rulespec-us us/policies/ssa/contribution-and-benefit-base/2026). TAXSIM additionally deducts half of the sec.1401(b)(2) additional Medicare tax, which sec.164(f)(1) excludes (probe: w=0, se=810,431 -> ALD 24,759.23 = 22,291.28 statutory + 0.5*0.009*(748,433-200,000)).",
+  "qbid": "TAXSIM 2026-05-21 module applies 20% of (psemp+ssemp net of its SE ALD) with no sec.199A(b)(3) wage/UBIA limitation and no H.R.1 sec.70105 $400 minimum; axiom applies the statutory phase-in (pr = clamp((TI_before_QBID - 403,500 joint / 201,750 single)/(150,000 / 75,000))) and the $400 floor. Rows where the QBI bases differ carry the dispositioned rental-in-QBI bridge convention.",
+  "sec461l": "axiom leg caps aggregate business loss (negative SE net of positive rental) at the 2024-vintage 305,000/610,000; TAXSIM caps at its projected 332,389.95/664,779.90 plus net positive capital gain (established empirically: psemp-only probes allow exactly 332,389.95 at any loss size; adding net capital gain raises the allowance dollar-for-dollar).",
+  "ss_scope": "TAXSIM projection sums gssi over head+spouse only (adapters/taxsim/projection.py earners); the axiom projection sums social security benefits over all unit members. Member = 0.85*(benefits_all - gssi).",
+  "senior": "H.R.1 sec.70103 additional senior deduction phases out per eligible senior at 6% of MAGI over the threshold; the AGI members above shift MAGI, producing the knock-on member.",
+  "amt": "axiom AMT reproduces exactly as max(0, PartIII_TMT - (sec.1(h)+sec.1(j) regular tax)) from its own audited worksheet on every row; the bridge Part III grants the capital-gain stack the full 0%/15% brackets (the dispositioned capgains-worksheet-bucket-routing convention), while TAXSIM v27 carries its pre-OBBBA AMT parameter vintage (the dispositioned taxsim-2026-amt-parameter-vintage class)."
+ },
+ "taxable_income_members": {
+  "ecps-tax-unit-135586": {
+   "resid": -1271.63,
+   "members": {
+    "qbid": -1271.62
+   },
+   "sum": -1271.62,
+   "ok": true
+  },
+  "ecps-tax-unit-58620": {
+   "resid": 1314.68,
+   "members": {
+    "seca_ald": 28.58,
+    "qbid": 1286.11
+   },
+   "sum": 1314.68,
+   "ok": true
+  },
+  "ecps-tax-unit-58643": {
+   "resid": -2479.65,
+   "members": {
+    "seca_ald": 0.46,
+    "qbid": -2480.11
+   },
+   "sum": -2479.65,
+   "ok": true
+  },
+  "ecps-tax-unit-58645": {
+   "resid": -2867.54,
+   "members": {
+    "qbid": -2867.54
+   },
+   "sum": -2867.54,
+   "ok": true
+  },
+  "ecps-tax-unit-135959": {
+   "resid": -8381.31,
+   "members": {
+    "seca_ald": -0.01,
+    "qbid": -6731.31,
+    "std": -1650.0
+   },
+   "sum": -8381.32,
+   "ok": true
+  },
+  "ecps-tax-unit-58942": {
+   "resid": 1711.24,
+   "members": {
+    "seca_ald": -93.0,
+    "qbid": 1804.25
+   },
+   "sum": 1711.24,
+   "ok": true
+  },
+  "ecps-tax-unit-58950": {
+   "resid": 12565.02,
+   "members": {
+    "ss_scope": 12555.75,
+    "qbid": -0.23,
+    "senior": 9.5
+   },
+   "sum": 12565.02,
+   "ok": true
+  },
+  "ecps-tax-unit-136114": {
+   "resid": -1298.78,
+   "members": {
+    "qbid": -1298.78
+   },
+   "sum": -1298.78,
+   "ok": true
+  },
+  "ecps-tax-unit-59011": {
+   "resid": 15188.41,
+   "members": {
+    "ss_scope": 15188.41,
+    "seca_ald": -0.01
+   },
+   "sum": 15188.41,
+   "ok": true
+  },
+  "ecps-tax-unit-136208": {
+   "resid": 7575.34,
+   "members": {
+    "seca_ald": -0.01,
+    "qbid": -474.66,
+    "std": 8050.0
+   },
+   "sum": 7575.34,
+   "ok": true
+  },
+  "ecps-tax-unit-59151": {
+   "resid": 21983.47,
+   "members": {
+    "ss_scope": 19628.1,
+    "senior": 2355.37
+   },
+   "sum": 21983.47,
+   "ok": true
+  },
+  "ecps-tax-unit-136327": {
+   "resid": -180.73,
+   "members": {
+    "qbid": -180.73
+   },
+   "sum": -180.73,
+   "ok": true
+  },
+  "ecps-tax-unit-136399": {
+   "resid": -74.4,
+   "members": {
+    "seca_ald": -93.0,
+    "qbid": 18.6
+   },
+   "sum": -74.39,
+   "ok": true
+  },
+  "ecps-tax-unit-59264": {
+   "resid": -4819.53,
+   "members": {
+    "qbid": -4819.53
+   },
+   "sum": -4819.53,
+   "ok": true
+  },
+  "ecps-tax-unit-59285": {
+   "resid": 895.43,
+   "members": {
+    "itemized": 895.43
+   },
+   "sum": 895.44,
+   "ok": true
+  },
+  "ecps-tax-unit-136429": {
+   "resid": -1371.54,
+   "members": {
+    "qbid": -1371.53
+   },
+   "sum": -1371.53,
+   "ok": true
+  },
+  "ecps-tax-unit-154504": {
+   "resid": 24389.95,
+   "members": {
+    "seca_ald": -3000.0,
+    "sec461l": 27389.95
+   },
+   "sum": 24389.95,
+   "ok": true
+  },
+  "ecps-tax-unit-154724": {
+   "resid": 139270.87,
+   "members": {
+    "seca_ald": 4739.42,
+    "qbid": 134531.46
+   },
+   "sum": 139270.88,
+   "ok": true
+  },
+  "ecps-tax-unit-155406": {
+   "resid": 2248.63,
+   "members": {
+    "seca_ald": 80.79,
+    "qbid": 2167.83
+   },
+   "sum": 2248.62,
+   "ok": true
+  },
+  "ecps-tax-unit-156147": {
+   "resid": 45137.07,
+   "members": {
+    "seca_ald": -93.0,
+    "qbid": 45230.07
+   },
+   "sum": 45137.07,
+   "ok": true
+  },
+  "ecps-tax-unit-156467": {
+   "resid": 28.51,
+   "members": {
+    "seca_ald": 1.82,
+    "qbid": 26.69
+   },
+   "sum": 28.51,
+   "ok": true
+  },
+  "ecps-tax-unit-156651": {
+   "resid": 54781.87,
+   "members": {
+    "seca_ald": 515.28,
+    "qbid": 54266.59
+   },
+   "sum": 54781.87,
+   "ok": true
+  },
+  "ecps-tax-unit-157013": {
+   "resid": 95158.92,
+   "members": {
+    "seca_ald": 933.66,
+    "qbid": 94225.25
+   },
+   "sum": 95158.91,
+   "ok": true
+  },
+  "ecps-tax-unit-157251": {
+   "resid": 98.85,
+   "members": {
+    "seca_ald": 18.38,
+    "qbid": 80.47
+   },
+   "sum": 98.85,
+   "ok": true
+  },
+  "ecps-tax-unit-157317": {
+   "resid": 288676.39,
+   "members": {
+    "seca_ald": 5600.22,
+    "qbid": 283076.17
+   },
+   "sum": 288676.39,
+   "ok": true
+  },
+  "ecps-tax-unit-157868": {
+   "resid": 41546.31,
+   "members": {
+    "seca_ald": -93.0,
+    "qbid": 41639.32
+   },
+   "sum": 41546.32,
+   "ok": true
+  },
+  "ecps-tax-unit-159221": {
+   "resid": 2263.96,
+   "members": {
+    "sec461l": 2263.96
+   },
+   "sum": 2263.96,
+   "ok": true
+  },
+  "ecps-tax-unit-161870": {
+   "resid": 73939.11,
+   "members": {
+    "seca_ald": 2669.29,
+    "qbid": 71269.82
+   },
+   "sum": 73939.11,
+   "ok": true
+  },
+  "ecps-tax-unit-161979": {
+   "resid": 44397.67,
+   "members": {
+    "seca_ald": 1608.92,
+    "qbid": 42788.74
+   },
+   "sum": 44397.66,
+   "ok": true
+  },
+  "ecps-tax-unit-162440": {
+   "resid": 237425.19,
+   "members": {
+    "seca_ald": 0.01,
+    "sec461l": 238740.59,
+    "itemized": -1315.41
+   },
+   "sum": 237425.19,
+   "ok": true
+  },
+  "ecps-tax-unit-163020": {
+   "resid": 37893.91,
+   "members": {
+    "seca_ald": 1377.94,
+    "qbid": 36515.96
+   },
+   "sum": 37893.9,
+   "ok": true
+  },
+  "ecps-tax-unit-164227": {
+   "resid": 34.92,
+   "members": {
+    "seca_ald": 2.49,
+    "qbid": 32.42
+   },
+   "sum": 34.91,
+   "ok": true
+  },
+  "ecps-tax-unit-164548": {
+   "resid": 159377.94,
+   "members": {
+    "seca_ald": 2149.95,
+    "qbid": 157227.99
+   },
+   "sum": 159377.94,
+   "ok": true
+  },
+  "ecps-tax-unit-164633": {
+   "resid": 4193224.92,
+   "members": {
+    "seca_ald": 85620.15,
+    "qbid": 4107604.76
+   },
+   "sum": 4193224.91,
+   "ok": true
+  }
+ },
+ "amt_identities": {
+  "ecps-tax-unit-58555": {
+   "amt_axiom": 14696.78,
+   "identity_tmt_minus_regular": 14696.78,
+   "tmt_part_iii": 170034.91,
+   "regular_1h_1j": 155338.13,
+   "taxsim_v27": 11099.78,
+   "amti_axiom": 909547.89,
+   "taxsim_v26": 909547.89
+  },
+  "ecps-tax-unit-58687": {
+   "amt_axiom": 15117.62,
+   "identity_tmt_minus_regular": 15117.62,
+   "tmt_part_iii": 206633.28,
+   "regular_1h_1j": 191515.66,
+   "taxsim_v27": 18057.49,
+   "amti_axiom": 1066958.78,
+   "taxsim_v26": 1066958.78
+  },
+  "ecps-tax-unit-157643": {
+   "amt_axiom": 6717.99,
+   "identity_tmt_minus_regular": 6717.99,
+   "tmt_part_iii": 14674254.27,
+   "regular_1h_1j": 14667536.27,
+   "taxsim_v27": 9991.02,
+   "amti_axiom": 73597481.37,
+   "taxsim_v26": 73597481.37
+  },
+  "ecps-tax-unit-158759": {
+   "amt_axiom": 7218.73,
+   "identity_tmt_minus_regular": 7218.73,
+   "tmt_part_iii": 11931443.35,
+   "regular_1h_1j": 11924224.62,
+   "taxsim_v27": 10491.76,
+   "amti_axiom": 59880923.12,
+   "taxsim_v26": 59880923.12
+  },
+  "ecps-tax-unit-158883": {
+   "amt_axiom": 31417.51,
+   "identity_tmt_minus_regular": 31417.51,
+   "tmt_part_iii": 11890305.1,
+   "regular_1h_1j": 11858887.59,
+   "taxsim_v27": 34838.76,
+   "amti_axiom": 59411931.03,
+   "taxsim_v26": 59411931.04
+  },
+  "ecps-tax-unit-159302": {
+   "amt_axiom": 2479.65,
+   "identity_tmt_minus_regular": 2479.65,
+   "tmt_part_iii": 11043812.82,
+   "regular_1h_1j": 11041333.17,
+   "taxsim_v27": 4531.93,
+   "amti_axiom": 54896764.06,
+   "taxsim_v26": 54896764.06
+  },
+  "ecps-tax-unit-156467": {
+   "amt_axiom": 12915.45,
+   "identity_tmt_minus_regular": 12915.45,
+   "tmt_part_iii": 18761068.02,
+   "regular_1h_1j": 18748152.57,
+   "taxsim_v27": 23553.97,
+   "amti_axiom": 93622754.85,
+   "taxsim_v26": 93622726.34
+  },
+  "ecps-tax-unit-160366": {
+   "amt_axiom": 23843.27,
+   "identity_tmt_minus_regular": 23843.27,
+   "tmt_part_iii": 10140461.32,
+   "regular_1h_1j": 10116618.05,
+   "taxsim_v27": 26683.63,
+   "amti_axiom": 50773411.88,
+   "taxsim_v26": 50747310.16
+  },
+  "ecps-tax-unit-156922": {
+   "amt_axiom": 6440.0,
+   "identity_tmt_minus_regular": 6440.0,
+   "tmt_part_iii": 17337824.46,
+   "regular_1h_1j": 17331384.46,
+   "taxsim_v27": 9713.03,
+   "amti_axiom": 86916722.3,
+   "taxsim_v26": 86516084.36
+  },
+  "ecps-tax-unit-156992": {
+   "amt_axiom": 2020.68,
+   "identity_tmt_minus_regular": 2020.68,
+   "tmt_part_iii": 268254.04,
+   "regular_1h_1j": 266233.36,
+   "taxsim_v27": 0.0,
+   "amti_axiom": 1161794.78,
+   "taxsim_v26": 1161794.78
+  }
+ },
+ "liability_composites": {
+  "ecps-tax-unit-136212": {
+   "tbc": 206.25,
+   "nonrefundable_ctc_used": 206.25,
+   "eitc_axiom": 7469.02,
+   "refundable_ctc_axiom": 4829.72,
+   "liability_axiom": -12298.74,
+   "taxsim": {
+    "v19": 206.25,
+    "v22": 206.25,
+    "v25": 0.0,
+    "actc": 0.0,
+    "fiitax": 0.0
+   }
+  },
+  "ecps-tax-unit-136408": {
+   "tbc": 77.42,
+   "nonrefundable_ctc_used": 77.42,
+   "eitc_axiom": 7848.92,
+   "refundable_ctc_axiom": 4571.13,
+   "liability_axiom": -12420.06,
+   "taxsim": {
+    "v19": 77.42,
+    "v22": 77.42,
+    "v25": 0.0,
+    "actc": 0.0,
+    "fiitax": 0.0
+   }
+  },
+  "ecps-tax-unit-136417": {
+   "tbc": 126.86,
+   "nonrefundable_ctc_used": 126.86,
+   "eitc_axiom": 4034.39,
+   "refundable_ctc_axiom": 1700.0,
+   "liability_axiom": -5734.39,
+   "taxsim": {
+    "v19": 126.86,
+    "v22": 126.86,
+    "v25": 0.0,
+    "actc": 0.0,
+    "fiitax": 0.0
+   }
+  }
+ },
+ "seca_probe_v10": {
+  "ecps-tax-unit-58620": {
+   "v10": 379915.99
+  },
+  "ecps-tax-unit-58942": {
+   "v10": 195370.88
+  },
+  "ecps-tax-unit-136399": {
+   "v10": 229752.54
+  },
+  "ecps-tax-unit-156147": {
+   "v10": 228514.96
+  },
+  "ecps-tax-unit-157868": {
+   "v10": 230964.02
+  },
+  "ecps-tax-unit-157317": {
+   "v10": 2485028.51
+  },
+  "ecps-tax-unit-154724": {
+   "v10": 15506736.86
+  },
+  "ecps-tax-unit-161870": {
+   "v10": 31031227.84
+  },
+  "ecps-tax-unit-155406": {
+   "v10": 4800363.38
+  },
+  "ecps-tax-unit-161979": {
+   "v10": 27164428.79
+  },
+  "ecps-tax-unit-163020": {
+   "v10": 29178331.87
+  },
+  "ecps-tax-unit-164548": {
+   "v10": 785897.02
+  },
+  "ecps-tax-unit-156651": {
+   "v10": 680398.23
+  },
+  "ecps-tax-unit-58643": {
+   "v10": 286284.71
+  },
+  "ecps-tax-unit-157251": {
+   "v10": 60703503.96
+  },
+  "ecps-tax-unit-164227": {
+   "v10": 455238.24
+  },
+  "ecps-tax-unit-156467": {
+   "v10": 232538.39
+  }
+ }
+}

@@ -1,0 +1,537 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 5,
+      "comparison_weight": 5,
+      "components": [],
+      "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+      "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+      "left_weighted_sum": 1478450,
+      "match_rate": 60,
+      "match_weight": 3,
+      "mismatch_count": 2,
+      "mismatch_weight": 2,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1471200,
+      "weighted_difference": 7250,
+      "weighted_match_rate": 60
+    }
+  ],
+  "case_count": 5,
+  "cases": [
+    {
+      "case_id": "et-business-2500000-high-margin",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+          "left": 325400.0,
+          "right": 325400.00000000006
+        }
+      ],
+      "metadata": {
+        "annual_business_income": 1000000.0,
+        "annual_gross_receipts": 2500000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 2500000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 1000000.0000000001
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 0.0,
+            "yse": 48917.29715627446,
+            "ytn": 122293.24289068613
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income"
+          ],
+          "ytn": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 2500000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 1000000.0000000001
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "category-a-business-income-tax",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-business-3000000-mid-margin",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+          "left": 395400.0,
+          "right": 395400.0
+        }
+      ],
+      "metadata": {
+        "annual_business_income": 1200000.0,
+        "annual_gross_receipts": 3000000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 3000000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 1200000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 0.0,
+            "yse": 58700.756587529344,
+            "ytn": 146751.89146882336
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income"
+          ],
+          "ytn": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 3000000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 1200000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "category-a-business-income-tax",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-business-4000000-comfortable",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+          "left": 675400.0,
+          "right": 675400.0000000001
+        }
+      ],
+      "metadata": {
+        "annual_business_income": 2000000.0,
+        "annual_gross_receipts": 4000000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 4000000.0000000005,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 2000000.0000000002
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 0.0,
+            "yse": 97834.59431254891,
+            "ytn": 195669.18862509783
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income"
+          ],
+          "ytn": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 4000000.0000000005,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 2000000.0000000002
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "category-a-business-income-tax",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-business-mat-active-3000000-60000-finding1",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "annual_business_income": 60000.0,
+        "annual_gross_receipts": 3000000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 3000000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 60000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 0.0,
+            "yse": 2935.0378293764675,
+            "ytn": 146751.89146882336
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income"
+          ],
+          "ytn": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 3000000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 60000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "category-a-minimum-tax-active",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+          "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+          "difference": 6000.0,
+          "kind": "amount_difference",
+          "left": 81000.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 75000.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-business-article-49-regime-50000-20000-finding2",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "annual_business_income": 20000.0,
+        "annual_gross_receipts": 50000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 50000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 20000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 0.0,
+            "yse": 978.3459431254892,
+            "ytn": 2445.8648578137227
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yse": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income"
+          ],
+          "ytn": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.annual_gross_receipts": 50000.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.taxable_business_income": 20000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "category-b-gross-revenue-regime",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+          "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+          "difference": 1250.0000000000002,
+          "kind": "amount_difference",
+          "left": 1250.0000000000002,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 1
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+      "id": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "ET"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "et-business-mat-active-3000000-60000-finding1",
+      "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+      "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+      "difference": 6000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "etmod-mat-added-not-floored-3000000-60000"
+      },
+      "kind": "amount_difference",
+      "left": 81000.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 75000.0,
+      "scenario": "category-a-minimum-tax-active",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "et-business-article-49-regime-50000-20000-finding2",
+      "concept": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable",
+      "description": "Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)",
+      "difference": 1250.0000000000002,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "etmod-mat-on-article-49-regime-50000-20000"
+      },
+      "kind": "amount_difference",
+      "left": 1250.0000000000002,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": "category-b-gross-revenue-regime",
+      "tolerance": 1,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:29:41Z",
+    "generated_by": "scripts/run_comparison.py::et-business-mat",
+    "oracle": {
+      "euromod_country": "ET",
+      "euromod_dataset": "et_2022_a2",
+      "euromod_system": "ET_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-et",
+        "sha": "98dfbac2eeba864ee6b881a0319065a50027562e"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "et-business-mat",
+  "summary": {
+    "comparison_count": 5,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 2
+      },
+      "dispositions_file": "dispositions/et-business-mat.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 60,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 3,
+    "mismatch_count": 2,
+    "mismatches_by_concept": [
+      {
+        "count": 2,
+        "value": "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 2,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "category-a-minimum-tax-active"
+      },
+      {
+        "count": 1,
+        "value": "category-b-gross-revenue-regime"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 5,
+      "match_rate": 60,
+      "match_weight": 3,
+      "mismatch_weight": 2
+    }
+  }
+}

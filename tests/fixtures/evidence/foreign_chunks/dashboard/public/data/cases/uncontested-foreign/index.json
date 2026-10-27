@@ -1,0 +1,16 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/foreign_chunks/dashboard/public/data/foreign-report.json",
+  "report_sha256": "759ba0a3507238b3004f915ac3282a050b5cba9a5a6e338f6b187b8e1cf0d214",
+  "case_verdicts_sha256": "cd74cb0a3077dc08dc79b321123f8d1af8fe0ef600f58e1befc2538fac4240cb",
+  "suite": "uncontested-foreign",
+  "count": 1,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "d482f9956ab8d40f4c25a08b12a24c0d49802a33d941d1ca6ec86b0411b2319e",
+      "cases": 1
+    }
+  ]
+}

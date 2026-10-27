@@ -1,404 +1,445 @@
 {
- "aggregates": [
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-   "description": "MD TCA allowable monthly payment, household of 1",
-   "left_weighted_sum": 348.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 339.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 9.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
-   "description": "MD TCA allowable monthly payment, household of 3",
-   "left_weighted_sum": 773.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 753.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 20.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
-   "description": "MD TCA allowable monthly payment, household of 6",
-   "left_weighted_sum": 1180.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1149.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 31.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
-   "description": "MD TCA allowable monthly payment, household of 10",
-   "left_weighted_sum": 1701.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 1656.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 45.0,
-   "weighted_match_rate": 0.0
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "comparison_count": 1,
-   "comparison_weight": 1,
-   "components": [],
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
-   "description": "MD TCA allowable monthly payment, household of 21",
-   "left_weighted_sum": 3269.0,
-   "match_count": 0,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_count": 1,
-   "mismatch_weight": 1,
-   "missing_both_count": 0,
-   "missing_left_count": 0,
-   "missing_right_count": 0,
-   "parent": null,
-   "right_weighted_sum": 3183.0,
-   "tolerance": 1e-09,
-   "weighted_difference": 86.0,
-   "weighted_match_rate": 0.0
-  }
- ],
- "case_count": 5,
- "cases": [
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
-    "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.1",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+  "aggregates": [
     {
-     "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-     "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-     "difference": 9.0,
-     "kind": "amount_difference",
-     "left": 348.0,
-     "right": 339.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
-    "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.3",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+      "description": "MD TCA allowable monthly payment, household of 1",
+      "left_weighted_sum": 348.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 339.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 9.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-     "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
-     "difference": 20.0,
-     "kind": "amount_difference",
-     "left": 773.0,
-     "right": 753.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
-    "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.6",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+      "description": "MD TCA allowable monthly payment, household of 3",
+      "left_weighted_sum": 773.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 753.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 20.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-     "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
-     "difference": 31.0,
-     "kind": "amount_difference",
-     "left": 1180.0,
-     "right": 1149.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
-    "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.10",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+      "description": "MD TCA allowable monthly payment, household of 6",
+      "left_weighted_sum": 1180.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1149.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 31.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-     "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
-     "difference": 45.0,
-     "kind": "amount_difference",
-     "left": 1701.0,
-     "right": 1656.0
-    }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "left_engine": "axiom",
-   "left_errors": [],
-   "match_rate": 0.0,
-   "metadata": {
-    "axiom_formula": null,
-    "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
-    "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
-    "dataset": "encoded_parameter_oracle",
-    "period": "2026-01-01",
-    "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.21",
-    "population": "rulespec-parameters"
-   },
-   "mismatches": [
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+      "description": "MD TCA allowable monthly payment, household of 10",
+      "left_weighted_sum": 1701.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1656.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 45.0,
+      "weighted_match_rate": 0.0
+    },
     {
-     "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-     "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
-     "difference": 86.0,
-     "kind": "amount_difference",
-     "left": 3269.0,
-     "right": 3183.0
+      "category": "cash",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+      "description": "MD TCA allowable monthly payment, household of 21",
+      "left_weighted_sum": 3269.0,
+      "match_count": 0,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3183.0,
+      "tolerance": 1e-09,
+      "weighted_difference": 86.0,
+      "weighted_match_rate": 0.0
     }
-   ],
-   "right_engine": "policyengine",
-   "right_errors": []
-  }
- ],
- "concepts": [
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "MD TCA allowable monthly payment, household of 1",
-   "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "MD TCA allowable monthly payment, household of 3",
-   "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "MD TCA allowable monthly payment, household of 6",
-   "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "MD TCA allowable monthly payment, household of 10",
-   "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
-   "parent": null,
-   "tolerance": 1e-09
-  },
-  {
-   "category": "cash",
-   "comparison": "amount",
-   "components": [],
-   "description": "MD TCA allowable monthly payment, household of 21",
-   "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
-   "parent": null,
-   "tolerance": 1e-09
-  }
- ],
- "engines": {
-  "left": "axiom",
-  "right": "policyengine"
- },
- "errors": [],
- "locales": [
-  "MD"
- ],
- "mismatches": [
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-   "difference": 9.0,
-   "kind": "amount_difference",
-   "left": 348.0,
-   "right": 339.0
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
-   "difference": 20.0,
-   "kind": "amount_difference",
-   "left": 773.0,
-   "right": 753.0
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
-   "difference": 31.0,
-   "kind": "amount_difference",
-   "left": 1180.0,
-   "right": 1149.0
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
-   "difference": 45.0,
-   "kind": "amount_difference",
-   "left": 1701.0,
-   "right": 1656.0
-  },
-  {
-   "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
-   "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
-   "difference": 86.0,
-   "kind": "amount_difference",
-   "left": 3269.0,
-   "right": 3183.0
-  }
- ],
- "population": "rulespec-parameters",
- "schema_version": "axiom.comparison_report.v1",
- "scope": {
-  "period": "2026-01-01",
-  "source": "rulespec-us origin/main"
- },
- "suite": "md-tca-payments",
- "summary": {
-  "alarms": [],
-  "comparison_count": 5,
-  "error_count": 0,
-  "errors_by_engine": {},
-  "match_count": 0,
-  "mismatch_count": 5,
-  "mismatches_by_concept": [
-   {
-    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
-    "count": 1
-   },
-   {
-    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
-    "count": 1
-   },
-   {
-    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
-    "count": 1
-   },
-   {
-    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
-    "count": 1
-   },
-   {
-    "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
-    "count": 1
-   }
   ],
-  "mismatches_by_kind": [
-   {
-    "count": 5,
-    "kind": "amount_difference"
-   }
+  "case_count": 5,
+  "concepts": [
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "MD TCA allowable monthly payment, household of 1",
+      "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "MD TCA allowable monthly payment, household of 3",
+      "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "MD TCA allowable monthly payment, household of 6",
+      "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "MD TCA allowable monthly payment, household of 10",
+      "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+      "parent": null,
+      "tolerance": 1e-09
+    },
+    {
+      "category": "cash",
+      "comparison": "amount",
+      "components": [],
+      "description": "MD TCA allowable monthly payment, household of 21",
+      "id": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+      "parent": null,
+      "tolerance": 1e-09
+    }
   ],
-  "mismatches_by_scenario": {},
-  "weighted": {
-   "comparison_weight": 5,
-   "match_rate": 0.0,
-   "match_weight": 0,
-   "mismatch_weight": 5
-  }
- }
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine"
+  },
+  "errors": [],
+  "locales": [
+    "MD"
+  ],
+  "mismatches": [
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+      "difference": 9.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "md-tca-im-26-13-hh1",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+      },
+      "kind": "amount_difference",
+      "left": 348.0,
+      "right": 339.0
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+      "difference": 20.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "md-tca-im-26-13-hh3",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+      },
+      "kind": "amount_difference",
+      "left": 773.0,
+      "right": 753.0
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+      "difference": 31.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "md-tca-im-26-13-hh6",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+      },
+      "kind": "amount_difference",
+      "left": 1180.0,
+      "right": 1149.0
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+      "difference": 45.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "md-tca-im-26-13-hh10",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+      },
+      "kind": "amount_difference",
+      "left": 1701.0,
+      "right": 1656.0
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+      "difference": 86.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "md-tca-im-26-13-hh21",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/9181"
+      },
+      "kind": "amount_difference",
+      "left": 3269.0,
+      "right": 3183.0
+    }
+  ],
+  "population": "rulespec-parameters",
+  "schema_version": "axiom.comparison_report.v1",
+  "scope": {
+    "period": "2026-01-01",
+    "source": "rulespec-us origin/main"
+  },
+  "suite": "md-tca-payments",
+  "summary": {
+    "alarms": [],
+    "comparison_count": 5,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 5
+      },
+      "dispositions_file": "dispositions/md-tca-payments.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 0,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 0,
+    "mismatch_count": 5,
+    "mismatches_by_concept": [
+      {
+        "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+        "count": 1
+      },
+      {
+        "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+        "count": 1
+      },
+      {
+        "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+        "count": 1
+      },
+      {
+        "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+        "count": 1
+      },
+      {
+        "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+        "count": 1
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 5,
+        "kind": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {},
+    "weighted": {
+      "comparison_weight": 5,
+      "match_rate": 0.0,
+      "match_weight": 0,
+      "mismatch_weight": 5
+    }
+  },
+  "cases": [
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
+        "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.1",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+          "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@1",
+          "difference": 9.0,
+          "kind": "amount_difference",
+          "left": 348.0,
+          "right": 339.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
+        "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.3",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+          "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@3",
+          "difference": 20.0,
+          "kind": "amount_difference",
+          "left": 773.0,
+          "right": 753.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
+        "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.6",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+          "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@6",
+          "difference": 31.0,
+          "kind": "amount_difference",
+          "left": 1180.0,
+          "right": 1149.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
+        "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.10",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+          "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@10",
+          "difference": 45.0,
+          "kind": "amount_difference",
+          "left": 1701.0,
+          "right": 1656.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "metadata": {
+        "axiom_formula": null,
+        "axiom_rule": "allowable_tca_monthly_payment_by_household_size",
+        "axiom_source": "rulespec-us origin/main: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml",
+        "dataset": "encoded_parameter_oracle",
+        "period": "2026-01-01",
+        "policyengine_parameter": "gov.states.md.tca.maximum_benefit.main.21",
+        "population": "rulespec-parameters"
+      },
+      "mismatches": [
+        {
+          "case_id": "md-tca-payments-allowable_tca_monthly_payment_by_household_size",
+          "concept": "us-md:policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment#allowable_tca_monthly_payment_by_household_size@21",
+          "difference": 86.0,
+          "kind": "amount_difference",
+          "left": 3269.0,
+          "right": 3183.0
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ]
 }

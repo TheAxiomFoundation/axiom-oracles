@@ -16,6 +16,13 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: ar-income-tax-populace
+  report: axiom-policyengine-ar-income-tax-populace.json
+  jurisdiction: AR
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ca-income-tax-populace
   report: axiom-policyengine-ca-income-tax-populace.json
   jurisdiction: CA
@@ -51,6 +58,13 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: in-income-tax-populace
+  report: axiom-policyengine-in-income-tax-populace.json
+  jurisdiction: IN
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ks-income-tax-populace
   report: axiom-policyengine-ks-income-tax-populace.json
   jurisdiction: KS
@@ -65,6 +79,27 @@ suites:
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py
   projector: scripts/emit_populace_campaign_artifacts.py
+- suite: mn-income-tax-populace
+  report: axiom-policyengine-mn-income-tax-populace.json
+  jurisdiction: MN
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
+- suite: mt-income-tax-populace
+  report: axiom-policyengine-mt-income-tax-populace.json
+  jurisdiction: MT
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
+- suite: nc-income-tax-populace
+  report: axiom-policyengine-nc-income-tax-populace.json
+  jurisdiction: NC
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
 - suite: ny-income-tax-populace
   report: axiom-policyengine-ny-income-tax-populace.json
   jurisdiction: NY
@@ -75,6 +110,20 @@ suites:
 - suite: oh-income-tax-populace
   report: axiom-policyengine-oh-income-tax-populace.json
   jurisdiction: OH
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
+- suite: pa-income-tax-populace
+  report: axiom-policyengine-pa-income-tax-populace.json
+  jurisdiction: PA
+  program: state_income_tax
+  oracle: policyengine
+  campaign_runner: scripts/run_state_tax_populace.py
+  projector: scripts/emit_populace_campaign_artifacts.py
+- suite: sc-income-tax-populace
+  report: axiom-policyengine-sc-income-tax-populace.json
+  jurisdiction: SC
   program: state_income_tax
   oracle: policyengine
   campaign_runner: scripts/run_state_tax_populace.py

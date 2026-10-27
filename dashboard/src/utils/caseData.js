@@ -27,9 +27,14 @@ export async function loadSuiteCases(suite) {
     const indexResp = await fetch(`${base}/index.json`);
     if (!indexResp.ok) return null;
     const index = await indexResp.json();
+    // v1 evidence indexes name and hash every chunk. Keep the numeric fallback
+    // while the remaining legacy dashboard indexes are migrated.
+    const chunkNames = Array.isArray(index.chunks)
+      ? index.chunks.map((chunk) => chunk.name)
+      : Array.from({ length: index.chunks }, (_, i) => `chunk-${i}.json`);
     const chunks = await Promise.all(
-      Array.from({ length: index.chunks }, (_, i) =>
-        fetch(`${base}/chunk-${i}.json`).then((r) => (r.ok ? r.json() : [])),
+      chunkNames.map((name) =>
+        fetch(`${base}/${name}`).then((r) => (r.ok ? r.json() : [])),
       ),
     );
     return { index, cases: chunks.flat() };

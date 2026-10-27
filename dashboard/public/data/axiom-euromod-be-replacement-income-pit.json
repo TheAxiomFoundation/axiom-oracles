@@ -1,0 +1,800 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 5,
+      "comparison_weight": 5,
+      "components": [],
+      "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+      "description": "Belgium pension and replacement-income PIT before withholding",
+      "left_weighted_sum": 2638.661535,
+      "match_rate": 80,
+      "match_weight": 4,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3165.867552,
+      "weighted_difference": -527.206017,
+      "weighted_match_rate": 80
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits",
+      "description": "Belgium Articles 147--153 unemployment-income tax reduction",
+      "left_weighted_sum": 4755.128951,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 4755.128951,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 1,
+      "comparison_weight": 1,
+      "components": [],
+      "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits",
+      "description": "Belgium Articles 147--153 sickness/invalidity tax reduction",
+      "left_weighted_sum": 2024.5,
+      "match_rate": 100,
+      "match_weight": 1,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2024.5,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 5,
+  "cases": [
+    {
+      "case_id": "be-replacement-income-pit-bun-12k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits",
+          "left": 272.5000000000001,
+          "right": 272.5
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 74,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_input_records_count": 19,
+        "euromod_input_uprating_factors": {
+          "bhl": 1.1096513390601312,
+          "bun": 1.0793082886106142,
+          "yem": 1.055022392834293
+        },
+        "euromod_inputs": [
+          {
+            "bhl": 0.0,
+            "bun": 926.5193370165746,
+            "bunmy": 12,
+            "dag": 45,
+            "ddi": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 0,
+            "dwt": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "lunmy": 12,
+            "poa": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "bun": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit"
+              }
+            ]
+          },
+          "yem": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+              }
+            ]
+          },
+          "yemeq_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[head]::be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 0.0,
+          "Person[head]::be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit": 12000.0,
+          "Person[head]::be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 0.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "BE",
+        "rulespec_fixture": "be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_12k_euromod_input_bun_zero_tax",
+        "rulespec_fixture_commit": "b105e2b3a3086ddd2de447d58a9b951346870dd1",
+        "scenario": "unemployment-replacement-income-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 0.0,
+        "yearly_sickness_income": 0.0,
+        "yearly_unemployment_income": 12000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-replacement-income-pit-bun-18k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits",
+          "left": 2024.5,
+          "right": 2024.5
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 74,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_input_records_count": 19,
+        "euromod_input_uprating_factors": {
+          "bhl": 1.1096513390601312,
+          "bun": 1.0793082886106142,
+          "yem": 1.055022392834293
+        },
+        "euromod_inputs": [
+          {
+            "bhl": 0.0,
+            "bun": 1389.7790055248618,
+            "bunmy": 12,
+            "dag": 45,
+            "ddi": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 0,
+            "dwt": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "lunmy": 12,
+            "poa": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "bun": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit"
+              }
+            ]
+          },
+          "yem": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+              }
+            ]
+          },
+          "yemeq_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[head]::be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 0.0,
+          "Person[head]::be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit": 18000.0,
+          "Person[head]::be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 0.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "BE",
+        "rulespec_fixture": "be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_18k_euromod_input_bun_zero_tax",
+        "rulespec_fixture_commit": "b105e2b3a3086ddd2de447d58a9b951346870dd1",
+        "scenario": "unemployment-replacement-income-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 0.0,
+        "yearly_sickness_income": 0.0,
+        "yearly_unemployment_income": 18000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-replacement-income-pit-bun-24k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+          "left": 1475.6238264363938,
+          "right": 1475.6238264363935
+        },
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits",
+          "left": 2458.128950819672,
+          "right": 2458.1289508196724
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 74,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_input_records_count": 19,
+        "euromod_input_uprating_factors": {
+          "bhl": 1.1096513390601312,
+          "bun": 1.0793082886106142,
+          "yem": 1.055022392834293
+        },
+        "euromod_inputs": [
+          {
+            "bhl": 0.0,
+            "bun": 1853.0386740331492,
+            "bunmy": 12,
+            "dag": 45,
+            "ddi": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 0,
+            "dwt": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "lunmy": 12,
+            "poa": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "bun": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit"
+              }
+            ]
+          },
+          "yem": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+              }
+            ]
+          },
+          "yemeq_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[head]::be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 0.0,
+          "Person[head]::be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit": 24000.0,
+          "Person[head]::be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 0.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "BE",
+        "rulespec_fixture": "be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_24k_euromod_articles_147_to_153",
+        "rulespec_fixture_commit": "b105e2b3a3086ddd2de447d58a9b951346870dd1",
+        "scenario": "unemployment-replacement-income-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 0.0,
+        "yearly_sickness_income": 0.0,
+        "yearly_unemployment_income": 24000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-replacement-income-pit-bhl-18k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits",
+          "left": 2024.5,
+          "right": 2024.5
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 74,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_input_records_count": 19,
+        "euromod_input_uprating_factors": {
+          "bhl": 1.1096513390601312,
+          "bun": 1.0793082886106142,
+          "yem": 1.055022392834293
+        },
+        "euromod_inputs": [
+          {
+            "bhl": 1351.7759562841532,
+            "bun": 0.0,
+            "bunmy": 0,
+            "dag": 45,
+            "ddi": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 0,
+            "dwt": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 6,
+            "lfs": 0,
+            "lhw": 0,
+            "liwmy": 0,
+            "liwwh": 0,
+            "loc": 5,
+            "lunmy": 0,
+            "poa": 0,
+            "yem": 0.0,
+            "yemmy": 0,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "bhl": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_sickness_benefit"
+              }
+            ]
+          },
+          "yem": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+              }
+            ]
+          },
+          "yemeq_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[head]::be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 0.0,
+          "Person[head]::be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_sickness_benefit": 18000.0,
+          "Person[head]::be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 0.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "BE",
+        "rulespec_fixture": "be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#sickness_18k_euromod_bhl_article_153_cap",
+        "rulespec_fixture_commit": "b105e2b3a3086ddd2de447d58a9b951346870dd1",
+        "scenario": "sickness-replacement-income-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 0.0,
+        "yearly_sickness_income": 18000.0,
+        "yearly_unemployment_income": 0.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "be-replacement-income-pit-bun-15k-yem-15k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_all_outputs_count": 74,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_input_records_count": 19,
+        "euromod_input_uprating_factors": {
+          "bhl": 1.1096513390601312,
+          "bun": 1.0793082886106142,
+          "yem": 1.055022392834293
+        },
+        "euromod_inputs": [
+          {
+            "bhl": 0.0,
+            "bun": 1158.1491712707182,
+            "bunmy": 12,
+            "dag": 45,
+            "ddi": 0,
+            "dgn": 1,
+            "dms": 1,
+            "drgn1": 0,
+            "dwt": 1,
+            "idfather": 0,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 5,
+            "lfs": 15,
+            "lhw": 38,
+            "liwmy": 12,
+            "liwwh": 120,
+            "loc": 5,
+            "lunmy": 12,
+            "poa": 0,
+            "yem": 1184.8089751364464,
+            "yemmy": 12,
+            "yiy": 0,
+            "yse": 0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "bun": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit"
+              }
+            ]
+          },
+          "yem": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration"
+              }
+            ]
+          },
+          "yemeq_s": {
+            "records": [
+              {
+                "entity": "Person",
+                "entity_id": "head",
+                "name": "be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+              }
+            ]
+          }
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "Person[head]::be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration": 12931.034482758623,
+          "Person[head]::be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#input.belgium_pit_replacement_annual_gross_unemployment_benefit": 15000.0,
+          "Person[head]::be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration": 15000.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            15000.0
+          ],
+          "yearly_earned_income_total": 15000.0
+        },
+        "locale": "BE",
+        "rulespec_fixture": "be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_15k_plus_wage_15k_no_activity_exclusion",
+        "rulespec_fixture_commit": "b105e2b3a3086ddd2de447d58a9b951346870dd1",
+        "scenario": "unemployment-replacement-income-pit",
+        "scope": {
+          "geoid": "BE",
+          "type": "country"
+        },
+        "yearly_earned_income": 15000.0,
+        "yearly_sickness_income": 0.0,
+        "yearly_unemployment_income": 15000.0
+      },
+      "mismatches": [
+        {
+          "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+          "description": "Belgium pension and replacement-income PIT before withholding",
+          "difference": -527.2060172661136,
+          "kind": "amount_difference",
+          "left": 1163.0377081352365,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1690.24372540135,
+          "tolerance": 0.01
+        }
+      ],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium pension and replacement-income PIT before withholding",
+      "id": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium Articles 147--153 unemployment-income tax reduction",
+      "id": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Belgium Articles 147--153 sickness/invalidity tax reduction",
+      "id": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 0.01
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "BE"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "be-replacement-income-pit-bun-15k-yem-15k",
+      "concept": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding",
+      "description": "Belgium pension and replacement-income PIT before withholding",
+      "difference": -527.2060172661136,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "mixed-unemployment-proration-and-work-bonus-engine-semantics",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/25"
+      },
+      "kind": "amount_difference",
+      "left": 1163.0377081352365,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1690.24372540135,
+      "scenario": "unemployment-replacement-income-pit",
+      "tolerance": 0.01,
+      "yearly_earned_income": 15000.0
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "c6cc389a8f5e7238019e4fa06849325fad9acd46",
+      "axiom_rules_engine_version": "0.1.0",
+      "binary": "/Users/maxghenis/TheAxiomFoundation/_cape-prep-engine/target/release/axiom-rules-engine",
+      "binary_sha256": "9452599c5ef641a30ded4ab65ced19cdfc054a667582b62ad33577a8ad787a1f"
+    },
+    "generated_at": "2026-08-22T20:10:26Z",
+    "generated_by": "scripts/run_comparison.py::be-replacement-income-pit",
+    "oracle": {
+      "euromod_country": "BE",
+      "euromod_dataset": "BE_2024_c1_2015_03_e2",
+      "euromod_release": "J2.0+",
+      "euromod_system": "BE_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-be",
+        "sha": "b105e2b3a3086ddd2de447d58a9b951346870dd1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "be-replacement-income-pit",
+  "summary": {
+    "comparison_count": 9,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 1
+      },
+      "dispositions_file": "dispositions/be-replacement-income-pit.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 88.888889,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 8,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "unemployment-replacement-income-pit"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 9,
+      "match_rate": 88.888889,
+      "match_weight": 8,
+      "mismatch_weight": 1
+    }
+  }
+}

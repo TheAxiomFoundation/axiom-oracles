@@ -1,0 +1,15 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/malformed_row/dashboard/public/data/report.json",
+  "report_sha256": "a9747cb0cd58ee225f367d8f8c86b7cd18b3a0f2b7ed5c0b2145144463df5518",
+  "suite": "malformed-row",
+  "count": 1,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "e1b17c1b9d973954d4d22b3988fbbe0abed07ac05959267b75edbad4951706c7",
+      "cases": 1
+    }
+  ]
+}

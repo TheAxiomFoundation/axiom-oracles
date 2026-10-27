@@ -1,0 +1,40 @@
+name: de-kindergeld-eligibility
+title: Germany Kindergeld child eligibility — EUROMOD vs GETTSIM
+description: >-
+  Compares EUROMOD DE_2025 with GETTSIM 1.2.1 at 2025-06-30 over the DE
+  child-eligibility grid: one § 32 EStG threshold per case (age 17; 18 in and
+  not in training; 24 and 25 in training; 22 in training working 20 h and 25 h;
+  one eligible plus one ineligible child) on a single-parent West household at
+  EUR 4,000. The compared household amount is monthly Kindergeld (EUROMOD has
+  no per-child eligibility output); GETTSIM's claim count is pinned by the live
+  anchors and attaches to the Axiom leg as the qualifying-child concept.
+  Inputs mirror the canonical grid (nominal wages under DE_2024_b1_2015_03_e2
+  for EUROMOD, the exact 61/56 gross for GETTSIM). On hosts without both
+  optional engines, the runner re-emits the committed report.
+documentation: docs/de-dual-oracle-playbook.md
+
+runner:
+  type: gettsim-synthetic-compare
+  parameters:
+    suite: de-kindergeld-eligibility
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    concepts:
+      - de:policies/worker_dual_oracle_baseline#kindergeld_monthly
+    euromod_model_root: $EUROMOD_MODEL_ROOT_DE
+    euromod_country: DE
+    euromod_system: DE_2025
+    euromod_dataset: DE_2024_b1_2015_03_e2
+    euromod_template_dataset: DE_training_data
+    euromod_extra_columns: [drgn1]
+    gettsim_policy_date: "2025-06-30"
+    gettsim_version: "1.2.1"
+    dashboard_filename: euromod-gettsim-de-kindergeld-eligibility.json
+
+artifacts:
+  report_basename: euromod-gettsim-de-kindergeld-eligibility
+
+dashboard:
+  filename: euromod-gettsim-de-kindergeld-eligibility.json
+  suite: de-kindergeld-eligibility

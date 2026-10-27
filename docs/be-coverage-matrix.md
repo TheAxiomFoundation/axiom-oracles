@@ -6,6 +6,10 @@ comparison suites. This gates the Belgium encoding wave: a row's status tells a
 worker whether the instrument is unencoded, encoded-but-unvalidated, or already
 oracle-compared.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 - **EUROMOD facts** are parsed from the model itself:
   `EUROMOD_RELEASES_J2.0+/XMLParam/Countries/BE/BE.xml`, system `BE_2025`
   (SystemID `98820bac-c53d-4fac-8abf-96e0b43d29eb`), sha256
@@ -60,7 +64,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 | 5 | `tscpe_be` | on | `tscpe_s` | Pensioner health/disability + solidarity contributions | **compared with encoding gaps** (`be/statutes/social_security/non_labour_income_contributions.yaml` — Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%, composed into an annual combined output; **not** `chapter_10_special_contributions.yaml`, which encodes the Law 29.06.1981 art. 38 employer/fringe special contributions) | `be-pensioner-contributions` (1/6 exact; 5 axiom_encoding_gap residuals) | encode art. 191 low-pension **floor** + reconcile art. 68 solidarity base table to 2025 indexation → rulespec-be#89 |
 | 6 | `tci_be` | on | `tci_s` (+ `brv_s`) | Flemish care insurance / social-protection flat premium (zorgverzekering) | compared | `be-flemish-social-protection-premium` (2/2) | — (broaden: Brussels voluntary affiliation, sanctions) |
 | 7 | `tinna_be` | on | `tin_s`, `tinna_s` | Federal PIT — brackets, tax-free amount, credits; writes total `tin_s` | compared (worker pilot only) | `be-worker-pit` (2/3; EUROMOD #12) | — (broaden: full household PIT, joint assessment) |
-| 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | compared (marital quotient) | `be-marital-quotient` (0/3 raw, 100% explained; single-earner-couple Article 87) | — (`tintasp_s`/`tintami_s` not emitted by EUROMOD, so only the `tin_s` couple total is comparable; the composed slice reproduces `tin_s` once the SSC + Article 51 forfait base reductions are added, exact at 60k) |
+| 8 | `tintb_be` | on | `tintasp_s`, marital-quotient, deductions | PIT deductions & marital quotient (CIR 92 arts. 87–89, 131–145) | compared (marital quotient) | `be-marital-quotient` (current publication 0/3 raw, 100% explained; repaired rulespec-be#118 worktree 3/3 within EUR 15) | — (`tintasp_s`/`tintami_s` not emitted by EUROMOD, so only the `tin_s` couple total is comparable; refresh the canonical report and retire the old slice dispositions after #118 reaches main) |
 | 9 | `tinfe_be` | on | `tintcch_s`, `tin_s`, fiscal-expenditure reductions | PIT fiscal expenditures — childcare, service vouchers, pensions, donations reductions (CIR 92 arts. 145/1 ff.) | **partial** (tax_reductions_and_credits.yaml encodes childcare 145/35, pension savings 145/8, donations 145/33, domestic-employee 145/34, adoption 145/48, legal-protection 145/49; service vouchers not encoded) | — (not EUROMOD-comparable) | **Service vouchers** (titres-services/dienstencheques) absent from BE_2025 entirely; `tintcch_s` childcare stays 0 for any constructible synthetic household (data-driven, not input-driven). Only `tintcly_s` (289ter/1 work-bonus reduction) is drivable and is already covered by `be-worker-pit`. Encode remaining reductions → CIR 92 arts. 145/1–145/48 + regional decrees, unit-test-only |
 | 10 | `tinrg_be` | on | `tinrg_s`, `tin_s` | Regional PIT surcharges / reductions (post-6th-state-reform regional additional %) | compared (`regional_surcharge.yaml`: reduced-state-tax base × supplied regional rate) | `be-regional-pit-surcharge` (3/3; BXL/FL/WAL) | — (broaden: regional reductions/credits, regional bracket structure) |
 | 11 | `tinmu_be` | on | `tinmu_s`, `tin_s` | Municipal/local PIT surcharge (communal additional centimes on PIT) | compared (`regional_surcharge.yaml`: state+regional net of `tinfe` reductions × supplied communal rate; `communal_additions.yaml` base mechanics) | `be-local-municipal-pit` (3/3; BXL/FL/WAL) | — (broaden: municipality-specific centimes tables, agglomeration additions) |
@@ -84,7 +88,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 |---|---|---|---|---|---|
 | `bun_be` | off → **switched on per run** | `bun_s` | "PART SIMULATED" and shipped **off** (unemployment income carried from input data); **activated per run** via `euromod_policy_switch_overrides` for hypothetical cases — see verdict below | **compared (dispositioned)** — `be-unemployment` (0/4 exact, **4/4 dispositioned** `upstream_engine_gap`); composed pilot `be/regulations/unemployment/pilot_oracle_pipeline.yaml` | — (broaden: household-status partner-income branches, Article 114 degressivity phases 2/3, temporary unemployment) |
 | `bsaoa_be` | off (case switch → on) | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | **compared** (published `axiom-euromod-be-elderly-income-support`, 1/1 exact) via per-case XML switch overlay (`bsaoa_be`→on): isolated no-resources senior, EUROMOD `bsaoa_s` = Axiom GRAPA = 18,964.44 → Law 22.03.2001 (GRAPA/IGO). Broaden: cohabiting, delegated resource exclusions, property/capital resources |
-| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. The rulespec-be pension encodings (RD No. 50; RD 23.12.1996) validate via other oracles, not EUROMOD |
+| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. No comparison in this repo covers the rulespec-be pension encodings (RD No. 50; RD 23.12.1996): every Belgium comparison, both the `comparisons/be-*.yaml` configs and the suites in `axiom_oracles/suites/be_*.py`, runs EUROMOD (published as `axiom-euromod-be-*.json`) |
 | `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
 
@@ -181,12 +185,14 @@ in the dashboard suite selector — now manifested, with a test pin enforcing th
 invariant (the `be-maternity-leave` and `be-birth-leave` entries were restored in
 #158). The three PIT-decomposition suites — `be-regional-pit-surcharge`
 (`tinrg_s`), `be-local-municipal-pit` (`tinmu_s`), and `be-capital-income-tax`
-(`tinkt_s`) — remain 9/9 exact. The **`be-marital-quotient`** (`tintb_be` Article
-87) suite adds 3 comparisons, all explained residuals: the composed couple slice
-supplies professional income before the 13.07% employee social security and
-Article 51 forfait base reductions EUROMOD applies, and reproduces `tin_s` to the
-cent at 60k once those are added (the 30k residual is the refundable 289ter/1
-work-bonus credit). The **`be-pensioner-contributions`**
+(`tinkt_s`) — remain 9/9 exact. The published **`be-marital-quotient`**
+(`tintb_be` Article 87) report still contributes 3 explained residuals from the
+old flat couple slice. The repaired rulespec-be#118 worktree instead receives
+two related Person records, runs the imported SSC/Article 51/work-bonus stages,
+and matched the same three EUROMOD cases 3/3 within the unchanged EUR 15
+tolerance (absolute deltas 4.730748, 0.001332, and 0.001688). Those dispositions
+remain until #118 reaches main and a canonical affected rerun replaces the
+published report. The **`be-pensioner-contributions`**
 (`tscpe_s`) suite sweeps an isolated old-age pensioner across the health and
 solidarity thresholds and is 1/6 exact (48k, where both engines' 3.55% health +
 2% solidarity coincide above every threshold); its 5 residuals are the reason

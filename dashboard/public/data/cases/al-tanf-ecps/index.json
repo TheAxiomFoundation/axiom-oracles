@@ -23,15 +23,22 @@
   "axiom:al-tanf-compiled#input.sanction_reduction_under_rule_660_2_2_23"
  ],
  "output_slots": [
-  "al_tanf_monthly_benefit",
   "al_tanf_payable"
  ],
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
-  "right": "policyengine"
+  "right": "policyengine",
+  "versions": {
+   "axiom_rules_engine": "0.1.0",
+   "policyengine": "4.18.9",
+   "policyengine_core": "3.30.3",
+   "policyengine_us": "1.767.3"
+  }
  },
- "mismatch_concepts": [],
- "source": "axiom-policyengine-al-tanf-ecps-0-2026-07-25.json",
+ "mismatch_concepts": [
+  "us-al:policies/dhr/tanf#al_tanf_benefit"
+ ],
+ "source": "axiom-policyengine-al-tanf-ecps-0-2026-07-28.json",
  "total_cases": 1444
 }

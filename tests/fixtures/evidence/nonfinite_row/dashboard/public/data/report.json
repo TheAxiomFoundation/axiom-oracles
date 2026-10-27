@@ -1,0 +1,11 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "nonfinite-row",
+  "case_count": 1,
+  "summary": {
+    "comparison_count": 1,
+    "match_count": 1,
+    "mismatch_count": 0
+  },
+  "cases": []
+}

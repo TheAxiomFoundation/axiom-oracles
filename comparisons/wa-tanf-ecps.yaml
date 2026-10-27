@@ -3,12 +3,20 @@
 name: wa-tanf-ecps
 title: Washington TANF -- Axiom vs PolicyEngine
 description: >-
-  Compares the annualized WA TANF (WorkFirst) grant from the composed
+  Compares the monthly WA TANF (WorkFirst) grant from the composed
   us-wa/tanf program (WAC 388-450 benefit and work deductions, 388-478
   payment standards and gross earned income limits) against PolicyEngine's
-  wa_tanf on Enhanced CPS households in Washington. Refresh the rulespec
-  root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-wa/ ~/.axiom-oracles/roots/rulespec-us-wa/
+  wa_tanf on Enhanced CPS households in Washington, using the canonical
+  rulespec-us monorepo checkout.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: axiom-oracles-compare
@@ -25,14 +33,18 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     jurisdiction_fips: "53"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: $HOME/axiom-oracles/programs/us-wa/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/wa-tanf-composed.yaml
     axiom_compiled_program: /tmp/wa-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-wa
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-wa-tanf-ecps

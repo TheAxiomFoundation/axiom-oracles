@@ -1,0 +1,61 @@
+name: rw-cbhi-tiers
+title: Rwanda rw-cbhi-tiers — Axiom vs RWAMOD (period-shifted schedule check)
+description: >-
+  PERIOD-SHIFTED SCHEDULE CHECK. Compares the rulespec-rw Ministerial Order
+  002/26/10/TC CBHI member premium schedule (IMIBEREHO Dynamic Social Registry
+  levels 2-5: member-paid 3,000/5,000/8,000/20,000 FRW per year) against
+  RWAMOD tsceehl02_s, which pays the amounts as annual twelfths by
+  monthly-earnings tier (probed 250/416.67/666.67/1,666.67 per month, tier
+  changes at 30,000/60,000/120,000 FRW). The Axiom side is evaluated at 2027
+  because the module correctly starts 2026-02-23; the oracle side is RW_2025
+  (CY2025), so the cases verify the schedule amounts, not validation-year law.
+  TIMING FINDING (rulespec-rw#1, rwamod_issues.json): RWAMOD applies the
+  schedule in RW_2025 where its first gazetted carrier is the Order of
+  16/02/2026, in force on publication 23/02/2026 (the prior PM Order 105/03 of
+  30/09/2020 carries the funding schedule and the 0.5% employee levy but no
+  income-tier member premiums). SUITE ASSUMPTION: the Axiom module takes the
+  registry level as input, and the level paired with each earnings point
+  (20,000 -> 2, 45,000 -> 3, 90,000 -> 4, 200,000 -> 5) is chosen by the
+  suite; no committed source maps incomes to IMIBEREHO levels. Results are
+  based on the tax-benefit microsimulation model for Rwanda (RWAMOD) in
+  SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER with SASPRI,
+  the LSE International Inequalities Institute and local partners, run on the
+  EUROMOD software (EM_Executable 1.0.0 via the euromod connector 0.2.18)
+  under the registered rw_2024_a1 dataset name; the bundle ships no Rwandan
+  microdata, so a header-only input file is built locally from the model's own
+  variable list and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_rw.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-cbhi-tiers
+    population: synthetic
+    sample_size: 0
+    period: 2027
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-cbhi-tiers.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-cbhi-tiers
+
+dashboard:
+  filename: axiom-euromod-rw-cbhi-tiers.json
+  suite: rw-cbhi-tiers

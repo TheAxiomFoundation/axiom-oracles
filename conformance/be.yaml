@@ -18,24 +18,28 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILDef_be
     oracle_policy_name: ILDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILsDef_be
     oracle_policy_name: ILsDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:ILsUDBDef_be
     oracle_policy_name: ILsUDBDef_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:InitVars_be
     oracle_policy_name: InitVars_be
@@ -55,6 +59,7 @@ policies:
       - ddppr_s
       - ddp_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - temp_rand_ind
       - temp_rand_ind2
@@ -72,6 +77,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - xhl00
       - xed00
@@ -81,6 +87,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:TransLMA_be
     oracle_policy_name: TransLMA_be
@@ -94,6 +101,7 @@ policies:
       - bwkmcsemy_s
       - ysemwmy_s
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - lma
       - yem_a
@@ -114,6 +122,7 @@ policies:
       - sin11_s
       - sin13_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
       - i_dchor01
@@ -138,6 +147,7 @@ policies:
       - sin01_s
       - bchba_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-family-birth-allowance
   - id: be:bed_be
     oracle_policy_name: bed_be
@@ -165,6 +175,7 @@ policies:
       - sin16_s
       - sin17_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bed_fl_be
       - i_bed_fl_frac_be_BCH
@@ -188,7 +199,7 @@ policies:
       - i_bed_fl_type_be
       - i_bed_fl_frac_be
       - i_bed_fl_repY_be
-    suite: be-study-allowance
+    suite: null
     note: 'BEN: study allowances (Flemish + French Community, 147 functions). The be-study-allowance suite
       live-compares bed_s region-routed to the Flemish study-financing decree of 8 June 2007 / Groeipakket
       decree of 27 April 2018 or the French-Community decree of 18 November 2021, and matches EUROMOD
@@ -196,13 +207,19 @@ policies:
       real dataset-configuration name (its !IsUsedDatabase gate matches only be_????_hhot dataset names),
       so the suite runs each household as its own engine run (axiom-oracles#168) and pins $bed_FlTakeUp/$bed_FrTakeUp
       to 1.0 via euromod_constant_overrides to hold bed_s on the statutory amount. Brussels'' random 90/10
-      split stays out of scope on hypothetical data.'
+      split stays out of scope on hypothetical data. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `be-study-allowance` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (sin07_s, sin06_s,
+      sin05_s, sin42_s, sin43_s, sin03_s, sin02_s, sin44_s, sin45_s, sin46_s, sin47_s, bed_s, sin50_s,
+      sin40_s, sin08_s, sin48_s, sin49_s, sin14_s, sin15_s, sin16_s, sin17_s); then re-register.'
   - id: be:bfapl_be
     oracle_policy_name: bfapl_be
     oracle_policy_type: ben
     output_vars:
       - bfapl_s
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - i_lpb
       - i_elparent_bfapl
@@ -228,6 +245,7 @@ policies:
     output_vars:
       - bmact_s
     in_scope: true
+    oracle_switch: switch
     internal_only_vars:
       - i_elparent
       - i_durdays_em
@@ -243,21 +261,30 @@ policies:
       - i_elparent_se
       - i_durdays_se
       - i_durdays_temp
-    suite: be-maternity-leave
+    suite: null
     note: 'BEN: maternity-leave indemnity. The be-maternity-leave suite live-compares bmact_s and matches
-      EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.'
+      EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered. Current
+      coverage retracted under the same-case execution evidence rule: The retained case rows omit both
+      returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `be-maternity-leave` retaining same-case returned values from both engines and explicit
+      comparison bindings for `bmact_s`; then re-register.'
   - id: be:bpact_be
     oracle_policy_name: bpact_be
     oracle_policy_type: ben
     output_vars:
       - bpact_s
     in_scope: true
+    oracle_switch: switch
     internal_only_vars:
       - i_elparent_bpact
       - i_amount_bpact
-    suite: be-birth-leave
+    suite: null
     note: 'BEN: paternity/birth-leave compensation. The be-birth-leave suite live-compares bpact_s and
-      matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.'
+      matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `be-birth-leave` retaining same-case returned values from both engines and explicit
+      comparison bindings for `bpact_s`; then re-register.'
   - id: be:bsa_be
     oracle_policy_name: bsa_be
     oracle_policy_type: ben
@@ -273,12 +300,18 @@ policies:
       - bsamt02_s
       - bsamt04_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - ISSPI_s
       - nparents
       - i_bsa_sort
       - nchildren
-    suite: be-social-assistance
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-social-assistance` retaining same-case returned values from both engines
+      and explicit comparison bindings for a registered output (bsa_s, yiviy_s, yivpr_s, bsaen_s, sin01_s,
+      bsamt01_s, bsamt03_s, sin03_s, bsamt02_s, bsamt04_s); then re-register.'
   - id: be:bsaoa_be
     oracle_policy_name: bsaoa_be
     oracle_policy_type: ben
@@ -288,14 +321,19 @@ policies:
       - bsaoa_s
       - yeaoamn_s
     in_scope: true
-    suite: be-elderly-income-support
-    note: Elderly income guarantee (GRAPA/IGO). Marked 'TO BE SWITCHED ON MANUALLY, otherwise from data'
+    oracle_switch: 'off'
+    suite: null
+    note: 'Elderly income guarantee (GRAPA/IGO). Marked ''TO BE SWITCHED ON MANUALLY, otherwise from data''
       in BE_2025, so it is off in a default run, but activatable per run via euromod_policy_switch_overrides
       [(bsaoa_be, True)] (the bun_be precedent — the adapter patches the model XML; no extension switch
       enables it). The be-elderly-income-support suite switches bsaoa_be on and live-compares bsaoa_s
       (garantie de revenus aux personnes agees) against the composed RuleSpec payable amount, matching
       EUROMOD exactly (1/1). Now covered; the prior not_a_policy exclusion is superseded by the published
-      activated suite.
+      activated suite. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `be-elderly-income-support` retaining same-case returned values
+      from both engines and explicit comparison bindings for a registered output (yiviy01_s, yivpr01_s,
+      bsaoa_s, yeaoamn_s); then re-register.'
   - id: be:bun_be
     oracle_policy_name: bun_be
     oracle_policy_type: ben
@@ -303,6 +341,7 @@ policies:
       - yempv_s
       - bun_s
     in_scope: true
+    oracle_switch: 'off'
     internal_only_vars:
       - i_bunmw
       - i_bunel
@@ -323,12 +362,14 @@ policies:
     output_vars:
       - bwkrg_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-flemish-jobbonus
   - id: be:byr_be
     oracle_policy_name: byr_be
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: input_carrying
@@ -343,12 +384,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: be:neg_be
     oracle_policy_name: neg_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yse
     exclusion_reason: technical
@@ -357,18 +400,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:output_std_hh_be
     oracle_policy_name: output_std_hh_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: be:random_be
     oracle_policy_name: random_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - temp_rand
       - temp_rand_ind
@@ -396,12 +442,19 @@ policies:
       - kivhooo_s
       - sin01_s
     in_scope: true
-    suite: be-flemish-social-protection-premium
+    oracle_switch: 'on'
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-flemish-social-protection-premium` retaining same-case returned values from
+      both engines and explicit comparison bindings for a registered output (tci_s, brv_s, kivhooo_s,
+      sin01_s); then re-register.'
   - id: be:tco_be
     oracle_policy_name: tco_be
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: extension_not_available
     note: Indirect consumption tax (VAT/excise). In BE_2025 its body is 15 DefConst/DefIl functions with
       no OutputVar and no compute function, and the public EUROMOD_RELEASES_J2.0+ ships no consumption-tax
@@ -424,6 +477,7 @@ policies:
       - sin18_s
       - sin22_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-work-bonus-credit
@@ -446,9 +500,14 @@ policies:
     output_vars:
       - tinkt_s
     in_scope: true
-    suite: be-capital-income-tax
+    oracle_switch: 'on'
+    suite: null
     note: 'TAX: separately-taxed movable/capital income tax. The be-capital-income-tax suite live-compares
-      tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3).'
+      tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3). Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `be-capital-income-tax`
+      retaining same-case returned values from both engines and explicit comparison bindings for `tinkt_s`;
+      then re-register.'
   - id: be:tinmu_be
     oracle_policy_name: tinmu_be
     oracle_policy_type: tax
@@ -456,9 +515,14 @@ policies:
       - tinmu_s
       - tin_s
     in_scope: true
-    suite: be-local-municipal-pit
+    oracle_switch: 'on'
+    suite: null
     note: 'TAX: municipal PIT surcharge (communal centimes). The be-local-municipal-pit suite live-compares
-      tinmu_s (communal_additions) and matches EUROMOD exactly (3/3).'
+      tinmu_s (communal_additions) and matches EUROMOD exactly (3/3). Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `be-local-municipal-pit`
+      retaining same-case returned values from both engines and explicit comparison bindings for a registered
+      output (tinmu_s, tin_s); then re-register.'
   - id: be:tinna_be
     oracle_policy_name: tinna_be
     oracle_policy_type: tax
@@ -473,6 +537,7 @@ policies:
       - tintatc01_s
       - sin08_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - tmp_tinna
       - n/a
@@ -489,25 +554,34 @@ policies:
       - tinrg01_s
       - tin_s
     in_scope: true
-    suite: be-regional-pit-surcharge
+    oracle_switch: 'on'
+    suite: null
     note: 'TAX: regional PIT additional tax. The be-regional-pit-surcharge suite live-compares tinrg_s
       (special financing law of 16 January 1989 article 5/2 — the reduced State tax times the region''s
       additional-tax percentage, 32.591% Brussels / 33.257% Flanders and Wallonia) and matches EUROMOD
-      exactly (3/3, one case per region).'
+      exactly (3/3, one case per region). Current coverage retracted under the same-case execution evidence
+      rule: The retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `be-regional-pit-surcharge` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (tinrg_s, tinrg01_s,
+      tin_s); then re-register.'
   - id: be:tintace_be
     oracle_policy_name: tintace_be
     oracle_policy_type: tax
     output_vars:
       - tintace_s
     in_scope: true
-    suite: be-article-51-forfait
+    oracle_switch: 'on'
+    suite: null
     note: 'TAX: PIT professional-expense forfait (article_51_forfaits). The be-article-51-forfait suite
       live-compares tintace_s as its own surface on a five-point single-worker earnings sweep (12k / 22k
       / 27k / 35k / 60k) that straddles the indexed forfait cap. EUROMOD BE_2025 computes tintace_s =
       min(0.30 * il_netYem, 5930) on employment income after ordinary employee SSC; the encoded belgium_pit_pilot_worker_forfait_professional_expenses
       applies the identical Article 51 employee rate (30%) and indexed cap (5,930 EUR) to the pipeline''s
       own post-employee-SSC remuneration, bridged on the engine''s post-uprating gross (yem). Matches
-      EUROMOD exactly (5/5).'
+      EUROMOD exactly (5/5). Current coverage retracted under the same-case execution evidence rule: The
+      retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `be-article-51-forfait` retaining same-case returned values
+      from both engines and explicit comparison bindings for `tintace_s`; then re-register.'
   - id: be:tintb_be
     oracle_policy_name: tintb_be
     oracle_policy_type: tax
@@ -529,18 +603,19 @@ policies:
       - sin33_s
       - xccfd_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
       - kivho
-    suite: be-marital-quotient
-    note: 'TAX: PIT deductions & marital quotient — a distinct policy from the covered tinna worker PIT.
-      The be-marital-quotient suite live-compares the CIR 1992 Article 87 marital quotient (quotient conjugal
-      — 30% of the single earner''s professional income, capped at the indexed 13,460 EUR, imputed to
-      the zero-income spouse and taxed separately through the Article 130 scale) against EUROMOD tin_s
-      on a single-earner married-couple grid at 30k/45k/60k. The three cases are dispositioned as explained
-      residuals (upstream_engine_gap) with the 13.07% SSC + Article 51 forfait decomposition, exact at
-      60k; zero unexplained and zero Axiom-attributed, so the surface is covered and conformant for this
-      policy.'
+    suite: null
+    note: 'be-marital-quotient compares tin_s, not the registered tintb_be outputs such as tintasp_s;
+      coverage requires a report recording an actual comparison of a registered tintb_be output. Current
+      coverage retracted under the same-case execution evidence rule: The report compares `tin_s`; no
+      registered marital-quotient output is compared. Add an actual final-output comparison and rerun
+      `be-marital-quotient` retaining same-case returned values from both engines and explicit comparison
+      bindings for a registered output (tintasp_s, tintals_s, tintami_s, tintcmg_s, sin03_s, sin04_s,
+      sin01_s, sin02_s, sin05_s, sin06_s, tintadt_s, sin30_s, sin31_s, sin32_s, sin33_s, xccfd_s); then
+      re-register.'
   - id: be:tprhm_be
     oracle_policy_name: tprhm_be
     oracle_policy_type: tax
@@ -548,7 +623,12 @@ policies:
       - tprhm_s
       - tprhmtr_s
     in_scope: true
-    suite: be-property-tax
+    oracle_switch: 'on'
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-property-tax` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tprhm_s, tprhmtr_s); then re-register.'
   - id: be:tscee_be
     oracle_policy_name: tscee_be
     oracle_policy_type: sic
@@ -564,6 +644,7 @@ policies:
       - tsceerd_s
       - tsceerdwb02B_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - wbhours_s
       - i_tsceerdB_s
@@ -576,6 +657,7 @@ policies:
     output_vars:
       - tsceesp_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-special-social-security-contribution
@@ -598,6 +680,7 @@ policies:
       - tscerrd_s
       - tscer_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: be-employer-ssc
@@ -607,26 +690,32 @@ policies:
     output_vars:
       - tscpe_s
     in_scope: true
-    suite: be-pensioner-contributions
+    oracle_switch: 'on'
+    suite: null
     note: 'SIC: pensioner health/disability + solidarity contribution; encoded in non_labour_income_contributions.yaml
       (Law 30.03.1994 art. 68 solidarity + Law 14.07.1994 art. 191 health 3.55%), NOT chapter_10_special_contributions
       (that is the Law 29.06.1981 art. 38 employer/fringe special contributions). The be-pensioner-contributions
       suite live-compares tscpe_s and matches EUROMOD exactly (6/6). rulespec-be#89 encoded the art. 191
       low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded
       in the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap
-      residuals that previously held this uncovered.'
+      residuals that previously held this uncovered. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `be-pensioner-contributions` retaining same-case
+      returned values from both engines and explicit comparison bindings for `tscpe_s`; then re-register.'
   - id: be:tscse_be
     oracle_policy_name: tscse_be
     oracle_policy_type: sic
     output_vars:
       - tscse_s
     in_scope: true
+    oracle_switch: 'on'
     suite: be-self-employed-ssc
   - id: be:uprate_be
     oracle_policy_name: uprate_be
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: be:yem_be
     oracle_policy_name: yem_be
@@ -637,6 +726,7 @@ policies:
       - yem04_s
       - yem01_s
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - yem
     exclusion_reason: technical
@@ -649,6 +739,7 @@ policies:
       - yemmw_s
       - bwkmcee_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmcee_s
     exclusion_reason: oracle_dataset_lacks_input
@@ -675,6 +766,7 @@ policies:
       - bwkmcse01_s
       - bwkmcse02_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmcse01_s
       - i_bwkmcse02_s

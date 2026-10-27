@@ -21,7 +21,7 @@ cases aren't listed.
 Row shape (kept deliberately small):
     {"id": case_id, "r": match_rate,
      "h": {"n": household_size, "e": earned_income, "a": ages},
-     "m": [{"c": concept, "l": left, "x": right, "d": difference,
+     "m": [{"c": concept, "l": left, "x": right, "d": right_minus_left,
             "e": disposition_kind_if_explained}, ...]}
 
 Usage:
@@ -40,11 +40,21 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import (  # noqa: E402
+    dashboard_delta,
+    dashboard_match_rate,
+    strict_json_loads,
+)
+
 REPORTS = REPO_ROOT / "reports"
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 OUT_ROOT = DASHBOARD_DATA / "cases"
 CHUNK_SIZE = 500
 MAX_CASES = 25_000  # keep artifacts static-site friendly
+CHUNK_INDEX_SCHEMA_VERSION = "axiom_oracles.chunk_index.v1"
 
 
 def latest_full_report(basename: str) -> Path | None:
@@ -62,6 +72,20 @@ def dashboard_report(basename: str) -> dict | None:
     if not path.exists():
         return None
     return json.loads(path.read_text())
+
+
+def has_versioned_chunks(suite: str) -> bool:
+    """Whether an existing chunk corpus is report-bound and must be preserved."""
+
+    path = OUT_ROOT / suite / "index.json"
+    try:
+        payload = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(payload, dict)
+        and payload.get("schema_version") == CHUNK_INDEX_SCHEMA_VERSION
+    )
 
 
 def mismatches_complete(report: dict | None) -> bool:
@@ -121,6 +145,13 @@ def engine_pair_records(metadata: dict) -> list[dict]:
         value = metadata[key]
         if value is None or isinstance(value, str):
             continue
+        if key == "axiom_relations" and isinstance(value, (list, tuple)):
+            # Older full reports can still carry internal producer role hints.
+            value = [
+                {field: item for field, item in record.items() if field != "roles"}
+                if isinstance(record, dict) else record
+                for record in value
+            ]
         name = key[len("axiom_") :]
         out.append({"n": name, "v": value})
         peer = metadata.get("pe_" + name)
@@ -135,7 +166,8 @@ def engine_pair_records(metadata: dict) -> list[dict]:
 
 
 def compact_case(case: dict, explained: dict) -> dict:
-    hs = (case.get("metadata") or {}).get("household_summary") or {}
+    metadata = case.get("metadata") or {}
+    hs = metadata.get("household_summary") or {}
     ages = hs.get("ages") or []
     mismatches = []
     for m in case.get("mismatches") or []:
@@ -143,16 +175,35 @@ def compact_case(case: dict, explained: dict) -> dict:
             "c": m.get("concept"),
             "l": m.get("left"),
             "x": m.get("right"),
-            "d": m.get("difference"),
+            "d": dashboard_delta(m.get("left"), m.get("right")),
         }
         kind = explained.get((case.get("case_id"), m.get("concept")))
         if kind:
             row["e"] = kind
         mismatches.append(row)
+    if case.get("matched") is False and not mismatches:
+        # SNAP-QC case rows carry a headline boolean and first divergent stage
+        # rather than comparator-style value rows. Preserve that negative
+        # verdict as an explicit compact mismatch even when the producer has
+        # no case-local values; otherwise the household explorer labels the
+        # row "engines agree."
+        stage = case.get("stage")
+        mismatches.append(
+            {
+                "c": stage if isinstance(stage, str) and stage else "mismatch",
+                "l": None,
+                "x": None,
+                "d": None,
+            }
+        )
     earned = hs.get("yearly_earned_income_per_person")
+    matches = case.get("matches")
+    match_rate = case.get("match_rate")
+    if isinstance(matches, list):
+        match_rate = dashboard_match_rate(len(matches), len(mismatches))
     row = {
         "id": case.get("case_id"),
-        "r": case.get("match_rate"),
+        "r": match_rate,
         "h": {
             "n": hs.get("household_size") or len(ages) or None,
             # None (not 0) when the harness never captured earnings — the
@@ -168,7 +219,7 @@ def compact_case(case: dict, explained: dict) -> dict:
     # the artifact two orders of magnitude heavier than the site can carry.
     # `i0` records how many defaults were dropped; the full report under
     # reports/ remains the complete record.
-    records = (case.get("metadata") or {}).get("axiom_input_records")
+    records = metadata.get("axiom_input_records")
     if records:
         kept = []
         dropped = 0
@@ -195,31 +246,105 @@ def compact_case(case: dict, explained: dict) -> dict:
         # Consumed by write_artifacts for the suite-level slot dictionary,
         # stripped before chunks are written.
         row["_all_input_names"] = [{"name": r.get("name")} for r in records]
-    outputs = (case.get("metadata") or {}).get("axiom_all_outputs")
+    outputs = metadata.get("axiom_all_outputs")
     if isinstance(outputs, dict) and outputs:
         kept_o = []
-        dropped_o = 0
+        zero_o = []
         for name in sorted(outputs):
             value = outputs[name]
             if value is None or value is False or value == 0:
-                dropped_o += 1
+                zero_o.append(name)
                 continue
             kept_o.append({"n": name, "v": value})
         row["o"] = kept_o
-        if dropped_o:
-            row["o0"] = dropped_o
+        if zero_o:
+            row["o0"] = len(zero_o)
+        # Both consumed by finalize_slot_dictionaries, stripped before chunks
+        # are written.
         row["_all_output_names"] = sorted(outputs)
+        row["_zero_output_names"] = zero_o
     else:
-        synth = engine_pair_records(case.get("metadata") or {})
+        synth = engine_pair_records(metadata)
         if synth:
             row["i"] = synth
-    matches = case.get("matches")
-    if matches:
+    # A report-bound chunk can also be the durable input source for a
+    # hermetic executable receipt. Preserve the exact post-bridge Axiom
+    # inputs when the producer exposes them, plus the small bridge/aggregation
+    # facts needed to reconstruct record-oriented runs. This is deliberately
+    # narrower than copying all case metadata (notably EUROMOD input tables).
+    execution = {
+        "schema_version": "axiom_oracles.case_execution.v1",
+    }
+    axiom_inputs = metadata.get("axiom_inputs")
+    if isinstance(axiom_inputs, dict):
+        execution["axiom_inputs"] = axiom_inputs
+    for key in (
+        "axiom_entity",
+        "axiom_entity_id",
+        "axiom_input_records_count",
+        "axiom_result_aggregation",
+        "euromod_to_axiom_input_bridge_applied",
+    ):
+        if metadata.get(key) is not None:
+            execution[key] = metadata[key]
+    if len(execution) > 1:
+        row["execution"] = execution
+    if isinstance(matches, list):
         row["v"] = [
             {"c": m.get("concept"), "l": m.get("left"), "x": m.get("right")}
             for m in matches
         ]
+    elif "matches" in case:
+        raise ValueError("full-evidence case matches must be an array")
     return row
+
+
+def zero_output_mask(zero_names, output_slots: list[str]) -> str:
+    """Hex bitmask of ``zero_names`` over ``output_slots``.
+
+    Hex digit ``i // 4`` holds slot ``i`` at bit ``3 - i % 4``, so the mask
+    reads left to right in slot order. dashboard/src/utils/zeroOutputs.mjs
+    decodes it.
+    """
+
+    zero = set(zero_names)
+    bits = "".join("1" if name in zero else "0" for name in output_slots)
+    bits += "0" * (-len(bits) % 4)
+    return "".join(
+        format(int(bits[index : index + 4], 2), "x")
+        for index in range(0, len(bits), 4)
+    )
+
+
+def finalize_slot_dictionaries(rows: list[dict]) -> tuple[list[str], list[str]]:
+    """Build the suite's input/output name dictionaries and bind rows to them.
+
+    ``output_slots`` is the union of every output any case recorded. Cases
+    record different outputs — full evidence lists only the rules the
+    engine evaluated for that case — so a row cannot be assumed to hold a
+    zero for every slot it does not list. Each row with zero-valued outputs
+    gets ``oz``, their bitmask over ``output_slots``; a slot outside both
+    ``o`` and ``oz`` was not evaluated for that case.
+    """
+
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
+        zero_names = row.pop("_zero_output_names", None)
+        if zero_names:
+            row["oz"] = zero_output_mask(zero_names, output_slots)
+    return input_slots, output_slots
 
 
 def normalize_mismatch(m: dict) -> dict:
@@ -269,7 +394,7 @@ def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
             "c": m["concept"],
             "l": m["left"],
             "x": m["right"],
-            "d": m["difference"],
+            "d": dashboard_delta(m["left"], m["right"]),
         }
         kind = explained.get((m["case_id"], m["concept"]))
         if kind:
@@ -289,20 +414,7 @@ def write_artifacts(
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
@@ -371,6 +483,35 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
         rows = [compact_case(c, explained) for c in cases]
         return write_artifacts(suite, rows, meta, source_name, partial=False)
 
+    # Once a report has moved inline cases into a versioned chunk corpus, a
+    # skip/re-emit run may intentionally carry no inline rows. Do not replace
+    # that complete corpus with an empty mismatch-only projection. The binding
+    # generator that runs next permits an idempotent index only and fails if a
+    # changed report lacks producer-refreshed chunks.
+    if has_versioned_chunks(suite):
+        return f"preserve {suite}: versioned chunks (no full case rows in this run)"
+
+    # Complete legacy campaign corpora are also durable evidence. Without
+    # their ignored producer reports, emitting only mismatches would erase
+    # the matched households and their input/output evidence. Validate the
+    # existing corpus against the canonical report before preserving it;
+    # drift requires genuine source rows, never a destructive downgrade.
+    index_path = OUT_ROOT / suite / "index.json"
+    if index_path.exists():
+        index = strict_json_loads(index_path.read_bytes())
+        if not isinstance(index, dict):
+            raise ValueError(f"{suite}: existing case-artifact index must be an object")
+        if "partial" in index and index["partial"] != "mismatch-only":
+            raise ValueError(f"{suite}: unsupported case-artifact partial mode {index['partial']!r}")
+        if "partial" not in index:
+            problems, _stats = check_suite_artifacts(suite, dashboard_config)
+            if problems:
+                raise ValueError(
+                    f"{suite}: cannot preserve complete case corpus without "
+                    f"full source rows: {'; '.join(problems)}"
+                )
+            return f"preserve {suite}: complete legacy chunks (no full case rows in this run)"
+
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.
     if mismatches_complete(dash):
@@ -426,9 +567,47 @@ def _load_served_rows(suite: str, index: dict) -> tuple[list[dict], list[str]]:
     problems: list[str] = []
     out_dir = OUT_ROOT / suite
     declared_chunks = index.get("chunks")
-    if not isinstance(declared_chunks, int) or declared_chunks < 0:
-        return [], [f"{suite}: index.chunks must be a non-negative integer"]
-    expected_names = {f"chunk-{i}.json" for i in range(declared_chunks)}
+    if isinstance(declared_chunks, int) and not isinstance(declared_chunks, bool):
+        if declared_chunks < 0:
+            return [], [f"{suite}: index.chunks must be non-negative"]
+        expected_names = {f"chunk-{i}.json" for i in range(declared_chunks)}
+    elif (
+        index.get("schema_version") == CHUNK_INDEX_SCHEMA_VERSION
+        and isinstance(declared_chunks, list)
+    ):
+        declared_names: list[str] = []
+        for position, descriptor in enumerate(declared_chunks):
+            name = descriptor.get("name") if isinstance(descriptor, dict) else None
+            if not isinstance(name, str) or not re.fullmatch(
+                r"chunk-\d+\.json", name
+            ):
+                problems.append(
+                    f"{suite}: index.chunks[{position}].name is invalid"
+                )
+                continue
+            declared_names.append(name)
+        if len(set(declared_names)) != len(declared_names):
+            problems.append(f"{suite}: index.chunks repeats a chunk name")
+        expected_names = set(declared_names)
+        chunk_count = index.get("chunk_count")
+        if (
+            isinstance(chunk_count, bool)
+            or not isinstance(chunk_count, int)
+            or chunk_count < 0
+        ):
+            problems.append(
+                f"{suite}: index.chunk_count must be a non-negative integer"
+            )
+        elif chunk_count != len(declared_chunks):
+            problems.append(
+                f"{suite}: index.chunk_count {chunk_count} != "
+                f"{len(declared_chunks)} descriptors"
+            )
+    else:
+        return [], [
+            f"{suite}: index.chunks must be a non-negative integer or "
+            "a v1 descriptor array"
+        ]
     actual_names = {path.name for path in out_dir.glob("chunk-*.json")}
     if actual_names != expected_names:
         missing = sorted(expected_names - actual_names)
@@ -483,7 +662,20 @@ def _canonical_mismatch_payloads(
         payloads[key] = {
             "l": normalized.get("left"),
             "x": normalized.get("right"),
+            # Two sign conventions for the served delta coexist on main: this
+            # emitter writes the documented right-minus-left dashboard delta,
+            # while the populace-campaign artifacts (AL/MA/NC/SC/TN SNAP,
+            # checked by the same CI step) serve the report's stored
+            # `difference` (left-minus-right). Both are faithful projections
+            # of the same (l, x) pair. The parity check therefore accepts a
+            # served `d` equal to EITHER, so a DK PR neither re-emits SNAP
+            # under a convention it does not own nor lets DK's fresh chunks
+            # fail against the other. Unifying the convention repo-wide is a
+            # tracked follow-up, not a side effect here.
             "d": normalized.get("difference"),
+            "d_alt": dashboard_delta(
+                normalized.get("left"), normalized.get("right")
+            ),
             "e": disposition.get("disposition"),
         }
     return payloads, problems
@@ -612,10 +804,15 @@ def check_suite_artifacts(
             f"from canonical ({len(silent)} silent classifications); "
             f"examples={wrong_annotations[:5]}"
         )
+    def _delta_matches(key: tuple[str, str]) -> bool:
+        served_d = served[key].get("d")
+        return served_d == canonical[key]["d"] or served_d == canonical[key]["d_alt"]
+
     value_drift = sorted(
         key
         for key in shared
-        if any(canonical[key][field] != served[key][field] for field in ("l", "x", "d"))
+        if any(canonical[key][field] != served[key][field] for field in ("l", "x"))
+        or not _delta_matches(key)
     )
     if value_drift:
         problems.append(

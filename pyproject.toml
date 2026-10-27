@@ -27,6 +27,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
   "click>=8.1",
+  # The DE executable certificate verifies the RuleSpec apply signature before
+  # replaying the pinned engine; keep that load-bearing verifier in the base env.
+  "cryptography>=44.0",
   "pyyaml>=6.0",
   "requests>=2.31",
 ]
@@ -39,9 +42,14 @@ dev = [
   # _runner.py under this interpreter with a stub engine; the worker itself
   # needs pandas.
   "pandas>=2.2",
+  "hypothesis>=6.100",
 ]
 policyengine = [
-  "policyengine[us]==4.18.9",
+  "policyengine[us]==5.0.0",
+  # policyengine-us declares spm-calculator>=0.2.0 but imports
+  # spm_calculator.geoadj, which spm-calculator 1.0.0 removed. CI installs this
+  # extra with `uv pip install -e '.[policyengine]'`, which ignores uv.lock.
+  "spm-calculator>=0.2.0,<1",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",
@@ -87,6 +95,14 @@ conflicts = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+# Delete each passing test's tmp_path at teardown, and the whole session
+# basetemp when every test passes; keep only failures for debugging. The
+# commit_refreshed_report tests check out full copies of a ~600 MB seed repo
+# in every test, so the default "all" left 4-16 GB per run in
+# $TMPDIR/pytest-of-$USER and filled the disk on 2026-09-22. To keep passing
+# tests' directories while debugging, run with
+# -o tmp_path_retention_policy=all (--basetemp alone does not keep them).
+tmp_path_retention_policy = "failed"
 
 [tool.ruff]
 target-version = "py313"

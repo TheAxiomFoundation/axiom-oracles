@@ -1,21 +1,21 @@
 # Georgia TANF (ga-tanf-ecps) residual dispositions.
 # Composed us-ga/tanf vs PolicyEngine ga_tanf on Enhanced CPS Georgia households
-# (PE pin 1.752.2, populace-us 2024, FIPS 13): 1896/1897 match, 1 residual.
+# (PE 4.18.9 / US 1.767.3 / core 3.30.3, populace-us 2024, FIPS 13):
+# 1896/1897 match, 1 residual.
 schema: axiom_oracles.dispositions.v1
 suite: ga-tanf-ecps
-updated: '2026-07-08'
+updated: '2026-07-28'
 entries:
 - id: ga-tanf-ecps-ga_tanf_benefit-composed-vs-pe-income-bridge
   concept: us-ga:policies/dfcs/tanf#ga_tanf_benefit
-  case_selector:
-    case_ids:
-      - ecps-30062
+  case_id: ecps-30062
   disposition: bridge_artifact
   evidence:
     mechanism: >-
       Composed GA TANF benefit vs PolicyEngine: 1 ga_tanf_benefit mismatch on a
       family of four (adults 48/48, minors 16/14) with zero earned income.
-      PolicyEngine ga_tanf pays 1979.65/yr; the composed slice pays 0 because its
+      PolicyEngine ga_tanf pays $164.970459 for 2026-01; the composed slice pays
+      0 because its
       PAMMS 1605 gross-income-ceiling / standard-of-need income-eligibility test
       denies the unit where PE's full ga_tanf graph pays. Structural
       projection/definition divergence between the ECPS unearned-income projection
@@ -23,9 +23,14 @@ entries:
       this household (composed-slice vs full-PE-model gap), not a rulespec
       statutory-encoding defect: the us-ga 1605 block-14 benefit leaf reproduces
       PE's min(max(standard_of_need - net_countable_income, 0), family_maximum) on
-      every other Georgia ECPS household. Representative: ecps-30062 axiom=0.0
-      PE=1979.6455078125.
+      every other Georgia ECPS household. The legacy annualized row was
+      axiom=0 / PE=1979.645508; the requested-month fix changes it exactly to
+      axiom=0 / PE=164.970459 (one twelfth), so the case-scoped mechanism was
+      explicitly revalidated rather than silently retained.
     sources:
     - dashboard/public/data/axiom-policyengine-ga-tanf-ecps.json
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/247
   expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 164.970458984375

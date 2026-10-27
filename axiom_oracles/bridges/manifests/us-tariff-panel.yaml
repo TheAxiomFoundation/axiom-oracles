@@ -1,0 +1,60 @@
+# Strict experiment boundary for the committed 122-family tariff witness.
+schema: axiom_oracles.bridge_manifest.v1
+suite: us-tariff-panel
+program: us/tariff-witness
+period: "2026"
+logical_period: "2026"
+strict: true
+bridge:
+  module: axiom_oracles/suites/us_tariff_panel.py
+  entrypoint: panel_case
+population:
+  family: yale-panel-covered-slice
+  pin_required: true
+  pinned:
+    revision: c4307e514196618afcbf88cf7fd33746417eeabf
+    sha256: add5540f497ba2788eb963d58d0e1ca06352026c96f9e14ddb931abbf69d3da5
+oracle:
+  name: yale-budget-lab-tariff-rate-tracker
+  mode: legal-date-statutory-panel
+
+bindings:
+  - kind: mapped
+    input: hts_number
+    source: reference row hts10, formatted by dotted_hts before engine execution
+    audit: read
+  - kind: mapped
+    input: country_of_origin
+    source: committed census_iso_bridge.csv ISO-2 value for each reference country
+    audit: read
+  - kind: mapped
+    input: entry_date
+    source: Case.period from both covered interval endpoints
+    audit: read
+  - kind: constant
+    inputs:
+      - article_is_potash
+      - cbp_agrees_chapter_98_entry_is_appropriate
+      - entry_is_9802_excepted_entry
+      - entry_is_chapter_98_subchapter_xxiii_entry
+      - entry_is_entered_free_of_duty_under_usmca
+      - entry_is_humanitarian_donation_article
+      - entry_is_informational_material_article
+      - entry_is_personal_use_accompanied_baggage
+      - entry_is_properly_claimed_chapter_98_entry
+      - entry_is_usmca_duty_free_entry
+      - entry_loaded_and_in_transit_before_july_24_2026
+    reason: >-
+      The witness is line-entry evidence, not transaction-fact evidence. The
+      harness omits these eleven optional composition inputs, so each compiled
+      input_or_else path supplies its false neutral value. The exercise receipt
+      records them as constant, never varied.
+    audit: read
+
+completeness:
+  status: verified
+  source: committed_exercise_receipt
+  receipt: axiom_oracles/bridges/exercise_receipts/us-tariff-panel.json
+  note: The committed report contains all 122 family rows; its receipt flattens
+    their HTS, country and probe-date ledgers and declares the eleven neutral
+    optional inputs exactly as the harness supplies them by compiled default.

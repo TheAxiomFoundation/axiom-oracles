@@ -364,7 +364,7 @@
       },
       "dispositions_file": "dispositions/or-income-tax-liability.yaml",
       "expired_entries": [],
-      "explained_rate": 50,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 0,
       "schema_version": "axiom_oracles.dispositions.v1",

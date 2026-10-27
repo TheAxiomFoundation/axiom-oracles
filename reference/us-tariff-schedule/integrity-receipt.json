@@ -1,0 +1,12 @@
+{
+  "schema_columns": ["hts10", "country", "revision", "valid_from", "valid_until", "statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip", "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs", "statutory_rate_s301fl", "statutory_rate_s301br", "statutory_rate_s338", "statutory_rate_s122", "statutory_rate_section_201", "statutory_rate_other"],
+  "statutory_columns": ["statutory_base_rate", "statutory_rate_232", "statutory_rate_ieepa_recip", "statutory_rate_ieepa_fent", "statutory_rate_301", "statutory_rate_301_cs", "statutory_rate_s301fl", "statutory_rate_s301br", "statutory_rate_s338", "statutory_rate_s122", "statutory_rate_section_201", "statutory_rate_other"],
+  "duplicate_keys": 0,
+  "interval_gaps_or_overlaps": 0,
+  "country_set_per_line": 240,
+  "unbridged_countries": 0,
+  "selected_lines": 20508,
+  "selected_countries": 240,
+  "every_class_represented": true,
+  "regime_table_sha256": "1f322eac52a39fee2ca3380021fc3da3e298caf02dbfcc9c0c21692dbe7821c8"
+}

@@ -1,0 +1,949 @@
+rows:
+  - citation: "us/statute/7"
+    heading: "AGRICULTURE"
+    status: excluded
+    reason: container_heading
+    basis: "The title node has no body text; “AGRICULTURE” is only the heading for the child provisions."
+  - citation: "us/statute/7/2011"
+    heading: "Congressional declaration of policy"
+    status: excluded
+    reason: no_household_computation
+    basis: "The section declares congressional policy “to safeguard the health and well-being of the Nation’s population” and authorizes a program in general terms; it supplies no rule for calculating a household’s eligibility or allotment."
+  - citation: "us/statute/7/2012"
+    heading: "Definitions"
+    status: pending
+    note: "This parent section mixes administrative definitions with household-computational definitions for medical expenses, elderly or disabled members, homelessness, household composition, and the Thrifty Food Plan. The direct modules cover § 2012(m)(4) and only the household aggregation step of § 2012(j), not the section as a whole."
+  - citation: "us/statute/7/2012/a"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines an “Access device” as a card, code, account number, or other means used to obtain or transfer benefits; it governs benefit-access infrastructure rather than household eligibility or amount."
+  - citation: "us/statute/7/2012/b"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision only defines “Allotment” as “the total value of benefits a household is authorized to receive during each month”; it does not determine that value."
+  - citation: "us/statute/7/2012/c"
+    heading: null
+    status: pending
+    note: "The enumerated “allowable medical expenses” determine the medical deduction base and therefore household net income and benefit amount. The encoded § 273.10 module consumes resolved total medical expenses and expressly defers deductible-expense determination, so it does not fully operationalize this definition."
+  - citation: "us/statute/7/2012/d"
+    heading: "Benefit .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “benefit” by its delivery through “an electronic benefit transfer” or another assistance mechanism; it does not set household eligibility or the value delivered."
+  - citation: "us/statute/7/2012/d/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph identifies “an electronic benefit transfer under section 2016(h)” as a means of providing a benefit, an issuance mechanism with no household calculation."
+  - citation: "us/statute/7/2012/d/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph permits “other means of providing assistance, as determined by the Secretary”; it concerns delivery method rather than household eligibility or amount."
+  - citation: "us/statute/7/2012/e"
+    heading: "Benefit Issuer .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines a “benefit issuer” as a State office or contracted or delegated entity responsible for issuance, which is program administration rather than household computation."
+  - citation: "us/statute/7/2012/f"
+    heading: null
+    status: pending
+    note: "The provision defines the period for which a household “shall be eligible to receive benefits,” including a 24-month rule for households whose adults are elderly or disabled and an extension for transitional benefits. Because those durations can govern point-in-time benefit receipt and the § 273.10 module expressly defers certification-period determination, procedural exclusion would be unsafe."
+  - citation: "us/statute/7/2012/g"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “Coupon” as a coupon, stamp, certificate, card, cash, or check issued in lieu of one; this is benefit-delivery terminology with no household calculation."
+  - citation: "us/statute/7/2012/h"
+    heading: null
+    status: pending
+    note: "The definition of a qualifying drug addiction or alcoholic treatment and rehabilitation program is used by the special household and food-treatment rules for program residents. No encoded module resolves whether a program meets this statutory definition."
+  - citation: "us/statute/7/2012/i"
+    heading: "EBT Card .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines an “EBT card” by reference to the electronic-transfer issuance system in section 2016(h); it contains no household eligibility or amount rule."
+  - citation: "us/statute/7/2012/j"
+    heading: null
+    status: pending
+    note: "This subsection’s seven categories determine elderly-or-disabled status, which changes income tests and deductions. us/statutes/7/2012/j.yaml only aggregates an input fact named snap_member_is_elderly_or_disabled across household members; it does not compute any of the seven statutory categories."
+  - citation: "us/statute/7/2012/j/1"
+    heading: null
+    status: pending
+    note: "Age 60 or older is a substantive elderly-member criterion. The § 2012(j) module consumes member status as an input instead of encoding this age test."
+  - citation: "us/statute/7/2012/j/2"
+    heading: null
+    status: pending
+    note: "Receipt of SSI and specified federal or State disability assistance is a substantive disabled-member criterion. The § 2012(j) module does not encode these benefit-receipt and stringency tests."
+  - citation: "us/statute/7/2012/j/3"
+    heading: null
+    status: pending
+    note: "The paragraph treats specified disability or blindness payments and permanent governmental disability retirement as disabled-member criteria. Those tests are not computed by the § 2012(j) module."
+  - citation: "us/statute/7/2012/j/4"
+    heading: null
+    status: pending
+    note: "A veteran’s total disability, aid-and-attendance, or permanently-housebound status is a substantive disabled-member criterion. The § 2012(j) module leaves this status as an unresolved input."
+  - citation: "us/statute/7/2012/j/5"
+    heading: null
+    status: pending
+    note: "The paragraph defines qualifying surviving-spouse combinations of veterans’ benefits and permanent disability. The § 2012(j) module does not encode these tests."
+  - citation: "us/statute/7/2012/j/6"
+    heading: null
+    status: pending
+    note: "The paragraph defines qualifying children of veterans through incapacity or specified benefits plus permanent disability. The § 2012(j) module does not encode these tests."
+  - citation: "us/statute/7/2012/j/7"
+    heading: null
+    status: pending
+    note: "The Railroad Retirement annuity and hypothetical Social Security coverage/application conditions are substantive disabled-member criteria. The § 2012(j) module does not encode them."
+  - citation: "us/statute/7/2012/k"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines what benefits may purchase, from “food or food product for home consumption” through specified prepared meals and Alaska subsistence equipment; it does not calculate household eligibility or allotment."
+  - citation: "us/statute/7/2012/l"
+    heading: null
+    status: pending
+    note: "The definition of “Homeless individual” can change household treatment and the ABAWD exemption. The § 273.24 module accepts member_is_homeless as an input and does not encode this definition."
+  - citation: "us/statute/7/2012/l/1"
+    heading: null
+    status: pending
+    note: "Lacking “a fixed and regular nighttime residence” is a substantive route to homeless status. Existing modules consume homeless status as an input rather than computing this criterion."
+  - citation: "us/statute/7/2012/l/2"
+    heading: null
+    status: pending
+    note: "The shelter, institution, temporary-accommodation, and public-place alternatives determine homeless status and downstream eligibility treatment. Existing modules do not compute these alternatives."
+  - citation: "us/statute/7/2012/m"
+    heading: null
+    status: pending
+    note: "The subsection defines who constitutes a SNAP household and includes multiple substantive composition rules. Only paragraph (4) is directly encoded; paragraphs (1)–(3) and (5) remain uncovered."
+  - citation: "us/statute/7/2012/m/1"
+    heading: null
+    status: pending
+    note: "Separate or shared customary food purchase and preparation determines the household unit and therefore eligibility and allotment size. No module encodes this composition test."
+  - citation: "us/statute/7/2012/m/2"
+    heading: null
+    status: pending
+    note: "The mandatory grouping of spouses, parents with children 21 or younger, and certain minors with a person exercising parental control changes household composition. No module encodes these grouping rules."
+  - citation: "us/statute/7/2012/m/3"
+    heading: null
+    status: pending
+    note: "The elderly-and-disabled separate-household exception combines age, disability, inability to prepare food, spouse treatment, and a 165-percent poverty test. No module encodes this rule."
+  - citation: "us/statute/7/2012/m/4"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2012/m/4.yaml"]
+  - citation: "us/statute/7/2012/m/5"
+    heading: null
+    status: pending
+    note: "The paragraph creates five institution-residency exceptions that allow specified people to constitute individual households. No module encodes these household-status exceptions."
+  - citation: "us/statute/7/2012/n"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines a “Reservation” as the geographic area over which a tribal organization exercises jurisdiction; it is jurisdictional administration, not household computation."
+  - citation: "us/statute/7/2012/o"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection defines which establishments and services qualify as a “Retail food store,” including stocking, sales, and delivery-service conditions; these are retailer-authorization rules, not household eligibility or benefit calculations."
+  - citation: "us/statute/7/2012/o/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph qualifies retailers through continuous offerings in four staple-food categories or “over 50 percent” staple-food sales; it computes retailer status, not household eligibility or amount."
+  - citation: "us/statute/7/2012/o/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph includes specified establishments, organizations, programs, and group living arrangements in the retail-store definition; it is retailer classification with no household calculation."
+  - citation: "us/statute/7/2012/o/3"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph includes “a store purveying the hunting and fishing equipment” described elsewhere; it classifies a retailer rather than a household."
+  - citation: "us/statute/7/2012/o/4"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph includes nonprofit cooperative purchasing ventures and direct-marketing agricultural producers in the retail-store definition; it contains no household eligibility or amount rule."
+  - citation: "us/statute/7/2012/o/5"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets purchasing, notice, delivery-fee, and no-markup conditions for a food purchasing and delivery service; these govern service authorization and transactions, not a household’s eligibility or allotment."
+  - citation: "us/statute/7/2012/p"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision states that “Secretary” means the Secretary of Agriculture, an administrative definition with no household rule."
+  - citation: "us/statute/7/2012/q"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection defines staple-food categories and excludes accessory foods; those categories govern retailer qualification rather than household eligibility or amount."
+  - citation: "us/statute/7/2012/q/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph lists meat, bread or cereals, vegetables or fruits, and dairy as “staple foods”; it is a retailer-inventory classification, not a household calculation."
+  - citation: "us/statute/7/2012/q/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph excludes accessory items such as coffee, drinks, candy, condiments, and spices from “staple foods”; it does not determine household eligibility or allotment."
+  - citation: "us/statute/7/2012/r"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “State” to include the fifty States, specified territories, and qualifying tribal reservations; it sets program jurisdiction rather than a household computation."
+  - citation: "us/statute/7/2012/s"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “State agency” as government offices or capable tribal organizations administering the programs; it allocates administrative identity and responsibility, not household eligibility or amount."
+  - citation: "us/statute/7/2012/t"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “Supplemental nutrition assistance program” as “the program operated pursuant to this chapter”; it contains no computational rule."
+  - citation: "us/statute/7/2012/u"
+    heading: "Thrifty Food Plan"
+    status: pending
+    note: "This subsection supplies the benefit-base methodology, household-size ratios, geographic and CPI adjustments, and market-basket constraints. Fiscal-year maximum-allotment policy tables realize selected current dollar outcomes, but they do not fully encode this statutory methodology across periods and re-evaluations."
+  - citation: "us/statute/7/2012/u/1"
+    heading: "In general The term “thrifty food plan” means the diet required to feed a family of 4 persons consisting of a man and a woman ages 20 through 50, a child ages 6 through 8, and a child ages 9 through 11 using the items and quantities of food described in the report of the Department of Agriculture entitled “Thrifty Food Plan, 2021”, and each successor report updated pursuant to this subsection, subject to the conditions that—"
+    status: pending
+    note: "The paragraph makes the Thrifty Food Plan cost the basis for uniform allotments and restricts changes to the statutory adjustment and re-evaluation routes. Current fiscal-year policy tables provide dollar values but do not encode these governing conditions."
+  - citation: "us/statute/7/2012/u/2"
+    heading: "Household adjustments .—"
+    status: pending
+    note: "The paragraph directly computes household-size amounts from 30, 55, 79, 100, 119, 143, 158, and 180 percent ratios plus the capped additional-person rule. Current policy modules store fiscal-year dollar tables and increments rather than encoding the statutory ratio formula in full."
+  - citation: "us/statute/7/2012/u/3"
+    heading: "Allowable cost adjustments .—"
+    status: pending
+    note: "The paragraph requires geographic cost adjustments and annual October 1 CPI adjustment, which determine household allotment amounts. Fiscal-year policy tables contain selected published outcomes but do not encode the full adjustment methodology."
+  - citation: "us/statute/7/2012/u/4"
+    heading: "Re-evaluation of market baskets"
+    status: pending
+    note: "The paragraph authorizes post-2027 market-basket re-evaluation while prohibiting a resulting cost increase, a constraint on the benefit base. No module encodes this re-evaluation and cost-neutrality rule."
+  - citation: "us/statute/7/2012/v"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision defines “Tribal organization” as a recognized tribal governing body or specified treaty entity; it is an administrative-entity definition with no household calculation."
+  - citation: "us/statute/7/2012a"
+    heading: "Publicly operated community health centers"
+    status: pending
+    note: "The section extends provisions concerning private nonprofit drug or alcohol treatment programs to publicly operated community health centers, changing which treatment settings receive the special participant treatment. No module encodes that extension."
+  - citation: "us/statute/7/2013"
+    heading: "Establishment of supplemental nutrition assistance program"
+    status: pending
+    note: "The section is mixed: most provisions establish and finance program administration, but subsection (b) bars simultaneous SNAP/FDPIR participation and makes certain FDPIR-disqualified individuals ineligible for SNAP. Those household eligibility rules are not encoded."
+  - citation: "us/statute/7/2013/a"
+    heading: "Program"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection establishes issuance to already “eligible households,” restricts benefit use and redemption, and computes Federal and State program cost shares from State payment-error rates; it does not determine a household’s eligibility or allotment."
+  - citation: "us/statute/7/2013/a/1"
+    heading: "Establishment"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes issuance to already “eligible households,” conditions State participation on sales-tax policy, restricts purchases to approved stores, and provides Treasury redemption; it supplies no household eligibility or amount formula."
+  - citation: "us/statute/7/2013/a/2"
+    heading: "State quality control incentive"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph maps a State’s “payment error rate” to Federal and State shares of allotment costs and implementation years; this is intergovernmental program financing, not a household calculation."
+  - citation: "us/statute/7/2013/a/3"
+    heading: "Maximum Federal payment"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph caps what the Secretary may pay toward allotment costs at “the applicable Federal share”; it governs Federal reimbursement rather than a household’s allotment."
+  - citation: "us/statute/7/2013/b"
+    heading: "Food distribution program on Indian reservations"
+    status: pending
+    note: "The subsection mixes program administration, purchasing, and appropriations with household-level bars on simultaneous SNAP/FDPIR participation and SNAP eligibility after FDPIR disqualification. Because those substantive rules are unencoded, the mixed parent remains pending."
+  - citation: "us/statute/7/2013/b/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires commodity distribution when a tribal organization requests concurrent or separate program operations; it governs program availability and administration rather than household computation."
+  - citation: "us/statute/7/2013/b/2"
+    heading: "Administration"
+    status: pending
+    note: "The paragraph mixes assignment of distribution responsibility with a substantive prohibition against a plan permitting a household to participate simultaneously in SNAP and FDPIR. The encoded duplicate-SNAP rule in § 273.3 does not cover this cross-program prohibition."
+  - citation: "us/statute/7/2013/b/3"
+    heading: "Disqualified participants"
+    status: pending
+    note: "The paragraph makes an individual disqualified from FDPIR ineligible for SNAP for a Secretary-determined period, directly changing point-in-time eligibility. No module encodes this cross-program disqualification."
+  - citation: "us/statute/7/2013/b/4"
+    heading: "Administrative costs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets the Federal share of “administrative costs and distribution costs,” waiver criteria, tribal contributions, and protections for tribal benefits or services; it does not compute household eligibility or allotment."
+  - citation: "us/statute/7/2013/b/5"
+    heading: "Bison meat"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes the Secretary, subject to appropriations, to purchase bison meat from specified producers for commodity recipients; it is procurement rather than household computation."
+  - citation: "us/statute/7/2013/b/6"
+    heading: "Traditional and locally- and regionally-grown food fund"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph establishes a food-purchasing fund, a producer sourcing goal, procurement standards, and a $5,000,000 authorization; these are procurement and appropriations rules, not household calculations."
+  - citation: "us/statute/7/2013/b/7"
+    heading: "Availability of funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph specifies that program and administrative-cost funds remain available for obligation for “2 fiscal years”; it is fiscal administration with no household rule."
+  - citation: "us/statute/7/2013/c"
+    heading: "Regulations; transmittal of copy of regulations to Congressional committees prior to issuance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection directs the Secretary to promulgate regulations under 5 U.S.C. 553 and send Congress a copy with justification before issuance; it is rulemaking administration, not household computation."
+  - citation: "us/statute/7/2014"
+    heading: "Eligible households"
+    status: pending
+    note: "The section aggregates many household eligibility, income, deduction, budgeting, resource, and special-population rules. The available 2014 modules fully cover only selected children; several modules expressly defer aggregate outputs, so the section is not fully encoded."
+  - citation: "us/statute/7/2014/a"
+    heading: "Income and other financial resources as substantial limiting factors in obtaining more nutritious diet; recipients under Social Security Act"
+    status: pending
+    note: "us/statutes/7/2014/a.yaml derives categorical participation bases but expressly defers final SNAP participation eligibility because cross-referenced exceptions and resource computation are incomplete. us/regulations/7-cfr/273/2/j.yaml also leaves general-assistance and optional expanded categorical eligibility separate."
+  - citation: "us/statute/7/2014/b"
+    heading: "Eligibility standards"
+    status: excluded
+    reason: no_household_computation
+    basis: "This provision directs the Secretary to establish uniform standards and conditions approval of a State agency's \"plan of operation\"; it supplies no household-level eligibility or benefit calculation of its own."
+  - citation: "us/statute/7/2014/c"
+    heading: "Gross income standard"
+    status: encoded
+    encoded_by: ["us/statutes/7/2014/c.yaml"]
+  - citation: "us/statute/7/2014/c/1"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2014/c.yaml"]
+  - citation: "us/statute/7/2014/c/2"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2014/c.yaml"]
+  - citation: "us/statute/7/2014/d"
+    heading: "Exclusions from income"
+    status: pending
+    note: "us/statutes/7/2014/d.yaml encodes only paragraphs (2) and (7) and expressly defers the aggregate exclusion output and several other branches. us/regulations/7-cfr/273/9.yaml likewise defers detailed income-exclusion composition."
+  - citation: "us/statute/7/2014/d/1"
+    heading: null
+    status: pending
+    note: "The rule excluding gains or benefits not payable directly to the household is not encoded; us/regulations/7-cfr/273/9.yaml consumes resolved exclusions and expressly defers their composition."
+  - citation: "us/statute/7/2014/d/2"
+    heading: null
+    status: pending
+    note: "us/statutes/7/2014/d.yaml treats the exclusion as min(certification-period irregular income, $30), but the statute excludes irregular income only when it is “not in excess of $30 in a quarter.” The module neither represents the quarterly measurement nor the all-or-nothing over-limit condition, so coverage is not full."
+  - citation: "us/statute/7/2014/d/3"
+    heading: null
+    status: pending
+    note: "The educational-loan, grant, scholarship, fellowship, and veterans' benefit exclusion and its school-expense limits are absent from the direct statute module; 7 CFR 273.9's encoding defers exclusion composition."
+  - citation: "us/statute/7/2014/d/4"
+    heading: null
+    status: pending
+    note: "The exclusion for noneducational loans on which repayment is deferred is not encoded, and the 7 CFR 273.9 module leaves detailed exclusions deferred."
+  - citation: "us/statute/7/2014/d/5"
+    heading: null
+    status: pending
+    note: "The reimbursement and annual school-clothing allowance rules, including the TANF and living-expense exceptions, are not represented in the direct statute module or the deferred 7 CFR 273.9 exclusion layer."
+  - citation: "us/statute/7/2014/d/6"
+    heading: null
+    status: pending
+    note: "The exclusions for third-party-beneficiary care funds and legally obligated child support paid outside the household are not encoded; downstream modules only consume resolved income or deduction amounts."
+  - citation: "us/statute/7/2014/d/7"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2014/d.yaml"]
+  - citation: "us/statute/7/2014/d/8"
+    heading: null
+    status: pending
+    note: "The nonrecurring lump-sum exclusion, charitable-donation cap, and requirement to count the payments as resources are not encoded; both income- and resource-composition regulation modules defer these details."
+  - citation: "us/statute/7/2014/d/9"
+    heading: null
+    status: pending
+    note: "No module computes the cost-of-producing-self-employment-income exclusion or the special treatment when farming costs exceed farming income."
+  - citation: "us/statute/7/2014/d/10"
+    heading: null
+    status: pending
+    note: "us/statutes/7/2014/d.yaml expressly defers the exclusion because the income categories excluded by other Federal laws are not enumerated in the available encoding."
+  - citation: "us/statute/7/2014/d/11"
+    heading: null
+    status: pending
+    note: "The Federal energy-assistance and one-time weatherization or emergency-repair payment exclusions are not encoded; the utility-allowance modules address shelter calculations, not this income classification."
+  - citation: "us/statute/7/2014/d/12"
+    heading: null
+    status: pending
+    note: "No module implements the through-September-30 exclusion of specified midyear Social Security, railroad-retirement, or veterans' cost-of-living increases."
+  - citation: "us/statute/7/2014/d/13"
+    heading: null
+    status: pending
+    note: "us/statutes/7/2014/d.yaml expressly defers advance earned-income-credit payments because the upstream 26 USC 3507 classification is not encoded."
+  - citation: "us/statute/7/2014/d/14"
+    heading: null
+    status: pending
+    note: "us/statutes/7/2014/d.yaml expressly defers the work-related and dependent-care payment exclusion because the cited 2015 and 2025 rules are not available as a complete dependency."
+  - citation: "us/statute/7/2014/d/15"
+    heading: null
+    status: pending
+    note: "The exclusion for amounts necessary to fulfill a Social Security Act plan for achieving self-support is not encoded in the statute or regulation modules."
+  - citation: "us/statute/7/2014/d/16"
+    heading: null
+    status: pending
+    note: "The optional Medicaid-aligned exclusion for educational assistance is part of the State-option treatment expressly deferred by us/statutes/7/2014/d.yaml."
+  - citation: "us/statute/7/2014/d/17"
+    heading: null
+    status: pending
+    note: "The optional exclusion of State complementary-assistance payments is part of the State-option treatment expressly deferred by us/statutes/7/2014/d.yaml."
+  - citation: "us/statute/7/2014/d/18"
+    heading: null
+    status: pending
+    note: "The TANF- or medical-assistance-aligned State option and its prohibited categories are expressly deferred by us/statutes/7/2014/d.yaml and are not supplied by 7 CFR 273.9's module."
+  - citation: "us/statute/7/2014/d/19"
+    heading: null
+    status: pending
+    note: "No module implements the exclusion for additional combat-zone pay or its deployment and prior-receipt conditions."
+  - citation: "us/statute/7/2014/e"
+    heading: "Deductions from income"
+    status: pending
+    note: "The available statute and regulation modules implement pieces of the earned-income and shelter calculations, but the standard, dependent-care, child-support, medical, and shelter provisions are not all fully covered."
+  - citation: "us/statute/7/2014/e/1"
+    heading: "Standard deduction"
+    status: pending
+    note: "The FY 2026 policy module supplies current deduction tables, but no direct statute module encodes this paragraph's percentage formulas, territorial rules, minimums, annual CPI adjustment, and unrounded-prior-period requirement as a whole."
+  - citation: "us/statute/7/2014/e/2"
+    heading: "Earned income deduction"
+    status: pending
+    note: "us/statutes/7/2014/e/2.yaml encodes the 20 percent calculation and work-supplementation subtraction, but it does not implement paragraph (C)'s overissuance exception; the nested B module expressly defers the adjusted deduction output for that reason."
+  - citation: "us/statute/7/2014/e/3"
+    heading: "Dependent care deduction"
+    status: pending
+    note: "us/regulations/7-cfr/273/10.yaml subtracts an already resolved dependent-care amount but expressly defers deductible-expense determination, leaving the employment or training condition and the three excluded-expense categories unencoded."
+  - citation: "us/statute/7/2014/e/4"
+    heading: "Deduction for child support payments"
+    status: pending
+    note: "The regulation calculation consumes an already resolved child-support amount and defers expense determination; it does not encode the State election or the required ordering before the shelter deduction."
+  - citation: "us/statute/7/2014/e/5"
+    heading: "Excess medical expense deduction"
+    status: pending
+    note: "us/regulations/7-cfr/273/10.yaml encodes the $35 arithmetic only after entitlement and allowable expenses are supplied. The eligible-member rule, recurring-expense estimation method, and medical-marijuana exclusion remain uncovered."
+  - citation: "us/statute/7/2014/e/6"
+    heading: "Excess shelter expense deduction"
+    status: pending
+    note: "us/statutes/7/2014/e/6/A.yaml covers only subparagraph (A), while the 7 CFR 273.9 and 273.10 modules encode selected current calculation and utility-allowance rules. The paragraph also contains territorial caps, elections and restrictions, homeless-household conditions, and the internet-expense bar that are not fully covered."
+  - citation: "us/statute/7/2014/f"
+    heading: "Calculation of household income; prospective or retrospective accounting basis; consistency"
+    status: pending
+    note: "No direct statute module covers the budgeting rules, and us/regulations/7-cfr/273/10.yaml expressly defers anticipated-income determination rather than operationalizing the subsection."
+  - citation: "us/statute/7/2014/f/1"
+    heading: null
+    status: pending
+    note: "The annual and educational-income averaging rules, anticipated self-employment exception, and option to disregard selected deduction changes until recertification are not encoded."
+  - citation: "us/statute/7/2014/f/2"
+    heading: null
+    status: pending
+    note: "The prospective-versus-retrospective budgeting election and first-month and reporting-household exceptions are not encoded; 7 CFR 273.10's anticipated-income output is expressly deferred."
+  - citation: "us/statute/7/2014/f/3"
+    heading: null
+    status: pending
+    note: "The definitions and mechanics of prospective and retrospective calculation, including prior-30-day income and hardship supplementation, are not encoded."
+  - citation: "us/statute/7/2014/f/4"
+    heading: null
+    status: pending
+    note: "Although this paragraph includes interagency consultation, it also authorizes waivers that change the basis of household income calculation; that substantive effect is not encoded, so the mixed provision cannot be procedurally excluded."
+  - citation: "us/statute/7/2014/g"
+    heading: "Allowable financial resources"
+    status: pending
+    note: "us/statutes/7/2014/g.yaml encodes the paragraph (1) thresholds and part of paragraph (2)'s vehicle treatment, but expressly defers complete countable resources and a paragraph (3) output. us/regulations/7-cfr/273/8.yaml also defers resource exclusions and vehicle valuation."
+  - citation: "us/statute/7/2014/g/1"
+    heading: "Total amount.—"
+    status: pending
+    note: "us/statutes/7/2014/g.yaml encodes the base amounts, elderly-or-disabled selection, CPI adjustment, prior-unrounded basis, and $250 rounding, but it does not apply the resulting point-in-time limit to household resources to determine ineligibility. us/regulations/7-cfr/273/8.yaml performs a current-limit comparison but relies on a fiscal-year policy value rather than fully encoding this paragraph's adjustment rule."
+  - citation: "us/statute/7/2014/g/2"
+    heading: "Included assets.—"
+    status: pending
+    note: "us/statutes/7/2014/g.yaml encodes the licensed-vehicle threshold, vehicle exceptions, and alternative State allowance, but not the recreational craft, vacation properties, savings accounts, or the full pre-1982-regulation baseline in this paragraph."
+  - citation: "us/statute/7/2014/g/3"
+    heading: null
+    status: pending
+    note: "The module expressly defers the self-sufficiency-resource output and has no rules for the burial-plot or 12-month earned-income-tax-credit exclusions; 7 CFR 273.8's exclusion composition is also deferred."
+  - citation: "us/statute/7/2014/g/4"
+    heading: null
+    status: pending
+    note: "The one-year exclusion for farm property after self-employment in farming ends is recited in a module summary but has no executable rule, and 7 CFR 273.8 defers exclusion composition."
+  - citation: "us/statute/7/2014/g/5"
+    heading: null
+    status: pending
+    note: "The standards for resources that cannot practically be sold for a significant return and the limited verification rule are not encoded; the regulation module explicitly defers inaccessible-resource composition."
+  - citation: "us/statute/7/2014/g/6"
+    heading: "Exclusion of types of financial resources not considered under certain other federal programs.—"
+    status: pending
+    note: "The optional TANF- or medical-assistance-aligned resource exclusions and the cash, vehicle, account, and similar-resource limits are not encoded."
+  - citation: "us/statute/7/2014/g/7"
+    heading: "Exclusion of retirement accounts from allowable financial resources.—"
+    status: pending
+    note: "The mandatory listed retirement-account exclusions and Secretary's discretionary successor and other-account exclusions are not encoded; the statute module expressly identifies retirement classifications as missing."
+  - citation: "us/statute/7/2014/g/8"
+    heading: "Exclusion of education accounts from allowable financial resources.—"
+    status: pending
+    note: "The qualified-tuition and Coverdell exclusions and the Secretary's discretionary treatment of other education accounts are not encoded; the statute module expressly identifies education-account classifications as missing."
+  - citation: "us/statute/7/2014/h"
+    heading: "Temporary emergency standards of eligibility; Disaster Task Force; direct assistance to State and local officials"
+    status: pending
+    note: "This subsection mixes household disaster eligibility and emergency-allotment computation with agency Task Force administration and adjusted procedures. No module covers the substantive household rules, so the aggregate cannot be excluded."
+  - citation: "us/statute/7/2014/h/1"
+    heading: null
+    status: pending
+    note: "The temporary eligibility rule for disaster victims in need of food assistance has point-in-time household effect and is not encoded."
+  - citation: "us/statute/7/2014/h/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires the Secretary to \"establish a Disaster Task Force\" and, when cost-effective, send its members to assist State and local officials; it contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2014/h/3"
+    heading: null
+    status: pending
+    note: "Subparagraph (A) computes replacement emergency allotments up to the household-size maximum, while subparagraph (B) adjusts issuance, reporting, and application procedure. The mixed provision is not encoded and cannot be procedurally excluded."
+  - citation: "us/statute/7/2014/i"
+    heading: "Attribution of income and resources to sponsored aliens; coverage, computations, etc."
+    status: pending
+    note: "us/regulations/7-cfr/273/4.yaml expressly defers sponsored-alien income and resource deeming. The subsection also mixes the unencoded deeming formulas and exceptions with documentation, interagency, liability, and recovery rules."
+  - citation: "us/statute/7/2014/i/1"
+    heading: null
+    status: pending
+    note: "The three-year attribution of sponsor and co-resident spouse income and resources, including treatment as unearned income, is not encoded; the 7 CFR 273.4 module expressly defers sponsor deeming."
+  - citation: "us/statute/7/2014/i/2"
+    heading: null
+    status: pending
+    note: "This paragraph contains unencoded sponsor-income and resource formulas and household exceptions alongside procedural documentation and recovery provisions; its computational content is expressly deferred by us/regulations/7-cfr/273/4.yaml."
+  - citation: "us/statute/7/2014/j"
+    heading: "Resource exemption for otherwise exempt households"
+    status: pending
+    note: "us/regulations/7-cfr/273/8.yaml accepts an unresolved categorical-resource-exemption fact, while us/regulations/7-cfr/273/2/j.yaml derives only selected categorical-eligibility paths. No confirmed module connects all benefit categories in this provision to satisfaction of subsection (g)'s limits."
+  - citation: "us/statute/7/2014/k"
+    heading: "Assistance to third parties included; educational benefits; exceptions"
+    status: pending
+    note: "The subsection's classifications determine countable income and shelter expenses. No direct module covers them, and us/regulations/7-cfr/273/9.yaml expressly defers income-exclusion composition."
+  - citation: "us/statute/7/2014/k/1"
+    heading: null
+    status: pending
+    note: "The treatment of specified third-party State or local assistance as money paid directly to the household is not encoded."
+  - citation: "us/statute/7/2014/k/2"
+    heading: null
+    status: pending
+    note: "The seven exceptions to treating third-party assistance as direct household money are not encoded; 7 CFR 273.9's module defers the relevant income classification."
+  - citation: "us/statute/7/2014/k/3"
+    heading: null
+    status: pending
+    note: "The rule treating third-party educational assistance for living expenses as money payable directly to the household is not encoded."
+  - citation: "us/statute/7/2014/k/4"
+    heading: "Third party energy assistance payments.—"
+    status: pending
+    note: "The direct-payment treatment for State energy assistance and the out-of-pocket shelter-expense treatment for elderly or disabled households are not encoded; utility-allowance modules do not realize these classifications."
+  - citation: "us/statute/7/2014/l"
+    heading: "Earnings to participants of on-the-job training programs; exception"
+    status: pending
+    note: "No module implements the rule counting on-the-job training earnings as earned income while excepting dependents under age 19."
+  - citation: "us/statute/7/2014/m"
+    heading: "Simplified calculation of income for the self-employed"
+    status: pending
+    note: "The State method affects the household's self-employment income calculation and therefore is substantive despite its approval procedure. No module implements the alternative estimation method or its scope."
+  - citation: "us/statute/7/2014/m/1"
+    heading: "In general"
+    status: pending
+    note: "The authorized State method replaces actual self-employment production costs with a reasonable estimate and can change household income; no module implements that option or approval constraint."
+  - citation: "us/statute/7/2014/m/2"
+    heading: "Inclusive of all types of income or limited types of income"
+    status: pending
+    note: "The option to apply the estimate to all or selected types of self-employment income changes the computation's scope and is not encoded."
+  - citation: "us/statute/7/2014/m/3"
+    heading: "Differences for different types of income"
+    status: pending
+    note: "The authorization for different estimation methods by income type affects household income computation and is not encoded."
+  - citation: "us/statute/7/2014/n"
+    heading: "State options to simplify determination of child support payments"
+    status: pending
+    note: "The simplified procedure may determine deductible child support from prior-month agency information instead of current household information, directly affecting the deduction amount. us/regulations/7-cfr/273/10.yaml consumes a resolved amount and expressly defers deductible-expense determination."
+  - citation: "us/statute/7/2014a"
+    heading: "Notice of change in State of residence of certified household"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The provision only requires a certified household to \"report in a manner prescribed by the Secretary\" when it no longer resides in the certifying State; it does not itself determine eligibility or benefit amount."
+  - citation: "us/statute/7/2015"
+    heading: "Eligibility disqualifications"
+    status: pending
+    note: "The section combines many household eligibility and benefit-treatment rules; only § 2015(d)(2) and § 2015(e) are fully covered by direct statute modules, while other provisions are absent or only partially represented."
+  - citation: "us/statute/7/2015/a"
+    heading: "Additional specific conditions rendering individuals ineligible"
+    status: pending
+    note: "This provision makes compliance with the section's specific requirements a condition of household and member eligibility, but no module composes the full set of § 2015 requirements."
+  - citation: "us/statute/7/2015/b"
+    heading: "Fraud and misrepresentation; disqualification penalties; ineligibility period; applicable procedures"
+    status: pending
+    note: "The subsection mixes substantive disqualification periods and household benefit treatment with hearing and information-sharing procedures; the § 2015(b)(1) module does not fully realize sanction timing."
+  - citation: "us/statute/7/2015/b/1"
+    heading: null
+    status: pending
+    note: "us/statutes/7/2015/b/1.yaml encodes violation categories, duration constants, and the no-increase rule, but its eligibility judgments contain no determination-date/current-period test for the one- and two-year periods."
+  - citation: "us/statute/7/2015/b/2"
+    heading: null
+    status: excluded
+    reason: "procedural_no_point_in_time_effect"
+    basis: "The paragraph prescribes how a State agency shall proceed—through ‘administrative hearings, after notice and an opportunity for a hearing’ or referral for court action—and does not itself determine eligibility or an allotment."
+  - citation: "us/statute/7/2015/b/3"
+    heading: null
+    status: pending
+    note: "The rule that disqualification periods remain effective unless the underlying finding is judicially reversed changes point-in-time eligibility, and the existing § 2015(b)(1) module does not encode reversal or stay logic."
+  - citation: "us/statute/7/2015/b/4"
+    heading: null
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The paragraph requires entities to forward ‘information concerning any such determination’ to the Secretary; it is intergovernmental information-sharing administration and supplies no household eligibility or benefit formula."
+  - citation: "us/statute/7/2015/c"
+    heading: "Refusal to provide necessary information"
+    status: pending
+    note: "The subsection includes household ineligibility for refusal to cooperate and withholding an allotment until a missing report is submitted, alongside procedural reporting rules; no encoded module covers the substantive effects."
+  - citation: "us/statute/7/2015/c/1"
+    heading: null
+    status: pending
+    note: "The paragraph mixes reporting frequencies with direct benefit effects: reservation households can receive reinstatement without a new application, timely-late reports may not cause an allotment to be delayed, reduced, suspended, or terminated, and some households receive a 2-year certification period. Those effects are unencoded, so procedural exclusion is unsafe."
+  - citation: "us/statute/7/2015/c/2"
+    heading: null
+    status: pending
+    note: "The paragraph is mostly report-processing procedure, but it also requires an allotment ‘based on the reported information for a given month’; because that budgeting language can affect the point-in-time amount and is unencoded, the mixed provision remains pending."
+  - citation: "us/statute/7/2015/c/3"
+    heading: null
+    status: excluded
+    reason: "procedural_no_point_in_time_effect"
+    basis: "The paragraph defines when reports are complete and prescribes warning text, joint filing, and agency consultation; its rule that forms contain information ‘specified by the State agency’ is reporting procedure, not an eligibility or benefit formula."
+  - citation: "us/statute/7/2015/c/4"
+    heading: null
+    status: pending
+    note: "A household that fails to submit a required report ‘shall not receive an allotment’ until submission; this point-in-time benefit effect is not encoded."
+  - citation: "us/statute/7/2015/c/5"
+    heading: null
+    status: excluded
+    reason: "procedural_no_point_in_time_effect"
+    basis: "The paragraph authorizes the Secretary to waive reporting provisions so a State may use reporting requirements similar to its title IV-A program; it changes reporting procedure, not the eligibility or allotment computation."
+  - citation: "us/statute/7/2015/d"
+    heading: "Conditions of participation"
+    status: pending
+    note: "The subsection contains work-disqualification, strike, exemption, and E&T participation rules. The direct § 2015(d)(2) module is complete, but § 273.7 expressly defers sanction timing, good cause, reentry, and detailed E&T rules."
+  - citation: "us/statute/7/2015/d/1"
+    heading: "Work requirements .—"
+    status: pending
+    note: "us/regulations/7-cfr/273/7.yaml encodes a current compliance predicate but expressly defers good-cause adjudication, sanction periods, reentry, and voluntary-quit determination; it also does not fully realize the household-head consequences in this paragraph."
+  - citation: "us/statute/7/2015/d/2"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/d/2.yaml"]
+  - citation: "us/statute/7/2015/d/3"
+    heading: null
+    status: pending
+    note: "The strike rule changes household eligibility and bars an increased allotment from a striker's income reduction; those conditions are not encoded in § 273.7 or another listed module."
+  - citation: "us/statute/7/2015/d/4"
+    heading: "Employment and training.—"
+    status: pending
+    note: "The paragraph mixes E&T program administration with household-level exemption, participation, hours-cap, reimbursement, and good-cause effects. us/regulations/7-cfr/273/7.yaml explicitly defers detailed E&T program design and consumes participation as an input."
+  - citation: "us/statute/7/2015/e"
+    heading: "Students"
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/1"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/2"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/3"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/4"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/5"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/6"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/7"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/e/8"
+    heading: null
+    status: encoded
+    encoded_by: ["us/statutes/7/2015/e.yaml"]
+  - citation: "us/statute/7/2015/f"
+    heading: "Aliens"
+    status: pending
+    note: "us/regulations/7-cfr/273/4.yaml covers citizenship and alien-status predicates, but not the full statutory residence and household income/resource treatment; us/regulations/7-cfr/273/11/c.yaml expressly defers the State-option treatment of ineligible aliens."
+  - citation: "us/statute/7/2015/f/1"
+    heading: null
+    status: pending
+    note: "The requirement that the individual be ‘a resident of the United States’ is not separately realized by us/regulations/7-cfr/273/4.yaml."
+  - citation: "us/statute/7/2015/f/2"
+    heading: null
+    status: pending
+    note: "us/regulations/7-cfr/273/4.yaml covers much of the citizenship and alien-status logic, but the paragraph also requires counting the ineligible individual's income and resources, for which us/regulations/7-cfr/273/11/c.yaml records a deferred State option."
+  - citation: "us/statute/7/2015/g"
+    heading: "Residents of States which provide State supplementary payments"
+    status: pending
+    note: "The SSI cash-out rule excludes an individual from household membership for a month when the specified State supplementary-payment conditions hold; no listed SNAP statute or regulation module encodes that rule."
+  - citation: "us/statute/7/2015/h"
+    heading: "Transfer of assets to qualify"
+    status: pending
+    note: "The provision imposes up to one year of household ineligibility for a knowing asset transfer. us/regulations/7-cfr/273/8.yaml explicitly defers transfer-of-resources disqualification tracking."
+  - citation: "us/statute/7/2015/i"
+    heading: "Comparable treatment for disqualification"
+    status: pending
+    note: "The subsection includes an optional SNAP disqualification matching another means-tested program and a reapplication rule with prior-work-disqualification effects; these substantive rules are not encoded."
+  - citation: "us/statute/7/2015/i/1"
+    heading: "In general"
+    status: pending
+    note: "The State option to impose the same SNAP disqualification for failure to perform an action required by another means-tested program changes member eligibility and is not encoded."
+  - citation: "us/statute/7/2015/i/2"
+    heading: "Rules and procedures"
+    status: excluded
+    reason: "procedural_no_point_in_time_effect"
+    basis: "The paragraph allows a State agency to ‘use the rules and procedures’ of title IV-A when imposing the separately authorized comparable disqualification; it supplies procedure rather than a distinct eligibility or benefit rule."
+  - citation: "us/statute/7/2015/i/3"
+    heading: "Application after disqualification period"
+    status: pending
+    note: "The paragraph requires treatment as a new applicant after the period expires while carrying a prior subsection (d) disqualification into the eligibility determination; that reentry logic is not encoded."
+  - citation: "us/statute/7/2015/j"
+    heading: "Disqualification for receipt of multiple benefits"
+    status: pending
+    note: "The ten-year individual disqualification for a fraudulent identity or residence representation made to receive simultaneous benefits is household-level eligibility content not encoded by a listed module."
+  - citation: "us/statute/7/2015/k"
+    heading: "Disqualification of fleeing felons"
+    status: pending
+    note: "The subsection defines a member-level ineligibility rule and terms that control its application; us/regulations/7-cfr/273/11/c.yaml only consumes fleeing-felon status for household income/resource treatment and does not determine it."
+  - citation: "us/statute/7/2015/k/1"
+    heading: "In general"
+    status: pending
+    note: "The fleeing-felon and probation-or-parole-violation conditions directly determine member eligibility and are not computed by a listed module."
+  - citation: "us/statute/7/2015/k/2"
+    heading: "Procedures"
+    status: pending
+    note: "The paragraph mixes procedure with substantive definitions of ‘fleeing’ and ‘actively seeking’ that determine who is disqualified; no module realizes those criteria."
+  - citation: "us/statute/7/2015/l"
+    heading: "Custodial parent’s cooperation with child support agencies"
+    status: pending
+    note: "The subsection contains an optional cooperation-based disqualification and a good-cause exception that affect member eligibility; the encoded § 273.11(c) module only handles downstream household budgeting."
+  - citation: "us/statute/7/2015/l/1"
+    heading: "In general"
+    status: pending
+    note: "The State-option ineligibility rule for a custodial parent's failure to cooperate in establishing paternity or obtaining support is not encoded."
+  - citation: "us/statute/7/2015/l/2"
+    heading: "Good cause for noncooperation"
+    status: pending
+    note: "The good-cause exception can preserve the individual's eligibility when cooperation is against the child's best interests; no listed module computes it."
+  - citation: "us/statute/7/2015/l/3"
+    heading: "Fees"
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The paragraph says cooperation may not require ‘the payment of a fee or other cost’ for title IV-D services; it regulates service charges and contains no SNAP eligibility or allotment computation."
+  - citation: "us/statute/7/2015/m"
+    heading: "Noncustodial parent’s cooperation with child support agencies"
+    status: pending
+    note: "The subsection combines an optional refusal-based eligibility rule with substantive refusal criteria and administrative fee/privacy provisions; no module determines the disqualification."
+  - citation: "us/statute/7/2015/m/1"
+    heading: "In general"
+    status: pending
+    note: "The State-option disqualification of a noncustodial parent who refuses to cooperate in establishing paternity or providing support directly affects eligibility and is not encoded."
+  - citation: "us/statute/7/2015/m/2"
+    heading: "Refusal to cooperate"
+    status: pending
+    note: "Although it prescribes guidelines and procedures, the paragraph defines what constitutes refusal and therefore controls the eligibility consequence in paragraph (1); that determination is unencoded."
+  - citation: "us/statute/7/2015/m/3"
+    heading: "Fees"
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The paragraph provides that cooperation shall not require ‘the payment of a fee or other cost’ for title IV-D services; it is a service-cost safeguard, not a SNAP eligibility or benefit formula."
+  - citation: "us/statute/7/2015/m/4"
+    heading: "Privacy"
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The paragraph requires safeguards restricting the use of collected child-support information ‘to purposes for which the information is collected’; this is privacy administration with no household computation."
+  - citation: "us/statute/7/2015/n"
+    heading: "Disqualification for child support arrears"
+    status: pending
+    note: "The subsection makes arrears an optional monthly disqualification and supplies court-delay and payment-plan exceptions; those eligibility conditions are not encoded."
+  - citation: "us/statute/7/2015/n/1"
+    heading: "In general"
+    status: pending
+    note: "The State option to make an individual ineligible during a month of delinquency under a child-support order is a point-in-time eligibility rule not encoded by a listed module."
+  - citation: "us/statute/7/2015/n/2"
+    heading: "Exceptions"
+    status: pending
+    note: "Court-authorized delay and compliance with an approved payment plan prevent the disqualification and therefore affect eligibility; no listed module computes these exceptions."
+  - citation: "us/statute/7/2015/o"
+    heading: "Work requirement"
+    status: pending
+    note: "us/regulations/7-cfr/273/24.yaml covers only part of the ABAWD rule and reflects different age/dependent exceptions; it expressly defers discretionary exemption allocation and other-program composition."
+  - citation: "us/statute/7/2015/o/1"
+    heading: "“Work program” defined"
+    status: pending
+    note: "The statutory list defines qualifying work programs used in the eligibility tests. us/regulations/7-cfr/273/24.yaml consumes work-program participation as an input rather than classifying the listed programs."
+  - citation: "us/statute/7/2015/o/2"
+    heading: "Work requirement"
+    status: pending
+    note: "us/regulations/7-cfr/273/24.yaml partially models hours and countable months, but it does not fully realize the statute's current 36-month/three-month rule and all four compliance routes."
+  - citation: "us/statute/7/2015/o/3"
+    heading: "Exceptions"
+    status: pending
+    note: "The statute now uses an over-65 threshold, responsibility for a child under 14, and Indian-status exceptions; us/regulations/7-cfr/273/24.yaml instead encodes materially different exception criteria, so coverage is not full."
+  - citation: "us/statute/7/2015/o/4"
+    heading: "Waiver"
+    status: pending
+    note: "The waiver changes whether paragraph (2) applies to a group based on unemployment and noncontiguous-State conditions. The § 273.24 module accepts waiver coverage as an input and does not compute these statutory criteria."
+  - citation: "us/statute/7/2015/o/5"
+    heading: "Subsequent eligibility"
+    status: pending
+    note: "The provision computes regaining, maintaining, and one-time additional eligibility from 30-day hours and later work status. The § 273.24 module uses resolved regained/additional-eligibility inputs rather than implementing these tests."
+  - citation: "us/statute/7/2015/o/6"
+    heading: "Exemptions"
+    status: pending
+    note: "The paragraph authorizes household-level exemptions subject to covered-individual and State allocation calculations; us/regulations/7-cfr/273/24.yaml expressly defers the discretionary-exemption allocation."
+  - citation: "us/statute/7/2015/o/7"
+    heading: "Exemption for noncontiguous States"
+    status: pending
+    note: "A granted exemption changes individual eligibility through 2028, while its grant and termination depend on good-faith milestones and reporting; no listed module realizes this rule."
+  - citation: "us/statute/7/2015/o/8"
+    heading: "Other program rules"
+    status: pending
+    note: "The paragraph requires ABAWD eligibility to be composed with all other program eligibility rules. us/regulations/7-cfr/273/24.yaml expressly lists this full-SNAP-eligibility composition as deferred."
+  - citation: "us/statute/7/2015/p"
+    heading: "Disqualification for obtaining cash by destroying food and collecting deposits"
+    status: pending
+    note: "The conduct finding and Secretary-prescribed ineligibility period affect member eligibility. us/regulations/7-cfr/273/11/c.yaml only handles downstream budgeting for an already disqualified member."
+  - citation: "us/statute/7/2015/q"
+    heading: "Disqualification for sale of food purchased with supplemental nutrition assistance program benefits"
+    status: pending
+    note: "The intentional-sale finding and Secretary-prescribed ineligibility period affect member eligibility. us/regulations/7-cfr/273/11/c.yaml only handles downstream budgeting for an already disqualified member."
+  - citation: "us/statute/7/2015/r"
+    heading: "Disqualification for certain convicted felons"
+    status: pending
+    note: "The subsection combines an unencoded felony/sentence-compliance disqualification, regulation-operationalized treatment of the remaining household, and an application attestation procedure."
+  - citation: "us/statute/7/2015/r/1"
+    heading: "In general"
+    status: pending
+    note: "The conviction categories and sentence/restriction compliance test directly determine eligibility; us/regulations/7-cfr/273/11/c.yaml accepts the resulting status as an input rather than determining it."
+  - citation: "us/statute/7/2015/r/2"
+    heading: "Effects on assistance and benefits for others"
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/11/c.yaml"
+    basis: "The statute requires treating the felon as ‘not to be a member of the household’ while counting that person's income and resources. The regulation module expressly includes § 273.11(s) felons, excludes them from household size, and counts their income and resources in full."
+  - citation: "us/statute/7/2015/r/3"
+    heading: "Enforcement"
+    status: excluded
+    reason: "procedural_no_point_in_time_effect"
+    basis: "The paragraph requires each applicant to ‘attest to whether’ the applicant or a household member has a listed conviction; it prescribes an application-verification step and does not itself define the disqualification or benefit amount."
+  - citation: "us/statute/7/2015/s"
+    heading: "Ineligibility for benefits due to receipt of substantial lottery or gambling winnings"
+    status: pending
+    note: "The subsection imposes immediate household ineligibility and a financial-eligibility condition for return, alongside an administrative data-matching agreement; no listed module encodes the substantive rules."
+  - citation: "us/statute/7/2015/s/1"
+    heading: "In general"
+    status: pending
+    note: "Immediate loss of household eligibility upon receipt of substantial lottery or gambling winnings is not encoded by a listed module."
+  - citation: "us/statute/7/2015/s/2"
+    heading: "Duration of ineligibility"
+    status: pending
+    note: "The household remains ineligible until it again meets specified income and resource requirements; no listed module composes that restoration rule."
+  - citation: "us/statute/7/2015/s/3"
+    heading: "Agreements"
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The paragraph tells State agencies to establish agreements with gaming regulators or sponsors ‘to determine whether’ participants received winnings; it is inter-entity data-matching administration, not the eligibility threshold or restoration calculation."
+  - citation: "us/statute/7/2016"
+    heading: "Issuance and use of program benefits"
+    status: pending
+    note: "Although much of the section is EBT and retailer administration, its body also includes household-level rules such as allotment-reduction replacement-card fees, benefit inactivity/expungement, and State-funded benefits for otherwise ineligible individuals; no module covers the full section."
+  - citation: "us/statute/7/2016/a"
+    heading: "In general"
+    status: excluded
+    reason: "no_household_computation"
+    basis: "The subsection directs that EBT cards be issued ‘only to households which have been duly certified as eligible’; it governs issuance after certification and supplies no rule for computing eligibility or the allotment."
+
+findings:
+  - >-
+    data/usc-51.jsonl contains 827 source records; the assigned slice, lines
+    1-207, contains exactly 207 records and this output contains exactly 207
+    rows. Citation paths are unique, complete, and in exact source order, with
+    no duplicate or missing citation defect.
+  - >-
+    us/statutes/7/2012/j.yaml is only a household aggregator: it combines the
+    resolved snap_member_is_elderly_or_disabled fact across members but does
+    not compute the seven member-level criteria in § 2012(j). The parent and
+    those substantive criteria therefore remain pending.
+  - >-
+    The § 2014 income, deduction, and resource modules are partial:
+    us/statutes/7/2014/a.yaml defers final SNAP participation eligibility;
+    us/statutes/7/2014/d.yaml has a complete rule only for paragraph (7), while
+    its paragraph (2) formula does not realize the statutory quarterly,
+    all-or-nothing $30 condition and it defers the aggregate exclusion output;
+    us/statutes/7/2014/e/2.yaml does not cover paragraph (C), leaving the
+    adjusted earned-income deduction deferred; and
+    us/statutes/7/2014/g.yaml defers complete countable resources and the
+    paragraph (3) self-sufficiency-resource output. The corresponding § 273.8,
+    § 273.9, and § 273.10 modules likewise consume or defer resource-exclusion,
+    income-exclusion, and deductible-expense composition.
+  - >-
+    us/statutes/7/2015/b/1.yaml encodes the violation categories, duration
+    constants, and no-increase rule, but it has no determination-date or
+    current-period test that makes the one- and two-year sanctions operative
+    at a point in time; § 2015(b)(1) therefore remains pending.
+  - >-
+    Confirmed direct statutory coverage is limited to § 2012(m)(4);
+    § 2014(c), (c)(1), and (c)(2); § 2014(d)(7);
+    § 2015(d)(2); and § 2015(e) with paragraphs (1)-(8), using the encoded_by
+    paths recorded on those rows.
+  - >-
+    Certification and reporting provisions were kept pending when they have
+    direct benefit effects: § 2012(f) defines 12- and 24-month eligibility
+    periods and a transitional-benefit extension, while § 2015(c)(1) includes
+    reinstatement without a new application, protection against allotment
+    delay or reduction, and a 2-year certification period for specified
+    reservation households. Treating those mixed provisions as purely
+    procedural would overstate closure.
+  - >-
+    Two exclusions required narrower judgment. Section 2014(b) was treated as
+    no household computation because it regulates the Secretary's uniform
+    standards and State plan approval without supplying an eligibility test,
+    even though it bars States from adding other standards. Section
+    2015(i)(2) was treated as procedural because paragraph (1) supplies the
+    optional disqualification and paragraph (2) only permits reuse of title
+    IV-A rules and procedures; the substantive reapplication rule in
+    paragraph (3) remains pending.
+  - >-
+    Section 2015(r)(2) is fully operationalized by
+    us/regulations/7-cfr/273/11/c.yaml: the module excludes the disqualified
+    felon from household size while counting that person's income and
+    resources in full.
+  - >-
+    The current § 2015(o)(3) exceptions materially differ from
+    us/regulations/7-cfr/273/24.yaml: the statute includes an over-65
+    threshold, responsibility for a child under 14, and Indian-status
+    exceptions that the module's different criteria do not fully realize.
+  - >-
+    The source text has confirmed transcription artifacts. Section
+    2015(o)(6) embeds doubled footnote numerals and editorial text after
+    paragraph (4), and contains "(C), (D),," followed by another doubled
+    footnote marker. Section 2015(r) renders the title 42 reference as
+    "as defined in 13925(a) 3 3 So in original. Probably should be preceded by
+    “section”. of title 42," omitting "section" from the statutory reference
+    and flattening the footnote into the body.

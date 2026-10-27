@@ -1,7 +1,8 @@
 """Enumerate the policy universe an oracle simulates, from its model spine.
 
 Universe facts are never hand-invented: they come from parsing the oracle's own
-model definition. Two backends live here.
+model definition. The backends here preserve that provenance in either live or
+committed form.
 
 * :class:`EuromodUniverseBackend` parses a EUROMOD-platform country XML
   (UKMOD or the JRC EUROMOD release) — the same ``XMLParam/Countries/<CC>/<CC>.xml``
@@ -10,6 +11,11 @@ model definition. Two backends live here.
   those into *queryable* outputs (present in ``VARCONFIG``, the model's variable
   registry) and *internal-only* locals (absent from ``VARCONFIG``). A pure XML
   parse — no engine, no .NET, no licensed data — so it is CI-friendly.
+
+* :class:`EuromodSpineArtifactBackend` consumes a reviewed single-system JSON
+  extract produced by the live EUROMOD backend. It lets CI enforce the real
+  model row/output facts when the external model checkout is unavailable,
+  rather than turning the drift gate into a no-op.
 
 * :class:`PolicyEngineUniverseBackend` enumerates PolicyEngine-UK's *simulated*
   surface from a pinned ``policyengine-uk`` checkout — the PolicyEngine analogue
@@ -41,6 +47,7 @@ the *facts* (policy list, outputs) and keeps the *decisions*.
 
 from __future__ import annotations
 
+import json
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,6 +56,11 @@ from axiom_oracles.conformance.schema import UniversePolicy
 
 _CC_NS = "{http://euromod.com/CountryConfig.xsd}"
 _VAR_NS = "{http://euromod.com/VarConfig.xsd}"
+
+#: Schema stamped on committed, single-system EUROMOD spine extracts. These
+#: artifacts let CI verify an externally sourced model spine without requiring
+#: the licensed/local model checkout itself.
+EUROMOD_SPINE_ARTIFACT_SCHEMA = "axiom_oracles.euromod_spine.v1"
 
 #: Function ``Parameter`` names that declare where a function writes its result.
 #: EUROMOD is case-insensitive on parameter names, so we lower-case before test.
@@ -102,6 +114,163 @@ class RawPolicy:
     #: Outputs the policy writes that are shaped like intermediates or are
     #: absent from the variable registry — evidence for exclusion classifying.
     internal_outputs: tuple[str, ...]
+
+
+class EuromodSpineArtifactBackend:
+    """Read a committed, single-system EUROMOD policy-spine extract.
+
+    The live :class:`EuromodUniverseBackend` remains the extraction authority.
+    This backend consumes its committed JSON result so ``--check`` can compare
+    real model facts in CI even when the external EUROMOD checkout is absent.
+    Identity checks prevent a DK_2025 extract, for example, from being scored as
+    another country, release, or system.
+    """
+
+    backend = "euromod"
+
+    def __init__(
+        self,
+        artifact_path: str | Path,
+        *,
+        model: str,
+        release: str,
+        country: str,
+        system: str,
+    ) -> None:
+        self.artifact_path = Path(artifact_path)
+        self.model = model
+        self.release = release
+        self.country = country.upper()
+        self.system = system
+
+    def _document(self) -> dict:
+        if not self.artifact_path.exists():
+            raise FileNotFoundError(
+                f"committed EUROMOD spine artifact not found at "
+                f"{self.artifact_path}"
+            )
+        try:
+            document = json.loads(self.artifact_path.read_text())
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"{self.artifact_path}: invalid JSON ({exc})"
+            ) from exc
+        if document.get("schema") != EUROMOD_SPINE_ARTIFACT_SCHEMA:
+            raise ValueError(
+                f"{self.artifact_path}: expected schema "
+                f"{EUROMOD_SPINE_ARTIFACT_SCHEMA!r}, got "
+                f"{document.get('schema')!r}"
+            )
+
+        oracle = document.get("oracle") or {}
+        expected_identity = {
+            "model": self.model,
+            "release": self.release,
+            "country": self.country,
+        }
+        actual_identity = {
+            key: oracle.get(key) for key in expected_identity
+        }
+        if actual_identity != expected_identity:
+            raise ValueError(
+                f"{self.artifact_path}: oracle identity {actual_identity!r} does "
+                f"not match configured identity {expected_identity!r}"
+            )
+
+        systems = document.get("systems")
+        if not isinstance(systems, list):
+            raise ValueError(f"{self.artifact_path}: systems must be a list")
+        system_names = {
+            row.get("name") for row in systems if isinstance(row, dict)
+        }
+        if system_names != {self.system} or len(systems) != 1:
+            raise ValueError(
+                f"{self.artifact_path}: expected the single-system set "
+                f"{{{self.system!r}}}, got {system_names!r}"
+            )
+        if not systems[0].get("id"):
+            raise ValueError(
+                f"{self.artifact_path}: {self.system} is missing its model id"
+            )
+        return document
+
+    @staticmethod
+    def _outputs(row: dict, key: str, artifact_path: Path) -> tuple[str, ...]:
+        values = row.get(key)
+        if not isinstance(values, list) or not all(
+            isinstance(value, str) and value for value in values
+        ):
+            raise ValueError(
+                f"{artifact_path}: policy {row.get('name')!r} field {key!r} "
+                "must be a list of non-empty strings"
+            )
+        if len(values) != len(set(values)):
+            raise ValueError(
+                f"{artifact_path}: policy {row.get('name')!r} field {key!r} "
+                "contains duplicates"
+            )
+        return tuple(values)
+
+    def raw_policies(self) -> list[RawPolicy]:
+        """Return the exact raw policy facts recorded in the artifact."""
+        document = self._document()
+        rows = document.get("policies")
+        if not isinstance(rows, list):
+            raise ValueError(f"{self.artifact_path}: policies must be a list")
+
+        policies: list[RawPolicy] = []
+        seen_names: set[str] = set()
+        for row in rows:
+            if not isinstance(row, dict):
+                raise ValueError(
+                    f"{self.artifact_path}: every policy must be an object"
+                )
+            name = row.get("name")
+            if not isinstance(name, str) or not name:
+                raise ValueError(
+                    f"{self.artifact_path}: policy is missing a non-empty name"
+                )
+            if name in seen_names:
+                raise ValueError(
+                    f"{self.artifact_path}: duplicate policy name {name!r}"
+                )
+            seen_names.add(name)
+
+            policy_type = row.get("policy_type")
+            switch = row.get("switch")
+            if policy_type is not None and not isinstance(policy_type, str):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} policy_type must be a string"
+                )
+            if switch is not None and not isinstance(switch, str):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} switch must be a string"
+                )
+            all_outputs = self._outputs(row, "all_outputs", self.artifact_path)
+            queryable_outputs = self._outputs(
+                row, "queryable_outputs", self.artifact_path
+            )
+            internal_outputs = self._outputs(
+                row, "internal_outputs", self.artifact_path
+            )
+            if set(queryable_outputs) & set(internal_outputs) or set(
+                queryable_outputs + internal_outputs
+            ) != set(all_outputs):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} queryable/internal outputs "
+                    "must be a disjoint partition of all_outputs"
+                )
+            policies.append(
+                RawPolicy(
+                    name=name,
+                    policy_type=policy_type,
+                    switch=switch,
+                    all_outputs=all_outputs,
+                    queryable_outputs=queryable_outputs,
+                    internal_outputs=internal_outputs,
+                )
+            )
+        return policies
 
 
 class EuromodUniverseBackend:
@@ -181,6 +350,10 @@ class EuromodUniverseBackend:
             "systems can be listed with the euromod connector or by inspecting "
             "the XML <System><Name> elements."
         )
+
+    def system_id(self) -> str:
+        """Return the model GUID for the selected system."""
+        return self._system_id()
 
     def available_systems(self) -> list[str]:
         """List system names in the country XML (for error messages / probing)."""
@@ -273,9 +446,9 @@ def propose_scope(policy: RawPolicy) -> tuple[bool, str | None]:
       ``def`` block it is ``technical``; otherwise it is proposed
       ``unobservable_boundary`` (it simulates something, but not at a queryable
       surface) so a human looks at it rather than it defaulting to covered.
-    * A policy with queryable outputs is proposed in-scope with no suite yet —
-      which is intentionally *invalid* until a reviewer names the covering
-      suite, so it surfaces loudly in ``--check`` instead of passing vacuously.
+    * A policy with queryable outputs is proposed in-scope with no suite yet.
+      This is the valid, honest uncovered state: it enters the denominator and
+      remains visible in the scoreboard burn-down until a live suite covers it.
     """
     if not policy.queryable_outputs:
         if (policy.policy_type or "").lower() in _DEF_LIKE_TYPES:
@@ -319,6 +492,7 @@ def raw_to_universe_policy(
         note=note,
         comparability=comparability if in_scope else "full",
         oracle_policy_type=policy.policy_type,
+        oracle_switch=policy.switch,
         internal_only_vars=policy.internal_outputs,
     )
 
@@ -906,4 +1080,278 @@ class PolicyEngineUniverseBackend:
                     internal_outputs=tuple(internal),
                 )
             )
+        return policies
+
+
+# ---------------------------------------------------------------------------
+# Yale Budget Lab tariff-rate-tracker backend
+# ---------------------------------------------------------------------------
+
+#: RATE_SCHEMA literals that are table keys / interval framing, not simulated
+#: surfaces. Every OTHER literal column must map into a universe row (the
+#: no-silent-drop accounting); a new framing column must be added here
+#: deliberately, so it cannot vanish from the accounting unnoticed.
+_YALE_KEY_COLUMNS = frozenset(
+    {"hts10", "country", "revision", "effective_date", "valid_from", "valid_until"}
+)
+
+
+def parse_r_string_vector(source: str, name: str) -> list[str | None]:
+    """Parse ``name = c('a', 'b', NA, ...)`` from an R source block.
+
+    Returns the quoted strings in order, with ``NA`` entries as ``None``.
+    Only literal entries are read — a spliced expression inside ``c(...)``
+    (e.g. ``registry$rate_col[...]``) raises, because a universe fact must be
+    a literal the parse can pin, never something we'd re-derive by memory.
+    """
+    import re
+
+    match = re.search(
+        rf"{re.escape(name)}\s*=\s*c\((.*?)\)", source, flags=re.DOTALL
+    )
+    if match is None:
+        raise ValueError(f"vector {name!r} not found in registry source")
+    entries: list[str | None] = []
+    for raw in match.group(1).split(","):
+        token = raw.strip()
+        if not token:
+            continue
+        if token == "NA":
+            entries.append(None)
+        elif (token.startswith("'") and token.endswith("'")) or (
+            token.startswith('"') and token.endswith('"')
+        ):
+            entries.append(token[1:-1])
+        elif re.fullmatch(r"-?\d+L?", token):
+            entries.append(token.rstrip("L"))
+        else:
+            raise ValueError(
+                f"vector {name!r} contains a non-literal entry {token!r}; "
+                "the registry parse only pins literals"
+            )
+    return entries
+
+
+def parse_r_quoted_literals(source: str) -> list[str]:
+    """All single/double-quoted string literals in an R block, in order."""
+    import re
+
+    return [
+        m.group(1) or m.group(2)
+        for m in re.finditer(r"'([^']*)'|\"([^\"]*)\"", source)
+    ]
+
+
+class YaleTariffUniverseBackend:
+    """Enumerate the Yale Budget Lab tariff-rate-tracker's statutory panel spine.
+
+    The oracle's own model spine is ``src/model/authority_registry.R``
+    (``AUTHORITY_REGISTRY``: one row per tariff authority rate layer, with its
+    normalized authority name and stacking class) plus the canonical output
+    schema ``src/model/rate_schema.R`` (``RATE_SCHEMA``). Both are read by a
+    pure text parse of literal vectors — no R runtime — so this is CI-friendly
+    the same way the EUROMOD XML parse is.
+
+    Per panel authority the *statutory* column ``statutory_<rate_col>`` is the
+    queryable comparison surface (created pre-exemption/pre-stacking at
+    ``src/pipeline/06_calculate_rates.R`` — the backend verifies each name
+    appears there, so a renamed statutory column fails the drift check). The
+    effective-layer columns (``rate_*``/``net_*``, post share/utilization
+    transform) are recorded as internal-only evidence, outside the statutory
+    comparison boundary. The MFN base is its own row (``statutory_base_rate``
+    vs the exemption-share-adjusted effective ``base_rate``); the Swiss
+    framework metadata columns and the stacking/framing outputs are emitted as
+    non-queryable rows so the exclusion decision is visible, never a silent
+    drop.
+    """
+
+    backend = "yale-tariff"
+
+    def __init__(self, checkout: str | Path) -> None:
+        self.checkout = Path(checkout).expanduser()
+        self._registry_r = self.checkout / "src" / "model" / "authority_registry.R"
+        self._schema_r = self.checkout / "src" / "model" / "rate_schema.R"
+        self._pipeline_r = (
+            self.checkout / "src" / "pipeline" / "06_calculate_rates.R"
+        )
+
+    def pinned_commit(self) -> str:
+        """The checkout's HEAD commit — the oracle release the header pins."""
+        import subprocess
+
+        try:
+            result = subprocess.run(
+                ["git", "-C", str(self.checkout), "rev-parse", "HEAD"],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+        except (OSError, subprocess.CalledProcessError) as exc:
+            raise ValueError(
+                f"cannot pin the tariff-rate-tracker commit at {self.checkout}: "
+                f"{exc}"
+            ) from exc
+        return result.stdout.strip()
+
+    def _registry_rows(self) -> list[dict]:
+        source = self._registry_r.read_text()
+        import re
+
+        block = re.search(
+            r"AUTHORITY_REGISTRY\s*<-\s*data\.frame\((.*?)\n\)\n",
+            source,
+            flags=re.DOTALL,
+        )
+        if block is None:
+            raise ValueError(
+                f"AUTHORITY_REGISTRY data.frame not found in {self._registry_r}"
+            )
+        body = block.group(1)
+        columns = {
+            name: parse_r_string_vector(body, name)
+            for name in (
+                "rate_col",
+                "net_col",
+                "spec_authority",
+                "default_stacking_class",
+                "panel_order",
+                "schema_group",
+            )
+        }
+        length = len(columns["rate_col"])
+        if any(len(v) != length for v in columns.values()):
+            raise ValueError(
+                f"AUTHORITY_REGISTRY vectors have unequal lengths in "
+                f"{self._registry_r}"
+            )
+        return [
+            {name: values[i] for name, values in columns.items()}
+            for i in range(length)
+        ]
+
+    def _rate_schema_literals(self) -> list[str]:
+        source = self._schema_r.read_text()
+        import re
+
+        block = re.search(
+            r"RATE_SCHEMA\s*<-\s*c\((.*?)\n\)\n", source, flags=re.DOTALL
+        )
+        if block is None:
+            raise ValueError(f"RATE_SCHEMA not found in {self._schema_r}")
+        return parse_r_quoted_literals(block.group(1))
+
+    def _statutory_column(self, rate_col: str) -> str:
+        """``rate_232`` -> ``statutory_rate_232``, verified against the pipeline.
+
+        The statutory columns are created at src/pipeline/06_calculate_rates.R
+        (the pre-exemption, pre-stacking save); a rename there must fail the
+        drift check, not silently break the comparison surface.
+        """
+        column = f"statutory_{rate_col}"
+        if column not in self._pipeline_text():
+            raise ValueError(
+                f"statutory column {column!r} not found in {self._pipeline_r}; "
+                "the model renamed or removed it — review the panel suite's "
+                "statutory column mapping and regenerate"
+            )
+        return column
+
+    def _pipeline_text(self) -> str:
+        if not hasattr(self, "_pipeline_cache"):
+            self._pipeline_cache = self._pipeline_r.read_text()
+        return self._pipeline_cache
+
+    def raw_policies(self) -> list[RawPolicy]:
+        registry = self._registry_rows()
+        # The RATE_SCHEMA c(...) splices the registry's per-group rate columns
+        # via `panel_registry$rate_col[schema_group == '<group>']`; the quoted
+        # group names in those splices are selectors, not columns.
+        group_names = {r["schema_group"] for r in registry if r["schema_group"]}
+        schema_literals = [
+            c for c in self._rate_schema_literals() if c not in group_names
+        ]
+
+        policies: list[RawPolicy] = []
+
+        # MFN base: statutory_base_rate is the parsed HTS column-1 rate the
+        # panel keeps; the effective base_rate applies MFN exemption shares
+        # (06_calculate_rates.R step 6c) — outside the statutory boundary.
+        for required in ("statutory_base_rate", "base_rate"):
+            if required not in schema_literals:
+                raise ValueError(
+                    f"{required!r} missing from RATE_SCHEMA in {self._schema_r}"
+                )
+        policies.append(
+            RawPolicy(
+                name="mfn_base",
+                policy_type="base",
+                switch=None,
+                all_outputs=("statutory_base_rate", "base_rate"),
+                queryable_outputs=("statutory_base_rate",),
+                internal_outputs=("base_rate",),
+            )
+        )
+
+        # One row per panel authority in the model's own registry.
+        for row in registry:
+            if row["panel_order"] is None:
+                continue  # scenario-only authority: not in the baseline panel
+            rate_col = row["rate_col"]
+            statutory = self._statutory_column(rate_col)
+            policies.append(
+                RawPolicy(
+                    name=row["spec_authority"] or rate_col,
+                    policy_type=row["default_stacking_class"],
+                    switch=None,
+                    all_outputs=(statutory, rate_col, row["net_col"]),
+                    queryable_outputs=(statutory,),
+                    internal_outputs=(rate_col, row["net_col"]),
+                )
+            )
+
+        # Every remaining RATE_SCHEMA literal must land in a declared row (the
+        # no-silent-drop accounting): swiss framework metadata + the stacking/
+        # framing outputs. A new schema column fails here until classified.
+        claimed = {
+            "statutory_base_rate",
+            "base_rate",
+            *(f"statutory_{r['rate_col']}" for r in registry),
+        } | _YALE_KEY_COLUMNS
+        remaining = [c for c in schema_literals if c not in claimed]
+        swiss = [c for c in remaining if c.startswith("swiss_")]
+        framing = [c for c in remaining if not c.startswith("swiss_")]
+        expected_framing = {
+            "metal_share",
+            "heading_program",
+            "total_additional",
+            "total_rate",
+            "usmca_eligible",
+        }
+        unexpected = set(framing) - expected_framing
+        if unexpected:
+            raise ValueError(
+                "RATE_SCHEMA carries unclassified column(s) "
+                f"{sorted(unexpected)}; classify them in the Yale universe "
+                "backend (a new simulated surface must not be silently dropped)"
+            )
+        policies.append(
+            RawPolicy(
+                name="swiss_framework",
+                policy_type="framework_metadata",
+                switch=None,
+                all_outputs=tuple(swiss),
+                queryable_outputs=(),
+                internal_outputs=tuple(swiss),
+            )
+        )
+        policies.append(
+            RawPolicy(
+                name="stacking_outputs",
+                policy_type="output_framing",
+                switch=None,
+                all_outputs=tuple(framing),
+                queryable_outputs=(),
+                internal_outputs=tuple(framing),
+            )
+        )
         return policies

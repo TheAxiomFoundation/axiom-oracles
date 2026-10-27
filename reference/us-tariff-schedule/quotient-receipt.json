@@ -1,0 +1,15 @@
+{
+  "full_interval_cells": 68417040,
+  "full_lines": 20508,
+  "full_countries": 240,
+  "full_revisions": 14,
+  "trajectory_classes": 480580,
+  "representative_interval_cells": 6713128,
+  "guard_interval_cells": 3200176,
+  "evaluated_interval_cells": 9913304,
+  "cap": 12000000,
+  "guard_dropped_for_cap": false,
+  "under_cap": true,
+  "selected_pairs": 709659,
+  "guard_pairs": 229079
+}

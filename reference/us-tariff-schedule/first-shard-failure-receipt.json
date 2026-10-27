@@ -1,0 +1,15 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule.evaluation_failure.v1",
+  "stage": "C1",
+  "chapter_shard": "01",
+  "attempted_engine_cases": 5001,
+  "completed_engine_cases": 0,
+  "engine_error_cases": 5001,
+  "engine_wall_clock_seconds": 0.8794580830144696,
+  "invocation_wall_clock_seconds": 9.310958,
+  "maximum_concurrent_engine_processes": 1,
+  "error": "dataset input `us:policies/cbp/us-tariff-schedule/generated/ch01/ch01#input.entry_is_line_c` must use an absolute legal RuleSpec reference that resolves to an input slot, derived rule, or parameter in the compiled program",
+  "classification": "unexplained_engine_error_after_A7_routing",
+  "verdict": "FAIL_CLOSED",
+  "downstream_stages_run": []
+}

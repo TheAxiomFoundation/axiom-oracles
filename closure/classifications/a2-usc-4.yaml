@@ -1,0 +1,997 @@
+rows:
+  - citation: "us/statute/7/2027/h"
+    heading: "Ban on recruitment by entities that receive funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall issue regulations that prohibit entities that receive funds under this chapter to compensate any…”. It regulates compensation for outreach and recruitment by funded entities, not household eligibility or allotment calculations."
+  - citation: "us/statute/7/2028"
+    heading: "Consolidated block grants for Puerto Rico and American Samoa"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Payments to governmental entities (1) Definition of governmental entity In this subsection, the term “governmental…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/a"
+    heading: "Payments to governmental entities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Definition of governmental entity In this subsection, the term “governmental entity” means— (A) the Commonwealth of…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/a/1"
+    heading: "Definition of governmental entity"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In this subsection, the term “governmental entity” means— (A) the Commonwealth of Puerto Rico; and (B) American Samoa”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/a/2"
+    heading: "Block grants"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Amount of block grants From the sums appropriated under this chapter, the Secretary shall, subject to this section,…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/a/3"
+    heading: "Time and manner of payments to Commonwealth of Puerto Rico"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall, subject to the provisions of subsection (b), pay to the Commonwealth for the applicable fiscal…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/b"
+    heading: "Plan for provision of assistance; approval; noncompliance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In order to receive payments under this chapter for any fiscal year, the Commonwealth shall have a plan for that…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/b/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In order to receive payments under this chapter for any fiscal year, the Commonwealth shall have a plan for that…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/b/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Commonwealth shall provide for a biennial audit of expenditures under its program for the provision of the…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/c"
+    heading: "Review; technical assistance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall provide for the review of the programs for the provision of the assistance described in…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/c/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall provide for the review of the programs for the provision of the assistance described in…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/c/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary is authorized as the Secretary deems practicable to provide technical assistance with respect to the…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/d"
+    heading: "Penalty for violations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Whoever knowingly and willfully embezzles, misapplies, steals, or obtains by fraud, false statement, or forgery, any…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/e"
+    heading: "Review, report, and regulation of cash nutrition assistance program benefits provided in Puerto Rico"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Review The Secretary, in consultation with the Secretary of Health and Human Services, shall carry out a review of…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/e/1"
+    heading: "Review"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary, in consultation with the Secretary of Health and Human Services, shall carry out a review of the…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/e/2"
+    heading: "Report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than 18 months after February 7, 2014 , the Secretary shall submit to the Committee on Agriculture of the…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/e/3"
+    heading: "Regulation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Except as provided in subparagraph (B), and notwithstanding the second sentence of subsection…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2028/e/4"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Out of any funds made available under section 2027 of this title for fiscal year 2014, the Secretary shall make…”. It governs territorial block-grant funding, plans, oversight, enforcement, or benefit-delivery form and supplies no household eligibility or allotment rule."
+  - citation: "us/statute/7/2029"
+    heading: "Workfare"
+    status: pending
+    note: "This section mixes household workfare duties, exemptions, work-hour limits, reimbursements, and disqualification with program administration. The inspected 7 CFR 273.7 module explicitly defers optional-workfare operation and sanction context, so its partial overlap is not full coverage."
+  - citation: "us/statute/7/2029/a"
+    heading: "Program plan; guidelines; compliance"
+    status: pending
+    note: "Paragraph (1) makes nonexempt household members work in return for portions of the household allotment, while paragraph (2) governs local program design. The optional-workfare operation needed to implement paragraph (1) is expressly deferred by us/regulations/7-cfr/273/7.yaml."
+  - citation: "us/statute/7/2029/a/1"
+    heading: ""
+    status: pending
+    note: "This paragraph requires a nonexempt member to work and converts each hour into a portion of the household allotment at the applicable minimum wage. us/regulations/7-cfr/273/7.yaml consumes workfare participation as an input but expressly defers program operation and assignment rules."
+  - citation: "us/statute/7/2029/a/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall promulgate guidelines pursuant to paragraph (1) which, to the maximum extent practicable, enable…”. It concerns federal guidelines and local program compatibility, without itself determining a household's eligibility or allotment."
+  - citation: "us/statute/7/2029/b"
+    heading: "Exempt household members"
+    status: pending
+    note: "The subsection contains six workfare exemptions. us/regulations/7-cfr/273/7.yaml fully covers the cross-referenced general exemptions and the unfit, under-16, and age-60 criteria, but does not cover the optional 20-hour title IV-A rule or the special caretaker rule, so the parent is only partially operationalized."
+  - citation: "us/statute/7/2029/b/1"
+    heading: ""
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/7.yaml"
+    basis: "The text includes “exempt from section 2015(d)(1) of this title as the result of clause (B), (C), (D), (E), or (F) of section 2015(d)(2)…”. The cross-referenced §2015(d)(2)(B)–(F) exemptions are all explicit inputs to the module's exemption OR, and that predicate bypasses workfare compliance in its person-level eligibility output."
+  - citation: "us/statute/7/2029/b/2"
+    heading: ""
+    status: pending
+    note: "This optional exemption requires current satisfactory participation for at least 20 hours a week in a title IV-A work activity. The regulation module has a broader resolved title IV work-requirement input but does not encode the operating-agency option or this 20-hour test."
+  - citation: "us/statute/7/2029/b/3"
+    heading: ""
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/7.yaml"
+    basis: "The text includes “mentally or physically unfit”. The module expressly treats a physically or mentally unfit member as exempt, and its eligibility output bypasses workfare compliance when that predicate holds."
+  - citation: "us/statute/7/2029/b/4"
+    heading: ""
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/7.yaml"
+    basis: "The text includes “under sixteen years of age”. The module's age threshold is exactly under 16, and its eligibility output bypasses workfare compliance for an exempt member."
+  - citation: "us/statute/7/2029/b/5"
+    heading: ""
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/7.yaml"
+    basis: "The text includes “sixty years of age or older; or”. The module's older-adult threshold is exactly age 60 or older, and its eligibility output bypasses workfare compliance for an exempt member."
+  - citation: "us/statute/7/2029/b/6"
+    heading: ""
+    status: pending
+    note: "This exempts a parent or caretaker when another household member is subject to workfare or employed full time. The general caretaker exemption in us/regulations/7-cfr/273/7.yaml is different and does not implement this household-relative condition."
+  - citation: "us/statute/7/2029/c"
+    heading: "Valuation or duration of work"
+    status: pending
+    note: "Required work is capped by both the value of the household allotment and a 30-hour combined weekly limit. The existing work-requirement module does not calculate workfare assignment hours and explicitly defers optional-workfare operation."
+  - citation: "us/statute/7/2029/d"
+    heading: "Nature, conditions, and costs of work"
+    status: pending
+    note: "The subsection mixes workplace protections with a participant reimbursement capped at $25 per month. Because the reimbursement is a person-level amount and the optional-workfare program is deferred, the subsection cannot be excluded as wholly noncomputational."
+  - citation: "us/statute/7/2029/d/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “not provide any work that has the effect of replacing or preventing the employment of an individual not participating…”. It prescribes worksite protections for the operating agency and does not calculate household eligibility or a benefit amount."
+  - citation: "us/statute/7/2029/d/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “provide the same benefits and working conditions that are provided at the job site to employees performing comparable…”. It prescribes worksite protections for the operating agency and does not calculate household eligibility or a benefit amount."
+  - citation: "us/statute/7/2029/d/3"
+    heading: ""
+    status: pending
+    note: "This computes reimbursement of necessary transportation and other participation costs, capped at $25 per month. No module encodes that person-level workfare payment."
+  - citation: "us/statute/7/2029/e"
+    heading: "Job search period"
+    status: pending
+    note: "Allowing up to 30 days of job search before assignment changes when a member becomes subject to workfare compliance and possible disqualification. The existing regulation module expressly defers optional-workfare assignment and sanction timing."
+  - citation: "us/statute/7/2029/f"
+    heading: "Disqualification"
+    status: pending
+    note: "Failure to comply can make an individual or household ineligible for SNAP. us/regulations/7-cfr/273/7.yaml consumes resolved compliance but explicitly defers sanction timing and good-cause adjudication, so coverage is partial."
+  - citation: "us/statute/7/2029/g"
+    heading: "Payment of administrative expenses"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall pay to each operating agency 50 per centum of all administrative expenses incurred by such agency…”. It determines federal payments to an operating agency or enforcement of agency compliance, not a household's eligibility or allotment."
+  - citation: "us/statute/7/2029/g/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall pay to each operating agency 50 per centum of all administrative expenses incurred by such agency…”. It determines federal payments to an operating agency or enforcement of agency compliance, not a household's eligibility or allotment."
+  - citation: "us/statute/7/2029/g/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “From 50 per centum of the funds saved from employment related to a workfare program operated under this section, the…”. It determines federal payments to an operating agency or enforcement of agency compliance, not a household's eligibility or allotment."
+  - citation: "us/statute/7/2029/g/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary may suspend or cancel some or all of these payments, or may withdraw approval from a political…”. It determines federal payments to an operating agency or enforcement of agency compliance, not a household's eligibility or allotment."
+  - citation: "us/statute/7/2030"
+    heading: "Repealed. Pub. L. 110–234, title IV, § 4115(b)(14) , May 22, 2008 , 122 Stat. 1108 , and Pub. L. 110–246, § 4(a) , title IV, § 4115(b)(14), June 18, 2008 , 122 Stat. 1664 , 1870"
+    status: excluded
+    reason: reserved
+    basis: "The source body is empty and the heading expressly states “Repealed.”"
+  - citation: "us/statute/7/2031"
+    heading: "Minnesota Family Investment Project"
+    status: pending
+    note: "The section creates the Minnesota Family Investment Project and includes project-family eligibility, SNAP ineligibility, household-composition rules, alternative benefit calculations, and sanctions. No direct statute or regulation module implements the Project overlay."
+  - citation: "us/statute/7/2031/a"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Subject to paragraph (2), upon written application of the State of Minnesota that complies with this section and…”. It authorizes and conditions the Minnesota demonstration at the State-program level without specifying a point-in-time household eligibility or benefit-amount calculation."
+  - citation: "us/statute/7/2031/a/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Subject to paragraph (2), upon written application of the State of Minnesota that complies with this section and…”. It authorizes and conditions the Minnesota demonstration at the State-program level without specifying a point-in-time household eligibility or benefit-amount calculation."
+  - citation: "us/statute/7/2031/a/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Project may be implemented only in accordance with this section and only if the Secretary of Health and Human…”. It authorizes and conditions the Minnesota demonstration at the State-program level without specifying a point-in-time household eligibility or benefit-amount calculation."
+  - citation: "us/statute/7/2031/b"
+    heading: "Required terms and conditions of Project"
+    status: pending
+    note: "This subsection mixes Project-family eligibility, SNAP exclusions, benefit floors and reductions, household calculation rules, application procedure, and administration. Ordinary SNAP modules supply only underlying calculations and do not implement the Minnesota Project overlay."
+  - citation: "us/statute/7/2031/b/1"
+    heading: ""
+    status: pending
+    note: "Only families may be eligible for Project assistance and services. This project-eligibility class is not encoded."
+  - citation: "us/statute/7/2031/b/2"
+    heading: ""
+    status: pending
+    note: "Families assigned to and found eligible for the Project become ineligible for SNAP. No module encodes this Project-based SNAP exclusion."
+  - citation: "us/statute/7/2031/b/3"
+    heading: ""
+    status: pending
+    note: "This paragraph sets family assistance floors, treatment of child care and child support, tax adjustments, food-assistance designations, and a special allotment formula for nonproject household members. The ordinary SNAP modules do not implement these Minnesota Project adjustments."
+  - citation: "us/statute/7/2031/b/4"
+    heading: ""
+    status: pending
+    note: "The Project must provide participating families education, employment, and training services equivalent to specified SNAP E&T services. No module encodes this family-level service entitlement or equivalence rule."
+  - citation: "us/statute/7/2031/b/5"
+    heading: ""
+    status: pending
+    note: "The State may select families for the Project by application or assignment from title IV-A or SNAP populations. Because Project selection triggers distinct eligibility and benefit rules, this unencoded household-selection authority is substantive."
+  - citation: "us/statute/7/2031/b/6"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The text includes “Whenever selection for participation in the Project is accomplished through submission and approval of an application…”. It governs application access, issuance timing, language access, or information safeguards and does not change the point-in-time eligibility or benefit formula."
+  - citation: "us/statute/7/2031/b/7"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The text includes “Whenever selection for participation in the Project is accomplished by assigning families that are determined…”. It governs application access, issuance timing, language access, or information safeguards and does not change the point-in-time eligibility or benefit formula."
+  - citation: "us/statute/7/2031/b/8"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The text includes “Paragraphs (1)(B) and (8) of section 2020(e) of this title shall apply with respect to applicants and participating…”. It governs application access, issuance timing, language access, or information safeguards and does not change the point-in-time eligibility or benefit formula."
+  - citation: "us/statute/7/2031/b/9"
+    heading: ""
+    status: pending
+    note: "Project assistance must be reduced by the pro rata value of SNAP benefits received for the same period. No module encodes this household-level reduction."
+  - citation: "us/statute/7/2031/b/10"
+    heading: ""
+    status: pending
+    note: "This paragraph mixes notices and screening with rules that restore SNAP eligibility and retroactive benefits after Project termination or household changes. The substantive transition rules are unencoded, so the mixed paragraph remains pending."
+  - citation: "us/statute/7/2031/b/11"
+    heading: ""
+    status: pending
+    note: "Although principally a hearing and notice incorporation, §2020(e)(10) also continues the household's prior benefit level while a timely fair hearing is pending, subject to exceptions. That point-in-time benefit effect makes the incorporated rule mixed and unencoded."
+  - citation: "us/statute/7/2031/b/12"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “For each fiscal year, the Secretary shall not be liable for any costs related to carrying out the Project in excess…”. It concerns federal costs, statewide program operation, Project duration, or the aggregate participation cap rather than a household calculation."
+  - citation: "us/statute/7/2031/b/13"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The State shall carry out the supplemental nutrition assistance program throughout the State while the State carries…”. It concerns federal costs, statewide program operation, Project duration, or the aggregate participation cap rather than a household calculation."
+  - citation: "us/statute/7/2031/b/14"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Except as provided in subparagraph (B), the State will carry out the Project during a five-year period beginning on…”. It concerns federal costs, statewide program operation, Project duration, or the aggregate participation cap rather than a household calculation."
+  - citation: "us/statute/7/2031/b/15"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not more than six thousand families may participate in the Project simultaneously”. It concerns federal costs, statewide program operation, Project duration, or the aggregate participation cap rather than a household calculation."
+  - citation: "us/statute/7/2031/c"
+    heading: "Additional terms and conditions of Project"
+    status: pending
+    note: "This subsection establishes parent work-requirement exemptions, an hours cap, and a possible 10-percent assistance reduction for noncompliance. No module covers the Minnesota Project rules."
+  - citation: "us/statute/7/2031/c/1"
+    heading: ""
+    status: pending
+    note: "The paragraph defines which parents may be required to participate and lists illness, caregiving, age, work, and pregnancy exemptions. These special-population rules are unencoded."
+  - citation: "us/statute/7/2031/c/2"
+    heading: ""
+    status: pending
+    note: "A sole parent of a child under six may not be required to work or train more than 20 hours weekly. This special household rule limits sanction-triggering obligations and is not encoded."
+  - citation: "us/statute/7/2031/c/3"
+    heading: ""
+    status: pending
+    note: "For failure without good cause, family assistance may be reduced by up to 10 percent of the no-other-income amount. No module encodes this benefit reduction."
+  - citation: "us/statute/7/2031/d"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “If an application submitted under subsection (a) complies with the requirements specified in subsection (b), then the…”. It calculates grants and adjustments payable to the State, not eligibility or assistance payable to an individual household."
+  - citation: "us/statute/7/2031/d/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “If an application submitted under subsection (a) complies with the requirements specified in subsection (b), then the…”. It calculates grants and adjustments payable to the State, not eligibility or assistance payable to an individual household."
+  - citation: "us/statute/7/2031/d/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall periodically adjust payments made to the State under paragraph (1) to reflect— (A) the cost of…”. It calculates grants and adjustments payable to the State, not eligibility or assistance payable to an individual household."
+  - citation: "us/statute/7/2031/d/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Payments under paragraph (1)(B) shall include adjustments, as estimated under a methodology satisfactory to the…”. It calculates grants and adjustments payable to the State, not eligibility or assistance payable to an individual household."
+  - citation: "us/statute/7/2031/e"
+    heading: "Waiver"
+    status: pending
+    note: "The Secretary must waive any chapter requirement that would prevent the Project, potentially suspending household eligibility or benefit rules. The provision does not identify the waived rules, and no module or waiver instrument establishes its full computational effect."
+  - citation: "us/statute/7/2031/f"
+    heading: "Project audits"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Comptroller General of the United States shall— (1) conduct periodic audits of the operation of the Project to…”. It requires Project audits or reports concerning amounts payable to the State and supplies no household decision rule."
+  - citation: "us/statute/7/2031/f/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “conduct periodic audits of the operation of the Project to verify the amounts payable to the State from time to time…”. It requires Project audits or reports concerning amounts payable to the State and supplies no household decision rule."
+  - citation: "us/statute/7/2031/f/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “submit to the Secretary, the Secretary of Health and Human Services, the Committee on Agriculture of the House of…”. It requires Project audits or reports concerning amounts payable to the State and supplies no household decision rule."
+  - citation: "us/statute/7/2031/g"
+    heading: "Construction"
+    status: pending
+    note: "The subsection gives participating families a deemed legal status and protects amounts eligible households would otherwise receive, while also imposing a federal-cost limitation. Its household-level effects are unencoded."
+  - citation: "us/statute/7/2031/g/1"
+    heading: ""
+    status: pending
+    note: "Designated Project cash assistance must be treated like SNAP allotments and participating families like SNAP participants under other laws. No confirmed encoding implements this household-level deeming rule."
+  - citation: "us/statute/7/2031/g/2"
+    heading: ""
+    status: pending
+    note: "Subparagraph (A) protects the amounts the State and eligible households would otherwise receive, while subparagraph (B) caps federal costs. This mixed household-benefit and fiscal rule is not encoded."
+  - citation: "us/statute/7/2031/h"
+    heading: "Quality control"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Participating families shall be excluded from any sample taken for purposes of making any determination under section…”. It governs quality control, evaluation design, or evaluation funding and does not determine a household's benefits."
+  - citation: "us/statute/7/2031/i"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The State shall develop and implement a plan for an independent evaluation designed to provide reliable information…”. It governs quality control, evaluation design, or evaluation funding and does not determine a household's benefits."
+  - citation: "us/statute/7/2031/i/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The State shall develop and implement a plan for an independent evaluation designed to provide reliable information…”. It governs quality control, evaluation design, or evaluation funding and does not determine a household's benefits."
+  - citation: "us/statute/7/2031/i/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The State shall pay 50 percent of the cost of developing and implementing such plan and the Federal Government shall…”. It governs quality control, evaluation design, or evaluation funding and does not determine a household's benefits."
+  - citation: "us/statute/7/2031/j"
+    heading: "Definitions"
+    status: pending
+    note: "The definitions of family and caregiver determine the Project eligibility unit, while contract and State are noncomputational definitions. No module covers the substantive definitions."
+  - citation: "us/statute/7/2031/j/1"
+    heading: ""
+    status: pending
+    note: "This defines the eligible family unit through co-residence and specified relationships and includes a third-trimester pregnant woman. The household-composition rule is unencoded."
+  - citation: "us/statute/7/2031/j/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The term “contract” means a plan to help a family pursue self-sufficiency, based on the State’s assessment of the…”. It defines a noncomputational Project term or geographic scope and does not determine household eligibility or assistance."
+  - citation: "us/statute/7/2031/j/3"
+    heading: ""
+    status: pending
+    note: "This expressly defines which relatives and spouses count as a caregiver for determining Project eligibility. No encoding covers the household-composition rule."
+  - citation: "us/statute/7/2031/j/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The term “State” means the State of Minnesota”. It defines a noncomputational Project term or geographic scope and does not determine household eligibility or assistance."
+  - citation: "us/statute/7/2032"
+    heading: "Automated data processing and information retrieval systems"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Standards and procedures for reviews (1) Initial reviews (A) In general Not later than 1 year after November 28, 1990…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/a"
+    heading: "Standards and procedures for reviews"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Initial reviews (A) In general Not later than 1 year after November 28, 1990 , the Secretary shall complete a review…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/a/1"
+    heading: "Initial reviews"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Not later than 1 year after November 28, 1990 , the Secretary shall complete a review of regulations and…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/a/2"
+    heading: "Operational reviews"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall conduct such reviews as are necessary to ensure that systems— (A) comply with conditions of…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/b"
+    heading: "Standards for approval of systems"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general After conducting the review required under subsection (a), the Secretary shall establish standards for…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/b/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “After conducting the review required under subsection (a), the Secretary shall establish standards for approval of…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/b/2"
+    heading: "Implementation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “A State shall implement the standards established by the Secretary within a reasonable period of time, as determined…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/b/3"
+    heading: "Periodic compliance reviews"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall conduct appropriate periodic reviews of systems to ensure compliance with the standards…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2032/c"
+    heading: "Report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than October 1, 1993 , the Secretary shall report to the Committee on Agriculture of the House of…”. It governs review, approval, implementation, or reporting for State information systems rather than household eligibility or benefit amounts."
+  - citation: "us/statute/7/2033"
+    heading: "Repealed. Pub. L. 107–171, title IV, § 4124(b) , May 13, 2002 , 116 Stat. 326"
+    status: excluded
+    reason: reserved
+    basis: "The source body is empty and the heading expressly states “Repealed.”"
+  - citation: "us/statute/7/2034"
+    heading: "Assistance for community food projects"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Definitions In this section: (1) Community food project In this section, the term “community food project” means a…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/a"
+    heading: "Definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In this section: (1) Community food project In this section, the term “community food project” means a…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/a/1"
+    heading: "Community food project"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In this section, the term “community food project” means a community-based project that— (A) requires a 1-time…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/a/2"
+    heading: "Gleaner"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The term “gleaner” means an entity that— (A) collects edible, surplus food that would be thrown away and distributes…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/a/3"
+    heading: "Hunger-free communities goal"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The term “hunger-free communities goal” means any of the 14 goals described in House Concurrent Resolution 302, 102nd…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/b"
+    heading: "Authority to provide assistance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general From amounts made available to carry out this chapter, the Secretary may make grants to assist eligible…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/b/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “From amounts made available to carry out this chapter, the Secretary may make grants to assist eligible private…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/b/2"
+    heading: "Limitation on grants"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The total amount of funds provided as grants under this section may not exceed— (A) $1,000,000 for fiscal year 1996;…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/c"
+    heading: "Eligible entities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “To be eligible for a grant under subsection (b), a public food program service provider, a tribal organization, or a…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/c/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “have experience in the area of— (A) community food work, particularly concerning small and medium-sized farms,…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/c/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “demonstrate competency to implement a project, provide fiscal accountability, collect data, and prepare reports and…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/c/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “demonstrate a willingness to share information with researchers, practitioners, and other interested parties; and”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/c/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “collaborate with 1 or more local partner organizations to achieve at least 1 hunger-free communities goal”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d"
+    heading: "Preference for certain projects"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In selecting community food projects to receive assistance under subsection (b), the Secretary shall give a…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “develop linkages between 2 or more sectors of the food system”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “support the development of entrepreneurial projects”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “develop innovative linkages between the for-profit and nonprofit food sectors”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “encourage long-term planning activities, and multisystem, interagency approaches with multistakeholder…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/d/5"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “develop new resources and strategies to help reduce food insecurity in the community and prevent food insecurity in…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/e"
+    heading: "Matching funds requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Requirements The Federal share of the cost of establishing or carrying out a community food project that receives…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/e/1"
+    heading: "Requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Federal share of the cost of establishing or carrying out a community food project that receives assistance under…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/e/2"
+    heading: "Calculation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In providing for the non-Federal share of the cost of carrying out a community food project, the entity receiving the…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/e/3"
+    heading: "Sources"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “An entity may provide for the non-Federal share through State government, local government, or private sources”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/f"
+    heading: "Term of grant"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Single grant A community food project may be supported by only a single grant under subsection (b). (2) Term The term…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/f/1"
+    heading: "Single grant"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “A community food project may be supported by only a single grant under subsection (b)”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/f/2"
+    heading: "Term"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The term of a grant under subsection (b) may not exceed 5 years”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/g"
+    heading: "Technical assistance and related information"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Technical assistance In carrying out this section, the Secretary may provide technical assistance regarding community…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/g/1"
+    heading: "Technical assistance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In carrying out this section, the Secretary may provide technical assistance regarding community food projects,…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/g/2"
+    heading: "Sharing information"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general The Secretary may provide for the sharing of information concerning community food projects and issues…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/h"
+    heading: "Reports to Congress"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than September 30, 2014 , and each year thereafter, the Secretary shall submit to Congress a report that…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/h/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “a description of any activity funded”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/h/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “the degree of success of each activity funded in achieving hunger-free community goals; and”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2034/h/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “the degree of success in improving the long-term capacity of a community to address food and agriculture problems…”. It defines or administers grants to organizations for community food projects, not eligibility or benefits for a household."
+  - citation: "us/statute/7/2035"
+    heading: "Simplified supplemental nutrition assistance program"
+    status: pending
+    note: "The section mixes State election, plan approval, and federal-cost administration with household participation rules, State-selected benefit methodologies, standardized deductions, and a 130-percent eligibility limitation. No §2035 or 7 CFR 273.25 module exists; nearby modules cover only ordinary SNAP rules."
+  - citation: "us/statute/7/2035/a"
+    heading: "“Federal costs” defined"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In this section, the term “Federal costs” does not include any Federal costs incurred under section 2026 of this…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/b"
+    heading: "Election"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Subject to subsection (d), a State may elect to carry out a simplified supplemental nutrition assistance program…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/c"
+    heading: "Operation of Program"
+    status: pending
+    note: "This subsection determines participation from whether none, all, or some household members receive title IV-A assistance and permits benefits under State, SNAP, or combined rules. No module covers the complete simplified-Program logic."
+  - citation: "us/statute/7/2035/c/1"
+    heading: ""
+    status: pending
+    note: "A household with no members receiving title IV-A State-program assistance may not participate in the simplified Program. No confirmed module encodes this exclusion."
+  - citation: "us/statute/7/2035/c/2"
+    heading: ""
+    status: pending
+    note: "A household whose members all receive title IV-A assistance is automatically eligible for the simplified Program. The inspected categorical-eligibility modules address ordinary SNAP, not this distinct Program, and therefore provide only overlap."
+  - citation: "us/statute/7/2035/c/3"
+    heading: ""
+    status: pending
+    note: "A mixed household in which some but not all members receive title IV-A assistance may be eligible subject to Secretarial approval. No module covers this optional eligibility rule."
+  - citation: "us/statute/7/2035/c/4"
+    heading: ""
+    status: pending
+    note: "Household benefits may be determined under title IV-A rules, SNAP rules, or a combination. This benefit methodology depends on unencoded State choices and §2035(f)."
+  - citation: "us/statute/7/2035/d"
+    heading: "Approval of Program"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “State plan A State agency may not operate a Program unless the Secretary approves a State plan for the operation of…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/d/1"
+    heading: "State plan"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “A State agency may not operate a Program unless the Secretary approves a State plan for the operation of the Program…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/d/2"
+    heading: "Approval of plan"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall approve any State plan to carry out a Program if the Secretary determines that the plan— (A)…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/e"
+    heading: "Increased Federal costs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Determination (A) In general The Secretary shall determine whether a Program being carried out by a State agency is…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/e/1"
+    heading: "Determination"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general The Secretary shall determine whether a Program being carried out by a State agency is increasing Federal…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/e/2"
+    heading: "Notification"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “If the Secretary determines that the Program has increased Federal costs under this chapter for any fiscal year or…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/e/3"
+    heading: "Enforcement"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Corrective action Not later than 90 days after the date of a notification under paragraph (2), the State shall submit…”. It governs State election, plan approval, aggregate federal-cost accounting, notice, or corrective action rather than a household determination."
+  - citation: "us/statute/7/2035/f"
+    heading: "Rules and procedures"
+    status: pending
+    note: "This mixed subsection permits alternate TANF or SNAP rules, State-standardized deductions, an alternate household-income determination, and a 130-percent-of-poverty eligibility limitation. Existing modules cover only pieces of the ordinary federal calculation."
+  - citation: "us/statute/7/2035/f/1"
+    heading: "In general"
+    status: pending
+    note: "Allowing a State to use TANF or SNAP rules and procedures can change the rules applied to household eligibility and benefit calculations. No module encodes this simplified-Program election or the alternative TANF framework."
+  - citation: "us/statute/7/2035/f/2"
+    heading: "Standardized deductions"
+    status: pending
+    note: "A State may standardize work, dependent-care, and shelter deductions, directly affecting net income and allotments. us/regulations/7-cfr/273/10.yaml covers ordinary federal calculations but not this State simplified-Program option."
+  - citation: "us/statute/7/2035/f/3"
+    heading: "Requirements"
+    status: pending
+    note: "The paragraph incorporates numerous substantive provisions, including benefit calculation and a State-program household-income alternative. us/statutes/7/2017/a.yaml covers only one incorporated rule; the remaining requirements and exception are not fully encoded."
+  - citation: "us/statute/7/2035/f/4"
+    heading: "Limitation on eligibility"
+    status: pending
+    note: "This limits TANF-derived eligibility unless households above 130 percent of the poverty guidelines are barred. The ordinary gross-income test in us/regulations/7-cfr/273/9.yaml does not encode this simplified-Program condition."
+  - citation: "us/statute/7/2036"
+    heading: "Availability of commodities for emergency food assistance program"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Purchase of commodities (1) In general From amounts made available to carry out this chapter, for each of the fiscal…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/a"
+    heading: "Purchase of commodities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general From amounts made available to carry out this chapter, for each of the fiscal years 2014 through 2023, the…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/a/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “From amounts made available to carry out this chapter, for each of the fiscal years 2014 through 2023, the Secretary…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/a/2"
+    heading: "Amounts"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall use to carry out paragraph (1)— (A) for fiscal year 2008, $190,000,000; (B) for fiscal year 2009,…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/a/3"
+    heading: "Funds availability"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “For purposes of the funds described in this subsection, the Secretary shall— (A) make the funds available for 2…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/b"
+    heading: "Basis for commodity purchases"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In purchasing commodities under subsection (a), the Secretary shall, to the extent practicable and appropriate, make…”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/b/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “agricultural market conditions”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/b/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “preferences and needs of States and distributing agencies; and”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036/b/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “preferences of recipients”. It governs federal purchase, funding, State distribution, or purchasing priorities for emergency-food commodities and creates no household entitlement or amount."
+  - citation: "us/statute/7/2036a"
+    heading: "Nutrition education and obesity prevention grant program"
+    status: pending
+    note: "The section mixes grant administration with an express definition of individuals eligible to receive nutrition-education benefits. Because that definition determines who may receive a service and no §2036a module exists, conservative classification is pending."
+  - citation: "us/statute/7/2036a/a"
+    heading: "Definition of eligible individual"
+    status: pending
+    note: "This directly defines eligibility for nutrition-education benefits through other-program eligibility, residence in a significantly low-income community, or another low-income determination. No module encodes the complete test."
+  - citation: "us/statute/7/2036a/a/1"
+    heading: ""
+    status: pending
+    note: "This grants categorical eligibility for nutrition-education benefits based on eligibility under SNAP or specified child-nutrition programs. No module resolves all listed categorical pathways."
+  - citation: "us/statute/7/2036a/a/2"
+    heading: ""
+    status: pending
+    note: "Residence in a community with a significant low-income population is an eligibility pathway determined by the Secretary. It is computational eligibility content with no encoding."
+  - citation: "us/statute/7/2036a/a/3"
+    heading: ""
+    status: pending
+    note: "The Secretary may deem other low-income individuals eligible for nutrition-education benefits. This residual eligibility pathway is unencoded."
+  - citation: "us/statute/7/2036a/b"
+    heading: "Programs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Consistent with the terms and conditions of grants awarded under this section, State agencies may implement a…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c"
+    heading: "Delivery of nutrition education and obesity prevention services"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general State agencies may deliver nutrition education and obesity prevention services under a program described…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “State agencies may deliver nutrition education and obesity prevention services under a program described in…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/2"
+    heading: "Nutrition education State plans"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general A State agency that elects to provide nutrition education and obesity prevention services under this…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/3"
+    heading: "Use of funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general A State agency may use funds provided under this section for any evidence-based allowable use of funds…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/4"
+    heading: "Notification"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The text includes “To the maximum extent practicable, State agencies shall notify applicants, participants, and eligible individuals…”. It is a notice duty about service availability and does not alter an individual's eligibility or benefit amount."
+  - citation: "us/statute/7/2036a/c/5"
+    heading: "Coordination"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Subject to the approval of the Secretary, projects carried out with funds received under this section may be…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/6"
+    heading: "Information clearinghouse"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall establish an online clearinghouse that makes available to State agencies, local agencies,…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/7"
+    heading: "Technical assistance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall provide technical assistance to a State agency in developing and implementing a nutrition…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/8"
+    heading: "Annual State report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Each State agency that delivers nutrition education and obesity prevention services under this subsection shall…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/c/9"
+    heading: "Annual Federal report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Administrator of the Food and Nutrition Service, in consultation with the Director of the National Institute of…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/d"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Of funds made available each fiscal year under section 2027(a)(1) of this title , the Secretary shall…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/d/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Of funds made available each fiscal year under section 2027(a)(1) of this title , the Secretary shall reserve for…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/d/2"
+    heading: "Allocation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Initial allocation Of the funds set aside under paragraph (1), as determined by the Secretary— (i) for each of fiscal…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/d/3"
+    heading: "Limitation on Federal financial participation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Grants awarded under this section shall be the only source of Federal financial participation under this…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036a/e"
+    heading: "Implementation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than January 1, 2012 , the Secretary shall publish in the Federal Register a description of the…”. It governs nutrition-education service delivery, State plans, grant uses, coordination, reporting, funding, or implementation rather than a household SNAP computation."
+  - citation: "us/statute/7/2036b"
+    heading: "Retail food store and recipient trafficking"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Purpose The purpose of this section is to provide the Department of Agriculture with additional resources to prevent…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/a"
+    heading: "Purpose"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The purpose of this section is to provide the Department of Agriculture with additional resources to prevent…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/b"
+    heading: "Use of funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Additional funds are provided under this section to supplement the retail food store and recipient…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/b/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Additional funds are provided under this section to supplement the retail food store and recipient integrity…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/b/2"
+    heading: "Information technologies"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall use an appropriate amount of the funds provided under this section to employ information…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/c"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Authorization of appropriations There is authorized to be appropriated to carry out this section $5,000,000 for each…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/c/1"
+    heading: "Authorization of appropriations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “There is authorized to be appropriated to carry out this section $5,000,000 for each of fiscal years 2014 through…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036b/c/2"
+    heading: "Mandatory funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general Out of any funds in the Treasury not otherwise appropriated, the Secretary of the Treasury shall transfer…”. It funds Department integrity work, information technology, or trafficking enforcement and states no household eligibility, sanction, or benefit formula."
+  - citation: "us/statute/7/2036c"
+    heading: "Annual State report on verification of SNAP participation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Annual report Not later than 1 year after the date specified by the Secretary during the 180-day period beginning on…”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036c/a"
+    heading: "Annual report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than 1 year after the date specified by the Secretary during the 180-day period beginning on February 7,…”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036c/a/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “did not issue benefits to a deceased individual; and”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036c/a/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “did not issue benefits to an individual who had been permanently disqualified from receiving benefits”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036c/b"
+    heading: "Penalty for noncompliance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “For any fiscal year for which a State agency fails to comply with subsection (a), the Secretary shall impose a…”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036c/c"
+    heading: "Report of pilot program to test prevention of duplicate participation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Not later than 90 days after the completion in multiple States of a temporary pilot program to test the detection and…”. It governs State verification reporting, State-agency penalties, or a congressional pilot report and does not independently establish a household eligibility rule."
+  - citation: "us/statute/7/2036d"
+    heading: "Pilot projects to encourage the use of public-private partnerships committed to addressing food insecurity"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “In general The Secretary may, on application of eligible entities, approve not more than 10 pilot projects to support…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/a"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary may, on application of eligible entities, approve not more than 10 pilot projects to support…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/b"
+    heading: "Definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “For purposes of this section— (1) the term “eligible entity” means— (A) a nonprofit organization; (B) a…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/b/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “the term “eligible entity” means— (A) a nonprofit organization; (B) a community-based organization; (C) an…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/b/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “the term “public agency” means a department, agency, other unit, or instrumentality of Federal, State, or local…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/c"
+    heading: "Project requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Projects approved under this section shall— (1) be limited to 2 years in length; and (2) include a collaboration…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/c/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “be limited to 2 years in length; and”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/c/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “include a collaboration between one or more public agencies and one or more eligible entities that— (A) improves the…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/d"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “The Secretary shall provide for an independent evaluation of pilot projects approved under this section that…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/d/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “a summary of the activities conducted under the pilot projects”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/d/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “an assessment of the effectiveness of the pilot projects; and”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/d/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “best practices regarding the use of public-private partnerships to improve the effectiveness of public benefit…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/e"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Authorization of appropriations There is authorized to be appropriated to carry out this section $5,000,000 to remain…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/e/1"
+    heading: "Authorization of appropriations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “There is authorized to be appropriated to carry out this section $5,000,000 to remain available until expended”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+  - citation: "us/statute/7/2036d/e/2"
+    heading: "Appropriation in advance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The text includes “Only funds appropriated under paragraph (1) in advance specifically to carry out this section shall be available to…”. It governs organizational eligibility, design, evaluation, or funding for public-private pilot projects and contains no household eligibility or benefit rule."
+findings:
+  - "No direct us/statutes/7 module in the pinned inventory covers any assigned citation from 7 U.S.C. 2027(h) through 2036d."
+  - "The inspected us/regulations/7-cfr/273/7.yaml fully realizes the exact workfare exemptions in §2029(b)(1) and (b)(3)–(5): its exemption OR includes the referenced categories, unfitness, age under 16, and age 60 or older, and an exempt result bypasses workfare compliance. The same module expressly defers optional-workfare election, operation, assignment, and sanction context, so the remaining substantive §2029 rows are pending."
+  - "The Minnesota Family Investment Project provisions are not directly encoded. Ordinary SNAP modules may supply underlying calculations, but they do not implement the Project's eligibility unit, benefit overlays, transition rules, or sanctions."
+  - "No 7 CFR 273.25 module is present. Existing 7 CFR 273.2(j), 273.9, and 273.10 and 7 U.S.C. 2017(a) modules overlap pieces of §2035 but do not implement the complete simplified Program, so computational §2035 rows remain pending."
+  - "The §2036a eligible-individual rows are conservatively pending because they compute access to nutrition-education benefits even though they do not change a SNAP allotment; the rest of that section is grant and service administration."
+  - "Puerto Rico's phased cash-benefit restriction was excluded because it regulates benefit-delivery form and plan approval, not who is eligible or the amount of nutrition assistance."
+  - "The slice has 82 null headings, represented as empty strings; this is normal child-provision granularity. The only empty bodies are the repealed §§2030 and 2033, and no citation is duplicated."
+  - "Section 2031 contains source-note artifacts such as “parts A and F 1 1 See References” and “482(h) 1”; these appear to be footnote-marker transcription artifacts, not duplicate provisions."

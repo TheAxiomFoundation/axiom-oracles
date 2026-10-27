@@ -14,9 +14,11 @@ grid for its RCW 82.87 tax.
   Kentucky executes its canonical KRS 141.020 RuleSpec live.
 * **policyengine** — the configured per-state PolicyEngine liability target in
   ``_PE_VAR``, computed live at the 2026 tax year.
-* **taxsim** — the pinned policyengine-taxsim binary's ``siitax``, run at 2026.
-  Any target-scope or model-vintage residual is recorded in dispositions rather
-  than absorbed by tolerance.
+* **taxsim** — the pinned policyengine-taxsim binary, run at 2026. The graded
+  output column resolves from the concept mapping (``_taxsim_output_column``):
+  ``staxbc`` (state tax before credits) for pre-credit schedule concepts,
+  ``siitax`` for final-liability concepts. Any target-scope or model-vintage
+  residual is recorded in dispositions rather than absorbed by tolerance.
 
 Nothing here invents a value: the axiom side is the engine fixture, the
 PolicyEngine side is a live calculation, and the TAXSIM side is the pinned
@@ -46,6 +48,7 @@ from axiom_oracles.comparison.dispositions import (
     apply_dispositions_from_dir,
     report_json_text,
 )
+from axiom_oracles.adapters.taxsim import pins as taxsim_pins
 from axiom_oracles.provenance import build_provenance, rulespec_provenance
 
 warnings.filterwarnings("ignore")
@@ -61,7 +64,9 @@ REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
 VALIDATION_YEAR = 2026
-TAXSIM_YEAR = 2026  # policyengine-taxsim 2.30.0 models 2026 law incl. OBBBA
+# The pinned macOS binary accepts 2026; the pinned Linux binary stops at 2024,
+# so main() refuses to run on Linux (taxsim_pins.json law_years).
+TAXSIM_YEAR = 2026
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
 _TAXSIM_STATE = {
@@ -163,14 +168,14 @@ _PE_VAR = {
     # exemption credit (a post-tax nonrefundable credit) that this core excludes.
     "NE": "ne_income_tax_before_credits",
     # Maine and Minnesota use a before-refundable-credits variable as the exact
-    # statutory analog of each composed pipeline. Delaware instead
-    # targets the unit-level tax before nonrefundable credits because its promoted
-    # RuleSpec encodes the section 1102 schedule and branch selection, not credits.
-    # Delaware's later variables net nonrefundable credits and refundable EITC;
+    # statutory analog of each composed pipeline. Delaware's canonical campaign
+    # target is instead the Person-grain individual schedule before
+    # nonrefundable credits; the legacy grid is excluded below because it cannot
+    # truthfully express Person aggregation or omit filing-method selection.
     # Maine and Minnesota net their refundable credits in the final variable;
     # Maryland uses the state-only before-credits target: county tax is separate,
     # and the before-refundable target additionally subtracts nonrefundable credits.
-    "DE": "de_income_tax_before_non_refundable_credits_unit",
+    "DE": "de_income_tax_before_non_refundable_credits_indv",
     "MD": "md_income_tax_before_credits",
     "ME": "me_income_tax_before_refundable_credits",
     "MN": "mn_income_tax_before_refundable_credits",
@@ -254,6 +259,11 @@ _GRID_EXCLUDED_STATES = {
         "12-700 component with a 98-fixture boundary suite; no broad liability "
         "output or legacy six-case grid fixtures"
     ),
+    "DE": (
+        "canonical RuleSpec comparison exposes only the Person-grain section "
+        "1102(a)(14) individual schedule; no filing-method selector, broad "
+        "TaxUnit liability output, or truthful TAXSIM comparison surface"
+    ),
 }
 
 # Ordered grid state list; new eligible states append through _TAXSIM_STATE.
@@ -294,6 +304,9 @@ _LIABILITY_OUTPUT["AL"] = (
 _LIABILITY_OUTPUT["CT"] = (
     f"{_MODULE['CT']}#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
 )
+_LIABILITY_OUTPUT["DE"] = (
+    f"{_MODULE['DE']}#de_pit_pilot_separate_schedule_tax"
+)
 _LIABILITY_OUTPUT["GA"] = (
     f"{_MODULE['GA']}#ga_pit_2026_annual_tax_before_nonrefundable_credits"
 )
@@ -321,6 +334,8 @@ _POPULACE_MODULE = {
         "2026_section_47_1806_03_schedule_before_credits"
     ),
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
+    "MN": _MODULE["MN"],
+    "NC": "us-nc:policies/income_tax/resident_core_liability_pipeline",
 }
 _POPULACE_OUTPUT = {
     "AR": (
@@ -336,11 +351,14 @@ _POPULACE_OUTPUT = {
         f"{_POPULACE_MODULE['DC']}#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     ),
+    "DE": _LIABILITY_OUTPUT["DE"],
     "KS": (
         f"{_POPULACE_MODULE['KS']}#"
         "ks_pit_2026_k40es_schedule_before_credits"
     ),
     "MS": _LIABILITY_OUTPUT["MS"],
+    "MN": f"{_POPULACE_MODULE['MN']}#mn_pit_pilot_schedule_tax",
+    "NC": f"{_POPULACE_MODULE['NC']}#nc_pit_2026_income_tax_before_credits",
     "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
 }
@@ -349,13 +367,16 @@ _POPULACE_PE_VAR = {
     "CA": "ca_mental_health_services_tax",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
     "DC": "dc_income_tax_before_credits_joint",
+    "DE": "de_income_tax_before_non_refundable_credits_indv",
     "KS": "ks_k40es_schedule_before_credits_reviewed",
     "MS": "ms_income_tax_before_credits_joint",
+    "MN": "mn_basic_tax_precision_stable",
     "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
     "UT": "ut_resident_income_tax_before_credits_derived",
 }
 _POPULACE_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
+    "DE": "person_sum_to_tax_unit",
     "MS": "person_sum_to_tax_unit",
 }
 
@@ -951,7 +972,37 @@ def _taxsim_binary() -> Path | None:
     return None
 
 
-def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
+def _taxsim_output_column(state: str) -> str:
+    """The TAXSIM output column graded for a state's liability concept.
+
+    Resolved from the concept mapping so the comparison surface stays
+    declared in one place: states whose canonical concept is a pre-credit
+    schedule map ``staxbc`` (state tax before credits — staxbc - v40 =
+    siitax on the pinned binary); final-liability concepts map ``siitax``.
+    A concept the mapping does not know fails loudly — the graded column
+    is mapping-declared, never guessed (a ``siitax`` default would
+    misgrade any pre-credit schedule silently; every runnable grid state
+    is mapped today, so this branch only fires on a renamed or missing
+    mapping entry).
+    """
+    from axiom_oracles.comparison.mappings import engine_targets_for_concepts
+
+    targets = engine_targets_for_concepts(
+        [_LIABILITY_OUTPUT[state]], "taxsim"
+    )
+    if not targets:
+        raise SystemExit(
+            f"{state}: liability concept {_LIABILITY_OUTPUT[state]!r} has "
+            "no 'taxsim' entry in concept_mappings.yaml; declare the graded "
+            "column instead of guessing"
+        )
+    return targets[0]
+
+
+def _taxsim_liabilities(
+    cases: list[Case],
+    recorder: taxsim_pins.TaxsimIdentityRecorder,
+) -> dict[str, float]:
     from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
     import pandas as pd
 
@@ -975,13 +1026,27 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
         )
     frame = pd.DataFrame(rows)
     runner = TaxsimRunner(frame, taxsim_path=_taxsim_binary())
+    binary_path = Path(runner.taxsim_path)
+    binary_sha256 = taxsim_pins.sha256_file(binary_path)
     try:
         result = runner.run(show_progress=False)
     except TypeError:
         result = runner.run()
+    recorder.observe(
+        binary_path,
+        rows=len(rows),
+        build_observed=taxsim_pins.build_stamp_from_columns(result.columns),
+        sha256=binary_sha256,
+    )
     records = result.to_dict(orient="records")
+    # One resolution per state, not per record — the resolver re-reads the
+    # concept mapping and all of a grid's cases share one state anyway.
+    column_by_state = {
+        state: _taxsim_output_column(state)
+        for state in {case.state for case in cases}
+    }
     return {
-        case.case_id: float(rec["siitax"])
+        case.case_id: float(rec[column_by_state[case.state]])
         for case, rec in zip(cases, records, strict=True)
     }
 
@@ -1083,6 +1148,7 @@ _POPULACE_TOL = {
     "AL": (0.01, 0.0000001),
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
+    "DE": (0.01, 0.0000001),
     "CA": (0.01, 0.0000001),
     "CO": (0.01, 0.0000001),
     "DC": (0.01, 0.0000001),
@@ -1091,6 +1157,7 @@ _POPULACE_TOL = {
     "KY": (0.01, 0.0000001),
     "KS": (0.01, 0.0000001),
     "MS": (0.01, 0.0000001),
+    "MN": (1.0, 0.0),
     "LA": (0.01, 0.0000001),
     "MT": (0.01, 0.0000001),
     "NM": (0.01, 0.0000001),
@@ -1109,6 +1176,7 @@ def _build_report(
     axiom: dict[tuple[str, str, int], float],
     pe: dict[str, float],
     taxsim: dict[str, float],
+    taxsim_identity: dict | None = None,
 ) -> dict:
     tol, rel = _TOL[state]
     concept = _LIABILITY_OUTPUT[state]
@@ -1191,7 +1259,7 @@ def _build_report(
     comparison_count = n * 2
     mismatch_count = len(mismatches)
     match_count = pe_matches + taxsim_matches
-    return {
+    report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-liability",
         "concept": concept,
@@ -1201,7 +1269,7 @@ def _build_report(
         "engines": {
             "axiom": _MODULE[state],
             "policyengine": _PE_VAR[state],
-            "taxsim": "siitax",
+            "taxsim": _taxsim_output_column(state),
         },
         "tolerance": {"absolute": tol, "relative": rel},
         "case_count": n,
@@ -1238,6 +1306,19 @@ def _build_report(
             ),
         },
     }
+    if taxsim_identity:
+        # One binary run covers every selected state; this report's rows are
+        # the ones for this state.
+        report["engine_identity"] = {
+            "taxsim": {
+                **taxsim_identity,
+                "binaries": [
+                    {**binary, "rows": n}
+                    for binary in taxsim_identity.get("binaries", [])
+                ],
+            }
+        }
+    return report
 
 
 def _finalize_report(
@@ -1252,12 +1333,18 @@ def _finalize_report(
         REPO_ROOT / "dispositions",
         repo_root=REPO_ROOT,
     )
+    taxsim = (report.get("engine_identity") or {}).get("taxsim") or {}
     finalized["provenance"] = build_provenance(
         generated_by=(
             "scripts/generate_state_income_tax_liability.py::"
             f"{report['suite']}"
         ),
         rulespecs=rulespecs,
+        oracle={
+            "name": "policyengine-taxsim",
+            "policyengine_taxsim": taxsim_pins.pinned_version(),
+            "taxsim_binaries": taxsim.get("binaries"),
+        },
         generated_at=generated_at,
     )
     return finalized
@@ -1277,6 +1364,10 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
+    try:
+        taxsim_pins.require_law_years([TAXSIM_YEAR], binary_path=_taxsim_binary())
+    except taxsim_pins.TaxsimLawYearError as exc:
+        raise SystemExit(str(exc)) from exc
     selected_states = (args.state,) if args.state else _STATES
     cases = _grid(selected_states)
     axiom = _axiom_liabilities(selected_states)
@@ -1354,7 +1445,10 @@ def main(argv: list[str] | None = None) -> int:
         for case in cases
         if case.state in runnable
     }
-    taxsim = _taxsim_liabilities([c for c in cases if c.state in runnable])
+    taxsim_recorder = taxsim_pins.TaxsimIdentityRecorder()
+    taxsim = _taxsim_liabilities(
+        [c for c in cases if c.state in runnable], taxsim_recorder
+    )
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
@@ -1362,7 +1456,7 @@ def main(argv: list[str] | None = None) -> int:
     rulespecs = rulespec_provenance([RULESPEC_US])
     for state in runnable:
         report = _finalize_report(
-            _build_report(state, cases, axiom, pe, taxsim),
+            _build_report(state, cases, axiom, pe, taxsim, taxsim_recorder.to_dict()),
             generated_at=generated_at,
             rulespecs=rulespecs,
         )

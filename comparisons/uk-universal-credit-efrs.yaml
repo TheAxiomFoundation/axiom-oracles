@@ -10,6 +10,17 @@ description: >-
   its bridge surface removed. The projection-safe pre-take-up final award is
   already compared here via universal-credit-award.
 
+# Not CI-runnable: the composed Universal Credit surfaces die at runtime on
+# `unknown RuleSpec scalar parameter:
+# uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25_amount`
+# (verified 2026-08-05 against compose main + rulespec-uk main + engine main)
+# -- the bridge's UC parameter bindings lag the upstream UC restructuring
+# (rulespec-uk 829ab1a retired the take-up wrapper vintage this binding
+# targeted). The source-path surfaces work (uk-tax-benefits-efrs is
+# dispatchable); rebind the bridge's composed-UC parameter map, then drop
+# this marker (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-encode-uk-efrs-compare
   axiom_encode_repo: $HOME/axiom-encode

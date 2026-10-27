@@ -1,13 +1,13 @@
 {
  "suite": "ssi-ecps",
- "updated": "2026-07-08",
+ "updated": "2026-07-28",
  "entries": [
   {
    "id": "ssi-v1-slice-eligibility-and-income-composition",
    "concept": "us:statutes/42/1382#ssi_benefit",
    "kind": null,
    "disposition": "bridge_artifact",
-   "mechanism": "ssi-ecps bridge projection + v1-slice scope, not an Axiom statutory encoding defect. Two verified sub-classes (per-household PE correlation): (a) 1,768 households where Axiom awards but PE has no is_ssi_eligible member \u2014 the bridge feeds Axiom generic is_disabled/is_blind rather than PE's SSI-specific disability determination, and the v1 slice omits qualified-alien/institutional criteria; (b) 996 households where PE is eligible but benefit offsets to $0 on income while Axiom awards \u2014 the bridge's countable-income assembly diverges from PE ssi_countable_income. Representative: ecps-30 (axiom 17,880 / PE 0), ecps-42 (axiom 11,928 / PE 0), ecps-588 (axiom 1,384.90 / PE 1,504.90).",
+   "mechanism": "ssi-ecps bridge projection + documented v1-slice scope, not an Axiom statutory encoding defect. The bridge feeds generic is_disabled/is_blind rather than PolicyEngine's SSI-specific disability determination, while the v1 slice omits couple/ineligible-spouse deeming and other acknowledged eligibility branches. Fresh true-month characterization is 2,990 rows. A direct PE eligibility join verifies five current classes: 1,746 Axiom awards/PE=0 with no eligible PE member; 987 Axiom awards/PE=0 with an eligible member whose income offsets the award; 167 both-positive Axiom>PE; 17 both-positive Axiom<PE; and 73 Axiom=0/PE>0. Representative rows are ecps-64 (axiom=994 / PE=0, no eligible member), ecps-30 (axiom=1490 / PE=0, eligible member), ecps-831 (836.618333 / 330.067780), ecps-5872 (843.740833 / 1361.741028), and ecps-1587 (0 / 994). The disposition materially changed from 3,067 annualized rows; 976/1,000 committed legacy examples were replayable and scaled by 1/12, while 24 dropped below the unchanged $25 tolerance. Obsolete subtype counts and the now-within-tolerance ecps-588 representative were removed.",
    "cases": [],
    "arithmetic": [],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/228"

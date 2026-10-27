@@ -1,108 +1,32 @@
 {
  "suite": "id-income-tax-liability",
- "updated": "2026-07-08",
+ "updated": "2026-07-27",
  "entries": [
   {
-   "id": "id-taxsim-2024-vintage-single-30000",
+   "id": "id-uprating-vintage-flat-deltas",
    "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
    "kind": "amount_difference",
    "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 475.94; TAXSIM 2024 reports 500.90. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
+   "mechanism": "Parameter uprating vintage between the legs: the axiom program carries\nFY2026-uprated ID parameters while the oracle leg's parameter set holds\nthe prior vintage, producing income-invariant flat deltas within each\nfiling band (the fingerprint: identical differences across the grid's\nincome levels \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the oracle's parameters uprate.",
    "cases": [
-    "id-single-30000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "475.94 - 500.9",
-     "equals": -24.96
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "id-taxsim-2024-vintage-single-60000",
-   "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 2065.94; TAXSIM 2024 reports 2209.40. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
-   "cases": [
+    "id-married-120000",
+    "id-married-300000",
+    "id-married-60000",
+    "id-single-150000",
+    "id-single-30000",
     "id-single-60000"
    ],
    "arithmetic": [
     {
-     "expression": "2065.94 - 2209.4",
-     "equals": -143.46
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "id-taxsim-2024-vintage-single-150000",
-   "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 6835.94; TAXSIM 2024 reports 7334.90. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
-   "cases": [
-    "id-single-150000"
-   ],
-   "arithmetic": [
+     "expression": "151.22",
+     "equals": 151.22
+    },
     {
-     "expression": "6835.94 - 7334.9",
-     "equals": -498.96
+     "expression": "312.75",
+     "equals": 312.75
     }
    ],
-   "linked_issue": null
-  },
-  {
-   "id": "id-taxsim-2024-vintage-married-60000",
-   "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 951.88; TAXSIM 2024 reports 991.81. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
-   "cases": [
-    "id-married-60000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "951.88 - 991.81",
-     "equals": -39.93
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "id-taxsim-2024-vintage-married-120000",
-   "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 4131.88; TAXSIM 2024 reports 4408.81. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
-   "cases": [
-    "id-married-120000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "4131.88 - 4408.81",
-     "equals": -276.93
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "id-taxsim-2024-vintage-married-300000",
-   "concept": "us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Idaho's section 63-3024 flat rate stepped down from 5.695 per cent (2024) to 5.3 per cent (2026) and the no-tax threshold was indexed, so the 2026 tax is lower than TAXSIM's 2024 computation; the residual is that rate-step and indexation. The pipeline reports 13671.88; TAXSIM 2024 reports 14659.81. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.",
-   "cases": [
-    "id-married-300000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "13671.88 - 14659.81",
-     "equals": -987.93
-    }
-   ],
-   "linked_issue": null
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
   }
  ]
 }

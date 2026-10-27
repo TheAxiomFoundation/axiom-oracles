@@ -1,24 +1,7 @@
 {
  "suite": "nd-income-tax-liability",
- "updated": "2026-07-16",
+ "updated": "2026-07-27",
  "entries": [
-  {
-   "id": "nd-taxsim-2024-single-150000",
-   "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "Axiom applies North Dakota's official 2026 indexed rate schedule under N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.",
-   "cases": [
-    "nd-single-150000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "1644.3375 - 1721.01",
-     "equals": -76.6725
-    }
-   ],
-   "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
-  },
   {
    "id": "nd-policyengine-2026-single-150000",
    "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
@@ -32,23 +15,6 @@
     {
      "expression": "1644.3375 - 1665.7874755859375",
      "equals": -21.4499755859375
-    }
-   ],
-   "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
-  },
-  {
-   "id": "nd-taxsim-2024-married-120000",
-   "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "Axiom applies North Dakota's official 2026 indexed rate schedule under N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.",
-   "cases": [
-    "nd-married-120000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "97.5 - 234.16",
-     "equals": -136.66
     }
    ],
    "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
@@ -71,23 +37,6 @@
    "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
   },
   {
-   "id": "nd-taxsim-2024-married-300000",
-   "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "Axiom applies North Dakota's official 2026 indexed rate schedule under N.D.C.C. 57-38-30.3(1)(g); the pinned TAXSIM leg applies 2024 law.",
-   "cases": [
-    "nd-married-300000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "3607.5 - 3744.16",
-     "equals": -136.66
-    }
-   ],
-   "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
-  },
-  {
    "id": "nd-policyengine-2026-married-300000",
    "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
    "kind": "policyengine_amount_difference",
@@ -103,6 +52,28 @@
     }
    ],
    "linked_issue": "https://www.tax.nd.gov/sites/www/files/documents/forms/individual/2025-iit/28709-form-nd-1es-2026.pdf"
+  },
+  {
+   "id": "nd-uprating-vintage-flat-deltas",
+   "concept": "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Parameter uprating vintage between the legs: the axiom program carries\nFY2026-uprated ND parameters while the oracle leg's parameter set holds\nthe prior vintage, producing income-invariant flat deltas within each\nfiling band (the fingerprint: identical differences across the grid's\nincome levels \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the oracle's parameters uprate.",
+   "cases": [
+    "nd-married-120000",
+    "nd-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-35.59",
+     "equals": -35.59
+    },
+    {
+     "expression": "12.15",
+     "equals": 12.15
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
   }
  ]
 }

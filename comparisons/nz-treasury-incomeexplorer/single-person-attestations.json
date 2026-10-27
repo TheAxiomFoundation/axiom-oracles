@@ -1,0 +1,72 @@
+{
+  "programs": {
+    "nz/acc-earners-levy": {
+      "baseline_cells": [
+        "0",
+        "2.8",
+        "4.375095890410958904109589041095890410959",
+        "6.475095890410958904109589041095890410959",
+        "9.712547945205479452054794520547945205479",
+        "12.95",
+        "17.5",
+        "26.25"
+      ],
+      "baseline_cells_sha256": "333a3842fb552583de92c88688f222c961a786650f501004a33b5ad76cde90ed",
+      "baseline_scenario": "single_no_children_area2_no_housing_costs",
+      "cell_count": 8,
+      "perturbed_cells": [
+        "0",
+        "2.8",
+        "4.375095890410958904109589041095890410959",
+        "6.475095890410958904109589041095890410959",
+        "9.712547945205479452054794520547945205479",
+        "12.95",
+        "17.5",
+        "26.25"
+      ],
+      "perturbed_cells_sha256": "333a3842fb552583de92c88688f222c961a786650f501004a33b5ad76cde90ed",
+      "perturbed_non_primary_inputs": {
+        "children_ages": {
+          "after": [
+            6,
+            15
+          ],
+          "before": []
+        },
+        "gross_wage2": {
+          "after": "740",
+          "before": "0"
+        },
+        "hours2": {
+          "after": "40",
+          "before": "0"
+        },
+        "partnered": {
+          "after": true,
+          "before": false
+        }
+      },
+      "perturbed_scenario": "couple_two_children_dual_full_time",
+      "primary_weekly_wages": [
+        0,
+        160,
+        250,
+        370,
+        555,
+        740,
+        1000,
+        1500
+      ],
+      "program": "nz/acc-earners-levy",
+      "root_nodes": [
+        "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst"
+      ],
+      "status": "pass"
+    }
+  },
+  "schema": "axiom_oracles.nz_single_person_attestations.v1",
+  "source_receipt": {
+    "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
+    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+  }
+}

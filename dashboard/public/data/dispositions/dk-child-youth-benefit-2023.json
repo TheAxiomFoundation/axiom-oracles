@@ -1,0 +1,39 @@
+{
+ "suite": "dk-child-youth-benefit-2023",
+ "updated": "2026-08-13",
+ "entries": [
+  {
+   "id": "euromod-dk-2023-bfachnm-supplement-600-vs-660",
+   "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "B\u00f8rne- og ungeydelsesloven \u00a7 1, stk. 3 sets the additional 2023 increase at 660 kr. Applying the 15,6 pct. CPI change less the recurring 3,9 percentage-point reduction to the 13452 kr. 2011-level age-5 amount gives 15025.884, which rounds to the nearest amount divisible by 12, 15024. Axiom then adds the statutory 660 and pays 15684, matching the ministry's 2023 with-supplement value. EUROMOD DK_2023 instead adds its 600 kr. constant and pays 15624, exactly 60 kr. less.",
+   "cases": [
+    "dk-child-youth-benefit-2023-age5-yem300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "13452 * (1 + 0.156 - 0.039)",
+     "equals": 15025.884
+    },
+    {
+     "expression": "1252 * 12",
+     "equals": 15024
+    },
+    {
+     "expression": "15024 + 660",
+     "equals": 15684
+    },
+    {
+     "expression": "15024 + 600",
+     "equals": 15624
+    },
+    {
+     "expression": "15624 - 15684",
+     "equals": -60
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/19"
+  }
+ ]
+}

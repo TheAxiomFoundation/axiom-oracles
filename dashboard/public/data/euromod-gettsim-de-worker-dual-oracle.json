@@ -1353,8 +1353,8 @@
       "difference": -1.0697295884447975,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "gettsim-midijob-childless-care-surcharge-base",
-        "linked_issue": "https://github.com/ttsim-dev/gettsim/issues/1215"
+        "id": "euromod-midijob-childless-care-surcharge-base",
+        "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23"
       },
       "kind": "amount_difference",
       "left": 24.968737633557577,

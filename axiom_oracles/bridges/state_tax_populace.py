@@ -50,6 +50,7 @@ ALLOWED_SOURCE_KINDS = frozenset(
         "raw_populace",
         "derived",
         "statutory_constant",
+        "projection_constant",
         "rulespec_import",
         "pe_upstream_boundary",
         "blocked",
@@ -98,6 +99,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "tax_unit",
         ),
         (
+            "DE",
+            "us-de:policies/income_tax/pilot_liability_pipeline#"
+            "de_pit_pilot_separate_schedule_tax",
+            "de_income_tax_before_non_refundable_credits_indv",
+            "person_sum_to_tax_unit",
+        ),
+        (
             "KS",
             "us-ks:policies/income_tax/"
             "2026_k40es_schedule_before_credits#"
@@ -111,6 +119,13 @@ ALLOWED_NONSTANDARD_COMPARISON_SURFACES = frozenset(
             "ms_pit_2026_section_27_7_5_schedule_tax",
             "ms_income_tax_before_credits_joint",
             "person_sum_to_tax_unit",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#"
+            "mn_pit_pilot_schedule_tax",
+            "mn_basic_tax_precision_stable",
+            "tax_unit",
         ),
         (
             "OH",
@@ -197,6 +212,10 @@ EXPECTED_OUTPUT_OVERRIDES = {
         "2026_section_47_1806_03_schedule_before_credits#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     ),
+    "DE": (
+        "us-de:policies/income_tax/pilot_liability_pipeline#"
+        "de_pit_pilot_separate_schedule_tax"
+    ),
     "GA": (
         "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits"
         "#ga_pit_2026_annual_tax_before_nonrefundable_credits"
@@ -212,6 +231,14 @@ EXPECTED_OUTPUT_OVERRIDES = {
     "MS": (
         "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
         "#ms_pit_2026_section_27_7_5_schedule_tax"
+    ),
+    "MN": (
+        "us-mn:policies/income_tax/pilot_liability_pipeline"
+        "#mn_pit_pilot_schedule_tax"
+    ),
+    "NC": (
+        "us-nc:policies/income_tax/resident_core_liability_pipeline"
+        "#nc_pit_2026_income_tax_before_credits"
     ),
     "NY": (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
@@ -244,22 +271,27 @@ EXPECTED_PROGRAM_OVERRIDES = {
     "KY": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
     "MS": "us-ms:policies/income_tax/2026_section_27_7_5_schedule",
+    "NC": "us-nc:policies/income_tax/resident_core_liability_pipeline",
     "UT": (
         "us-ut:policies/income_tax/"
         "2026_full_year_resident_before_credit_schedule"
     ),
 }
-EXPECTED_EXPLICIT_INPUT_COUNT = 139
-EXPECTED_EXPLICIT_RELATION_COUNT = 1
+EXPECTED_EXPLICIT_INPUT_COUNT = 176
+EXPECTED_EXPLICIT_RELATION_COUNT = 0
 EXPECTED_SLOT_INVENTORY_SHA256 = (
-    "57a4acfc80e96018303a4d50745f42eba8bbde510b0162b372f7b33e4fd66f99"
+    "b1bc4f031a279a5814a522ee2c01a260779c134ac9bdea0ca3aa50731d472f06"
 )
 EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
-    "c80d58d6f962cba4785f1606e309c2c275df84d92da4967729a8a621e27f7071"
+    "c742343daf35998d934c4288008c47097b2ebe4a249e59838a7c3e635e5bedaf"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "fa1cb6740cf089b27ce93c5431bb4a6de1e80aa81ba2a4098bf49466c9393d8d"
+    "37583f05537744f9a4f99abfdb3399fa936ac9c99c5c9ab5c1af7932ef9cda79"
 )
+_NC_RESIDENT_CORE_INPUT = (
+    "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
+)
+
 # Exact boundaries admitted only after independent legal and dependency-graph
 # review.  The comparison target itself is forbidden below, so these remain
 # upstream inputs rather than circular alignment values.
@@ -305,6 +337,12 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "ct_agi",
         ),
         (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_state_taxable_income",
+            "mn_taxable_income",
+        ),
+        (
             "CO",
             "us-co:policies/income_tax/pilot_liability_pipeline#input."
             "co_pit_pilot_state_taxable_income",
@@ -322,12 +360,6 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "2026_section_47_1806_03_schedule_before_credits#input."
             "dc_pit_2026_section_47_1806_03_completed_joint_method_taxable_income",
             "dc_taxable_income_joint",
-        ),
-        (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_files_separately",
-            "de_files_separately",
         ),
         (
             "GA",
@@ -412,9 +444,28 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
         ),
         (
             "NC",
-            "us-nc:policies/income_tax/pilot_liability_pipeline#input."
-            "nc_pit_pilot_state_taxable_income",
-            "nc_taxable_income",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_federal_adjusted_gross_income",
+            "adjusted_gross_income",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_charitable_contributions",
+            "charitable_deduction",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_medical_and_dental_expenses",
+            "medical_expense_deduction",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_federal_child_tax_credit_qualifying_children",
+            "ctc_qualifying_children",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_eligible_obligation_interest",
+            "us_govt_interest",
         ),
         (
             "NJ",
@@ -504,13 +555,6 @@ ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
 ] = frozenset(
     {
         (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_taxpayer_is_included",
-            ("is_tax_unit_head", "is_tax_unit_spouse"),
-            "person_filer_role_or",
-        ),
-        (
             "HI",
             "us-hi:policies/income_tax/pilot_liability_pipeline#input."
             "hi_pit_pilot_capital_gains_worksheet_line_10",
@@ -535,6 +579,12 @@ ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES: frozenset[
             "mt_pit_pilot_section_1222_net_long_term_capital_gain",
             ("long_term_capital_gains", "short_term_capital_gains"),
             "person_sums_to_net_long_term_capital_gain",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_mfs_combined_mortgage_interest_and_property_taxes",
+            ("deductible_mortgage_interest", "real_estate_taxes"),
+            "person_sums_to_combined_amount",
         ),
     }
 )
@@ -587,6 +637,27 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "filing_status_joint_or_surviving_spouse",
         ),
         (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_separate",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+        (
+            "MN",
+            "us-mn:policies/income_tax/pilot_liability_pipeline#input."
+            "mn_pit_pilot_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
+        ),
+        (
             "CT",
             "us-ct:policies/income_tax/"
             "2026_resident_ordinary_tax_before_personal_credit#input."
@@ -601,13 +672,6 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "ct_pit_2026_ordinary_tax_filing_status_married_separate",
             "filing_status",
             "filing_status_is_separate",
-        ),
-        (
-            "DE",
-            "us-de:policies/income_tax/pilot_liability_pipeline#input."
-            "de_pit_pilot_supplied_combined_taxable_income",
-            "de_taxable_income_joint",
-            "person_sum_to_tax_unit",
         ),
         (
             "VA",
@@ -657,6 +721,54 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "nm_pit_pilot_filing_status_joint_head_or_surviving",
             "filing_status",
             "filing_status_joint_surviving_spouse_or_head",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_filing_status_joint_or_surviving_spouse",
+            "filing_status",
+            "filing_status_joint_or_surviving_spouse",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_filing_status_head_of_household",
+            "filing_status",
+            "filing_status_is_head_of_household",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_filing_status_married_separately",
+            "filing_status",
+            "filing_status_is_separate",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_eligible_for_federal_standard_deduction",
+            "separate_filer_itemizes",
+            "boolean_negation",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_qualified_residence_interest",
+            "deductible_mortgage_interest",
+            "person_sum_to_tax_unit",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_real_estate_property_taxes",
+            "real_estate_taxes",
+            "person_sum_to_tax_unit",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_taxable_social_security_and_railroad_retirement",
+            "taxable_social_security",
+            "person_sum_to_tax_unit",
+        ),
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_income_tax_refunds",
+            "salt_refund_income",
+            "person_sum_to_tax_unit",
         ),
         (
             "NY",
@@ -728,6 +840,55 @@ ALLOWED_STATUTORY_CONSTANTS: frozenset[tuple[str, str, float]] = frozenset(
             "us-ia:policies/income_tax/pilot_liability_pipeline#input."
             "ia_pit_pilot_supplied_alternate_tax_rate",
             0.043,
+        ),
+    }
+)
+
+# Projection constants are reviewed values that the projection fixes for a
+# RuleSpec input the certified population does not carry as a separately
+# classified amount.  Unlike statutory constants they state no law; each must
+# show that the comparison target carries the same value, either because
+# PolicyEngine models no counterpart or because a runtime assertion proves its
+# counterpart is zero for every selected TaxUnit.
+ALLOWED_PROJECTION_CONSTANTS: frozenset[tuple[str, str, float]] = frozenset(
+    {
+        (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_mfs_cap_allocation_share",
+            1.0,
+        ),
+        *(
+            ("NC", _NC_RESIDENT_CORE_INPUT + name, 0.0)
+            for name in (
+                "nc_pit_2026_section_170_deduction_attributable_to_credit_backed_donation",
+                "nc_pit_2026_claim_of_right_repayment_deduction",
+                "nc_pit_2026_wagering_loss_deduction_not_in_federal_agi",
+                "nc_pit_2026_other_state_obligation_interest",
+                "nc_pit_2026_s_corporation_built_in_gains_reduction",
+                "nc_pit_2026_federal_basis_excess",
+                "nc_pit_2026_accelerated_depreciation_and_expensing_addback",
+                "nc_pit_2026_federal_net_operating_loss_deduction",
+                "nc_pit_2026_nonqualified_education_withdrawal",
+                "nc_pit_2026_opportunity_fund_deferred_gain",
+                "nc_pit_2026_opportunity_fund_step_up_gain",
+                "nc_pit_2026_exempt_income_allocated_expenses",
+                "nc_pit_2026_excess_federal_nol_carryforward_deduction",
+                "nc_pit_2026_taxed_pass_through_loss_addition",
+                "nc_pit_2026_exempt_obligation_gain",
+                "nc_pit_2026_bailey_retirement_benefits",
+                "nc_pit_2026_eligible_uniformed_services_retirement",
+                "nc_pit_2026_eligible_tribal_income",
+                "nc_pit_2026_north_carolina_basis_excess",
+                "nc_pit_2026_accelerated_depreciation_recovery",
+                "nc_pit_2026_federal_credit_disallowed_business_expense",
+                "nc_pit_2026_employee_retention_credit_disallowed_expense",
+                "nc_pit_2026_personal_education_student_account_deposit",
+                "nc_pit_2026_disaster_relief_payment",
+                "nc_pit_2026_economic_incentive_and_recovery_grants",
+                "nc_pit_2026_state_net_operating_loss",
+                "nc_pit_2026_previously_taxed_opportunity_fund_gain",
+                "nc_pit_2026_taxed_pass_through_income_deduction",
+            )
         ),
     }
 )
@@ -1400,6 +1561,27 @@ def _validate_slot(
             or slot.policyengine_transform
         ):
             errors.append(f"{label}: statutory constant may not declare PE metadata")
+    elif slot.source_kind == "projection_constant":
+        if slot.constant_value is None:
+            errors.append(f"{label}: projection constant requires constant_value")
+        elif isinstance(slot.constant_value, bool):
+            errors.append(f"{label}: projection constant must be numeric")
+        elif (
+            jurisdiction.state,
+            slot.slot,
+            float(slot.constant_value),
+        ) not in ALLOWED_PROJECTION_CONSTANTS:
+            errors.append(
+                f"{label}: projection constant is not in the independently "
+                "reviewed constant allowlist"
+            )
+        if (
+            slot.policyengine_variable
+            or slot.policyengine_variables
+            or slot.policyengine_relationship
+            or slot.policyengine_transform
+        ):
+            errors.append(f"{label}: projection constant may not declare PE metadata")
     elif slot.source_kind == "raw_populace":
         if "#input." in slot.slot and (
             jurisdiction.state,

@@ -1,6 +1,145 @@
+mappings:
+  # Zambia outputs are validated against MicroZAMOD (SOUTHMOD Zambia, run on the
+  # EUROMOD engine), not PolicyEngine, which has no Zambia model. These explicit
+  # entries record the MicroZAMOD household-oracle wiring for each output a zm-*
+  # suite compares; they stay not_comparable to PolicyEngine because there is
+  # no Zambia PolicyEngine target, mirroring the UKMOD-compared UK pipeline
+  # entries. The comparisons live in comparisons/zm-*.yaml and their committed
+  # reports in dashboard/public/data/.
+  - legal_id: zm:statutes/act-2023-22/income-tax-amendment-2023#individual_income_tax
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Individual income tax (Charging Schedule paragraph 2(1) as
+      substituted by Act 22 of 2023: nil to 61,200; 20% to 85,200; 30% to
+      110,400; 37% above). Validated against MicroZAMOD tin_s by the
+      zm-paye-rate-schedule suite on the model's own taxable base ttb_s,
+      bridged onto the module input, so the suite tests the schedule, not
+      the base; the model's net-of-contributions base is candidate finding
+      1 in microzamod_issues.json. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Turnover tax (Ninth Schedule Part II as substituted by Act 22 of
+      2024: 0% on K12,000 or less, 5% of the whole turnover above K12,000
+      up to the s.64A K5,000,000 ceiling). Validated against MicroZAMOD
+      ttn_s by the zm-turnover suite inside the agreement zone; the two
+      boundary divergences are findings 2a/2b in microzamod_issues.json.
+      PolicyEngine has no Zambia model; the household oracle is MicroZAMOD.
+  - legal_id: zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employee_contribution
+    country: zm
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NAPSA employee contribution (S.I. No. 9 of 2024: 5% of pensionable
+      earnings to the K29,816 monthly ceiling). Validated against
+      MicroZAMOD tsceepi_s by the zm-napsa-contributions suite on the
+      ZM_2024 system, monthly. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
+  - legal_id: zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employer_contribution
+    country: zm
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NAPSA employer contribution (S.I. No. 9 of 2024: 5% of pensionable
+      earnings to the K29,816 monthly ceiling). Validated against
+      MicroZAMOD tscerpi_s by the zm-napsa-contributions suite on the
+      ZM_2024 system, monthly. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
+  - legal_id: zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employee_monthly_contribution_amount
+    country: zm
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NHIMA employee contribution (S.I. No. 63 of 2019 Third Schedule: 1%
+      of basic salary, uncapped). Validated against MicroZAMOD tsceehl_s
+      by the zm-nhima-contributions suite, monthly. PolicyEngine has no
+      Zambia model; the household oracle is MicroZAMOD.
+  - legal_id: zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employer_monthly_contribution_amount
+    country: zm
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NHIMA employer contribution (S.I. No. 63 of 2019 Third Schedule: 1%
+      of basic salary, uncapped). Validated against MicroZAMOD tscerhl_s
+      by the zm-nhima-contributions suite, monthly. PolicyEngine has no
+      Zambia model; the household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/cap-331/value-added-tax-act#vat_amount
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      VAT at the 16% standard rate (Value Added Tax (Rate of Tax) Order,
+      2008, S.I. No. 14 of 2008, under Cap. 331 s.9(3)). Validated against
+      MicroZAMOD tva_s by the zm-vat suite on a non-excise item, with the
+      model's il_vat01 income list as the base. PolicyEngine has no Zambia
+      model; the household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Wine excise duty (60 percent, Act 19 of 2018 Second Schedule heading
+      5, carried into the CY2025 module). Validated against MicroZAMOD
+      tex02_s by the zm-excise-ad-valorem suite on single-item wine
+      expenditure. PolicyEngine has no Zambia model; the household oracle
+      is MicroZAMOD.
+  - legal_id: zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Spirits excise duty (60 percent, Act 45 of 2021 Second Schedule
+      heading 6, carried into the CY2025 module). Validated against
+      MicroZAMOD tex02_s by the zm-excise-ad-valorem suite on single-item
+      spirits expenditure. PolicyEngine has no Zambia model; the household
+      oracle is MicroZAMOD.
+  - legal_id: zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer
+    country: zm
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Social Cash Transfer standing value (MCDSS Ministerial Statement:
+      K200 per month per household, K400 with a severely disabled member).
+      Validated against MicroZAMOD bsa_s by the zm-sct suite on the
+      ZM_2024 system, monthly; ZM_2025's 400/600 amounts are finding 6 in
+      microzamod_issues.json. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: zm
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 22 of 2023 tax on
+      gross income, less the employee NAPSA and NHIMA contributions the
+      pipeline takes as inputs). Validated against MicroZAMOD ils_dispy by
+      the zm-dispy suite in the shared-nil zone; the taxed-zone
+      net-of-contributions base is candidate finding 1 in
+      microzamod_issues.json. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
 prefixes:
   - legal_id_prefix: "zm:"
     country: zm
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: PolicyEngine has no Zambia model and cannot serve as a Zambia tax-benefit oracle. Axiom Zambia outputs are built from official Zambia legislation (the Income Tax Act, Cap. 323, as amended, from National Assembly assented prints; the National Pension Scheme and National Health Insurance instruments), and the household oracle is MicroZAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine, systems ZM_2010-ZM_2025 in the licensed SOUTHMOD A4.0 bundle), whose suite wiring lands with the Ghana/Uganda/Zambia oracle chain. This prefix classifies Zambia outputs as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Zambia PolicyEngine oracle target is ever implemented.
+    rationale: >-
+      PolicyEngine has no Zambia model and cannot serve as a Zambia
+      tax-benefit oracle. Axiom Zambia outputs are built from official Zambia
+      legislation (the Income Tax Act, Cap. 323, as amended, from National
+      Assembly assented prints; the National Pension Scheme and National
+      Health Insurance instruments; the Customs and Excise and Value Added Tax
+      instruments; the MCDSS Social Cash Transfer statement); the household
+      oracle is MicroZAMOD (UNU-WIDER SOUTHMOD, run on the EUROMOD engine;
+      licensed SOUTHMOD A4.0 bundle, systems ZM_2024 and ZM_2025), wired by
+      the zm-* comparison suites. Their reports are run by hand where the
+      licensed bundle is installed and committed with a dated provenance stamp
+      (comparisons/zm-*.yaml declare ci: manual, because the licence bars
+      giving the bundle to a shared CI runner); see the explicit mappings
+      above and concept_mappings.yaml. This prefix classifies any remaining
+      Zambia output with no explicit entry as not comparable to PolicyEngine;
+      add exact PolicyEngine mappings only if a real one-to-one Zambia
+      PolicyEngine oracle target is ever implemented.

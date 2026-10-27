@@ -1,0 +1,61 @@
+schema: axiom_oracles.dispositions.v1
+suite: ny-income-tax-liability
+updated: '2026-08-25'
+entries:
+- id: taxsim-ny-module-divergence-axiom-pe-agree
+  concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ny-married-120000
+    - ny-married-300000
+    - ny-married-60000
+    - ny-single-150000
+    - ny-single-30000
+    - ny-single-60000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence across the New York grid: on
+      every
+
+      selected row axiom and PolicyEngine agree to within 0.90 (well inside the
+
+      suite''s 2.25 absolute tolerance) and `axiom_vs_policyengine.match` is true
+
+      on all six, while TAXSIM reports a HIGHER liability at every income level
+
+      - the only lane in this grid family where TAXSIM runs high. The gap grows
+
+      monotonically with income, from 5.10 at 30k single to 1,398.85 at 300k
+
+      married, and steepens sharply above New York''s 107,650 tax-table-benefit
+
+      threshold (556.04 at 150k single, 131.53 at 120k married). The shape is
+
+      consistent with a supplemental-tax / tax-table-benefit recapture component
+
+      carried by TAXSIM''s New York module and absent from both axiom and
+
+      PolicyEngine, plus a smaller rate-schedule vintage difference below the
+
+      threshold. Per-row proof is the axiom==PolicyEngine agreement.'
+    arithmetic:
+    - expression: 1023.40 - 1028.50
+      equals: -5.1
+      tolerance: 0.05
+    - expression: 2643.40 - 2678.50
+      equals: -35.1
+      tolerance: 0.05
+    - expression: 7810.65 - 8366.69
+      equals: -556.04
+      tolerance: 0.05
+    - expression: 2040.70 - 2051.59
+      equals: -10.89
+      tolerance: 0.05
+    - expression: 5280.70 - 5412.23
+      equals: -131.53
+      tolerance: 0.05
+    - expression: 15612.60 - 17011.45
+      equals: -1398.85
+      tolerance: 0.05
+  expires_on_source_change: true

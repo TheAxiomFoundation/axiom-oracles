@@ -14,18 +14,17 @@
 # on the demographic fact PolicyEngine's al_tanf requires (a minor or pregnant
 # member) so the comparison never pays childless units PE's al_tanf would not.
 #
-# Target oracle surface: PolicyEngine al_tanf (SPMUnit, MONTH). The annualized
-# output mirrors the covered az/co/ks convention; the compare framework
-# annualizes PE's monthly al_tanf to match.
+# Target oracle surface: PolicyEngine al_tanf (SPMUnit, MONTH). The comparison
+# requests January 2026 and therefore exposes the composed monthly benefit.
 
 program: us-al/tanf
 period: 2026-01
 
 outputs:
-  - al_tanf_annual_benefit
+  - al_tanf_monthly_benefit
 
 acknowledged_incomplete:
-  - al_tanf_annual_benefit
+  - al_tanf_monthly_benefit
 
 scope:
   state:

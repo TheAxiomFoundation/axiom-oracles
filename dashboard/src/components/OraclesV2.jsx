@@ -7,28 +7,40 @@ import { causeFor, countUnexplained } from "../utils/programs";
 import {
   engineLabel,
   formatAgreementRate,
+  formatPct,
   mismatchKindLabel,
 } from "../utils/format";
-import { rateColor } from "../utils/colors";
 import ProgramPage from "./ProgramPage";
 import DispositionNote from "./DispositionNote";
 import HouseholdsView from "./Households";
+import SouthmodFindings from "./SouthmodFindings";
 import {
   suiteMeta,
   suiteLabel,
   reportMetric,
+  accumulateExplainedRate,
+  resolveExplainedRate,
   topLevelAggregates,
-  isAxiomPair,
   otherOracle,
+  displayEngines,
   JURISDICTION_LABELS,
+  SOUTHMOD_MODELS,
 } from "../utils/suites";
+import { ORACLE_IDENTITY, attributedOracles } from "../utils/oracleIdentity";
+import {
+  crossCheckCount,
+  groupByOracle,
+  reportHouseholds,
+  verificationReports,
+} from "../utils/roster";
 
 /**
  * v2 concept — the oracle-first, validation-centered dashboard.
  *
  * The oracle is the first-class object: trust comes from WHO checked the
  * work. The page is one argument, top to bottom:
- *   1. Thesis — every encoding is checked against independent engines.
+ *   1. Thesis — encodings are checked against other engines and datasets
+ *      where a comparison exists.
  *   2. The roster — one card per oracle: identity, scope, verdict, and
  *      validation state. A card opens into the oracle's full record, where
  *      every discrepancy class ends in an action — a filed issue, a
@@ -39,63 +51,34 @@ import {
 
 const AXIOM_APP_URL = "https://axiom-foundation.org";
 
-/** Who each oracle IS — the identity that makes the check independent. */
-const ORACLE_IDENTITY = {
-  policyengine: {
-    org: "PolicyEngine",
-    what: "Open-source tax–benefit microsimulation of US and UK law, maintained independently of Axiom.",
-    url: "https://policyengine.org",
-  },
-  taxsim: {
-    org: "NBER",
-    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research.",
-    url: "https://taxsim.nber.org/",
-  },
-  taxcalc: {
-    org: "Policy Simulation Library",
-    what: "Tax-Calculator — open-source US federal income-tax microsimulation used by think tanks across the spectrum.",
-    url: "https://github.com/PSLmodels/Tax-Calculator",
-  },
-  euromod: {
-    org: "European Commission JRC",
-    what: "The EU's official tax–benefit microsimulation model, covering all member states including Belgium.",
-    url: "https://euromod-web.jrc.ec.europa.eu/",
-  },
-  ukmod: {
-    org: "University of Essex (CeMPA)",
-    what: "UKMOD — the UK's tax–benefit microsimulation model, EUROMOD's UK descendant.",
-    url: "https://www.microsimulation.ac.uk/ukmod/",
-  },
-  accessnyc: {
-    org: "NYC Opportunity",
-    what: "ACCESS NYC — New York City's official benefits screening service.",
-    url: "https://access.nyc.gov/",
-  },
-  prd: {
-    org: "Policy Rules Database",
-    what: "The Atlanta Fed's Policy Rules Database of US safety-net program rules.",
-    url: "https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database",
-  },
-  spsm: {
-    org: "Statistics Canada",
-    what: "SPSD/M — Statistics Canada's Social Policy Simulation Database and Model, the reference Canadian tax–transfer microsimulation, run under licence over its synthetic database. Results carry the SPSD/M licence attribution; per-household evidence stays local.",
-    url: "https://www.statcan.gc.ca/en/microsimulation/spsdm/spsdm",
-  },
+const REGION_LABELS = {
+  us: "US",
+  ca: "CA",
+  uk: "UK",
+  be: "BE",
+  de: "DE",
+  dk: "DK",
+  ...Object.fromEntries(
+    Object.keys(SOUTHMOD_MODELS).map((region) => [region, region.toUpperCase()]),
+  ),
 };
 
-const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "DK" };
-
 /**
- * The unit of counting is the household case: one household compared once,
- * no matter how many concepts (liability, CTC, EITC, …) that comparison
- * covers — component concepts roll up into their parent, and a household's
- * concept-by-concept comparisons are the evidence, not extra households.
+ * Oracles hidden from every dashboard surface (roster, hero totals, program
+ * census, household drill) without touching their data or dispositions.
+ * Entries are dashboard oracle ids (otherOracle), so "euromod" hides the
+ * JRC release's countries only, not UKMOD or SOUTHMOD.
+ * TAXSIM is parked here until its comparison surface is rebuilt — the full
+ * mismatch rows are not yet persisted (axiom-oracles#439), so most of its
+ * open residuals cannot be triaged. The unexplained publication ratchet
+ * still gates its reports at the data level regardless of UI visibility.
+ * Delete an entry to restore the oracle.
  */
-function reportHouseholds(report) {
-  return Number.isFinite(report.case_count)
-    ? report.case_count
-    : (report.cases || []).length;
-}
+// TAXSIM re-enabled 2026-08-24: its comparison surface is rebuilt — full
+// mismatch persistence (#439), 10 verified disposition classes on the
+// national federal lane (99.75% classified), and the intersection lane's
+// residue characterized. Ratchets pin every remaining unexplained count.
+const HIDDEN_ORACLES = new Set([]);
 
 function compactCount(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} million`;
@@ -160,7 +143,7 @@ function buildClasses(reports, knownCauses) {
         program: suiteLabel(report.suite),
         region: suiteMeta(report.suite).region,
         oracle: otherOracle(report),
-        engines: report.engines,
+        engines: displayEngines(report),
         concept,
         conceptLabel: descriptions.get(concept) || concept,
         kind,
@@ -333,7 +316,7 @@ function OracleCard({ oracle, selected, onSelect }) {
       aria-expanded={selected}
     >
       <div className="mono v2-card-eyebrow">
-        {id.org || "Independent engine"}
+        {id.org || "Oracle"}
         <span className="v2-card-regions">
           {[...oracle.regions].map((r) => (
             <span key={r} className="mono v2-region">
@@ -346,17 +329,9 @@ function OracleCard({ oracle, selected, onSelect }) {
       <p className="v2-card-what">{id.what}</p>
       <div
         className="v2-card-stats"
-        title={`${oracle.checks.toLocaleString()} individual checks across these households`}
+        title={`${oracle.checks.toLocaleString()} individual checks across these comparison cases`}
       >
-        <Stat
-          value={
-            <span style={{ color: rateColor(oracle.rate) }}>
-              {formatAgreementRate(oracle.rate, oracle.mismatches)}
-            </span>
-          }
-          label="agreement"
-        />
-        <Stat value={oracle.households.toLocaleString()} label="households" />
+        <Stat value={oracle.households.toLocaleString()} label="comparison cases" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>
       <div className="mono v2-card-foot">
@@ -368,7 +343,17 @@ function OracleCard({ oracle, selected, onSelect }) {
   );
 }
 
-const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
+// SOUTHMOD countries follow their registry order, so the SOUTHMOD record
+// and the overview census both get a chip per country model.
+const REGION_ORDER = [
+  "us",
+  "ca",
+  "uk",
+  "be",
+  "de",
+  "dk",
+  ...Object.keys(SOUTHMOD_MODELS),
+];
 
 function ProgRow({ p, onOpenProgram }) {
   return (
@@ -391,17 +376,31 @@ function ProgRow({ p, onOpenProgram }) {
       </span>
       <span
         className="mono v2-prog-checks"
-        title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+        title={`${p.households.toLocaleString()} comparison cases · ${p.total.toLocaleString()} checks`}
       >
         {p.households.toLocaleString()}
-        <span className="v2-prog-unit"> households</span>
+        <span className="v2-prog-unit"> comparison cases</span>
       </span>
-      <span
-        className="mono v2-prog-rate"
-        style={{ color: rateColor(p.rate) }}
-      >
-        {formatAgreementRate(p.rate, p.mismatches)}
-        <span className="v2-prog-unit"> agree</span>
+      <span className="mono v2-prog-rate">
+        <span className="v2-prog-rate-part">
+          <span className="v2-prog-rate-value">
+            {formatAgreementRate(p.rate, p.mismatches)}
+          </span>
+          <span className="v2-prog-unit">agree</span>
+        </span>
+        {p.explainedRate != null &&
+          p.rate != null &&
+          p.explainedRate - p.rate >= 0.05 && (
+            <span
+              className="v2-prog-rate-part"
+              title="Counting disagreements with schema-validated dispositions as explained"
+            >
+              <span className="v2-prog-rate-value">
+                {formatPct(p.explainedRate, 1)}
+              </span>
+              <span className="v2-prog-unit">explained</span>
+            </span>
+          )}
       </span>
     </button>
   );
@@ -412,7 +411,7 @@ const programKeyOf = (suite) => {
   return `${meta.family}__${meta.jurisdiction}`;
 };
 
-function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
+function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }) {
   // One filter bar scopes the whole record: country chips + program select
   // apply to the alignment census, the discrepancy classes, and the
   // household browser alike.
@@ -444,22 +443,27 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
           region: meta.region,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
         });
       }
       const entry = byProgram.get(key);
       const m = reportMetric(report);
+      const reportUnexplained = countUnexplained([report], knownCauses || []);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
+      accumulateExplainedRate(entry, m, reportUnexplained);
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+        explainedRate: resolveExplainedRate(p),
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
-  }, [regionScoped]);
+  }, [regionScoped, knownCauses]);
 
   // A stale program selection (after a scope change) falls back to all.
   const activeProgram = programRows.some((p) => p.key === program)
@@ -478,18 +482,23 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
     );
   }, [programRows, activeProgram, q]);
 
-  const scoped = useMemo(() => {
-    if (!activeProgram && !matchedKeys) return regionScoped;
-    const keep = (suite) => {
+  // null when no program filter is active.
+  const keepSuite = useMemo(() => {
+    if (!activeProgram && !matchedKeys) return null;
+    return (suite) => {
       const key = programKeyOf(suite);
       return activeProgram ? key === activeProgram : matchedKeys.has(key);
     };
+  }, [activeProgram, matchedKeys]);
+
+  const scoped = useMemo(() => {
+    if (!keepSuite) return regionScoped;
     return {
       ...regionScoped,
-      reports: regionScoped.reports.filter((r) => keep(r.suite)),
-      classes: regionScoped.classes.filter((c) => keep(c.suite)),
+      reports: regionScoped.reports.filter((r) => keepSuite(r.suite)),
+      classes: regionScoped.classes.filter((c) => keepSuite(c.suite)),
     };
-  }, [regionScoped, activeProgram, matchedKeys]);
+  }, [regionScoped, keepSuite]);
 
   const visibleRows = activeProgram
     ? programRows.filter((p) => p.key === activeProgram)
@@ -510,7 +519,7 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
   return (
     <section className="card-flat v2-dossier">
       <div className="v2-scope" role="group" aria-label="Scope">
-        {regions.length > 1 &&
+        {regions.length > 1 ? (
           [null, ...regions].map((r) => (
             <button
               key={r ?? "all"}
@@ -521,7 +530,12 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
             >
               {r ? REGION_LABELS[r] || r : "All countries"}
             </button>
-          ))}
+          ))
+        ) : (
+          <span className="mono v2-dossier-colhead v2-scope-label">
+            Program alignment against {engineLabel(oracle.id)}
+          </span>
+        )}
         <input
           className="input-pill v2-scope-search"
           type="search"
@@ -553,9 +567,11 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
 
       <div className="v2-record-stack">
         <div className="v2-dossier-col">
-          <div className="mono v2-dossier-colhead">
-            Program alignment against {engineLabel(oracle.id)}
-          </div>
+          {regions.length > 1 && (
+            <div className="mono v2-dossier-colhead">
+              Program alignment against {engineLabel(oracle.id)}
+            </div>
+          )}
           {alignmentRows.length === 0 && (
             <p className="v2-empty">No programs in this scope.</p>
           )}
@@ -576,6 +592,16 @@ function OracleRecord({ oracle, onOpenProgram, onBrowseHouseholds }) {
             <ClassLedger classes={scoped.classes} />
           )}
         </div>
+
+        {oracle.id === "southmod" && (
+          <div className="v2-dossier-col">
+            <SouthmodFindings
+              region={region}
+              keepSuite={keepSuite}
+              onOpenSuite={(suite) => onOpenProgram(programKeyOf(suite))}
+            />
+          </div>
+        )}
       </div>
       {onBrowseHouseholds && (
         <div className="v2-record-foot">
@@ -619,6 +645,10 @@ export default function OraclesV2() {
     setRoute(next);
     const url = new URL(window.location.href);
     for (const k of ["oracle", "program", "view"]) url.searchParams.delete(k);
+    // A #finding-<id> fragment belongs to the page it was opened on; carried
+    // along, it would re-pin that finding whenever the SOUTHMOD record
+    // remounts and ride into unrelated shareable URLs.
+    url.hash = "";
     if (next.oracle) url.searchParams.set("oracle", next.oracle);
     if (next.program) url.searchParams.set("program", next.program);
     if (next.view) url.searchParams.set("view", next.view);
@@ -628,40 +658,10 @@ export default function OraclesV2() {
 
   const model = useMemo(() => {
     if (!data) return null;
-    const verification = data.reports.filter(
-      (r) =>
-        isAxiomPair(r) &&
-        suiteMeta(r.suite).kind !== "diagnostic" &&
-        (r.aggregates || []).length > 0,
-    );
-    const crossChecks = data.reports.filter((r) => !isAxiomPair(r)).length;
+    const verification = verificationReports(data.reports, HIDDEN_ORACLES);
+    const crossChecks = crossCheckCount(data.reports, HIDDEN_ORACLES);
 
-    const byOracle = new Map();
-    for (const report of verification) {
-      const id = otherOracle(report);
-      if (!byOracle.has(id)) {
-        byOracle.set(id, {
-          id,
-          reports: [],
-          checks: 0,
-          mismatches: 0,
-          households: 0,
-          regions: new Set(),
-          programs: new Set(),
-        });
-      }
-      const entry = byOracle.get(id);
-      entry.reports.push(report);
-      const m = reportMetric(report);
-      entry.checks += m.total;
-      entry.mismatches += m.mismatches;
-      entry.households += reportHouseholds(report);
-      const meta = suiteMeta(report.suite);
-      entry.regions.add(meta.region);
-      entry.programs.add(`${meta.family}__${meta.jurisdiction}`);
-    }
-
-    const oracles = [...byOracle.values()]
+    const oracles = groupByOracle(verification)
       .map((o) => ({
         ...o,
         rate: o.checks > 0 ? ((o.checks - o.mismatches) / o.checks) * 100 : null,
@@ -700,20 +700,31 @@ export default function OraclesV2() {
           jurisdiction: meta.jurisdiction,
           total: 0,
           mismatches: 0,
+          unexplained: 0,
           households: 0,
           oracles: new Set(),
         });
       }
       const entry = byProgram.get(key);
       const m = reportMetric(report);
+      const reportUnexplained = countUnexplained(
+        [report],
+        data.knownCauses || [],
+      );
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));
+      // Canonical disposition-merge rate when present (visible-row
+      // arithmetic overstated truncated premerged-slim suites — see
+      // accumulateExplainedRate in utils/suites.js).
+      accumulateExplainedRate(entry, m, reportUnexplained);
     }
     return [...byProgram.values()].map((p) => ({
       ...p,
       rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
+      explainedRate: resolveExplainedRate(p),
     }));
   }, [model]);
 
@@ -816,7 +827,6 @@ export default function OraclesV2() {
               />
             </a>
             <a href={`${BASE_PATH}/`} className="brand-title">
-              <span className="brand-eyebrow">Interactive</span>
               <span className="brand-name">Oracles</span>
             </a>
           </span>
@@ -876,7 +886,7 @@ export default function OraclesV2() {
                 <span className="mono pp-where">
                   {" "}
                   · {(ORACLE_IDENTITY[routeOracle.id] || {}).org ||
-                    "independent engine"}
+                    "oracle"}
                 </span>
               </h1>
               <p className="v2-oracle-what">
@@ -898,10 +908,30 @@ export default function OraclesV2() {
                   </>
                 )}
               </p>
+              {(ORACLE_IDENTITY[routeOracle.id] || {}).acknowledgement && (
+                <p className="v2-oracle-what v2-oracle-ack">
+                  {ORACLE_IDENTITY[routeOracle.id].acknowledgement}
+                </p>
+              )}
+              {(ORACLE_IDENTITY[routeOracle.id] || {}).licence && (
+                <p className="v2-oracle-what v2-oracle-ack">
+                  {engineLabel(routeOracle.id)} is licensed under{" "}
+                  <a
+                    className="cite"
+                    href={ORACLE_IDENTITY[routeOracle.id].licence.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {ORACLE_IDENTITY[routeOracle.id].licence.name}
+                  </a>
+                  .
+                </p>
+              )}
             </div>
             <OracleRecord
               key={routeOracle.id}
               oracle={routeOracle}
+              knownCauses={data.knownCauses || []}
               onOpenProgram={(key) => navigate({ program: key })}
               onBrowseHouseholds={() =>
                 navigate({ view: "households", oracle: routeOracle.id })
@@ -912,22 +942,14 @@ export default function OraclesV2() {
           /* ── Level 1 · the overview ── */
           <>
             <section className="v2-hero">
-              <h1 className="v2-thesis">
-                Axiom never grades its own work —{" "}
-                <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines,{" "}
-                <em style={{ color: rateColor(totals.rate) }}>
-                  {formatAgreementRate(totals.rate, totals.mismatches)}
-                </em>{" "}
-                agreement.
-              </h1>
-              <p
-                className="v2-hero-sub"
-                title={`${compactCount(totals.checks)} concept-level checks behind the agreement rate${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
+              <h1
+                className="v2-thesis"
+                title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                Every disagreement is triaged in the open — dispositioned,
-                filed upstream, or kept visibly open until someone acts.
-              </p>
+                <em>{compactCount(totals.households)}</em> comparison cases checked
+                against <em>{oracles.length}</em> other engines and datasets,
+                with disagreements tracked in the open.
+              </h1>
             </section>
 
             <section className="v2-section">
@@ -995,7 +1017,7 @@ export default function OraclesV2() {
                   </p>
                 )}
                 <div className="v2-prog-grid">
-                  {censusRows.map((p) => (
+                        {censusRows.map((p) => (
                     <ProgRow
                       key={p.key}
                       p={p}
@@ -1010,6 +1032,26 @@ export default function OraclesV2() {
 
         <footer className="v2-footer mono">
           <span>Axiom Foundation · Oracles · {new Date().getFullYear()}</span>
+          {attributedOracles(oracles.map((o) => o.id)).length > 0 && (
+            <span>
+              Model acknowledgements and licences:{" "}
+              {attributedOracles(oracles.map((o) => o.id)).map((id, i) => (
+                <span key={id}>
+                  {i > 0 && " · "}
+                  <a
+                    className="cite"
+                    href={`?oracle=${id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate({ oracle: id });
+                    }}
+                  >
+                    {engineLabel(id)}
+                  </a>
+                </span>
+              ))}
+            </span>
+          )}
           <a
             href="https://github.com/TheAxiomFoundation/axiom-oracles"
             target="_blank"

@@ -1,0 +1,57 @@
+schema: axiom_oracles.dispositions.v1
+suite: me-income-tax-liability
+updated: '2026-08-25'
+entries:
+- id: taxsim-me-module-divergence-axiom-pe-agree
+  concept: us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - me-married-120000
+    - me-married-300000
+    - me-married-60000
+    - me-single-150000
+    - me-single-30000
+    - me-single-60000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence across the whole Maine grid:
+      on every
+
+      selected row axiom and PolicyEngine agree to the cent (or to a half-cent
+
+      rounding at 60k/150k single and 300k married), with
+
+      `axiom_vs_policyengine.match` true on all six, while TAXSIM reports a
+
+      lower liability at every income level. Deltas are heterogeneous
+
+      (34.47-158.04) and do not scale with income monotonically, so this is not
+
+      a single flat offset; the per-row proof is the axiom==PolicyEngine
+
+      agreement, which places the divergence in TAXSIM''s Maine module
+
+      (exemption/standard-deduction phase-out vintage) rather than in the axiom
+
+      encoding.'
+    arithmetic:
+    - expression: 565.50 - 452.31
+      equals: 113.19
+      tolerance: 0.05
+    - expression: 2428.53 - 2394.06
+      equals: 34.47
+      tolerance: 0.05
+    - expression: 9483.73 - 9404.35
+      equals: 79.38
+      tolerance: 0.05
+    - expression: 1131.00 - 1001.44
+      equals: 129.56
+      tolerance: 0.05
+    - expression: 4857.05 - 4788.13
+      equals: 68.92
+      tolerance: 0.05
+    - expression: 18966.74 - 18808.70
+      equals: 158.04
+      tolerance: 0.05
+  expires_on_source_change: true

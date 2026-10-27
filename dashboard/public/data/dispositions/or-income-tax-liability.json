@@ -1,109 +1,7 @@
 {
  "suite": "or-income-tax-liability",
- "updated": "2026-07-15",
+ "updated": "2026-07-27",
  "entries": [
-  {
-   "id": "or-taxsim-2024-single-30000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-single-30000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "1931.4375 - 1692.57",
-     "equals": 238.87
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "or-taxsim-2024-single-60000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-single-60000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "4241.4375 - 4002.57",
-     "equals": 238.87
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "or-taxsim-2024-single-150000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-single-150000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "12809.895 - 12838.79",
-     "equals": -28.9
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "or-taxsim-2024-married-60000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-married-60000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "3862.4375 - 3385.13",
-     "equals": 477.31
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "or-taxsim-2024-married-120000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-married-120000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "8604.0625 - 8196.06",
-     "equals": 408
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "or-taxsim-2024-married-300000",
-   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "The Axiom/PolicyEngine leg applies Oregon's 2026 indexed brackets and taxable-income adjustments, while the pinned TAXSIM leg applies 2024 law. The exact residual is the indexation and law-vintage difference.",
-   "cases": [
-    "or-married-300000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "25619.295 - 25677.58",
-     "equals": -58.29
-    }
-   ],
-   "linked_issue": null
-  },
   {
    "id": "or-pe-2026-uprating-single-30000",
    "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
@@ -205,6 +103,36 @@
     }
    ],
    "linked_issue": null
+  },
+  {
+   "id": "or-uprating-vintage-flat-deltas",
+   "concept": "us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Parameter uprating vintage between the legs: the axiom program carries\nFY2026-uprated OR parameters while the oracle leg's parameter set holds\nthe prior vintage, producing income-invariant flat deltas within each\nfiling band (the fingerprint: identical differences across the grid's\nincome levels \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the oracle's parameters uprate.",
+   "cases": [
+    "or-married-120000",
+    "or-married-300000",
+    "or-married-60000",
+    "or-single-150000",
+    "or-single-30000",
+    "or-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-6.0",
+     "equals": -6.0
+    },
+    {
+     "expression": "-3.5",
+     "equals": -3.5
+    },
+    {
+     "expression": "258.0",
+     "equals": 258.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
   }
  ]
 }

@@ -18,6 +18,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - i_rand_tu
     exclusion_reason: takeup_adjustment
@@ -26,6 +27,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     exclusion_reason: technical
@@ -34,6 +36,7 @@ policies:
     oracle_policy_type: inc
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - glfya1
       - n/a
@@ -43,6 +46,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - glfya1
       - n/a
@@ -52,18 +56,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:ILSDef_uk
     oracle_policy_name: ILSDef_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:ILSUDBDef_uk
     oracle_policy_name: ILSUDBDef_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:InitVars_uk
     oracle_policy_name: InitVars_uk
@@ -81,6 +88,7 @@ policies:
       - tpcee_s
       - sin05_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yot01
       - ydgchmp_s
@@ -101,6 +109,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - ntax
       - mntr_earns
@@ -114,12 +123,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: uk:Output_std_uk
     oracle_policy_name: Output_std_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:PAA_uk
     oracle_policy_name: PAA_uk
@@ -127,6 +138,7 @@ policies:
     output_vars:
       - boact_s
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - boactcm
       - yem
@@ -152,6 +164,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - dhr
     exclusion_reason: technical
@@ -160,18 +173,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:Uprate_uk
     oracle_policy_name: Uprate_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:UseHBAI_uk
     oracle_policy_name: UseHBAI_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - yem
       - yse
@@ -199,12 +215,13 @@ policies:
       - brd_s
       - brduc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bcap_finalAmt
       - i_bcap_NoExempt
       - i_bcap_AmtCap
       - n/a
-    suite: uk-benefit-cap
+    suite: null
     note: 'BEN: benefit cap on Housing Benefit and Universal Credit (UC Regs 2013 reg 80A/81). bcap_uk
       computes the cap reduction, not a benefit: brd_s reduces the legacy-benefit stack (i_bcap_finalAmt
       = (bsa_s+bsadi_s+bho_s+bwkmt_s+bfamt_s) - brd_s) and brduc_s reduces UC (i_bcap_finalAmt += bsauc_s
@@ -225,14 +242,19 @@ policies:
       cap-base scope boundary (the UC-only pilot does not add non-UC welfare to the reg-81 excess), not
       a defect in the reg-80A/81 reduction the pilot encodes, so it is documented here rather than compared.
       brd_s (the legacy-benefit reduction) likewise stays uncovered — the Axiom UC pilot is UC-only. Runs
-      on the x64 UKMOD runtime.'
+      on the x64 UKMOD runtime. Current coverage retracted under the same-case execution evidence rule:
+      The retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `uk-benefit-cap` retaining same-case returned values from
+      both engines and explicit comparison bindings for a registered output (bsadi02_s, brd_s, brduc_s);
+      then re-register.'
   - id: uk:bch_uk
     oracle_policy_name: bch_uk
     oracle_policy_type: ben
     output_vars:
       - bch_s
     in_scope: true
-    suite: uk-child-benefit
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Child Benefit. The uk-child-benefit suite live-compares the composed UK Child Benefit
       pipeline (SSCBA 1992 s.141 with the SI 2006/965 reg.2 enhanced GBP 27.05 / other GBP 17.90 weekly
       rates, annualised over 52 weeks) against UKMOD''s pre-charge Child Benefit on a single-parent grid
@@ -244,13 +266,17 @@ policies:
       the suite also wires a net-of-charge surface (bch_s alone vs Axiom''s post-charge amount); the committed
       report exercises the gross bridge surface. The ~0.27% 52-vs-52.14-weeks convention residual is inside
       tolerance; all cases recover the same statutory weekly rates. bch_s is the compared surface, so
-      bch_uk is covered.'
+      bch_uk is covered. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-child-benefit` retaining same-case returned values from both
+      engines and explicit comparison bindings for `bch_s`; then re-register.'
   - id: uk:bched01_uk
     oracle_policy_name: bched01_uk
     oracle_policy_type: ben
     output_vars:
       - bched01_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bched01a
       - i_bched01b
@@ -286,6 +312,7 @@ policies:
     output_vars:
       - bched02_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: oracle_models_nonstatutory_amount
     note: 'BEN: School Clothing Grant (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
       Benefit education-age extension despite the bch* prefix. bched02_s passports off the same means-tested
@@ -305,12 +332,13 @@ policies:
     output_vars:
       - bchht_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bdisc00
       - i_bdisc01
       - i_bdiscwa00
       - i_bdiscwa01
-    suite: uk-child-winter-heating-payment
+    suite: null
     note: 'BEN: Child Winter Heating Assistance (Scotland) (UKMOD comment "BEN: Child Winter Heating Assistance
       (Scotland)"), not a Child Benefit household/HICBC test component despite the bch* prefix. bchht_s
       is a devolved Scottish disability payment: paid at $SCWHA to a child under 18 in Scotland (drgn1=12)
@@ -323,12 +351,17 @@ policies:
       ss.77-79), and its gating care indicators (bdisc, bdiscwa) are admissible columns of the training_data
       schema. Uncovered until the flat CWHA amount (Scotland, child under 18, highest-rate care) is encoded
       on top of that passport and a Scotland/disability surface is built with the care inputs supplied;
-      requires the x64 UKMOD runtime to regenerate. Out of scope for the child-benefit + benefit-cap lane.'
+      requires the x64 UKMOD runtime to regenerate. Out of scope for the child-benefit + benefit-cap lane.
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `uk-child-winter-heating-payment` retaining same-case returned values from both engines
+      and explicit comparison bindings for `bchht_s`; then re-register.'
   - id: uk:bchmt01_uk
     oracle_policy_name: bchmt01_uk
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -340,6 +373,7 @@ policies:
     output_vars:
       - bchmt_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-scottish-child-payment
     note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
       means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
@@ -365,7 +399,8 @@ policies:
       - bch_s
       - bchrd_s
     in_scope: true
-    suite: uk-child-benefit
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Reduce child benefit (from 2013) — the High Income Child Benefit Charge clawback (ITEPA
       2003 ss.681B-681H). bchrd_uk computes bchrd_s = ((adjusted_net_income - $ITCBthresh)/200)*1% * bch_s,
       capped at bch_s, then nets bchrd_s back into bch_s (UK_2026: threshold GBP 60,000, full clawback
@@ -376,13 +411,18 @@ policies:
       is now corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75),
       so a direct net-of-charge surface (bch_s alone vs Axiom''s post-charge entitlement) is wired into
       the suite too; the committed report exercises the gross bridge surface, which already consumes bchrd_s.
-      bchrd_s is a compared surface, so bchrd_uk is covered — mirroring bch_uk.'
+      bchrd_s is a compared surface, so bchrd_uk is covered — mirroring bch_uk. Current coverage retracted
+      under the same-case execution evidence rule: The retained case rows omit both returned comparison
+      values for this registered output; matches/counts alone cannot attest either side. Rerun `uk-child-benefit`
+      retaining same-case returned values from both engines and explicit comparison bindings for a registered
+      output (bch_s, bchrd_s); then re-register.'
   - id: uk:bcrdicm_uk
     oracle_policy_name: bcrdicm_uk
     oracle_policy_type: ben
     output_vars:
       - bcrdicm_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bcrdi
     suite: uk-scottish-carer-supplement
@@ -407,6 +447,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - ddipd
       - bdimbwa
@@ -425,6 +466,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - bdisc
     exclusion_reason: not_a_policy
@@ -440,6 +482,7 @@ policies:
       - ymn01_s
       - bho_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bho_FamPremium
       - i_bho_FamDisChildPremium
@@ -499,6 +542,7 @@ policies:
     output_vars:
       - bhosc01_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: oracle_models_nonstatutory_amount
     note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. EXCLUDED oracle_models_nonstatutory_amount.
       Verdict: scoped out (not encoded), a modelled policy assumption rather than a statutory formula.
@@ -527,6 +571,7 @@ policies:
     output_vars:
       - bmact_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bmact
       - i_elchild_bmact
@@ -536,7 +581,7 @@ policies:
       - i_durweeks_bmact2
       - i_yempv_bmact
       - i_bmact
-    suite: uk-statutory-maternity-pay
+    suite: null
     note: 'BEN: Statutory Maternity Pay. The UKMOD Comment says "(not simulated in the baseline)", but
       the UK_2026 policy is switch=on and computes bmact_s from ordinary demographic/earnings inputs —
       female (dgn=0) with a newborn (dag<1, baby-months dmb), earnings above the SMP lower-earnings-limit
@@ -547,14 +592,18 @@ policies:
       pipeline (SSCBA 1992 Part XII ss.164-166). Now COVERED by the uk-statutory-maternity-pay suite (5
       cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the full 39-week period for
       the HHoT case rather than the flat prescribed rate. bmact_uk does not consume the stochastic take-up
-      draw i_rand_tu.'
+      draw i_rand_tu. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-statutory-maternity-pay` retaining same-case returned values
+      from both engines and explicit comparison bindings for `bmact_s`; then re-register.'
   - id: uk:bmamt01_uk
     oracle_policy_name: bmamt01_uk
     oracle_policy_type: ben
     output_vars:
       - bmamt01_s
     in_scope: true
-    suite: uk-healthy-start
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Healthy Start food voucher (rest of UK). Unlike the statutory-pay policies this is a passported
       means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0
       | bunmt_s>0 | boamt_s>0 | bfamt_s>0 | bsauc_s>0 ...), and the amount is $HSFood (£4.25/week per
@@ -564,14 +613,19 @@ policies:
       bmamt01_s=£443.21. It does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic
       passported surface. Now COVERED by the uk-healthy-start suite (2 cases, 2/2 match): the composed
       rulespec-uk pilot (SI 2005/3262 reg.8) annualises the determined weekly value over 52 benefit weeks,
-      about 0.27% below UKMOD''s 365/7 convention, within the 0.3% relative tolerance.'
+      about 0.27% below UKMOD''s 365/7 convention, within the 0.3% relative tolerance. Current coverage
+      retracted under the same-case execution evidence rule: The retained case rows omit both returned
+      comparison values for this registered output; matches/counts alone cannot attest either side. Rerun
+      `uk-healthy-start` retaining same-case returned values from both engines and explicit comparison
+      bindings for `bmamt01_s`; then re-register.'
   - id: uk:bmamt_uk
     oracle_policy_name: bmamt_uk
     oracle_policy_type: ben
     output_vars:
       - bmamt_s
     in_scope: true
-    suite: uk-sure-start-maternity-grant
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Sure Start Maternity Grant (rest of UK). Passported means-tested lump sum: the Elig_Cond
       requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0
       ...) and a child under 1 with no other dependent children, paying $BSurMaG (£500, 2026-27). Confirmed
@@ -580,13 +634,18 @@ policies:
       bmamt_s=£500.00 (= $BSurMaG). It does NOT consume the stochastic i_rand_tu take-up draw, so it is
       a deterministic passported surface. Now COVERED by the uk-sure-start-maternity-grant suite (1 case,
       1/1 match): the composed rulespec-uk pilot (SI 2005/3061 reg.5) exposes the £500 lump sum as a Person-level
-      annual entitlement, matching to the penny.'
+      annual entitlement, matching to the penny. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `uk-sure-start-maternity-grant` retaining
+      same-case returned values from both engines and explicit comparison bindings for `bmamt_s`; then
+      re-register.'
   - id: uk:bmanc_uk
     oracle_policy_name: bmanc_uk
     oracle_policy_type: ben
     output_vars:
       - bmanc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bmanc
       - i_elchild_bmanc
@@ -595,7 +654,7 @@ policies:
       - i_durweeks_bmanc
       - i_yempv_bmanc
       - i_bmanc
-    suite: uk-maternity-allowance
+    suite: null
     note: 'BEN: Maternity Allowance. The UKMOD Comment says "(not simulated in the baseline)", but the
       UK_2026 policy is switch=on and computes bmanc_s from ordinary demographic/earnings inputs (eligible
       parent, newborn age-weeks, duration weeks, previous earnings i_yempv_bmanc). Maternity Allowance
@@ -604,14 +663,18 @@ policies:
       bmanc_s is nonzero and earnings-responsive (self-employment £9k->£6,041.80, £15k->£10,069.67), reconstructed
       exactly by the composed rulespec-uk MA pipeline (SSCBA 1992 Part II ss.35/35A/35B). Now COVERED
       by the uk-maternity-allowance suite (3 cases, 3/3 match). bmanc_uk does not consume the stochastic
-      take-up draw.'
+      take-up draw. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-maternity-allowance` retaining same-case returned values from
+      both engines and explicit comparison bindings for `bmanc_s`; then re-register.'
   - id: uk:bmascmt01_uk
     oracle_policy_name: bmascmt01_uk
     oracle_policy_type: ben
     output_vars:
       - bmascmt01_s
     in_scope: true
-    suite: uk-best-start-foods
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Best Start Foods (Scotland). Passported means-tested payment: the Elig_Cond requires a
       qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) AND
       Scottish residence (drgn1=12), paying $BScBSF0 (£11.20/week under 1) or $BScBSF1to2 (£5.60/week
@@ -622,13 +685,17 @@ policies:
       take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-best-start-foods
       suite (2 cases, 2/2 match): the composed rulespec-uk pilot (SSI 2019/193 reg.13, £5.60 basic rate
       per SSI 2026/170) annualises the weekly value over 52 benefit weeks, about 0.27% below UKMOD''s
-      365/7 convention, within the 0.3% relative tolerance.'
+      365/7 convention, within the 0.3% relative tolerance. Current coverage retracted under the same-case
+      execution evidence rule: The retained case rows omit both returned comparison values for this registered
+      output; matches/counts alone cannot attest either side. Rerun `uk-best-start-foods` retaining same-case
+      returned values from both engines and explicit comparison bindings for `bmascmt01_s`; then re-register.'
   - id: uk:bmascmt_uk
     oracle_policy_name: bmascmt_uk
     oracle_policy_type: ben
     output_vars:
       - bmascmt_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bmascmt01_s
       - i_bmascmt04_s
@@ -656,6 +723,7 @@ policies:
       - ymn01_s
       - bmu_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bmu_nBabies
       - i_bmu_FamPremium
@@ -699,6 +767,7 @@ policies:
     output_vars:
       - boact_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: input_carrying
     note: 'State Pension (contributory). UKMOD does not compute the state pension from contribution records
       — its whole UK_2026 body is boact_s = boact00 * (SPSingle/SPSingle0): it takes the reported state-
@@ -714,7 +783,8 @@ policies:
     output_vars:
       - boaht_s
     in_scope: true
-    suite: uk-winter-fuel
+    oracle_switch: 'on'
+    suite: null
     note: 'BEN: Pensioner''s annual heating allowance (Winter Fuel Payment). The UK_2026 policy is switch=on
       and computes a distinct payable boaht_s at benefit-unit level: a base amount if anyone in the unit
       is of state-pension age ($WFA, with an additional $WFAAdd80 where anyone is 80+), on separate England/Wales
@@ -731,18 +801,23 @@ policies:
       and Winter Fuel does not draw UKMOD''s stochastic take-up correction, so the surface is a clean
       deterministic comparable. Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs
       a higher devolved instrument (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does
-      not encode, so it is out of scope for this England-and-Wales surface. Runs on the x64 UKMOD runtime.'
+      not encode, so it is out of scope for this England-and-Wales surface. Runs on the x64 UKMOD runtime.
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `uk-winter-fuel` retaining same-case returned values from both engines and explicit
+      comparison bindings for `boaht_s`; then re-register.'
   - id: uk:bpact_uk
     oracle_policy_name: bpact_uk
     oracle_policy_type: ben
     output_vars:
       - bpact_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bpact
       - i_yempv_bpact
       - i_bpact
-    suite: uk-statutory-paternity-pay
+    suite: null
     note: 'BEN: Statutory Paternity Pay. The UKMOD Comment says "(not simulated in the baseline)", but
       the UK_2026 policy is switch=on and computes bpact_s from ordinary inputs (eligible parent, previous
       earnings i_yempv_bpact). Confirmed empirically against UKMOD_PUBLIC_B2026.03/UK_2026: bpact_s is
@@ -750,7 +825,11 @@ policies:
       £25k->£860.66, below the £130 LEL->£0), reconstructed exactly by the composed rulespec-uk SPP pipeline
       (SSCBA 1992 Part 12ZA ss.171ZA/171ZE/171ZJ). Now COVERED by the uk-statutory-paternity-pay suite
       (5 cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the 2-week period for the
-      HHoT case. bpact_uk does not consume the stochastic take-up draw.'
+      HHoT case. bpact_uk does not consume the stochastic take-up draw. Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `uk-statutory-paternity-pay`
+      retaining same-case returned values from both engines and explicit comparison bindings for `bpact_s`;
+      then re-register.'
   - id: uk:bsa_uk
     oracle_policy_name: bsa_uk
     oracle_policy_type: ben
@@ -764,6 +843,7 @@ policies:
       - bfamt_s
       - boamt_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsa_EligDisPremium
       - i_bsa_SevDisPremium
@@ -834,6 +914,7 @@ policies:
       - bsadi_s
       - bsa_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsadi_EligSevDisPremium
       - i_bsadi_EligCarerPremium
@@ -877,6 +958,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -889,6 +971,7 @@ policies:
       - yiviy02_s
       - bsauc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsauc_AmtFam
       - i_bsauc_AmtChild
@@ -933,6 +1016,7 @@ policies:
       - liwmy_s
       - yempv_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bunct_IncDisregard
     suite: uk-contribution-based-jsa
@@ -966,6 +1050,7 @@ policies:
       - bwkmt_s
       - bfamttm_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmt_bfamt_Disab
       - i_bwkmt_ChildCare
@@ -1016,6 +1101,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1026,12 +1112,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:covshocks_benreceipt_uk
     oracle_policy_name: covshocks_benreceipt_uk
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1041,6 +1129,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_lha30
     exclusion_reason: technical
@@ -1049,6 +1138,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_mif_exempt
       - i_mif_h
@@ -1059,6 +1149,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yse
       - i_yse0
@@ -1068,6 +1159,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_rand_dla
       - i_rand_uc
@@ -1081,6 +1173,7 @@ policies:
     oracle_policy_type: inc
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1091,6 +1184,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - tco_adj_ta_02131
       - tco_adj_ta_02111
@@ -1111,6 +1205,7 @@ policies:
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - tco_ta_07221
     exclusion_reason: unobservable_boundary
@@ -1122,12 +1217,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:tco_ce_uk
     oracle_policy_name: tco_ce_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x1
       - bsav
@@ -1138,6 +1235,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x
     exclusion_reason: technical
@@ -1146,6 +1244,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x
     exclusion_reason: technical
@@ -1154,6 +1253,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:tin_uk
     oracle_policy_name: tin_uk
@@ -1166,6 +1266,7 @@ policies:
       - tin00_s
       - tinsa_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tin_prelim_rUK
       - i_tin_prelimMCA
@@ -1205,17 +1306,23 @@ policies:
       - i_taxabley_div
       - i_tintsS_s
       - i_tintsD_s
-    suite: uk-worker-pit
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-worker-pit` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tints_s, tin_s, tin12_s, tin11_s, tin00_s, tinsa_s);
+      then re-register.'
   - id: uk:tinta_uk
     oracle_policy_name: tinta_uk
     oracle_policy_type: tax
     output_vars:
       - tinta_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tinta_IncExcess2
       - i_tinta_PersAllow
-    suite: uk-personal-allowance
+    suite: null
     note: 'TAX: Personal tax allowance. The UK_2026 policy is switch=on and computes the final personal
       allowance tinta_s = preliminary allowance $ITPerAll less the income-limit taper (half of taxable
       income il_tinty in excess of $ITAllLim, floored at zero) — i.e. the Income Tax Act 2007 s.35(1)-(3)
@@ -1230,13 +1337,18 @@ policies:
       (comparisons/uk-personal-allowance-ukmod.yaml) regenerates on the x64 UKMOD runner via scripts/regenerate_euromod_uk.sh.
       Covered once that runner commits axiom-euromod-uk-personal-allowance.json (the euromod runtime has
       no macOS wheel, so the live match rate is generated on the provisioned runner, per axiom-oracles#190).
-      Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding.'
+      Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding. Current coverage retracted
+      under the same-case execution evidence rule: The retained case rows omit both returned comparison
+      values for this registered output; matches/counts alone cannot attest either side. Rerun `uk-personal-allowance`
+      retaining same-case returned values from both engines and explicit comparison bindings for `tinta_s`;
+      then re-register.'
   - id: uk:tpcee_uk
     oracle_policy_name: tpcee_uk
     oracle_policy_type: def
     output_vars:
       - tpcee_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: input_carrying
   - id: uk:tscee_tscse_uk
     oracle_policy_name: tscee_tscse_uk
@@ -1245,6 +1357,7 @@ policies:
       - tscee_s
       - tscse_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_NIcl1_empl_bwPTandUEL
       - i_NIcl1_empl_aboveUEL
@@ -1261,21 +1374,31 @@ policies:
       - i_NI3cl4_semp_aboveUPL
       - i_NI3cl4_semp_belowUPL
       - i_yse
-    suite: uk-worker-nic
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-worker-nic` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tscee_s, tscse_s); then re-register.'
   - id: uk:tscer_uk
     oracle_policy_name: tscer_uk
     oracle_policy_type: sic
     output_vars:
       - tscer_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
-    suite: uk-employer-nic
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-employer-nic` retaining same-case returned values from both engines and explicit
+      comparison bindings for `tscer_s`; then re-register.'
   - id: uk:ukpovertyline_uk
     oracle_policy_name: ukpovertyline_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - eqScaleBHC
       - eqDispyBHC
@@ -1289,6 +1412,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - i_hourlywage
       - yem

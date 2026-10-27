@@ -2,11 +2,14 @@
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+.cache/us-tariff-c1/
 .mypy_cache/
 .env
 *.pyc
 reports/*.json
 reports/*.log
+reports/.*.lock
+reports/.*.tmp
 data/.cache/
 data/county_fips_2020.csv.gz
 .claude/

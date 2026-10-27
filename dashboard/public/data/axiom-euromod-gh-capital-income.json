@@ -1,0 +1,319 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding",
+      "description": "Ghana residential rent final withholding (Act 896 First Schedule para 8(1)(b)(iv), 8% of rent to a resident individual)",
+      "left_weighted_sum": 7680,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 7680,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 3,
+  "cases": [
+    {
+      "case_id": "gh-rent-12k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding",
+          "left": 960.0,
+          "right": 960.0
+        }
+      ],
+      "metadata": {
+        "annual_residential_rent": 12000.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.dividends_from_resident_companies": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.non_exempt_interest_paid_to_individual": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.nonresidential_rent_received": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 12000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 45,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ypr": 278.54418753475574
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 12000.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-individual-residential-rent-withholding",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rent-24k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding",
+          "left": 1920.0,
+          "right": 1920.0
+        }
+      ],
+      "metadata": {
+        "annual_residential_rent": 24000.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.dividends_from_resident_companies": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.non_exempt_interest_paid_to_individual": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.nonresidential_rent_received": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 24000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 45,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ypr": 557.0883750695115
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 24000.0
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-individual-residential-rent-withholding",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-rent-60k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding",
+          "left": 4799.999999999999,
+          "right": 4799.999999999999
+        }
+      ],
+      "metadata": {
+        "annual_residential_rent": 60000.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.dividends_from_resident_companies": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.non_exempt_interest_paid_to_individual": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.nonresidential_rent_received": 0.0,
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 59999.999999999985
+        },
+        "euromod_inputs": [
+          {
+            "dag": 45,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ypr": 1392.7209376737785
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#input.residential_rent_received": 59999.999999999985
+        },
+        "household_summary": {
+          "ages": [
+            45
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-individual-residential-rent-withholding",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana residential rent final withholding (Act 896 First Schedule para 8(1)(b)(iv), 8% of rent to a resident individual)",
+      "id": "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T13:55:16Z",
+    "generated_by": "scripts/run_comparison.py::gh-capital-income",
+    "oracle": {
+      "euromod_country": "GH",
+      "euromod_dataset": "gh_2017_a8",
+      "euromod_system": "GH_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-gh",
+        "sha": "4d84b152548663313d3ef09c6538c27e51e411b1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-capital-income",
+  "summary": {
+    "comparison_count": 3,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 3,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 3,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_weight": 0
+    }
+  }
+}

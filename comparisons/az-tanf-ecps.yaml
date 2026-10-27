@@ -9,6 +9,15 @@ description: >-
   earned income deductions) against PolicyEngine's az_tanf on Enhanced
   CPS households in Arizona.
 
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-oracles-compare
   axiom_rules_repo: $HOME/axiom-rules-engine
@@ -24,6 +33,10 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     jurisdiction_fips: "04"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: $HOME/axiom-oracles/programs/us-az/tanf/fy-2026.yaml

@@ -1,0 +1,13 @@
+{
+  "content_type": "application/pdf",
+  "curl_version": "libcurl/8.7.1 (SecureTransport) LibreSSL/3.3.6 zlib/1.2.12 nghttp2/1.68.1",
+  "exitcode": 0,
+  "http_code": 200,
+  "http_version": "2",
+  "method": "GET",
+  "num_redirects": 0,
+  "size_download": 424072,
+  "ssl_verify_result": 0,
+  "time_total": 0.112859,
+  "url_effective": "https://www.govinfo.gov/content/pkg/FR-2022-02-09/pdf/2022-02906.pdf"
+}

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import subprocess
 import tempfile
 from calendar import monthrange
@@ -14,6 +15,14 @@ from typing import Any
 
 import yaml
 
+from ...bridges.relation_binding import (
+    RelationBinder,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    relation_binding_diagnostics,
+    with_relation_binding_diagnostics,
+)
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -34,6 +43,7 @@ AXIOM_INPUTS_METADATA_KEY = "axiom_inputs"
 AXIOM_INPUT_RECORDS_METADATA_KEY = "axiom_input_records"
 AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY = "axiom_input_record_overlays"
 AXIOM_RESULT_SELECTION_METADATA_KEY = "axiom_result_selection"
+AXIOM_RESULT_AGGREGATION_METADATA_KEY = "axiom_result_aggregation"
 AXIOM_RELATIONS_METADATA_KEY = "axiom_relations"
 AXIOM_ENTITY_ID_METADATA_KEY = "axiom_entity_id"
 AXIOM_ENTITY_METADATA_KEY = "axiom_entity"
@@ -106,9 +116,7 @@ class AxiomRulesRunner(EngineAdapter):
             # be re-keyed at the candidate level (#296).
             output_aliases = _output_aliases_from_artifact(
                 list(
-                    dict.fromkeys(
-                        [*output_targets, *_result_selection_outputs(cases)]
-                    )
+                    dict.fromkeys([*output_targets, *_result_selection_outputs(cases)])
                 ),
                 artifact_path,
             )
@@ -126,28 +134,15 @@ class AxiomRulesRunner(EngineAdapter):
                 allowed_program_refs,
                 output_aliases=output_aliases,
             )
-            if self.record_all_outputs:
-                # Full-evidence mode: also query every derived rule in the
-                # compared concepts' dependency closure, so each case
-                # records the complete computation chain (intermediates
-                # included). Rules OUTSIDE the closure are not queried —
-                # forcing them evaluates program surfaces whose inputs the
-                # projector legitimately prunes (e.g. citizenship modules)
-                # and fails every case with missing-input errors.
-                known = set(execution_targets)
-                case_entity = str(
-                    cases[0].metadata.get(AXIOM_ENTITY_METADATA_KEY)
-                    or self.default_entity
-                )
-                execution_targets = execution_targets + [
-                    name
-                    for name in _derived_closure_ids(
-                        artifact_path,
-                        execution_targets,
-                        entity=case_entity,
-                    )
-                    if name not in known
-                ]
+            # Full-evidence mode (record_all_outputs) queries the same
+            # targets as an ordinary run — the compared outputs plus any
+            # result-selection output — and reads intermediates from the
+            # explain-mode trace of what the engine evaluated. Querying the
+            # targets' dependency closure instead forced derived rules that
+            # only an untaken branch references — e.g. 26 USC 21's
+            # creditable expenses when the claim requirements already zeroed
+            # the credit — whose inputs the projector need not supply, and
+            # that one missing input failed every case in the batch.
             results = self._run_cases(
                 cases,
                 execution_targets,
@@ -155,9 +150,7 @@ class AxiomRulesRunner(EngineAdapter):
                 allowed_program_refs=allowed_program_refs,
                 output_aliases=output_aliases,
             )
-            return [
-                _remap_output_aliases(result, output_aliases) for result in results
-            ]
+            return [_remap_output_aliases(result, output_aliases) for result in results]
 
     def run_households(
         self,
@@ -197,8 +190,7 @@ class AxiomRulesRunner(EngineAdapter):
             return self.compiled_artifact_path
         if program_path is None:
             raise RuntimeError(
-                "Axiom comparisons require --axiom-program or "
-                "AXIOM_RULESPEC_PROGRAM."
+                "Axiom comparisons require --axiom-program or AXIOM_RULESPEC_PROGRAM."
             )
         artifact_path = temp_dir / "program.compiled.json"
         program_doc = self._load_program_doc(program_path)
@@ -250,6 +242,16 @@ class AxiomRulesRunner(EngineAdapter):
             if self._staged_roots is None:
                 self._staged_roots = StagedRootCache()
             for root in roots:
+                # A discovered root that carries none of the requested
+                # jurisdictions would stage as an empty directory, and the
+                # hard-cut engine contract rejects empty roots outright
+                # ("must contain a direct matching jurisdiction"). Skip it:
+                # sibling-jurisdiction checkouts under a shared roots dir are
+                # not part of this program's universe. (The legacy compile
+                # path tolerated them, which is why this only bites pinned
+                # post-hard-cut engines.)
+                if not any((root / name).is_dir() for name in jurisdictions):
+                    continue
                 staged = self._staged_roots.staged(root, jurisdictions)
                 staged_roots.append(staged)
                 if not composed:
@@ -329,9 +331,23 @@ class AxiomRulesRunner(EngineAdapter):
                 EngineResult(engine=self.name, household_id=case.case_id, values={})
                 for case in cases
             ]
+        # Entity aggregation needs more than one query result per Case. Keep
+        # those cases on the single-case request path, where the response can
+        # preserve and sum the ordered component results. The ordinary batch
+        # path intentionally retains its one-query-result-per-case contract.
+        if any(_case_result_aggregation(case) is not None for case in cases):
+            return [
+                self._run_case(
+                    case,
+                    output_targets,
+                    artifact_path,
+                    allowed_program_refs=allowed_program_refs,
+                    output_aliases=output_aliases,
+                )
+                for case in cases
+            ]
         overlays_by_case = [
-            _case_input_record_overlays(case, _period_for_case(case))
-            for case in cases
+            _case_input_record_overlays(case, _period_for_case(case)) for case in cases
         ]
         if not any(overlays_by_case):
             return self._run_cases_once(
@@ -342,7 +358,9 @@ class AxiomRulesRunner(EngineAdapter):
             )
 
         overlay_count = len(overlays_by_case[0])
-        if not overlay_count or any(len(overlays) != overlay_count for overlays in overlays_by_case):
+        if not overlay_count or any(
+            len(overlays) != overlay_count for overlays in overlays_by_case
+        ):
             return [
                 self._run_case(
                     case,
@@ -428,6 +446,26 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlays=input_record_overlays,
         )
+        ambiguities = []
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
+            request, raw_ambiguities = bind_materialized_relations(
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
+            )
+            ambiguities.extend(raw_ambiguities)
+
+        def case_raw(raw: Any, index: int) -> Any:
+            return with_relation_binding_diagnostics(
+                raw,
+                relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
+            )
+
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -442,14 +480,27 @@ class AxiomRulesRunner(EngineAdapter):
         )
         if process.returncode != 0:
             error = process.stderr.strip() or "Axiom RuleSpec execution failed"
+            if len(cases) == 1:
+                error = _strip_batch_namespace(error, 0)
+            isolated = self._isolate_case_failure(
+                cases,
+                output_targets,
+                artifact_path,
+                error=error,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlays=input_record_overlays,
+            )
+            if isolated is not None:
+                return isolated
             return [
                 EngineResult(
                     engine=self.name,
                     household_id=case.case_id,
                     values={},
                     errors=(error,),
+                    raw=case_raw(None, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
         try:
             payload = json.loads(process.stdout)
@@ -460,9 +511,9 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
-                    raw=process.stdout,
+                    raw=case_raw(process.stdout, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
 
         query_results = [
@@ -481,23 +532,95 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=(error,),
-                    raw=payload,
+                    raw=case_raw(payload, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
 
         return [
             EngineResult(
                 engine=self.name,
                 household_id=case.case_id,
-                values=_values_from_query_result(query_result),
-                raw={
-                    "metadata": payload.get("metadata"),
-                    "result": query_result,
-                },
+                values=_values_from_query_result(
+                    query_result,
+                    include_trace=self.record_all_outputs,
+                ),
+                raw=case_raw(
+                    {
+                        "metadata": payload.get("metadata"),
+                        "result": query_result,
+                    },
+                    index,
+                ),
             )
-            for case, query_result in zip(cases, query_results, strict=True)
+            for index, (case, query_result) in enumerate(
+                zip(cases, query_results, strict=True)
+            )
         ]
+
+    def _isolate_case_failure(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        error: str,
+        allowed_program_refs: "_AllowedProgramRefs | None",
+        input_record_overlays: list[list[dict[str, Any]]] | None,
+    ) -> list[EngineResult] | None:
+        """Keep one case's engine error from failing its whole batch.
+
+        ``run-compiled`` exits non-zero on the first query that errors, so a
+        single case's missing input used to fail every case in the batch.
+        The error's entity field names the batch namespace (``case-<i>::``)
+        the engine was evaluating; that is only a hint. The named case is
+        run alone: if it fails there, the failure is its own and its error
+        is recorded on it; the remaining cases are then rerun as two halves,
+        isolating any further failure the same way. If the named case
+        computes alone, or the error names no single case, this returns
+        ``None`` and the caller fails this batch (the whole batch, or the
+        half being rerun) as before.
+
+        The adapter namespaces every input record, relation and query per
+        case, so no rule evaluated for one case reads another case's facts
+        and a case computes the same alone as in any batch. Each isolated
+        failure costs one failed batch run and at most one confirming run,
+        so k of them cost at most 3k + 1 engine runs, plus one for each
+        hint that the confirming run does not bear out.
+        """
+
+        if len(cases) == 1:
+            # The caller's normal error path retains binding diagnostics.
+            return None
+        suspect = _suspect_case_index(error, len(cases))
+        if suspect is None:
+            return None
+
+        def run(indices: list[int]) -> list[EngineResult]:
+            return self._run_case_batch_once(
+                [cases[index] for index in indices],
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlays=(
+                    [input_record_overlays[index] for index in indices]
+                    if input_record_overlays is not None
+                    else None
+                ),
+            )
+
+        # Any error from the run alone confirms the suspect, including a
+        # malformed engine response: it is that case's own result either way.
+        [alone] = run([suspect])
+        if not alone.errors:
+            return None
+        results = {suspect: alone}
+        remaining = [index for index in range(len(cases)) if index != suspect]
+        middle = len(remaining) // 2
+        for half in (remaining[:middle], remaining[middle:]):
+            if half:
+                results.update(zip(half, run(half), strict=True))
+        return [results[index] for index in range(len(cases))]
 
     def _run_case_once(
         self,
@@ -514,6 +637,20 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
+        ambiguities = []
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
+            request, raw_ambiguities = bind_materialized_relations(
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
+            )
+            ambiguities.extend(raw_ambiguities)
+        diagnostics = relation_binding_diagnostics(ambiguities)
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -533,6 +670,7 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(error,),
+                raw=with_relation_binding_diagnostics(None, diagnostics),
             )
         try:
             payload = json.loads(process.stdout)
@@ -542,14 +680,42 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
-                raw=process.stdout,
+                raw=with_relation_binding_diagnostics(process.stdout, diagnostics),
             )
-        values = _values_from_response(payload)
+        aggregation = _case_result_aggregation(case)
+        raw: Any = payload
+        if aggregation is None:
+            values = _values_from_response(
+                payload,
+                include_trace=self.record_all_outputs,
+            )
+        else:
+            values, components, aggregation_errors = _sum_query_results(
+                payload,
+                aggregation["entity_ids"],
+                tuple(output_targets),
+                include_trace=self.record_all_outputs,
+            )
+            raw = {
+                **payload,
+                "aggregation": {
+                    "strategy": aggregation["strategy"],
+                    "components": components,
+                },
+            }
+            if aggregation_errors:
+                return EngineResult(
+                    engine=self.name,
+                    household_id=case.case_id,
+                    values={},
+                    errors=aggregation_errors,
+                    raw=with_relation_binding_diagnostics(raw, diagnostics),
+                )
         return EngineResult(
             engine=self.name,
             household_id=case.case_id,
             values=values,
-            raw=payload,
+            raw=with_relation_binding_diagnostics(raw, diagnostics),
         )
 
     def _execution_request(
@@ -583,18 +749,23 @@ class AxiomRulesRunner(EngineAdapter):
                 for record in relation_records
                 if allowed_program_refs.accepts_relation(str(record["name"]))
             ]
+        aggregation = _case_result_aggregation(case)
+        query_entity_ids = (
+            aggregation["entity_ids"] if aggregation is not None else (entity_id,)
+        )
         return {
-            "mode": self.mode,
+            "mode": self._execution_mode(),
             "dataset": {
                 "inputs": input_records,
                 "relations": relation_records,
             },
             "queries": [
                 {
-                    "entity_id": entity_id,
+                    "entity_id": query_entity_id,
                     "period": period,
                     "outputs": outputs,
                 }
+                for query_entity_id in query_entity_ids
             ],
         }
 
@@ -635,13 +806,18 @@ class AxiomRulesRunner(EngineAdapter):
             queries.append(query)
 
         return {
-            "mode": self.mode,
+            "mode": self._execution_mode(),
             "dataset": {
                 "inputs": input_records,
                 "relations": relation_records,
             },
             "queries": queries,
         }
+
+    def _execution_mode(self) -> str:
+        # Evidence intermediates come from the explain trace; fast mode
+        # returns none, so full evidence always executes in explain mode.
+        return "explain" if self.record_all_outputs else self.mode
 
     def _input_records(
         self,
@@ -705,6 +881,11 @@ class AxiomRulesRunner(EngineAdapter):
                     "name": str(relation["name"]),
                     "tuple": [str(value) for value in relation["tuple"]],
                     "interval": _interval(period),
+                    **(
+                        {"roles": dict(relation["roles"])}
+                        if "roles" in relation
+                        else {}
+                    ),
                 }
             )
         return records
@@ -725,7 +906,9 @@ def _resolve_binary_path(
             candidates.append(
                 ancestor / "axiom-rules-engine/target/release/axiom-rules-engine"
             )
-            candidates.append(ancestor / "axiom-rules-engine/target/release/axiom-rules")
+            candidates.append(
+                ancestor / "axiom-rules-engine/target/release/axiom-rules"
+            )
             candidates.append(
                 ancestor / "axiom-rules-engine/target/debug/axiom-rules-engine"
             )
@@ -769,65 +952,38 @@ def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
     return temp_dir / f"rulespec-{prefix}" / relative_path.with_suffix(".yaml")
 
 
-def _derived_closure_ids(
-    artifact_path: Path,
-    roots: list[str],
-    *,
-    entity: str | None = None,
-) -> list[str]:
-    """Qualified ids of every derived rule reachable from ``roots``.
+_TRACE_RELATED_ENTITY_MARKER = "@entity:"
+# The engine names the entity an evaluation error occurred on as
+# ``entity `<id>```; batched ids carry the generated ``case-<i>::`` prefix.
+# Only that field is read: the same text inside an input value, an input
+# name or a case's own entity id is not an attribution.
+_CASE_ENTITY_FIELD_PATTERN = re.compile(r"entity `case-(\d+)::")
 
-    Walks ``{"kind": "derived", "name": ...}`` references in the compiled
-    expr trees. Roots may be qualified ids or local names.
+
+def _suspect_case_index(error: str, case_count: int) -> int | None:
+    """Batch index the error's entity field points at, else ``None``.
+
+    Batched requests namespace each case's entities as ``case-<i>::`` (see
+    ``_batched_execution_request``). An error whose entity field names no
+    batch namespace, or fields naming more than one, points at no single
+    case. The result is a hint for ``_isolate_case_failure`` to confirm.
     """
 
-    try:
-        compiled = json.loads(artifact_path.read_text())
-    except (OSError, json.JSONDecodeError):
-        return []
-    program = compiled.get("program", compiled)
-    rules = [r for r in program.get("derived", []) or [] if isinstance(r, dict)]
-    by_name: dict[str, dict] = {}
-    for rule in rules:
-        for key in (rule.get("name"), rule.get("id")):
-            if isinstance(key, str) and key:
-                by_name.setdefault(key, rule)
+    indices = {int(match) for match in _CASE_ENTITY_FIELD_PATTERN.findall(error)}
+    if len(indices) != 1:
+        return None
+    (index,) = indices
+    return index if index < case_count else None
 
-    def refs(node) -> list[str]:
-        found = []
-        if isinstance(node, dict):
-            if node.get("kind") == "derived" and isinstance(
-                node.get("name"), str
-            ):
-                found.append(node["name"])
-            for child in node.values():
-                found.extend(refs(child))
-        elif isinstance(node, list):
-            for child in node:
-                found.extend(refs(child))
-        return found
 
-    seen: set[str] = set()
-    queue = [root for root in roots if root in by_name]
-    closure_ids: list[str] = []
-    while queue:
-        key = queue.pop()
-        rule = by_name.get(key)
-        if rule is None:
-            continue
-        identifier = rule.get("id") or rule.get("name")
-        if not isinstance(identifier, str) or identifier in seen:
-            continue
-        seen.add(identifier)
-        # Queries evaluate at the case's entity; rules scoped to other
-        # entities (per-Person intermediates) would be force-evaluated at
-        # the wrong scope and fail on entity-mismatched inputs. They are
-        # still walked THROUGH so household-level rules beyond them stay
-        # reachable — just not queried.
-        if entity is None or (rule.get("entity") or entity) == entity:
-            closure_ids.append(identifier)
-        queue.extend(refs(rule.get("expr")))
-    return sorted(closure_ids)
+def _strip_batch_namespace(error: str, index: int) -> str:
+    """Drop the generated ``case-<index>::`` prefix from each entity field.
+
+    Only the outer prefix goes: a case whose own entity id starts with the
+    same text keeps it.
+    """
+
+    return error.replace(f"entity `case-{index}::", "entity `")
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:
@@ -915,17 +1071,66 @@ def _remap_output_aliases(
     }
     values = dict(result.values)
     for actual, requested in reverse_aliases.items():
-        if actual in values and requested not in values:
+        # Unconditional: the requested name belongs to the queried output.
+        # A full-evidence trace entry that happens to be keyed by the same
+        # name is a different rule and must never stand in for it.
+        if actual in values:
             values[requested] = values[actual]
-    if values == result.values:
+    raw = _remap_aggregation_component_aliases(result.raw, reverse_aliases)
+    if values == result.values and raw is result.raw:
         return result
     return EngineResult(
         engine=result.engine,
         household_id=result.household_id,
         values=values,
         errors=result.errors,
-        raw=result.raw,
+        raw=raw,
     )
+
+
+def _remap_aggregation_component_aliases(
+    raw: Any,
+    reverse_aliases: Mapping[str, str],
+) -> Any:
+    """Mirror top-level aliases into each per-entity evidence component."""
+
+    if not isinstance(raw, Mapping):
+        return raw
+    aggregation = raw.get("aggregation")
+    if not isinstance(aggregation, Mapping):
+        return raw
+    raw_components = aggregation.get("components")
+    if not isinstance(raw_components, list):
+        return raw
+
+    components = []
+    changed = False
+    for component in raw_components:
+        if not isinstance(component, Mapping):
+            components.append(component)
+            continue
+        component_values = component.get("values")
+        if not isinstance(component_values, Mapping):
+            components.append(component)
+            continue
+        remapped_values = dict(component_values)
+        for actual, requested in reverse_aliases.items():
+            if actual in remapped_values:
+                remapped_values[requested] = remapped_values[actual]
+        if remapped_values != component_values:
+            changed = True
+            components.append({**component, "values": remapped_values})
+        else:
+            components.append(component)
+    if not changed:
+        return raw
+    return {
+        **raw,
+        "aggregation": {
+            **aggregation,
+            "components": components,
+        },
+    }
 
 
 def _execution_output_targets(
@@ -977,9 +1182,7 @@ def _case_input_record_overlays(
     if raw_overlays is None:
         return []
     if not isinstance(raw_overlays, list | tuple):
-        raise RuntimeError(
-            "metadata['axiom_input_record_overlays'] must be a list."
-        )
+        raise RuntimeError("metadata['axiom_input_record_overlays'] must be a list.")
     return [
         _normalize_input_records(
             raw_overlay,
@@ -988,6 +1191,39 @@ def _case_input_record_overlays(
         )
         for index, raw_overlay in enumerate(raw_overlays)
     ]
+
+
+def _case_result_aggregation(case: Case) -> dict[str, Any] | None:
+    """Validate and normalize an optional cross-entity result aggregation.
+
+    RuleSpec outputs are entity-scoped. A comparison whose oracle reports a
+    household sum can therefore request the same output for several entity ids
+    and sum the executed values without inventing a household-level legal rule.
+    """
+
+    raw = case.metadata.get(AXIOM_RESULT_AGGREGATION_METADATA_KEY)
+    if raw is None:
+        return None
+    if not isinstance(raw, Mapping):
+        raise RuntimeError("metadata['axiom_result_aggregation'] must be a mapping.")
+    strategy = str(raw.get("strategy", ""))
+    if strategy != "sum":
+        raise RuntimeError("metadata['axiom_result_aggregation'].strategy must be sum.")
+    raw_entity_ids = raw.get("entity_ids")
+    if not isinstance(raw_entity_ids, list | tuple) or isinstance(raw_entity_ids, str):
+        raise RuntimeError(
+            "metadata['axiom_result_aggregation'].entity_ids must be a list."
+        )
+    entity_ids = tuple(str(entity_id) for entity_id in raw_entity_ids)
+    if not entity_ids or any(not entity_id for entity_id in entity_ids):
+        raise RuntimeError(
+            "metadata['axiom_result_aggregation'].entity_ids must be non-empty."
+        )
+    if len(set(entity_ids)) != len(entity_ids):
+        raise RuntimeError(
+            "metadata['axiom_result_aggregation'].entity_ids must be unique."
+        )
+    return {"strategy": strategy, "entity_ids": entity_ids}
 
 
 def _normalize_input_records(
@@ -1053,6 +1289,17 @@ def _select_candidate_result(
     case: Case,
     candidates: list[EngineResult],
 ) -> EngineResult:
+    diagnostics: dict = {}
+    for candidate in candidates:
+        if isinstance(candidate.raw, Mapping):
+            merge_relation_binding_diagnostics(
+                diagnostics,
+                candidate.raw.get("relation_binding_diagnostics", {}),
+            )
+
+    def selection_raw(raw: Any) -> Any:
+        return with_relation_binding_diagnostics(raw, diagnostics)
+
     raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
     if not isinstance(raw_selection, Mapping):
         return EngineResult(
@@ -1063,7 +1310,7 @@ def _select_candidate_result(
                 "metadata['axiom_result_selection'] is required when "
                 "metadata['axiom_input_record_overlays'] is provided.",
             ),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
     strategy = str(raw_selection.get("strategy", ""))
     output = str(raw_selection.get("output", ""))
@@ -1073,7 +1320,7 @@ def _select_candidate_result(
             household_id=case.case_id,
             values={},
             errors=("metadata['axiom_result_selection'].strategy must be min or max.",),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
     if not output:
         return EngineResult(
@@ -1081,7 +1328,7 @@ def _select_candidate_result(
             household_id=case.case_id,
             values={},
             errors=("metadata['axiom_result_selection'].output is required.",),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
 
     valid_candidates = [
@@ -1101,7 +1348,7 @@ def _select_candidate_result(
                 f"Axiom candidate selection found no numeric '{output}' result.",
                 *candidate_errors,
             ),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
 
     selector = min if strategy == "min" else max
@@ -1113,11 +1360,13 @@ def _select_candidate_result(
         engine=engine_name,
         household_id=case.case_id,
         values=selected.values,
-        raw={
-            "selection": dict(raw_selection),
-            "selected_candidate": selected_index,
-            "candidates": _candidate_raw(candidates),
-        },
+        raw=selection_raw(
+            {
+                "selection": dict(raw_selection),
+                "selected_candidate": selected_index,
+                "candidates": _candidate_raw(candidates),
+            }
+        ),
         errors=selected.errors,
     )
 
@@ -1238,36 +1487,149 @@ def _relation_tuples(value: Any) -> list[Any]:
     return [[value]]
 
 
-def _namespace_input_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+def _namespace_input_record(
+    record: Mapping[str, Any], namespace: str
+) -> dict[str, Any]:
     namespaced = dict(record)
     namespaced["entity_id"] = _namespace_entity_id(namespace, namespaced["entity_id"])
     return namespaced
 
 
-def _namespace_relation_record(record: Mapping[str, Any], namespace: str) -> dict[str, Any]:
+def _namespace_relation_record(
+    record: Mapping[str, Any], namespace: str
+) -> dict[str, Any]:
     namespaced = dict(record)
     namespaced["tuple"] = [
-        _namespace_entity_id(namespace, value)
-        for value in namespaced.get("tuple", [])
+        _namespace_entity_id(namespace, value) for value in namespaced.get("tuple", [])
     ]
+    if "roles" in namespaced:
+        namespaced["roles"] = {
+            **namespaced["roles"],
+            "owner_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["owner_id"]
+            ),
+            "related_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["related_id"]
+            ),
+        }
     return namespaced
+
+
+def _materialize_relation_roles(
+    request: dict[str, Any],
+    artifact: dict[str, Any],
+    *,
+    binding_ambiguities: list | None = None,
+) -> set[int]:
+    """Resolve producer roles against the artifact actually sent to the engine."""
+    materialized = set()
+    relation_binder = RelationBinder(artifact)
+    for index, record in enumerate(request["dataset"]["relations"]):
+        roles = record.pop("roles", None)
+        if roles is not None:
+            record["tuple"] = relation_binder.tuple(
+                record["name"],
+                **roles,
+                binding_ambiguities=binding_ambiguities,
+            )
+            materialized.add(index)
+    return materialized
 
 
 def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
     return f"{namespace}{entity_id}"
 
 
-def _values_from_response(payload: Mapping[str, Any]) -> dict[str, Any]:
+def _values_from_response(
+    payload: Mapping[str, Any],
+    *,
+    include_trace: bool = False,
+) -> dict[str, Any]:
     values: dict[str, Any] = {}
     for result in payload.get("results", []):
         if not isinstance(result, Mapping):
             continue
-        values.update(_values_from_query_result(result))
+        values.update(_values_from_query_result(result, include_trace=include_trace))
     return values
 
 
-def _values_from_query_result(result: Mapping[str, Any]) -> dict[str, Any]:
+def _sum_query_results(
+    payload: Mapping[str, Any],
+    entity_ids: tuple[str, ...],
+    aggregate_outputs: tuple[str, ...],
+    *,
+    include_trace: bool = False,
+) -> tuple[dict[str, Any], list[dict[str, Any]], tuple[str, ...]]:
+    """Sum requested numeric outputs across ordered entity query results.
+
+    Only ``aggregate_outputs`` are summed. Trace intermediates (full-evidence
+    mode) stay on their entity's component: they are not household sums.
+    """
+
+    query_results = [
+        result for result in payload.get("results", []) if isinstance(result, Mapping)
+    ]
+    components = [
+        {
+            "entity_id": entity_id,
+            "values": _values_from_query_result(result, include_trace=include_trace),
+        }
+        for entity_id, result in zip(entity_ids, query_results)
+    ]
+    if len(query_results) != len(entity_ids):
+        return (
+            {},
+            components,
+            (
+                "Axiom RuleSpec execution returned "
+                f"{len(query_results)} query results for "
+                f"{len(entity_ids)} aggregated entities.",
+            ),
+        )
+
+    aggregated: dict[str, Any] = {}
+    errors: list[str] = []
+    for output in aggregate_outputs:
+        if any(output not in component["values"] for component in components):
+            errors.append(
+                "Axiom entity aggregation requires every query to return "
+                f"output {output!r}."
+            )
+            continue
+        values = [component["values"][output] for component in components]
+        if not all(_is_numeric_value(value) for value in values):
+            errors.append(
+                "Axiom entity aggregation can only sum numeric output "
+                f"{output!r}; got {values!r}."
+            )
+            continue
+        aggregated[output] = sum(values)
+    return aggregated, components, tuple(errors)
+
+
+def _values_from_query_result(
+    result: Mapping[str, Any],
+    *,
+    include_trace: bool = False,
+) -> dict[str, Any]:
     values: dict[str, Any] = {}
+    if include_trace:
+        # Explain mode's trace holds the derived rules the engine has
+        # evaluated for this query's entity and period, keyed and shaped
+        # like outputs; a rule nothing evaluated is absent, not forced.
+        # Newer engines also list instances evaluated on related entities
+        # under ``<rule>@entity:<hex id>``. Those stay out: evidence is
+        # scoped to the queried entity (as the closure query was), and the
+        # hex encodes the batch namespace, so it would vary with a case's
+        # position in its batch. The queried outputs are written last, so
+        # they win over a trace entry with the same key.
+        trace = result.get("trace")
+        if isinstance(trace, Mapping):
+            for trace_key, node in trace.items():
+                if isinstance(
+                    node, Mapping
+                ) and _TRACE_RELATED_ENTITY_MARKER not in str(trace_key):
+                    values[str(trace_key)] = _output_value(node)
     for output_key, output in result.get("outputs", {}).items():
         if not isinstance(output, Mapping):
             continue
@@ -1398,6 +1760,25 @@ def _default_rulespec_repo_roots() -> tuple[Path, ...]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         return (root,)
+    # AXIOM_RULESPEC_REPO_ROOTS (plural, os.pathsep-joined) is what
+    # run_comparison.py forwards from a suite's `axiom_rulespec_repo_roots`
+    # config. Honoring it here makes suite YAMLs self-sufficient — before
+    # this, the compare subprocess received the variable but this fallback
+    # never read it, so lanes only ran on machines with AXIOM_RULESPEC_ROOT
+    # exported or a ~/TheAxiomFoundation workspace (fiit-taxsim-ecps smoke,
+    # 2026-08-23).
+    plural = os.environ.get(AXIOM_RULESPEC_REPO_ROOTS_ENV)
+    if plural:
+        roots = []
+        for part in plural.split(os.pathsep):
+            if not part:
+                continue
+            root = Path(part).expanduser()
+            if root.name.startswith("rulespec-"):
+                root = root.parent
+            roots.append(root)
+        if roots:
+            return tuple(roots)
     candidate = Path.home() / "TheAxiomFoundation"
     if candidate.exists():
         return (candidate,)

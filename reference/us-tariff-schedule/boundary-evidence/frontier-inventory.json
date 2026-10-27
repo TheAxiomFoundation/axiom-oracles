@@ -1,0 +1,671 @@
+{
+  "canonical_scope_sha256": "13625d5f125cea50515552e197e3d899d7b59467a2b04d121b2e73a2fef040a8",
+  "claim": {
+    "certified": false,
+    "closed": false,
+    "current_certification_status_inferred": false,
+    "engine_binary_reproducible_build_verified": false,
+    "expectation_provenance": "source-linked reviewed transcriptions",
+    "expectations_independently_pdf_derived": false,
+    "kind": "bounded_frozen_historical_evidence",
+    "release_authorized": false
+  },
+  "corpus_ref": "cc18c703741425a3ebf994a2975cae158bd305d1",
+  "counts": {
+    "diagnostic_contract_only": 1,
+    "distinct_mismatch_scenarios": 19,
+    "distinct_runtime_entity_ids": 453,
+    "evidence_covered_scopes": 21,
+    "fully_admitted_or_grounded_scopes": 0,
+    "intentional_native_missing_input_errors": 12,
+    "known_source_runtime_mismatch": 7,
+    "named_scopes": 58,
+    "no_mismatch_detected_in_bounded_checks": 12,
+    "post_expiry_only": 1,
+    "raw_identity_differences": 9,
+    "reachable_inputs": 58,
+    "returned_output_bindings": 1817,
+    "runtime_query_executions": 843,
+    "source_groundings_still_uncaptured": 58,
+    "source_runtime_mismatch_records": 30,
+    "successful_runtime_result_rows": 831
+  },
+  "current_certification_authority": false,
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "engine_source_ref": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+  "engine_source_repository": "TheAxiomFoundation/axiom-rules-engine",
+  "generated_by": "scripts/us_tariff_evidence_snapshot.py",
+  "inputs": [
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "CBP acceptance on the entry record that the declarant's Chapter 98 provision is appropriate under U.S. note 2(u); not inferable from the HTS number alone",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "cbp_agrees_chapter_98_entry_is_appropriate",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "CBP country-of-origin determination for the entry transaction; not a tariff-table membership proxy",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "country_of_origin",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "19 U.S.C. 1401a appraised customs value for the entry",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "customs_value",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "real-entry determination under HTS U.S. note 16(c) of at least 15 percent aggregate applicable listed-metal weight; the campaign TRUE value is only a Yale-model assumption, not actual-entry proof",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_has_at_least_fifteen_percent_aggregate_applicable_listed_metal_weight",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "entry classification within the U.S. note 2(u) Chapter 98 exception for heading 9802.00.80 or subheading 9802.00.40, 9802.00.50, or 9802.00.60",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_9802_excepted_entry",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-preparation membership determination under HTS chapter 99 U.S. note 50 for the Brazil section-301 component",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_brazil_301_listed",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation membership determination against the complete HTS U.S. note 31 China 2024-action table, which the pinned program does not itself derive",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-action.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_2024_action",
+      "receipt_query_executions": 36,
+      "scope_validation_status": "blocked_on_missing_adapter_note31_membership"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation membership determination against the original China section-301 lists 1, 2, or 3 and their exclusions",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-lists.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_list123",
+      "receipt_query_executions": 18,
+      "scope_validation_status": "blocked_on_beer_list3_overlap"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation membership determination against China section-301 list 4A and its exclusions",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-lists.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_list4a",
+      "receipt_query_executions": 18,
+      "scope_validation_status": "bounded_nonexcluded_list4a_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation membership determination against the complete HTS U.S. note 31 solar-products China section-301 table, which the pinned program does not itself derive",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/china-action.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_china_301_solar",
+      "receipt_query_executions": 36,
+      "scope_validation_status": "blocked_on_missing_adapter_note31_membership"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "declarant claim and transaction qualification for duty-free DR-CAFTA treatment, including applicable subchapter XXII treatment",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_entered_free_of_duty_under_dr_cafta",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "declarant claim and transaction qualification for duty-free USMCA treatment used by HTS U.S. note 52(g)-(h)",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_entered_free_of_duty_under_usmca",
+      "receipt_query_executions": 230,
+      "scope_validation_status": "bounded_stipulated_fact_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-preparation membership determination under HTS chapter 99 U.S. note 52 for the forced-labor section-301 component",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_forced_labor_301_listed",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "General Note 29(d)(v) classification under the WTO textiles-and-clothing annex and stated exclusions",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_general_note_29_d_v_textile_or_apparel_good",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "transaction determination that the article is a humanitarian donation described by HTS 9903.01.21 and U.S. note 2(t)",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_humanitarian_donation_article",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "article determination that the goods are informational material described by HTS 9903.01.22",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_informational_material_article",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "generated-schedule adapter's exact HTS-number equality to 7202.11.10.00; the witness derives the same predicate from hts_number",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/hts-identity.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_line_a",
+      "receipt_query_executions": 63,
+      "scope_validation_status": "bounded_canonical_contract_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "generated-schedule adapter's exact HTS-number equality to 7601.10.30.00; the witness derives the same predicate from hts_number",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/hts-identity.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_line_b",
+      "receipt_query_executions": 63,
+      "scope_validation_status": "bounded_canonical_contract_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "generated-schedule adapter's exact HTS-number equality to 2203.00.00.30; the witness derives the same predicate from hts_number",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/hts-identity.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_line_d",
+      "receipt_query_executions": 63,
+      "scope_validation_status": "bounded_canonical_contract_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level HTS U.S. note 33 automobile-part import-adjustment-offset determination",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note33_auto_part_subject_to_import_adjustment_offset",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level determination that a U.S. note 33(g) candidate is an automobile part",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note33_g_automobile_part",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level determination that a U.S. note 37(f) candidate is a completed kitchen cabinet, vanity, or part",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note37_f_completed_kitchen_cabinet_vanity_or_part",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level determination that a U.S. note 38(i) candidate is a medium- or heavy-duty-vehicle part",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note38_i_medium_or_heavy_duty_vehicle_part",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level HTS U.S. note 38 medium/heavy-duty-vehicle-part import-adjustment-offset determination",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note38_mhd_part_subject_to_import_adjustment_offset",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level determination that a U.S. note 40 candidate is covered by a valid unexpired U.S. patent",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_note40_patented_pharmaceutical_article",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "transaction determination that the goods are for personal use in accompanied baggage under HTS U.S. note 2(u)",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_personal_use_accompanied_baggage",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_for_frozen_snapshot",
+      "canonical_scope": "declarant's Chapter 98 claim made under applicable CBP regulations for the entry transaction",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_properly_claimed_chapter_98_entry",
+      "receipt_query_executions": 384,
+      "scope_validation_status": "bounded_source_truth_table_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 16(c)(viii) additional-copper membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_copper_additional_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 16(c)(v) primary-copper membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_copper_primary_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 16(c)(ii) derivative-aluminum membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note16_c_ii_derivative_aluminum_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 16(c)(ix) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note16_c_ix_derivative_aluminum_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 16(c)(vi) derivative-aluminum candidate membership supplied by entry preparation; candidate status alone does not establish the listed-metal-weight qualification",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note16_c_vi_derivative_aluminum_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry classification in HTS chapter 72, 73, 74, or 76 for the note 16(c)(vi)/(ix) listed-metal-weight exception",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note16_metal_chapter",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 33(g) automobile-part candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note33_auto_part_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 33(b) vehicle candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note33_vehicle_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 37(f) cabinet/vanity candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note37_cabinet_vanity_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 37(b) softwood membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note37_softwood_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 37(d) upholstered-wood-furniture membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note37_upholstered_wood_furniture_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 38(c) bus membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note38_bus_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 38(i) medium/heavy-duty-vehicle-part candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note38_mhd_part_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 38(b) medium/heavy-duty-vehicle membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note38_mhd_vehicle_member",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 39 semiconductor candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note39_semiconductor_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "HTS U.S. note 40 pharmaceutical candidate membership supplied by entry preparation",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_s232_note40_pharmaceutical_candidate",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation determination that an applicable section 122 surcharge exclusion in HTS U.S. note 2(aa) covers the entry",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/temporal-boundaries.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_section_122_exempt",
+      "receipt_query_executions": 23,
+      "scope_validation_status": "blocked_at_subminute_activation"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "classification of the entry as a crystalline-silicon photovoltaic (CSPV) article within the expired HTS U.S. note 18 safeguard surface",
+      "evidence_class": "post_expiry_only",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/temporal-boundaries.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_section_201_cspv",
+      "receipt_query_executions": 20,
+      "scope_validation_status": "bounded_postexpiry_replay_only"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation determination that the entry is an aluminum article or derivative covered by the applicable section 232 action",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/primary-metals.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_section_232_aluminum",
+      "receipt_query_executions": 28,
+      "scope_validation_status": "blocked_on_missing_uk_note16_d_qualification"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-preparation determination of existing aluminum or steel section-232 coverage for cross-program exclusions",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_is_section_232_covered",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation determination that the entry is a steel article or derivative covered by the applicable section 232 action",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/primary-metals.json",
+      "grounding": "uncaptured",
+      "input": "entry_is_section_232_steel",
+      "receipt_query_executions": 28,
+      "scope_validation_status": "blocked_on_missing_uk_note16_d_qualification"
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "carrier and entry records establishing the HTS 9903.05.85 transit condition before July 24, 2026 for entries before July 28, 2026",
+      "evidence_class": "known_source_runtime_mismatch",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json",
+      "grounding": "uncaptured",
+      "input": "entry_loaded_and_in_transit_before_july_24_2026",
+      "receipt_query_executions": 230,
+      "scope_validation_status": "blocked_at_subminute_entry_cutoff"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "importer certification for a U.S. note 33 automobile part whose heading is listed in notes 50 and 52",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_qualifies_for_note33_certified_auto_part_heading_listed_in_notes_50_52",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "transaction qualification for a U.S. note 33 vehicle heading listed in notes 50 and 52",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_qualifies_for_note33_vehicle_heading_listed_in_notes_50_52",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "importer certification for a U.S. note 38 vehicle part whose heading is listed in notes 50 and 52",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_qualifies_for_note38_certified_mhd_part_heading_listed_in_notes_50_52",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "entry-level technical qualification for semiconductor heading 9903.79.01 under U.S. note 39",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "entry_qualifies_for_note39_heading_9903_79_01",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "caller-selected exact HTS tariff-line key in the generated Rev-15 rate table after entry classification",
+      "evidence_class": "no_mismatch_detected_in_bounded_checks",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/hts-identity.json",
+      "grounding": "uncaptured",
+      "input": "hts_line",
+      "receipt_query_executions": 63,
+      "scope_validation_status": "bounded_canonical_contract_replay_matches"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "full HTS statistical reporting number assigned to the entry by the declarant and accepted or corrected through CBP classification",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "hts_number",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "carrier-channel fact that the shipment is postal",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "is_postal_shipment",
+      "receipt_query_executions": 0
+    },
+    {
+      "among_21_evidence_covered_scopes": true,
+      "bounded_source_evidence": "captured_live_primary_source",
+      "canonical_scope": "entry-preparation resolution of the applicable specific, compound, or conditional non-ad-valorem column-2 duty to the Rate value consumed for chapter-99 schedule rows; no flat column-2 table value is inferred",
+      "evidence_class": "diagnostic_contract_only",
+      "evidence_receipt": "reference/us-tariff-schedule/boundary-evidence/column2-resolution.json",
+      "grounding": "uncaptured",
+      "input": "resolved_non_ad_valorem_column2_rate",
+      "receipt_query_executions": 41,
+      "scope_validation_status": "blocked_on_external_non_ad_valorem_resolution_and_vintage_admission"
+    },
+    {
+      "among_21_evidence_covered_scopes": false,
+      "bounded_source_evidence": "not_captured_this_batch",
+      "canonical_scope": "declared shipment value used by the postal/de-minimis branch, distinct from 19 U.S.C. 1401a customs value",
+      "evidence_receipt": null,
+      "grounding": "uncaptured",
+      "input": "shipment_value",
+      "receipt_query_executions": 0
+    }
+  ],
+  "live_source_supplement": {
+    "path": "reference/us-tariff-schedule/boundary-evidence/live-sources/receipt.json",
+    "producer": "scripts/us_tariff_live_source_evidence.py",
+    "producer_sha256": "c33a367b777a7c413d39ee9a167a2ffa51470c63e8a3396a474c02da3d471740",
+    "sha256": "d0fecaf7d42608a98e6197b7674dc496d59b44f02a1a9e78998305e0df4f8c1f"
+  },
+  "producer_sha256": "2bdf153ec84ff6958b0c8214ba474838bb7c9dbbcc2bac666e47025fa109e512",
+  "reachable_input_inventory_live_reproduced": true,
+  "receipts": {
+    "china-action.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/china-action.json",
+      "producer": "scripts/build_us_tariff_china_action_evidence.py",
+      "producer_sha256": "c2e3eb0815fc8cc5fc085d3d754645a3a2228614a53da69b048276e930f659b8",
+      "sha256": "2fe90fdab38c91a3d20456f4cdd0880863482a4ee1f4a8a7c6022cb1b1810fa5"
+    },
+    "china-lists.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/china-lists.json",
+      "producer": "scripts/build_us_tariff_china_list_evidence.py",
+      "producer_sha256": "c5a381a4132915a0b293a411098d6aba8232cc09c3acf516fd40cd89a5347c67",
+      "sha256": "d162d1276ad22188c60f1e16ee5005e97bd2138df8c2020f064ab8334eb704e0"
+    },
+    "column2-resolution.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/column2-resolution.json",
+      "producer": "scripts/build_us_tariff_column2_evidence.py",
+      "producer_sha256": "d4d6d08a0236e5827adc01ea122537b084601c04b8cd3e53fd216a73c8a2a930",
+      "sha256": "63892705d00b400af8a4733dbdcc24886b17723382dd4513769e9ef86a78a53e"
+    },
+    "hts-identity.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/hts-identity.json",
+      "producer": "scripts/build_us_tariff_identity_evidence.py",
+      "producer_sha256": "8b72d90acfa3adf857dc01abab8369f7204f9fdcf6f8634fd36351196712710b",
+      "sha256": "204dc568e9ebb71568611b47576c2fd4cd06f38ba180f2ee7a62be2cb7499c16"
+    },
+    "note2-exceptions.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/note2-exceptions.json",
+      "producer": "scripts/build_us_tariff_boundary_evidence.py",
+      "producer_sha256": "eeecb89e4fe4a68cb370023ba32e8e3007899e4957dffaf7c142d178f8441028",
+      "sha256": "c185aeb8bd4b6d119fac5be03834f305b31d863ef2ea056ecedb4665e2e8e6f3"
+    },
+    "note52-transit-usmca.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/note52-transit-usmca.json",
+      "producer": "scripts/build_us_tariff_note52_boundary_evidence.py",
+      "producer_sha256": "eea4ed08412cdaee0d8d29ecdf7261cb51b60083050a2baf614e0ea3550e436a",
+      "sha256": "ff4c4393d68356ffd094a253260c3cb581ce01295e1d2abd7b4fb14453af019c"
+    },
+    "primary-metals.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/primary-metals.json",
+      "producer": "scripts/build_us_tariff_metal_evidence.py",
+      "producer_sha256": "c3d631ff9a20fea458e5f4d0b9c74dd4555ea4b1aed9ec94da463eb25efe366c",
+      "sha256": "f2e580dea265af6044e76e469b61b20de4c3f626dbe4c09cc0358548e814e815"
+    },
+    "temporal-boundaries.json": {
+      "path": "reference/us-tariff-schedule/boundary-evidence/temporal-boundaries.json",
+      "producer": "scripts/build_us_tariff_temporal_evidence.py",
+      "producer_sha256": "dcba9dbaa01da397b0bb39e4f65369d7dba160e392181d065fd5c256bad2a110",
+      "sha256": "f9b0b11826da0a8d9dbdee854c129cf5fe37a133392d80e3af57d81b1cb9df05"
+    }
+  },
+  "replay_manifest": {
+    "manifest_sha256": "1985de4e5600e29fdf6972723184c4ecc0215a4fdbd89a4c40d9746fcb79dba3",
+    "path": "reference/us-tariff-schedule/boundary-evidence/continuation-replay-manifest.json",
+    "sha256": "2cd317d393cf14726b391d148032f36ddc720a36c5e4ae2499af0e5127718b1a"
+  },
+  "repository_base_ref": "c7cd2346ef540801d2c89780420be77dc0654ff9",
+  "rulespec_ref": "4f591c4267063094cc6da9d590872ea982940b81",
+  "schema": "axiom_oracles.us_tariff_schedule.frozen_evidence_frontier.v2",
+  "snapshot_kind": "frozen_historical_evidence"
+}

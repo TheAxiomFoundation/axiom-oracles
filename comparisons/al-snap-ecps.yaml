@@ -6,6 +6,15 @@ description: Compares Alabama SNAP eligibility and benefit amount from the
   composed axiom-programs/us-al/snap/fy-2026 spec against PolicyEngine on the
   Enhanced CPS, filtered to Alabama households.
 
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
 runner:
   type: axiom-oracles-compare
   axiom_rules_repo: $HOME/axiom-rules-engine

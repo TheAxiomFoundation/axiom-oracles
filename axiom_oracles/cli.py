@@ -30,6 +30,7 @@ from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.taxsim import pins as taxsim_pins
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -37,6 +38,7 @@ from .comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
     engine_targets_for_concepts,
+    load_program_mappings,
 )
 from .comparison.report import (
     FULL_CASE_INPUT_LIMIT,
@@ -52,6 +54,7 @@ from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
 from .populations import load_populace_us_cases
+from .populations.populace_us import CaseUnit, CaseUnitSelector
 from .suites import available_suites, load_suite
 
 
@@ -60,15 +63,23 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-# The pinned policyengine-taxsim 2.30.0 binary (see adapters/taxsim/
-# taxsim_pins.json) models law year 2026 rate schedules, the OBBBA standard
-# deduction, childless EITC, and FICA/SECA, so TAXSIM comparisons default to
-# the same 2026 validation year as every other lane. Known 2026 gap, verified
-# empirically against the pinned binary: the qualifying-child credit machinery
-# is absent at 2026 — CTC collapses to the $500 ODC path, and ACTC, CDCC, and
-# EITC-with-children return zero (2025 models all of them, including the OBBBA
-# $2,200 CTC). Comparisons of child-credit concepts at 2026 must treat TAXSIM
-# zeros as an NBER gap, not evidence.
+# The macOS binary in the pinned policyengine-taxsim 2.30.0 release
+# (taxsimtest-osx.exe, build 20260521; see adapters/taxsim/taxsim_pins.json)
+# models law year 2026 rate schedules, the OBBBA standard deduction, childless
+# EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
+# validation year as DEFAULT_PERIOD. The Linux binary in the same release
+# (taxsimtest-linux.exe, build cdate-compdate) is a different NBER build that
+# accepts law years 1960-2024 only, so `compare` refuses 2025 and 2026 on Linux
+# before loading the population (_require_taxsim_law_year; each binary's range
+# is pinned in taxsim_pins.json); 2024 is the last year a Linux host can pass,
+# and the two builds differ even there (docs/policyengine-taxsim.md). Known
+# 2026 gap in the
+# macOS build, verified empirically: the qualifying-child credit machinery is
+# absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
+# zero, and the EITC ignores qualifying children, so a family with children
+# gets the childless EITC (2025 models all of them, including the OBBBA $2,200
+# CTC). Comparisons of child-credit concepts at 2026 must treat these TAXSIM
+# values as an NBER gap, not evidence.
 TAXSIM_DEFAULT_PERIOD = "2026"
 MAX_CONSOLE_MISMATCHES = 50
 EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
@@ -157,7 +168,6 @@ def cli() -> None:
     """Axiom program validation and oracle-comparison tools."""
 
 
-
 def _attach_axiom_outputs(
     cases: list[Case],
     axiom_results: list,
@@ -165,12 +175,13 @@ def _attach_axiom_outputs(
 ) -> list[Case]:
     """Stash the axiom engine's non-compared outputs into case metadata.
 
-    In full-evidence mode the runner queries every derived rule; the values
-    beyond the compared concepts' targets are the household's complete
-    computed surface (intermediates included). They land under
-    ``axiom_all_outputs`` — kept in the reports/ artifact, summarized to a
-    count in committed dashboard copies, and surfaced by the case
-    explorer's outputs panel.
+    In full-evidence mode the runner records the derived rules the engine
+    evaluated on the case's queried entity (its explain trace); the values
+    beyond the compared concepts' targets are the household's computation
+    chain (intermediates included). Ordinary results land under
+    ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
+    are not meaningful household sums, so they remain attached to their
+    executed entity under ``axiom_result_aggregation_applied.components``.
     """
 
     compared = set(engine_targets_for_concepts(list(concept_ids), "axiom"))
@@ -180,18 +191,46 @@ def _attach_axiom_outputs(
     for case in cases:
         result = by_id.get(case.case_id)
         extras = {}
+        aggregation_applied = None
         if result is not None:
             for name, value in (result.values or {}).items():
                 if name in compared:
                     continue
                 if isinstance(value, (int, float, bool)):
                     extras[name] = value
-        if extras:
+            raw_aggregation = (
+                result.raw.get("aggregation") if isinstance(result.raw, dict) else None
+            )
+            if isinstance(raw_aggregation, dict):
+                components = []
+                for component in raw_aggregation.get("components") or []:
+                    if not isinstance(component, dict):
+                        continue
+                    component_values = component.get("values") or {}
+                    components.append(
+                        {
+                            "entity_id": component.get("entity_id"),
+                            "values": {
+                                name: value
+                                for name, value in component_values.items()
+                                if isinstance(value, (int, float, bool))
+                            },
+                        }
+                    )
+                aggregation_applied = {
+                    "strategy": raw_aggregation.get("strategy"),
+                    "components": components,
+                }
+        if extras or aggregation_applied is not None:
             metadata = dict(case.metadata)
-            metadata["axiom_all_outputs"] = extras
+            if extras:
+                metadata["axiom_all_outputs"] = extras
+            if aggregation_applied is not None:
+                metadata["axiom_result_aggregation_applied"] = aggregation_applied
             case = replace(case, metadata=metadata)
         out.append(case)
     return out
+
 
 @cli.command("coverage")
 @click.option(
@@ -219,9 +258,13 @@ def coverage_check(compiled_program: Path, target: str) -> None:
 
 
 @cli.command("sanity")
-@click.argument("fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path))
+@click.argument(
+    "fixtures_file", type=click.Path(exists=True, dir_okay=False, path_type=Path)
+)
 @click.option("--left", default="axiom", type=click.Choice(["axiom", "policyengine"]))
-@click.option("--right", default="policyengine", type=click.Choice(["axiom", "policyengine"]))
+@click.option(
+    "--right", default="policyengine", type=click.Choice(["axiom", "policyengine"])
+)
 @click.option("--axiom-engine-binary", type=click.Path(path_type=Path, exists=True))
 @click.option("--axiom-compiled-program", type=click.Path(path_type=Path, exists=True))
 @click.option("--jurisdiction-fips", type=str, default=None)
@@ -255,19 +298,25 @@ def sanity_check(
         click.echo("No fixtures to run.", err=True)
         sys.exit(2)
 
-    cases = [
-        fixture_to_case(f, concept=concept, period=period) for f in fixtures
-    ]
+    cases = [fixture_to_case(f, concept=concept, period=period) for f in fixtures]
     concept_ids = (concept,)
 
     left_runner = _build_runner(
-        left, "api", None, None, concept_ids,
+        left,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
         paired_engine=right,
     )
     right_runner = _build_runner(
-        right, "api", None, None, concept_ids,
+        right,
+        "api",
+        None,
+        None,
+        concept_ids,
         axiom_compiled_program=axiom_compiled_program,
         axiom_engine_binary=axiom_engine_binary,
         paired_engine=left,
@@ -275,7 +324,9 @@ def sanity_check(
 
     try:
         prepared = _prepare_cases_for_engines(
-            cases, {left, right}, concept_ids,
+            cases,
+            {left, right},
+            concept_ids,
             axiom_compiled_program=axiom_compiled_program,
             jurisdiction_fips=jurisdiction_fips,
         )
@@ -298,11 +349,16 @@ def sanity_check(
             expected = bool(fixture.expected[engine_name])
             engine_result = results_by_id.get(case.case_id)
             if engine_result is None:
-                summary.results.append(SanityResult(
-                    fixture_id=fixture.id, engine=engine_name,
-                    expected=expected, actual=None, matched=False,
-                    error="no result returned",
-                ))
+                summary.results.append(
+                    SanityResult(
+                        fixture_id=fixture.id,
+                        engine=engine_name,
+                        expected=expected,
+                        actual=None,
+                        matched=False,
+                        error="no result returned",
+                    )
+                )
                 continue
             # Engines key their output dicts differently — axiom uses bare
             # derived names (`snap_eligible`), PolicyEngine uses its
@@ -326,12 +382,16 @@ def sanity_check(
                     "engine returned no value for the requested concept "
                     f"(values={list(values)!r})"
                 )
-            summary.results.append(SanityResult(
-                fixture_id=fixture.id, engine=engine_name,
-                expected=expected, actual=actual,
-                matched=(bool(actual) == expected) if err is None else False,
-                error=err,
-            ))
+            summary.results.append(
+                SanityResult(
+                    fixture_id=fixture.id,
+                    engine=engine_name,
+                    expected=expected,
+                    actual=actual,
+                    matched=(bool(actual) == expected) if err is None else False,
+                    error=err,
+                )
+            )
 
     print_summary(summary)
     sys.exit(0 if summary.passed else 1)
@@ -559,11 +619,46 @@ def compare(
         gc.disable()
     try:
         period = _resolve_period(period, left, right)
+        if "taxsim" in {left, right}:
+            _require_taxsim_law_year(period)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
             report_suite or suite_name, {left, right}, axiom_program
         )
+        population_mappings = None
+        population_mapping_locales = None
+        case_unit_selector: CaseUnitSelector | None = None
+        if population == "enhanced-cps":
+
+            def case_unit_selector(population_locales: set[str]) -> CaseUnit:
+                nonlocal population_mappings, population_mapping_locales
+                # Invariant: tax_unit iff every output of the final supported
+                # surface is a tax-unit concept. Empty surfaces never compare.
+                population_mapping_locales = (
+                    set(locales) if locales else population_locales
+                )
+                population_mappings = comparable_mappings(
+                    left,
+                    right,
+                    locales=population_mapping_locales,
+                    scope=comparison_scope,
+                    concepts=set(concepts) or None,
+                    categories=set(categories) or None,
+                    include_components=include_components,
+                )
+                try:
+                    population_mappings = _filter_for_accessnyc_mode(
+                        population_mappings,
+                        left,
+                        right,
+                        accessnyc_mode,
+                        accessnyc_python_path,
+                    )
+                except RuntimeError as exc:
+                    raise click.ClickException(str(exc)) from exc
+                return _populace_us_case_unit((), (), mappings=population_mappings)
+
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,
@@ -573,10 +668,13 @@ def compare(
             ecps_dataset=ecps_dataset,
             categories=categories,
             concepts=concepts,
+            case_unit_selector=case_unit_selector,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
-                case for case in cases if _household_in_jurisdiction(case, jurisdiction_fips)
+                case
+                for case in cases
+                if _household_in_jurisdiction(case, jurisdiction_fips)
             ]
         if not cases:
             raise click.ClickException(
@@ -584,32 +682,58 @@ def compare(
             )
         case_locales = set(locales) if locales else _case_locales(cases)
         requested_concepts = set(concepts) or _case_output_concepts(cases) or None
-        mappings = comparable_mappings(
-            left,
-            right,
-            locales=case_locales,
-            scope=comparison_scope,
-            concepts=requested_concepts,
-            categories=set(categories) or None,
-            include_components=include_components,
-        )
-        try:
-            mappings = _filter_for_accessnyc_mode(
-                mappings,
+        if (
+            population_mappings is not None
+            and population_mapping_locales == case_locales
+        ):
+            mappings = population_mappings
+        else:
+            mappings = comparable_mappings(
                 left,
                 right,
-                accessnyc_mode,
-                accessnyc_python_path,
+                locales=case_locales,
+                scope=comparison_scope,
+                concepts=requested_concepts,
+                categories=set(categories) or None,
+                include_components=include_components,
             )
-        except RuntimeError as exc:
-            raise click.ClickException(str(exc)) from exc
+            try:
+                mappings = _filter_for_accessnyc_mode(
+                    mappings,
+                    left,
+                    right,
+                    accessnyc_mode,
+                    accessnyc_python_path,
+                )
+            except RuntimeError as exc:
+                raise click.ClickException(str(exc)) from exc
         if not mappings:
             raise click.ClickException(
                 "No comparable concepts found for those engines, locales, and filters."
             )
 
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
-        cases = [replace(case, outputs=concept_ids) for case in cases]
+        suite_declares_outputs = any(case.outputs for case in cases)
+        if concepts or categories or include_components or not suite_declares_outputs:
+            # An explicit CLI selection intentionally overrides the suite's
+            # declared surfaces for every case. Suites with no declarations
+            # retain the historical all-comparable-concepts fallback.
+            cases = [replace(case, outputs=concept_ids) for case in cases]
+        else:
+            # Registered suites may expose different diagnostic surfaces on
+            # different cases (for example a negative-income semantics probe
+            # alongside final-liability cases). Keep that declaration while
+            # trimming any output that is not comparable for this engine pair.
+            selected = set(concept_ids)
+            cases = [
+                replace(
+                    case,
+                    outputs=tuple(
+                        output for output in case.outputs if output in selected
+                    ),
+                )
+                for case in cases
+            ]
 
         if case_shard:
             try:
@@ -691,7 +815,9 @@ def compare(
                 # explicit --include-case-inputs wins over the heuristic.
                 include_inputs=full_evidence,
             )
-            total_batches = (len(cases) + comparison_batch_size - 1) // comparison_batch_size
+            total_batches = (
+                len(cases) + comparison_batch_size - 1
+            ) // comparison_batch_size
             for batch_index, case_batch in enumerate(
                 _batched(cases, comparison_batch_size),
                 start=1,
@@ -736,15 +862,34 @@ def compare(
                         left_results if left == "axiom" else right_results,
                         concept_ids,
                     )
-                accumulator.add_batch(
-                    accumulator_cases,
-                    comparator.compare(left_results, right_results),
-                )
+                try:
+                    accumulator.add_batch(
+                        accumulator_cases,
+                        comparator.compare(
+                            left_results,
+                            right_results,
+                            outputs_by_case={
+                                case.case_id: case.outputs for case in accumulator_cases
+                            },
+                        ),
+                    )
+                except ValueError as exc:
+                    raise click.ClickException(
+                        f"Invalid comparison results: {exc}"
+                    ) from exc
+                # Automatic collection is off for the whole run, so free this
+                # batch's engine objects (simulations held in reference
+                # cycles, for every runner) before the next batch starts.
+                del accumulator_cases, left_results, right_results
+                gc.collect()
 
             if not accumulator.case_count:
                 raise click.ClickException(
                     "No cases remain after engine-specific preparation filters."
                 )
+
+            accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            _echo_engine_identity(accumulator.engine_identity)
 
             if output_path:
                 accumulator.write_json(output_path)
@@ -865,6 +1010,40 @@ def _case_output_concepts(cases: list[Case]) -> set[str]:
     }
 
 
+def _filter_comparisons_for_case_outputs(
+    cases: list[Case],
+    comparisons: list[HouseholdComparison],
+) -> list[HouseholdComparison]:
+    """Keep only the concepts each registered case declares.
+
+    Runners still receive the union of suite outputs so shared engine/model
+    setup happens once. This final projection prevents that union from turning
+    a case-specific diagnostic into unintended missing/zero comparisons on
+    every other case. Explicit ``--concept``/``--category`` selections replace
+    ``Case.outputs`` earlier and therefore retain their historical all-case
+    behavior.
+    """
+
+    outputs_by_id = {case.case_id: set(case.outputs) for case in cases}
+    filtered: list[HouseholdComparison] = []
+    for comparison in comparisons:
+        declared = outputs_by_id.get(comparison.household_id)
+        if declared is None:
+            filtered.append(comparison)
+            continue
+        filtered.append(
+            replace(
+                comparison,
+                comparisons=[
+                    item
+                    for item in comparison.comparisons
+                    if item.variable in declared
+                ],
+            )
+        )
+    return filtered
+
+
 def _run_comparison_batch(
     cases: list[Case],
     *,
@@ -921,6 +1100,11 @@ def _apply_euromod_to_axiom_input_bridge(
             continue
 
         inputs = dict(case.metadata.get("axiom_inputs", {}))
+        input_records = [
+            dict(record) for record in case.metadata.get("axiom_input_records", [])
+        ]
+        inputs_changed = False
+        input_records_changed = False
         applied: dict[str, float | int | bool | str | None] = {}
         for euromod_output, axiom_inputs in bridge.items():
             value = result.values.get(str(euromod_output))
@@ -931,13 +1115,28 @@ def _apply_euromod_to_axiom_input_bridge(
             for input_name in input_names:
                 inputs[str(input_name)] = value
                 applied[str(input_name)] = value
+                inputs_changed = True
+            for record_spec in _bridged_axiom_input_records(axiom_inputs):
+                input_records = _upsert_bridged_axiom_input_record(
+                    input_records,
+                    record_spec,
+                    value,
+                )
+                applied[
+                    f"{record_spec['entity']}[{record_spec['entity_id']}]::"
+                    f"{record_spec['name']}"
+                ] = value
+                input_records_changed = True
 
         if not applied:
             bridged_cases.append(case)
             continue
 
         metadata = dict(case.metadata)
-        metadata["axiom_inputs"] = inputs
+        if inputs_changed:
+            metadata["axiom_inputs"] = inputs
+        if input_records_changed:
+            metadata["axiom_input_records"] = input_records
         metadata["euromod_to_axiom_input_bridge_applied"] = applied
         bridged_cases.append(replace(case, metadata=metadata))
     return bridged_cases
@@ -954,6 +1153,72 @@ def _bridged_axiom_inputs(spec) -> tuple[str, ...]:
             return ()
         return tuple(str(input_name) for input_name in inputs)
     return tuple(str(input_name) for input_name in spec)
+
+
+def _bridged_axiom_input_records(spec) -> tuple[dict, ...]:
+    if not isinstance(spec, dict):
+        return ()
+    raw_records = spec.get("records") or spec.get("input_records")
+    if raw_records is None:
+        return ()
+    if not isinstance(raw_records, list | tuple):
+        raise RuntimeError(
+            "EUROMOD-to-Axiom bridge records must be a list of mappings."
+        )
+    records = []
+    for raw_record in raw_records:
+        if not isinstance(raw_record, dict):
+            raise RuntimeError("EUROMOD-to-Axiom bridge records must be mappings.")
+        missing = {"name", "entity", "entity_id"} - set(raw_record)
+        if missing:
+            raise RuntimeError(
+                f"EUROMOD-to-Axiom bridge record is missing {sorted(missing)}."
+            )
+        record = {
+            "name": str(raw_record["name"]),
+            "entity": str(raw_record["entity"]),
+            "entity_id": str(raw_record["entity_id"]),
+        }
+        if "interval" in raw_record:
+            if not isinstance(raw_record["interval"], dict):
+                raise RuntimeError(
+                    "EUROMOD-to-Axiom bridge record interval must be a mapping."
+                )
+            record["interval"] = dict(raw_record["interval"])
+        records.append(record)
+    return tuple(records)
+
+
+def _upsert_bridged_axiom_input_record(
+    records: list[dict],
+    record_spec: dict,
+    value,
+) -> list[dict]:
+    key = _bridged_axiom_input_record_key(record_spec)
+    updated = []
+    matched = False
+    for record in records:
+        record_key = _bridged_axiom_input_record_key(record)
+        if record_key == key:
+            updated.append({**record, "value": value})
+            matched = True
+        else:
+            updated.append(record)
+    if not matched:
+        updated.append({**record_spec, "value": value})
+    return updated
+
+
+def _bridged_axiom_input_record_key(record: dict) -> tuple[str, str, str, str]:
+    interval = record.get("interval", {})
+    if not isinstance(interval, dict):
+        raise RuntimeError("Axiom input record interval must be a mapping.")
+    return (
+        str(record.get("name", "")),
+        str(record.get("entity", "")),
+        str(record.get("entity_id", "")),
+        json.dumps(interval, sort_keys=True, separators=(",", ":")),
+    )
 
 
 def _transform_bridged_value(value, spec):
@@ -984,6 +1249,7 @@ def _load_population_cases(
     ecps_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
+    case_unit_selector: CaseUnitSelector | None = None,
 ) -> list[Case]:
     if population == "enhanced-cps":
         return load_populace_us_cases(
@@ -992,6 +1258,7 @@ def _load_population_cases(
             sample_size=sample_size or None,
             dataset=ecps_dataset,
             case_unit=_populace_us_case_unit(categories, concepts),
+            case_unit_selector=case_unit_selector,
         )
     if population == "synthetic":
         cases = [
@@ -1007,10 +1274,22 @@ def _load_population_cases(
 def _populace_us_case_unit(
     categories: tuple[str, ...],
     concepts: tuple[str, ...],
-) -> str:
-    if categories and set(categories) == {"tax"}:
-        return "tax_unit"
-    if concepts and all(concept.startswith("us:tax/") for concept in concepts):
+    *,
+    mappings: list[ProgramMapping] | None = None,
+) -> CaseUnit:
+    if mappings is None:
+        mappings = (
+            [
+                mapping
+                for mapping in load_program_mappings()
+                if (not concepts or mapping.concept_id in concepts)
+                and (not categories or mapping.category in categories)
+                and mapping.target_for_engine("policyengine")
+            ]
+            if concepts or categories
+            else []
+        )
+    if mappings and all(mapping.case_unit == "tax_unit" for mapping in mappings):
         return "tax_unit"
     return "household"
 
@@ -1042,26 +1321,20 @@ def _prepare_cases_for_engines(
         prepared = attach_taxsim_inputs(prepared)
     if "taxcalc" in engines:
         prepared = attach_taxcalc_inputs(prepared)
-    if (
-        "axiom" in engines
-        and axiom_program is None
-        and _wants_tax(concept_ids)
-    ):
+    if "axiom" in engines and axiom_program is None and _wants_tax(concept_ids):
         if _needs_axiom_tax_itemization_choice(concept_ids):
             # The generated state-income-tax bridge currently implements
             # Colorado. Federal taxable-income and liability comparisons also
             # need the encoded state tax for SALT/itemization resolution.
             prepared = [case for case in prepared if _is_co_household(case)]
         prepared = attach_axiom_tax_inputs(prepared)
-        if (
-            engines & {"policyengine", "taxsim"}
-            and _needs_axiom_tax_itemization_choice(concept_ids)
+        if engines & {"policyengine", "taxsim"} and _needs_axiom_tax_itemization_choice(
+            concept_ids
         ):
             prepared = attach_axiom_tax_itemization_choice(prepared)
             if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
                 prepared = [
-                    _select_axiom_state_income_tax_candidate(case)
-                    for case in prepared
+                    _select_axiom_state_income_tax_candidate(case) for case in prepared
                 ]
     if "axiom" in engines and _wants_snap(concept_ids):
         # Two paths:
@@ -1132,6 +1405,49 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
     return replace(case, metadata=metadata)
 
 
+def _require_taxsim_law_year(period: str) -> None:
+    """Fail before any work when the host's TAXSIM binary rejects the year.
+
+    The Linux and macOS executables in the pinned policyengine-taxsim release
+    are different NBER builds with different law-year ranges
+    (taxsim_pins.json); without this check a Linux run loads the whole
+    population and then dies on the binary's ``STOP 1``.
+    """
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise click.ClickException(
+            f"--period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        taxsim_pins.require_law_years([year])
+    except taxsim_pins.TaxsimLawYearError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _engine_identity(*runners: EngineAdapter) -> dict | None:
+    """The report's ``engine_identity`` block: binaries the runners executed."""
+    identity: dict = {}
+    for runner in runners:
+        if isinstance(runner, TaxsimPackageRunner):
+            taxsim = runner.taxsim_identity()
+            if taxsim:
+                identity["taxsim"] = taxsim
+    return identity or None
+
+
+def _echo_engine_identity(identity: dict | None) -> None:
+    for binary in ((identity or {}).get("taxsim") or {}).get("binaries", ()):
+        click.echo(
+            f"TAXSIM binary: {binary['path']} sha256 {binary['sha256'][:12]} "
+            f"build {binary['build_observed'] or binary['build']} on "
+            f"{binary['platform']}/{binary['machine']}"
+            f"{'' if binary['pinned'] else ' (NOT the pinned binary)'}: "
+            f"{binary['rows']} row(s)",
+            err=True,
+        )
+
+
 def _resolve_period(period: str | None, left: str, right: str) -> str:
     if period:
         return period
@@ -1200,11 +1516,7 @@ def _build_runner(
         # (compose already resolved its imports); deriving imports from the
         # concept ids here would flip prune_unsupported_inputs and strip the
         # generic ECPS input records the artifact needs.
-        if (
-            axiom_program is None
-            and not wants_snap
-            and axiom_compiled_program is None
-        ):
+        if axiom_program is None and not wants_snap and axiom_compiled_program is None:
             if _wants_tax(concept_ids):
                 program_imports = _tax_oracle_imports_for_concepts(concept_ids)
                 generated_program_target = US_TAX_ORACLE_BRIDGE_TARGET
@@ -1260,6 +1572,17 @@ def _build_runner(
             constant_overrides=_parse_euromod_constant_overrides(
                 os.environ.get("EUROMOD_CONSTANT_OVERRIDES"),
             ),
+            # Month-period Axiom modules compare monthly-to-monthly (the
+            # engine returns one month at the queried period), so suites
+            # whose Axiom outputs are monthly disable the x12
+            # annualization via EUROMOD_ANNUALIZE_OUTPUTS=false.
+            annualize_outputs=os.environ.get(
+                "EUROMOD_ANNUALIZE_OUTPUTS", "true"
+            ).strip().lower()
+            not in {"false", "0", "no"},
+            extra_columns=_parse_euromod_extra_columns(
+                os.environ.get("EUROMOD_EXTRA_COLUMNS"),
+            ),
         )
     raise click.ClickException(f"Engine '{engine}' is not implemented yet.")
 
@@ -1293,6 +1616,14 @@ def _parse_euromod_constant_overrides(
     return tuple(overrides)
 
 
+def _parse_euromod_extra_columns(raw: str | None) -> tuple[str, ...]:
+    """Parse a comma-separated list of input columns absent from the template."""
+
+    if not raw:
+        return ()
+    return tuple(dict.fromkeys(part.strip() for part in raw.split(",") if part.strip()))
+
+
 def _parse_euromod_switches(
     raw: str | None,
     env_var: str = "EUROMOD_SWITCHES",
@@ -1304,9 +1635,7 @@ def _parse_euromod_switches(
         if not entry.strip():
             continue
         if "=" not in entry:
-            raise click.ClickException(
-                f"{env_var} entries must be name=on/off pairs."
-            )
+            raise click.ClickException(f"{env_var} entries must be name=on/off pairs.")
         name, value = entry.split("=", 1)
         normalized = value.strip().lower()
         if normalized in {"1", "true", "yes", "on"}:
