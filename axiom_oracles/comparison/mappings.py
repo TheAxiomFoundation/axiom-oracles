@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 
@@ -37,8 +37,17 @@ class ProgramMapping:
     priority: str = "normal"
     components: tuple[str, ...] = field(default_factory=tuple)
     parent: str | None = None
+    # Comparison grain, independent of category and engine output entity.
+    case_unit: Literal["household", "tax_unit"] = "household"
 
     def __post_init__(self) -> None:
+        # A repeated sum term has a different comparison identity from its
+        # independently returned scalar. Reject it before report compaction
+        # can erase multiplicity from the per-output observation ledger.
+        for engine in set(self.targets) | {"axiom", "policyengine"}:
+            target = self.target_for_engine(engine)
+            if isinstance(target, list) and len(target) != len(set(target)):
+                raise ValueError(f"{self.standard}: {engine} has a repeated target term")
         if isinstance(self.locales, str):
             object.__setattr__(self, "locales", (self.locales,))
         elif not isinstance(self.locales, tuple):

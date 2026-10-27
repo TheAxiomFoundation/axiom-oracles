@@ -1,9 +1,17 @@
 from __future__ import annotations
 
 import argparse
+from types import SimpleNamespace
+
+import pytest
 
 from axiom_oracles.bridges import us_populace
-from axiom_oracles.bridges.adapters import get_pe_us_var_adapter
+from axiom_oracles.bridges.adapters import (
+    SNAP_ALIMONY_PAYMENTS_INPUT,
+    SNAP_CHILD_SUPPORT_ELECTION_INPUT,
+    SNAP_CHILD_SUPPORT_PAYMENTS_INPUT,
+    get_pe_us_var_adapter,
+)
 from axiom_oracles.bridges.registry import PolicyEngineMapping
 
 
@@ -412,6 +420,90 @@ def test_policyengine_target_period_uses_mapping_multiplier_before_monthly_adapt
             month=1,
         )
         == "2026-01"
+    )
+
+
+def _child_support_parameters(values: dict[str, bool]) -> SimpleNamespace:
+    # PolicyEngine's state-keyed parameter node, subscripted by state code.
+    deductions = SimpleNamespace(child_support=values)
+    return SimpleNamespace(
+        gov=SimpleNamespace(
+            usda=SimpleNamespace(
+                snap=SimpleNamespace(income=SimpleNamespace(deductions=deductions))
+            )
+        )
+    )
+
+
+@pytest.mark.parametrize(
+    ("variable", "state", "chose_deduction"),
+    [
+        ("snap_child_support_gross_income_deduction", "TX", True),
+        ("snap_child_support_gross_income_deduction", "CA", False),
+        ("snap_child_support_deduction", "TX", True),
+        ("snap_child_support_deduction", "CA", False),
+    ],
+)
+def test_project_snap_child_support_uses_monthly_payments_and_the_state_election(
+    variable, state, chose_deduction
+):
+    adapter = get_pe_us_var_adapter(variable)
+
+    projected, reason = us_populace.project_case_inputs(
+        variable,
+        adapter,
+        row={"state": state, "child_support_expense": 4200, "alimony_expense": 1200},
+        # PolicyEngine's countable expense for the comparison month, after its
+        # counted share: 350 of the 4200 / 12 paid.
+        spm_row={"snap_countable_child_support_expense": 175},
+        parameters=_child_support_parameters({"TX": False, "CA": True}),
+    )
+
+    assert reason is None
+    assert projected == {
+        SNAP_CHILD_SUPPORT_PAYMENTS_INPUT: 175,
+        SNAP_ALIMONY_PAYMENTS_INPUT: 100,
+        SNAP_CHILD_SUPPORT_ELECTION_INPUT: chose_deduction,
+    }
+
+
+@pytest.mark.parametrize(
+    ("row", "parameters"),
+    [
+        ({"state": "TX"}, None),
+        ({}, _child_support_parameters({"TX": False})),
+        ({"state": float("nan")}, _child_support_parameters({"TX": False})),
+    ],
+)
+def test_project_snap_child_support_skips_rows_without_a_state_election(
+    row, parameters
+):
+    projected, reason = us_populace.project_case_inputs(
+        "snap_child_support_deduction",
+        get_pe_us_var_adapter("snap_child_support_deduction"),
+        row={"child_support_expense": 3600, **row},
+        spm_row={"snap_countable_child_support_expense": 300},
+        parameters=parameters,
+    )
+
+    assert projected == {}
+    assert reason == "snap_child_support_deduction_missing_state_election"
+
+
+def test_snap_countable_child_support_source_is_read_for_the_month():
+    # direct_spm_overrides copy the source undivided into a monthly input; an
+    # annual read would sum twelve months.
+    assert (
+        us_populace.policyengine_source_period(
+            "snap_countable_child_support_expense", year=2026, month=3
+        )
+        == "2026-03"
+    )
+    assert (
+        us_populace.policyengine_source_period(
+            "child_support_expense", year=2026, month=3
+        )
+        == 2026
     )
 
 

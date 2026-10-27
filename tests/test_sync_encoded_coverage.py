@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts.sync_encoded_coverage import classify
 
 
@@ -481,3 +483,48 @@ def test_dc_state_income_tax_surface_is_executable_and_suite_backed() -> None:
             "suite": "dc-income-tax-populace",
         }
     ]
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "us-nc/policies/income_tax/resident_core_liability_pipeline.yaml",
+        "us-nc/policies/income_tax/pilot_liability_pipeline.yaml",
+        "us-nc/statutes/105/105-153.5/a.yaml",
+        "us-nc/statutes/105/105-153/7.yaml",
+    ],
+)
+def test_north_carolina_income_tax_rules_are_classified(path) -> None:
+    assert classify(path) == ("state_income_tax", "NC")
+
+
+def test_north_carolina_rule_classification_stays_narrow() -> None:
+    # Chapter 105 also holds non-income taxes; only Part 2 (105-151 to
+    # 105-159) is classified as individual income tax.
+    assert classify("us-nc/statutes/105/105-164.4/a.yaml") is None
+    assert classify("us-nc/policies/dhhs/fns/fns-100.yaml") == ("snap", "NC")
+
+
+def test_north_carolina_resident_core_surface_is_executable() -> None:
+    coverage = json.loads(
+        (REPO_ROOT / "dashboard/public/data/coverage_overview.json").read_text()
+    )
+    matches = [
+        entry
+        for entry in coverage["axiom"]["programs"]
+        if entry.get("program") == "state_income_tax"
+        and entry.get("jurisdiction") == "NC"
+    ]
+
+    assert len(matches) == 1
+    entry = matches[0]
+    assert entry["status"] == "executable"
+    assert entry["suite"] == "nc-income-tax-populace"
+    assert "generated" not in entry
+    assert entry["source"].startswith(
+        "rulespec-us 56455a56d08cdeeab76818e45a33efe6ea42be6b + pinned Populace"
+    )
+    assert any(
+        "PolicyEngine/policyengine-us#10468" in gap
+        for gap in entry["known_non_tanf_gaps"]
+    )

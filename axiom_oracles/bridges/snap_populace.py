@@ -31,12 +31,21 @@ from typing import Any
 
 import yaml
 
+from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
     format_dataset_identity,
     load_populace_dataset,
     populace_data_requirement,
+)
+from .relation_binding import (
+    RelationBinder,
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
 )
 
 try:
@@ -69,7 +78,6 @@ COMMON_AXIOM_OUTPUT_ID_BY_LABEL = {
 class JurisdictionConfig:
     jurisdiction: str
     state_code: str
-    repo_name: str
     program_relative_path: Path
     output_id_by_label: dict[str, str]
     utility_allowance_labels: tuple[str, ...]
@@ -78,13 +86,13 @@ class JurisdictionConfig:
     temp_prefix: str
     display_name: str
     additional_relation_ids: tuple[str, ...] = ()
+    eligibility_oracle_bridge: bool = False
 
 
 JURISDICTION_CONFIGS = {
     "us-co": JurisdictionConfig(
         jurisdiction="us-co",
         state_code="CO",
-        repo_name="rulespec-us-co",
         program_relative_path=Path(
             "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -124,7 +132,6 @@ JURISDICTION_CONFIGS = {
     "us-ca": JurisdictionConfig(
         jurisdiction="us-ca",
         state_code="CA",
-        repo_name="rulespec-us-ca",
         program_relative_path=Path(
             "policies/cdss/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -174,7 +181,6 @@ JURISDICTION_CONFIGS = {
     "us-az": JurisdictionConfig(
         jurisdiction="us-az",
         state_code="AZ",
-        repo_name="rulespec-us-az",
         program_relative_path=Path(
             "policies/des/faa5/na-eligibility-and-benefit-determination/"
             "fy-2026-benefit-calculation.yaml"
@@ -200,11 +206,13 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
+        # The projector supplies PE eligibility and benefit inputs to this program.
+        # Remove only when compared outcomes are independent of PE-derived inputs.
+        eligibility_oracle_bridge=True,
     ),
     "us-ga": JurisdictionConfig(
         jurisdiction="us-ga",
         state_code="GA",
-        repo_name="rulespec-us-ga",
         program_relative_path=Path(
             "policies/dfcs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -236,7 +244,6 @@ JURISDICTION_CONFIGS = {
     "us-md": JurisdictionConfig(
         jurisdiction="us-md",
         state_code="MD",
-        repo_name="rulespec-us-md",
         program_relative_path=Path(
             "policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -268,7 +275,6 @@ JURISDICTION_CONFIGS = {
     "us-tx": JurisdictionConfig(
         jurisdiction="us-tx",
         state_code="TX",
-        repo_name="rulespec-us-tx",
         program_relative_path=Path(
             "policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
         ),
@@ -300,7 +306,6 @@ JURISDICTION_CONFIGS = {
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
         state_code="NY",
-        repo_name="rulespec-us-ny",
         program_relative_path=Path(
             "policies/otda/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -367,8 +372,7 @@ JURISDICTION_CONFIGS = {
             "snap_individual_utility_allowance",
         ),
         relation_id=(
-            "us:policies/usda/snap/state-plan-composition"
-            "#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ny-snap-pe-populace-",
@@ -813,19 +817,26 @@ def resolve_program_path(
 ) -> Path:
     if override is not None:
         return override.resolve()
-    cwd_program = Path.cwd() / config.program_relative_path
-    if cwd_program.exists():
+    # A CWD program may override the workspace copy only from a country/state
+    # monorepo layout, with a matching upstream identity when a GitHub origin
+    # is available. Bare rsync'd layouts still work without a git remote.
+    # There is no standalone-path fallback; a missing workspace program fails
+    # at load, naming the monorepo path.
+    cwd = Path.cwd()
+    cwd_program = cwd / config.program_relative_path
+    if (
+        cwd.name == config.jurisdiction
+        and (cwd.parent / "us").is_dir()
+        and checkout_remote_matches_slug(cwd.parent, "TheAxiomFoundation/rulespec-us")
+        and cwd_program.exists()
+    ):
         return cwd_program.resolve()
-    # The country monorepo's jurisdiction twin is the canonical copy — it is
-    # the only layout post-hard-cut engines can resolve imports from (a state
-    # repo is not a valid engine root) — so prefer it; the standalone state
-    # repo remains the supervised-machine fallback.
-    monorepo_program = (
-        workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
-    )
-    if monorepo_program.exists():
-        return monorepo_program.resolve()
-    return (workspace_root / config.repo_name / config.program_relative_path).resolve()
+    return (
+        workspace_root
+        / "rulespec-us"
+        / config.jurisdiction
+        / config.program_relative_path
+    ).resolve()
 
 
 def resolve_test_template_path(program: Path, override: Path | None) -> Path:
@@ -1357,10 +1368,6 @@ def load_policyengine_cases(
             **project_income_resource_inputs(config, values, idx),
             "household_size": int(values["snap_unit_size"][idx]),
             "household_shelter_costs_incurred": money(values["housing_cost"][idx]),
-            "household_lives_in_application_state": True,
-            "household_in_project_area_solely_for_vacation": False,
-            "household_contains_individual_participating_in_more_than_one_household_or_project_area": False,
-            "resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member": False,
             **project_deduction_inputs(
                 config,
                 dependent_care_deduction=dependent_care_deduction,
@@ -1370,6 +1377,17 @@ def load_policyengine_cases(
             **project_jurisdiction_household_inputs(config, values, idx),
             **utility_inputs,
         }
+        # The Arizona composition's current first companion case does not
+        # expose these federal residence inputs. Do not inject unbound names:
+        # legalize_inputs would fail before the household can be compared.
+        # This is a coverage limit, not evidence of residence parity.
+        if config.jurisdiction != "us-az":
+            projected_inputs.update(
+                household_lives_in_application_state=True,
+                household_in_project_area_solely_for_vacation=False,
+                household_contains_individual_participating_in_more_than_one_household_or_project_area=False,
+                resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member=False,
+            )
         for input_name, value in projected_inputs.items():
             set_input_value(inputs, input_name, value)
         set_input_value(
@@ -1452,18 +1470,17 @@ def project_jurisdiction_household_inputs(
         }
     if config.jurisdiction == "us-az":
         return {
-            "na_net_income": money(values["snap_net_income"][idx]),
             "na_budgetary_unit_is_eligible": bool(values["is_snap_eligible"][idx]),
             "budgetary_unit_participant_count": int(values["snap_unit_size"][idx]),
+            "az_utility_allowance_participant_count": int(
+                values["snap_unit_size"][idx]
+            ),
             "thrifty_food_plan_amount_for_budgetary_unit_size": money(
                 values["snap_max_allotment"][idx]
             ),
             "minimum_na_allotment": money(values["snap_min_allotment"][idx]),
             "initial_month_proration_applies": False,
             "prorated_initial_month_na_benefit": 0,
-            "snap_excess_shelter_deduction_for_net_income": money(
-                values["snap_excess_shelter_expense_deduction"][idx]
-            ),
         }
     return {}
 
@@ -1493,7 +1510,26 @@ def project_raw_utility_inputs(
     values: dict[str, np.ndarray],
     idx: int,
     utility_region: str,
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        heating = bool(values["heating_cooling_expense"][idx] > 0)
+        other_bills = [
+            bool(values[name][idx] > 0)
+            for name in (
+                "pre_subsidy_electricity_expense",
+                "water_expense",
+                "sewage_expense",
+                "trash_expense",
+                "gas_expense",
+                "phone_expense",
+            )
+        ]
+        return arizona_utility_inputs(
+            heating=heating,
+            non_heating_count=sum(other_bills),
+            telephone_only=other_bills[-1] and sum(other_bills) == 1 and not heating,
+            elderly_or_disabled=bool(values["has_usda_elderly_disabled"][idx]),
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": bool(
@@ -1546,7 +1582,14 @@ def project_raw_utility_inputs(
 
 def project_utility_allowance_type(
     config: JurisdictionConfig, utility_type: str, utility_region: str
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        return arizona_utility_inputs(
+            heating=utility_type == "SUA",
+            non_heating_count=2 if utility_type == "LUA" else 0,
+            telephone_only=utility_type == "TUA",
+            elderly_or_disabled=False,
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": (
@@ -1588,6 +1631,34 @@ def project_utility_allowance_type(
     elif utility_type == "IUA":
         inputs["household_pays_electricity_utility_cost"] = True
     return inputs
+
+
+def arizona_utility_inputs(
+    *,
+    heating: bool,
+    non_heating_count: int,
+    telephone_only: bool,
+    elderly_or_disabled: bool,
+) -> dict[str, bool | int]:
+    # Populace reports expenses but not DES verification or LIHEAP history.
+    # Treat a reported bill as verified for this diagnostic projection, and
+    # leave the unobserved LIHEAP conditions false. Neither assumption proves
+    # parity for households where those facts determine the allowance.
+    has_bill = heating or non_heating_count > 0 or telephone_only
+    return {
+        "budgetary_unit_billed_separately_for_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_allowable_utility_expenses": has_bill,
+        "budgetary_unit_has_verified_allowable_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis": heating,
+        "budgetary_unit_received_liheap_payment": False,
+        "liheap_annual_payment_amount": 0,
+        "liheap_payment_received_in_application_month_or_lookback_period": False,
+        "budgetary_unit_has_participant_who_is_elderly_or_has_disability": elderly_or_disabled,
+        "budgetary_unit_heating_or_cooling_expenses_exceed_energy_assistance_payments": False,
+        "budgetary_unit_obligated_to_pay_at_least_two_non_heating_or_non_cooling_utility_expenses": non_heating_count
+        >= 2,
+        "budgetary_unit_obligated_to_pay_only_telephone_expense": telephone_only,
+    }
 
 
 def new_york_utility_region_inputs(utility_region: str) -> dict[str, bool]:
@@ -1719,9 +1790,12 @@ def run_axiom_cases(
         "end": period.end.isoformat(),
         "name": period.label,
     }
+    ambiguities = []
     inputs = []
     relations = []
     queries = []
+    artifact_payload = json.loads(artifact.read_text())
+    relation_binder = RelationBinder(artifact_payload)
     for case in cases:
         entity_id = f"spm-{case.spm_unit_id}"
         for name, value in case.inputs.items():
@@ -1740,7 +1814,14 @@ def run_axiom_cases(
                 relations.append(
                     {
                         "name": current_relation_id,
-                        "tuple": [member_entity_id, entity_id],
+                        "tuple": relation_binder.tuple(
+                            current_relation_id,
+                            owner_id=entity_id,
+                            owner_kind="Household",
+                            related_id=member_entity_id,
+                            related_kind=member_entity_type,
+                            binding_ambiguities=ambiguities,
+                        ),
                         "interval": interval,
                     }
                 )
@@ -1767,6 +1848,13 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
+    request, raw_ambiguities = bind_materialized_relations(
+        request,
+        artifact_payload,
+        materialized=set(range(len(relations))),
+        binder=bind_request_relations,
+    )
+    ambiguities.extend(raw_ambiguities)
     result = subprocess.run(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
         input=json.dumps(request),
@@ -1778,6 +1866,7 @@ def run_axiom_cases(
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     payload = json.loads(result.stdout)
+    attach_relation_binding_diagnostics(payload["results"], ambiguities)
     return payload["results"]
 
 
@@ -1808,9 +1897,11 @@ def compare(
     results: list[dict[str, Any]],
     tolerance: float,
     *,
-    output_id_by_label: dict[str, str],
-    utility_allowance_labels: tuple[str, ...],
+    config: JurisdictionConfig,
 ):
+    output_id_by_label = config.output_id_by_label
+    utility_allowance_labels = config.utility_allowance_labels
+    eligibility_oracle_bridge = config.eligibility_oracle_bridge
     rows = []
     for case, result in zip(cases, results, strict=True):
         raw_outputs = result.get("outputs", {})
@@ -1836,6 +1927,7 @@ def compare(
         axiom_snap = float(outputs[COMPARED_AXIOM_OUTPUT])
         pe_snap = float(case.pe_outputs[PE_COMPARED_OUTPUT])
         diff = axiom_snap - pe_snap
+        amount_match = abs(diff) <= tolerance
         row = {
             "spm_unit_id": case.spm_unit_id,
             "household_id": case.household_id,
@@ -1843,7 +1935,16 @@ def compare(
             "axiom_snap_allotment": axiom_snap,
             "difference": diff,
             "absolute_difference": abs(diff),
-            "match": abs(diff) <= tolerance,
+            "amount_match": amount_match,
+            "comparison_status": (
+                "not_comparable" if eligibility_oracle_bridge else "comparable"
+            ),
+            "not_comparable_reason": (
+                "PolicyEngine eligibility and benefit inputs are supplied to Axiom"
+                if eligibility_oracle_bridge
+                else ""
+            ),
+            "match": amount_match and not eligibility_oracle_bridge,
             "pe_snap_eligible": bool(case.pe_outputs["is_snap_eligible"]),
             "axiom_snap_eligible": outputs["snap_eligible"],
             "pe_gross_income": case.pe_outputs["snap_gross_income"],
@@ -1915,7 +2016,12 @@ def add_snapscreener_results(
         row["snapscreener_status"] = result.get("status")
         errors = result.get("errors") or []
         row["snapscreener_error"] = "; ".join(str(error) for error in errors)
-        row["snapscreener_comparable"] = primary_oracles_find_eligible(row)
+        eligible_in_primary_oracle = primary_oracles_find_eligible(row)
+        row["snapscreener_comparable"] = (
+            eligible_in_primary_oracle
+            and row.get("comparison_status", "comparable") == "comparable"
+        )
+        row["pe_snapscreener_comparable"] = eligible_in_primary_oracle
         if result.get("status") != "OK":
             row["snapscreener_snap"] = None
             row["snapscreener_eligible"] = None
@@ -1931,8 +2037,12 @@ def add_snapscreener_results(
         row["snapscreener_eligible"] = bool(result.get("estimated_eligibility"))
         row["axiom_snapscreener_difference"] = axiom_difference
         row["pe_snapscreener_difference"] = pe_difference
-        row["axiom_snapscreener_match"] = abs(axiom_difference) <= tolerance
-        row["pe_snapscreener_match"] = abs(pe_difference) <= tolerance
+        row["axiom_snapscreener_match"] = (
+            row["snapscreener_comparable"] and abs(axiom_difference) <= tolerance
+        )
+        row["pe_snapscreener_match"] = (
+            row["pe_snapscreener_comparable"] and abs(pe_difference) <= tolerance
+        )
 
 
 def primary_oracles_find_eligible(row: dict[str, Any]) -> bool:
@@ -1943,18 +2053,25 @@ def print_summary(
     rows: list[dict[str, Any]], tolerance: float, max_differences: int
 ) -> None:
     total = len(rows)
-    matches = sum(1 for row in rows if row["match"])
+    comparable_rows = [
+        row
+        for row in rows
+        if row.get("comparison_status", "comparable") == "comparable"
+    ]
+    matches = sum(1 for row in comparable_rows if row["match"])
     diffs = sorted(rows, key=lambda row: row["absolute_difference"], reverse=True)
     mean_abs = sum(row["absolute_difference"] for row in rows) / total if total else 0.0
     print()
-    print(f"Compared {total:,} PolicyEngine Populace SPM units")
+    print(f"Evaluated {total:,} PolicyEngine Populace SPM units")
+    print(f"Comparable rows: {len(comparable_rows):,}/{total:,}")
     print(f"Tolerance: ${tolerance:,.2f}")
     print(
-        f"Matches: {matches:,}/{total:,} ({matches / total:.1%})"
-        if total
-        else "No rows"
+        f"Matches: {matches:,}/{len(comparable_rows):,} "
+        f"({matches / len(comparable_rows):.1%})"
+        if comparable_rows
+        else "No comparable rows; parity is not established"
     )
-    print(f"Mean absolute difference: ${mean_abs:,.2f}")
+    print(f"Diagnostic mean absolute difference: ${mean_abs:,.2f}")
     if diffs:
         print(f"Max absolute difference: ${diffs[0]['absolute_difference']:,.2f}")
     print()
@@ -1979,6 +2096,9 @@ def print_snapscreener_summary(
         return
     valid_rows = [row for row in rows if row["snapscreener_status"] == "OK"]
     comparable_rows = [row for row in valid_rows if row["snapscreener_comparable"]]
+    pe_comparable_rows = [
+        row for row in valid_rows if row["pe_snapscreener_comparable"]
+    ]
     noncomparable_positive = [
         row
         for row in valid_rows
@@ -1990,24 +2110,22 @@ def print_snapscreener_summary(
         if bool(row["pe_snap_eligible"]) != (row["axiom_snap_eligible"] == "holds")
     ]
     axiom_matches = sum(1 for row in comparable_rows if row["axiom_snapscreener_match"])
-    pe_matches = sum(1 for row in comparable_rows if row["pe_snapscreener_match"])
+    pe_matches = sum(1 for row in pe_comparable_rows if row["pe_snapscreener_match"])
     disagreement_axiom_matches = sum(
         1 for row in disagreement_rows if row["axiom_snapscreener_match"]
-    )
-    disagreement_pe_matches = sum(
-        1 for row in disagreement_rows if row["pe_snapscreener_match"]
     )
     print()
     print("SnapScreener diagnostic oracle")
     print(f"Rows: {len(valid_rows):,}/{len(rows):,} OK")
     print(
-        f"Comparable rows: {len(comparable_rows):,} "
-        "(PolicyEngine or Axiom marks SNAP eligible)"
+        f"Axiom-comparable rows: {len(comparable_rows):,} "
+        "(eligible in a primary oracle and no oracle-fed outcome bridge)"
     )
+    print(f"PolicyEngine-comparable rows: {len(pe_comparable_rows):,}")
     if noncomparable_positive:
         print(
-            f"Excluded {len(noncomparable_positive):,} row(s) where PE and Axiom "
-            "both mark ineligible but SnapScreener estimates a positive benefit."
+            f"Excluded {len(noncomparable_positive):,} row(s) from Axiom/SnapScreener "
+            "comparison where SnapScreener estimates a positive benefit."
         )
     print(f"Tolerance: ${tolerance:,.2f}")
     if comparable_rows:
@@ -2016,16 +2134,16 @@ def print_snapscreener_summary(
             f"{axiom_matches:,}/{len(comparable_rows):,} "
             f"({axiom_matches / len(comparable_rows):.1%})"
         )
+    if pe_comparable_rows:
         print(
             f"PolicyEngine matches SnapScreener: "
-            f"{pe_matches:,}/{len(comparable_rows):,} "
-            f"({pe_matches / len(comparable_rows):.1%})"
+            f"{pe_matches:,}/{len(pe_comparable_rows):,} "
+            f"({pe_matches / len(pe_comparable_rows):.1%})"
         )
     if disagreement_rows:
         print(
-            f"On PE/Axiom eligibility disagreements: "
-            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,}, "
-            f"PolicyEngine {disagreement_pe_matches:,}/{len(disagreement_rows):,} "
+            f"On PE/Axiom eligibility disagreements in Axiom-comparable rows: "
+            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,} "
             "match SnapScreener."
         )
     diffs = sorted(
@@ -2111,9 +2229,19 @@ def main(args: argparse.Namespace | None = None) -> int:
         cases,
         results,
         args.tolerance,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
+        config=config,
     )
+    diagnostics: dict = {}
+    for result in results:
+        merge_relation_binding_diagnostics(
+            diagnostics, result.get("relation_binding_diagnostics", {})
+        )
+    if diagnostics.get("count"):
+        dataset_identity["relation_binding_diagnostics"] = (
+            public_relation_binding_diagnostics(
+                diagnostics,
+            )
+        )
     if "snapscreener" in args.external_oracle:
         bundle = snapscreener.ensure_api_js(
             api_js=args.snapscreener_api_js,
@@ -2148,7 +2276,12 @@ def main(args: argparse.Namespace | None = None) -> int:
             )
             print(f"Wrote {identity_path}")
 
-    match_rate = sum(1 for row in rows if row["match"]) / len(rows) if rows else 0
+    comparable_rows = [row for row in rows if row["comparison_status"] == "comparable"]
+    match_rate = (
+        sum(1 for row in comparable_rows if row["match"]) / len(comparable_rows)
+        if comparable_rows
+        else 0
+    )
     if args.min_match_rate is not None and match_rate < args.min_match_rate:
         print(
             f"Match rate {match_rate:.1%} is below required {args.min_match_rate:.1%}"

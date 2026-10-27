@@ -1,0 +1,275 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount",
+      "description": "Ghana beer excise (Act 1108 First Schedule, 47.5% band under 50% local raw material)",
+      "left_weighted_sum": 3420,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 3420,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "gh-excise-beer-1200",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount",
+          "left": 569.9999999999999,
+          "right": 569.9999999999999
+        }
+      ],
+      "metadata": {
+        "annual_beer_spend": 1200.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.akpeteshie_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value": 1199.9999999999998,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_local_raw_material_share": 0.4,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.blended_spirits_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.cigarette_ex_factory_value_ghp": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.cigarette_sticks": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.eliquid_ex_factory_value_ghp": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.eliquid_millilitres": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.fruit_juice_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.malt_drink_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.malt_drink_local_raw_material_share": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.other_non_alcoholic_drinks_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.plastics_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.snuff_and_negrohead_kilogrammes": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.wine_ex_factory_value": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x021302": 27.85441875347557,
+            "xhh": 278.54418753475574,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ils_coicop02": [
+            "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value": 1199.9999999999998
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-consumer-beer-excise",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-excise-beer-6000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount",
+          "left": 2850.0,
+          "right": 2850.0
+        }
+      ],
+      "metadata": {
+        "annual_beer_spend": 6000.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.akpeteshie_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value": 6000.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_local_raw_material_share": 0.4,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.blended_spirits_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.cigarette_ex_factory_value_ghp": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.cigarette_sticks": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.eliquid_ex_factory_value_ghp": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.eliquid_millilitres": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.fruit_juice_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.malt_drink_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.malt_drink_local_raw_material_share": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.other_non_alcoholic_drinks_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.plastics_ex_factory_value": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.snuff_and_negrohead_kilogrammes": 0.0,
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.wine_ex_factory_value": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x021302": 139.27209376737787,
+            "xhh": 278.54418753475574,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ils_coicop02": [
+            "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#input.beer_ex_factory_value": 6000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-consumer-beer-excise",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana beer excise (Act 1108 First Schedule, 47.5% band under 50% local raw material)",
+      "id": "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:02:24Z",
+    "generated_by": "scripts/run_comparison.py::gh-excise",
+    "oracle": {
+      "euromod_country": "GH",
+      "euromod_dataset": "gh_2017_a8",
+      "euromod_system": "GH_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-gh",
+        "sha": "4d84b152548663313d3ef09c6538c27e51e411b1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-excise",
+  "summary": {
+    "comparison_count": 2,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 2,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_weight": 0
+    }
+  }
+}

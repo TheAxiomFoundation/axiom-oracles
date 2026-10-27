@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import io
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -40,6 +41,18 @@ def _load(name: str):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+#: The central gate's blocker lines for the committed all-pending kindergeld
+#: discovery ledger (18 spine rows / 463 candidate instruments (28 discovered + 420 DA-KG headings + 15 supplemental) / 4 law-derived
+#: + 4 unclassified leaves). Certificates and the DE census must both carry
+#: exactly these — they are derived, never typed, in the producers.
+DE_KINDERGELD_CLOSURE_BLOCKERS = [
+    "closed: instrument frontier incomplete — 4 of 492 subordinate/bearing "
+    "instruments pending disposition (oracles#491)",
+    "closed: dependency closure open — 145 open dependencies (8 law-derived "
+    "inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)",
+]
 
 
 def _load_from(path: Path):
@@ -817,6 +830,14 @@ def test_weighted_mass_must_be_finite_and_nonnegative():
             },
         )
         try:
+            if marker == "finite":
+                # Strict artifact admission rejects non-standard JSON before
+                # it can contribute any leg counts or weighted evidence.
+                with pytest.raises(
+                    ValueError, match="non-standard JSON numeric constant.*NaN"
+                ):
+                    _verdict(name)
+                continue
             leg, _e, defects = _verdict(name)
             assert leg["clean"] is False, marker
             assert any(marker in d for d in defects), (marker, defects)
@@ -1098,7 +1119,7 @@ def test_bridge_manifest_identity_fields_are_typed():
 
 
 def test_dropping_strict_opt_in_drops_bridge_audited():
-    """MUTANT (delta-audit finding): a strict-clean lane that removes or
+    """MUTANT: a strict-clean lane that removes or
     falsifies its `strict: true` opt-in must LOSE bridge_audited — otherwise
     the lane could silence future --strict enforcement while its census row
     and certificate kept claiming audited/exercised. The opt-in is part of the
@@ -1140,8 +1161,9 @@ def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
             shutil.copytree(
                 src, tree / root, ignore=shutil.ignore_patterns("__pycache__")
             )
-    shutil.copytree(REPO / "scripts", tree / "scripts",
-                    ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copytree(
+        REPO / "scripts", tree / "scripts", ignore=shutil.ignore_patterns("__pycache__")
+    )
     assert not (tree / "tests").exists()
     spec = importlib.util.spec_from_file_location(
         "census_hermetic", tree / "scripts" / "exercise_census.py"
@@ -1155,6 +1177,7 @@ def test_certified_lane_census_is_hermetic_without_tests_dir(tmp_path):
         "dk-child-youth-benefit-couple",
     ):
         assert clean.get(suite) is True, (suite, clean.get(suite))
+
 
 # ── #378: strict execution-evidence boundary ─────────────────────────────────
 
@@ -2050,9 +2073,7 @@ def test_nz_view_scoped_trace_mutants_are_killed(mutation, marker):
     elif mutation == "declared-roots":
         evaluation()["requested_output_roots"] = ["mutant"]
     elif mutation == "changed-typed-input":
-        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = (
-            "999999999"
-        )
+        evaluation()["request"]["dataset"]["inputs"][0]["value"]["value"] = "999999999"
     elif mutation == "missing-returned-output":
         row = evaluation()
         root = row["requested_output_roots"][0]
@@ -2060,9 +2081,7 @@ def test_nz_view_scoped_trace_mutants_are_killed(mutation, marker):
     elif mutation == "cross-view-root":
         row = evaluation()
         foreign = nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0]
-        template = copy.deepcopy(
-            next(iter(row["response"]["outputs"].values()))
-        )
+        template = copy.deepcopy(next(iter(row["response"]["outputs"].values())))
         template["id"] = foreign
         row["request"]["queries"][0]["outputs"].append(foreign)
         row["requested_output_roots"].append(foreign)
@@ -2137,7 +2156,9 @@ def test_nz_exercise_is_derived_separately_for_each_requested_root_set():
     views = nz.derive_bound_trace_views()
 
     benefits = views["nz/main-benefits"]["root_set_receipts"]
-    assert [(row["evaluation_count"], len(row["evidence_fields"])) for row in benefits] == [
+    assert [
+        (row["evaluation_count"], len(row["evidence_fields"])) for row in benefits
+    ] == [
         (150, 11),
         (16, 2),
     ]
@@ -2212,9 +2233,7 @@ def test_nz_trace_normalizer_mutants_are_killed(mutation, marker, monkeypatch):
                             {
                                 "outputs": [
                                     nz.PROGRAM_VIEWS["nz/income-tax"]["roots"][0],
-                                    nz.PROGRAM_VIEWS["nz/acc-earners-levy"]["roots"][
-                                        0
-                                    ],
+                                    nz.PROGRAM_VIEWS["nz/acc-earners-levy"]["roots"][0],
                                 ]
                             }
                         ]
@@ -2300,9 +2319,7 @@ def test_nz_trace_capture_path_is_no_drift_only(tmp_path, monkeypatch, capsys):
 
 def test_nz_attested_catalog_denominator_cannot_contradict_its_receipt(monkeypatch):
     certify = _load("certify")
-    source_path = (
-        REPO / "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
-    )
+    source_path = REPO / "comparisons/nz-treasury-incomeexplorer/source-comparison.json"
     mutant = json.loads(source_path.read_text())
     mutant["compiled_program"]["input_slots"] += 1
     original_load = certify._load
@@ -2797,7 +2814,7 @@ def test_census_binds_strict_manifest_identity():
     assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
 
 
-# ── strict covered_by: typed, suite-bound evidence (delta audits #2–#5) ─────
+# ── strict covered_by: typed, suite-bound evidence ────────────────────────
 
 
 COUPLE_REPORT = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
@@ -2836,12 +2853,24 @@ def test_strict_typed_evidence_honest_forms_validate():
         "dk-child-youth-benefit-couple",
         "README.md",
         # wrong suite's report / index / an unlisted chunk (relevance gap)
-        {"report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json", "claim": "x"},
+        {
+            "report": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit.json",
+            "claim": "x",
+        },
         {"report": "conformance/exercise-census.json", "claim": "x"},
         {"report": "certificates/dk-boerne-og-ungeydelse.json", "claim": "x"},
-        {"report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml", "claim": "self"},
-        {"chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json", "claim": "x"},
-        {"chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json", "claim": "x"},
+        {
+            "report": "axiom_oracles/bridges/manifests/dk-child-youth-benefit-couple.yaml",
+            "claim": "self",
+        },
+        {
+            "chunk_index": "dashboard/public/data/cases/dk-child-youth-benefit/index.json",
+            "claim": "x",
+        },
+        {
+            "chunk": "dashboard/public/data/cases/dk-child-youth-benefit/chunk-0.json",
+            "claim": "x",
+        },
         # physical: outside roots / unshipped / never-shipped / case-variant / abs
         {"report": "tests/test_certification_mutants.py", "claim": "x"},
         {"report": "axiom_oracles/__pycache__/x.pyc", "claim": "x"},
@@ -2876,7 +2905,10 @@ def test_strict_typed_evidence_prose_is_opaque():
     resolver never sees it."""
     vbm, path, manifest, binding = _couple_manifest()
     binding["covered_by"] = [
-        {"report": COUPLE_REPORT, "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ..."},
+        {
+            "report": COUPLE_REPORT,
+            "claim": "see tests/x.py [C:secret] ~me ／ \u200b README.md ...",
+        },
     ]
     errors, findings = vbm.validate(path, manifest)
     assert not errors and not findings, (errors, findings)
@@ -2915,7 +2947,9 @@ def test_shipped_evidence_file_physical_rules():
     assert not stray.exists()
     stray.write_text("not tracked\n")
     try:
-        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        assert (
+            vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        )
     finally:
         stray.unlink()
 
@@ -2975,6 +3009,8 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     cl = importlib.util.module_from_spec(spec)
     sys.modules["_mutant_closure_ledger"] = cl
     spec.loader.exec_module(cl)
+    if not cl.CORPUS_RELEASE_PATH.parent.is_dir():
+        pytest.skip("needs the local corpus checkout for full DK re-derivation")
     recorded = yaml.safe_load(
         (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
     )["generated_facts"]["rulespec"]["commit"]
@@ -2983,7 +3019,9 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     assert cl.main(["--check", "--rulespec-ref", recorded]) == 0
     # currency against the OLDER commit 9986b603 (same module bytes, but the
     # ledger records bbc987b0): the recorded pin differs → drift
-    rc = cl.main(["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"])
+    rc = cl.main(
+        ["--check", "--rulespec-ref", "9986b6035c4e557b9b40645dfe2f3e4cffb6037c"]
+    )
     assert rc == 1
     # and the ledger's own generated_facts.rulespec.ref is the immutable sha
     facts = yaml.safe_load(
@@ -2994,7 +3032,7 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
 
 
 def test_strict_evidence_rejects_never_shipped_files():
-    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    """MUTANT: a gitignored __pycache__/*.pyc under an
     evidence root exists on this disk but in no clone and not in the refresh
     bot's rsync'd tree; it passed as strict evidence. Never-shipped
     components/suffixes are rejected outright, and — when the tree is a git
@@ -3016,13 +3054,15 @@ def test_strict_evidence_rejects_never_shipped_files():
     assert not stray.exists()
     stray.write_text("not tracked\n")
     try:
-        assert vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        assert (
+            vbm._shipped_evidence_file("docs/zz-untracked-evidence-mutant.md") is False
+        )
     finally:
         stray.unlink()
 
 
 def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
-    """MUTANT (delta-audit #6): the closure ledger and executable receipt each
+    """MUTANT: the closure ledger and executable receipt each
     verify their OWN recorded pin, so a ledger coherently regenerated at
     9986b603 passes its own check while the receipt sits at bbc987b0 (byte-
     identical modules, different commit). certify must refuse to treat those
@@ -3062,7 +3102,9 @@ def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
     assert cert["verdicts"]["closed"]["mode"] == "computed"
     assert cert["verdicts"]["closed"]["rulespec_commit"] == other
     assert cert["verdicts"]["executable"]["rulespec_sha"] == receipt["rulespec"]["sha"]
-    assert any("producers disagree on the rulespec commit" in b for b in cert["blockers"]), cert["blockers"]
+    assert any(
+        "producers disagree on the rulespec commit" in b for b in cert["blockers"]
+    ), cert["blockers"]
     assert cert["certified"]["value"] is False
 
 
@@ -3117,7 +3159,7 @@ def test_nz_program_scoped_producers_must_agree_on_one_rulespec_commit(
 
 
 def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
-    """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
+    """MUTANT: a 40-DIGIT YAML integer is a legal scalar
     that `str(commit)` turned into a passing "sha"; certification then emitted
     a computed closed premise while the commit cross-check silently skipped
     the non-string. The validator now requires a string SHA and ref==commit
@@ -3136,7 +3178,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     assert cl._validation_errors(baseline) == []
 
     digits = int("1" * 40)  # a 40-digit integer, not a hex string
-    # delta-audit #8: the !!str-tagged form is a 40-char DECIMAL string, which
+    # The !!str-tagged form is a 40-char DECIMAL string, which
     # is syntactically valid hex — it must still fail (a real git object id
     # has at least one of a-f; a decimal-only id is the forgery shape).
     digit_str = "1234567890123456789012345678901234567890"
@@ -3147,7 +3189,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
             doc["generated_facts"][fact]["ref"] = forged
             errors = cl._validation_errors(doc)
             assert any("commit must be a full git commit SHA" in e for e in errors), (
-                fact, forged, errors
+                fact,
+                forged,
+                errors,
             )
 
         doc = copy.deepcopy(baseline)
@@ -3161,7 +3205,9 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     original_closed = certify._producer_closed_verdict
 
     def _tampered(program, spec_, evidence, *, verify_producer=False):
-        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        block = original_closed(
+            program, spec_, evidence, verify_producer=verify_producer
+        )
         if block is not None:
             block["rulespec_commit"] = digits
         return block
@@ -3175,16 +3221,20 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
         certify._producer_closed_verdict = original_closed
     assert cert["verdicts"]["closed"]["mode"] == "computed"
     assert cert["verdicts"]["executable"]["mode"] == "computed"
-    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert[
+        "blockers"
+    ]
     assert cert["certified"]["value"] is False
 
-    # delta-audit #8: COORDINATED equal digit-only strings on both computed
+    # COORDINATED equal digit-only strings on both computed
     # sides satisfied plain equality. Equality now counts only between values
     # that are each a canonical git object id.
     original_exec = certify._producer_executable_verdict
 
     def _tampered_closed(program, spec_, evidence, *, verify_producer=False):
-        block = original_closed(program, spec_, evidence, verify_producer=verify_producer)
+        block = original_closed(
+            program, spec_, evidence, verify_producer=verify_producer
+        )
         if block is not None:
             block["rulespec_commit"] = digit_str
         return block
@@ -3206,13 +3256,15 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
         certify._producer_executable_verdict = original_exec
     assert cert["verdicts"]["closed"]["rulespec_commit"] == digit_str
     assert cert["verdicts"]["executable"]["rulespec_sha"] == digit_str
-    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert["blockers"]
+    assert any("provenance is not comparable" in b for b in cert["blockers"]), cert[
+        "blockers"
+    ]
     assert cert["certified"]["value"] is False
     assert cert["certified"]["state"] != "yes"
 
 
 def test_executable_receipt_rejects_digit_only_sha():
-    """delta-audit #8: the receipt's own sha regex accepted a decimal-only
+    """The receipt's own sha regex accepted a decimal-only
     40-char string; canonical git object ids need at least one of a-f."""
     er = _load("executable_reproduction")
     document = json.loads(
@@ -3260,14 +3312,223 @@ def test_tariff_preview_ruling_does_not_rewrite_current_certificate():
     actual = certify.build_certificate(
         "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
     )
-    committed = json.loads(
-        (REPO / "certificates/us-tariff-duty.json").read_text()
-    )
+    committed = json.loads((REPO / "certificates/us-tariff-duty.json").read_text())
 
     assert actual == committed
     assert actual["certified"]["value"] is False
     assert actual["verdicts"]["closed"]["status"] == "computed_open"
-    assert actual["verdicts"]["executable"]["status"] == "computed_pass"
+    executable = actual["verdicts"]["executable"]
+    assert executable["status"] == "computed_fail"
+    assert executable["value"] is False
+    assert executable["compile_replay_reproduced"] is True
+    assert executable["execution_scope"]["replayed_output_is_promised"] is False
+    assert executable["reproduction_contract"]["repo_only"] is False
+    assert executable["engine_binary_provenance"]["identity"] == "sha256-only"
+    assert executable["engine_binary_provenance"]["published_provenance"] is False
+    closed_contract = actual["verdicts"]["closed"]["reproduction_contract"]
+    assert closed_contract["repo_only"] is False
+    assert closed_contract["external_corpus_git_object"]["commit"] == (
+        "bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6"
+    )
+    assert closed_contract["external_rulespec_git_object"]["commit"] == (
+        "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
+    )
+    assert closed_contract["external_engine_binary"]["sha256"] == (
+        "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
+    )
+    assert all(
+        set(row) == {"program_spec", "module", "promised_output", "sha256"}
+        and all(row[key] for key in ("program_spec", "module", "promised_output"))
+        for row in executable["compiled_artifacts"]
+    )
+    assert (
+        actual["verdicts"]["closed"]["program_set"]
+        == (actual["verdicts"]["executable"]["program_set"])
+    )
+    assert any("denominator unknown" in blocker for blocker in actual["blockers"])
+    assert any(
+        "not a singular composed program" in blocker for blocker in actual["blockers"]
+    )
+    assert any(
+        "promised-output coverage incomplete" in blocker
+        for blocker in actual["blockers"]
+    )
+    assert any("at least 31" in blocker for blocker in actual["blockers"])
+
+
+def test_tariff_certificate_rejects_program_set_mismatch(monkeypatch):
+    certify = _load("certify")
+    real_executable_verdict = certify._executable_verdict
+
+    def mismatched(*args, **kwargs):
+        block = real_executable_verdict(*args, **kwargs)
+        block["program_set"] = {**block["program_set"], "rows_sha256": "0" * 64}
+        return block
+
+    monkeypatch.setattr(certify, "_executable_verdict", mismatched)
+    certificate = certify.build_certificate(
+        "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
+    )
+    assert certificate["certified"]["value"] is False
+    assert any(
+        "disagree on the exact program set" in blocker
+        for blocker in certificate["blockers"]
+    )
+
+
+_UNCOMPARABLE_PROGRAM_SETS = {
+    "missing": None,
+    "not-an-object": "us-tariff-schedule-ensemble-v1",
+    "digest-not-hex": {"rows_sha256": "not-a-sha256", "program_count": 101},
+    "digest-not-a-string": {"rows_sha256": 101, "program_count": 101},
+    "count-is-bool": {"rows_sha256": "0" * 64, "program_count": True},
+    "count-is-string": {"rows_sha256": "0" * 64, "program_count": "101"},
+}
+
+
+@pytest.mark.parametrize(
+    "sides,forgery",
+    [
+        (side, forgery)
+        for side in ("both", "closed", "executable")
+        for forgery in sorted(_UNCOMPARABLE_PROGRAM_SETS)
+    ],
+)
+def test_tariff_certificate_blocks_uncomparable_program_set_provenance(
+    monkeypatch, sides, forgery
+):
+    """A program set that is not a hash-identified row binding is a blocker,
+    never a silent skip or a crash. "both" forges the two premises
+    identically, so plain equality alone would wave them through."""
+
+    certify = _load("certify")
+    value = _UNCOMPARABLE_PROGRAM_SETS[forgery]
+
+    def forge(real):
+        def forged(*args, **kwargs):
+            block = real(*args, **kwargs)
+            if value is None:
+                block.pop("program_set", None)
+            else:
+                block["program_set"] = copy.deepcopy(value)
+            return block
+
+        return forged
+
+    if sides in ("closed", "both"):
+        monkeypatch.setattr(certify, "_closed_verdict", forge(certify._closed_verdict))
+    if sides in ("executable", "both"):
+        monkeypatch.setattr(
+            certify, "_executable_verdict", forge(certify._executable_verdict)
+        )
+    certificate = certify.build_certificate(
+        "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
+    )
+    assert certificate["certified"]["value"] is False
+    assert (
+        sum(
+            "program-set provenance is not comparable" in blocker
+            for blocker in certificate["blockers"]
+        )
+        == 1
+    ), certificate["blockers"]
+    assert not any(
+        "disagree on the exact program set" in blocker
+        for blocker in certificate["blockers"]
+    )
+
+
+def _tariff_executable_verdict_with_blockers(monkeypatch, blockers):
+    """Run the tariff executable producer verdict with the validator's
+    summary blockers replaced (``None`` removes the key)."""
+
+    certify = _load("certify")
+    spec = certify.PROGRAMS["us/tariff-duty"]
+    producer_path = spec["computed"]["executable"]["producer"]
+    real_producer_module = certify._producer_module
+
+    def producer_module(relative):
+        module = real_producer_module(relative)
+        if relative != producer_path:
+            return module
+        real_validate = module.validate_artifact
+
+        def validate_artifact(document, **kwargs):
+            summary = dict(real_validate(document, **kwargs))
+            if blockers is None:
+                summary.pop("blockers", None)
+            else:
+                summary["blockers"] = blockers
+            return summary
+
+        monkeypatch.setattr(module, "validate_artifact", validate_artifact)
+        return module
+
+    monkeypatch.setattr(certify, "_producer_module", producer_module)
+    return certify._producer_executable_verdict("us/tariff-duty", spec, [])
+
+
+def test_tariff_executable_verdict_carries_the_validated_blockers(monkeypatch):
+    # Control for the malformed cases below.
+    verdict = _tariff_executable_verdict_with_blockers(
+        monkeypatch, ["closed: composition identity remains open"]
+    )
+    assert "execution_scope" in verdict
+    assert verdict["blockers"] == ["closed: composition identity remains open"]
+
+
+@pytest.mark.parametrize(
+    "blockers",
+    [None, "one blocker as a bare string", [1], [""], ["valid", None]],
+    ids=["missing", "string", "non-string-item", "empty-item", "none-item"],
+)
+def test_tariff_executable_verdict_rejects_malformed_execution_blockers(
+    monkeypatch, blockers
+):
+    with pytest.raises(ValueError, match="has malformed execution blockers"):
+        _tariff_executable_verdict_with_blockers(monkeypatch, blockers)
+
+
+def test_tariff_certificate_declares_the_v3_closure_contract():
+    """The registry's contract string, the producer's declared contract, the
+    producer's ledger schema version, and the committed ledger's schema must
+    all agree: a contract label cannot drift from the ledger it describes."""
+    certify = _load("certify")
+    closed = certify.PROGRAMS["us/tariff-duty"]["computed"]["closed"]
+    assert closed["contract"] == "us_tariff_closure_v3"
+    assert closed["producer"] == "scripts/us_tariff_closure.py"
+    # Load the producer exactly as certify does (registered in sys.modules,
+    # which its frozen dataclasses need under `from __future__ import
+    # annotations`).
+    closure = certify._producer_module(closed["producer"])
+    assert closed["contract"] == closure.CONTRACT
+    contract_version = closure.CONTRACT.rsplit("_", 1)[-1]
+    schema_version = closure.SCHEMA.rsplit(".", 1)[-1]
+    assert contract_version == schema_version == "v3"
+    ledger = yaml.safe_load(closure.ARTIFACT.read_text())
+    assert ledger["schema"] == closure.SCHEMA
+
+
+def test_tariff_certificate_fails_closed_on_a_stale_closure_contract(monkeypatch):
+    """A registry that still says us_tariff_closure_v1 over the v3 producer is
+    a certificate defect, not a cosmetic label: certification refuses to
+    build rather than describing a ledger the producer no longer emits."""
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["us/tariff-duty"])
+    spec["computed"]["closed"]["contract"] = "us_tariff_closure_v1"
+    with pytest.raises(ValueError, match="closure contract mismatch"):
+        certify.build_certificate("us/tariff-duty", spec)
+
+
+def test_tariff_certificate_can_generate_in_isolation(tmp_path, monkeypatch):
+    certify = _load("certify")
+    monkeypatch.setattr(certify, "OUT_DIR", tmp_path)
+
+    assert certify.main(["--program", "us/tariff-duty"]) == 0
+    generated = json.loads((tmp_path / "us-tariff-duty.json").read_text())
+    assert generated == certify.build_certificate(
+        "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
+    )
 
 
 # ── Exercise denominator: computed from committed artifacts ──────────────────
@@ -3296,9 +3557,7 @@ def test_nz_denominator_recorded_input_slots_tamper_reds(tmp_path, monkeypatch):
     mutant = tmp_path / "source-comparison.json"
     mutant.write_text(json.dumps(report))
     monkeypatch.setattr(denominator, "SOURCE_REPORT_PATH", mutant)
-    with pytest.raises(
-        denominator.DenominatorError, match="input_slots denominator"
-    ):
+    with pytest.raises(denominator.DenominatorError, match="input_slots denominator"):
         denominator.validate()
 
 
@@ -3384,9 +3643,7 @@ def test_bare_closed_true_dependency_block_fails_the_central_gate(
     assert verdict["dependency_closure"]["malformed"] is True
 
 
-def test_boolean_count_dependency_block_fails_the_central_gate(
-    tmp_path, monkeypatch
-):
+def test_boolean_count_dependency_block_fails_the_central_gate(tmp_path, monkeypatch):
     """open_dependency_count=false must read malformed, not as zero: bool
     is an int subclass in Python (launch-audit delta r2 finding). Covers
     both the generic and program-scoped verdict paths."""
@@ -3439,9 +3696,7 @@ def test_boolean_count_dependency_block_fails_the_central_gate(
         monkeypatch.setattr(
             certify, "_repo_artifact_path", lambda relative, label: artifact
         )
-        monkeypatch.setattr(
-            certify, "_producer_module", lambda name, _p=producer: _p()
-        )
+        monkeypatch.setattr(certify, "_producer_module", lambda name, _p=producer: _p())
         monkeypatch.setattr(certify, "sha256_of", lambda path: "0" * 64)
         verdict = certify._producer_closed_verdict(
             "forged/program",
@@ -3450,6 +3705,8 @@ def test_boolean_count_dependency_block_fails_the_central_gate(
         )
         assert verdict["value"] is False, f"scoped={scoped}"
         assert verdict["dependency_closure"]["malformed"] is True
+
+
 # ── DE Kindergeld: every new unified-record gate gets a killed mutant ──
 
 
@@ -3743,7 +4000,7 @@ def test_de_census_recomputes_ready_state_when_exact_inputs_land(monkeypatch):
     # Even with a forged all-clear executable status, the census must keep
     # the certificate pending on the open v3 closure requirements.
     assert kindergeld["certificate_status"] == "pending"
-    assert kindergeld["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert kindergeld["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     amount_root = next(
         row
         for row in kindergeld["declared_roots"]
@@ -3846,9 +4103,7 @@ def test_de_closure_pending_signature_cannot_self_promote():
     )
     module["signature_state"] = "pending"
     del module["artifact"]
-    with pytest.raises(
-        closure.ClosureError, match="must be encoded and signed"
-    ):
+    with pytest.raises(closure.ClosureError, match="must be encoded and signed"):
         closure.build(demoted)
 
 
@@ -3886,8 +4141,14 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert exercise["fields"]["yearly_earned_income_total"]["distinct"] == 10
     closed = certificate["verdicts"]["closed"]
     assert closed["value"] is False
-    assert closed["instrument_frontier"]["missing"] is True
-    assert closed["dependency_closure"]["missing"] is True
+    # The v3 discovery ledger is consumed through the central gate: the
+    # frontier and dependency blocks are DECLARED and open, not missing.
+    assert closed["instrument_frontier"]["complete"] is False
+    assert closed["instrument_frontier"]["instrument_count"] == 492
+    assert closed["dependency_closure"]["closed"] is False
+    assert closed["dependency_closure"]["open_dependency_count"] == 145
+    assert closed["dependency_closure"]["unclassified_inputs"] == []
+    assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0
 
@@ -3900,6 +4161,9 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     certify = _load("certify")
     # The committed evidence is complete and computed; only the executable
     # verdict is forged here, in both directions.
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
     signed = {
         "id": "signed-rulespec-estg-66-2025",
         "state": "valid",
@@ -3911,7 +4175,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         "trusted_key_id": f"sha256:{'5' * 64}",
         "checkout_observation": {
             "repository": "TheAxiomFoundation/rulespec-de",
-            "commit": "6" * 40,
+            "commit": closure_commit,
             "tree": "7" * 40,
             "claim_mode": "attested",
         },
@@ -3939,7 +4203,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
     # certify while the closure's instrument frontier is undeclared.
-    assert certificate["blockers"] == ["closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none", 'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block']
+    assert certificate["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 
@@ -3952,8 +4216,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert mutant["certified"]["value"] is False
     assert mutant["certified"]["state"] == "no"
     assert mutant["blockers"] == [
-        "closed: closure must disposition the act's subordinate instruments (oracles#491); this closure declares none",
-        'closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this closure declares no dependency-closure block',
+        *DE_KINDERGELD_CLOSURE_BLOCKERS,
         "release replay mismatch",
     ]
 
@@ -4166,9 +4429,7 @@ def test_de_executable_pending_inputs_never_self_assert_true(tmp_path):
     # not pending, and build_status fails closed on it).
     tmp_unified = _load_from(root / "scripts/de_unified_comparison.py")
     record = tmp_unified.build()
-    rendered = (
-        json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
-    )
+    rendered = json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     (root / "comparisons/de-worker-dual-oracle/unified-record.json").write_text(
         rendered, encoding="utf-8"
     )
@@ -4294,17 +4555,12 @@ def _complete_de_axiom_leg(de, unified, *, oracle="euromod"):
     from scripts import de_axiom_legs
 
     inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in inspection["artifacts"]:
         if artifact["path"] == "de/statutes/estg/66.yaml":
             artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
-        elif artifact["path"] == (
-            ".axiom/encoding-manifests/de/statutes/estg/66.json"
-        ):
+        elif artifact["path"] == (".axiom/encoding-manifests/de/statutes/estg/66.json"):
             artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
     scaffolds = de_axiom_legs.complete_view_scaffolds(oracle, inspection)
     kindergeld = record["views"][de.PROGRAM]
@@ -4494,17 +4750,12 @@ def test_de_live_leg_builder_uses_actual_engine_rows_not_aggregate_expansion():
     fixture = _de_engine_fixture(executable, case_ids)
     oracle_rows = [0.0] * 11 + [250.0, 515.0]
     dependency_inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in dependency_inspection["artifacts"]:
         if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "a" * 64})
-        elif artifact["path"] == executable.RULESPEC_PIN[
-            "encoding_manifest_path"
-        ]:
+        elif artifact["path"] == executable.RULESPEC_PIN["encoding_manifest_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "b" * 64})
     with pytest.raises(executable.DEExecutableError, match="differs from Axiom"):
         executable._build_live_leg_documents(
@@ -4613,17 +4864,12 @@ def test_de_live_producer_repairs_stale_bundle_and_emits_all_flip_inputs(
     from scripts import de_axiom_legs
 
     dependency_inspection = json.loads(
-        (
-            REPO
-            / "comparisons/de-worker-dual-oracle/axiom-euromod.json"
-        ).read_text()
+        (REPO / "comparisons/de-worker-dual-oracle/axiom-euromod.json").read_text()
     )["provenance"]["rulespec_ref_inspection"]
     for artifact in dependency_inspection["artifacts"]:
         if artifact["path"] == executable.RULESPEC_PIN["module_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "2" * 64})
-        elif artifact["path"] == executable.RULESPEC_PIN[
-            "encoding_manifest_path"
-        ]:
+        elif artifact["path"] == executable.RULESPEC_PIN["encoding_manifest_path"]:
             artifact.update({"presence": "on-pinned-ref", "sha256": "4" * 64})
     monkeypatch.setattr(
         de_axiom_legs,
@@ -5249,7 +5495,7 @@ rules:
         == descriptor["encoding_manifest"]["source_file_sha256"]
     )
     wrong_checkout_commit = copy.deepcopy(descriptor)
-    wrong_checkout_commit["checkout_observation"]["commit"] = "0" * 40
+    wrong_checkout_commit["checkout_observation"]["commit"] = "a" * 40
     with pytest.raises(executable.DEExecutableError, match="pinned commit"):
         executable._validate_signed_descriptor_document(wrong_checkout_commit, manifest)
 
@@ -5490,3 +5736,541 @@ def test_de_release_process_does_not_inherit_ambient_environment(monkeypatch):
         "TZ",
         "SYSTEMROOT",
     }
+
+
+# ---------------------------------------------------------------------------
+# oracles#498 — per-target engine pins: the producing pin stays the binding;
+# a sibling-target verifier may only replay a sha-pinned asset of the same
+# release, and only the binary's own SHA-256 is allowed to differ.
+# ---------------------------------------------------------------------------
+
+
+def test_de_engine_platform_pins_cover_the_release_and_match_the_producing_pin():
+    executable = _load("de_executable")
+    pins = executable.ENGINE_PLATFORM_PINS
+    assert set(pins) == {
+        "x86_64-unknown-linux-gnu",
+        "aarch64-unknown-linux-gnu",
+        "x86_64-apple-darwin",
+        "aarch64-apple-darwin",
+    }
+    producing = pins[executable.ENGINE_PIN["target"]]
+    for field in ("asset", "archive_sha256", "binary_in_archive"):
+        assert producing[field] == executable.ENGINE_PIN[field]
+    shas = [pin["archive_sha256"] for pin in pins.values()]
+    assert len(set(shas)) == len(shas)
+    for target, pin in pins.items():
+        assert re.fullmatch(r"[0-9a-f]{64}", pin["archive_sha256"])
+        assert pin["asset"] == f"axiom-rules-engine-{target}.tar.xz"
+        assert (
+            pin["binary_in_archive"]
+            == f"axiom-rules-engine-{target}/axiom-rules-engine"
+        )
+
+
+@pytest.mark.parametrize(
+    ("system", "machine", "expected"),
+    [
+        ("linux", "x86_64", "x86_64-unknown-linux-gnu"),
+        ("linux2", "amd64", "x86_64-unknown-linux-gnu"),
+        ("linux", "aarch64", "aarch64-unknown-linux-gnu"),
+        ("darwin", "arm64", "aarch64-apple-darwin"),
+        ("darwin", "x86_64", "x86_64-apple-darwin"),
+        ("win32", "AMD64", None),
+        ("linux", "riscv64", None),
+    ],
+)
+def test_de_host_engine_target_mapping(system, machine, expected):
+    executable = _load("de_executable")
+    assert executable.host_engine_target(system, machine) == expected
+
+
+def test_de_sibling_host_requires_a_sha_pinned_archive(tmp_path, monkeypatch):
+    """MUTANT: a verifier off the producing target cannot run arbitrary bytes."""
+
+    executable = _load("de_executable")
+    monkeypatch.setattr(
+        executable, "host_engine_target", lambda *_: "aarch64-apple-darwin"
+    )
+    monkeypatch.setattr(executable, "HOST_ARCHIVE_CACHE", tmp_path / "cache")
+    monkeypatch.delenv(executable.HOST_ARCHIVE_ENV, raising=False)
+    embedded = b"producing-target archive bytes"
+
+    with pytest.raises(executable.DEExecutableError, match="fetch-host-engine") as info:
+        executable._host_engine_archive(embedded)
+    assert "aarch64-apple-darwin" in str(info.value)
+    assert executable.ENGINE_PLATFORM_PINS["aarch64-apple-darwin"][
+        "archive_sha256"
+    ] in str(info.value)
+
+    tampered = tmp_path / "engine.tar.xz"
+    tampered.write_bytes(b"not the pinned asset")
+    monkeypatch.setenv(executable.HOST_ARCHIVE_ENV, str(tampered))
+    with pytest.raises(
+        executable.DEExecutableError, match="host engine archive SHA-256"
+    ):
+        executable._host_engine_archive(embedded)
+
+    # A correctly pinned sibling asset is selected with its own pin, and the
+    # embedded producing archive is never executed on the wrong target.
+    sibling_bytes = b"sibling-target archive bytes"
+    pinned = copy.deepcopy(executable.ENGINE_PLATFORM_PINS)
+    pinned["aarch64-apple-darwin"]["archive_sha256"] = hashlib.sha256(
+        sibling_bytes
+    ).hexdigest()
+    monkeypatch.setattr(executable, "ENGINE_PLATFORM_PINS", pinned)
+    tampered.write_bytes(sibling_bytes)
+    chosen, pin = executable._host_engine_archive(embedded)
+    assert chosen == sibling_bytes
+    assert pin["target"] == "aarch64-apple-darwin"
+    assert pin["release"] == executable.ENGINE_PIN["release"]
+    assert pin["commit"] == executable.ENGINE_PIN["commit"]
+    assert pin["asset"] == "axiom-rules-engine-aarch64-apple-darwin.tar.xz"
+
+    # Unsupported hosts fail closed rather than guessing an asset.
+    monkeypatch.setattr(executable, "host_engine_target", lambda *_: None)
+    with pytest.raises(executable.DEExecutableError, match="unsupported host"):
+        executable._host_engine_archive(embedded)
+
+
+def test_de_producing_host_replays_the_embedded_archive_unchanged(monkeypatch):
+    executable = _load("de_executable")
+    monkeypatch.setattr(
+        executable, "host_engine_target", lambda *_: executable.ENGINE_PIN["target"]
+    )
+    embedded = b"producing-target archive bytes"
+    chosen, pin = executable._host_engine_archive(embedded)
+    assert chosen is embedded
+    assert pin == executable.ENGINE_PIN
+
+
+def test_de_replay_receipt_on_a_sibling_target_relaxes_only_the_binary_sha(
+    tmp_path, monkeypatch
+):
+    """MUTANTS: off-target replay still binds version, artifact, stdout, rows."""
+
+    executable = _load("de_executable")
+    inputs = _synthetic_de_replay(executable, tmp_path, monkeypatch)
+    path, manifest, unified, legs, fixture, descriptor, receipt, fresh = inputs
+    recorded_binary_sha = receipt["engine"]["binary_sha256"]
+
+    sibling = {
+        **fresh,
+        "engine_target": "aarch64-apple-darwin",
+        "binary_sha256": "e" * 64,
+    }
+    assert sibling["binary_sha256"] != recorded_binary_sha
+    row = executable._validate_replay_receipt(
+        path, manifest, unified, legs, fixture, descriptor, lambda *_: sibling
+    )
+    # The status stays host-invariant: it reports the producing binary.
+    assert row["fresh_binary_sha256"] == recorded_binary_sha
+
+    on_target = {**fresh, "binary_sha256": "e" * 64}
+    with pytest.raises(
+        executable.DEExecutableError, match="fresh release binary SHA-256"
+    ):
+        executable._validate_replay_receipt(
+            path, manifest, unified, legs, fixture, descriptor, lambda *_: on_target
+        )
+
+    mutants = {
+        "unpinned target": {**sibling, "engine_target": "riscv64-unknown-linux-gnu"},
+        "version": {**sibling, "version_stdout": "axiom-rules-engine 0.2.3"},
+        "compiled artifact": {**sibling, "compiled_artifact_sha256": "f" * 64},
+        "stdout": {**sibling, "stdout_sha256": "f" * 64},
+        "results": {
+            **sibling,
+            "observed_results": copy.deepcopy(fresh["observed_results"])[:-1],
+        },
+        "binary sha shape": {**sibling, "binary_sha256": "not-a-sha"},
+    }
+    for label, mutant in mutants.items():
+        with pytest.raises(executable.DEExecutableError):
+            executable._validate_replay_receipt(
+                path, manifest, unified, legs, fixture, descriptor, lambda *_: mutant
+            )
+        assert label
+
+
+def test_de_raw_replay_binds_the_engine_pin_it_is_given(tmp_path, monkeypatch):
+    executable = _load("de_executable")
+    sibling_pin = executable._host_engine_pin("aarch64-apple-darwin")
+    with pytest.raises(executable.DEExecutableError, match="engine archive SHA-256"):
+        executable._execute_release_archive_raw(
+            b"wrong bytes", {"module_bytes": b""}, {}, engine=sibling_pin
+        )
+    with pytest.raises(executable.DEExecutableError, match="engine archive SHA-256"):
+        executable._execute_release_archive_raw(
+            b"wrong bytes", {"module_bytes": b""}, {}
+        )
+    with pytest.raises(executable.DEExecutableError, match="ships no asset"):
+        executable._host_engine_pin("riscv64-unknown-linux-gnu")
+
+
+# ---------------------------------------------------------------------------
+# DE closure through the central producer gate (issue #502 step 1): the
+# discovery ledgers are consumed by scripts/closure_gate.py like every other
+# closure artifact; nothing DE-specific decides the closed premise.
+# ---------------------------------------------------------------------------
+
+
+def test_closure_gate_counts_unclassified_inputs_as_open():
+    """A discovery ledger that has not typed every leaf must count those
+    leaves as open dependencies; they can never be hidden or netted away."""
+
+    closure_gate = _load("closure_gate")
+
+    computed = {
+        "instrument_frontier": {
+            "instrument_count": 2,
+            "counts": {"total": 2, "pending": 0},
+            "pending": [],
+            "complete": True,
+        },
+        "dependency_closure": {
+            "open_dependency_count": 1,
+            "law_derived_inputs": [],
+            "unclassified_inputs": ["x"],
+            "instruments_bearing_on_computed": [],
+            "closed": False,
+        },
+    }
+    frontier, dependency, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is True
+    assert dependency["unclassified_inputs"] == ["x"]
+    assert passes is False
+    assert blockers == [
+        "closed: dependency closure open — 1 open dependencies (0 law-derived "
+        "inputs, 1 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+    ]
+
+    # MUTANT: an unclassified list the count does not include is malformed.
+    forged = copy.deepcopy(computed)
+    forged["dependency_closure"]["open_dependency_count"] = 0
+    forged["dependency_closure"]["closed"] = True
+    _f, dependency, passes, blockers = closure_gate.gate(forged)
+    assert passes is False
+    assert dependency["malformed"] is True
+    assert blockers == ["closed: " + closure_gate.DEPENDENCY_MALFORMED_REQUIREMENT]
+
+    # MUTANT: unclassified_inputs that is not a list is malformed too.
+    forged = copy.deepcopy(computed)
+    forged["dependency_closure"]["unclassified_inputs"] = 1
+    assert closure_gate.gate(forged)[1]["malformed"] is True
+
+    # Fully closed, well-formed: no blockers at all.
+    closed = copy.deepcopy(computed)
+    closed["dependency_closure"].update(
+        {"unclassified_inputs": [], "open_dependency_count": 0, "closed": True}
+    )
+    assert closure_gate.gate(closed)[2:] == (True, [])
+
+    # A complete instrument/dependency frontier cannot outvote an explicitly
+    # ineligible executable surface.
+    surface_open = copy.deepcopy(closed)
+    surface_open["instrument_frontier"]["executable_surface"] = {
+        "program_count": 101,
+        "closure_eligible": False,
+    }
+    _f, _d, passes, blockers = closure_gate.gate(surface_open)
+    assert passes is False
+    assert blockers == [
+        (
+            "closed: executable surface is not a singular composed program — 101 "
+            "separately compiled program/output rows are bound, but composition "
+            "identity remains open"
+        )
+    ]
+
+    malformed_surface = copy.deepcopy(closed)
+    malformed_surface["instrument_frontier"]["executable_surface"] = "closed"
+    _f, _d, passes, blockers = closure_gate.gate(malformed_surface)
+    assert passes is False
+    assert blockers == [
+        (
+            "closed: executable surface block is malformed and cannot satisfy "
+            "composition identity"
+        )
+    ]
+
+    # Missing blocks keep their requirement sentences.
+    _f, _d, passes, blockers = closure_gate.gate({})
+    assert passes is False
+    assert blockers == [
+        "closed: " + closure_gate.FRONTIER_MISSING_REQUIREMENT,
+        "closed: " + closure_gate.DEPENDENCY_MISSING_REQUIREMENT,
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Seed-only instrument frontiers (the US tariff ledger's shape): a producer's
+# complete=true cannot outvote the frontier's own open disclosures.
+# ---------------------------------------------------------------------------
+
+
+def _seed_only_closed_computed() -> dict:
+    """A seed-only frontier whose own disclosures are all resolved."""
+
+    return {
+        "instrument_frontier": {
+            "enumeration_scope": "seed-only-v1",
+            "enumerated_seed_candidate_count": 2,
+            "enumerated_seed_counts_by_status": {"encoded": 2, "pending": 0},
+            "pending_enumerated_seed_candidates": [],
+            "discovery_channel_count": 1,
+            "pending_discovery_channels": [],
+            "additional_known_families_open": False,
+            "denominator_status": "known",
+            "executable_surface": {"program_count": 1, "closure_eligible": True},
+            "complete": True,
+        },
+        "dependency_closure": {
+            "open_dependency_count": 0,
+            "law_derived_inputs": [],
+            "instruments_bearing_on_computed": [],
+            "closed": True,
+        },
+    }
+
+
+def test_seed_only_frontier_with_resolved_disclosures_passes_the_gate():
+    """Control for the forged cases below: every refusal is caused by the
+    one field each case changes."""
+
+    closure_gate = _load("closure_gate")
+    frontier, _d, passes, blockers = closure_gate.gate(_seed_only_closed_computed())
+    assert frontier["complete"] is True
+    assert (passes, blockers) == (True, [])
+
+
+_ABSENT = object()
+_SEED_FRONTIER = "closed: instrument frontier incomplete — "
+_SURFACE_NOT_ELIGIBLE = _SEED_FRONTIER + "executable surface not closure-eligible"
+
+
+@pytest.mark.parametrize(
+    "field,value,expected_blockers",
+    [
+        (
+            "denominator_status",
+            "unknown",
+            [
+                _SEED_FRONTIER + "0 enumerated seed candidates pending; additional "
+                "known families and 0 discovery channels open; denominator unknown "
+                "(oracles#491)"
+            ],
+        ),
+        (
+            "denominator_status",
+            _ABSENT,
+            [_SEED_FRONTIER + "denominator status undeclared (oracles#491)"],
+        ),
+        (
+            "pending_enumerated_seed_candidates",
+            ["instrument-a"],
+            [_SEED_FRONTIER + "1 enumerated seed candidates pending (oracles#491)"],
+        ),
+        (
+            "pending_enumerated_seed_candidates",
+            _ABSENT,
+            [
+                _SEED_FRONTIER
+                + "pending_enumerated_seed_candidates undeclared (oracles#491)"
+            ],
+        ),
+        (
+            "pending_discovery_channels",
+            ["channel-a", "channel-b"],
+            [_SEED_FRONTIER + "2 discovery channels open (oracles#491)"],
+        ),
+        (
+            "additional_known_families_open",
+            True,
+            [_SEED_FRONTIER + "additional known families open (oracles#491)"],
+        ),
+        (
+            "executable_surface",
+            {"program_count": 1, "closure_eligible": False},
+            [
+                _SURFACE_NOT_ELIGIBLE + " (oracles#491)",
+                "closed: executable surface is not a singular composed program — 1 "
+                "separately compiled program/output rows are bound, but "
+                "composition identity remains open",
+            ],
+        ),
+        (
+            "executable_surface",
+            _ABSENT,
+            [
+                _SURFACE_NOT_ELIGIBLE + " (oracles#491)",
+                "closed: executable surface block is missing and cannot satisfy "
+                "composition identity",
+            ],
+        ),
+    ],
+)
+def test_forged_seed_only_complete_claim_fails_the_gate(
+    field, value, expected_blockers
+):
+    closure_gate = _load("closure_gate")
+    computed = _seed_only_closed_computed()
+    if value is _ABSENT:
+        del computed["instrument_frontier"][field]
+    else:
+        computed["instrument_frontier"][field] = value
+    assert computed["instrument_frontier"]["complete"] is True
+    frontier, _d, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is False
+    assert passes is False
+    assert blockers == expected_blockers
+
+
+def test_missing_surface_fails_a_seed_only_frontier_even_without_complete_claim(
+    monkeypatch,
+):
+    """The surface requirement is enforced by gate() itself, not only through
+    the summary's complete flag."""
+
+    closure_gate = _load("closure_gate")
+    computed = _seed_only_closed_computed()
+    del computed["instrument_frontier"]["executable_surface"]
+    # Even a summary that kept complete=true cannot pass without a surface.
+    monkeypatch.setattr(
+        closure_gate, "_seed_only_disclosures_resolved", lambda frontier: True
+    )
+    frontier, _d, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is True
+    assert passes is False
+    assert blockers == [
+        "closed: executable surface block is missing and cannot satisfy "
+        "composition identity"
+    ]
+
+
+def test_de_kindergeld_closed_verdict_is_the_ledger_through_the_central_gate():
+    certify = _load("certify")
+    evidence = []
+    closed = certify._closed_verdict(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"], evidence
+    )
+    assert closed["mode"] == "computed"
+    assert closed["value"] is False
+    assert closed["artifact"] == "conformance/closure/de-kindergeld.yaml"
+    assert closed["instrument_frontier"]["instrument_count"] == 492
+    assert closed["instrument_frontier"]["complete"] is False
+    assert closed["dependency_closure"]["open_dependency_count"] == 145
+    assert closed["dependency_closure"]["unclassified_inputs"] == []
+    assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
+    assert closed["provision_counts"]["pending"] == 5
+    # The exact-path summary still contributes its scope fields only.
+    assert closed["rulespec_commit"] == "d83ba3db30e2f63376aacf822d116687589b8564"
+    assert closed["by_signature_state"] is not None
+    claims = {row["claim"] for row in evidence}
+    assert {"closed:de/kindergeld", "closure census:de/kindergeld"} <= claims
+    # The producer's validate_artifact is a hermetic rederivation: it must
+    # have been invoked (no DE-specific path bypasses it).
+    assert any(
+        row.get("verification") == "producer_artifact_validation" for row in evidence
+    )
+
+
+def test_de_forged_ledger_cannot_flip_the_central_gate(tmp_path, monkeypatch):
+    """MUTANT: computed.closed=true (or a complete frontier / closed
+    dependency block) hand-written into the ledger fails the producer's
+    exact rederivation, so it never reaches the gate."""
+
+    certify = _load("certify")
+    source = REPO / "conformance/closure/de-kindergeld.yaml"
+    for mutate in (
+        lambda d: d["computed"].__setitem__("closed", True),
+        lambda d: d["computed"]["instrument_frontier"].update(
+            {"pending": [], "complete": True}
+        ),
+        lambda d: d["computed"]["dependency_closure"].update(
+            {
+                "law_derived_inputs": [],
+                "unclassified_inputs": [],
+                "open_dependency_count": 0,
+                "closed": True,
+            }
+        ),
+    ):
+        document = yaml.safe_load(source.read_text())
+        mutate(document)
+        forged = tmp_path / "de-kindergeld.yaml"
+        forged.write_text(yaml.safe_dump(document, sort_keys=False, allow_unicode=True))
+        real_path = _load("certify")._repo_artifact_path
+        monkeypatch.setattr(
+            certify,
+            "_repo_artifact_path",
+            lambda relative, label, _p=forged: (
+                _p
+                if str(relative).endswith("de-kindergeld.yaml")
+                else real_path(relative, label=label)
+            ),
+        )
+        spec = {
+            "computed": {
+                "closed": {
+                    "artifact": "conformance/closure/de-kindergeld.yaml",
+                    "producer": "scripts/de_closure_ledger.py",
+                }
+            }
+        }
+        with pytest.raises(ValueError, match="failed closure validation"):
+            certify._producer_closed_verdict("de/kindergeld", spec, [])
+
+
+def test_exact_path_summary_alone_fails_the_central_gate_for_any_program():
+    """No program-name conditional: a spec that names only an exact-path
+    summary (no producer ledger) fails closed on the same central gate."""
+
+    certify = _load("certify")
+    evidence = []
+    closed = certify._closed_verdict(
+        "de/kindergeld", {"computed_closed": "closure/de/summary.json"}, evidence
+    )
+    assert closed["value"] is False
+    assert closed["instrument_frontier"]["missing"] is True
+    assert closed["dependency_closure"]["missing"] is True
+    assert closed["blockers"] == [
+        "closed: closure must disposition the act's subordinate instruments "
+        "(oracles#491); this artifact declares none",
+        "closed: closure must type every leaf and encode every law-derived "
+        "dependency (CERTIFIED.md v3); this artifact declares no "
+        "dependency-closure block",
+    ]
+
+
+def test_de_census_and_certificate_carry_the_same_closure_blockers():
+    census = _load("de_certificate_census")
+    certify = _load("certify")
+    rows = census.build()["programs"]
+    for program in (
+        "de/kindergeld",
+        "de/rv-employee-contribution",
+        "de/unterhaltsvorschuss",
+    ):
+        certificate = certify.build_certificate(program, certify.PROGRAMS[program])
+        closure_lines = [b for b in certificate["blockers"] if b.startswith("closed: ")]
+        assert closure_lines == certificate["verdicts"]["closed"]["blockers"]
+        assert [b for b in rows[program]["blockers"] if b.startswith("closed: ")] == (
+            closure_lines
+        )
+        assert rows[program]["certificate_status"] == "pending"
+        assert certificate["certified"]["value"] is False
+
+
+def test_de_certificate_leg_counts_completed_axiom_mismatches(monkeypatch):
+    certify = _load("certify")
+    entry = certify.PROGRAMS["de/kindergeld"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    axiom_leg = report["views"]["de/kindergeld"]["legs"][1]
+    axiom_leg["match_count"] -= 1
+    axiom_leg["mismatch_count"] += 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    monkeypatch.setattr(certify, "_rederived_de_report", lambda: report)
+    leg, _evidence, _defects = certify._de_suite_verdict(entry)
+    assert leg["unexplained"] == leg["mismatches"] == 1
+    assert not leg["clean"]

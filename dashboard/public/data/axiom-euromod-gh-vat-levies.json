@@ -1,0 +1,313 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+      "description": "Ghana National Health Insurance Levy (Act 1156 s.47, 2.5% of the chargeable supply value)",
+      "left_weighted_sum": 1800,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1800,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount",
+      "description": "Ghana Education Trust Fund Levy (Act 1152 s.3A, 2.5% of the taxable supply value)",
+      "left_weighted_sum": 1800,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1800,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "gh-levies-12k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+          "left": 300.0,
+          "right": 300.0
+        },
+        {
+          "concept": "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount",
+          "left": 300.0,
+          "right": 300.0
+        }
+      ],
+      "metadata": {
+        "annual_standard_rated_consumption": 12000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.exempt_goods_or_services": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.exempt_imports": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.import_of_goods_or_services": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.supply_of_goods_or_services_made_in_country": true,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services": 12000.0,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.exempt_goods_or_services": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.exempt_import": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.import_of_goods_or_services": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value": 12000.0,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.supply_of_goods_or_services_made_in_country": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x0111105": 278.54418753475574,
+            "xhh": 278.54418753475574,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ils_vat_std": [
+            "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value",
+            "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services": 12000.0,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value": 12000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-consumer-standard-rated-levies",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-levies-60k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+          "left": 1499.9999999999998,
+          "right": 1499.9999999999995
+        },
+        {
+          "concept": "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount",
+          "left": 1499.9999999999998,
+          "right": 1499.9999999999995
+        }
+      ],
+      "metadata": {
+        "annual_standard_rated_consumption": 60000.0,
+        "axiom_all_outputs_count": 2,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.exempt_goods_or_services": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.exempt_imports": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.import_of_goods_or_services": false,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.supply_of_goods_or_services_made_in_country": true,
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services": 59999.999999999985,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.exempt_goods_or_services": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.exempt_import": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.import_of_goods_or_services": false,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value": 59999.999999999985,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.supply_of_goods_or_services_made_in_country": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x0111105": 1392.7209376737785,
+            "xhh": 1392.7209376737785,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ils_vat_std": [
+            "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value",
+            "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#input.taxable_value_of_goods_or_services": 59999.999999999985,
+          "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#input.levy_chargeable_value": 59999.999999999985
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "GH",
+        "scenario": "single-consumer-standard-rated-levies",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana National Health Insurance Levy (Act 1156 s.47, 2.5% of the chargeable supply value)",
+      "id": "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana Education Trust Fund Levy (Act 1152 s.3A, 2.5% of the taxable supply value)",
+      "id": "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:00:01Z",
+    "generated_by": "scripts/run_comparison.py::gh-vat-levies",
+    "oracle": {
+      "euromod_country": "GH",
+      "euromod_dataset": "gh_2017_a8",
+      "euromod_system": "GH_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-gh",
+        "sha": "4d84b152548663313d3ef09c6538c27e51e411b1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-vat-levies",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 4,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_weight": 0
+    }
+  }
+}

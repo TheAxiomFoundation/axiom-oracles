@@ -1,0 +1,22 @@
+prefixes:
+  - legal_id_prefix: "et:"
+    country: et
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: >-
+      PolicyEngine has no Ethiopia model and cannot serve as an Ethiopia
+      tax-benefit oracle. Axiom Ethiopia outputs are built from official
+      Ethiopia legislation (the Income Tax Proclamation No. 979/2016 as
+      amended by Proclamation No. 1395/2025, the Value Added Tax Proclamation
+      No. 1341/2024 and Directive No. 1021/2024, and the pension Proclamations
+      No. 714/2011 and No. 715/2011); the household oracle is ETMOD (UNU-WIDER
+      SOUTHMOD, run on the EUROMOD engine; licensed SOUTHMOD A4.0 bundle,
+      system ET_2025), wired by the et-* comparison suites. Their reports are
+      run by hand where the licensed bundle is installed and committed with a
+      dated provenance stamp (comparisons/et-*.yaml declare ci: manual,
+      because the licence bars giving the bundle to a shared CI runner); see
+      concept_mappings.yaml and axiom_oracles/data/etmod_issues.json. This
+      prefix classifies any remaining Ethiopia output with no explicit entry
+      as not comparable to PolicyEngine; add exact PolicyEngine mappings only
+      if a real one-to-one Ethiopia PolicyEngine oracle target is ever
+      implemented.

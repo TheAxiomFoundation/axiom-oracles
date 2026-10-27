@@ -19,7 +19,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:IlDef_dk",
@@ -37,7 +41,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:IlsDef_dk",
@@ -55,7 +63,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:IlsUDBDef_dk",
@@ -73,7 +85,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:TransLMA_dk",
@@ -91,7 +107,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Labour-market-transition input transformation, switched off in DK_2025. The model comment says 'DO NOT SWITCH ON; ONLY WORKS WITH THE LMA ADD-ON'; it carries simulated transition inputs and is not a distinct statutory tax or benefit.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bfach00_dk",
@@ -109,7 +129,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bfached_dk",
@@ -127,7 +151,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bfachnm_dk",
@@ -145,7 +173,13 @@
       "oracle_attributed": 1,
       "bridge_artifacts": 0,
       "note": "The suite covers the single-recipient/single-parent domain. Couple/spousal taper cases stay outside its graded surface because DK_2025 retains the pre-2022 spousal income test; see euromod-dk-2025-bfachnm-pre2022-spousal-taper. The schema cannot represent a partial-domain exclusion, so this note records that carve-out.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "bfachnm_s"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bfachxp_dk",
@@ -163,7 +197,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Det midlertidige b\u00f8rnetilskud \u2014 LOV nr 1550 af 27/12/2019 (Lov om et midlertidigt b\u00f8rnetilskud til visse fors\u00f8rgere), a statutorily TEMPORARY scheme, extended by LOV nr 781 af 04/05/2021 and LOV nr 877 af 21/06/2022 (both Forl\u00e6ngelse; instruments verified via the retsinformation.dk document-search API, 2026-08-14). The committed DK_2025 spine shows the switch off in the target system, and the model comment records the scheme as 'Extra child benefit (abolished in Feb 2023)'; the DK_2020-DK_2022 on-history is the builder's multi-system probe record (ops report), not committed evidence. The target system retains a switched-off historical module, not a current-law payable benefit.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bho01_dk",
@@ -181,7 +219,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bho02_dk",
@@ -199,7 +241,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bhtuc_dk",
@@ -217,7 +263,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bma_dk",
@@ -235,7 +285,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Statutory maternity-leave calculation with an observable bma_s output. Although switched off in every DK_2007 through DK_2025 system, its body computes eligibility, duration, and a capped award; the later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion, so this remains honestly uncovered.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bpa_dk",
@@ -253,7 +307,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Statutory paternity/parental-leave calculation with an observable bpa_s output. Although switched off in every DK_2007 through DK_2025 system, its body computes eligibility and a capped award; the later yem/bhl adjustments are reclassification bookkeeping. Switch state is not a schema exclusion, so this remains honestly uncovered.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bsa_dk",
@@ -271,7 +329,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bsard_dk",
@@ -289,7 +351,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:bunct_dk",
@@ -307,7 +373,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:neg_dk",
@@ -325,7 +395,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:output_std_dk",
@@ -343,7 +417,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:output_std_hh_dk",
@@ -361,7 +439,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:poa_dk",
@@ -379,7 +461,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:random_dk",
@@ -397,7 +483,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "DEF block assigning random numbers for Monte Carlo, labour-market, and social-assistance machinery; stk01_s is an RNG output, not a statutory instrument.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:setdefault_dk",
@@ -415,7 +505,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tco_dk",
@@ -433,7 +527,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Commodities/consumption-tax shell, switched off in DK_2025. The public EUROMOD_RELEASES_J2.0+ body contains definitions only, with no compute function or output, so the consumption-tax extension needed to simulate a payable amount is not available.",
-      "status": "excluded:extension_not_available"
+      "status": "excluded:extension_not_available",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tcr_dk",
@@ -451,7 +549,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:thl_dk",
@@ -469,7 +571,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Health-contribution historical container; the DK_2025 policy switch and every function are n/a, and the target system exposes no queryable output.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tinbt_dk",
@@ -487,7 +593,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tinmd_dk",
@@ -505,7 +615,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Medium-bracket-tax historical container; the DK_2025 policy switch and every function are n/a, and the model's constants comment records that the instrument was abolished in 2010.",
-      "status": "excluded:not_a_policy"
+      "status": "excluded:not_a_policy",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tintaox_dk",
@@ -523,7 +637,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tintc_dk",
@@ -541,7 +659,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tinto_dk",
@@ -559,7 +681,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tmu_dk",
@@ -577,7 +703,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tpr_dk",
@@ -595,7 +725,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tscpi_dk",
@@ -613,7 +747,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tscpielig_dk",
@@ -631,7 +769,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tudef_dk",
@@ -649,7 +791,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:txc_dk",
@@ -667,7 +813,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tyrui_dk",
@@ -685,7 +835,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:tyruielig_dk",
@@ -703,7 +857,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Internal eligibility helper explicitly documented by the model as existing for METR calculation purposes; it produces no queryable tax output.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:uprate_dk",
@@ -721,7 +879,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:xpp00_dk",
@@ -739,7 +901,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "DEF tax-base helper that caps the deductible private-pension contribution used by downstream income-tax policies; it is not itself a distinct tax or benefit instrument.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:yem_dk",
@@ -757,7 +923,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:yemcomp_dk",
@@ -775,7 +945,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "No queryable output exists in the target system: the committed spine (conformance/spines/dk-DK_2025.json, yemcomp_dk row) records an empty output set with an n/a body and switch off in DK_2025. The model labels it a COVID-19 employee compensation scheme; the DK_2020-DK_2022 on-history is the builder's probe record, not committed evidence. With no output surface it cannot be compared per-case regardless of legal status, so no repeal claim is made.",
-      "status": "excluded:unobservable_boundary"
+      "status": "excluded:unobservable_boundary",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "dk:ysecomp_dk",
@@ -793,7 +967,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "No queryable output exists in the target system: the committed spine (conformance/spines/dk-DK_2025.json, ysecomp_dk row) records an empty output set with an n/a body and switch off in DK_2025. The model labels it a COVID-19 self-employment compensation scheme; the DK_2020-DK_2022 on-history is the builder's probe record, not committed evidence. With no output surface it cannot be compared per-case regardless of legal status, so no repeal claim is made.",
-      "status": "excluded:unobservable_boundary"
+      "status": "excluded:unobservable_boundary",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     }
   ]
 }

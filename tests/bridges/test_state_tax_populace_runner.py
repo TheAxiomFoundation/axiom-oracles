@@ -2961,14 +2961,14 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation() 
     assert request["dataset"]["inputs"] == [
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-11",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-12",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
@@ -3007,6 +3007,75 @@ def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
         )
 
 
+@pytest.mark.parametrize("current_slot", [0, 1])
+@pytest.mark.parametrize("typed", [False, True])
+def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
+    current_slot: int,
+    typed: bool,
+) -> None:
+    from axiom_oracles.bridges.relation_binding import bind_request_relations
+
+    prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
+    relation = f"{prefix}#relation.dc_pit_pilot_taxpayer_of_tax_unit"
+    request = state_tax_runner._state_request(
+        state="DC",
+        routes=(TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),),
+        year=2026,
+        output=f"{prefix}#tax",
+        projected_inputs={
+            f"{prefix}#input.dc_pit_pilot_supplied_separate_taxable_income": {
+                11: 30_000.0,
+                12: 20_000.0,
+            },
+            f"{prefix}#input.dc_pit_pilot_taxpayer_is_included": {11: True, 12: True},
+            f"{prefix}#input.dc_pit_pilot_supplied_joint_taxable_income": {1: 50_000.0},
+        },
+        declared_relations=(relation,),
+        raw_persons=pd.DataFrame(
+            {"person_id": [11, 12], "person_tax_unit_id": [1, 1]}
+        ),
+    )
+    kinds = {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    }
+    assert kinds == {
+        "state-tax-unit-1": "TaxUnit",
+        "state-tax-person-11": "Person",
+        "state-tax-person-12": "Person",
+    }
+    artifact = {
+        "program": {
+            "relations": [
+                {
+                    "name": relation,
+                    "arity": 2,
+                    **({"slot_entities": (
+                        ["TaxUnit", "Person"] if current_slot == 0 else ["Person", "TaxUnit"]
+                    )} if typed else {}),
+                }
+            ],
+            "derived": [
+                {
+                    "name": "tax",
+                    "entity": "TaxUnit",
+                    "expr": {
+                        "kind": "sum_related",
+                        "relation": relation,
+                        "current_slot": current_slot,
+                        "related_slot": 1 - current_slot,
+                    },
+                }
+            ],
+        }
+    }
+    runtime_request = bind_request_relations(request, artifact)
+    expected_slot = current_slot if typed else 0
+    for record in runtime_request["dataset"]["relations"]:
+        assert kinds[record["tuple"][expected_slot]] == "TaxUnit"
+        assert kinds[record["tuple"][1 - expected_slot]] == "Person"
+
+
 def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
@@ -3037,14 +3106,14 @@ def test_delaware_request_emits_canonical_person_schedule_without_relation() -> 
     assert request["dataset"]["inputs"] == [
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-21",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
         },
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-22",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
@@ -3597,6 +3666,62 @@ def test_taxsim_target_column_is_mapping_declared_or_none() -> None:
     assert taxsim_target_column(by_state["CA"].output) is None
 
 
+def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
+    """The campaign's TAXSIM leg builds its Cases from its own person table;
+    it must load the same concept -> PolicyEngine variable pairs as the
+    Enhanced-CPS tax-unit loader, less the SSI benefit and resource facts
+    (benefit-lane inputs that no TAXSIM column reads), or a source added to
+    one silently goes missing from the other."""
+    from axiom_oracles.adapters.taxsim.projection import taxsim_input_for_case
+    from axiom_oracles.core.case import Case, Concepts, Entity
+    from axiom_oracles.populations import populace_us
+
+    loader_tax_unit_table = {
+        **populace_us._PERSON_NON_WAGE_VARIABLES,
+        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+    }
+    benefit_only = {Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES}
+    campaign_table = {
+        getattr(Concepts, key.upper()): pe_variable
+        for key, pe_variable in state_tax_runner._TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
+    }
+
+    assert campaign_table == {
+        concept: pe_variable
+        for concept, pe_variable in loader_tax_unit_table.items()
+        if concept not in benefit_only
+    }
+
+    # The exclusion is sound only while the TAXSIM row ignores those facts.
+    def head(**facts):
+        return Case(
+            case_id=1,
+            period="2026",
+            entities=(
+                Entity(
+                    "1",
+                    "person",
+                    facts={
+                        Concepts.HOUSEHOLD_RELATION: "head",
+                        Concepts.PERSON_AGE: 70,
+                        **facts,
+                    },
+                ),
+            ),
+            metadata={"state": "UT"},
+        )
+
+    assert taxsim_input_for_case(
+        head(
+            **{
+                Concepts.SSI_BENEFITS: 9_000,
+                Concepts.SSI_COUNTABLE_RESOURCES: 1_500,
+            }
+        ),
+        taxsimid=1,
+    ) == taxsim_input_for_case(head(), taxsimid=1)
+
+
 def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
     class FakeSimulation:
         def __init__(self, dataset):
@@ -3609,6 +3734,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
                 "is_tax_unit_head": [True, False, False],
                 "is_tax_unit_spouse": [False, True, False],
                 "employment_income": [60000.0, 15000.0, 0.0],
+                "tax_exempt_interest_income": [4_000.0, 1_500.0, 900.0],
             }
             if variable == "tax_unit_id" and map_to == "person":
                 return [7, 7, 7]
@@ -3637,6 +3763,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
         {"person_id": [1, 2, 3], "person_tax_unit_id": [7, 7, 7]}
     )
 
+    unprojected_inputs = {}
     targets = state_tax_runner.calculate_taxsim_targets(
         dataset="dataset",
         raw_tax_units=raw_tax_units,
@@ -3645,6 +3772,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
         year=2026,
         microsimulation_factory=FakeSimulation,
         taxsim_runner_factory=FakeRunner,
+        unprojected_inputs=unprojected_inputs,
     )
 
     # UT's concept maps staxbc — the pre-credit value, not siitax.
@@ -3659,6 +3787,34 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
     assert row["depx"] == 1
     assert row["page"] == 40 and row["sage"] == 38
     assert row["idtl"] == 2
+    assert unprojected_inputs == {
+        "UT": {7: {"tax_exempt_interest_income": 5_500.0}}
+    }
+    assert "taxsim_unprojected_inputs" not in row
+
+
+def test_state_taxsim_comparison_persists_dropped_input_metadata(tmp_path) -> None:
+    report = compare_ready_state_tax_units(
+        routes=(TaxUnitRoute(7, 1, "UT", "49", 2.5, DISPOSITION_READY),),
+        policyengine_targets={"UT": {7: 0.0}},
+        policyengine_projection_inputs={"UT": _ut_inputs({7: 0.0})},
+        taxsim_targets={"UT": {7: 100.0}},
+        taxsim_unprojected_inputs={
+            "UT": {7: {"tax_exempt_interest_income": 5_500.0}}
+        },
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=_fake_axiom_zero_runner,
+    )
+
+    [row] = report["states"]["UT"]["cases"]
+    assert row["metadata"]["taxsim_unprojected_inputs"] == {
+        "tax_exempt_interest_income": 5_500.0
+    }
+    # A diagnostic explains the input surface; it never suppresses grading.
+    assert row["taxsim_matched"] is False
+    assert report["taxsim_mismatch_count"] == 1
 
 
 def test_calculate_taxsim_targets_skips_unmapped_jurisdictions() -> None:

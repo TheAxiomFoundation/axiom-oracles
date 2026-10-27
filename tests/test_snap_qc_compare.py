@@ -331,10 +331,11 @@ def test_map_qc_unit_missing_certified_size_raises() -> None:
 
 
 def test_map_qc_unit_medical_feeds_applied_deduction() -> None:
-    # The engine input reconstructs the deduction FNS applied (FSMEDDED plus
-    # the $35 threshold): in standard-medical-deduction demonstration states
-    # FSMEDDED is a flat standard that differs from the excess FSMEDEXP, so
-    # FSMEDDED is the operative amount (10 such rows in FY2024, none in CO).
+    # The engine input reconstructs the file's calculated medical deduction
+    # (FSMEDDED plus the $35 threshold): in standard-medical-deduction
+    # demonstration states FSMEDDED is a flat standard that differs from the
+    # excess FSMEDEXP, so FSMEDDED is the operative amount (10 such rows in
+    # FY2024, none in CO).
     unit = _unit(
         medical_expenses=130.0,
         expected=SimpleNamespace(benefit=291, medical_deduction=135.0),
@@ -389,9 +390,10 @@ def test_map_qc_unit_elderly_or_disabled_flag(age, elderly_flag, expected) -> No
 
 
 def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> None:
-    # The child-support feed is the deduction FNS applied (FSCSDED), not the
-    # reported payment: the file carries rows whose reported FSCSEXP was not
-    # allowed as a deduction, and the applied amount is what enters FSTOTDED.
+    # The child-support feed is the file's constructed deduction (FSCSDED) in
+    # place of the reported payment: the file carries rows whose reported
+    # FSCSEXP was not allowed as a deduction, and the applied amount is what
+    # enters FSTOTDED.
     inputs = _map(
         _unit(
             dependent_care_expense=120.0,
@@ -410,7 +412,7 @@ def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> No
 
 def test_map_qc_unit_disallowed_child_support_payment_feeds_zero() -> None:
     # A reported payment with FSCSDED = 0 must not produce an engine-side
-    # deduction (two real FY2024 New York rows).
+    # deduction (one in-scope FY2024 New York row: FSCSEXP 139, FSCSDED 0).
     inputs = _map(
         _unit(
             child_support_expense=139.0,
@@ -564,6 +566,21 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     )
     assert benefit_row["match_rate"] == 50
     assert len(report["cases"]) == 2
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(sc.QC_JURISDICTIONS))
+def test_stage_concepts_are_the_ids_a_replay_report_lists(jurisdiction) -> None:
+    config = sc.QC_JURISDICTIONS[jurisdiction]
+    output_id_by_label = sc._output_id_by_label(
+        config, load_overlay_spec(config.overlay).module_id_rewrites
+    )
+    stages = sc.stage_concepts(jurisdiction)
+    assert list(stages) == [label.stage for label in sc._LABELS]
+    assert sc._benefit_stage() in stages
+    assert len(set(stages.values())) == len(stages)
+    assert list(stages.values()) == [
+        row["id"] for row in sc._concept_rows(output_id_by_label, 0.0, 1.0)
+    ]
 
 
 # --------------------------------------------------------------------------- #

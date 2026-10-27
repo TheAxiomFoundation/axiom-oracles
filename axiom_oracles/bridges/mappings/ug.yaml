@@ -1,6 +1,149 @@
+mappings:
+  # Uganda outputs are validated against UGAMOD (SOUTHMOD Uganda, run on the
+  # EUROMOD engine), not PolicyEngine, which has no Uganda model. These explicit
+  # entries record the UGAMOD household-oracle wiring for each output a ug-*
+  # suite compares; they stay not_comparable to PolicyEngine because there is
+  # no Uganda PolicyEngine target, mirroring the UKMOD-compared UK pipeline
+  # entries. The comparisons live in comparisons/ug-*.yaml and their committed
+  # reports in dashboard/public/data/.
+  - legal_id: ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#resident_individual_income_tax
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Resident individual income tax (Cap. 340 Third Schedule Part I as
+      substituted by Act 4 of 2012: nil to 2,820,000; 10% to 4,020,000;
+      20% to 4,920,000; 30% above; an additional 10% on chargeable income
+      exceeding 120,000,000). Validated against UGAMOD tin_s by the
+      ug-paye-rate-schedule suite (SOUTHMOD A4.0, UG_2025 = FY2025/26):
+      run live within 0.4 UGX a year (tolerance 1) at every tested income, including the
+      additional-rate region, which UGAMOD implements. PolicyEngine has
+      no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2022-11/income-tax-amendment-2022/third-schedule-rental-rate-part-substituted#individual_rental_income_tax
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Individual rental income tax (Third Schedule Part VI as substituted
+      by the Income Tax (Amendment) Act, 2022: 12% of gross rental income
+      exceeding 2,820,000 per annum, no expense deductions for
+      individuals). Validated against UGAMOD tpr_s by the ug-rental suite
+      (run live exact: 261,600 at 5m gross; 861,600 at 10m). PolicyEngine
+      has no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Presumptive small-business income tax (Act 20 of 2020 Second
+      Schedule: turnover bands to the 150m ceiling; fixed amounts without
+      records, cumulative-component rates with records). Validated
+      against UGAMOD ttn_s by the ug-presumptive suite in both regimes,
+      exact at every band. PolicyEngine has no Uganda model; the
+      household oracle is UGAMOD.
+  - legal_id: ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employee_share
+    country: ug
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NSSF employee share (five percent of monthly total wages, Cap. 230
+      s.11, deductible by the employer from the fifteen percent standard
+      contribution). Validated against UGAMOD tscee_s by the
+      ug-nssf-contributions suite - run live exact at every case (wage
+      sweep at age 35, probe income at ages 60 and 70), no ceiling;
+      UGAMOD applies no age window (contrast GHAMOD's age-15-45 cap).
+      Whether the Act itself has an age limit is not settled (the
+      captured corpus lacks the "eligible employee" definition).
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employer_net_share
+    country: ug
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NSSF employer-net share (the fifteen percent standard contribution
+      less the five percent employee share, derived - economically ten
+      percent). Validated against UGAMOD tscer_s by the
+      ug-nssf-contributions suite, run live exact. PolicyEngine has no
+      Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Salaried-employee Local Service Tax (Act 8 of 2008, regulation 3 table:
+      ten graduated bands by monthly take-home income, 5,000 to 100,000
+      shillings per year). Validated against UGAMOD tgv_s by the ug-lst
+      suite (formal employees, loc01=1) in every band, run live exact
+      with the same gross monthly income fed to both engines. UGAMOD
+      bands on gross pay; whether the statute's take-home base means
+      gross or net pay is an open methodology question the suite does
+      not decide. PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:policies/mglsd-scg/sage-handbook#senior_citizens_grant_per_year
+    country: ug
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Senior Citizens Grant national rule (MGLSD SAGE Handbook: Shs
+      25,000 per month at age 80 and above). Validated against UGAMOD
+      boa_s by the ug-scg suite (run live exact at 80/85; zero at 79
+      outside the rollout districts, whose lower-age lists are deferred
+      in the module). PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006#vat_amount
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      The 18% standard VAT rate (Value Added Tax (Rate of Tax) Order,
+      2006, in force 1 July 2005 and unchanged). Validated against
+      UGAMOD tva_s by the ug-vat suite on a single standard-rated item,
+      with taxable_value bridged from UGAMOD's post-uprating
+      il_exp_vat01 base. PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Fuel excise duty (Excise Duty (Amendment) Act 2024 Schedule 2 items 8(a) and (b): motor
+      spirit Shs 1550 per litre, gas oil Shs 1230 per litre). Validated
+      against UGAMOD tex10_s by the ug-fuel-excise suite - run live
+      exact (litres pass unuprated). The FY2025/26 amendment print is an
+      open vintage question (rulespec-ug#1): the match shows both engines
+      price the 2024 rows, not that those rows are FY2025/26 law.
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: ug
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 4 of 2012 Third
+      Schedule resident income tax, Cap. 230 s.11 employee 5% share,
+      gross + benefits - tax - share). Validated against UGAMOD
+      ils_dispy by the ug-dispy suite on the full PAYE grid, run live
+      exact to within 0.4 UGX/yr. Local Service Tax is excluded on both
+      sides (loc01=0 on the UGAMOD rows; no LST stage in the pipeline).
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
 prefixes:
   - legal_id_prefix: "ug:"
     country: ug
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: PolicyEngine has no Uganda model and cannot serve as a Uganda tax-benefit oracle. Axiom Uganda outputs are built from official Uganda legislation (the Income Tax Act, Cap. 340, as amended, from Parliament of Uganda assented prints); the household oracle is UGAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine, systems UG_2016-UG_2025 in the licensed SOUTHMOD A4.0 bundle), whose suite wiring lands with the Ghana/Uganda oracle chain. This prefix classifies Uganda outputs as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Uganda PolicyEngine oracle target is ever implemented.
+    rationale: >-
+      PolicyEngine has no Uganda model and cannot serve as a Uganda
+      tax-benefit oracle. Axiom Uganda outputs are built from official Uganda
+      legislation (the Income Tax Act, Cap. 340, as amended; the NSSF Act,
+      Cap. 230; the Local Governments, VAT and Excise Duty instruments) from
+      Parliament of Uganda assented prints and MGLSD sources; the household
+      oracle is UGAMOD (UNU-WIDER SOUTHMOD, run on the EUROMOD engine;
+      licensed SOUTHMOD A4.0 bundle, system UG_2025), wired by the ug-*
+      comparison suites. Their reports are run by hand where the licensed
+      bundle is installed and committed with a dated provenance stamp
+      (comparisons/ug-*.yaml declare ci: manual, because the licence bars
+      giving the bundle to a shared CI runner); see the explicit mappings
+      above and concept_mappings.yaml; Uganda has no findings ledger because
+      no value mismatch was found. This prefix classifies any remaining Uganda
+      output with no explicit entry as not comparable to PolicyEngine; add
+      exact PolicyEngine mappings only if a real one-to-one Uganda
+      PolicyEngine oracle target is ever implemented.

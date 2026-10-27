@@ -1,0 +1,49 @@
+{
+ "schema": "axiom_oracles.etmod_issues.v1",
+ "updated_at": "2026-10-04",
+ "purpose": "Track ETMOD (SOUTHMOD Ethiopia) model findings observed in household-level Axiom oracle comparisons, mirroring ghamod_issues.json and microzamod_issues.json. Canonical narrative ledger: rulespec-et#1 closing comment.",
+ "entries": [
+  {
+   "id": "etmod-mat-added-instead-of-reduced-floor",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ET",
+   "observed_with": {
+    "country": "ET",
+    "system": "ET_2025",
+    "dataset": "et_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "ETMOD implements the Proclamation 1395/2025 Article 23 Minimum Alternative Tax as an addition: when scheduled business tax falls below 2.5% of turnover it adds the full 2.5% of turnover to the scheduled tax in tin02_s, where sub-article 3 provides the minimum tax 'shall be reduced by business income tax under Article 18 paid in the tax year' - a floor. Probed live: at 3,000,000 birr receipts and 60,000 taxable income ETMOD returns tin02_s 81,000 (= scheduled 6,000 + 75,000) where the statutory payable is 75,000. The encoded rulespec-et module implements the reduced top-up. The et-business-mat suite carries this point as case et-business-mat-active-3000000-60000-finding1, dispositioned in dispositions/et-business-mat.yaml (run live 2026-10-04 through scripts/run_comparison.py: 81,000 vs the encoded 75,000). A second probe on 2026-10-04 (not committed) gave 63,400 vs 62,500 at 2,500,000 receipts / 30,000 income (scheduled 900 plus the full 62,500, where the floor is 62,500).",
+   "affected_comparisons": [
+    "et-business-mat"
+   ],
+   "affected_concepts": [
+    "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable"
+   ]
+  },
+  {
+   "id": "etmod-mat-applied-to-article-49-regime-taxpayers",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ET",
+   "observed_with": {
+    "country": "ET",
+    "system": "ET_2025",
+    "dataset": "et_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "ETMOD levies the Article 23 minimum tax on taxpayers under the Article 49 total gross revenue tax regime (Category B, annual gross receipts below Birr 2,000,000), whom sub-article 4 expressly excludes: 'This Article shall not apply to a taxpayer under the total gross revenue tax regime set out in Article 49 of this Proclamation.' Probed live: at 50,000 birr receipts ETMOD returns tin02_s 1,250 (= 2.5% of receipts) alongside its presumptive ttn_s, so each probed Category B point pays both. The encoded module gates the minimum tax to receipts above the Category A bound. The et-business-mat suite carries this point as case et-business-article-49-regime-50000-20000-finding2 (income kept in the 0-24,000 nil band), dispositioned in dispositions/et-business-mat.yaml (run live 2026-10-04: 1,250 vs the encoded 0). Further probes on 2026-10-04 (not committed): tin02_s is exactly 2.5% of receipts at 500,000 receipts / 200,000 income (12,500) and at 1,900,000 / 1,000,000 (47,500); ETMOD turns the Article 19 schedule off below the Category A bound (at 2,100,000 / 1,000,000 it returns the scheduled 325,400) but still adds the minimum tax. The ETMOD side of this finding lands in tin02_s only; the et-presumptive suite (ttn_s) is unaffected and runs exact.",
+   "affected_comparisons": [
+    "et-business-mat"
+   ],
+   "affected_concepts": [
+    "et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable"
+   ]
+  }
+ ]
+}

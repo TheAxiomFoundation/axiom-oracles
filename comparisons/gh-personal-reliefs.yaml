@@ -1,0 +1,74 @@
+name: gh-personal-reliefs
+title: Ghana personal income-tax reliefs — Axiom vs GHAMOD
+description: >-
+  Compares the rulespec-gh Fifth Schedule personal reliefs (Income Tax Act
+  2015 (Act 896) section 51 and Fifth Schedule, amounts as substituted by the
+  Income Tax (Amendment) Act 2019 (Act 1007): dependent spouse or two-plus
+  children 1,200; disability 25% of assessable business/employment income; old
+  age at 60+ 1,500; child education 600 per child capped at 3; aged dependant
+  relative 1,000 per relative capped at 2; training cost capped at 2,000)
+  encoded in Axiom RuleSpec against GHAMOD's per-relief tinta0X_s outputs: one
+  relief branch per case, the two caps, and a combined multi-relief household.
+  GHAMOD is the SOUTHMOD tax-benefit model for Ghana (UNU-WIDER) on the
+  EUROMOD engine (SOUTHMOD A4.0, country GH, system GH_2025). GHAMOD derives
+  each relief from household composition, so each case builds the triggering
+  household as euromod input rows and gives Axiom the equivalent direct
+  inputs, including the household's true dependant-child count. The amounts
+  are in force from 30 December 2019 (Act 1007) and unchanged through 2026, so
+  GH_2025 applies the amounts the Axiom module validates for 2026. Branch
+  mapping: old_age <-> tinta03_s, disability <-> tinta07_s (25% of the
+  engine's il_tintb3, bridged), child_education <-> tinta05_s,
+  aged_dependant_relative <-> tinta06_s, dependant_spouse_or_children <->
+  tinta01_s (the dependent-spouse limb). Each case scores only the reliefs it
+  targets: 8 cases, 10 comparisons, all matching to the cedi in the live run.
+  Two parts of the Fifth Schedule have no live comparison because GHAMOD
+  offers nothing to compare against: the training relief (GH_2025 emits no
+  tinta04_s column at all), and the two-child limb of paragraph 1(a) for a
+  lone parent (GHAMOD's lone-parent output tinta02_s returns 0 for every
+  synthetic lone-parent household tried, including this suite's
+  child-education households, where Axiom's two-child limb pays 1,200). Both
+  are recorded in axiom_oracles/data/ghamod_issues.json. The committed report
+  refreshes only through a supervised run (scripts/regenerate_euromod_gh.sh)
+  where the x64 EUROMOD runtime and the local SOUTHMOD bundle exist. Results
+  are based on the tax-benefit microsimulation model for Ghana (GHAMOD) in
+  SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER with SASPRI,
+  the LSE International Inequalities Institute and local partners, run on the
+  EUROMOD software (EM_Executable 1.0.0 via the euromod connector 0.2.18)
+  under the gh_2017_a8 dataset configuration (Ghana Statistical Service, Ghana
+  Living Standards Survey Round 7, 2016-2017); only the dataset's variable
+  list is read and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_gh.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: gh-personal-reliefs
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: GH
+    euromod_system: GH_2025
+    euromod_dataset: gh_2017_a8
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-gh-personal-reliefs.json
+
+artifacts:
+  report_basename: axiom-euromod-gh-personal-reliefs
+
+dashboard:
+  filename: axiom-euromod-gh-personal-reliefs.json
+  suite: gh-personal-reliefs

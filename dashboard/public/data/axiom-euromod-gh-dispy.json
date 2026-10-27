@@ -1,0 +1,257 @@
+{
+  "aggregates": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "description": "Ghana composed single-employee disposable income (gross + benefits - income tax - employee SSNIT contribution)",
+      "left_weighted_sum": 10281.6,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 10281.6,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "gh-dispy-5000-nil-zone",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 4724.999999999999,
+          "right": 4725.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 4,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.personal_reliefs_claimed": 0.0,
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income": 5000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 116.06007813948155,
+            "yem00": 116.06007813948155
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income": 5000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            5000.0
+          ],
+          "yearly_earned_income_total": 5000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 5000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-dispy-5880-nil-band-bound",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 5556.599999999999,
+          "right": 5556.599999999999
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 4,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.personal_reliefs_claimed": 0.0,
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income": 5879.999999999999
+        },
+        "euromod_inputs": [
+          {
+            "dag": 40,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 136.4866518920303,
+            "yem00": 136.4866518920303
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/composed/pilot-worker-disposable-income-pipeline#input.qualifying_employment_income": 5879.999999999999
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            5880.0
+          ],
+          "yearly_earned_income_total": 5880.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 5880.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana composed single-employee disposable income (gross + benefits - income tax - employee SSNIT contribution)",
+      "id": "gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:05:26Z",
+    "generated_by": "scripts/run_comparison.py::gh-dispy",
+    "oracle": {
+      "euromod_country": "GH",
+      "euromod_dataset": "gh_2017_a8",
+      "euromod_system": "GH_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-gh",
+        "sha": "4d84b152548663313d3ef09c6538c27e51e411b1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-dispy",
+  "summary": {
+    "comparison_count": 2,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 2,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_weight": 0
+    }
+  }
+}

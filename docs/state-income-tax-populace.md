@@ -6,6 +6,8 @@ the complete, sha256-pinned US Populace validation population. The historical
 `ecps` command name is retained for compatibility, but the dataset is the certified
 `populace-us` artifact rather than Enhanced CPS.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Why the grid runner cannot simply use a larger sample
 
 The current-law campaign exercises 42 RuleSpec modules with 252 hand-computed
@@ -147,10 +149,13 @@ but its constant repeal result is not executed or counted as tax coverage.
 5. Publish the canonical v2.1 report only after every residual is dispositioned,
    independent review is clean, and current CI is green.
 
-Population readiness is a legal-coverage claim, not merely a successful engine
-invocation. A state is ready only when every included case has a non-circular
-projection, every excluded case has a stable reason, and all operative branches
-within the declared comparison scope are encoded and tested.
+Population readiness is a projection-contract status. The contract validator
+accepts a state as `ready` only when none of its input or relation slots is
+`blocked` (`axiom_oracles/bridges/state_tax_populace.py`); every slot must carry
+evidence, and a PolicyEngine boundary may not reuse the comparison target. The
+runner records a fixed disposition for each tax unit it does not compare, such
+as `excluded_unknown_geography`. Neither checks that the RuleSpec branches in
+the comparison scope are encoded or tested.
 
 Validate the current contract with:
 
@@ -181,6 +186,10 @@ uv run --extra policyengine scripts/run_state_tax_populace.py \
   --output /tmp/state-tax-populace-report.json
 ```
 
+North Carolina needs a newer policyengine-us than this extra installs, so this
+command stops before loading the dataset until it runs in an environment that
+meets every ready state's floor (see [PolicyEngine version](#policyengine-version)).
+
 For a bounded execution, repeat the case-insensitive `--state` option. Unknown
 or currently blocked jurisdictions fail before the dataset is loaded:
 
@@ -199,3 +208,41 @@ only target calculation, input projection, and comparison are restricted to
 the requested ready jurisdictions. This selects whole jurisdictions, not a
 filtered population slice: every eligible unit in each selected state remains
 in scope.
+
+## PolicyEngine version
+
+The runner pins no PolicyEngine release for the whole campaign. It runs on the
+installed `policyengine` and `policyengine-us` and records both in each
+report's `runtime_provenance.packages`, so a committed report names the oracle
+it was graded against. The `policyengine` extra in `pyproject.toml` resolves
+to `policyengine[us]==5.0.0` (policyengine-us 1.764.6 in `uv.lock`); most
+committed state reports instead record policyengine 4.18.9 with
+policyengine-us 1.752.2.
+
+A state whose projection depends on a PolicyEngine fix that the runtime
+proofs cannot see sets a floor in `MINIMUM_POLICYENGINE_US_BY_STATE`
+(`axiom_oracles/bridges/state_tax_populace_runner.py`). The campaign checks
+every requested state, or every ready state when none is requested, after the
+TAXSIM host check and before loading the dataset. It exits if policyengine-us
+is missing, older than the floor, or not a plain release. North Carolina
+requires 2.60.4 or later. Earlier releases counted federally non-deductible
+mortgage interest in the North Carolina itemized deduction
+(PolicyEngine/policyengine-us#10468), and that is a formula change, not a
+parameter or schema change the runner can pin. The extra's
+1.764.6 is below that floor, so run North Carolina in its own environment.
+These pins resolve to the versions the committed report records:
+
+```bash
+uv venv --python 3.13 .venv-nc
+uv pip install --python .venv-nc -e . \
+  policyengine==6.11.1 policyengine-us==2.68.0 policyengine-taxsim==2.30.0
+.venv-nc/bin/python scripts/run_state_tax_populace.py --state NC \
+  --sample-size-per-state 0 \
+  --rulespec-root /path/to/rulespec-us \
+  --axiom-rules-path /path/to/axiom-rules-engine \
+  --output /tmp/nc-state-tax-populace-report.json
+```
+
+The engine rejects a RuleSpec root whose folder name is not
+`rulespec-<country code>`, so check a pinned RuleSpec revision out into a
+folder named `rulespec-us`.
