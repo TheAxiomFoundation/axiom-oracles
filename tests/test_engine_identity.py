@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
+import itertools
 import json
 import shutil
 import subprocess
@@ -22,6 +24,7 @@ from axiom_oracles.engine_identity import (
     build_engine_binary,
     engine_binding_receipt_path,
     engine_receipt,
+    ensure_engine_binary,
     main,
     record_engine_receipt,
 )
@@ -291,6 +294,86 @@ def test_build_rejects_source_modified_during_build(tmp_path):
     with pytest.raises(EngineIdentityError, match="clean"):
         build_engine_binary(repo, binary, ["cargo", "build"], run=build)
     assert not engine_binding_receipt_path(binary).exists()
+
+
+
+def _head(repo: Path) -> str:
+    return subprocess.check_output(["git", "-C", str(repo), "rev-parse", "HEAD"], text=True).strip()
+
+
+# Every cache state a build step can restore, against a clean or dirty checkout.
+CACHE_STATES = list(itertools.product(
+    [False, True], ["none", "head", "older", "mismatched"], [False, True]
+))
+
+
+@pytest.mark.parametrize("exists,receipt,dirty", [
+    state for state in CACHE_STATES if state[0] or state[1] == "none"
+])
+def test_ensure_reuses_only_a_binary_receipted_for_the_clean_head(tmp_path, exists, receipt, dirty):
+    repo = _source_repo(tmp_path / "source")
+    binary = repo / "target" / "release" / "axiom-rules-engine"
+    head = _head(repo)
+    if exists:
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"restored from a build cache")
+        if receipt == "head":
+            _write_binding(binary, engine_commit=head)
+        elif receipt == "older":
+            _write_binding(binary)
+        elif receipt == "mismatched":
+            _write_binding(binary, engine_commit=head, binary_sha256="0" * 64)
+    if dirty:
+        (repo / "Cargo.toml").write_text("modified source\n")
+    calls = []
+
+    def build(command, **kwargs):
+        calls.append(command)
+        binary.parent.mkdir(parents=True, exist_ok=True)
+        binary.write_bytes(b"built from observed source")
+
+    if dirty and not exists:
+        with pytest.raises(EngineIdentityError, match="clean"):
+            ensure_engine_binary(repo, binary, ["cargo", "build"], run=build)
+        assert calls == []
+        return
+    result = ensure_engine_binary(repo, binary, ["cargo", "build"], run=build)
+    rebuilt = not exists or (not dirty and receipt != "head")
+    assert calls == ([["cargo", "build"]] if rebuilt else [])
+    assert result["binary_sha256"] == hashlib.sha256(binary.read_bytes()).hexdigest()
+    if dirty:
+        # A dirty checkout keeps its binary and whatever identity it carries.
+        assert result["commit"] == {"head": head, "older": COMMIT}.get(receipt)
+    else:
+        # A clean checkout always yields an executable receipted for its HEAD.
+        assert result["commit"] == head
+        assert result["source_status"] == "verified build receipt"
+
+
+def test_comparison_runner_rebuilds_an_unreceipted_cached_engine(tmp_path, capsys):
+    source = Path(__file__).parents[1] / "scripts" / "run_comparison.py"
+    spec = importlib.util.spec_from_file_location("engine_identity_run_comparison", source)
+    run_comparison = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(run_comparison)
+    repo = _source_repo(tmp_path / "source")
+    binary = repo / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_bytes(b"restored without a receipt")
+    calls = []
+
+    def build(command, **kwargs):
+        calls.append(command)
+        binary.write_bytes(b"built from observed source")
+
+    run_comparison.subprocess = type("FakeSubprocess", (), {"run": staticmethod(build)})
+    receipt = run_comparison._ensure_engine_binary(repo, kind="release")
+    assert calls == [["cargo", "build", "--locked", "--jobs", "4", "--bin", "axiom-rules-engine", "--release"]]
+    assert receipt["commit"] == _head(repo)
+    assert "Building release axiom-rules-engine" in capsys.readouterr().out
+    calls.clear()
+    assert run_comparison._ensure_engine_binary(repo, kind="release")["commit"] == _head(repo)
+    assert calls == []
 
 
 def test_inspect_cli_rejects_unreceipted_cache_hit(tmp_path, capsys):

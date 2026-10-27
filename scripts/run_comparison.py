@@ -5064,16 +5064,21 @@ def _expand_path(raw: str | Path) -> Path:
 
 
 def _ensure_engine_binary(repo: Path, *, kind: str) -> dict:
-    from axiom_oracles.engine_identity import build_engine_binary, engine_receipt
+    from axiom_oracles.engine_identity import ensure_engine_binary
 
-    bin_path = repo / "target" / kind / "axiom-rules-engine"
-    if bin_path.exists():
-        return engine_receipt(bin_path)
-    print(f"Building {kind} axiom-rules-engine in {repo}...")
     cmd = ["cargo", "build", "--locked", "--jobs", "4", "--bin", "axiom-rules-engine"]
     if kind == "release":
         cmd.append("--release")
-    return build_engine_binary(repo, bin_path, cmd, run=subprocess.run)
+
+    def build(command, **kwargs):
+        print(f"Building {kind} axiom-rules-engine in {repo}...")
+        return subprocess.run(command, **kwargs)
+
+    # A cached target/ can hold an unreceipted or older binary; only one
+    # receipted for this checkout's HEAD is reused.
+    return ensure_engine_binary(
+        repo, repo / "target" / kind / "axiom-rules-engine", cmd, run=build
+    )
 
 
 def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Path:

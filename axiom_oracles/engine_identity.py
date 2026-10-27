@@ -286,6 +286,34 @@ def build_engine_binary(
     return engine_receipt(binary)
 
 
+def ensure_engine_binary(
+    repo: str | Path,
+    binary_path: str | Path,
+    command: Sequence[str],
+    *,
+    run: Callable[..., Any] = subprocess.run,
+) -> dict[str, Any]:
+    """Reuse an executable only when its receipt binds it to the checkout's HEAD.
+
+    A restored build cache can hold a binary with no receipt, or one receipted
+    for an older commit; a clean checkout rebuilds either through
+    ``build_engine_binary``. A checkout that is dirty or can't be verified keeps
+    its existing binary, whose receipt then names whatever identity it has, and
+    a missing binary is always built.
+    """
+    source = Path(repo).expanduser().resolve()
+    binary = Path(binary_path).expanduser().resolve()
+    if binary.exists():
+        receipt = engine_receipt(binary)
+        try:
+            head = _clean_source_commit(source)
+        except EngineIdentityError:
+            return receipt
+        if receipt["commit"] == head:
+            return receipt
+    return build_engine_binary(source, binary, command, run=run)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="action", required=True)
