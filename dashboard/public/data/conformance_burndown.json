@@ -842,6 +842,16 @@
         "axiom_attributed_open": 0,
         "gap": 13,
         "conformant": false
+      },
+      {
+        "date": "2026-10-27",
+        "in_scope": 23,
+        "covered": 10,
+        "uncovered": 13,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 13,
+        "conformant": false
       }
     ],
     "dk": [
@@ -1387,6 +1397,16 @@
       },
       {
         "date": "2026-10-26",
+        "in_scope": 22,
+        "covered": 1,
+        "uncovered": 21,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 21,
+        "conformant": false
+      },
+      {
+        "date": "2026-10-27",
         "in_scope": 22,
         "covered": 1,
         "uncovered": 21,
@@ -2236,6 +2256,16 @@
         "axiom_attributed_open": 0,
         "gap": 15,
         "conformant": false
+      },
+      {
+        "date": "2026-10-27",
+        "in_scope": 21,
+        "covered": 6,
+        "uncovered": 15,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 15,
+        "conformant": false
       }
     ],
     "uk-pe": [
@@ -3068,6 +3098,16 @@
         "axiom_attributed_open": 0,
         "gap": 10,
         "conformant": false
+      },
+      {
+        "date": "2026-10-27",
+        "in_scope": 23,
+        "covered": 13,
+        "uncovered": 10,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 10,
+        "conformant": false
       }
     ],
     "us-pe": [
@@ -3890,6 +3930,16 @@
         "axiom_attributed_open": 0,
         "gap": 111,
         "conformant": false
+      },
+      {
+        "date": "2026-10-27",
+        "in_scope": 127,
+        "covered": 16,
+        "uncovered": 111,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 111,
+        "conformant": false
       }
     ],
     "us-tariff-yale": [
@@ -4555,6 +4605,16 @@
       },
       {
         "date": "2026-10-26",
+        "in_scope": 10,
+        "covered": 8,
+        "uncovered": 2,
+        "unexplained": 0,
+        "axiom_attributed_open": 0,
+        "gap": 2,
+        "conformant": false
+      },
+      {
+        "date": "2026-10-27",
         "in_scope": 10,
         "covered": 8,
         "uncovered": 2,
