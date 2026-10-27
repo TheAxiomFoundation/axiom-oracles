@@ -29,6 +29,10 @@ python -m axiom_oracles.engine_identity inspect \
   --expect-commit 32bc1c124724ebbb2187a196a3b228cfb2a14721
 ```
 
+The receipt names `TheAxiomFoundation/axiom-rules-engine` without checking the
+checkout's remote (local engine clones often point at a filesystem path), so
+`--repo` must be a checkout of that repository.
+
 Existing matching axiom-encode `.provenance.json` receipts are also accepted.
 Cache the sidecar with the executable. Every invocation hashes the resolved
 executable before and after execution, including cache hits; absent or stale

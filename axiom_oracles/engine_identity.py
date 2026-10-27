@@ -233,6 +233,9 @@ def build_engine_binary(
     The expected output is removed first, so a successful command that leaves
     stale bytes elsewhere cannot accidentally attest an old executable. Cargo's
     output directory is explicit even when callers have a shared target cache.
+    The receipt names ENGINE_REPOSITORY without checking the checkout's
+    remote, which local engine clones often set to a filesystem path, so the
+    caller must pass a checkout of that repository.
     """
     source = Path(repo).expanduser().resolve()
     binary = Path(binary_path).expanduser().resolve()
