@@ -95,7 +95,7 @@ only when that program subgraph cites it. Filenames are never used as a
 membership filter or as evidence of coverage.
 
 The versioned denominator and node graph are `closure/nz/source.json`, pinned
-in the generator and populated from the signed named corpus release
+in the generator and populated from the named corpus release
 `nz-rulespec-2026-10-23-amendment-markers`, the release pinned by that RuleSpec
 commit's `.axiom/toolchain.toml`. Its content SHA-256 is
 `4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2`;
