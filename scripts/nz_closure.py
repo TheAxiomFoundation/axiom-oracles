@@ -40,7 +40,7 @@ EVALUATION_TRACE_PATH = (
 RATCHET_PATH = OUT_DIR / "denominator-ratchet.json"
 SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
 EVALUATION_TRACE_SHA256 = (
-    "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+    "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
 )
 RULESPEC_REPO = Path.home() / "TheAxiomFoundation" / "rulespec-nz"
 CORPUS_REPO = Path.home() / "TheAxiomFoundation" / "axiom-corpus"
@@ -60,11 +60,11 @@ TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.v1"
 TRACE_SUITE = "nz-treasury-incomeexplorer"
 TRACE_EVALUATION_COUNT = 883
 TRACE_ENGINE = {
-    "binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
-    "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
+    "binary_sha256": "f63fb4912df57c1ae897a9e5fe53634b215646a1ad49757397dbb75d32803a8d",
+    "git_sha": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
 }
 TRACE_COMPILED_PROGRAM = {
-    "artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+    "artifact_sha256": "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91",
     "derived_outputs": 176,
     "engine_evaluations": TRACE_EVALUATION_COUNT,
     "input_slots": 328,
@@ -76,12 +76,12 @@ TRACE_CAPTURE = {
     "source_comparison": {
         "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
         "regenerated_sha256": (
-            "7b58fcfdb50f8627f0228bf024d95cde3ef3d50caae7f2d9de2862d82ea6e8c6"
+            "70f636371ca78ca6abc38012f93146cfabcc90b29e28f9f432bc6636b425fbc5"
         ),
         "regeneration_difference": "provenance only",
-        "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b",
+        "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
         "substance_sha256": (
-            "a52a16d81433c91bc73e107fdaa5cdbc701d908f5c359615fd317cb82e6b8a15"
+            "418f943cfd49eeae7a9129e3952f521c9903d4d3b454fc4502471699a605cf0e"
         ),
     },
     "source_harness": {

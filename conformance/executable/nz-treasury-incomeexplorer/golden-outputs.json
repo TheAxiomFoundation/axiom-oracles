@@ -246,7 +246,7 @@
   "schema": "axiom_oracles.nz_executable_expected_comparisons.v2",
   "source_classifications": {
     "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-    "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+    "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
   },
   "treasury_snapshot": {
     "path": "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json",

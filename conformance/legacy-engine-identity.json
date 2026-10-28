@@ -267,7 +267,6 @@
     "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json": "2bfe4e557e1fb461b747b836635b9f7c1e9ee2e64a283911b3b22e3f4bd0d09a",
     "dashboard/public/data/axiom-taxsim-fiit-ecps.json": "00ba24a179c5a22de241ad79ab2c7915b598e7b3c260cf31ccb7cdb978c9d660",
     "dashboard/public/data/axiom-usitc-us-tariff.json": "7b5168727755ef5f60797f378f845046a64bf342ac6aa3af77d64644f833642d",
-    "dashboard/public/data/axiom-yale-us-tariff-panel.json": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
-    "dashboard/public/data/nz-treasury-incomeexplorer.json": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784"
+    "dashboard/public/data/axiom-yale-us-tariff-panel.json": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5"
   }
 }

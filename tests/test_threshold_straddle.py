@@ -146,6 +146,9 @@ def assess(program, observations, outputs=None):
 
 
 def test_differential_every_recorded_nz_engine_output():
+    program = json.loads(PROGRAM.read_bytes())
+    assert program["artifact_format_version"] == 2
+    assert all(len(rule["versions"]) == 1 for rule in program["program"]["derived"])
     traces = json.loads(TRACES.read_text())
     block = compute_threshold_straddle(PROGRAM.read_bytes(), traces)
     check = block["self_check"]
@@ -752,13 +755,47 @@ def test_empty_suite_conjunction_is_rejected_with_threshold_admission():
     assert complete is False
 
 
-@pytest.mark.parametrize("version", [False, True, 0, 2, "1"])
+@pytest.mark.parametrize("version", [False, True, 0, 3, "1"])
 def test_invalid_artifact_versions_never_admit_straddle(version):
     program = artifact()
     program["artifact_format_version"] = version
     block = assess(program, [1, 11])
     assert not block["complete"]
     assert "unsupported compiled artifact format" in block["defects"]
+
+
+@pytest.mark.parametrize("kind", ["derived", "parameters"])
+def test_bounded_v2_versions_never_admit_straddle(kind):
+    program = artifact()
+    program["artifact_format_version"] = 2
+    if kind == "derived":
+        program["program"]["derived"][0]["versions"] = [
+            {"effective_from": "2025-01-01", "expr": MIN}
+        ]
+    program["program"][kind][0]["versions"][0]["effective_to"] = "2026-03-31"
+    block = assess(program, [1, 11])
+    assert not block["complete"] and not block["self_check"]["complete"]
+    assert "bounded compiled artifact versions are unsupported" in block["defects"]
+
+
+@pytest.mark.parametrize("format_version", [1, 2])
+@pytest.mark.parametrize("kind", ["derived", "parameters"])
+def test_versions_sharing_a_start_date_never_admit_straddle(kind, format_version):
+    """Two versions on one date leave selection to list order; refuse rather than guess."""
+    program = artifact()
+    program["artifact_format_version"] = format_version
+    if kind == "derived":
+        program["program"]["derived"][0]["versions"] = [
+            {"effective_from": "2025-01-01", "expr": MIN},
+            {"effective_from": "2025-01-01", "expr": MIN},
+        ]
+    else:
+        program["program"]["parameters"][0]["versions"].append(
+            {"effective_from": "2025-01-01", "values": {"0": literal(20)["value"]}}
+        )
+    block = assess(program, [1, 11])
+    assert not block["complete"] and not block["self_check"]["complete"]
+    assert "duplicate compiled artifact version dates are unsupported" in block["defects"]
 
 
 @pytest.mark.parametrize("duplicate", ["parameter", "root"])
