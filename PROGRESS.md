@@ -3,7 +3,7 @@
 ## State
 
 - Branch/worktree: `evidence-validator-land` in
-  `/Users/maxghenis/TheAxiomFoundation/_worktrees/evidence-land`.
+  `<workspace>/_worktrees/evidence-land`.
 - Requested operation: finish the `origin/main` reconciliation in place, keep
   the strict evidence layer together with the DK/NZ multi-program and
   oracle-switch machinery, regenerate all certificates and downstream
@@ -294,7 +294,7 @@
   untracked worker reports remain.
 - Sandbox disclosure: the review workflow's local GitNexus analysis could
   create a partial worktree index but could not register it at
-  `/Users/maxghenis/.gitnexus/registry.json` (`EPERM`). The generated partial
+  `~/.gitnexus/registry.json` (`EPERM`). The generated partial
   index was removed, and direct diff/caller/test inspection replaced graph
   queries.
 
@@ -656,7 +656,7 @@
   `9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb`; the tracked worktree is clean
   apart from its unrelated untracked worker report.
 - The sandbox also blocks `uv` from writing its cache at
-  `/Users/maxghenis/.cache/uv`. Validation therefore uses the repository's
+  `~/.cache/uv`. Validation therefore uses the repository's
   Python 3.13.9 interpreter with the already-cached, read-only exact package
   roots for PolicyEngine 4.18.9, PolicyEngine-Core 3.30.3, and
   PolicyEngine-US 1.767.3.
