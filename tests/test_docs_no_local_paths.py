@@ -17,17 +17,18 @@ Invariants:
      ``https://host/#/home/<name>``, escaped ``https:\\/\\/host\\/home\\/<name>``).
      A URL ends at whitespace, ``|``, ``;``, a quote or backtick, ``<``, ``>``,
      or an unbalanced ``)`` or ``]``. A query value is free text, so it is
-     scanned like any other. A remote host is a name of at most 255 letters,
-     digits, ``_``, ``-`` and ``.`` (a domain name or an IPv4 address) or a
-     bracketed IPv6 address without a zone, then an optional port of digits,
-     that is not a local host: ``localhost``, ``*.localhost``,
-     ``127.0.0.0/8`` or ``0.0.0.0/8`` in any IPv4 spelling, ``[::1]``,
-     ``[::]`` or their IPv4-mapped forms. A name is read after Unicode
-     compatibility normalization, with an ideographic full stop as ``.``, so
-     fullwidth ``localhost`` is local. A local host may serve its own files
-     (``http://localhost:5173/@fs/Users/<name>``), and any other text in the
-     host's place (``https://e.org~~/Users/<name>``, a strikethrough) names no
-     web server, so both paths are scanned too. A host is judged by its name
+     scanned like any other. A remote host has at most 255 characters as
+     written. It is a name of letters, digits, ``_``, ``-`` and ``.`` (a
+     domain name or an IPv4 address) or a bracketed IPv6 address without a
+     zone, and a port of ASCII digits may follow it. It is not a local host:
+     ``localhost``, ``*.localhost``, ``127.0.0.0/8`` or ``0.0.0.0/8`` in any
+     IPv4 spelling, ``[::1]``, ``[::]`` or their IPv4-mapped forms. A name is
+     read after Unicode compatibility normalization, with an ideographic full
+     stop as ``.``, so fullwidth ``localhost`` is local. A local host may
+     serve its own files (``http://localhost:5173/@fs/Users/<name>``), and
+     any other text in the host's place (``https://e.org~~/Users/<name>``, a
+     strikethrough, ``https://example.org:hello/Users/<name>``) names no web
+     server, so both paths are scanned too. A host is judged by its name
      alone, so a LAN address, a ``.local`` name, a name that resolves to
      loopback and a tunnel all count as remote;
    - the path in front of it keeps it below a filesystem root. The segments
@@ -796,9 +797,11 @@ def test_allow_marker_skips_only_its_own_line(
     assert home_path_hits("\n".join(lines)) == [(unmarked, len(lead) + 1)]
 
 
-# Remote hosts only: a top-level label of letters is neither an IPv4 part nor ``localhost``.
+# Remote hosts only: a top-level label of letters is neither an IPv4 part nor ``localhost``,
+# and at most ten labels keep a host under 255 characters.
 _DNS_HOSTS = st.from_regex(
-    r"[a-z0-9]([a-z0-9-]{0,10}[a-z0-9])?(\.[a-z0-9]{1,10})*\.[a-z]{2,8}", fullmatch=True
+    r"[a-z0-9]([a-z0-9-]{0,10}[a-z0-9])?(\.[a-z0-9]{1,10}){0,8}\.[a-z]{2,8}",
+    fullmatch=True,
 )
 _REMOTE_HOSTS = st.one_of(
     _DNS_HOSTS,
