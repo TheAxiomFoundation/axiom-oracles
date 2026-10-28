@@ -281,8 +281,13 @@ def test_policyengine_us_source_accepts_any_full_commit():
     accepts()
 
 
-def test_tax_ecps_provenance_records_policyengine_us_source(tmp_path):
+def test_tax_ecps_provenance_records_policyengine_us_source(tmp_path, monkeypatch):
     run_comparison = load_run_comparison_module()
+    # This test checks oracle source pins, so host convention checkouts must
+    # not trigger unrelated full rulespec working-tree attestations.
+    monkeypatch.setattr(
+        "axiom_oracles.provenance.resolve_rulespec_checkout", lambda _slug: None
+    )
     output = tmp_path / "report.json"
     output.write_text("{}")
     config = {
@@ -1799,6 +1804,13 @@ def test_euromod_skip_through_main_leaves_a_committed_reemission_untouched(
     # The leg's own engine checkout, which a re-emission must not claim.
     import axiom_oracles.provenance as provenance_module
 
+    # No rules executed: keep provenance collection independent of whichever
+    # configured UK checkout happens to exist on the host.
+    monkeypatch.setattr(
+        provenance_module,
+        "rulespec_provenance",
+        lambda _paths: [{"repo": "TheAxiomFoundation/rulespec-uk", "sha": None}],
+    )
     monkeypatch.setattr(
         provenance_module,
         "engine_provenance",
@@ -2278,6 +2290,14 @@ def test_euromod_synthetic_runner_forwards_extra_template_columns(
         captured.update({"command": command, "check": check, "cwd": cwd, "env": env})
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    # The engine directory is not a checkout; this test is about the EUROMOD
+    # command, so its binary is taken as found.
+    from axiom_oracles.engine_identity import engine_receipt
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary",
+        lambda repo, *, kind: engine_receipt(engine_binary),
+    )
     run_comparison._run_euromod_synthetic_compare(
         {
             "axiom_rules_repo": str(engine_repo),
@@ -4469,3 +4489,48 @@ def test_from_report_binding_holds_when_one_cases_rows_split_by_output(
     assert apply_dispositions._premerged_block_problems(
         dashboard_path, dashboard, dispositions
     ) == []
+
+
+def test_registry_collects_generator_execution_receipt(monkeypatch, tmp_path):
+    from axiom_oracles.engine_identity import engine_receipt, record_engine_receipt
+
+    registry = load_run_comparison_module()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "receipt-suite.yaml").write_text(
+        "name: receipt-suite\nrunner:\n  type: fake-receipt\n"
+        "  parameters: {sample_size: 1}\nartifacts:\n  report_basename: receipt-suite\n"
+    )
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"generator executable bytes")
+    receipt = engine_receipt(binary)
+
+    def generator(_runner, output):
+        record_engine_receipt(receipt)
+        output.write_text(json.dumps({"engines": {"left": "axiom", "right": "oracle"}}))
+
+    monkeypatch.setattr(registry, "COMPARISONS_DIR", comparisons)
+    monkeypatch.setitem(registry.RUNNERS, "fake-receipt", generator)
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr("sys.argv", ["run_comparison.py", "receipt-suite",
+                                    "--output-dir", str(output_dir)])
+    assert registry.main() == 0
+    [published] = [path for path in output_dir.iterdir() if path.suffix == ".json"]
+    assert json.loads(published.read_text())["provenance"]["engine"]["binary_sha256"] == receipt["binary_sha256"]
+    assert not list(output_dir.glob("*.engine.json*"))
+
+
+@pytest.mark.parametrize('preserve_runner_provenance', [False, True])
+def test_copied_producer_without_engine_cannot_acquire_publishers_identity(
+    tmp_path, preserve_runner_provenance,
+):
+    registry = load_run_comparison_module()
+    path = tmp_path / 'copy-without-engine.json'
+    path.write_text(json.dumps({'provenance': {'reemitted_report': False}}))
+    registry._stamp_report_provenance(path, {
+        'reemitted_report': True,
+        'engine': {'commit': 'e' * 40, 'binary_sha256': 'b' * 64},
+    }, preserve_runner_provenance=preserve_runner_provenance)
+    provenance = json.loads(path.read_text())['provenance']
+    assert provenance['reemitted_report'] is True
+    assert 'engine' not in provenance

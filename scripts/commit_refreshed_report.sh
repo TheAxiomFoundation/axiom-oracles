@@ -376,6 +376,7 @@ verify_derived() {
 # This mode must exit before packing, fetching, resetting, committing or pushing.
 if [ "${VERIFY_DERIVED_REFRESH:-0}" = "1" ]; then
   verify_derived
+  "$PYTHON" scripts/check_engine_identity.py --check
   "$PYTHON" scripts/unexplained_ratchet.py --check
   exit 0
 fi
@@ -521,8 +522,11 @@ PY
   # guard runs first, so the gates judge what publish would commit.
   if [ "$vet" = 1 ]; then
     "$PYTHON" scripts/guard_reemitted_reports.py
+    "$PYTHON" scripts/check_engine_identity.py --check
     regenerate_derived
     verify_derived
+    # Regeneration can edit report annotations; validate the final bytes too.
+    "$PYTHON" scripts/check_engine_identity.py --check
     # Publication gate — unlike the conformance ratchet (an alarm that fires
     # on main AFTER an honest regression lands), the per-suite unexplained
     # ratchet stops the regression from publishing at all: a rerun that
@@ -764,11 +768,13 @@ PY
     # run_comparison.py already declines to publish one; this is the check at
     # the push, which no CI workflow sees (bot pushes don't trigger ci.yml).
     "$PYTHON" scripts/guard_reemitted_reports.py
+    "$PYTHON" scripts/check_engine_identity.py --check
 
     # Recompute every derived artifact against THIS tip, once for every
     # bundle, then refuse to push anything ci.yml would call stale.
     regenerate_derived
     verify_derived
+    "$PYTHON" scripts/check_engine_identity.py --check
 
     # The publication gate again, now over the combined tree on THIS tip: each
     # bundle passed it alone where it ran, but the tip may have moved since.

@@ -1,8 +1,16 @@
 import argparse
+import hashlib
+import json
+from pathlib import Path
 
 import pytest
 
 import axiom_oracles.bridges.tax_populace as tax_populace
+from axiom_oracles.engine_identity import (
+    ENGINE_RECEIPT_OUTPUT_ENV,
+    EngineIdentityError,
+    engine_binding_receipt_path,
+)
 from axiom_oracles.bridges.tax_populace import (
     AOTC_BASE,
     AOTC_OUTPUTS,
@@ -2711,3 +2719,120 @@ def test_run_axiom_program_passes_the_configured_timeouts(monkeypatch, tmp_path)
             program=program, request={}, rulespec_root=rulespec, axiom_rules_path=engine
         )
     assert seen == [("compile", 90)]
+
+
+def _receipted_program_fixture(monkeypatch, tmp_path):
+    rulespec = tmp_path / "rulespec-us"
+    program = rulespec / "us/fixtures/program.yaml"
+    engine = tmp_path / "engine"
+    binary = engine / "target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_bytes(b"original engine")
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "a" * 40,
+        "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+    }))
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    monkeypatch.setattr(tax_populace, "_rulespec_repo_alias_parent", lambda _: None)
+    monkeypatch.setattr(tax_populace, "_canonical_rulespec_compile_path", lambda path, _: path)
+    monkeypatch.setattr(tax_populace, "_runtime_axiom_request", lambda request, **kwargs: (request, {}))
+    arguments = {
+        "program": program, "request": {"queries": []},
+        "rulespec_root": rulespec, "axiom_rules_path": engine,
+    }
+    return binary, journal, arguments
+
+
+def test_run_axiom_program_journals_compile_fallback_and_runtime_bytes(
+    monkeypatch, tmp_path
+):
+    binary, journal, arguments = _receipted_program_fixture(monkeypatch, tmp_path)
+    executed = []
+
+    def execute(command, **kwargs):
+        executed.append((command[1], Path(command[0]).read_bytes()))
+        if command[1] == "compile":
+            if "--rulespec-root" in command:
+                return tax_populace.subprocess.CompletedProcess(
+                    command, 1, stdout="", stderr="unknown compile argument",
+                )
+            Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
+            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+        return tax_populace.subprocess.CompletedProcess(
+            command, 0, stdout='{"results": []}', stderr="",
+        )
+
+    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
+    real_record = tax_populace.record_engine_receipt
+    observed = []
+
+    def record(receipt):
+        real_record(receipt)
+        observed.append(json.loads(journal.read_text()))
+
+    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
+    assert tax_populace.run_axiom_program(**arguments) == []
+    assert executed == [
+        ("compile", b"original engine"), ("compile", b"original engine"),
+        ("run-compiled", b"original engine"),
+    ]
+    assert len(observed) == 3
+    for receipt in observed:
+        assert receipt["commit"] == "a" * 40
+        assert receipt["binary_sha256"] == hashlib.sha256(binary.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize(
+    ("change_phase", "expected_commands"),
+    [("during_compile", ["compile"]), ("before_fallback", ["compile"]),
+     ("before_run", ["compile", "compile"]),
+     ("during_run", ["compile", "compile", "run-compiled"])],
+)
+def test_run_axiom_program_rejects_changed_engine_at_each_invocation(
+    monkeypatch, tmp_path, change_phase, expected_commands
+):
+    binary, journal, arguments = _receipted_program_fixture(monkeypatch, tmp_path)
+    executed = []
+
+    def execute(command, **kwargs):
+        executed.append(command[1])
+        if command[1] == "compile":
+            if change_phase == "during_compile":
+                binary.write_bytes(b"replacement engine")
+            if "--rulespec-root" in command:
+                return tax_populace.subprocess.CompletedProcess(
+                    command, 1, stdout="", stderr="unknown compile argument",
+                )
+            Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
+            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+        if change_phase == "during_run":
+            binary.write_bytes(b"replacement engine")
+        elif change_phase == "before_run":
+            # A whole-program before/after check would miss this A -> B -> A.
+            binary.write_bytes(b"original engine")
+        return tax_populace.subprocess.CompletedProcess(
+            command, 0, stdout='{"results": []}', stderr="",
+        )
+
+    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
+    real_record = tax_populace.record_engine_receipt
+
+    def record(receipt):
+        real_record(receipt)
+        if (
+            change_phase == "before_fallback" and len(executed) == 1
+            or change_phase == "before_run" and len(executed) == 2
+        ):
+            binary.write_bytes(b"replacement engine")
+
+    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
+    with pytest.raises(EngineIdentityError, match="changed .*program invocation"):
+        tax_populace.run_axiom_program(**arguments)
+    assert executed == expected_commands
+    if change_phase == "during_compile":
+        assert not journal.exists()
+    else:
+        assert json.loads(journal.read_text())["binary_sha256"] == (
+            hashlib.sha256(b"original engine").hexdigest()
+        )

@@ -129,6 +129,8 @@ class ComparisonReportAccumulator:
         self._right_engine: str | None = None
         self._seen_case_ids: set[int | str] = set()
         self._relation_binding_diagnostics: dict = {}
+        self._engine_receipt: dict = {}
+        self._axiom_receipt_presence: bool | None = None
         #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
         #: written as the report's top-level ``engine_identity`` when set.
         self.engine_identity: dict | None = None
@@ -190,6 +192,20 @@ class ComparisonReportAccumulator:
                 f"output concepts for case {item.household_id!r}",
             )
 
+        receipt = self._engine_receipt
+        receipt_presence = self._axiom_receipt_presence
+        for item in comparisons:
+            if "axiom" in (item.left_engine, item.right_engine):
+                present = bool(item.engine_receipt)
+                if receipt_presence is not None and receipt_presence != present:
+                    raise ValueError("Axiom comparisons mix missing and present executable receipts")
+                receipt_presence = present
+            if item.engine_receipt:
+                if receipt and receipt != item.engine_receipt:
+                    raise ValueError("Axiom executable identity changed between batches")
+                receipt = dict(item.engine_receipt)
+        self._engine_receipt = receipt
+        self._axiom_receipt_presence = receipt_presence
         self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
@@ -301,6 +317,9 @@ class ComparisonReportAccumulator:
         }
         if self.engine_identity:
             report["engine_identity"] = self.engine_identity
+        receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
+        if receipt:
+            report.setdefault("provenance", {})["engine"] = dict(receipt)
         return report
 
     def _attestation(self) -> dict:

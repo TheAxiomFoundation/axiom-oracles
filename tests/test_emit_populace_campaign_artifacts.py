@@ -1,15 +1,29 @@
 import hashlib
 import json
 from pathlib import Path
+from subprocess import CompletedProcess
 
 import pytest
 import yaml
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.bridges.state_tax_populace_runner import (
     require_policyengine_us_floor,
 )
 import scripts.emit_populace_campaign_artifacts as emitter
+from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+from axiom_oracles.bridges import state_tax_populace_runner as campaign_runner
+from axiom_oracles.engine_identity import (
+    VERIFIED_RECEIPT,
+    engine_binding_receipt_path,
+    engine_receipt,
+)
+from axiom_oracles.engine_publication import (
+    LEGACY_ALLOWLIST,
+    engine_identity_errors,
+    load_legacy_allowlist,
+    publication_errors,
+)
 from scripts.emit_populace_campaign_artifacts import (
     RETIRED_MANIFEST_REPORTS,
     apply_suite_dispositions,
@@ -1796,6 +1810,12 @@ def test_projected_report_carries_standard_rulespec_provenance():
     assert provenance["schema"] == "axiom_oracles.provenance.v1"
     assert provenance["generated_at"] == "2026-07-26T12:00:00Z"
     assert provenance["run_kind"] == "manual"
+    # A pre-receipt campaign asserts no engine identity; its evidence stays
+    # under runtime_provenance.
+    assert "engine" not in provenance
+    assert provenance["runtime_provenance"]["axiom_engine"] == (
+        _campaign()["runtime_provenance"]["axiom_engine"]
+    )
     assert provenance["rulespecs"] == [
         {
             "repo": "TheAxiomFoundation/rulespec-us",
@@ -1913,6 +1933,196 @@ def test_reprojection_is_deterministic_and_preserves_campaign_time():
 
     assert first == second
     assert first["provenance"]["generated_at"] == "2026-07-26T12:00:00Z"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("commit", "abc123"), ("commit", "z" * 40),
+     ("executable_sha256", "1234"), ("executable_sha256", "z" * 64)],
+)
+def test_projector_rejects_malformed_source_engine_identity(field, value):
+    campaign = _campaign()
+    campaign["runtime_provenance"]["axiom_engine"][field] = value
+    with pytest.raises(ValueError, match="commit|binary_sha256"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+def test_projector_does_not_replace_unresolved_canonical_identity_with_legacy_fields():
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": {"binary_sha256": "4" * 64}}
+    with pytest.raises(ValueError, match="commit"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+def test_a_pre_receipt_campaign_projects_no_engine_identity():
+    """The historical runner recorded checkout HEAD and the executable digest
+    separately; nothing binds that commit to those bytes."""
+    campaign = _campaign()
+    report = project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+    assert "engine" not in report["provenance"]
+    assert engine_identity_errors(report)
+    runtime = report["provenance"]["runtime_provenance"]["axiom_engine"]
+    assert runtime == campaign["runtime_provenance"]["axiom_engine"]
+
+
+@pytest.mark.parametrize(
+    "status", [None, "unresolved: no build receipt", "recorded by original campaign"]
+)
+def test_only_a_verified_receipt_promotes_a_runtime_engine_commit(status):
+    campaign = _campaign()
+    engine = campaign["runtime_provenance"]["axiom_engine"]
+    engine["binary_sha256"] = engine["executable_sha256"]
+    if status is not None:
+        engine["source_status"] = status
+    assert "engine" not in project_state(
+        "NC", _nc_entry(), campaign, "campaign.json"
+    )["provenance"]
+    engine["source_status"] = VERIFIED_RECEIPT
+    projected = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    assert projected["provenance"]["engine"]["commit"] == engine["commit"]
+    assert not engine_identity_errors(projected)
+
+
+def test_a_runtime_engine_with_two_digests_is_rejected():
+    campaign = _campaign()
+    engine = campaign["runtime_provenance"]["axiom_engine"]
+    engine.update(binary_sha256="5" * 64, source_status=VERIFIED_RECEIPT)
+    with pytest.raises(ValueError, match="two different executable digests"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+
+def _canonical_engine(campaign: dict) -> dict:
+    runtime = campaign["runtime_provenance"]["axiom_engine"]
+    return {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": runtime["commit"],
+        "binary_sha256": runtime["executable_sha256"],
+        "version": "0.1.0",
+        "source_status": VERIFIED_RECEIPT,
+        "working_tree": "clean",
+    }
+
+
+def test_a_verified_canonical_engine_block_is_kept_verbatim():
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": _canonical_engine(campaign)}
+    projected = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    assert projected["provenance"]["engine"] == campaign["provenance"]["engine"]
+    assert not engine_identity_errors(projected)
+
+
+@pytest.mark.parametrize(
+    "status", [None, "unresolved: no build receipt", "recorded by original campaign"]
+)
+def test_a_canonical_engine_block_needs_a_verified_receipt(status):
+    campaign = _campaign()
+    engine = _canonical_engine(campaign)
+    if status is None:
+        del engine["source_status"]
+    else:
+        engine["source_status"] = status
+    campaign["provenance"] = {"engine": engine}
+    with pytest.raises(ValueError, match="verified build receipt"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+@pytest.mark.parametrize("runtime_field", ["commit", "executable_sha256", "binary_sha256"])
+def test_a_canonical_engine_block_must_agree_with_the_runtime_block(runtime_field):
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": _canonical_engine(campaign)}
+    runtime = campaign["runtime_provenance"]["axiom_engine"]
+    runtime[runtime_field] = "6" * (40 if runtime_field == "commit" else 64)
+    with pytest.raises(ValueError, match="disagrees with runtime_provenance"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+def test_committed_pre_receipt_report_reprojects_to_its_committed_bytes():
+    """Re-emission keeps a historical report under its byte-identical legacy
+    exception instead of relabelling it with an unbound commit."""
+    source = REPO_ROOT / (
+        "reports/state-tax-populace-nc-resident-core-campaign-2026-10-27-pe-us-2.68.0.json"
+    )
+    target = DASHBOARD_DATA / "axiom-policyengine-nc-income-tax-populace.json"
+    campaign = json.loads(source.read_text())
+    assert "provenance" not in campaign or "engine" not in campaign["provenance"]
+    report = emitter.apply_suite_dispositions(
+        project_state("NC", campaign["comparison"]["states"]["NC"], campaign, source.name)
+    )
+    content = (json.dumps(report, indent=1, sort_keys=True) + "\n").encode()
+
+    assert content == target.read_bytes()
+    legacy = load_legacy_allowlist(json.loads((REPO_ROOT / LEGACY_ALLOWLIST).read_text()))
+    relative = target.relative_to(REPO_ROOT).as_posix()
+    assert engine_identity_errors(report)
+    assert not publication_errors(report, path=relative, content=content, legacy=legacy)
+    assert publication_errors(report, path=relative, content=content + b" ", legacy=legacy)
+
+
+@given(
+    commit=st.text(alphabet="0123456789abcdef", min_size=40, max_size=40),
+    digest=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64),
+    version=st.one_of(st.none(), st.text(max_size=40)),
+)
+def test_reprojection_preserves_canonical_source_engine_exactly(commit, digest, version):
+    campaign = _campaign()
+    engine = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": commit,
+        "binary_sha256": digest,
+        "version": version,
+        "source_status": VERIFIED_RECEIPT,
+    }
+    campaign["provenance"] = {"engine": engine}
+    campaign["runtime_provenance"]["axiom_engine"].update(commit=commit, executable_sha256=digest)
+
+    first = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    second = project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+    assert first["provenance"]["engine"] == second["provenance"]["engine"] == engine
+    assert first["provenance"]["engine"] is not engine
+    assert campaign["provenance"]["engine"] == engine
+
+
+@settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(payload=st.binary(max_size=4096))
+def test_runner_and_campaign_projection_agree_for_cached_binary(
+    tmp_path, monkeypatch, payload
+):
+    engine_root = tmp_path / "engine"
+    binary = engine_root / "target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True, exist_ok=True)
+    binary.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "engine_commit": "2" * 40,
+        "binary_sha256": digest,
+        "working_tree": "clean",
+        "version": "1.0",
+    }))
+    executed_hashes = []
+
+    def execute(args, **kwargs):
+        executed_hashes.append(hashlib.sha256(Path(args[0]).read_bytes()).hexdigest())
+        return CompletedProcess(args, 0, stdout="", stderr="")
+
+    runner = AxiomRulesRunner(binary_path=binary, subprocess_run=execute)
+    runner._execute_engine([str(binary), "run-compiled"])
+    monkeypatch.setattr(campaign_runner, "_clean_git_commit", lambda *a, **k: "1" * 40)
+    monkeypatch.setattr(campaign_runner, "_package_version", lambda _: "1.0")
+    campaign = _campaign()
+    campaign["runtime_provenance"] = campaign_runner.runtime_provenance(
+        rulespec_root=tmp_path / "rulespec-us", axiom_rules_path=engine_root
+    )
+    report = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    projected = report["provenance"]["engine"]
+
+    assert executed_hashes == [digest]
+    assert runner.engine_receipt == engine_receipt(binary)
+    for field in ("repository", "commit", "binary_sha256", "version", "source_status"):
+        assert projected[field] == runner.engine_receipt[field]
 
 
 NC_OUTPUT = (
@@ -2204,13 +2414,16 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
         }
     ]
 
-    # Re-projecting the committed campaign reproduces the committed report.
+    # Re-projecting reproduces the committed report byte for byte. The
+    # campaign's runtime commit is checkout HEAD, not bound to the executable,
+    # so it is not promoted into a canonical identity.
     reprojected = apply_suite_dispositions(
         project_state("NC", state, campaign, campaign_path.name)
     )
     assert json.dumps(reprojected, indent=1, sort_keys=True) + "\n" == (
         report_path.read_text()
     )
+    assert "engine" not in reprojected["provenance"]
     monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
     emitter.emit_case_chunks("NC", state)
     generated = sorted((tmp_path / "nc-income-tax-populace").iterdir())

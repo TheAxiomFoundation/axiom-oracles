@@ -1,3 +1,5 @@
+import hashlib
+import json
 import shutil
 import subprocess
 from datetime import date
@@ -27,6 +29,13 @@ from axiom_oracles.bridges.snapscreener import (
     project_payload,
     run_payloads,
     snapscreener_state_key,
+)
+from axiom_oracles.engine_identity import (
+    ENGINE_RECEIPT_OUTPUT_ENV,
+    EngineIdentityError,
+    engine_binding_receipt_path,
+    engine_receipt,
+    record_engine_receipt,
 )
 
 
@@ -690,3 +699,137 @@ def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     assert snap_populace.resolve_program_path(config, tmp_path / "workspace", None) == (
         program.resolve()
     )
+
+
+def _receipted_snap_engine(tmp_path):
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"SNAP engine bytes")
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "32bc1c124724ebbb2187a196a3b228cfb2a14721",
+        "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+        "version": "0.3.0",
+    }))
+    return binary
+
+
+def _snap_execution_arguments(tmp_path, binary):
+    artifact = tmp_path / "artifact.json"
+    artifact.write_text(json.dumps({"program": {"relations": []}}))
+    return {
+        "binary": binary,
+        "artifact": artifact,
+        "cases": [],
+        "period": Period(
+            label="2026-01", year=2026, month=1,
+            start=date(2026, 1, 1), end=date(2026, 1, 31),
+        ),
+        "output_ids": [],
+        "relation_id": "member_of_household",
+        "additional_relation_ids": (),
+        "member_entity_type": "Person",
+        "env": {},
+    }
+
+
+def test_compile_program_journals_each_fallback_invocation(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+    output = tmp_path / "compiled.json"
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    commands = []
+    receipts = []
+
+    def execute(command, **kwargs):
+        assert Path(command[0]) == binary.resolve()
+        assert hashlib.sha256(Path(command[0]).read_bytes()).hexdigest() == engine_receipt(binary)["binary_sha256"]
+        commands.append(command)
+        return subprocess.CompletedProcess(
+            command, int(len(commands) == 1), stdout="",
+            stderr="unknown command" if len(commands) == 1 else "",
+        )
+
+    def record(receipt):
+        receipts.append(dict(receipt))
+        record_engine_receipt(receipt)
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    monkeypatch.setattr(snap_populace, "record_engine_receipt", record)
+    snap_populace.compile_program(binary, program, output, env={})
+
+    assert [command[1] for command in commands] == ["compile-composed", "compile"]
+    assert receipts == [engine_receipt(binary), engine_receipt(binary)]
+    assert json.loads(journal.read_text()) == engine_receipt(binary)
+
+
+def test_compile_program_rejects_swap_between_fallbacks(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    original = engine_receipt(binary)
+    commands = []
+
+    def execute(command, **kwargs):
+        commands.append(command)
+        return subprocess.CompletedProcess(command, 1, stdout="", stderr="unknown command")
+
+    def replace_after_invocation(receipt):
+        record_engine_receipt(receipt)
+        binary.write_bytes(b"different cached executable")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    monkeypatch.setattr(snap_populace, "record_engine_receipt", replace_after_invocation)
+    with pytest.raises(EngineIdentityError, match="changed before SNAP execution"):
+        snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+    assert len(commands) == 1
+    assert json.loads(journal.read_text()) == original
+
+
+@pytest.mark.parametrize("changed", [False, True])
+def test_snap_direct_execution_verifies_own_bytes_before_journaling(
+    monkeypatch, tmp_path, changed,
+):
+    binary = _receipted_snap_engine(tmp_path)
+    original = engine_receipt(binary)
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    observed = []
+
+    def execute(command, **kwargs):
+        assert command[0] == original["binary_path"]
+        observed.append(hashlib.sha256(Path(command[0]).read_bytes()).hexdigest())
+        if changed:
+            binary.write_bytes(b"changed during execution")
+        return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    if changed:
+        with pytest.raises(EngineIdentityError, match="changed during SNAP execution"):
+            run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))
+        assert not journal.exists()
+    else:
+        assert run_axiom_cases(**_snap_execution_arguments(tmp_path, binary)) == []
+        assert json.loads(journal.read_text()) == original
+    assert observed == [original["binary_sha256"]]
+
+
+def test_snap_journal_rejects_different_compile_and_runtime_engines(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    original = engine_receipt(binary)
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+
+    def execute(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+    binary.write_bytes(b"replacement runtime engine")
+    with pytest.raises(EngineIdentityError, match="identities disagree"):
+        run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))
+    assert json.loads(journal.read_text()) == original

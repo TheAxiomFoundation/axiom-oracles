@@ -21,9 +21,11 @@ The block shape (``axiom_oracles.provenance.v1``)::
           sha_toplevel: /path/to/repo    # checkout used to resolve the SHA
           worktree_toplevel: /path/to/repo # checkout used to attest its state
           diff_sha256: 3f0a…            # only when dirty: identifies the change
-      engine:                          # the Axiom side under test
-        axiom_rules_engine_sha: …      # git SHA of the axiom-rules checkout
-        axiom_rules_engine_version: …  # crate version if resolvable
+      engine:                          # receipt for the executable that ran
+        repository: TheAxiomFoundation/axiom-rules-engine
+        commit: …                      # full source SHA, absent if unresolved
+        binary_sha256: …               # SHA-256 of the executed bytes
+        version: …                     # version bound by the build receipt
       oracle:                          # the oracle side it was compared to
         name: policyengine             # or euromod
         policyengine_package: policyengine==4.11.0
@@ -761,7 +763,9 @@ def build_provenance(
     if rulespecs:
         block["rulespecs"] = rulespecs
     if engine:
-        block["engine"] = {k: v for k, v in engine.items() if v is not None}
+        # A receipt explicitly records unresolved fields. Preserve the whole
+        # observation, including an unknown source commit or version.
+        block["engine"] = dict(engine)
     if oracle:
         block["oracle"] = {k: v for k, v in oracle.items() if v is not None}
     if dataset:
@@ -769,16 +773,26 @@ def build_provenance(
     return block
 
 
-def engine_provenance(axiom_rules_repo: Path | str | None) -> dict[str, Any]:
-    """Axiom-side engine identity: git SHA + crate version if resolvable."""
-    repo = (
-        Path(os.path.expandvars(os.path.expanduser(str(axiom_rules_repo))))
-        if axiom_rules_repo
-        else None
-    )
-    return {
-        "axiom_rules_engine_sha": _git_sha(repo) if repo else None,
-        "axiom_rules_engine_version": _crate_version(repo) if repo else None,
+def engine_provenance(
+    axiom_rules_repo: Path | str | None = None,
+    *,
+    binary_path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Read an executable receipt; a checkout alone proves no build identity.
+
+    The positional checkout argument remains accepted for older callers. It
+    cannot establish which source produced an existing binary, or its version.
+    """
+    from .engine_identity import engine_receipt
+
+    return engine_receipt(binary_path) if binary_path is not None else {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": None,
+        "binary_sha256": None,
+        "version": None,
+        "source_status": "unresolved",
+        "axiom_rules_engine_sha": None,
+        "axiom_rules_engine_version": None,
     }
 
 

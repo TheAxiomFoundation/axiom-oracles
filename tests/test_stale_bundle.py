@@ -36,6 +36,7 @@ GATE_STUBS = (
     "certify.py",
     "unexplained_ratchet.py",
     "guard_reemitted_reports.py",
+    "check_engine_identity.py",
 )
 
 

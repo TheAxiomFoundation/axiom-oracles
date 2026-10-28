@@ -369,3 +369,15 @@ def test_cli_validates_case_coverage_and_requested_values(
         assert report["case_count"] == 2
         assert report["summary"]["comparison_count"] == 2
         assert report["summary"]["match_count"] == 2
+
+
+@pytest.mark.parametrize('first_has_receipt', [False, True])
+def test_receipt_presence_cannot_mix_between_batches(first_has_receipt):
+    receipt = {"commit": "a" * 40, "binary_sha256": "b" * 64}
+    report = accumulator()
+    first = replace(comparison(1), engine_receipt=receipt if first_has_receipt else {})
+    report.add_batch([Case(case_id=1, period="2026")], [first])
+    second = replace(comparison(2), engine_receipt={} if first_has_receipt else receipt)
+    with pytest.raises(ValueError, match="mix missing and present"):
+        report.add_batch([Case(case_id=2, period="2026")], [second])
+    assert report.case_count == 1

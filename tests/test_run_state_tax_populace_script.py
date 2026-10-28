@@ -143,6 +143,7 @@ def test_repeatable_state_filter_preserves_national_routing_report(
 
     def comparison(**kwargs):
         calls["comparison"] = tuple(kwargs["routes"])
+        calls["engine_receipt"] = kwargs["expected_engine_receipt"]
         calls["known_tax_unit_ids"] = set(kwargs["known_tax_unit_ids"])
         calls["taxsim_targets"] = kwargs["taxsim_targets"]
         calls["taxsim_unprojected_inputs"] = kwargs["taxsim_unprojected_inputs"]
@@ -165,7 +166,16 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     monkeypatch.setattr(campaign, "require_law_years", lambda years: None)
     monkeypatch.setattr(campaign, "population_routing_report", routing_report)
     monkeypatch.setattr(campaign, "compare_ready_state_tax_units", comparison)
-    monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {})
+    engine = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "a" * 40,
+        "binary_sha256": "b" * 64,
+        "executable_sha256": "b" * 64,
+        "working_tree": "clean",
+        "source_status": "verified build receipt",
+    }
+    monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {"axiom_engine": engine})
+    monkeypatch.setattr(campaign, "engine_receipt", lambda binary: engine)
 
     output = tmp_path / "report.json"
     assert campaign.main(
@@ -201,6 +211,23 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         "NJ": {1: {"tax_exempt_interest_income": 2_500.0}}
     }
     assert report["taxsim_leg"] == "graded"
+    assert report["provenance"]["engine"] == engine
+    assert calls["engine_receipt"] == engine
+    assert report["runtime_provenance"]["axiom_engine"] == engine
+    assert report["provenance"]["generated_at"] == report["generated_at"]
+    assert report["provenance"]["run_kind"] == report["run_kind"]
+
+    monkeypatch.setattr(campaign, "engine_receipt", lambda _: {
+        **engine, "binary_sha256": "c" * 64,
+    })
+    rejected_output = tmp_path / "changed-engine-report.json"
+    with pytest.raises(SystemExit, match="engine binary changed"):
+        campaign.main([
+            "--state", "NJ", "--rulespec-root", str(tmp_path),
+            "--axiom-rules-path", str(tmp_path),
+            "--output", str(rejected_output),
+        ])
+    assert not rejected_output.exists()
 
 
 def test_utah_projection_diagnostics_pin_exempt_and_domain_branch_counts() -> None:
