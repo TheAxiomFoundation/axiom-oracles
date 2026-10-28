@@ -141,6 +141,13 @@ class Interpreter:
             for version in row.get("versions", [])
         ):
             raise InterpretationError("bounded compiled artifact versions are unsupported")
+        # Version selection takes the latest effective_from at or before the
+        # period start; two versions of one rule on the same date would leave
+        # the choice to list order, which need not match the engine's.
+        for row in (*artifact["program"]["derived"], *artifact["program"]["parameters"]):
+            starts = [version["effective_from"] for version in row.get("versions", [])]
+            if len(starts) != len(set(starts)):
+                raise InterpretationError("duplicate compiled artifact version dates are unsupported")
         self.artifact = artifact
         self.derived = {row["name"]: row for row in artifact["program"]["derived"]}
         self.parameters = {

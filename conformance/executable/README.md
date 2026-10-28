@@ -1,6 +1,7 @@
 # Computed executable evidence
 
-Executable receipts use `axiom_oracles.executable_reproduction.v1`. A program
+Executable receipts use `axiom_oracles.executable_reproduction.v1`; the NZ
+receipt, written by `scripts/nz_executable_reproduction.py`, uses `.v2`. A program
 certificate accepts one only through the producer named in `scripts/certify.py`;
 the producer must validate committed artifact bytes, requests, golden outputs,
 and the bound transcript and must return a re-derived `executable` Boolean.
@@ -15,9 +16,12 @@ Those calls cover all 19 requested RuleSpec output roots and support 22 of the
 
 `python scripts/nz_executable_reproduction.py --check` is hermetic and is the
 CI gate: it verifies all committed bytes and re-derives the transcript/golden
-matches. `--check --live` is the stronger local integration gate. It requires
-the pinned RuleSpec checkout and macOS engine binary, recompiles the composition
-byte-for-byte, executes every request, and byte-compares the fresh transcript.
-The release binary is not portable to the Linux CI runner, so CI does not
-perform that final engine invocation; it does verify the artifact, request,
-golden-output, and transcript digests produced by the live gate.
+matches. `--check --live` is the stronger integration gate. It requires the
+pinned RuleSpec checkout and an engine checkout at the pinned commit,
+recompiles the composition byte-for-byte, executes every request, and
+byte-compares the fresh transcript. Locally it runs the pinned macOS release
+binary, whose bytes must match the recorded SHA-256. That binary is not
+portable to the Linux CI runner, so CI builds the pinned engine checkout with
+`cargo build --locked --release` and runs `--check --live --source-built-engine`:
+the same live recompile and replay, with the checkout's commit checked instead
+of the binary's bytes.

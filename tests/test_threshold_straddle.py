@@ -778,6 +778,26 @@ def test_bounded_v2_versions_never_admit_straddle(kind):
     assert "bounded compiled artifact versions are unsupported" in block["defects"]
 
 
+@pytest.mark.parametrize("format_version", [1, 2])
+@pytest.mark.parametrize("kind", ["derived", "parameters"])
+def test_versions_sharing_a_start_date_never_admit_straddle(kind, format_version):
+    """Two versions on one date leave selection to list order; refuse rather than guess."""
+    program = artifact()
+    program["artifact_format_version"] = format_version
+    if kind == "derived":
+        program["program"]["derived"][0]["versions"] = [
+            {"effective_from": "2025-01-01", "expr": MIN},
+            {"effective_from": "2025-01-01", "expr": MIN},
+        ]
+    else:
+        program["program"]["parameters"][0]["versions"].append(
+            {"effective_from": "2025-01-01", "values": {"0": literal(20)["value"]}}
+        )
+    block = assess(program, [1, 11])
+    assert not block["complete"] and not block["self_check"]["complete"]
+    assert "duplicate compiled artifact version dates are unsupported" in block["defects"]
+
+
 @pytest.mark.parametrize("duplicate", ["parameter", "root"])
 def test_ambiguous_ir_identities_never_admit_straddle(duplicate):
     program = artifact()
