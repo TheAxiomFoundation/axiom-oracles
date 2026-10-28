@@ -38,21 +38,56 @@ EVALUATION_TRACE_PATH = (
     REPO_ROOT / "comparisons" / "nz-treasury-incomeexplorer" / "evaluation-traces.json"
 )
 RATCHET_PATH = OUT_DIR / "denominator-ratchet.json"
-SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
+SOURCE_SHA256 = "9643c557a1231b92d6762a073241ad186c2fab398f8b259aa6af0783c68a91ff"
 EVALUATION_TRACE_SHA256 = (
-    "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+    "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
 )
 RULESPEC_REPO = Path.home() / "TheAxiomFoundation" / "rulespec-nz"
 CORPUS_REPO = Path.home() / "TheAxiomFoundation" / "axiom-corpus"
-RULESPEC_SHA = "89a7d25dc03a4d045348620283332de10b1047da"
-CORPUS_RELEASE_REF = "origin/release/nz-rulespec-2026-07-18"
-CORPUS_RELEASE_SHA = "3f7b5d985bce759cb487f1b7fd050f5cbf007d17"
-ROOTS = ("nz/statutes", "nz/regulations", "nz/policies")
-CORPUS_FILES = (
-    "data/corpus/provisions/nz/statute/2026-06-16-rulespec-nz-pco.jsonl",
-    "data/corpus/provisions/nz/regulation/2026-06-16-rulespec-nz-pco.jsonl",
-    "data/corpus/provisions/nz/district-plan/2026-07-18-wellington-district-plan.jsonl",
+RULESPEC_SHA = "c8ec92e855f835e8348803449836791aa56f5d38"
+RELEASE = "nz-rulespec-2026-10-23-amendment-markers"
+RELEASE_CONTENT_SHA256 = (
+    "4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2"
 )
+RELEASE_SELECTOR_SHA256 = (
+    "b9b73e48e2652bdb9bf4f0740139f6130512d8bd63d7fc9f6197b7ae4c717daf"
+)
+CORPUS_COMMIT = "4aa31fa00fec0706f00cbda3bd4fb53fb0adf3ca"
+RELEASE_SELECTOR_PATH = f"manifests/releases/{RELEASE}.json"
+ROOTS = ("nz/statutes", "nz/regulations", "nz/policies")
+# Preserve the existing statute/regulation/district-plan universe. The policy
+# inventory has always joined this same set; it did not read guidance scopes.
+EXPECTED_PROVISION_SOURCES = {
+    "data/corpus/provisions/nz/district-plan/2026-07-18-wellington-district-plan.jsonl": (
+        "4e34f0659f1287ef711fd81bb3dff1a81a61bb278eb6ecba0b14dd46d46929c4", 865,
+    ),
+    "data/corpus/provisions/nz/regulation/2026-06-16-rulespec-nz-pco.jsonl": (
+        "a9b0427491069803dce9800a0d86e4afa3dd40a8e5d4e5357d99bed135dfcb0d", 652,
+    ),
+    "data/corpus/provisions/nz/regulation/2026-07-19-rulespec-nz-pco.jsonl": (
+        "aeee28a95558d8b86b1dcecf4aec51c88dd33a5f17eb5a851b258279f44ac507", 44,
+    ),
+    "data/corpus/provisions/nz/statute/2026-06-16-rulespec-nz-pco.jsonl": (
+        "e18cbb943d3055b93528989afaec4816fd13b4dadc1945a3fde35ffd16a3fd42", 9519,
+    ),
+    "data/corpus/provisions/nz/statute/2026-07-19-rulespec-nz-pco.jsonl": (
+        "85782e4ed17f67fb26810af84a30eac212eae3da4327bd032df92ca989902a9e", 463,
+    ),
+    "data/corpus/provisions/nz/statute/2026-07-25-rulespec-nz-pco.jsonl": (
+        "3ef8ce0f70fdabd7daf17c374d44a6bd420908847b359ad365c114361a53e4c1", 51,
+    ),
+    "data/corpus/provisions/nz/statute/2026-10-23-rulespec-nz-pco.jsonl": (
+        "d2bfab06f4f699010567547e4b47acc3e9d6eb9f9593d33b526ec3e9b4476d9a", 26,
+    ),
+}
+CORPUS_FILES = tuple(EXPECTED_PROVISION_SOURCES)
+CONTENT_PINS = {
+    "rulespec_commit": RULESPEC_SHA,
+    "corpus_commit": CORPUS_COMMIT,
+    "corpus_release": RELEASE,
+    "corpus_release_content_sha256": RELEASE_CONTENT_SHA256,
+    "corpus_release_selector_sha256": RELEASE_SELECTOR_SHA256,
+}
 LEDGER_REPO_PATH = "known-missing-money-atoms.yaml"
 RATCHET_REPO_PATH = RATCHET_PATH.relative_to(REPO_ROOT).as_posix()
 
@@ -79,7 +114,7 @@ TRACE_CAPTURE = {
             "70f636371ca78ca6abc38012f93146cfabcc90b29e28f9f432bc6636b425fbc5"
         ),
         "regeneration_difference": "provenance only",
-        "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
+        "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507",
         "substance_sha256": (
             "418f943cfd49eeae7a9129e3952f521c9903d4d3b454fc4502471699a605cf0e"
         ),
@@ -151,6 +186,74 @@ def _list_sha256(values: list[str]) -> str:
 def _node_id(path: str, name: str) -> str:
     module = path.removeprefix("nz/").removesuffix(".yaml")
     return f"nz:{module}#{name}"
+
+
+def _provision_source_pins() -> list[dict]:
+    return [
+        {"path": path, "sha256": sha256, "row_count": row_count}
+        for path, (sha256, row_count) in sorted(EXPECTED_PROVISION_SOURCES.items())
+    ]
+
+
+def _validate_corpus_file(path: Path, expected_sha256: str, expected_rows: int) -> bytes:
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected_sha256:
+        raise ClosureError(f"NZ corpus file bytes do not match their pin: {path}")
+    if len(raw.splitlines()) != expected_rows:
+        raise ClosureError(f"NZ corpus file row count drifted: {path}")
+    return raw
+
+
+def _load_corpus_files(corpus_repo: Path) -> dict[str, bytes]:
+    """Read only local release bytes, authenticated by the cut commit's locks."""
+
+    if _git(corpus_repo, "rev-parse", CORPUS_COMMIT).strip() != CORPUS_COMMIT:
+        raise ClosureError("pinned corpus release cut commit is unavailable")
+    _git(
+        corpus_repo, "diff", "--exit-code", CORPUS_COMMIT, "--",
+        ".axiom/corpus-locks/nz", RELEASE_SELECTOR_PATH,
+    )
+    selector_raw = (corpus_repo / RELEASE_SELECTOR_PATH).read_bytes()
+    if hashlib.sha256(selector_raw).hexdigest() != RELEASE_SELECTOR_SHA256:
+        raise ClosureError("NZ corpus release selector sha256 drifted")
+    selector = json.loads(selector_raw)
+    if selector.get("name") != RELEASE:
+        raise ClosureError("NZ corpus release selector name drifted")
+    scopes = {
+        (scope["jurisdiction"], scope["document_class"], scope["version"])
+        for scope in selector["scopes"]
+    }
+    files = {}
+    for path, (sha256, row_count) in EXPECTED_PROVISION_SOURCES.items():
+        provision = Path(path)
+        jurisdiction, document_class, version = (
+            provision.parts[-3], provision.parts[-2], provision.stem,
+        )
+        if (jurisdiction, document_class, version) not in scopes:
+            raise ClosureError(f"NZ corpus scope absent from the release selector: {path}")
+        lock_path = f".axiom/corpus-locks/{jurisdiction}/{document_class}/{version}.json"
+        lock = json.loads(_git(corpus_repo, "show", f"{CORPUS_COMMIT}:{lock_path}"))
+        matches = [row for row in lock["files"] if row.get("path") == path]
+        if len(matches) != 1 or matches[0].get("sha256") != sha256:
+            raise ClosureError(f"NZ corpus release lock pin drifted: {path}")
+        files[path] = _validate_corpus_file(corpus_repo / path, sha256, row_count)
+    return files
+
+
+def _corpus_citation_paths(files: dict[str, bytes]) -> list[str]:
+    corpus_paths: set[str] = set()
+    for path, raw in files.items():
+        for line_number, line in enumerate(raw.splitlines(), 1):
+            try:
+                citation = json.loads(line)["citation_path"]
+            except (json.JSONDecodeError, KeyError, TypeError) as exc:
+                raise ClosureError(f"{path}:{line_number}: invalid provision row") from exc
+            if not isinstance(citation, str) or not citation:
+                raise ClosureError(f"{path}:{line_number}: invalid citation path")
+            if citation in corpus_paths:
+                raise ClosureError(f"duplicate corpus citation path {citation!r}")
+            corpus_paths.add(citation)
+    return sorted(corpus_paths)
 
 
 def load_source() -> dict:
@@ -444,6 +547,8 @@ def _ratchet_from_document(
 ) -> dict[str, dict[str, int]]:
     if document.get("schema") != "axiom_oracles.nz_closure_denominator_ratchet.v1":
         raise ClosureError(f"unexpected {label} schema")
+    if require_current_program_set and document.get("content_pins") != CONTENT_PINS:
+        raise ClosureError("NZ closure denominator ratchet content pins drifted")
     return _validate_ratchet_programs(
         document.get("programs"),
         label=label,
@@ -485,6 +590,10 @@ def _ratchet_at_revision(
         ) from exc
     if not isinstance(document, dict):
         raise ClosureError(f"{label} denominator ratchet must contain an object")
+    # Corpus or RuleSpec changes start a reviewed baseline. Legacy documents
+    # predate content pins and therefore belong to the previous baseline.
+    if document.get("content_pins") != CONTENT_PINS:
+        return None
     return _ratchet_from_document(
         document,
         label=f"{label} denominator ratchet",
@@ -520,8 +629,8 @@ def _load_ancestor_denominator_ratchets() -> dict[str, dict[str, dict[str, int]]
             or f"reachable history for {RATCHET_REPO_PATH} is unavailable"
         )
     else:
-        strict_found = False
-        for revision in strict_history.stdout.splitlines():
+        revisions = strict_history.stdout.splitlines()
+        for revision in revisions:
             strict_ratchet = _ratchet_at_revision(
                 revision,
                 label=f"reachable HEAD history {revision}",
@@ -529,9 +638,8 @@ def _load_ancestor_denominator_ratchets() -> dict[str, dict[str, dict[str, int]]
             )
             if strict_ratchet is None:
                 continue
-            strict_found = True
             ancestors[f"reachable HEAD history {revision}"] = strict_ratchet
-        if not strict_found:
+        if not revisions:
             _history_note(
                 f"reachable HEAD history containing {RATCHET_REPO_PATH} is unavailable"
             )
@@ -602,11 +710,10 @@ def load_denominator_ratchet(
     return programs
 
 
-def bootstrap_source() -> dict:
+def bootstrap_source(*, corpus_repo: Path = CORPUS_REPO) -> dict:
     if _git(RULESPEC_REPO, "rev-parse", RULESPEC_SHA).strip() != RULESPEC_SHA:
         raise ClosureError("pinned RuleSpec commit is unavailable")
-    if _git(CORPUS_REPO, "rev-parse", CORPUS_RELEASE_REF).strip() != CORPUS_RELEASE_SHA:
-        raise ClosureError("pinned corpus release ref moved or is unavailable")
+    corpus_files = _load_corpus_files(corpus_repo)
     parsed_files: list[tuple[str, object]] = []
     rule_names: set[str] = set()
     for path in _git(
@@ -662,21 +769,7 @@ def bootstrap_source() -> dict:
                 "nodes": nodes,
             }
         )
-    corpus_paths: set[str] = set()
-    for path in CORPUS_FILES:
-        for line_number, line in enumerate(
-            _git(CORPUS_REPO, "show", f"{CORPUS_RELEASE_REF}:{path}").splitlines(), 1
-        ):
-            try:
-                row = json.loads(line)
-                citation = row["citation_path"]
-            except (json.JSONDecodeError, KeyError, TypeError) as exc:
-                raise ClosureError(
-                    f"{path}:{line_number}: invalid provision row"
-                ) from exc
-            if citation in corpus_paths:
-                raise ClosureError(f"duplicate corpus citation path {citation!r}")
-            corpus_paths.add(citation)
+    corpus_paths = _corpus_citation_paths(corpus_files)
     ledger_raw = _git(RULESPEC_REPO, "show", f"{RULESPEC_SHA}:{LEDGER_REPO_PATH}")
     ledger = yaml.safe_load(ledger_raw)
     return {
@@ -693,10 +786,12 @@ def bootstrap_source() -> dict:
         },
         "corpus": {
             "repository": "TheAxiomFoundation/axiom-corpus",
-            "release": "nz-rulespec-2026-07-18",
-            "commit": CORPUS_RELEASE_SHA,
-            "provision_sources": list(CORPUS_FILES),
-            "citation_paths": sorted(corpus_paths),
+            "release": RELEASE,
+            "release_content_sha256": RELEASE_CONTENT_SHA256,
+            "release_selector_sha256": RELEASE_SELECTOR_SHA256,
+            "commit": CORPUS_COMMIT,
+            "provision_sources": _provision_source_pins(),
+            "citation_paths": corpus_paths,
         },
         "pending_ledger": {
             "source": f"TheAxiomFoundation/rulespec-nz/{LEDGER_REPO_PATH}",
@@ -726,12 +821,16 @@ def build(
     ):
         raise ClosureError("NZ closure RuleSpec pin or declared roots drifted")
     if (
-        corpus.get("release") != "nz-rulespec-2026-07-18"
+        corpus.get("release") != RELEASE
         or not isinstance(corpus.get("commit"), str)
         or not GIT_SHA.fullmatch(corpus["commit"])
-        or corpus.get("commit") != CORPUS_RELEASE_SHA
+        or corpus.get("commit") != CORPUS_COMMIT
+        or corpus.get("release_content_sha256") != RELEASE_CONTENT_SHA256
+        or corpus.get("release_selector_sha256") != RELEASE_SELECTOR_SHA256
     ):
         raise ClosureError("NZ closure corpus release pin drifted")
+    if corpus.get("provision_sources") != _provision_source_pins():
+        raise ClosureError("NZ closure corpus provision source pins drifted")
     if (ledger.get("document") or {}).get("total_allowed") != 0:
         raise ClosureError("known-missing-money-atoms ceiling rose above zero")
     corpus_paths = corpus.get("citation_paths") or []
@@ -938,8 +1037,10 @@ def build(
         "schema": "axiom_oracles.nz_closure_summary.v2",
         "jurisdiction": "nz",
         "rulespec_commit": RULESPEC_SHA,
-        "corpus_release": "nz-rulespec-2026-07-18",
-        "corpus_commit": CORPUS_RELEASE_SHA,
+        "corpus_release": RELEASE,
+        "corpus_release_content_sha256": RELEASE_CONTENT_SHA256,
+        "corpus_release_selector_sha256": RELEASE_SELECTOR_SHA256,
+        "corpus_commit": CORPUS_COMMIT,
         "roots": summaries,
         "pending_citations": sorted(all_pending),
         "pending_money_atoms": 0,
@@ -985,10 +1086,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--bootstrap-source", action="store_true")
+    parser.add_argument(
+        "--corpus-repo", type=Path,
+        help="local corpus checkout; also verify its locked bytes during --check",
+    )
+    parser.add_argument(
+        "--refresh-denominator-ratchet", action="store_true",
+        help="start the content-pinned baseline at the derived program counts",
+    )
     args = parser.parse_args()
     try:
         if args.bootstrap_source:
-            rendered = _render(bootstrap_source())
+            rendered = _render(bootstrap_source(corpus_repo=args.corpus_repo or CORPUS_REPO))
             if args.check:
                 if not SOURCE_PATH.exists() or SOURCE_PATH.read_text() != rendered:
                     print("NZ closure source snapshot drifted", file=sys.stderr)
@@ -998,6 +1107,48 @@ def main() -> int:
                 SOURCE_PATH.write_text(rendered)
             return 0
         source = load_source()
+        if args.corpus_repo is not None:
+            citation_paths = _corpus_citation_paths(_load_corpus_files(args.corpus_repo))
+            if source.get("corpus", {}).get("citation_paths") != citation_paths:
+                raise ClosureError("NZ closure corpus citation snapshot drifted")
+        if args.refresh_denominator_ratchet:
+            # Existing floors still constrain a baseline refresh. Pins establish
+            # which historical baseline is comparable; counts derive from the
+            # committed trace and the source graph, never from a hand edit.
+            previous = _load_json_object(RATCHET_PATH, "NZ closure denominator ratchet")
+            previous_programs = _ratchet_from_document(
+                previous, label="NZ closure denominator ratchet",
+                require_current_program_set=False,
+            )
+            current_baseline = previous.get("content_pins") == CONTENT_PINS
+            summary = build(
+                source, denominator_ratchet=previous_programs,
+                ancestor_denominator_ratchets=None if current_baseline else {},
+            )
+            ratchet = {
+                "_comment": (
+                    "Per-program closure denominators are monotone floors within "
+                    "the recorded content pins. Changing either source pin starts "
+                    "a new reviewed baseline."
+                ),
+                "schema": "axiom_oracles.nz_closure_denominator_ratchet.v1",
+                "content_pins": CONTENT_PINS,
+                "programs": {
+                    program: {
+                        "requested_output_count_min": row["root_node_count"],
+                        "citation_count_min": row["citation_root_count"],
+                    }
+                    for program, row in summary["programs"].items()
+                },
+            }
+            rendered = _render(ratchet)
+            if args.check:
+                if RATCHET_PATH.read_text() != rendered:
+                    print("NZ closure denominator ratchet drifted", file=sys.stderr)
+                    return 1
+            else:
+                RATCHET_PATH.write_text(rendered)
+            return 0
         summary = build(source)
     except (OSError, json.JSONDecodeError, ClosureError) as exc:
         print(f"NZ closure ERROR: {exc}", file=sys.stderr)

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import importlib.util
 import json
 import subprocess
@@ -21,6 +22,104 @@ def _load_closure():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+@pytest.mark.parametrize(
+    "field", ["release_content_sha256", "release_selector_sha256"],
+)
+def test_check_rejects_wrong_named_release_hash(field, tmp_path, monkeypatch, capsys):
+    """MUTANT: a reviewed snapshot cannot substitute another release identity."""
+
+    closure = _load_closure()
+    source = closure.load_source()
+    source["corpus"][field] = "0" * 64
+    mutant = tmp_path / "source.json"
+    mutant.write_text(closure._render(source))
+    # Re-reviewing snapshot bytes must not bypass the independent release pins.
+    monkeypatch.setattr(closure, "SOURCE_PATH", mutant)
+    monkeypatch.setattr(closure, "SOURCE_SHA256", hashlib.sha256(mutant.read_bytes()).hexdigest())
+    monkeypatch.setattr("sys.argv", ["nz_closure.py", "--check"])
+
+    assert closure.main() == 1
+    assert "corpus release pin drifted" in capsys.readouterr().err
+    # Control: with the committed snapshot back in place and the pin restored,
+    # the release builds again.
+    monkeypatch.undo()
+    source["corpus"][field] = getattr(closure, field.upper())
+    assert closure.build(source)["corpus_release"] == closure.RELEASE
+
+
+def test_check_rejects_corpus_file_bytes_then_accepts_restored_pin(
+    tmp_path, monkeypatch, capsys,
+):
+    """MUTANT: live --check hashes corpus bytes before reading citation paths."""
+
+    closure = _load_closure()
+    relative = "data/corpus/provisions/nz/statute/test-scope.jsonl"
+    path = tmp_path / relative
+    path.parent.mkdir(parents=True)
+    original = b'{"citation_path":"nz/statute/mutant-control"}\n'
+    expected_sha = hashlib.sha256(original).hexdigest()
+    source = closure.load_source()
+    selector = tmp_path / closure.RELEASE_SELECTOR_PATH
+    selector.parent.mkdir(parents=True)
+    selector.write_text(json.dumps({
+        "name": closure.RELEASE,
+        "scopes": [{"jurisdiction": "nz", "document_class": "statute", "version": "test-scope"}],
+    }))
+    monkeypatch.setattr(closure, "RELEASE_SELECTOR_SHA256", hashlib.sha256(selector.read_bytes()).hexdigest())
+    monkeypatch.setattr(closure, "EXPECTED_PROVISION_SOURCES", {relative: (expected_sha, 1)})
+
+    def local_release_git(_repo, *args):
+        if args == ("rev-parse", closure.CORPUS_COMMIT):
+            return closure.CORPUS_COMMIT
+        if args[0] == "diff":
+            return ""
+        assert args == ("show", f"{closure.CORPUS_COMMIT}:.axiom/corpus-locks/nz/statute/test-scope.json")
+        return json.dumps({"files": [{"path": relative, "sha256": expected_sha}]})
+
+    monkeypatch.setattr(closure, "_git", local_release_git)
+    path.write_bytes(original)
+    assert closure._load_corpus_files(tmp_path) == {relative: original}
+    selector.write_text(selector.read_text() + " ")
+    with pytest.raises(closure.ClosureError, match="selector sha256 drifted"):
+        closure._load_corpus_files(tmp_path)
+    selector.write_text(selector.read_text().removesuffix(" "))
+    path.write_bytes(original + b" ")
+    monkeypatch.setattr("sys.argv", ["nz_closure.py", "--check", "--corpus-repo", str(tmp_path)])
+    assert closure.main() == 1
+    assert "file bytes do not match their pin" in capsys.readouterr().err
+
+    path.write_bytes(original)
+    assert closure._load_corpus_files(tmp_path) == {relative: original}
+    # Restore the actual source's derived citation set to complete the CLI
+    # control without materializing an entire corpus in the test directory.
+    monkeypatch.setattr(closure, "_corpus_citation_paths", lambda _files: source["corpus"]["citation_paths"])
+    # The live file-reader fixture has synthetic pins; the hermetic build still
+    # checks the real source's committed per-file pins.
+    monkeypatch.setattr(closure, "RELEASE_SELECTOR_SHA256", source["corpus"]["release_selector_sha256"])
+    monkeypatch.setattr(closure, "_load_corpus_files", lambda _repo: {relative: original})
+    monkeypatch.setattr(closure, "_provision_source_pins", lambda: source["corpus"]["provision_sources"])
+    assert closure.main() == 0
+
+
+def test_hermetic_check_rejects_changed_provision_file_pin():
+    closure = _load_closure()
+    source = closure.load_source()
+    source["corpus"]["provision_sources"][0]["sha256"] = "0" * 64
+    with pytest.raises(closure.ClosureError, match="provision source pins drifted"):
+        closure.build(source)
+
+
+def test_different_content_pins_start_a_new_ancestor_baseline(monkeypatch):
+    closure = _load_closure()
+    document = json.loads(closure.RATCHET_PATH.read_text())
+    document["content_pins"]["rulespec_commit"] = "0" * 40
+    monkeypatch.setattr(
+        closure, "_git_history",
+        lambda *_args: SimpleNamespace(returncode=0, stdout=json.dumps(document), stderr=""),
+    )
+    assert closure._ratchet_at_revision("previous-baseline", label="previous baseline", unavailable_is_note=False) is None
 
 
 def test_executable_request_root_absent_from_execution_trace_is_rejected():
@@ -77,6 +176,14 @@ def test_unavailable_origin_main_floor_check_fails_open_loudly(
     real_git_history = closure._git_history
 
     def without_origin_main(*args):
+        if args and args[0] == "show":
+            # Supply a same-baseline ancestor even while this repin is still
+            # uncommitted and real HEAD belongs to the preceding baseline.
+            return SimpleNamespace(
+                returncode=0,
+                stdout=closure.RATCHET_PATH.read_text(),
+                stderr="",
+            )
         if args and args[0] == "merge-base":
             return SimpleNamespace(
                 returncode=128,

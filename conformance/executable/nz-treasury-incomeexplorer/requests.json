@@ -27,7 +27,7 @@
     "engine_git_sha": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
     "harness": "TheAxiomFoundation/ops/nz-lane/emtr_reproduction/run.py",
     "harness_commit": "bcf631b5",
-    "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da"
+    "rulespec_commit": "c8ec92e855f835e8348803449836791aa56f5d38"
   },
   "requested_outputs_by_program": {
     "nz/acc-earners-levy": [

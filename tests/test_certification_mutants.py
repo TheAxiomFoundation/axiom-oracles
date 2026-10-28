@@ -3116,7 +3116,7 @@ def test_nz_program_scoped_adapters_emit_the_same_pinned_rulespec_sha():
     spec = certify.PROGRAMS[program]
     closed = certify._producer_closed_verdict(program, spec, [])
     executable = certify._producer_executable_verdict(program, spec, [])
-    pinned_sha = "89a7d25dc03a4d045348620283332de10b1047da"
+    pinned_sha = "c8ec92e855f835e8348803449836791aa56f5d38"
 
     assert closed is not None
     assert executable is not None

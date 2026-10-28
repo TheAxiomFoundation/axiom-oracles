@@ -6,7 +6,7 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
       "regenerated_sha256": "70f636371ca78ca6abc38012f93146cfabcc90b29e28f9f432bc6636b425fbc5",
       "regeneration_difference": "provenance only",
-      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
+      "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507",
       "substance_sha256": "418f943cfd49eeae7a9129e3952f521c9903d4d3b454fc4502471699a605cf0e"
     },
     "source_harness": {
@@ -405737,7 +405737,7 @@
     "end": "2027-03-31",
     "start": "2026-04-01"
   },
-  "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
+  "rulespec_commit": "c8ec92e855f835e8348803449836791aa56f5d38",
   "schema": "axiom_oracles.nz_evaluation_traces.v1",
   "suite": "nz-treasury-incomeexplorer"
 }

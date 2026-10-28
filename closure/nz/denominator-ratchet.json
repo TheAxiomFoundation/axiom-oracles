@@ -1,5 +1,12 @@
 {
-  "_comment": "Per-program closure denominators are monotone floors. Requested-output roots and reached citation roots may grow but must not fall below these reviewed counts.",
+  "_comment": "Per-program closure denominators are monotone floors within the recorded content pins. Changing either source pin starts a new reviewed baseline.",
+  "content_pins": {
+    "corpus_commit": "4aa31fa00fec0706f00cbda3bd4fb53fb0adf3ca",
+    "corpus_release": "nz-rulespec-2026-10-23-amendment-markers",
+    "corpus_release_content_sha256": "4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2",
+    "corpus_release_selector_sha256": "b9b73e48e2652bdb9bf4f0740139f6130512d8bd63d7fc9f6197b7ae4c717daf",
+    "rulespec_commit": "c8ec92e855f835e8348803449836791aa56f5d38"
+  },
   "programs": {
     "nz/acc-earners-levy": {
       "citation_count_min": 2,

@@ -12,6 +12,8 @@ replays every request with the pinned engine checkout.
 from __future__ import annotations
 
 import argparse
+import ast
+import copy
 import hashlib
 import json
 import os
@@ -76,7 +78,7 @@ HARNESS_COMMIT = "bcf631b5"
 HARNESS_FULL_COMMIT = "bcf631b59968be4907e679b4704f5e029e2188ab"
 HARNESS_SHA256 = "9aa0fc64af8dca4a8f7574e98923fe0022561679027c2ed5325bf381e9c6ab27"
 RULESPEC_REPO = "TheAxiomFoundation/rulespec-nz"
-RULESPEC_SHA = "89a7d25dc03a4d045348620283332de10b1047da"
+RULESPEC_SHA = "c8ec92e855f835e8348803449836791aa56f5d38"
 ENGINE_REPO = "TheAxiomFoundation/axiom-rules-engine"
 ENGINE_GIT_SHA = "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021"
 # Historical capture provenance. A source-built Linux binary is instead bound
@@ -88,13 +90,13 @@ ENGINE_BINARY_SHA256 = (
 COMPOSITION_SHA256 = "af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0"
 COMPILED_SHA256 = "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91"
 EVALUATION_TRACE_SHA256 = (
-    "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+    "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
 )
 TREASURY_SNAPSHOT_SHA256 = (
     "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
 )
 SOURCE_REPORT_SHA256 = (
-    "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
+    "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507"
 )
 SOURCE_COMPARISON_HARNESS = {
     "repository": "TheAxiomFoundation/ops",
@@ -1184,6 +1186,111 @@ def _live_reproduction(
     return artifact_bytes, expected_document, full_responses, transcript, summary
 
 
+def _refresh_rulespec_provenance(
+    *,
+    rulespec_root: Path,
+    engine_root: Path,
+    engine_binary: Path,
+    source_built_engine: bool,
+) -> dict[str, Any]:
+    """Re-pin committed evidence only when a live replay preserves its values.
+
+    The prior producer at HEAD supplies the old exact source/trace hashes.
+    External capture lineage is retained; only the active RuleSpec provenance
+    and dependent source-file hashes move. Any failed replay restores all
+    evidence bytes, including the outer receipt.
+    """
+
+    prior_producer = _git_history("show", f"HEAD:{GENERATED_BY}")
+    _require(prior_producer.returncode == 0, "committed NZ producer is unavailable")
+    names = {"RULESPEC_SHA", "SOURCE_REPORT_SHA256", "EVALUATION_TRACE_SHA256"}
+    prior_pins = {}
+    for node in ast.parse(prior_producer.stdout).body:
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+            target = node.targets[0]
+            if isinstance(target, ast.Name) and target.id in names:
+                prior_pins[target.id] = ast.literal_eval(node.value)
+    _require(set(prior_pins) == names, "committed NZ producer pins are incomplete")
+    prior_sha = prior_pins["RULESPEC_SHA"]
+    _require(prior_sha != RULESPEC_SHA, "RuleSpec provenance already uses this pin")
+
+    paths = (
+        SOURCE_REPORT_PATH,
+        EVALUATION_TRACE_PATH,
+        REQUESTS_PATH,
+        GOLDEN_PATH,
+        FULL_RESPONSES_PATH,
+        TRANSCRIPT_PATH,
+        RECEIPT_PATH,
+    )
+    original = {path: path.read_bytes() for path in paths}
+    for path, content in original.items():
+        prior = _git_history("show", f"HEAD:{path.relative_to(REPO_ROOT).as_posix()}")
+        _require(
+            prior.returncode == 0 and prior.stdout.encode() == content,
+            f"{path.relative_to(REPO_ROOT)} must match committed evidence before re-pin",
+        )
+    _require(
+        _sha256(SOURCE_REPORT_PATH) == prior_pins["SOURCE_REPORT_SHA256"]
+        and _sha256(EVALUATION_TRACE_PATH) == prior_pins["EVALUATION_TRACE_SHA256"],
+        "prior source or evaluation trace does not match its committed producer pin",
+    )
+    source = _load(SOURCE_REPORT_PATH)
+    trace = _load(EVALUATION_TRACE_PATH)
+    requests = _load(REQUESTS_PATH)
+    prior_trace = copy.deepcopy(trace)
+    prior_golden = _load(GOLDEN_PATH)
+    rulespec = source["provenance"]["rulespec"]
+    _require(
+        rulespec.get("git_sha") == rulespec.get("expected_git_sha") == prior_sha
+        and trace.get("rulespec_commit") == prior_sha
+        and requests["provenance"].get("rulespec_commit") == prior_sha,
+        "prior evidence does not agree on the committed RuleSpec pin",
+    )
+    _validate_source_and_artifact_pins()
+    rulespec["git_sha"] = rulespec["expected_git_sha"] = RULESPEC_SHA
+    trace["rulespec_commit"] = RULESPEC_SHA
+    trace["capture"]["source_comparison"]["sha256"] = SOURCE_REPORT_SHA256
+    requests["provenance"]["rulespec_commit"] = RULESPEC_SHA
+    _require(
+        _sha256_bytes(_render(source).encode()) == SOURCE_REPORT_SHA256
+        and _sha256_bytes(_render(trace).encode()) == EVALUATION_TRACE_SHA256,
+        "re-pinned provenance does not match the new producer hashes",
+    )
+    _require(
+        trace["evaluations"] == prior_trace["evaluations"]
+        and len(trace["evaluations"]) == EVALUATION_COUNT,
+        "RuleSpec re-pin changed evaluation values",
+    )
+    try:
+        for path, document in (
+            (SOURCE_REPORT_PATH, source),
+            (EVALUATION_TRACE_PATH, trace),
+            (REQUESTS_PATH, requests),
+        ):
+            path.write_text(_render(document))
+        _artifact, expected, full_responses, transcript, summary = _live_reproduction(
+            rulespec_root=rulespec_root,
+            engine_root=engine_root,
+            engine_binary=engine_binary,
+            source_built_engine=source_built_engine,
+        )
+        _require(
+            _render(full_responses).encode() == original[FULL_RESPONSES_PATH]
+            and _render(transcript).encode() == original[TRANSCRIPT_PATH],
+            "RuleSpec re-pin changed live responses or reduced comparison values",
+        )
+        prior_golden["source_classifications"]["sha256"] = SOURCE_REPORT_SHA256
+        _require(expected == prior_golden, "RuleSpec re-pin changed expected values")
+        GOLDEN_PATH.write_text(_render(expected))
+        RECEIPT_PATH.write_text(_render(_receipt_document(summary)))
+        return validate_artifact(_load(RECEIPT_PATH))
+    except BaseException:
+        for path, content in original.items():
+            path.write_bytes(content)
+        raise
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
@@ -1205,6 +1312,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="reconstruct the outer receipt from committed components without trusting the old receipt",
     )
+    parser.add_argument(
+        "--refresh-rulespec-provenance",
+        action="store_true",
+        help="re-pin committed RuleSpec provenance after a byte-identical live replay",
+    )
     parser.add_argument("--rulespec-root", type=Path, default=DEFAULT_RULESPEC_ROOT)
     parser.add_argument("--engine-root", type=Path, default=DEFAULT_ENGINE_ROOT)
     parser.add_argument("--engine-binary", type=Path, default=DEFAULT_ENGINE_BINARY)
@@ -1212,7 +1324,11 @@ def main(argv: list[str] | None = None) -> int:
     try:
         _require(
             not args.check
-            or not (args.refresh_live_evidence or args.refresh_receipt),
+            or not (
+                args.refresh_live_evidence
+                or args.refresh_receipt
+                or args.refresh_rulespec_provenance
+            ),
             "--check is read-only and cannot be combined with a refresh mode",
         )
         _require(
@@ -1223,6 +1339,21 @@ def main(argv: list[str] | None = None) -> int:
             not args.source_built_engine or args.live,
             "--source-built-engine requires --live",
         )
+        if args.refresh_rulespec_provenance:
+            _require(
+                args.live and not (args.refresh_live_evidence or args.refresh_receipt),
+                "--refresh-rulespec-provenance requires --live and no other refresh mode",
+            )
+            _refresh_rulespec_provenance(
+                rulespec_root=args.rulespec_root,
+                engine_root=args.engine_root,
+                engine_binary=args.engine_binary,
+                source_built_engine=args.source_built_engine,
+            )
+            print(
+                f"NZ RuleSpec provenance re-pinned: 0 of {EVALUATION_COUNT} evaluation values changed"
+            )
+            return 0
         live_result = None
         if args.live:
             live_result = _live_reproduction(

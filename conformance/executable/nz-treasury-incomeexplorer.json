@@ -19,7 +19,7 @@
   "execution_trace": {
     "evaluation_count": 883,
     "path": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
-    "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+    "sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
   },
   "full_responses": {
     "path": "conformance/executable/nz-treasury-incomeexplorer/full-responses.json",
@@ -28,7 +28,7 @@
   "generated_by": "scripts/nz_executable_reproduction.py",
   "independent_expected": {
     "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
-    "sha256": "bd6012eb467e072c1ebcb35e289c1e146b59e6cf917b16ee5e56925d67355033"
+    "sha256": "8411422c380fad4732a0236f0102a766a126536bd5d4d89fb1450bfe272c33ab"
   },
   "program": "nz/treasury-incomeexplorer-comparison-composition",
   "programs": [
@@ -47,17 +47,17 @@
   },
   "request_set": {
     "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
-    "sha256": "e5351c383a83b21a5cd2b94c2cec0b4221168ef7e581ba9b257e3c16b6901111"
+    "sha256": "302bbc21f33a6c15bab891d109849db49f9cc5485a10919fddd3f221f9ea5998"
   },
   "rulespec": {
     "repository": "TheAxiomFoundation/rulespec-nz",
-    "sha": "89a7d25dc03a4d045348620283332de10b1047da"
+    "sha": "c8ec92e855f835e8348803449836791aa56f5d38"
   },
   "schema": "axiom_oracles.executable_reproduction.v2",
   "source_report": {
     "compiled_artifact_sha256": "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91",
     "path": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-    "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
+    "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507"
   },
   "summary": {
     "all_independent_cells_reproduced": true,

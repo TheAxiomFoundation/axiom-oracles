@@ -67,6 +67,6 @@
   "schema": "axiom_oracles.nz_single_person_attestations.v1",
   "source_receipt": {
     "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-    "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
+    "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507"
   }
 }
