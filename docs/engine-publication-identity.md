@@ -47,8 +47,9 @@ signed statements.
 receipt verifies and names the engine checkout's current HEAD, and the checkout
 is clean. Otherwise a clean checkout rebuilds through the build helper, so a
 restored `target/` cache with an unreceipted or older binary is rebuilt rather
-than published under the wrong identity. A dirty checkout keeps its existing
-binary, which carries whatever identity its receipt verifies.
+than published under the wrong identity. A checkout that is dirty, isn't a
+repository root, or has no readable full HEAD keeps its existing binary, which
+carries whatever identity its receipt verifies.
 
 The comparison runner supplies a private `AXIOM_ENGINE_RECEIPT_OUTPUT` journal
 to generator subprocesses. The engine adapter writes its receipt after each
