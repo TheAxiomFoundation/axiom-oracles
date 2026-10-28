@@ -80,7 +80,8 @@ def policyengine_row(age, months_since_last_birthday, state_pension_age, gender)
     return row
 
 
-# PolicyEngine UK at policyengine-uk#1899 (c46893e2), period 2026, whole age 66.
+# PolicyEngine UK 2.111.2 (policyengine-uk 0c7ea821, the merge of #1899), period
+# 2026, whole age 66.
 # Values as PolicyEngine stores them (float32), from Simulation.calculate.
 SPLIT_2026_66_YEAR_OLDS = [
     # months since last birthday, state_pension_age, is_SP_age
@@ -120,9 +121,10 @@ def test_whole_age_would_put_2026_66_year_olds_under_state_pension_age():
 
 
 # Attaining State Pension age at the commencement of 6 October. PolicyEngine UK
-# at #1899 (c46893e2): 2025 at age 66 and 2028 at age 67, months since last
-# birthday 0.001, 0.003 and 0.013 store a State Pension age just above the
-# exact age; months_since_state_pension_age rounds to -0.0, so is_SP_age holds.
+# 2.111.2 (0c7ea821, the merge of #1899): 2025 at age 66 and 2028 at age 67,
+# months since last birthday 0.001, 0.003 and 0.013 store a State Pension age
+# just above the exact age; months_since_state_pension_age rounds to -0.0, so
+# is_SP_age holds.
 FLOAT32_TIES = [
     # year, age, months since last birthday, state_pension_age
     (2025, 66, 0.0, 66.0),

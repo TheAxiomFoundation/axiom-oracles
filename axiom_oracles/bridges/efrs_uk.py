@@ -5973,8 +5973,9 @@ def policyengine_uk_exact_age(row: Any, state_pension_age: float) -> float:
     For a whole age, utils/dates.py's exact age in months is 12 * age +
     months_since_last_birthday clipped to [0, 12 - 1e-4]; a fractional age is
     read as the exact age there, which this projection does not reproduce
-    (months_since_last_birthday.py: microdata records age in whole years). The exact age here is floor(age) +
-    months_since_last_birthday / 12 with the same clip. Where that rounds to the
+    (months_since_last_birthday.py: microdata records age in whole years).
+    The exact age here is floor(age) + months_since_last_birthday / 12 with
+    the same clip. Where that rounds to the
     State Pension age, the State Pension age is returned itself, so a person
     who attains it at the commencement of 6 October stays an exact tie instead
     of landing either side of it by float32 storage error. Earlier releases
