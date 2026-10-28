@@ -342,12 +342,12 @@
       "coverage": []
     },
     {
-      "id": "us:statutes/42/1786#wic_eligible",
+      "id": "us:programs/wic#eligible",
       "name": "WIC eligibility",
       "category": "food",
-      "axiom_ref": "us:statutes/42/1786",
-      "axiom_target": "us:statutes/42/1786#wic_eligible",
-      "statute_label": "42 USC \u00a7 1786",
+      "axiom_ref": "us:policies/usda/wic/eligibility_pipeline",
+      "axiom_target": "us:policies/usda/wic/eligibility_pipeline#wic_eligible",
+      "statute_label": "us:policies/usda/wic/eligibility_pipeline",
       "comparison": "eligibility",
       "tolerance": null,
       "oracles": [
@@ -358,8 +358,16 @@
       "rule_aliases": [
         "wic_eligible"
       ],
-      "encoding_status": "missing",
-      "coverage": []
+      "encoding_status": "present",
+      "coverage": [
+        {
+          "corpus": "rulespec-us",
+          "file": "us/policies/usda/wic/eligibility_pipeline.yaml",
+          "label": "Federal (US)",
+          "scope": "federal",
+          "country": "US"
+        }
+      ]
     },
     {
       "id": "us:tax/federal-income-tax#nonrefundable_credits",
