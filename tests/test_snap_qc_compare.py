@@ -709,27 +709,23 @@ def test_stage_concepts_are_the_ids_a_replay_report_lists(jurisdiction) -> None:
 # Engine-gated live test: reproduce the proven worked example end to end
 # --------------------------------------------------------------------------- #
 
-_ENGINE = Path(
-    os.environ.get(
-        "AXIOM_RULES_ENGINE_BIN",
-        "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/"
-        "axiom-rules-engine",
-    )
+# Both come from the environment (the snap-qc-replay workflow sets them); with
+# either unset the live test skips.
+_ENGINE = Path(os.environ.get("AXIOM_RULES_ENGINE_BIN", ""))
+_RULESPEC_FY2024 = Path(os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT", ""))
+_LIVE = (
+    _ENGINE.is_file()
+    and _RULESPEC_FY2024 != Path()
+    and (_RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola").exists()
 )
-_RULESPEC_FY2024 = Path(
-    os.environ.get(
-        "RULESPEC_US_SNAP_FY2024_ROOT",
-        "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-fy2024",
-    )
-)
-_LIVE = _ENGINE.exists() and (
-    _RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola"
-).exists()
 
 
 @pytest.mark.skipif(
     not _LIVE,
-    reason="axiom-rules-engine binary and rulespec-us fy-2024-cola worktree required",
+    reason=(
+        "set AXIOM_RULES_ENGINE_BIN to an axiom-rules-engine binary and "
+        "RULESPEC_US_SNAP_FY2024_ROOT to a rulespec-us fy-2024-cola checkout"
+    ),
 )
 def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     config = sc.QC_JURISDICTIONS["us-co"]
