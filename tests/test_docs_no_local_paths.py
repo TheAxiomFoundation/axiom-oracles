@@ -17,13 +17,14 @@ Invariants:
      ``https://host/#/home/<name>``, escaped ``https:\\/\\/host\\/home\\/<name>``).
      A URL ends at whitespace, ``|``, ``;``, a quote or backtick, ``<``, ``>``,
      or an unbalanced ``)`` or ``]``. A query value is free text, so it is
-     scanned like any other. A remote host is a domain name (letters, digits,
-     ``_``, ``-`` and ``.``) or an IP address that is not a local host:
-     ``localhost``, ``*.localhost``, ``127.0.0.0/8`` or ``0.0.0.0/8`` in any
-     IPv4 spelling, ``[::1]``, ``[::]`` or their IPv4-mapped forms. A host is
-     read after Unicode compatibility normalization, with an ideographic full
-     stop as ``.``, so fullwidth ``localhost`` is local. A local host may serve
-     its own files
+     scanned like any other. A remote host is a name of at most 255 letters,
+     digits, ``_``, ``-`` and ``.`` (a domain name or an IPv4 address) or a
+     bracketed IPv6 address without a zone, then an optional port of digits,
+     that is not a local host: ``localhost``, ``*.localhost``,
+     ``127.0.0.0/8`` or ``0.0.0.0/8`` in any IPv4 spelling, ``[::1]``,
+     ``[::]`` or their IPv4-mapped forms. A name is read after Unicode
+     compatibility normalization, with an ideographic full stop as ``.``, so
+     fullwidth ``localhost`` is local. A local host may serve its own files
      (``http://localhost:5173/@fs/Users/<name>``), and any other text in the
      host's place (``https://e.org~~/Users/<name>``, a strikethrough) names no
      web server, so both paths are scanned too. A host is judged by its name
@@ -46,7 +47,7 @@ Invariants:
      ``/./home/<name>``, ``data/home/<name>``, ``/var/home/<name>`` and
      ``file://localhost/Users/<name>``, ``//server/Users/<name>`` are reported;
    - it names no one: ``/Users/`` alone, ``/Users/<you>/``, ``/Users/$USER/``,
-     ``/Users/.../`` and macOS's ``/Users/Shared``.
+     ``/Users/.../``.
    Candidates may overlap: in ``/Volumes/home/Users/<name>``, both
    ``/home/Users`` and ``/Users/<name>`` are checked.
    Anything else glued to the front of a candidate may be a prefix rather than
@@ -64,10 +65,12 @@ Invariants:
    schemeless URL (``www.kancare.ks.gov/home/showpublisheddocument/4880``) or
    a protocol-relative one (``//cdn.example.org/home/app.js``), a web route in
    a query (``?next=/home/dashboard``) or on a local server
-   (``http://localhost:3000/home/dashboard``), or a relative
-   ``data/home/<name>``.
+   (``http://localhost:3000/home/dashboard``), a relative
+   ``data/home/<name>``, or macOS's shared folder (``/Users/Shared``).
 4. A line is scanned in time linear in its length, however many URLs,
-   brackets, separators or candidates it holds.
+   brackets, separators or candidates it holds. Only a host of at most 255
+   characters is normalized, so this holds where Unicode normalization is
+   not linear (Python 3.14.0).
 5. Failures name ``file:line:column`` only, so the CI log does not republish
    the path.
 """
@@ -107,7 +110,12 @@ _URL_END = frozenset("<>\"'`|;")
 # A candidate right after one of these (or a letter or digit) continues a URL's path.
 _URL_PATH_CHARS = frozenset("-._~/#])%\\")
 _AUTHORITY = re.compile(r"[^/\\?#]*")
-_DOMAIN = re.compile(r"[\w.-]+")
+# A host, then an optional port of ASCII digits.
+_HOST_AND_PORT = re.compile(r"(\[[^\]]*\]|[^:\[\]]*)(?::[0-9]*)?")
+_NAME = re.compile(r"[\w.-]+")
+# No DNS name is longer. The bound also keeps normalization linear across a line where
+# normalizing a run of combining marks is quadratic (Python 3.14.0).
+_MAX_HOST = 255
 # One part of an IPv4 address as a browser reads it: hexadecimal, octal or decimal.
 _IPV4_PART = re.compile(r"0x[0-9a-f]*|0[0-7]*|[1-9][0-9]*")
 _ROOTS = frozenset({"Users", "home"})
@@ -152,21 +160,29 @@ def _ipv4_first_octet(host: str) -> int | None:
 
 def _is_remote_host(authority: str) -> bool:
     """Whether a URL's authority names another machine: a domain name or an IP address that
-    is not this machine's, whose server may serve its own files."""
-    host = unicodedata.normalize("NFKC", authority.rpartition("@")[2]).lower()
+    is not this machine's, whose server may serve its own files, then an optional port."""
+    split = _HOST_AND_PORT.fullmatch(authority.rpartition("@")[2])
+    if split is None or len(split[1]) > _MAX_HOST:
+        return False
+    host = split[1]
     if host.startswith("["):
+        if "%" in host:  # a zone ID, which a URL cannot carry
+            return False
         try:
-            address = ipaddress.IPv6Address(
-                host[1:].partition("]")[0].partition("%")[0]
-            )
+            address = ipaddress.IPv6Address(host[1:-1])
         except ValueError:
             return False
         if address.ipv4_mapped is not None:
             return address.ipv4_mapped.packed[0] not in (0, 127)
         return not (address.is_loopback or address.is_unspecified)
-    host = host.partition(":")[0].replace("\u3002", ".").removesuffix(".")
+    host = (
+        unicodedata.normalize("NFKC", host)
+        .lower()
+        .replace("\u3002", ".")
+        .removesuffix(".")
+    )
     return (
-        _DOMAIN.fullmatch(host) is not None
+        _NAME.fullmatch(host) is not None
         and host != "localhost"
         and not host.endswith(".localhost")
         and _ipv4_first_octet(host) not in (0, 127)
@@ -290,7 +306,6 @@ def home_path_hits(text: str) -> list[tuple[int, int]]:
             match
             for match in _CANDIDATE.finditer(line)
             if any(char.isalnum() for char in match["name"])
-            and (match["root"], match["name"]) != ("Users", "Shared")
         ]
         if not candidates:
             continue
@@ -399,6 +414,12 @@ def test_tracked_docs_have_no_home_paths() -> None:
         "https://[::1]/home/jane/profile and http://app.localhost/Users/jane",
         # Text in a host's place names no web server.
         "~~https://e.org~~/Users/jane~~ and https://[zz]/home/jane and https:///home/jane",
+        "https://[2001:db8::1]~~/Users/jane and https://example.org:hello/Users/jane",
+        "https://[2001:db8::1%25eth0]/home/jane and https://"
+        + "a" * 256
+        + "/home/jane",
+        # A host of 5,000 digits is longer than any domain name.
+        "http://" + "1" * 5_000 + "/home/jane",
         # Overlapping candidates: a volume named for a root.
         "/Volumes/home/Users/jane/repo and /Volumes/Users/Users/jane/repo",
         # A marker that is not the last token on its line does not count.
@@ -446,12 +467,13 @@ def test_home_path_is_reported(line: str) -> None:
         "/var/Users/jane and /usr/Users/jane and /host_mnt/home/jane and /Volumes/x/home/jane",
         "/var/lib/home/jane and /System/Volumes/Data/opt/home/jane and /Volumes/home/jane",
         "http://localhost:8000/app/home/jane and http://127.0.0.1/srv/Users/jane",
-        "/Users/Shared/Relocated Items and /System/Volumes/Data/Users/Shared",
+        "https://example.org:8080/Users/jane and https://[2001:DB8::1]:443/home/jane",
+        "https://" + "a" * 251 + ".org/home/jane",
         "https://b\u00fccher.example/home/jane and https://ex_1.example.org/Users/jane",
         # A host is judged by its name, so a LAN address or a ``.local`` name counts as remote.
         "http://192.168.1.20:5173/@fs/Users/jane and http://mac.local/Users/jane",
-        # A host of 5,000 digits is too long for an IPv4 address.
-        "http://" + "1" * 5_000 + "/home/jane",
+        # A host of 250 digits is too long for an IPv4 address.
+        "http://" + "1" * 250 + "/home/jane",
     ],
 )
 def test_non_path_is_not_reported(line: str) -> None:
@@ -471,6 +493,7 @@ def test_non_path_is_not_reported(line: str) -> None:
         "[Dashboard](http://localhost:3000/home/dashboard)",
         '<script src="//cdn.example.org/home/app.js"></script>',
         "data/var/home/jane/report.json",
+        "/Users/Shared/Relocated Items and /System/Volumes/Data/Users/Shared",
     ],
 )
 def test_allow_marker_clears_text_that_is_not_a_home_path(line: str) -> None:
@@ -516,13 +539,20 @@ def test_allow_marker_counts_only_as_the_last_token_on_its_line(line: str) -> No
         ("http://a/" + "(" * 20_000 + " /home/jane", [(1, 20_011)]),
         # 20,000 overlapping candidates, then a home on a volume named for a root.
         ("/x" + "/home" * 20_000 + " /Volumes/home/Users/jane", [(1, 100_017)]),
+        # A host of 40,000 combining marks, whose normalization would be quadratic.
+        ("http://a" + "\u0315\u0300" * 20_000 + "/home/jane", [(1, 40_009)]),
+        # 2,000 hosts of 254 combining marks each.
+        (("http://a" + "\u0315\u0300" * 127 + "/x ") * 2_000, []),
     ],
     ids=[
-        "glued-candidates",
-        "glued-urls",
-        "urls-and-candidates",
-        "url-brackets",
-        "overlap",
+        *[
+            "glued-candidates",
+            "glued-urls",
+            "urls-and-candidates",
+            "url-brackets",
+            "overlap",
+        ],
+        *["long-host-of-marks", "hosts-of-marks"],
     ],
 )
 def test_scan_is_linear_in_line_length(line: str, hits: list[tuple[int, int]]) -> None:
@@ -553,15 +583,47 @@ def test_local_host_is_read_after_unicode_normalization(host: str) -> None:
 
 
 @pytest.mark.parametrize(
+    ("authority", "remote"),
+    [
+        *[("example.org", True), ("example.org:8080", True), ("example.org:", True)],
+        *[
+            ("u:p@example.org", True),
+            ("93.184.215.14", True),
+            ("b\u00fccher.example", True),
+        ],
+        *[("[2001:db8::1]", True), ("[2001:DB8::1]:443", True), ("a" * 255, True)],
+        *[
+            ("example.org:hello", False),
+            ("example.org:\uff18\uff10", False),
+            ("e.org~~", False),
+        ],
+        *[("[2001:db8::1]~~", False), ("[2001:db8::1%25eth0]", False), ("[zz]", False)],
+        *[("", False), ("a" * 256, False), ("1" * 256, False), ("a[b]", False)],
+        *[("localhost:5173", False), ("[::1]:8000", False), ("[2001:db8::1]:", True)],
+        *[
+            ("[::1]", False),
+            ("[::ffff:127.0.0.1]", False),
+            ("127.1", False),
+            ("0x7f.1", False),
+        ],
+    ],
+)
+def test_remote_host_is_a_name_or_address_then_a_port_of_digits(
+    authority: str, remote: bool
+) -> None:
+    assert _is_remote_host(authority) is remote
+
+
+@pytest.mark.parametrize(
     ("host", "local"),
     [
-        ("0x" + "0" * 5_000 + "7f.1", True),
-        ("0" * 5_000 + "177.1", True),
-        ("1" * 5_000, False),
+        ("0x" + "0" * 240 + "7f.1", True),
+        ("0" * 240 + "177.1", True),
+        ("1" * 250, False),
         ("0x1" + "0" * 8, False),
     ],
 )
-def test_ipv4_host_of_any_length_is_read(host: str, local: bool) -> None:
+def test_ipv4_host_of_many_digits_is_read(host: str, local: bool) -> None:
     assert len(home_path_hits(f"http://{host}/home/jane")) == local
 
 
@@ -639,9 +701,7 @@ def test_web_url_paths_agree_with_one_url_at_a_time(line: str) -> None:
     assert [bool(flag) for flag in _web_url_paths(line)] == expected
 
 
-_NAMES = st.from_regex(r"[A-Za-z0-9][A-Za-z0-9._-]{0,19}", fullmatch=True).filter(
-    lambda name: name != "Shared"
-)
+_NAMES = st.from_regex(r"[A-Za-z0-9][A-Za-z0-9._-]{0,19}", fullmatch=True)
 # Filler holds no slash, so it can neither start nor extend a path or a URL.
 _FILLER = st.text(
     alphabet=st.characters(blacklist_characters="/\n", blacklist_categories=("Cs",)),
