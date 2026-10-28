@@ -24,7 +24,8 @@ Invariants:
      ``localhost``, ``*.localhost``, ``127.0.0.0/8`` or ``0.0.0.0/8`` in any
      IPv4 spelling, ``[::1]``, ``[::]`` or their IPv4-mapped forms. A name is
      read after Unicode compatibility normalization, with an ideographic full
-     stop as ``.``, so fullwidth ``localhost`` is local. A local host may
+     stop as ``.``, so fullwidth ``localhost`` is local. A Hangul filler is
+     not a letter here, because a browser drops it from a host. A local host may
      serve its own files (``http://localhost:5173/@fs/Users/<name>``), and
      any other text in the host's place (``https://e.org~~/Users/<name>``, a
      strikethrough, ``https://example.org:hello/Users/<name>``) names no web
@@ -113,7 +114,9 @@ _URL_PATH_CHARS = frozenset("-._~/#])%\\")
 _AUTHORITY = re.compile(r"[^/\\?#]*")
 # A host, then an optional port of ASCII digits.
 _HOST_AND_PORT = re.compile(r"(\[[^\]]*\]|[^:\[\]]*)(?::[0-9]*)?")
-_NAME = re.compile(r"[\w.-]+")
+# Letters and digits but the two Hangul fillers left after normalization: they are the only
+# default-ignorable characters that are letters, and a browser drops them from a host.
+_NAME = re.compile(r"(?:[^\W\u115f\u1160]|[.-])+")
 # No DNS name is longer. The bound also keeps normalization linear across a line where
 # normalizing a run of combining marks is quadratic (Python 3.14.0).
 _MAX_HOST = 255
@@ -540,20 +543,13 @@ def test_allow_marker_counts_only_as_the_last_token_on_its_line(line: str) -> No
         ("http://a/" + "(" * 20_000 + " /home/jane", [(1, 20_011)]),
         # 20,000 overlapping candidates, then a home on a volume named for a root.
         ("/x" + "/home" * 20_000 + " /Volumes/home/Users/jane", [(1, 100_017)]),
-        # A host of 40,000 combining marks, whose normalization would be quadratic.
-        ("http://a" + "\u0315\u0300" * 20_000 + "/home/jane", [(1, 40_009)]),
-        # 2,000 hosts of 254 combining marks each.
-        (("http://a" + "\u0315\u0300" * 127 + "/x ") * 2_000, []),
     ],
     ids=[
-        *[
-            "glued-candidates",
-            "glued-urls",
-            "urls-and-candidates",
-            "url-brackets",
-            "overlap",
-        ],
-        *["long-host-of-marks", "hosts-of-marks"],
+        "glued-candidates",
+        "glued-urls",
+        "urls-and-candidates",
+        "url-brackets",
+        "overlap",
     ],
 )
 def test_scan_is_linear_in_line_length(line: str, hits: list[tuple[int, int]]) -> None:
@@ -561,6 +557,43 @@ def test_scan_is_linear_in_line_length(line: str, hits: list[tuple[int, int]]) -
     assert home_path_hits(line) == hits
     # A quadratic scan of these lines takes hours; a linear one takes well under a second.
     assert time.perf_counter() - began < 60
+
+
+@pytest.mark.parametrize(
+    ("line", "normalized", "hits"),
+    [
+        # A host of 40,000 combining marks is longer than any domain name.
+        ("http://a" + "\u0315\u0300" * 20_000 + "/home/jane", 0, [(1, 40_009)]),
+        # 2,000 hosts of 254 combining marks, each followed by a candidate. Marks are not
+        # letters, so no host is a name and every candidate is reported.
+        (
+            ("http://a" + "\u0315\u0300" * 127 + "/home/jane ") * 2_000,
+            2_000,
+            [(1, 263 + 273 * index) for index in range(2_000)],
+        ),
+        # 2,000 remote hosts of 255 characters, each followed by a candidate.
+        (("https://" + "a" * 251 + ".org/home/jane ") * 2_000, 2_000, []),
+    ],
+    ids=["long-host-of-marks", "hosts-of-marks", "longest-hosts"],
+)
+def test_each_host_is_normalized_once_and_at_most_255_characters(
+    monkeypatch: pytest.MonkeyPatch,
+    line: str,
+    normalized: int,
+    hits: list[tuple[int, int]],
+) -> None:
+    # Normalizing a run of combining marks takes quadratic time on Python 3.14.0, so
+    # invariant 4 rests on this bound, which a timing on a later runtime cannot see.
+    normalize, lengths = unicodedata.normalize, []
+
+    def counting_normalize(form: str, text: str) -> str:
+        lengths.append(len(text))
+        return normalize(form, text)
+
+    monkeypatch.setattr(unicodedata, "normalize", counting_normalize)
+    assert home_path_hits(line) == hits
+    assert len(lengths) == normalized
+    assert max(lengths, default=0) <= 255
 
 
 def _fullwidth(text: str) -> str:
@@ -607,6 +640,12 @@ def test_local_host_is_read_after_unicode_normalization(host: str) -> None:
             ("127.1", False),
             ("0x7f.1", False),
         ],
+        *[
+            ("127.0.0.\u115f1", False),
+            ("local\u1160host", False),
+            ("\u3164example.org", False),
+        ],
+        *[("example.org\uffa0", False), ("\uc608\uc2dc.example", True)],
     ],
 )
 def test_remote_host_is_a_name_or_address_then_a_port_of_digits(
