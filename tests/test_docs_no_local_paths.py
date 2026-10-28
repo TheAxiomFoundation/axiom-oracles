@@ -559,45 +559,57 @@ def test_scan_is_linear_in_line_length(line: str, hits: list[tuple[int, int]]) -
     assert time.perf_counter() - began < 60
 
 
+_MARKS = "\u0315\u0300"
+
+
 @pytest.mark.parametrize(
     ("line", "normalized", "hits"),
     [
         # A host of 40,000 combining marks is longer than any domain name.
-        ("http://a" + "\u0315\u0300" * 20_000 + "/home/jane", 0, [(1, 40_009)]),
+        ("http://a" + _MARKS * 20_000 + "/home/jane", [], [(1, 40_009)]),
         # 2,000 hosts of 254 combining marks, each followed by a candidate. Marks are not
         # letters, so no host is a name and every candidate is reported.
         (
-            ("http://a" + "\u0315\u0300" * 127 + "/home/jane ") * 2_000,
-            2_000,
+            ("http://a" + _MARKS * 127 + "/home/jane ") * 2_000,
+            ["a" + _MARKS * 127] * 2_000,
             [(1, 263 + 273 * index) for index in range(2_000)],
         ),
         # 2,000 remote hosts of 255 characters, each followed by a candidate.
-        (("https://" + "a" * 251 + ".org/home/jane ") * 2_000, 2_000, []),
-        # Only the host is normalized: not 40,000 marks in the userinfo, nor a port of 40,000
-        # digits.
-        ("http://" + "\u0315\u0300" * 20_000 + "@a/home/jane", 1, []),
-        ("http://a:" + "0" * 40_000 + "/home/jane", 1, []),
+        (
+            ("https://" + "a" * 251 + ".org/home/jane ") * 2_000,
+            ["a" * 251 + ".org"] * 2_000,
+            [],
+        ),
+        # Only a name is normalized: not 40,000 marks in the userinfo, nor a port of 40,000
+        # digits, nor anything around a bracketed address.
+        ("http://" + _MARKS * 20_000 + "@a/home/jane", ["a"], []),
+        ("http://a:" + "0" * 40_000 + "/home/jane", ["a"], []),
+        ("http://" + _MARKS * 20_000 + "@[2001:db8::1]/home/jane", [], []),
+        ("http://[2001:db8::1]:" + "0" * 40_000 + "/home/jane", [], []),
     ],
-    ids=["long-host-of-marks", "hosts-of-marks", "longest-hosts", "userinfo", "port"],
+    ids=[
+        *["long-host-of-marks", "hosts-of-marks", "longest-hosts", "userinfo", "port"],
+        *["bracketed-userinfo", "bracketed-port"],
+    ],
 )
 def test_each_host_is_normalized_once_and_at_most_255_characters(
     monkeypatch: pytest.MonkeyPatch,
     line: str,
-    normalized: int,
+    normalized: list[str],
     hits: list[tuple[int, int]],
 ) -> None:
     # Normalizing a run of combining marks takes quadratic time on Python 3.14.0, so
     # invariant 4 rests on this bound, which a timing on a later runtime cannot see.
-    normalize, lengths = unicodedata.normalize, []
+    normalize, inputs = unicodedata.normalize, []
 
-    def counting_normalize(form: str, text: str) -> str:
-        lengths.append(len(text))
+    def recording_normalize(form: str, text: str) -> str:
+        inputs.append(text)
         return normalize(form, text)
 
-    monkeypatch.setattr(unicodedata, "normalize", counting_normalize)
+    monkeypatch.setattr(unicodedata, "normalize", recording_normalize)
     assert home_path_hits(line) == hits
-    assert len(lengths) == normalized
-    assert max(lengths, default=0) <= 255
+    assert inputs == normalized
+    assert all(len(text) <= 255 for text in inputs)
 
 
 def _fullwidth(text: str) -> str:
