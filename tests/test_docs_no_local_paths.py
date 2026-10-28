@@ -23,8 +23,9 @@ Invariants:
      (``http://localhost:5173/@fs/Users/<name>``), so its path is scanned too;
    - the path in front of it keeps it below a filesystem root. The segments
      in front (letters, digits, ``.``, ``_``, ``-``, joined by separators)
-     resolve as in ``posixpath.normpath``, and at least one must remain (``/opt/x/home/<name>``, ``$ROOT/x/home/<name>``) that is not
-     a home mount: ``/System/Volumes/Data`` (macOS) for either root,
+     resolve as in ``posixpath.normpath``, and at least one must remain
+     (``/opt/x/home/<name>``, ``$ROOT/x/home/<name>``) that is not a home
+     mount: ``/System/Volumes/Data`` (macOS) for either root,
      ``/Volumes/<volume>`` (macOS) and ``/host_mnt`` (Docker Desktop) for
      ``Users``, ``/var`` (Fedora Atomic) and ``/usr`` (FreeBSD) for ``home``.
      A path starting with ``.`` or ``..`` is relative and always qualifies
