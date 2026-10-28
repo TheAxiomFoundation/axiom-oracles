@@ -105,13 +105,13 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             ${{ runner.temp }}/nz-engine-target
-          key: nz-engine-${{ runner.os }}-d59969b53430ae2fd97eb4349d44ad23ce930d85
+          key: nz-engine-${{ runner.os }}-363c6a6c56f7ad130996b63f7a09cfd4c3d9b021
 
       - name: Checkout pinned NZ engine source
         uses: actions/checkout@v4
         with:
           repository: TheAxiomFoundation/axiom-rules-engine
-          ref: d59969b53430ae2fd97eb4349d44ad23ce930d85
+          ref: 363c6a6c56f7ad130996b63f7a09cfd4c3d9b021
           path: .ci/axiom-rules-engine
           token: ${{ secrets.GITHUB_TOKEN }}
 

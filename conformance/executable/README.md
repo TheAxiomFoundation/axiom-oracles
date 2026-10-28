@@ -5,8 +5,9 @@ certificate accepts one only through the producer named in `scripts/certify.py`;
 the producer must validate committed artifact bytes, requests, golden outputs,
 and the bound transcript and must return a re-derived `executable` Boolean.
 
-The NZ receipt commits the exact 703,295-byte comparison composition whose
-SHA-256 was recorded by the original harness. Its request set is the 19 engine
+The NZ receipt commits the exact 1,153,339-byte compiled comparison artifact whose
+SHA-256 was re-derived by rerunning the pinned harness on engine `363c6a6c`.
+Its request set is the 19 engine
 calls made while evaluating the
 `single_parent_three_children_area1_rent` scenario at weekly wages 0 and 740.
 Those calls cover all 19 requested RuleSpec output roots and support 22 of the

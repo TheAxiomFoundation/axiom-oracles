@@ -3,7 +3,7 @@
 Threshold admission is opt-in; the default census and
 certificate generators do not apply these results to published exercise flags.
 
-The sparse evaluator at engine d59969b53430ae2fd97eb4349d44ad23ce930d85
+The sparse evaluator at engine 363c6a6c56f7ad130996b63f7a09cfd4c3d9b021
 (`src/engine.rs`, `src/model.rs`, `src/compile.rs`) uses rust_decimal 1.41:
 96-bit coefficients, scale at most 28, and nearest-even arithmetic rounding.
 We retain Decimal values, fit each arithmetic result to that representation,
@@ -127,9 +127,20 @@ class Interpreter:
     def __init__(self, artifact: dict):
         if (
             type(artifact.get("artifact_format_version")) is not int
-            or artifact["artifact_format_version"] != 1
+            or artifact["artifact_format_version"] not in {1, 2}
         ):
             raise InterpretationError("unsupported compiled artifact format")
+        # The NZ v2 capture has only unbounded versions. Bounded v2 rules
+        # require end-date selection that this interpreter does not support.
+        if artifact["artifact_format_version"] == 2 and any(
+            version.get("effective_to") is not None
+            for row in (
+                *artifact["program"]["derived"],
+                *artifact["program"]["parameters"],
+            )
+            for version in row.get("versions", [])
+        ):
+            raise InterpretationError("bounded compiled artifact versions are unsupported")
         self.artifact = artifact
         self.derived = {row["name"]: row for row in artifact["program"]["derived"]}
         self.parameters = {

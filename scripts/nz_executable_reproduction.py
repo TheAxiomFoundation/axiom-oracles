@@ -78,23 +78,23 @@ HARNESS_SHA256 = "9aa0fc64af8dca4a8f7574e98923fe0022561679027c2ed5325bf381e9c6ab
 RULESPEC_REPO = "TheAxiomFoundation/rulespec-nz"
 RULESPEC_SHA = "89a7d25dc03a4d045348620283332de10b1047da"
 ENGINE_REPO = "TheAxiomFoundation/axiom-rules-engine"
-ENGINE_GIT_SHA = "d59969b53430ae2fd97eb4349d44ad23ce930d85"
+ENGINE_GIT_SHA = "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021"
 # Historical capture provenance. A source-built Linux binary is instead bound
 # by its exact Git checkout plus ``cargo build --locked`` because this digest
 # names the pinned Mach-O arm64 build and cannot be cross-platform identical.
 ENGINE_BINARY_SHA256 = (
-    "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1"
+    "f63fb4912df57c1ae897a9e5fe53634b215646a1ad49757397dbb75d32803a8d"
 )
 COMPOSITION_SHA256 = "af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0"
-COMPILED_SHA256 = "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33"
+COMPILED_SHA256 = "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91"
 EVALUATION_TRACE_SHA256 = (
-    "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+    "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
 )
 TREASURY_SNAPSHOT_SHA256 = (
     "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
 )
 SOURCE_REPORT_SHA256 = (
-    "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+    "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
 )
 SOURCE_COMPARISON_HARNESS = {
     "repository": "TheAxiomFoundation/ops",

@@ -8,7 +8,7 @@
   },
   "executable_request_evidence": {
     "artifact": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
-    "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+    "sha256": "e5351c383a83b21a5cd2b94c2cec0b4221168ef7e581ba9b257e3c16b6901111"
   },
   "jurisdiction": "nz",
   "pending_citations": [
@@ -493,7 +493,7 @@
   },
   "requested_output_trace": {
     "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
-    "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+    "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
   },
   "roots": [
     {

@@ -15,19 +15,19 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
       "claim": "view-scoped evaluation traces:nz/independent-earner-tax-credit",
       "mode": "computed",
-      "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+      "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
     },
     {
       "artifact": "dashboard/public/data/nz-treasury-incomeexplorer.json",
       "claim": "suite:nz-treasury-incomeexplorer",
       "mode": "computed",
-      "sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784"
+      "sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438"
     },
     {
       "artifact": "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json",
       "claim": "case-evidence-index:nz-treasury-incomeexplorer",
       "mode": "computed",
-      "sha256": "3b15ade1e8a628cd0e9606379e126540a283ebca9b37ac1f580dc5b766ea6a58"
+      "sha256": "0587d8702e0ae6802f6e0ae03aa516643ff74ba7ed2e5d0a335318d5b60aa4a4"
     },
     {
       "artifact": "dispositions/nz-treasury-incomeexplorer.yaml",
@@ -45,21 +45,21 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
       "claim": "compiled input universe and capture cardinality",
       "mode": "computed",
-      "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b",
+      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
       "verification": "producer_cross_derivation"
     },
     {
       "artifact": "closure/nz/summary.json",
       "claim": "closed:nz/independent-earner-tax-credit",
       "mode": "computed",
-      "sha256": "fd4b33acae0040579c0920c9913c5d641a5b13e1cff1096f22d2c9e21a5c1ac2",
+      "sha256": "865538456a23546e8436cb7c4d85acdd65c2223795ff75ee9673fc7f0744f20d",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "conformance/executable/nz-treasury-incomeexplorer.json",
       "claim": "executable:nz/independent-earner-tax-credit",
       "mode": "computed",
-      "sha256": "aa2c65ac46753711d49987efda746fcb95e4a744cc2930a17bc56c4a84abec59",
+      "sha256": "c401f8e9553bc1610908ee30ed60bfcf8f31561b0fef1d33129a019ece6343f7",
       "verification": "producer_artifact_validation"
     }
   ],
@@ -134,29 +134,29 @@
     "executable": {
       "artifact": "conformance/executable/nz-treasury-incomeexplorer.json",
       "compiled_artifact": {
-        "byte_count": 703295,
+        "byte_count": 1153339,
         "compile_contract": "compile-composed",
         "path": "conformance/executable/nz-treasury-incomeexplorer/compiled-program.json",
-        "sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33"
+        "sha256": "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91"
       },
       "engine": {
         "ci_replay_build": "cargo build --locked --release --bin axiom-rules-engine",
-        "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
-        "historical_capture_binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
+        "git_sha": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
+        "historical_capture_binary_sha256": "f63fb4912df57c1ae897a9e5fe53634b215646a1ad49757397dbb75d32803a8d",
         "repository": "TheAxiomFoundation/axiom-rules-engine"
       },
       "execution_trace": {
         "evaluation_count": 883,
         "path": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
-        "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+        "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
       },
       "full_responses": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/full-responses.json",
-        "sha256": "085daf12c203e0d1431234deaf733cf02caed725e3fd609e77f9f9ca803960eb"
+        "sha256": "9d8636fa330b69d1ac1cb2eb04fdc328b048a38798e54dbb661ecc037cbcddb8"
       },
       "independent_expected": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
-        "sha256": "3dd39c348339d733562cd810e514dc34b42c0c69bf79a2b06393e64458f1d7f7"
+        "sha256": "bd6012eb467e072c1ebcb35e289c1e146b59e6cf917b16ee5e56925d67355033"
       },
       "mode": "computed",
       "reducer": {
@@ -166,7 +166,7 @@
       },
       "request_set": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
-        "sha256": "ed83b26c3221c253b13a9df307567e09948b2e9337ff5289729276b6b6ed6272"
+        "sha256": "e5351c383a83b21a5cd2b94c2cec0b4221168ef7e581ba9b257e3c16b6901111"
       },
       "rulespec_sha": "89a7d25dc03a4d045348620283332de10b1047da",
       "status": "computed_pass",
@@ -180,7 +180,7 @@
       },
       "transcript": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/transcript.json",
-        "sha256": "646030d17c500cc86ba16e9669dc46d53b8f60e03f32a8a68a7b35b5ad873a35"
+        "sha256": "0f47b67829d693dc4daa2548d7f22beb0e1f6c5491818447cf8cb15b8ccb5d6c"
       },
       "treasury_snapshot": {
         "path": "comparisons/nz-treasury-incomeexplorer/treasury-emtr-snapshot-expanded.json",
@@ -199,7 +199,7 @@
         "input_count": 328,
         "mode": "computed",
         "not_supplied_count": 178,
-        "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b",
+        "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
         "supplied_input_count": 150,
         "universe_source": "compiled-artifact metadata.input_catalog (byte-verified)"
       },
@@ -215,10 +215,10 @@
           "per_evaluation_traces_committed": true,
           "reconciliation": "exact",
           "registry_report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
-          "registry_report_sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784",
+          "registry_report_sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438",
           "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
           "report_identity_matches_registry": true,
-          "report_sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784",
+          "report_sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438",
           "requested_output_root_sets": [
             [
               "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit"
@@ -295,7 +295,7 @@
           ],
           "trace_artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
           "trace_binding": "bound",
-          "trace_sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da",
+          "trace_sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179",
           "varied_fields": 4,
           "view": "nz/independent-earner-tax-credit"
         }

@@ -137,7 +137,7 @@
   "case_count": 104,
   "cases": [],
   "compiled_program": {
-    "artifact_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+    "artifact_sha256": "399aac72752faf6725f09cc4ca80f09ff4bcdee56af14d8a22917e4064f53b91",
     "derived_outputs": 176,
     "engine_evaluations": 883,
     "input_slots": 328,
@@ -2105,7 +2105,7 @@
       "limitation": "No committed compiled-program artifact or compiler-produced catalog enumeration proves the complete input denominator.",
       "mode": "attested",
       "not_supplied_count": 178,
-      "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b",
+      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
       "supplied_input_count": 150
     },
     "eligibility_closures": {
@@ -2118,7 +2118,7 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
       "capture_lineage_mode": "attested",
       "schema": "axiom_oracles.nz_evaluation_traces.v1",
-      "sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+      "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
     },
     "views": {
       "nz/acc-earners-levy": {
@@ -13962,30 +13962,35 @@
   "provenance": {
     "baseline_oracle_regeneration": {
       "byte_identical": true,
-      "path": "/Users/maxghenis/TheAxiomFoundation/_axiom-worktrees/rulespec-nz-emtr/rulespec-nz/data/oracles/treasury-emtr-snapshot.json",
+      "path": "/private/tmp/hub-epm/checkouts/rulespec-nz/data/oracles/treasury-emtr-snapshot.json",
       "sha256": "3f4ea311825b316d63910ce37c18e5980ef256df89d1eb5ec8442b4d1351c3c5"
     },
     "composition": {
-      "path": "/private/tmp/ops-nz-closures-inputs/nz-lane/emtr_reproduction/composition.yaml",
+      "path": "/private/tmp/hub-epm-w6-ops/nz-lane/emtr_reproduction/composition.yaml",
       "sha256": "af2ce73f1b16a74603965db1da92991545838748e943f3ed81cef394d469c3b0"
     },
     "eligibility_closures": {
-      "path": "/private/tmp/ops-nz-closures-inputs/nz-lane/emtr_reproduction/eligibility-closures.json",
+      "path": "/private/tmp/hub-epm-w6-ops/nz-lane/emtr_reproduction/eligibility-closures.json",
       "sha256": "a13881f452031d2875becb5a44d008da1dff5db0c001c5f3df959cfb69ed0324",
       "version": "2026-08-13"
     },
     "engine": {
-      "binary": "/Users/maxghenis/TheAxiomFoundation/_worktrees/engine-release-clone/target/release/axiom-rules-engine",
-      "binary_sha256": "56fbffea1e0e32c52b6fcbddbca76223bb185b33b49368c288e0c7213b0126e1",
-      "expected_git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
-      "git_sha": "d59969b53430ae2fd97eb4349d44ad23ce930d85",
-      "root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/engine-release-clone",
+      "binary": "/private/tmp/hub-epm/engine-363c6a6c/target/release/axiom-rules-engine",
+      "binary_sha256": "f63fb4912df57c1ae897a9e5fe53634b215646a1ad49757397dbb75d32803a8d",
+      "commit": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
+      "expected_git_sha": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
+      "git_sha": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021",
+      "root": "/private/tmp/hub-epm/engine-363c6a6c",
       "tracked_dirty": false
     },
     "generated_by": "scripts/nz_incomeexplorer.py",
     "harness_note": {
-      "description": "The comparison run predates the eligibility-closures loader commit and was produced by the pre-loader run.py; source_comparison_harness identifies the canonical merged version that consumes the versioned closures.",
-      "run_hash_at_generation": "1fc9654db16b3b5928ceeb2441e3c06fc95a4485c66f9123a17f75a17fd40b92"
+      "description": "Pinned harness rerun with only EXPECTED_ENGINE_SHA changed; capture-only instrumentation wraps run_checked externally.",
+      "engine_pin_override": {
+        "constant": "EXPECTED_ENGINE_SHA",
+        "value": "363c6a6c56f7ad130996b63f7a09cfd4c3d9b021"
+      },
+      "run_hash_at_generation": "2c36b48371dc19b96ff976e031d0d253c889002e47f9582a9b4af5593e003d9e"
     },
     "oracle_generator": {
       "path": "nz-lane/emtr_reproduction/generate_treasury_emtr_snapshot_expanded.R",
@@ -14004,7 +14009,7 @@
     "rulespec": {
       "expected_git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
       "git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
-      "root": "/Users/maxghenis/TheAxiomFoundation/_axiom-worktrees/rulespec-nz-emtr/rulespec-nz",
+      "root": "/private/tmp/hub-epm/checkouts/rulespec-nz",
       "tracked_dirty": false
     },
     "source_comparison_harness": {
@@ -14016,7 +14021,7 @@
     },
     "source_receipt": {
       "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-      "sha256": "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
     },
     "treasury_checkout": {
       "git_sha": "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b",

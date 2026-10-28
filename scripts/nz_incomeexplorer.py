@@ -56,19 +56,19 @@ SCHEMA = "axiom.unified_comparison_record.v1"
 SUITE = "nz-treasury-incomeexplorer"
 TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.v1"
 RAW_TRACE_SCHEMA = "axiom_oracles.nz_evaluation_traces.raw.v1"
-SOURCE_SHA256 = "abd3bcbebc01c73e58c27496db5897a306bb0496ae1d53e5abbd5ae487010b3b"
+SOURCE_SHA256 = "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
 SNAPSHOT_SHA256 = "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
 # The regenerated source differs from the committed source only in provenance.
 # It is an external receipt, so pin its claimed bytes rather than accepting an
 # arbitrary 64-character value from the trace document itself.
 REGENERATED_SOURCE_SHA256 = (
-    "7b58fcfdb50f8627f0228bf024d95cde3ef3d50caae7f2d9de2862d82ea6e8c6"
+    "70f636371ca78ca6abc38012f93146cfabcc90b29e28f9f432bc6636b425fbc5"
 )
 # Filled from the view-scoped trace artifact. The producer rejects even
 # semantically equivalent byte drift so certificates name one exact public
 # receipt. Capture lineage is explicitly attested; exercise observations are
 # computed from the committed bytes.
-TRACE_SHA256 = "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
+TRACE_SHA256 = "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
 TREASURY_COMMIT = "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b"
 AMOUNT_TOLERANCE = Decimal("0.005")
 ATTESTATION_BASELINE_SCENARIO = "single_no_children_area2_no_housing_costs"
