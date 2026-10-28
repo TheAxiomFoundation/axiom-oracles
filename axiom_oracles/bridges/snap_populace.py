@@ -31,6 +31,7 @@ from typing import Any
 
 import yaml
 
+from ..engine_identity import EngineIdentityError, engine_receipt, record_engine_receipt
 from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
@@ -1714,6 +1715,30 @@ def decimal_literal(value: float) -> str:
     return literal or "0"
 
 
+def _run_receipted_engine(
+    command: list[str], *, expected_receipt: dict[str, Any], **kwargs: Any
+) -> subprocess.CompletedProcess[str]:
+    """Verify and journal the exact executable used by a direct bridge call."""
+    before = engine_receipt(command[0])
+    if any(
+        before.get(field) != expected_receipt.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed before SNAP execution")
+    invocation = list(command)
+    if before.get("binary_sha256") is not None:
+        invocation[0] = before["binary_path"]
+    result = subprocess.run(invocation, **kwargs)
+    after = engine_receipt(invocation[0])
+    if any(
+        after.get(field) != before.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed during SNAP execution")
+    record_engine_receipt(before)
+    return result
+
+
 def compile_program(
     binary: Path,
     program: Path,
@@ -1733,6 +1758,13 @@ def compile_program(
         import_prefixes,
         stage_pure_root,
     )
+
+    expected_receipt = engine_receipt(binary)
+
+    def execute_engine(command: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+        return _run_receipted_engine(
+            command, expected_receipt=expected_receipt, **kwargs
+        )
 
     program_doc: dict = {}
     try:
@@ -1765,6 +1797,7 @@ def compile_program(
         roots=staged_roots or roots,
         composed=composed,
         env=env,
+        run=execute_engine,
     )
 
 
@@ -1780,6 +1813,7 @@ def run_axiom_cases(
     member_entity_type: str,
     env: dict[str, str],
 ) -> list[dict[str, Any]]:
+    expected_receipt = engine_receipt(binary)
     interval = {
         "start": period.start.isoformat(),
         "end": period.end.isoformat(),
@@ -1855,8 +1889,9 @@ def run_axiom_cases(
         binder=bind_request_relations,
     )
     ambiguities.extend(raw_ambiguities)
-    result = subprocess.run(
+    result = _run_receipted_engine(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
+        expected_receipt=expected_receipt,
         input=json.dumps(request),
         text=True,
         capture_output=True,

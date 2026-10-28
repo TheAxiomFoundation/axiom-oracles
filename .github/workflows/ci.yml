@@ -199,6 +199,9 @@ jobs:
       - name: Unexplained publication gate (per-suite ceilings only fall)
         run: uv run scripts/unexplained_ratchet.py --check
 
+      - name: Published Axiom engine identities (byte-identical legacy exceptions only)
+        run: uv run python scripts/check_engine_identity.py --check
+
       - name: PolicyEngine attributions carry their Axiom side (grandfathered list only shrinks; open debt only falls)
         # A mismatch blamed on PolicyEngine must cite the PolicyEngine issue
         # and declare axiom_companion or axiom_encoding_debt. Monotonicity is

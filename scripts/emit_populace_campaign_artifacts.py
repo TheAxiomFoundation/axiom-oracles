@@ -18,6 +18,7 @@ used.
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import sys
 from datetime import datetime
@@ -31,6 +32,11 @@ from axiom_oracles.comparison.dispositions import (
     load_dispositions,
 )
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
+from axiom_oracles.engine_identity import VERIFIED_RECEIPT
+from axiom_oracles.engine_publication import (
+    engine_identity_errors,
+    validate_engine_identity,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
@@ -334,6 +340,62 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
     return generated_at, run_kind, runtime
 
 
+def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict | None:
+    """Carry the source run's identity into its projection without relabelling.
+
+    Never inspect the publisher's engine checkout or executable. A campaign
+    with the canonical block keeps it verbatim, including any additional
+    receipt evidence, provided it came from a verified build receipt and agrees
+    with the campaign's runtime engine block. A runtime block whose commit came
+    from a verified build receipt is the same evidence under its historical
+    field names.
+
+    Campaigns from before receipts recorded the checkout's HEAD and the
+    executable's digest independently, so nothing binds that commit to those
+    bytes. Their projection asserts no engine identity (None): the evidence
+    stays under ``runtime_provenance``, an otherwise unchanged report keeps
+    its committed bytes, and publication admission accepts it only as a
+    byte-identical legacy exception until the campaign is rerun.
+    """
+
+    source_provenance = campaign.get("provenance")
+    if isinstance(source_provenance, dict) and "engine" in source_provenance:
+        engine = deepcopy(source_provenance["engine"])
+        validate_engine_identity({"provenance": {"engine": engine}})
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            raise ValueError("provenance.engine does not come from a verified build receipt")
+        # The runner writes both blocks from one receipt, so they must agree.
+        recorded = runtime.get("axiom_engine") if isinstance(runtime, dict) else None
+        if isinstance(recorded, dict):
+            for field, runtime_fields in (
+                ("commit", ("commit",)),
+                ("binary_sha256", ("binary_sha256", "executable_sha256")),
+            ):
+                for runtime_field in runtime_fields:
+                    value = recorded.get(runtime_field)
+                    if value is not None and str(value).lower() != engine[field].lower():
+                        raise ValueError(
+                            f"provenance.engine.{field} disagrees with "
+                            f"runtime_provenance.axiom_engine.{runtime_field}"
+                        )
+    else:
+        engine = deepcopy(runtime["axiom_engine"])
+        executable = engine.pop("executable_sha256")
+        if engine.setdefault("binary_sha256", executable) != executable:
+            raise ValueError(
+                "runtime_provenance.axiom_engine records two different "
+                "executable digests"
+            )
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            # Malformed historical evidence still fails closed.
+            errors = engine_identity_errors({"provenance": {"engine": engine}})
+            if errors:
+                raise ValueError("; ".join(errors))
+            return None
+    validate_engine_identity({"provenance": {"engine": engine}})
+    return engine
+
+
 def standard_mismatch_row(row: dict, *, concept: str) -> dict:
     """Give a campaign mismatch the v2 row identity dispositions select on.
 
@@ -419,6 +481,7 @@ def project_state(
     }
     generated_at, run_kind, runtime = validate_campaign_run_provenance(campaign)
     rulespec = runtime.get("rulespec") or {}
+    engine = campaign_engine_provenance(campaign, runtime)
     standard_provenance = build_provenance(
         generated_by=(
             "scripts/emit_populace_campaign_artifacts.py"
@@ -435,6 +498,8 @@ def project_state(
         if rulespec.get("repository")
         else None,
     )
+    if engine is not None:
+        standard_provenance["engine"] = engine
     standard_provenance.update(
         {
             "campaign_report": source_name,

@@ -1429,6 +1429,8 @@ def _engine_identity(*runners: EngineAdapter) -> dict | None:
     """The report's ``engine_identity`` block: binaries the runners executed."""
     identity: dict = {}
     for runner in runners:
+        if isinstance(runner, AxiomRulesRunner) and runner.engine_receipt:
+            identity["axiom"] = dict(runner.engine_receipt)
         if isinstance(runner, TaxsimPackageRunner):
             taxsim = runner.taxsim_identity()
             if taxsim:

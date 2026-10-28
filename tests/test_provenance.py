@@ -14,6 +14,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.provenance import (
     GIT_SHA,
@@ -103,10 +104,14 @@ def test_is_real_run_report(report, real):
 
 
 def test_build_provenance_always_has_schema_and_timestamp():
-    block = build_provenance(generated_by="x")
+    receipt = engine_provenance(None)
+    block = build_provenance(generated_by="x", engine=receipt)
     assert block["schema"] == PROVENANCE_SCHEMA_VERSION
     assert block["generated_at"].endswith("Z")
     assert block["run_kind"] in RUN_KINDS
+    assert block["engine"]["source_status"] == "unresolved"
+    assert block["engine"]["commit"] is None
+    assert block["engine"]["version"] is None
 
 
 def test_build_provenance_omits_empty_subblocks():
@@ -259,19 +264,40 @@ def test_rulespec_provenance_dedupes(tmp_path):
     assert entries == [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
 
 
-def test_engine_provenance_reads_cargo_version(tmp_path):
+def test_engine_provenance_checkout_cannot_prove_executable_identity(tmp_path):
     repo = tmp_path / "axiom-rules"
     repo.mkdir()
     (repo / "Cargo.toml").write_text(
         '[package]\nname = "axiom-rules-engine"\nversion = "0.4.2"\n'
     )
     prov = engine_provenance(repo)
-    assert prov["axiom_rules_engine_version"] == "0.4.2"
+    assert prov["commit"] is None
+    assert prov["binary_sha256"] is None
+    assert prov["version"] is None
+    assert prov["axiom_rules_engine_version"] is None
 
 
 def test_engine_provenance_none_repo():
     prov = engine_provenance(None)
     assert prov["axiom_rules_engine_sha"] is None
+    assert prov["commit"] is None
+    assert prov["source_status"] == "unresolved"
+
+
+def test_engine_provenance_reads_executable_receipt(tmp_path):
+    import hashlib
+    from axiom_oracles.engine_identity import engine_binding_receipt_path
+
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"actual executed bytes")
+    digest = hashlib.sha256(binary.read_bytes()).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "commit": "b" * 40, "binary_sha256": digest, "version": "0.4.2",
+    }))
+    prov = engine_provenance(tmp_path, binary_path=binary)
+    assert (prov["commit"], prov["binary_sha256"], prov["version"]) == (
+        "b" * 40, digest, "0.4.2",
+    )
 
 
 # --- dataset identity reuse -------------------------------------------------
@@ -883,7 +909,7 @@ def test_reemit_strips_shas_from_explicitly_configured_roots(tmp_path):
         assert entry.get("sha") is None, entry
 
 
-def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
+def test_reemit_keeps_the_copied_engine_identity_and_label(
     tmp_path, monkeypatch
 ):
     """A re-emission executed no engine, so it must not claim the leg's own
@@ -904,6 +930,7 @@ def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
     output = tmp_path / "r.json"
     copied = {
         "suite": "be-marital-quotient",
+        "provenance": {"engine": {"commit": "a" * 40, "version": "0.1.0"}},
         "engines": {
             "left": "euromod",
             "right": "axiom",
@@ -924,19 +951,131 @@ def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
     block = run_comparison._build_run_provenance(
         config, "euromod-synthetic-compare", output
     )
-    assert "engine" not in block
+    assert block["engine"] == copied["provenance"]["engine"]
     run_comparison._stamp_report_provenance(output, block)
     assert json.loads(output.read_text())["engines"]["versions"] == {
         "axiom_rules_engine": "0.1.0"
     }
 
-    # A real run still records, and labels the report with, the engine it ran.
+    # A real run uses the receipt the execution wrote, without querying HEAD.
     config["runner"].pop("_reemitted_report")
+    actual = {"commit": "e" * 40, "binary_sha256": "c" * 64,
+              "version": "0.2.2"}
+    output.write_text(json.dumps({**copied, "provenance": {"engine": actual}}))
     block = run_comparison._build_run_provenance(
         config, "euromod-synthetic-compare", output
     )
-    assert block["engine"]["axiom_rules_engine_version"] == "0.2.2"
+    assert block["engine"] == actual
     run_comparison._stamp_report_provenance(output, block)
     assert json.loads(output.read_text())["engines"]["versions"] == {
         "axiom_rules_engine": "0.2.2"
     }
+
+
+@settings(max_examples=100, deadline=None, suppress_health_check=[
+    HealthCheck.function_scoped_fixture, HealthCheck.too_slow,
+])
+@given(engine=st.dictionaries(
+    st.text(alphabet="abcdef_é0123456789", max_size=30),
+    st.one_of(st.none(), st.booleans(), st.integers(),
+              st.text(alphabet="abcdef_é0123456789", max_size=80),
+              st.lists(st.text(alphabet="abcdef_é0123456789", max_size=20), max_size=4)),
+    max_size=12,
+))
+def test_reemission_never_changes_copied_engine_block(tmp_path, engine):
+    runner = _load_run_comparison()
+    path = tmp_path / "copied.json"
+    path.write_text(json.dumps({
+        "engines": {"left": "axiom", "right": "oracle"},
+        "provenance": {"engine": engine},
+    }))
+    config = {"name": "copied", "runner": {
+        "parameters": {}, "_reemitted_report": True,
+        "_engine_receipt": {"commit": "f" * 40, "binary_sha256": "a" * 64},
+    }}
+    block = runner._build_run_provenance(config, "test-copy", path)
+    assert block["engine"] == engine
+    runner._stamp_report_provenance(path, block)
+    assert json.loads(path.read_text())["provenance"]["engine"] == engine
+    adapted = runner._preserve_relation_binding_diagnostics(
+        {"reemitted_report": True, "engine": {"commit": "f" * 40}},
+        {"engine": engine},
+    )
+    assert adapted["engine"] == engine
+
+
+def test_selected_executable_change_rejects_report_stamping(tmp_path):
+    from axiom_oracles.engine_identity import engine_receipt
+
+    runner = _load_run_comparison()
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"before execution")
+    receipt = engine_receipt(binary)
+    binary.write_bytes(b"after execution")
+    output = tmp_path / "report.json"
+    output.write_text('{}')
+    with pytest.raises(SystemExit, match="executable changed"):
+        runner._build_run_provenance({"runner": {
+            "parameters": {}, "_engine_receipt": receipt,
+        }}, "test-execution", output)
+
+
+def test_execution_receipt_disagreement_is_rejected(tmp_path):
+    runner = _load_run_comparison()
+    output = tmp_path / "report.json"
+    output.write_text(json.dumps({"provenance": {"engine": {
+        "commit": "a" * 40, "binary_sha256": "b" * 64,
+    }}}))
+    with pytest.raises(SystemExit, match="differs from selected receipt"):
+        runner._build_run_provenance({"runner": {"parameters": {},
+            "_engine_receipt": {"commit": "c" * 40, "binary_sha256": "b" * 64},
+        }}, "test-execution", output)
+
+
+@pytest.mark.parametrize('runner_type,adapter_name', [
+    ('axiom-encode-tax-ecps-compare', '_adapt_tax_ecps_to_v2'),
+    ('axiom-encode-uk-efrs-compare', '_adapt_uk_efrs_to_v2'),
+])
+def test_format_adapter_keeps_copied_engine_block(monkeypatch, runner_type, adapter_name):
+    registry = _load_run_comparison()
+    engine = {'commit': 'a' * 40, 'version': None, 'legacy': {'source': 'copied'}}
+    provenance = {'reemitted_report': True, 'engine': engine}
+    monkeypatch.setattr(registry, adapter_name, lambda *a, **k: {'summary': {}})
+    adapted = registry._adapt_raw_to_v2(
+        {'provenance': provenance}, runner_type, {}, suite='copy',
+    )
+    final = registry._preserve_relation_binding_diagnostics(provenance, adapted['provenance'])
+    assert final['engine'] == engine
+
+
+def test_preserved_producer_provenance_keeps_actual_execution_identity(tmp_path):
+    registry = _load_run_comparison()
+    path = tmp_path / 'producer.json'
+    path.write_text(json.dumps({'provenance': {
+        'engine': {'build_metadata': {'compiler': 'producer'}, 'version': 'old'},
+        'execution_receipt': {'producer_specific': True},
+    }}))
+    receipt = {'repository': 'TheAxiomFoundation/axiom-rules-engine',
+               'commit': 'c' * 40, 'binary_sha256': 'b' * 64, 'version': '1.0'}
+    registry._stamp_report_provenance(path, {'engine': receipt},
+                                      preserve_runner_provenance=True)
+    provenance = json.loads(path.read_text())['provenance']
+    assert {key: provenance['engine'][key] for key in receipt} == receipt
+    assert provenance['engine']['build_metadata'] == {'compiler': 'producer'}
+    assert provenance['execution_receipt'] == {'producer_specific': True}
+
+
+def test_preserved_producer_cannot_clear_copy_marker_or_replace_its_engine(tmp_path):
+    registry = _load_run_comparison()
+    path = tmp_path / 'copied-producer.json'
+    historical = {'commit': 'a' * 40, 'binary_sha256': 'b' * 64, 'version': None}
+    path.write_text(json.dumps({'provenance': {
+        'engine': historical, 'reemitted_report': False,
+    }}))
+    registry._stamp_report_provenance(path, {
+        'reemitted_report': True,
+        'engine': {'commit': 'c' * 40, 'binary_sha256': 'd' * 64},
+    }, preserve_runner_provenance=True)
+    provenance = json.loads(path.read_text())['provenance']
+    assert provenance['reemitted_report'] is True
+    assert provenance['engine'] == historical

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 from types import SimpleNamespace
 
 import pandas as pd
@@ -3478,7 +3479,6 @@ def test_runtime_provenance_uses_canonical_engine_repository(
     monkeypatch.setattr(
         state_tax_runner, "_clean_git_commit", fake_clean_git_commit
     )
-    monkeypatch.setattr(state_tax_runner, "_file_sha256", lambda _: "b" * 64)
     monkeypatch.setattr(state_tax_runner, "_package_version", lambda _: "1.0")
 
     provenance = state_tax_runner.runtime_provenance(
@@ -3488,11 +3488,83 @@ def test_runtime_provenance_uses_canonical_engine_repository(
 
     assert calls == [
         (rulespec_root, "TheAxiomFoundation/rulespec-us"),
-        (engine_root, "TheAxiomFoundation/axiom-rules-engine"),
     ]
     assert provenance["axiom_engine"]["repository"] == (
         "TheAxiomFoundation/axiom-rules-engine"
     )
+    # A neighbouring checkout's HEAD cannot identify these existing bytes.
+    engine = provenance["axiom_engine"]
+    assert engine["commit"] is None
+    assert engine["binary_sha256"] == hashlib.sha256(b"engine").hexdigest()
+    assert engine["executable_sha256"] == engine["binary_sha256"]
+    assert engine["source_status"].startswith("unresolved")
+
+
+@pytest.mark.parametrize("change_before_first_execution", [False, True])
+def test_campaign_rejects_engine_changed_between_state_executions(
+    tmp_path, monkeypatch, change_before_first_execution
+) -> None:
+    from axiom_oracles.bridges import tax_populace
+
+    engine_root = tmp_path / "engine"
+    binary = engine_root / "target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_bytes(b"original engine")
+    original_receipt = state_tax_runner.engine_receipt(binary)
+    jurisdictions = {
+        state: SimpleNamespace(
+            inputs=(), relations=(),
+            output=f"us-{state.lower()}:policies/income_tax/example#amount",
+            program=f"us-{state.lower()}:policies/income_tax/example",
+            tolerance=0.01, relative_tolerance=0.0,
+            policyengine_target="income_tax",
+        )
+        for state in ("CT", "UT")
+    }
+    contract = SimpleNamespace(
+        validation_year=2026, by_state=lambda: jurisdictions,
+    )
+    monkeypatch.setattr(state_tax_runner, "validate_state_tax_populace_contract", lambda value: value)
+    executed = []
+
+    def execute(**kwargs):
+        executed.append(binary.read_bytes())
+        return [
+            {"entity_id": query["entity_id"], "outputs": {
+                query["outputs"][0]: {"value": {"value": "0"}},
+            }}
+            for query in kwargs["request"]["queries"]
+        ]
+
+    monkeypatch.setattr(tax_populace, "run_axiom_program", execute)
+    observe = state_tax_runner.engine_receipt
+    observations = []
+
+    def change_between_executions(path):
+        receipt = observe(path)
+        observations.append(receipt)
+        # The first program and its post-execution observation see A; change
+        # to B only between programs, so each individual run would be stable.
+        if len(observations) == 2:
+            binary.write_bytes(b"replacement engine")
+        return receipt
+
+    monkeypatch.setattr(state_tax_runner, "engine_receipt", change_between_executions)
+    if change_before_first_execution:
+        binary.write_bytes(b"replacement engine")
+    with pytest.raises(StateTaxPopulationRoutingError, match="identity changed between campaign"):
+        compare_ready_state_tax_units(
+            routes=(
+                TaxUnitRoute(1, 1, "CT", "09", 1, DISPOSITION_READY),
+                TaxUnitRoute(2, 2, "UT", "49", 1, DISPOSITION_READY),
+            ),
+            policyengine_targets={"CT": {1: 0.0}, "UT": {2: 0.0}},
+            policyengine_projection_inputs={"CT": {}, "UT": {}},
+            year=2026, rulespec_root=tmp_path / "rulespec-us",
+            axiom_rules_path=engine_root, contract=contract,
+            expected_engine_receipt=original_receipt,
+        )
+    assert executed == ([] if change_before_first_execution else [b"original engine"])
 
 
 def test_ready_comparison_rejects_a_different_policy_year(tmp_path) -> None:

@@ -581,7 +581,7 @@ def test_engine_is_built_at_the_artifact_pin_and_shared_by_one_key():
         job: [
             step["with"]["key"]
             for step in _steps(job)
-            if (step.get("with") or {}).get("path") == engine
+            if engine in (step.get("with") or {}).get("path", "").splitlines()
         ]
         for job in ("prepare", "replay", "live-tests")
     }
@@ -593,6 +593,31 @@ def test_engine_is_built_at_the_artifact_pin_and_shared_by_one_key():
     assert _workflow()["jobs"]["prepare"]["outputs"]["engine_cache_key"] == (
         keys["prepare"][0]
     )
+
+
+def test_cached_engine_retains_build_receipt_and_every_job_verifies_its_own_bytes():
+    binary = "engine/target/release/axiom-rules-engine"
+    for job in ("prepare", "replay", "live-tests"):
+        steps = _steps(job)
+        cache = next(
+            step for step in steps
+            if binary in (step.get("with") or {}).get("path", "").splitlines()
+        )
+        assert cache["with"]["path"].splitlines() == [
+            binary, binary + ".provenance.json"
+        ]
+        verify = next(
+            step for step in steps
+            if "axiom_oracles.engine_identity inspect" in step.get("run", "")
+        )
+        assert "--expect-commit" in verify["run"]
+        assert "if" not in verify  # Includes cache-hit executions without a checkout.
+        assert binary in verify["run"]
+    build = next(step for step in _steps("prepare") if step.get("name") == "Build axiom-rules-engine")
+    assert "axiom_oracles.engine_identity build" in build["run"]
+    assert "--repo ../engine" in build["run"]
+    assert "-j 4" in build["run"]
+    assert "receipt-v1" in "\n".join(step.get("run", "") for step in _steps("prepare"))
 
 
 def test_every_job_runs_on_one_pinned_image():
