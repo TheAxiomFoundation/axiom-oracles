@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: sc-snap-ecps
-updated: '2026-08-16'
+updated: '2026-10-28'
 entries:
 - id: sc-bbce-gross-band-snap_eligible
   concept: us:statutes/7/2014/o#snap_eligible
@@ -2093,21 +2093,22 @@ entries:
       0, because member 0 earns 2954.56/month, above the 2026 non-blind SGA limit 1690, so ssi_engaged_in_sga=True
       screens the status out; (4) meets_ssi_disability_criteria=True on members 0 and 2 gives has_usda_elderly_disabled=True
       (via member 2, who has no earnings) and January SNAP 138.80; (5) the unit''s has_usda_elderly_disabled=True
-      (the 2026-08-07 entry''s intervention) gives has_usda_elderly_disabled=True and January SNAP 138.80. In (2),
-      (4) and (5) the gross test flips and January SNAP is 138.79998779296875 = 785 - 0.3 x floor(2154.650635),
-      absolute delta 0.80 from Axiom''s 138.0, within the suite tolerance 7. The statutory definition of an elderly
-      or disabled member, 7 U.S.C. 2012(j), is not receipt-only: paragraph (1) is age ("is sixty years of age or
-      older"); paragraphs (2), (3) and (7) turn on receiving listed benefits, payments or an annuity; paragraphs
-      (4) to (6) turn on veteran, surviving-spouse and veteran''s-child statuses, for example (4)(A), a veteran
-      who "has a service-connected or non-service-connected disability which is rated as total under title 38".
-      On this population Axiom''s input is the survey flag and PolicyEngine''s is an SSI-status proxy plus SSDI
-      and veteran flags; the bridge supplies the flag to one side only, so the projection asymmetry is the defect.
-      Earlier text of this entry described PolicyEngine''s flag as benefit receipt; corrected after the fourth referee
-      round on the oracles paper. Secondary observation, not load-bearing here: the SC page-44 family-independence
-      screen household_income_at_or_below_family_independence_fpl_limit persists true although gross exceeds 130
-      percent of FPL, consistent with its household_gross_income input being unmapped and defaulting to zero; the
-      expanded-categorical path additionally requires the referral-services input, and the operative eligibility
-      path on this row is the standard gross test waived by the projected E/D flag.'
+      (the intervention of the earlier entry pe-usda-disabled-surface-counterfactual-29732, added in 5436e526 and
+      since removed) gives has_usda_elderly_disabled=True and January SNAP 138.80. In (2), (4) and (5) the gross
+      test flips and January SNAP is 138.79998779296875 = 785 - 0.3 x floor(2154.650635), absolute delta 0.80 from
+      Axiom''s 138.0, within the suite tolerance 7. The statutory definition of an elderly or disabled member, 7
+      U.S.C. 2012(j), is not receipt-only: paragraph (1) is age ("is sixty years of age or older"); paragraphs (2),
+      (3) and (7) turn on receiving listed benefits, payments or an annuity; paragraphs (4) to (6) turn on veteran,
+      surviving-spouse and veteran''s-child statuses, for example (4)(A), a veteran who "has a service-connected
+      or non-service-connected disability which is rated as total under title 38". On this population Axiom''s input
+      is the survey flag and PolicyEngine''s is an SSI-status proxy plus SSDI and veteran flags; the bridge supplies
+      the flag to one side only, so the projection asymmetry is the defect. Earlier text of this entry described
+      PolicyEngine''s flag as benefit receipt; corrected after an automated review of the draft oracles paper. Secondary
+      observation, not load-bearing here: the SC page-44 family-independence screen household_income_at_or_below_family_independence_fpl_limit
+      persists true although gross exceeds 130 percent of FPL, consistent with its household_gross_income input
+      being unmapped and defaulting to zero; the expanded-categorical path additionally requires the referral-services
+      input, and the operative eligibility path on this row is the standard gross test waived by the projected E/D
+      flag.'
     arithmetic:
     - expression: 2954.56 - 2888.0
       equals: 66.56
@@ -2140,8 +2141,8 @@ entries:
     - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/ssa/ssi/eligibility/income/ssi_engaged_in_sga.py
     - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/ssa/sga/non_blind.yaml
     - https://www.ecfr.gov/current/title-7/chapter-II/subchapter-C/part-271#p-271.2(Elderly%20or%20disabled%20member)
-    - closure/data/usc-51.jsonl
-    - https://uscode.house.gov/view.xhtml?req=granuleid:USC-prelim-title7-section2012&num=0&edition=prelim
+    - closure/data/usc-51.jsonl#113cb96f-35a9-5a84-b4f7-33a41594b542
+    - https://uscode.house.gov/download/releasepoints/us/pl/119/100/xml_usc07@119-100.zip
   expires_on_source_change: true
   pinned:
     left: 138.0
