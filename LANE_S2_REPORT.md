@@ -54,8 +54,8 @@ The executable bindings used for every Axiom-side value were:
 
 ```sh
 git -C /private/tmp/lane-s2-rulespec-parent/rulespec-be rev-parse HEAD
-git -C /Users/maxghenis/TheAxiomFoundation/_cape-prep-engine rev-parse HEAD
-shasum -a 256 /Users/maxghenis/TheAxiomFoundation/_cape-prep-engine/target/release/axiom-rules-engine
+git -C <workspace>/_cape-prep-engine rev-parse HEAD
+shasum -a 256 <workspace>/_cape-prep-engine/target/release/axiom-rules-engine
 ```
 
 ```text
@@ -142,9 +142,9 @@ command created one 1,000-unit monthly-input row per variable, ran
 
 ```sh
 arch -x86_64 env PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
-  DOTNET_ROOT=/Users/maxghenis/.dotnet-x64 \
+  DOTNET_ROOT=$HOME/.dotnet-x64 \
   PYTHONNET_RUNTIME=coreclr POLARS_SKIP_CPU_CHECK=1 \
-  /Users/maxghenis/.venvs/axiom-euromod-x64/bin/python - <<'PY'
+  $HOME/.venvs/axiom-euromod-x64/bin/python - <<'PY'
 import json
 from contextlib import redirect_stdout
 from io import StringIO
@@ -153,7 +153,7 @@ import numpy as np
 import pandas as pd
 from euromod import Model
 
-root = Path('/Users/maxghenis/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+')
+root = Path.home() / 'Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+'
 with (root / 'Input/BE_training_data.txt').open(encoding='utf-8') as stream:
     columns = [x.strip() for x in stream.readline().rstrip('\n').split('\t')
                if x.strip()]
@@ -297,10 +297,10 @@ three actual invocations differed only in `SUITE` and `OUT`:
 
 ```sh
 PYTHONPATH=. \
-EUROMOD_PYTHON=/Users/maxghenis/.venvs/axiom-euromod-x64/bin/python \
-DOTNET_ROOT=/Users/maxghenis/.dotnet-x64 \
+EUROMOD_PYTHON=$HOME/.venvs/axiom-euromod-x64/bin/python \
+DOTNET_ROOT=$HOME/.dotnet-x64 \
 PYTHONNET_RUNTIME=coreclr POLARS_SKIP_CPU_CHECK=1 \
-EUROMOD_MODEL_ROOT=/Users/maxghenis/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+ \
+EUROMOD_MODEL_ROOT=$HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+ \
 EUROMOD_COUNTRY=BE EUROMOD_SYSTEM=BE_2025 \
 EUROMOD_DATASET=BE_2024_c1_2015_03_e2 \
 EUROMOD_TEMPLATE_DATASET=BE_training_data \
@@ -309,7 +309,7 @@ AXIOM_RULESPEC_REPO_ROOTS=/private/tmp/lane-s2-rulespec-parent \
 python3 -m axiom_oracles.cli compare euromod axiom \
   --population synthetic --suite "$SUITE" --report-suite "$SUITE" \
   --sample-size 0 --period 2025 \
-  --axiom-engine-binary /Users/maxghenis/TheAxiomFoundation/_cape-prep-engine/target/release/axiom-rules-engine \
+  --axiom-engine-binary <workspace>/_cape-prep-engine/target/release/axiom-rules-engine \
   --output "$OUT"
 
 # SUITE=be-pensioner-pit;          OUT=/private/tmp/lane-s2-pension-raw.json
@@ -453,8 +453,8 @@ uv run --with pytest pytest -q
 ```
 
 ```text
-error: Failed to initialize cache at `/Users/maxghenis/.cache/uv`
-  Caused by: failed to open file `/Users/maxghenis/.cache/uv/sdists-v9/.git`: Operation not permitted (os error 1)
+error: Failed to initialize cache at `~/.cache/uv`
+  Caused by: failed to open file `~/.cache/uv/sdists-v9/.git`: Operation not permitted (os error 1)
 ```
 
 A retry with a writable cache also failed before collection because the no-

@@ -20,25 +20,25 @@ the program before running the comparison, so dashboard regeneration no longer
 depends on a hidden manual `/tmp` setup step. The equivalent commands are:
 
 ```bash
-/Users/pavelmakarchuk/axiom-compose/.venv/bin/axiom-compose \
-  /Users/pavelmakarchuk/axiom-programs/us-al/snap/fy-2026.yaml \
-  --rulespec-root /Users/pavelmakarchuk/rulespec-us \
-  --rulespec-root /Users/pavelmakarchuk/rulespec-us-al \
+<workspace>/axiom-compose/.venv/bin/axiom-compose \
+  <workspace>/axiom-programs/us-al/snap/fy-2026.yaml \
+  --rulespec-root <workspace>/rulespec-us \
+  --rulespec-root <workspace>/rulespec-us-al \
   -o /tmp/al-snap-composed.yaml
 
-AXIOM_RULESPEC_REPO_ROOTS=/Users/pavelmakarchuk \
-  /Users/pavelmakarchuk/axiom-rules-engine/target/release/axiom-rules-engine \
+AXIOM_RULESPEC_REPO_ROOTS=<workspace> \
+  <workspace>/axiom-rules-engine/target/release/axiom-rules-engine \
   compile --program /tmp/al-snap-composed.yaml \
   --output /tmp/al-snap-compiled.json
 
-/Users/pavelmakarchuk/axiom-compose/.venv/bin/axiom-compose \
-  /Users/pavelmakarchuk/axiom-programs/us-tn/snap/fy-2026.yaml \
-  --rulespec-root /Users/pavelmakarchuk/rulespec-us \
-  --rulespec-root /Users/pavelmakarchuk/rulespec-us-tn \
+<workspace>/axiom-compose/.venv/bin/axiom-compose \
+  <workspace>/axiom-programs/us-tn/snap/fy-2026.yaml \
+  --rulespec-root <workspace>/rulespec-us \
+  --rulespec-root <workspace>/rulespec-us-tn \
   -o /tmp/tn-snap-composed.yaml
 
-AXIOM_RULESPEC_REPO_ROOTS=/Users/pavelmakarchuk \
-  /Users/pavelmakarchuk/axiom-rules-engine/target/release/axiom-rules-engine \
+AXIOM_RULESPEC_REPO_ROOTS=<workspace> \
+  <workspace>/axiom-rules-engine/target/release/axiom-rules-engine \
   compile --program /tmp/tn-snap-composed.yaml \
   --output /tmp/tn-snap-compiled.json
 ```
