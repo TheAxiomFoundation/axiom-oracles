@@ -340,6 +340,25 @@ def test_claimant_age_never_decreases_with_months_since_birthday(person, other):
     assert claimant_age(low) <= claimant_age(high)
 
 
+@pytest.mark.parametrize(
+    ("state_pension_age", "is_sp_age"),
+    [(66.0, True), (66 + 1 / 12, False)],
+)
+def test_negative_months_since_birthday_clip_to_zero(state_pension_age, is_sp_age):
+    """PolicyEngine clips months since the last birthday at zero, so negative
+    months give the whole age, not an age below it."""
+    inputs = project_state_pension_credit_qualifying_age_inputs(
+        policyengine_row(66, -3.0, state_pension_age, "FEMALE")
+    )
+
+    assert policyengine_is_sp_age(66, -3.0, state_pension_age) is is_sp_age
+    assert rulespec_has_attained_qualifying_age(inputs) is is_sp_age
+    if is_sp_age:
+        assert inputs["claimant_age"] == float(np.float32(state_pension_age))
+    else:
+        assert inputs["claimant_age"] == 66.0
+
+
 @settings(max_examples=500, deadline=None)
 @given(
     st.floats(0, 110, allow_nan=False).map(lambda value: float(np.float32(value))),
