@@ -378,7 +378,10 @@ jobs:
       - name: PolicyEngine live adapter tests
         env:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
-        run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
+        run: >-
+          uv run --no-sync pytest -q
+          tests/bridges/test_snap_child_support_adapters.py
+          tests/test_tax_exempt_interest_policyengine_live.py
 
   snap-income-boundary-live:
     runs-on: ubuntu-latest
