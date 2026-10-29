@@ -1,52 +1,19 @@
-# Populace-to-input mapping table — data, not code.
+# Populace-to-input mapping table: GENERATED from TheAxiomFoundation/axiom-mappings
+# (axiom_mappings/data/us/inputs.yaml, release us-1b3c6cd64c05). Edit there, then regenerate with
+#   python -m axiom_mappings export oracles-populace --out axiom_oracles/data/populace_input_mapping.yaml
 #
-# Each entry declares HOW a single input slot in a compiled program gets
-# populated from population facts on a Case (the population is the certified
-# populace-us artifact — axiom-oracles#74). The generic projector
-# (axiom_oracles.adapters.axiom.generic_inputs) reads this table at startup,
-# builds an input mapping, and applies it to every compiled program it runs.
-#
-# Adding a new program comparison no longer requires Python: extend this
-# table with the slot names the new program declares, point each at a
-# population fact (or a constant / derived value), and the generic projector
-# handles the rest. Tracked as the "data, not code" follow-up under #26.
-#
-# Match rules:
-#   match.kind: suffix | exact | substring
-#     suffix    — slot name ends with `match.value` (most common; covers
-#                 both us:... and us-co:... variants of the same input)
-#     exact     — slot name equals `match.value`
-#     substring — `match.value` appears anywhere in slot name
-#
-# Source rules:
-#   source.kind: fact | constant | derived
-#     fact     — read Case fact named `source.name` from the relevant
-#                entity (Person facts for Person-scoped slots,
-#                Case-level for Household/SnapUnit/TaxUnit).
-#                Optional `default` if the fact is missing.
-#     constant — yield `source.value` for every case (e.g. citizenship=True
-#                until ECPS exposes the citizenship column we want)
-#     derived  — apply a named transform to one or more facts:
-#                  transform: monthly       (annual → monthly, ÷12, 2dp)
-#                  transform: weekly        (annual → weekly, ÷52, 2dp)
-#                  transform: hh_size       (len(people))
-#                  transform: elderly_or_disabled  (age ≥ 60 OR disabled)
-#                  transform: positive      (1/True if value > 0 else 0/False)
-#                  transform: positive_to_constant  (constant if value>0)
-#                  transform: all_people_any_positive  (every person has at
-#                              least one positive fact from from_facts)
-#
-# Scope:
-#   scope: person | household
-#     person    — slot evaluated per-person; transforms see the Person facts
-#     household — slot evaluated once per case; transforms see the case
-#                 (with `people` available for hh_size etc.)
+# Each entry declares how one input slot of a compiled program is populated from population facts on a
+# Case. The generic projector (axiom_oracles.adapters.axiom.generic_inputs) reads this table, takes the
+# first entry whose match fits a slot (match.kind exact | suffix | substring), and fills it from a Case
+# fact (source.kind fact), a constant, or a named transform of facts (source.kind derived). What each
+# transform computes, and which embed law that belongs in RuleSpec, is recorded in axiom-mappings'
+# data/us/transforms.yaml.
 
 mappings:
+
   # ---------------------------------------------------------------------
   # Household-level
   # ---------------------------------------------------------------------
-
   - match: { kind: exact, value: household_size }
     scope: household
     source:
@@ -180,7 +147,6 @@ mappings:
   # ---------------------------------------------------------------------
   # Person-level
   # ---------------------------------------------------------------------
-
   - match: { kind: exact, value: member_age }
     scope: person
     source: { kind: fact, name: PERSON_AGE, cast: int }
@@ -355,21 +321,14 @@ mappings:
     source:
       kind: derived
       transform: scope_geoid_in
-      geoids:
-        - "36005"
-        - "36047"
-        - "36061"
-        - "36081"
-        - "36085"
+      geoids: ['36005', '36047', '36061', '36081', '36085']
 
   - match: { kind: substring, value: household_resides_in_nassau_or_suffolk_county }
     scope: household
     source:
       kind: derived
       transform: scope_geoid_in
-      geoids:
-        - "36059"
-        - "36103"
+      geoids: ['36059', '36103']
 
   - match: { kind: substring, value: state_agency_rounds_thirty_percent_net_income_up }
     scope: household
@@ -452,25 +411,21 @@ mappings:
     source:
       kind: derived
       transform: all_people_any_positive
-      from_facts:
-        - SSI_BENEFITS
+      from_facts: [SSI_BENEFITS]
 
   - match: { kind: substring, value: all_members_receive_or_authorized_for_tafdc }
     scope: household
     source:
       kind: derived
       transform: all_people_any_positive
-      from_facts:
-        - TANF_BENEFITS
+      from_facts: [TANF_BENEFITS]
 
   - match: { kind: substring, value: all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc }
     scope: household
     source:
       kind: derived
       transform: all_people_any_positive
-      from_facts:
-        - SSI_BENEFITS
-        - TANF_BENEFITS
+      from_facts: [SSI_BENEFITS, TANF_BENEFITS]
 
   # ---------------------------------------------------------------------
   # SSI (us/ssi program) — 42 USC 1382 individual slice.
@@ -482,7 +437,6 @@ mappings:
   # 1382a(b)(2) state-age payment path are constants (documented divergence
   # classes on the dashboard).
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: individual_age_years }
     scope: person
     source: { kind: fact, name: PERSON_AGE, default: 0 }
@@ -539,21 +493,27 @@ mappings:
   - match: { kind: suffix, value: citizen_of_united_states }
     scope: person
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: resident_of_united_states }
     scope: person
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: alien_lawfully_admitted_for_permanent_residence }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: alien_otherwise_permanently_residing_in_united_states_under_color_of_law }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: alien_lawfully_present_due_to_section_1182_d_5_application }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: child_citizen_of_united_states }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: living_with_parent_member_of_armed_forces_assigned_to_permanent_duty_ashore_outside_united_states }
     scope: person
     source: { kind: constant, value: false }
@@ -562,13 +522,21 @@ mappings:
   # treated as an SSI eligible couple (ECPS lacks marital linkage here).
   - match: { kind: suffix, value: individual_has_eligible_spouse }
     scope: person
-    source: { kind: derived, transform: abd_adult_with_abd_adult_partner }
+    source:
+      kind: derived
+      transform: abd_adult_with_abd_adult_partner
+
   - match: { kind: suffix, value: individual_has_spouse_with_whom_living }
     scope: person
-    source: { kind: derived, transform: abd_adult_with_abd_adult_partner }
+    source:
+      kind: derived
+      transform: abd_adult_with_abd_adult_partner
+
   - match: { kind: suffix, value: individual_and_spouse_income_not_excluded_pursuant_to_section_1382a_b }
     scope: person
-    source: { kind: derived, transform: ssi_couple_countable_income }
+    source:
+      kind: derived
+      transform: ssi_couple_countable_income
 
   # Resources (42 USC 1382b(a) countable resources, net of the statutory
   # exclusions). The certified populace-us artifact DOES carry SSI countable
@@ -587,12 +555,15 @@ mappings:
   - match: { kind: suffix, value: individual_has_commissioner_approved_plan_for_achieving_self_support }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: other_income_amount_necessary_for_fulfillment_of_self_support_plan }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: disability_work_expense_amount_necessary_and_within_commissioner_limits }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: expenses_reasonably_attributable_to_earning_income }
     scope: person
     source: { kind: constant, value: 0 }
@@ -601,27 +572,35 @@ mappings:
   - match: { kind: suffix, value: payment_is_monthly_or_other_periodic }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: payment_received_by_individual }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: payment_made_by_state_of_which_receiving_individual_is_resident }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: payment_program_eligibility_based_solely_on_required_age_and_state_residency }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: payment_program_eligibility_not_based_on_need }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: program_established_prior_to_july_first_nineteen_seventy_three }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: program_established_prior_to_july_first_nineteen_seventy_three_and_subsequently_amended_to_conform_to_state_or_federal_constitutional_standards }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: individual_first_became_eligible_individual_or_eligible_spouse_on_or_before_september_thirtieth_nineteen_eighty_five }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: individual_residency_years_under_program_as_in_effect_prior_to_january_first_nineteen_eighty_three }
     scope: person
     source: { kind: constant, value: 0 }
@@ -635,27 +614,35 @@ mappings:
   - match: { kind: suffix, value: section_1382_b_1_dollar_amount_in_effect_for_month }
     scope: household
     source: { kind: constant, value: 11604 }
+
   - match: { kind: suffix, value: unrounded_section_1382_b_1_dollar_amount_that_would_have_been_in_effect_for_month_but_for_prior_rounding }
     scope: household
     source: { kind: constant, value: 11604 }
+
   - match: { kind: suffix, value: section_1382_b_2_dollar_amount_in_effect_for_month }
     scope: household
     source: { kind: constant, value: 17400 }
+
   - match: { kind: suffix, value: unrounded_section_1382_b_2_dollar_amount_that_would_have_been_in_effect_for_month_but_for_prior_rounding }
     scope: household
     source: { kind: constant, value: 17400 }
+
   - match: { kind: suffix, value: dollar_amount_in_effect_for_month }
     scope: household
     source: { kind: constant, value: 11604 }
+
   - match: { kind: suffix, value: unrounded_dollar_amount_that_would_have_been_in_effect_for_month_but_for_prior_rounding }
     scope: household
     source: { kind: constant, value: 11604 }
+
   - match: { kind: suffix, value: subchapter_ii_benefit_increase_percentage_for_month }
     scope: household
     source: { kind: constant, value: 0.028 }
+
   - match: { kind: suffix, value: cpi_basis_subchapter_ii_increase_percentage_for_month }
     scope: household
     source: { kind: constant, value: 0.028 }
+
   - match: { kind: suffix, value: subchapter_ii_increase_was_determined_on_wage_increase_percentage }
     scope: household
     source: { kind: constant, value: false }
@@ -669,7 +656,6 @@ mappings:
   # post-October-2022 semantics), and the resource/work-activity rules are
   # outside the compared output tree, so their slots take inert constants.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: household_has_minor_or_pregnant_member }
     scope: household
     source:
@@ -680,11 +666,15 @@ mappings:
 
   - match: { kind: suffix, value: number_of_persons_in_household }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
 
   - match: { kind: exact, value: family_size }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
 
   - match: { kind: suffix, value: monthly_rent_amount_actually_paid }
     scope: household
@@ -726,9 +716,11 @@ mappings:
   - match: { kind: suffix, value: gross_earned_and_unearned_income_is_below_poverty_level }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: working_applicant_eligible_for_public_assistance_without_earned_income_disregard }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: working_applicant_received_public_assistance_in_one_of_previous_four_months }
     scope: household
     source: { kind: constant, value: false }
@@ -738,45 +730,59 @@ mappings:
   - match: { kind: substring, value: asset_is_ }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: asset_value }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: asset_equity_value }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: asset_fair_market_value }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: federal_poverty_level }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: months_since_job_entry }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: person_entered_unsubsidized_employment }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_has_previously_used_lifetime_unsubsidized_employment_disregard }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_tanf_recipient }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: resulting_total_income }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: earned_income_is_from_otda_qualified_work_activity_or_training_program }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_failed_to_participate_in_screening_or_assessment_process }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: treatment_nonparticipation_instance_number }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: unit_has_disabled_member }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: unit_has_member_age_sixty_or_over }
     scope: household
     source: { kind: constant, value: false }
@@ -787,13 +793,17 @@ mappings:
   # observable in ECPS and take inert constants; the demographic gate
   # entry above (household_has_minor_or_pregnant_member) is shared.
   # ---------------------------------------------------------------------
-
   - match: { kind: exact, value: assistance_unit_size }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
+
   - match: { kind: exact, value: number_of_family_members }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
 
   - match: { kind: exact, value: household_gross_earned_income }
     scope: household
@@ -802,6 +812,7 @@ mappings:
       transform: monthly
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: exact, value: cash_assistance_family_gross_earned_income }
     scope: household
     source:
@@ -809,6 +820,7 @@ mappings:
       transform: monthly
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: exact, value: gross_monthly_income }
     scope: household
     source:
@@ -825,6 +837,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: suffix, value: countable_unearned_income_after_exclusions_and_disregards }
     scope: household
     source:
@@ -843,9 +856,11 @@ mappings:
   - match: { kind: suffix, value: deemed_or_allocated_income_from_financially_responsible_nonmembers }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: income_allocated_to_persons_outside_assistance_unit }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: other_cash_assistance_deductions_allowed_under_wac_388_450_0177_and_388_450_0178 }
     scope: household
     source: { kind: constant, value: 0 }
@@ -853,21 +868,27 @@ mappings:
   - match: { kind: suffix, value: care_paid_before_benefit_approval }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: care_provider_is_not_parent_or_stepparent }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: dependent_care_amount_paid_prorated_to_eligibility_date }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: expense_verified }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: hours_worked_per_month }
     scope: person
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: recipient_gets_cash_assistance_with_person }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: recipient_is_dependent_child_under_two_years_of_age }
     scope: person
     source: { kind: constant, value: false }
@@ -879,7 +900,6 @@ mappings:
   # SSI-status detail, 1619, medically-needy, and state-supplement slots
   # belong to transitively imported rules outside the compared rollup.
   # ---------------------------------------------------------------------
-
   - match: { kind: exact, value: household_income_as_fraction_of_fpl }
     scope: household
     source:
@@ -901,9 +921,11 @@ mappings:
   - match: { kind: exact, value: person_age }
     scope: person
     source: { kind: fact, name: PERSON_AGE, cast: int }
+
   - match: { kind: exact, value: person_is_pregnant }
     scope: person
     source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+
   - match: { kind: exact, value: person_is_under_age_18 }
     scope: person
     source:
@@ -911,6 +933,7 @@ mappings:
       transform: age_below
       threshold: 18
       from_facts: [PERSON_AGE]
+
   - match: { kind: exact, value: person_is_aged_blind_or_disabled }
     scope: person
     source:
@@ -921,30 +944,46 @@ mappings:
 
   - match: { kind: exact, value: person_receives_ssi_benefits }
     scope: person
-    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [SSI_BENEFITS]
+
   - match: { kind: exact, value: person_is_receiving_or_deemed_receiving_ssi }
     scope: person
-    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [SSI_BENEFITS]
+
   - match: { kind: exact, value: person_is_ssi_beneficiary_or_deemed_ssi_beneficiary }
     scope: person
-    source: { kind: derived, transform: positive, from_facts: [SSI_BENEFITS] }
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [SSI_BENEFITS]
 
   # Colorado state-plan standards (PolicyEngine CO values).
   - match: { kind: exact, value: state_plan_child_income_standard_fpl_ratio }
     scope: household
     source: { kind: constant, value: 1.47 }
+
   - match: { kind: exact, value: state_plan_pregnant_women_income_standard_fpl_ratio }
     scope: household
     source: { kind: constant, value: 2.0 }
+
   - match: { kind: exact, value: state_plan_full_medicaid_applicable_income_limit_fpl_ratio }
     scope: household
     source: { kind: constant, value: 2.0 }
+
   - match: { kind: exact, value: state_plan_authorized_infant_income_standard_fpl_ratio }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: exact, value: state_plan_age_group_grandfathered_income_standard_fpl_ratio }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: exact, value: state_had_authorizing_legislation_for_higher_infant_income_standard }
     scope: household
     source: { kind: constant, value: false }
@@ -953,96 +992,125 @@ mappings:
   - match: { kind: exact, value: dependent_child_enrolled_in_minimum_essential_coverage }
     scope: person
     source: { kind: constant, value: true }
+
   - match: { kind: exact, value: dependent_child_receiving_chip }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: dependent_child_receiving_medicaid }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: person_is_parent_or_caretaker_relative }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: person_lives_with_dependent_child_under_age_threshold }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: state_elected_435_222_higher_age }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: state_elected_435_222_higher_age_as_of_march_23_2010 }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: person_eligible_and_enrolled_for_mandatory_medicaid_under_subpart_b }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: exact, value: person_entitled_to_or_enrolled_in_medicare_part_a_or_b }
     scope: person
     source: { kind: constant, value: false }
 
   # Transitively imported SSI-status / 1619 / medically-needy / QMB paths:
   # inert constants (their rules sit outside the compared rollup).
-  - match: { kind: substring, value: "1619" }
+  - match: { kind: substring, value: '1619' }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: medically_needy }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: spend_down }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_eligible_for_state_supplement }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_eligible_spouse_of_ssi_beneficiary }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_state_supplement_beneficiary }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_qualified_medicare_beneficiary_described_in_section_1905_p }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_qualified_severely_impaired_individual_defined_in_section_1905_q }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_is_qualified_working_disabled_individual_described_in_section_1905_s }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_receives_ssi_pending_final_blindness_or_disability_determination }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_receives_ssi_under_resource_disposal_agreement_with_social_security_administration }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_was_issued_medicaid_card_for_reference_month_under_more_restrictive_state_plan_criteria }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_would_be_eligible_to_receive_afdc_under_approved_state_plan_if_not_receiving_ssi }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: section_435_121_allows_other_medicaid_treatment_for_this_person }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_has_income_above_categorically_needy_standards }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_income_is_equal_to_or_below_optional_categorically_needy_standard }
     scope: person
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: agency_applies_more_restrictive }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: agency_limits_disabled_eligibility_to_individuals_age_18_or_older }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: categorically_needy_income_standard_selected_under_this_section_is_less_than_optional_categorically_needy_standard }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: state_does_not_have_medically_needy_program }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: state_elects_medically_needy_coverage }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: person_can_spend_down_to_state_selected_living_arrangement_standard }
     scope: person
     source: { kind: constant, value: false }
@@ -1052,13 +1120,21 @@ mappings:
   # Steady-state recipient month: application/redetermination flags off,
   # disregards mirror the 67% + $90 exclusion PolicyEngine carries.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: number_of_caretakers_in_assistance_unit }
     scope: household
-    source: { kind: derived, transform: count_age_at_least, threshold: 18, cap: 2 }
+    source:
+      kind: derived
+      transform: count_age_at_least
+      threshold: 18
+      cap: 2
+
   - match: { kind: suffix, value: number_of_children_in_assistance_unit }
     scope: household
-    source: { kind: derived, transform: count_age_below, threshold: 18 }
+    source:
+      kind: derived
+      transform: count_age_below
+      threshold: 18
+
   - match: { kind: suffix, value: need_standard_for_household_size }
     scope: household
     source:
@@ -1074,6 +1150,7 @@ mappings:
       transform: monthly
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: substring, value: countable_unearned_income }
     scope: household
     source:
@@ -1088,6 +1165,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: substring, value: unearned_income_received }
     scope: household
     source:
@@ -1102,6 +1180,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: substring, value: countable_gross_unearned_income_after_disregards }
     scope: household
     source:
@@ -1126,6 +1205,7 @@ mappings:
       flat: 90
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: substring, value: countable_gross_earned_income_after_disregards }
     scope: household
     source:
@@ -1135,6 +1215,7 @@ mappings:
       flat: 90
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: countable_earned_income }
     scope: household
     source:
@@ -1144,6 +1225,7 @@ mappings:
       flat: 90
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: countable_income_for_basic_cash_assistance }
     scope: household
     source:
@@ -1163,24 +1245,31 @@ mappings:
   - match: { kind: substring, value: is_application }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: application_month }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: currently_receiving_basic_cash_assistance }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: substring, value: first_certification_period }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: redetermination_new_certification_period }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: earned_income_is_new_source }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: assistance_unit_found_ineligible }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: substring, value: reports_earned_income }
     scope: household
     source:
@@ -1188,12 +1277,15 @@ mappings:
       transform: positive
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: certification_period_month_number }
     scope: household
     source: { kind: constant, value: 2 }
+
   - match: { kind: suffix, value: client_is_pregnant_parent }
     scope: person
     source: { kind: fact, name: PREGNANT, default: false, cast: bool }
+
   - match: { kind: suffix, value: month_is_not_after_month_in_which_pregnancy_ends }
     scope: person
     source: { kind: fact, name: PREGNANT, default: false, cast: bool }
@@ -1203,10 +1295,12 @@ mappings:
   # Region 1 is the seventeen higher-MAP counties (by county FIPS);
   # exempt units approximated as any-member-receives-SSI.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: persons_on_aid }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
+
   - match: { kind: suffix, value: assistance_unit_is_exempt }
     scope: household
     source:
@@ -1214,12 +1308,31 @@ mappings:
       transform: positive
       aggregate: sum_over_people
       from_facts: [SSI_BENEFITS]
+
   - match: { kind: suffix, value: household_in_ca_map_region_1 }
     scope: household
     source:
       kind: derived
       transform: scope_geoid_in
-      geoids: ["06001","06013","06037","06041","06053","06055","06059","06073","06075","06079","06081","06083","06085","06087","06095","06097","06111"]
+      geoids:
+        - '06001'
+        - '06013'
+        - '06037'
+        - '06041'
+        - '06053'
+        - '06055'
+        - 06059
+        - '06073'
+        - '06075'
+        - 06079
+        - 06081
+        - 06083
+        - 06085
+        - 06087
+        - 06095
+        - 06097
+        - '06111'
+
   - match: { kind: suffix, value: ca_countable_earned_income_after_disregard }
     scope: household
     source:
@@ -1229,21 +1342,24 @@ mappings:
       rate: 0.5
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: ca_countable_other_unearned_income }
     scope: household
     source:
       kind: derived
       transform: monthly
       aggregate: sum_over_people
-      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME,
-        QUALIFIED_DIVIDEND_INCOME]
+      from_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - INTEREST_INCOME
+        - DIVIDEND_INCOME
+        - QUALIFIED_DIVIDEND_INCOME
 
   # ---------------------------------------------------------------------
   # MN TANF / MFIP (us-mn/tanf program) — Combined Manual 0022.12.
   # Standards mirror PolicyEngine's transitional standard (cash + food),
   # 110% family wage level, and $65-per-earner + 50% disregard.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: transitional_standard_for_corresponding_payment_month }
     scope: household
     source:
@@ -1252,6 +1368,7 @@ mappings:
       table: { 1: 678, 2: 1114, 3: 1430, 4: 1715, 5: 1982, 6: 2297, 7: 2500, 8: 2759, 9: 3015, 10: 3265 }
       per_additional: 248
       max_size: 10
+
   - match: { kind: suffix, value: family_wage_level_for_corresponding_payment_month }
     scope: household
     source:
@@ -1261,6 +1378,7 @@ mappings:
       per_additional: 248
       max_size: 10
       multiplier: 1.1
+
   - match: { kind: suffix, value: mfip_food_portion_amount_under_section_0020_09 }
     scope: household
     source:
@@ -1269,6 +1387,7 @@ mappings:
       table: { 1: 247, 2: 453, 3: 652, 4: 829, 5: 1002, 6: 1224, 7: 1333, 8: 1510, 9: 1688, 10: 1869 }
       per_additional: 182
       max_size: 10
+
   - match: { kind: suffix, value: net_earned_income_in_budget_month }
     scope: household
     source:
@@ -1279,6 +1398,7 @@ mappings:
       rate: 0.5
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: unearned_income_in_budget_month }
     scope: household
     source:
@@ -1293,6 +1413,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: suffix, value: unit_receives_no_income_other_than_mfip }
     scope: household
     source:
@@ -1309,6 +1430,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: suffix, value: unit_receives_unearned_income_only }
     scope: household
     source:
@@ -1324,6 +1446,7 @@ mappings:
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
       zero_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: unit_has_earned_income_only }
     scope: household
     source:
@@ -1339,6 +1462,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   # Contextually correct: this branch is only reached after the
   # earned-only test fails, so "has both" reduces to "has earned income".
   - match: { kind: suffix, value: unit_has_both_earned_and_unearned_income }
@@ -1348,12 +1472,15 @@ mappings:
       transform: positive
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: unit_is_applicant_case }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: prorated_benefit_under_section_0022_12_03 }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: recoupment_amount_if_applicable }
     scope: household
     source: { kind: constant, value: 0 }
@@ -1365,7 +1492,6 @@ mappings:
   # annual sums. The base-year FPL is the 1992 poverty guideline the A1
   # standard is expressed against; current FPL is the 2026 guideline.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: caretaker_relative_family_earned_income }
     scope: household
     source:
@@ -1373,6 +1499,7 @@ mappings:
       transform: sum
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: caretaker_relative_family_unearned_income }
     scope: household
     source:
@@ -1387,6 +1514,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: suffix, value: gross_countable_income }
     scope: household
     source:
@@ -1403,6 +1531,7 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: suffix, value: ca_earned_income_deductions }
     scope: household
     source:
@@ -1413,6 +1542,7 @@ mappings:
       rate: 0.3
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+
   - match: { kind: suffix, value: current_federal_poverty_level_for_caretaker_relative_family_size }
     scope: household
     source:
@@ -1421,6 +1551,7 @@ mappings:
       table: { 1: 15960 }
       per_additional: 5680
       max_size: 1
+
   - match: { kind: suffix, value: federal_poverty_level_for_payment_standard_base_year }
     scope: household
     source:
@@ -1429,60 +1560,78 @@ mappings:
       table: { 1: 6810 }
       per_additional: 2380
       max_size: 1
+
   - match: { kind: suffix, value: budgetary_unit_has_obligation_to_pay_shelter_cost }
     scope: household
     source:
       kind: derived
       transform: positive
       from_facts: [RENT_PAID]
+
   - match: { kind: suffix, value: caretaker_relative_is_parent_or_nonparent_caretaker_relative_applying_for_self_and_child }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: all_members_of_caretaker_relative_family_registered_to_case }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: adult_caretaker_is_nonparent_caretaker_relative_applying_for_child_only }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: kinship_care_case }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: kinship_foster_care_case }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: kinship_foster_care_child_only_case }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: legal_permanent_guardian_case }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: tribal_tanf_budgetary_unit_for_which_ca_needy_family_test_is_not_conducted }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: case_change_has_occurred }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: budgetary_unit_has_shelter_cost_obligation_but_fails_to_provide_verification }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: participant_in_military_receives_basic_allowance_for_housing }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: participant_is_on_lease_and_resides_in_government_subsidized_housing_unit }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: participant_with_shelter_cost_obligation_is_in_foreclosure_and_mortgage_company_accepts_back_payments }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: participant_works_in_exchange_for_rent }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shelter_costs_paid_by_third_party_for_fewer_than_three_months }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: regular_benefit_amount }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: suffix, value: supplemental_benefit_amount }
     scope: household
     source: { kind: constant, value: 0 }
@@ -1494,58 +1643,76 @@ mappings:
   # and Johnson ECPS rows resolve to group IV, producing a visible $43
   # bridge residual at each household size. Keep the projection explicit.
   # ---------------------------------------------------------------------
-
   - match: { kind: suffix, value: assistance_plan_person_count }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
+
   - match: { kind: suffix, value: all_persons_in_home_in_same_assistance_plan }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: shelter_group_v_applies }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shelter_group_i_applies }
     scope: household
     source: { kind: constant, value: true }
+
   - match: { kind: suffix, value: shelter_group_ii_applies }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shelter_group_iii_applies }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shelter_group_iv_applies }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shared_living_arrangement_with_person_not_in_budget_plan }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: shared_living_arrangement_is_commercial_bona_fide_landlord_tenant }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: specialized_living_commercial_board_room_or_room_only_arrangement }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: only_excluded_person_is_qualifying_ssi_recipient_or_joint_custody_child }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: application_day_of_month }
     scope: household
     source: { kind: constant, value: 1 }
+
   - match: { kind: suffix, value: days_in_month }
     scope: household
     source: { kind: constant, value: 30 }
+
   - match: { kind: suffix, value: assistance_reinstated_after_required_information_or_cooperation_provided_in_month_following_closure }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: assistance_suspended_and_reinstated_in_month_following_one_month_suspension }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: cash_application_filed_in_response_to_sanction_notice_with_cooperation_within_45_days_and_received_in_month_following_closure }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: cash_review_or_application_returned_in_month_following_end_of_review_period }
     scope: household
     source: { kind: constant, value: false }
+
   - match: { kind: suffix, value: tanf_case_reopened_in_month_following_effective_date_of_closure }
     scope: household
     source: { kind: constant, value: false }
@@ -1563,12 +1730,13 @@ mappings:
   # constants (steady-state recipient month); the demographic gate
   # (household_has_minor_or_pregnant_member) is shared above.
   # ---------------------------------------------------------------------
-
   # au_size is declared Count in the program spec (integer chart key); it binds to
   # this AU member count. hh_size returns len(people) as an integer.
   - match: { kind: exact, value: assistance_unit_member_count }
     scope: household
-    source: { kind: derived, transform: hh_size }
+    source:
+      kind: derived
+      transform: hh_size
 
   - match: { kind: exact, value: assistance_unit_included_income }
     scope: household
@@ -1586,9 +1754,11 @@ mappings:
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+
   - match: { kind: exact, value: income_deemed_from_non_assistance_unit_members }
     scope: household
     source: { kind: constant, value: 0 }
+
   - match: { kind: exact, value: income_allocated_to_non_assistance_unit_members }
     scope: household
     source: { kind: constant, value: 0 }
@@ -1627,7 +1797,6 @@ mappings:
   # dependent-care deduction, and the $50 child-support disregard are not
   # observable in ECPS and take the values below (steady-state recipient month).
   # ---------------------------------------------------------------------
-
   # Delaware standard of need = 75% of the monthly federal poverty guideline.
   # PE: spm_unit_fpg (annual, CONTIGUOUS_US 2026: 15,960 + 5,680*(size-1)) / 12
   # * 0.75 = 997.50 + 355.00*(size-1). Projected here as the exact schedule by
@@ -1640,15 +1809,7 @@ mappings:
       transform: table_by_hh_size
       max_size: 8
       per_additional: 355.0
-      table:
-        1: 997.5
-        2: 1352.5
-        3: 1707.5
-        4: 2062.5
-        5: 2417.5
-        6: 2772.5
-        7: 3127.5
-        8: 3482.5
+      table: { 1: 997.5, 2: 1352.5, 3: 1707.5, 4: 2062.5, 5: 2417.5, 6: 2772.5, 7: 3127.5, 8: 3482.5 }
 
   # PE de_tanf_gross_income = tanf_gross_earned + tanf_gross_unearned (monthly AU
   # sum, pre-disregard), tested against 185% of the standard of need.
