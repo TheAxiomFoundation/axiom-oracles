@@ -15,19 +15,19 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
       "claim": "view-scoped evaluation traces:nz/accommodation-supplement",
       "mode": "computed",
-      "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+      "sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
     },
     {
       "artifact": "dashboard/public/data/nz-treasury-incomeexplorer.json",
       "claim": "suite:nz-treasury-incomeexplorer",
       "mode": "computed",
-      "sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438"
+      "sha256": "83cf2bd6ced416558aaa7f9cf8c3a8a22f5f01e5f09f7b3bb40fd12b3cd8fde3"
     },
     {
       "artifact": "dashboard/public/data/cases/nz-treasury-incomeexplorer/index.json",
       "claim": "case-evidence-index:nz-treasury-incomeexplorer",
       "mode": "computed",
-      "sha256": "0587d8702e0ae6802f6e0ae03aa516643ff74ba7ed2e5d0a335318d5b60aa4a4"
+      "sha256": "2c6d8b2fae0947d537779e9b78f1e65dcde4794c6c9dc655225c0042ba0427a6"
     },
     {
       "artifact": "dispositions/nz-treasury-incomeexplorer.yaml",
@@ -45,21 +45,21 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
       "claim": "compiled input universe and capture cardinality",
       "mode": "computed",
-      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
+      "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507",
       "verification": "producer_cross_derivation"
     },
     {
       "artifact": "closure/nz/summary.json",
       "claim": "closed:nz/accommodation-supplement",
       "mode": "computed",
-      "sha256": "865538456a23546e8436cb7c4d85acdd65c2223795ff75ee9673fc7f0744f20d",
+      "sha256": "34f4809b5e299a5bf1d447fd0de1814e93ff5eecf72f37b79c16ec33ecf27f68",
       "verification": "producer_artifact_validation"
     },
     {
       "artifact": "conformance/executable/nz-treasury-incomeexplorer.json",
       "claim": "executable:nz/accommodation-supplement",
       "mode": "computed",
-      "sha256": "c401f8e9553bc1610908ee30ed60bfcf8f31561b0fef1d33129a019ece6343f7",
+      "sha256": "6cba80dcf90e61f26bbac8219911892d86d130568366e5b802ee12ae71a60adf",
       "verification": "producer_artifact_validation"
     }
   ],
@@ -79,7 +79,7 @@
         "pending": 0
       },
       "citation_root_count": 5,
-      "corpus_release": "nz-rulespec-2026-07-18",
+      "corpus_release": "nz-rulespec-2026-10-23-amendment-markers",
       "denominator_ratchet": {
         "citation_count_min": 5,
         "requested_output_count_min": 3
@@ -103,7 +103,7 @@
         "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
         "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
       ],
-      "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
+      "rulespec_commit": "c8ec92e855f835e8348803449836791aa56f5d38",
       "status": "computed_open",
       "subgraph_node_count": 30,
       "value": false
@@ -150,7 +150,7 @@
       "execution_trace": {
         "evaluation_count": 883,
         "path": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
-        "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+        "sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
       },
       "full_responses": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/full-responses.json",
@@ -158,7 +158,7 @@
       },
       "independent_expected": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/golden-outputs.json",
-        "sha256": "bd6012eb467e072c1ebcb35e289c1e146b59e6cf917b16ee5e56925d67355033"
+        "sha256": "8411422c380fad4732a0236f0102a766a126536bd5d4d89fb1450bfe272c33ab"
       },
       "mode": "computed",
       "reducer": {
@@ -168,9 +168,9 @@
       },
       "request_set": {
         "path": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
-        "sha256": "e5351c383a83b21a5cd2b94c2cec0b4221168ef7e581ba9b257e3c16b6901111"
+        "sha256": "302bbc21f33a6c15bab891d109849db49f9cc5485a10919fddd3f221f9ea5998"
       },
-      "rulespec_sha": "89a7d25dc03a4d045348620283332de10b1047da",
+      "rulespec_sha": "c8ec92e855f835e8348803449836791aa56f5d38",
       "status": "computed_pass",
       "summary": {
         "all_independent_cells_reproduced": true,
@@ -201,7 +201,7 @@
         "input_count": 328,
         "mode": "computed",
         "not_supplied_count": 178,
-        "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
+        "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507",
         "supplied_input_count": 150,
         "universe_source": "compiled-artifact metadata.input_catalog (byte-verified)"
       },
@@ -217,10 +217,10 @@
           "per_evaluation_traces_committed": true,
           "reconciliation": "exact",
           "registry_report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
-          "registry_report_sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438",
+          "registry_report_sha256": "83cf2bd6ced416558aaa7f9cf8c3a8a22f5f01e5f09f7b3bb40fd12b3cd8fde3",
           "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
           "report_identity_matches_registry": true,
-          "report_sha256": "e492e1fc82070c2146bfefa36ba4377fc1dd482d6efc38ebe5195a13ea559438",
+          "report_sha256": "83cf2bd6ced416558aaa7f9cf8c3a8a22f5f01e5f09f7b3bb40fd12b3cd8fde3",
           "requested_output_root_sets": [
             [
               "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
@@ -388,7 +388,7 @@
           ],
           "trace_artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
           "trace_binding": "bound",
-          "trace_sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179",
+          "trace_sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11",
           "varied_fields": 17,
           "view": "nz/accommodation-supplement"
         }

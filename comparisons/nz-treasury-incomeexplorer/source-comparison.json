@@ -43562,8 +43562,8 @@
       "sha256": "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
     },
     "rulespec": {
-      "expected_git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
-      "git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
+      "expected_git_sha": "c8ec92e855f835e8348803449836791aa56f5d38",
+      "git_sha": "c8ec92e855f835e8348803449836791aa56f5d38",
       "root": "/private/tmp/hub-epm/checkouts/rulespec-nz",
       "tracked_dirty": false
     },

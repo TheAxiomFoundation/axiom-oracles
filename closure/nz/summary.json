@@ -1,14 +1,16 @@
 {
   "closed": false,
-  "corpus_commit": "3f7b5d985bce759cb487f1b7fd050f5cbf007d17",
-  "corpus_release": "nz-rulespec-2026-07-18",
+  "corpus_commit": "4aa31fa00fec0706f00cbda3bd4fb53fb0adf3ca",
+  "corpus_release": "nz-rulespec-2026-10-23-amendment-markers",
+  "corpus_release_content_sha256": "4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2",
+  "corpus_release_selector_sha256": "b9b73e48e2652bdb9bf4f0740139f6130512d8bd63d7fc9f6197b7ae4c717daf",
   "denominator_ratchet": {
     "artifact": "closure/nz/denominator-ratchet.json",
-    "sha256": "01ec01be8ae1ee0ae2717ab4f0a1e58ea265a4166c9f65883986d46f8e43e786"
+    "sha256": "31271ea7a23d547a6a70de815d913a70b3e3057c15e830e6f9199cafbc7bad3a"
   },
   "executable_request_evidence": {
     "artifact": "conformance/executable/nz-treasury-incomeexplorer/requests.json",
-    "sha256": "e5351c383a83b21a5cd2b94c2cec0b4221168ef7e581ba9b257e3c16b6901111"
+    "sha256": "302bbc21f33a6c15bab891d109849db49f9cc5485a10919fddd3f221f9ea5998"
   },
   "jurisdiction": "nz",
   "pending_citations": [
@@ -17,25 +19,18 @@
     "nz/guidance/employment-nz/parental-leave-payment-increase-2024/block-2",
     "nz/guidance/employment-nz/parental-leave-payment-increase-2026/block-4",
     "nz/guidance/employment-nz/parental-leave-payments/block-33",
-    "nz/guidance/ird/child-support/overview",
-    "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
-    "nz/guidance/ird/gst-calculation-guidance",
-    "nz/guidance/ird/gst-low-value-imported-goods",
+    "nz/guidance/ird/gst-calculation-guidance/block-7",
+    "nz/guidance/ird/gst-low-value-imported-goods/block-1",
     "nz/guidance/ird/how-kiwisaver-works/block-2",
-    "nz/guidance/ird/kiwisaver-contribution-rates",
     "nz/guidance/ird/kiwisaver-government-contribution/block-4",
-    "nz/guidance/ird/paye-deduction-tables",
-    "nz/guidance/ird/pir-rates-kiwisaver-pie",
+    "nz/guidance/ird/paye-deduction-tables/block-2",
     "nz/guidance/ird/rwt-rates",
-    "nz/guidance/ird/student-loan-repayment-deductions",
-    "nz/guidance/studylink/ordinary-residence",
-    "nz/guidance/studylink/student-allowances",
-    "nz/regulation/regulation/public/2016/0068/regulation/13",
-    "nz/statute/act/public/2007/0097/schedule/1/part/b",
-    "nz/statute/act/public/2007/0097/subpart/rd",
-    "nz/statute/act/public/2025/0026/section/13",
-    "nz/statute/act/public/2025/0026/section/20",
-    "nz/statute/act/public/2025/0026/section/22"
+    "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+    "nz/guidance/ird/student-loan-repayment-deductions/block-4",
+    "nz/guidance/studylink/ordinary-residence/block-2",
+    "nz/guidance/studylink/student-allowance-parental-income/block-2",
+    "nz/guidance/studylink/student-allowances/block-5",
+    "nz/statute/act/public/2007/0097/schedule/1/part/b"
   ],
   "pending_money_atoms": 0,
   "programs": {
@@ -493,14 +488,14 @@
   },
   "requested_output_trace": {
     "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
-    "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+    "sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
   },
   "roots": [
     {
       "by_status": {
-        "encoded": 24,
-        "excluded": 34,
-        "pending": 10
+        "encoded": 27,
+        "excluded": 35,
+        "pending": 8
       },
       "classifications": [
         {
@@ -528,30 +523,41 @@
         {
           "citations": [],
           "missing_citations": [],
+          "path": "nz/statutes/act/public/2018/0032/section/75.test.yaml",
+          "reason": "storage_or_test_file_without_corpus_citation",
+          "status": "excluded"
+        },
+        {
+          "citations": [
+            "nz/statute/act/public/2018/0032/section/2",
+            "nz/statute/act/public/2018/0032/section/75"
+          ],
+          "missing_citations": [],
+          "path": "nz/statutes/act/public/2018/0032/section/75.yaml",
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
+        },
+        {
+          "citations": [],
+          "missing_citations": [],
           "path": "nz/statutes/child_support/core_formula.test.yaml",
           "reason": "storage_or_test_file_without_corpus_citation",
           "status": "excluded"
         },
         {
           "citations": [
-            "nz/guidance/ird/child-support/overview",
-            "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
-            "nz/statute/act/public/1991/0142/schedule/1",
             "nz/statute/act/public/1991/0142/schedule/2",
-            "nz/statute/act/public/1991/0142/section/35a",
-            "nz/statute/act/public/1991/0142/section/4",
-            "nz/statute/act/public/1991/0142/section/40",
-            "nz/statute/act/public/1991/0142/section/5",
-            "nz/statute/act/public/1991/0142/section/72",
-            "nz/statute/act/public/1991/0142/section/8"
+            "nz/statute/act/public/1991/0142/section/16",
+            "nz/statute/act/public/1991/0142/section/30",
+            "nz/statute/act/public/1991/0142/section/31",
+            "nz/statute/act/public/1991/0142/section/32",
+            "nz/statute/act/public/1991/0142/section/33",
+            "nz/statute/act/public/1991/0142/section/34"
           ],
-          "missing_citations": [
-            "nz/guidance/ird/child-support/overview",
-            "nz/guidance/ird/child-support/types/formula-assessment/sharing-care"
-          ],
+          "missing_citations": [],
           "path": "nz/statutes/child_support/core_formula.yaml",
-          "reason": "citation_absent_from_pinned_corpus_release",
-          "status": "pending"
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
         },
         {
           "citations": [],
@@ -595,8 +601,8 @@
         },
         {
           "citations": [
-            "nz/guidance/studylink/ordinary-residence",
-            "nz/guidance/studylink/student-allowances",
+            "nz/guidance/studylink/ordinary-residence/block-2",
+            "nz/guidance/studylink/student-allowances/block-5",
             "nz/statute/act/public/1977/0061/section/6",
             "nz/statute/act/public/2009/0051/section/13",
             "nz/statute/act/public/2009/0051/section/70",
@@ -605,8 +611,8 @@
             "nz/statute/act/public/2018/0032/section/16"
           ],
           "missing_citations": [
-            "nz/guidance/studylink/ordinary-residence",
-            "nz/guidance/studylink/student-allowances"
+            "nz/guidance/studylink/ordinary-residence/block-2",
+            "nz/guidance/studylink/student-allowances/block-5"
           ],
           "path": "nz/statutes/common/residence.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -621,15 +627,15 @@
         },
         {
           "citations": [
-            "nz/guidance/ird/gst-calculation-guidance",
-            "nz/guidance/ird/gst-low-value-imported-goods",
+            "nz/guidance/ird/gst-calculation-guidance/block-7",
+            "nz/guidance/ird/gst-low-value-imported-goods/block-1",
             "nz/statute/act/public/1985/0141/section/10",
             "nz/statute/act/public/1985/0141/section/12",
             "nz/statute/act/public/1985/0141/section/8"
           ],
           "missing_citations": [
-            "nz/guidance/ird/gst-calculation-guidance",
-            "nz/guidance/ird/gst-low-value-imported-goods"
+            "nz/guidance/ird/gst-calculation-guidance/block-7",
+            "nz/guidance/ird/gst-low-value-imported-goods/block-1"
           ],
           "path": "nz/statutes/gst/rate.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -871,18 +877,14 @@
         },
         {
           "citations": [
-            "nz/guidance/ird/pir-rates-kiwisaver-pie",
-            "nz/statute/act/public/2007/0097/schedule/1/part/b",
+            "nz/statute/act/public/2007/0097/schedule/6/clause/1",
             "nz/statute/act/public/2007/0097/section/hm-47",
-            "nz/statute/act/public/2007/0097/section/hm-6"
+            "nz/statute/act/public/2024/0019/section/39"
           ],
-          "missing_citations": [
-            "nz/guidance/ird/pir-rates-kiwisaver-pie",
-            "nz/statute/act/public/2007/0097/schedule/1/part/b"
-          ],
+          "missing_citations": [],
           "path": "nz/statutes/income_tax/investment/pie.yaml",
-          "reason": "citation_absent_from_pinned_corpus_release",
-          "status": "pending"
+          "reason": "all_citations_resolve_by_exact_path",
+          "status": "encoded"
         },
         {
           "citations": [],
@@ -943,10 +945,7 @@
           ],
           "missing_citations": [
             "nz/guidance/ird/how-kiwisaver-works/block-2",
-            "nz/guidance/ird/kiwisaver-government-contribution/block-4",
-            "nz/statute/act/public/2025/0026/section/13",
-            "nz/statute/act/public/2025/0026/section/20",
-            "nz/statute/act/public/2025/0026/section/22"
+            "nz/guidance/ird/kiwisaver-government-contribution/block-4"
           ],
           "path": "nz/statutes/kiwisaver/contributions.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -1029,8 +1028,7 @@
           "missing_citations": [
             "nz/guidance/employment-nz/parental-leave-payment-increase-2024/block-2",
             "nz/guidance/employment-nz/parental-leave-payment-increase-2026/block-4",
-            "nz/guidance/employment-nz/parental-leave-payments/block-33",
-            "nz/regulation/regulation/public/2016/0068/regulation/13"
+            "nz/guidance/employment-nz/parental-leave-payments/block-33"
           ],
           "path": "nz/statutes/parental_leave/paid_parental_leave.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -1045,21 +1043,19 @@
         },
         {
           "citations": [
-            "nz/guidance/ird/kiwisaver-contribution-rates",
-            "nz/guidance/ird/paye-deduction-tables",
-            "nz/guidance/ird/student-loan-repayment-deductions",
+            "nz/guidance/ird/paye-deduction-tables/block-2",
+            "nz/guidance/ird/student-loan-repayment-deductions/block-3",
             "nz/regulation/regulation/public/2025/0018/regulation/4",
             "nz/regulation/regulation/public/2025/0018/regulation/5",
             "nz/statute/act/public/2006/0040/section/64",
+            "nz/statute/act/public/2006/0040/section/66",
+            "nz/statute/act/public/2007/0097/section/rd-10",
             "nz/statute/act/public/2007/0097/section/rd-3",
-            "nz/statute/act/public/2007/0097/subpart/rd",
             "nz/statute/act/public/2011/0062/section/22"
           ],
           "missing_citations": [
-            "nz/guidance/ird/kiwisaver-contribution-rates",
-            "nz/guidance/ird/paye-deduction-tables",
-            "nz/guidance/ird/student-loan-repayment-deductions",
-            "nz/statute/act/public/2007/0097/subpart/rd"
+            "nz/guidance/ird/paye-deduction-tables/block-2",
+            "nz/guidance/ird/student-loan-repayment-deductions/block-3"
           ],
           "path": "nz/statutes/payroll/deductions.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -1289,14 +1285,16 @@
         },
         {
           "citations": [
-            "nz/guidance/ird/student-loan-repayment-deductions",
+            "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+            "nz/guidance/ird/student-loan-repayment-deductions/block-4",
             "nz/regulation/regulation/public/2023/0295/regulation/3",
-            "nz/statute/act/public/2011/0062",
-            "nz/statute/act/public/2011/0062/schedule/1",
-            "nz/statute/act/public/2011/0062/section/22"
+            "nz/statute/act/public/2011/0062/section/37",
+            "nz/statute/act/public/2011/0062/section/4",
+            "nz/statute/act/public/2011/0062/section/77"
           ],
           "missing_citations": [
-            "nz/guidance/ird/student-loan-repayment-deductions"
+            "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+            "nz/guidance/ird/student-loan-repayment-deductions/block-4"
           ],
           "path": "nz/statutes/student_loan/repayments.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -1304,7 +1302,7 @@
         }
       ],
       "root": "nz/statutes",
-      "total_files": 68
+      "total_files": 70
     },
     {
       "by_status": {
@@ -1418,11 +1416,17 @@
         },
         {
           "citations": [
-            "nz/guidance/studylink/student-allowances",
-            "nz/regulation/regulation/public/1998/0277/regulation/4"
+            "nz/guidance/studylink/student-allowance-parental-income/block-2",
+            "nz/regulation/regulation/public/1998/0277/regulation/2",
+            "nz/regulation/regulation/public/1998/0277/regulation/4",
+            "nz/regulation/regulation/public/1998/0277/regulation/43",
+            "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+            "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2",
+            "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3",
+            "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
           ],
           "missing_citations": [
-            "nz/guidance/studylink/student-allowances"
+            "nz/guidance/studylink/student-allowance-parental-income/block-2"
           ],
           "path": "nz/regulations/student_allowances/core.yaml",
           "reason": "citation_absent_from_pinned_corpus_release",
@@ -1460,10 +1464,10 @@
       "total_files": 2
     }
   ],
-  "rulespec_commit": "89a7d25dc03a4d045348620283332de10b1047da",
+  "rulespec_commit": "c8ec92e855f835e8348803449836791aa56f5d38",
   "schema": "axiom_oracles.nz_closure_summary.v2",
   "source": {
     "artifact": "closure/nz/source.json",
-    "sha256": "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64aea"
+    "sha256": "9643c557a1231b92d6762a073241ad186c2fab398f8b259aa6af0783c68a91ff"
   }
 }

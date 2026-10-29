@@ -2105,7 +2105,7 @@
       "limitation": "No committed compiled-program artifact or compiler-produced catalog enumeration proves the complete input denominator.",
       "mode": "attested",
       "not_supplied_count": 178,
-      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25",
+      "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507",
       "supplied_input_count": 150
     },
     "eligibility_closures": {
@@ -2118,7 +2118,7 @@
       "artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
       "capture_lineage_mode": "attested",
       "schema": "axiom_oracles.nz_evaluation_traces.v1",
-      "sha256": "4411a6f16175127987cec573354ca71aa33207611fa4022f0ba3ab09def82179"
+      "sha256": "a5b3afdc47016de6f3cd4997ee274895bb3b86978701dad5ead6b6cf3eca3a11"
     },
     "views": {
       "nz/acc-earners-levy": {
@@ -14007,8 +14007,8 @@
       "sha256": "6bed8c0a91e4ba6416238ef1cf381bc8033f3122f3eeb5766074d763929293fd"
     },
     "rulespec": {
-      "expected_git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
-      "git_sha": "89a7d25dc03a4d045348620283332de10b1047da",
+      "expected_git_sha": "c8ec92e855f835e8348803449836791aa56f5d38",
+      "git_sha": "c8ec92e855f835e8348803449836791aa56f5d38",
       "root": "/private/tmp/hub-epm/checkouts/rulespec-nz",
       "tracked_dirty": false
     },
@@ -14021,7 +14021,7 @@
     },
     "source_receipt": {
       "artifact": "comparisons/nz-treasury-incomeexplorer/source-comparison.json",
-      "sha256": "5e78167c87fae8c167521a67fa5473db59e9d4422b2b388565af53ef08e29e25"
+      "sha256": "29a1de731232dd93de10b9f998ad3b08715e4356049bf786bdf537a666523507"
     },
     "treasury_checkout": {
       "git_sha": "741a6ca4f5d27b1dc00b43dc395e39ffc4040a4b",

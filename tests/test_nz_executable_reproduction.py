@@ -74,6 +74,168 @@ def test_source_built_engine_mode_cannot_skip_live_replay(capsys):
     assert "--source-built-engine requires --live" in capsys.readouterr().err
 
 
+def test_rulespec_provenance_refresh_requires_live(capsys):
+    """A new provenance pin requires the byte-preserving engine replay."""
+
+    module = _load_script()
+
+    assert module.main(["--refresh-rulespec-provenance"]) == 1
+    assert "--refresh-rulespec-provenance requires --live" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize(
+    "mutated_name", ["SOURCE_REPORT_PATH", "REQUESTS_PATH", "FULL_RESPONSES_PATH"]
+)
+def test_rulespec_provenance_refresh_rejects_modified_committed_evidence(
+    tmp_path, monkeypatch, mutated_name
+):
+    """MUTANT: a provenance refresh cannot launder an altered baseline."""
+
+    module = _load_script()
+    monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+    baseline = {}
+    paths = {}
+    for name in (
+        "SOURCE_REPORT_PATH",
+        "EVALUATION_TRACE_PATH",
+        "REQUESTS_PATH",
+        "GOLDEN_PATH",
+        "FULL_RESPONSES_PATH",
+        "TRANSCRIPT_PATH",
+        "RECEIPT_PATH",
+    ):
+        path = _write(tmp_path / f"{name}.json", {"committed": True})
+        paths[name] = path
+        baseline[path.name] = path.read_text()
+        monkeypatch.setattr(module, name, path)
+    prior_producer = (
+        f'RULESPEC_SHA = {"1" * 40!r}\n'
+        f'SOURCE_REPORT_SHA256 = {"2" * 64!r}\n'
+        f'EVALUATION_TRACE_SHA256 = {"3" * 64!r}\n'
+    )
+
+    def committed_blob(*args):
+        assert args[0] == "show"
+        relative = args[1].removeprefix("HEAD:")
+        return SimpleNamespace(
+            returncode=0,
+            stdout=(
+                prior_producer if relative == module.GENERATED_BY else baseline[relative]
+            ),
+        )
+
+    monkeypatch.setattr(module, "_git_history", committed_blob)
+    paths[mutated_name].write_text('{"committed": false}\n')
+    before = {path: path.read_bytes() for path in paths.values()}
+
+    with pytest.raises(ValueError, match="must match committed evidence before re-pin"):
+        module._refresh_rulespec_provenance(
+            rulespec_root=tmp_path,
+            engine_root=tmp_path,
+            engine_binary=tmp_path / "engine",
+            source_built_engine=False,
+        )
+
+    assert {path: path.read_bytes() for path in paths.values()} == before
+
+
+@pytest.mark.parametrize("failure", ["engine failure", "numeric drift"])
+def test_rulespec_provenance_refresh_restores_all_evidence_after_failed_replay(
+    tmp_path, monkeypatch, failure
+):
+    """MUTANT: failed replay must roll back every provenance/evidence write."""
+
+    module = _load_script()
+    monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+    previous_sha = "1" * 40
+    source = {
+        "provenance": {
+            "rulespec": {"git_sha": previous_sha, "expected_git_sha": previous_sha}
+        }
+    }
+    source_sha = module._sha256_bytes(module._render(source).encode())
+    trace = {
+        "rulespec_commit": previous_sha,
+        "capture": {"source_comparison": {"sha256": source_sha}},
+        "evaluations": [
+            {"response": {"amount": 42}} for _ in range(module.EVALUATION_COUNT)
+        ],
+    }
+    trace_sha = module._sha256_bytes(module._render(trace).encode())
+    documents = {
+        "SOURCE_REPORT_PATH": source,
+        "EVALUATION_TRACE_PATH": trace,
+        "REQUESTS_PATH": {"provenance": {"rulespec_commit": previous_sha}},
+        "GOLDEN_PATH": {},
+        "FULL_RESPONSES_PATH": {},
+        "TRANSCRIPT_PATH": {},
+        "RECEIPT_PATH": {},
+    }
+    paths = {}
+    baseline = {}
+    for name, document in documents.items():
+        path = _write(tmp_path / f"{name}.json", document)
+        paths[name] = path
+        baseline[path.name] = path.read_text()
+        monkeypatch.setattr(module, name, path)
+    prior_producer = (
+        f"RULESPEC_SHA = {previous_sha!r}\n"
+        f"SOURCE_REPORT_SHA256 = {source_sha!r}\n"
+        f"EVALUATION_TRACE_SHA256 = {trace_sha!r}\n"
+    )
+
+    def committed_blob(*args):
+        relative = args[1].removeprefix("HEAD:")
+        return SimpleNamespace(
+            returncode=0,
+            stdout=(
+                prior_producer if relative == module.GENERATED_BY else baseline[relative]
+            ),
+        )
+
+    next_source = copy.deepcopy(source)
+    next_source["provenance"]["rulespec"] = {
+        "git_sha": module.RULESPEC_SHA,
+        "expected_git_sha": module.RULESPEC_SHA,
+    }
+    next_source_sha = module._sha256_bytes(module._render(next_source).encode())
+    next_trace = copy.deepcopy(trace)
+    next_trace["rulespec_commit"] = module.RULESPEC_SHA
+    next_trace["capture"]["source_comparison"]["sha256"] = next_source_sha
+    monkeypatch.setattr(module, "SOURCE_REPORT_SHA256", next_source_sha)
+    monkeypatch.setattr(
+        module,
+        "EVALUATION_TRACE_SHA256",
+        module._sha256_bytes(module._render(next_trace).encode()),
+    )
+    monkeypatch.setattr(module, "_git_history", committed_blob)
+    monkeypatch.setattr(module, "_validate_source_and_artifact_pins", lambda: None)
+
+    def failed_live(**kwargs):
+        assert module._load(paths["SOURCE_REPORT_PATH"]) == next_source
+        assert module._load(paths["EVALUATION_TRACE_PATH"]) == next_trace
+        assert (
+            module._load(paths["REQUESTS_PATH"])["provenance"]["rulespec_commit"]
+            == module.RULESPEC_SHA
+        )
+        if failure == "engine failure":
+            raise ValueError("forced replay failure")
+        return b"artifact", {}, {"mutated_response": 43}, {}, {}
+
+    monkeypatch.setattr(module, "_live_reproduction", failed_live)
+    before = {path: path.read_bytes() for path in paths.values()}
+
+    with pytest.raises(ValueError, match="forced replay failure|changed live responses"):
+        module._refresh_rulespec_provenance(
+            rulespec_root=tmp_path,
+            engine_root=tmp_path,
+            engine_binary=tmp_path / "engine",
+            source_built_engine=False,
+        )
+
+    assert {path: path.read_bytes() for path in paths.values()} == before
+
+
 def test_live_engine_checkout_must_match_pinned_head(tmp_path, monkeypatch):
     """MUTANT: a binary beside the wrong engine checkout cannot be replayed."""
 
