@@ -258,6 +258,24 @@ def _build(payloads):
     )
 
 
+# Labels a weakened check would accept (#643): a non-canonical set, a
+# duplicated or nested ambiguous alternative, a single-alternative ambiguity.
+MUTANT_LABELS = {
+    "stage2": [
+        "seca+se_loss",
+        "ambiguous:seca|seca",
+        "ambiguous:se_loss|se_loss+seca",
+        "ambiguous:seca",
+    ],
+    "stage3": [
+        "cg_distributions+div_aggregate",
+        "ambiguous:div_aggregate|div_aggregate",
+        "ambiguous:div_aggregate|div_aggregate+farm_rent",
+        "ambiguous:div_aggregate",
+    ],
+}
+
+
 def _downstream_key(rows, stage1):
     # The old audit already caught a dividend row defaulting to PE investment.
     # Exercise the PE investment rows that its permissive fallback accepted.
@@ -309,9 +327,16 @@ def test_builder_and_audit_refuse_the_reviewers_corrupted_labels(build_payloads,
         )
 
 
-@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
 @pytest.mark.parametrize(
-    "label", ["residual", None, "", "unknown", "ambiguous:", "ambiguous:div_aggregate|unknown"]
+    "stage1,stage,label",
+    [
+        (stage1, stage, label)
+        for stage1, stage in (("residual", "stage2"), ("investment", "stage3"))
+        for label in [
+            "residual", None, "", "unknown", "ambiguous:",
+            "ambiguous:div_aggregate|unknown", *MUTANT_LABELS[stage],
+        ]
+    ],
 )
 def test_builder_refuses_uncleared_or_unsupported_downstream_labels(
     build_payloads, stage1, stage, label
@@ -322,8 +347,14 @@ def test_builder_refuses_uncleared_or_unsupported_downstream_labels(
         _build(build_payloads)
 
 
-@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
-@pytest.mark.parametrize("label", ["residual", None, "", "unknown"])
+@pytest.mark.parametrize(
+    "stage1,stage,label",
+    [
+        (stage1, stage, label)
+        for stage1, stage in (("residual", "stage2"), ("investment", "stage3"))
+        for label in ["residual", None, "", "unknown", *MUTANT_LABELS[stage]]
+    ],
+)
 def test_audit_refuses_uncleared_or_unsupported_downstream_labels(
     repo_copy, stage1, stage, label
 ):
@@ -355,6 +386,10 @@ def test_builder_and_audit_refuse_a_missing_stage3_label(build_payloads, repo_co
 @pytest.mark.parametrize(
     "stage,field,value",
     [
+        # A check saved as the string "true" is not a passed check (#643).
+        ("stage1", "baseline_reproduces_full_run", "true"),
+        ("stage3", "bridge_aggregate_variant_leaves_stage1_investment_rows", "true"),
+        ("stage3", "policyengine_aggregate_variant_clears_all", "true"),
         ("stage1", "baseline_reproduces_full_run", False),
         ("stage1", "baseline_value_drift", ["tax_unit_1|eitc"]),
         ("stage1", "explain_sample_matches_full_run", False),
@@ -383,6 +418,9 @@ def test_builder_refuses_failed_recorded_baseline_or_model_checks(
         ("stage3_switch_model_reproduces_both_aggregates", False),
         ("stage3_policyengine_aggregate_clears_all", False),
         ("bridge_aggregate_variant_leaves_stage1_investment_rows", False),
+        ("stage1_baseline_reproduces_full_run", "true"),
+        ("stage3_policyengine_aggregate_clears_all", "true"),
+        ("bridge_aggregate_variant_leaves_stage1_investment_rows", "true"),
     ],
 )
 def test_audit_and_disposition_builder_refuse_failed_recorded_checks(repo_copy, field, value):
