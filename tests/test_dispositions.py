@@ -1532,6 +1532,9 @@ _SHA = "c4307e514196618afcbf88cf7fd33746417eeabf"
         "https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blame/main/R/rates.R",
         "https://github.com/PolicyEngine/policyengine-us/commits/master/policyengine_us",
         "https://github.com/PolicyEngine/policyengine-us/blame/1.767.3/x.py",
+        # The singular commit view resolves a branch name too.
+        "https://github.com/a/b/commit/main",
+        "https://github.com/PolicyEngine/policyengine-us/commit/1.767.3",
         # Mixed-case host and path segments are still GitHub code links.
         "https://GitHub.COM/PolicyEngine/policyengine-us/BLOB/1.767.3/x.py",
         "https://RAW.GithubUserContent.com/PolicyEngine/policyengine-us/1.767.3/x.py",

@@ -53,7 +53,7 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   value, ``equals`` and ``tolerance`` must be finite, so a NaN or infinity
   can never make the reconciliation check vacuous.
 * A GitHub code link (``/blob/``, ``/tree/``, ``/raw/``, ``/blame/``,
-  ``/commits/`` or ``raw.githubusercontent.com``) into any repository, in
+  ``/commit/``, ``/commits/`` or ``raw.githubusercontent.com``) into any repository, in
   ``evidence.sources``, ``evidence.upstream_url`` or ``linked_issue``, must
   name a full 40-hex commit. A branch link moves, and a version link can be
   dead (``PolicyEngine/policyengine-us`` publishes no version tags).
@@ -261,7 +261,7 @@ def _is_url(value: object) -> bool:
 # URL); it checks only the ref's form.
 _GITHUB_CODE_URL_RE = re.compile(
     r"^https?://(?:www\.)?github\.com/(?P<owner>[^/?#]+)/(?P<repo>[^/?#]+)/"
-    r"(?:blob|tree|raw|blame|commits)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    r"(?:blob|tree|raw|blame|commits?)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
     re.IGNORECASE,
 )
 _RAW_GITHUB_URL_RE = re.compile(

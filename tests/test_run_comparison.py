@@ -4323,7 +4323,7 @@ def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeyp
     # counts.unexplained counts every row left unexplained (#521), whether an
     # explicit `unexplained` entry or no entry covers it; row annotations
     # still tell the two apart.
-    assert block["counts"]["unexplained"] == block["unexplained_count"]
+    assert block["counts"]["unexplained"] == block["unexplained_count"] == 1001
     assert apply_dispositions._premerged_block_problems(
         dashboard_path, dashboard, dispositions
     ) == []
