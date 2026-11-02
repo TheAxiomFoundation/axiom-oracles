@@ -111,14 +111,18 @@ def test_generated_merge_conserves_rows_counts_and_rates(seed: int) -> None:
                 expected_counts[expected["disposition"]] += 1
         assert len(merged["mismatches"]) == len(report["mismatches"])
         block = merged["summary"]["dispositioned"]
-        assert block["counts"] == {
-            kind: expected_counts[kind] for kind in DISPOSITION_KINDS
-        }
         classified = sum(expected_counts[k] for k in CLASSIFIED_DISPOSITION_KINDS)
+        # `counts["unexplained"]` is the whole residue (every mismatch row not
+        # classified), the same figure as unexplained_count.
+        assert block["counts"] == {
+            **{kind: expected_counts[kind] for kind in DISPOSITION_KINDS},
+            "unexplained": len(report["mismatches"]) - classified,
+        }
         total = report["summary"]["comparison_count"]
         matches = report["summary"]["match_count"]
         assert classified + block["unexplained_count"] + matches == total
-        assert sum(block["counts"].values()) <= len(report["mismatches"])
+        assert block["counts"]["unexplained"] == block["unexplained_count"]
+        assert sum(block["counts"].values()) == len(report["mismatches"])
         assert block["raw_match_rate"] == pytest.approx(matches / total * 100, abs=1e-6)
         assert block["explained_rate"] == pytest.approx(
             (matches + classified) / total * 100, abs=1e-6

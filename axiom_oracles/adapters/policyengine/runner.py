@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 from collections.abc import Mapping, Sequence
 from functools import lru_cache
 from typing import Any
@@ -39,6 +40,7 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.DIVIDEND_INCOME: "dividend_income",
     Concepts.QUALIFIED_DIVIDEND_INCOME: "qualified_dividend_income",
     Concepts.INTEREST_INCOME: "taxable_interest_income",
+    Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
     Concepts.PENSION_INCOME: "taxable_pension_income",
@@ -176,6 +178,14 @@ class PolicyEngineRunner(EngineAdapter):
         for start in range(0, len(cases), self.batch_size):
             batch = cases[start : start + self.batch_size]
             results.extend(self._run_case_batch(batch, pe_variables))
+            # Each batch builds a PolicyEngine-US Microsimulation whose
+            # populations, holders and tax-benefit system refer back to it, so
+            # it is freed only by a full collection. `compare` disables
+            # automatic collection for the whole run, and elsewhere thresholds
+            # rarely trigger a full one between batches, so collect here. The
+            # shared tax-benefit system still pins the last simulation built,
+            # so at most one batch's simulation survives this call.
+            gc.collect()
         return results
 
     def run_case(self, case: Case, variables: list[str]) -> EngineResult:
@@ -500,13 +510,16 @@ class PolicyEngineRunner(EngineAdapter):
         except RuntimeError:
             raise
         except Exception:
-            if len(cases) == 1:
-                return [self.run_case(cases[0], variables)]
-            midpoint = len(cases) // 2
-            return [
-                *self._run_case_batch(cases[:midpoint], variables),
-                *self._run_case_batch(cases[midpoint:], variables),
-            ]
+            pass
+        # Bisect outside the handler: inside it, the in-flight exception keeps
+        # the failed attempt's frames (simulation, dataset, output frames)
+        # alive through every level of recursion. Collect them first.
+        gc.collect()
+        if len(cases) == 1:
+            return [self.run_case(cases[0], variables)]
+        midpoint = len(cases) // 2
+        first = self._run_case_batch(cases[:midpoint], variables)
+        return [*first, *self._run_case_batch(cases[midpoint:], variables)]
 
     def _run_case_batch_once(
         self,

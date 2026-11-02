@@ -5,12 +5,20 @@ Big states OOM a single compare process on constrained machines; the
 ``--case-shard K/N`` option runs disjoint case subsets in fresh processes.
 This merges the shard reports back into one ``axiom.comparison_report.v2``:
 counters and weights sum, row lists concatenate, aggregates re-sum by
-concept, and per-shard identity fields must agree. TAXSIM binary inventories
-are unioned by digest, scope, and platform with summed row counts; their pin
-profiles must agree and every nonempty shard must record its identity.
+concept, and per-shard identity fields must agree. ``engine_identity``
+binaries (the TAXSIM executables each shard ran) merge by identity with
+their row counts summed; equivalent printed build stamps share one entry
+and retain the first shard's observed spelling. Shards that ran different
+binaries keep one entry per binary. The provenance copy
+(``provenance.oracle.taxsim_binaries``) merges the same way, even when no
+shard carries ``engine_identity``; every shard must record it or none, a
+shard with rows must not record an empty list, the two copies must agree,
+and ``provenance.oracle.policyengine_taxsim`` and
+``provenance.oracle.taxsim_pin_profile`` must agree across shards.
 
-Usage:
-    merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
+Usage (the script imports axiom_oracles, so run it in the project
+environment):
+    uv run scripts/merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
 """
 
 from __future__ import annotations
@@ -20,9 +28,12 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from axiom_oracles.adapters.taxsim.pins import normalize_build_stamp
+
 _SUM_SUMMARY = (
     "match_count",
     "mismatch_count",
+    "uncompared_mismatches",
     "comparison_count",
     "error_count",
 )
@@ -32,6 +43,7 @@ _SUM_AGGREGATE = (
     "match_count",
     "match_weight",
     "mismatch_count",
+    "uncompared_mismatches",
     "mismatch_weight",
     "missing_left_count",
     "missing_right_count",
@@ -57,95 +69,6 @@ def _merge_count_objects(count_objects: list[dict[str, int]]) -> dict[str, int]:
     return dict(sorted(totals.items()))
 
 
-def _merge_taxsim_identity(
-    identities: list[dict], *, populated: list[bool],
-    binaries_key: str, profile_key: str, path: str,
-) -> dict | None:
-    """Merge C1 identity records without losing a later shard's executable.
-
-    Both the CLI's engine_identity and run_comparison's provenance copy use
-    the same binary records. Require complete coverage within either shape;
-    keeping the first shard's identity could authorize unrelated rows.
-    """
-    present = [binaries_key in identity or profile_key in identity for identity in identities]
-    if not any(present):
-        return None
-    if not all(present):
-        raise SystemExit(f"shards have incomplete TAXSIM identity coverage at {path}")
-    profile = identities[0].get(profile_key)
-    if not isinstance(profile, str) or not profile:
-        raise SystemExit(f"invalid TAXSIM identity {path}.{profile_key}")
-    binaries: dict[tuple[str, ...], dict] = {}
-    for identity, has_rows in zip(identities, populated, strict=True):
-        if identity.get(profile_key) != profile:
-            raise SystemExit(f"shards disagree on {path}.{profile_key}")
-        records = identity.get(binaries_key)
-        if not isinstance(records, list):
-            raise SystemExit(f"invalid TAXSIM identity {path}.{binaries_key}")
-        if not records and has_rows:
-            raise SystemExit(f"shards have incomplete TAXSIM identity coverage at {path}")
-        for record in records:
-            if not isinstance(record, dict) or not isinstance(record.get("sha256"), str):
-                raise SystemExit(f"invalid TAXSIM binary identity at {path}")
-            rows = record.get("rows")
-            if isinstance(rows, bool) or not isinstance(rows, int) or rows < 0:
-                raise SystemExit(f"invalid TAXSIM binary rows at {path}")
-            # Canonical JSON also permits structured scopes supplied by a
-            # pin profile without assuming a particular scope vocabulary.
-            key = tuple(
-                json.dumps(record.get(field), sort_keys=True)
-                for field in ("sha256", "scope", "platform")
-            )
-            if key in binaries:
-                binaries[key]["rows"] += rows
-            else:
-                binaries[key] = dict(record)
-    return {
-        **identities[0],
-        profile_key: profile,
-        binaries_key: [binaries[key] for key in sorted(binaries)],
-    }
-
-
-def _merge_taxsim_identities(shards: list[dict], merged: dict) -> None:
-    engine_identities = [(shard.get("engine_identity") or {}) for shard in shards]
-    oracles = [
-        (shard.get("provenance") or {}).get("oracle") or {}
-        for shard in shards
-    ]
-    populated = [
-        any(shard.get(key) for key in ("case_count", "cases", "mismatches", "errors"))
-        or any(
-            (shard.get("summary") or {}).get(key)
-            for key in (*_SUM_SUMMARY, "engine_error_count")
-        )
-        for shard in shards
-    ]
-    taxsim = _merge_taxsim_identity(
-        [identity.get("taxsim") or {} for identity in engine_identities],
-        populated=populated,
-        binaries_key="binaries", profile_key="pin_profile", path="engine_identity.taxsim",
-    )
-    oracle = _merge_taxsim_identity(
-        oracles, populated=populated,
-        binaries_key="taxsim_binaries", profile_key="taxsim_pin_profile",
-        path="provenance.oracle",
-    )
-    versions = [oracle.get("policyengine_taxsim") for oracle in oracles]
-    if any(version != versions[0] for version in versions[1:]):
-        raise SystemExit("shards disagree on provenance.oracle.policyengine_taxsim identity")
-    if taxsim is not None and oracle is not None:
-        if (
-            taxsim["pin_profile"] != oracle["taxsim_pin_profile"]
-            or taxsim["binaries"] != oracle["taxsim_binaries"]
-        ):
-            raise SystemExit("TAXSIM identity disagrees between engine_identity and provenance")
-    if taxsim is not None:
-        merged["engine_identity"] = {**engine_identities[0], "taxsim": taxsim}
-    if oracle is not None:
-        merged["provenance"] = {**merged.get("provenance", {}), "oracle": oracle}
-
-
 def merge(shards: list[dict]) -> dict:
     first = shards[0]
     for key in ("schema_version", "suite", "population", "engines", "locales"):
@@ -157,7 +80,6 @@ def merge(shards: list[dict]) -> dict:
                 )
 
     merged = dict(first)
-    _merge_taxsim_identities(shards, merged)
     merged["case_count"] = sum(int(s.get("case_count") or 0) for s in shards)
     for key in ("cases", "mismatches", "errors"):
         merged[key] = [row for shard in shards for row in shard.get(key) or []]
@@ -221,7 +143,141 @@ def merge(shards: list[dict]) -> dict:
                         aggregate.get(key) or 0
                     )
     merged["aggregates"] = list(buckets.values())
+    engine_identity = _merge_engine_identity(shards)
+    _require_binaries_for_rows(
+        shards,
+        [((s.get("engine_identity") or {}).get("taxsim")) for s in shards],
+        "binaries",
+        "engine_identity.taxsim",
+    )
+    provenance_binaries = _merge_provenance_taxsim(shards)
+    taxsim = (engine_identity or {}).get("taxsim")
+    if (
+        taxsim
+        and provenance_binaries is not None
+        and provenance_binaries != taxsim.get("binaries")
+    ):
+        raise SystemExit(
+            "TAXSIM identity disagrees between engine_identity and provenance"
+        )
+    if engine_identity is None:
+        merged.pop("engine_identity", None)
+    else:
+        merged["engine_identity"] = engine_identity
+    binaries = taxsim.get("binaries") if taxsim else provenance_binaries
+    if binaries is not None and isinstance(merged.get("provenance"), dict):
+        provenance = dict(merged["provenance"])
+        oracle = dict(provenance.get("oracle") or {})
+        oracle["taxsim_binaries"] = [dict(item) for item in binaries]
+        provenance["oracle"] = oracle
+        merged["provenance"] = provenance
     return merged
+
+
+def _shard_has_rows(shard: dict) -> bool:
+    summary = shard.get("summary") or {}
+    return bool(
+        any(shard.get(key) for key in ("case_count", "cases", "mismatches", "errors"))
+        or any(summary.get(key) for key in (*_SUM_SUMMARY, "engine_error_count"))
+    )
+
+
+def _require_binaries_for_rows(
+    shards: list[dict], blocks: list, key: str, path: str
+) -> None:
+    """A shard that ran rows must name the binaries that produced them."""
+    for shard, block in zip(shards, blocks, strict=True):
+        if isinstance(block, dict) and key in block:
+            if not isinstance(block[key], list):
+                raise SystemExit(f"invalid TAXSIM identity {path}.{key}")
+            if not block[key] and _shard_has_rows(shard):
+                raise SystemExit(
+                    f"shards have incomplete TAXSIM identity coverage at {path}"
+                )
+
+
+def _merge_provenance_taxsim(shards: list[dict]) -> list[dict] | None:
+    """Merge every shard's ``provenance.oracle.taxsim_binaries``.
+
+    ``None`` when no shard records one. The wrapper version and pin profile
+    must agree across shards, and either every shard records binaries or
+    none does, so the first shard's identity cannot stand in for the rows
+    of a later shard that ran something else.
+    """
+    oracles = [
+        ((shard.get("provenance") or {}).get("oracle") or {}) for shard in shards
+    ]
+    for field in ("policyengine_taxsim", "taxsim_pin_profile"):
+        values = [oracle.get(field) for oracle in oracles]
+        if any(value != values[0] for value in values[1:]):
+            raise SystemExit(
+                f"shards disagree on provenance.oracle.{field} identity"
+            )
+    present = ["taxsim_binaries" in oracle for oracle in oracles]
+    if not any(present):
+        return None
+    if not all(present):
+        raise SystemExit(
+            "shards have incomplete TAXSIM identity coverage at provenance.oracle"
+        )
+    _require_binaries_for_rows(
+        shards, oracles, "taxsim_binaries", "provenance.oracle"
+    )
+    return _merge_binaries(
+        [oracle["taxsim_binaries"] for oracle in oracles], "taxsim"
+    )
+
+
+def _merge_engine_identity(shards: list[dict]) -> dict | None:
+    blocks = [shard.get("engine_identity") for shard in shards]
+    if not any(blocks):
+        return None
+    if not all(blocks):
+        raise SystemExit(
+            "shards disagree on engine_identity: some record the binaries "
+            "they ran and some do not"
+        )
+    merged: dict = {}
+    for engine in sorted({key for block in blocks for key in block}):
+        parts = [block.get(engine) for block in blocks]
+        if not all(parts):
+            raise SystemExit(f"shards disagree on engine_identity.{engine}")
+        header = {k: v for k, v in parts[0].items() if k != "binaries"}
+        for part in parts[1:]:
+            other = {k: v for k, v in part.items() if k != "binaries"}
+            if other != header:
+                raise SystemExit(
+                    f"shards disagree on engine_identity.{engine}: "
+                    f"{header!r} vs {other!r}"
+                )
+        merged[engine] = dict(header)
+        # An engine identity without a binary inventory keeps its shape.
+        if any("binaries" in part for part in parts):
+            merged[engine]["binaries"] = _merge_binaries(
+                [part.get("binaries") or [] for part in parts], engine
+            )
+    return merged
+
+
+def _merge_binaries(lists: list[list[dict]], engine: str) -> list[dict]:
+    """Merge binary records by identity, summing their rows."""
+    binaries: dict[str, dict] = {}
+    for records in lists:
+        for binary in records:
+            identity = {k: v for k, v in binary.items() if k != "rows"}
+            if engine == "taxsim" and identity.get("build_observed") is not None:
+                identity["build_observed"] = normalize_build_stamp(
+                    identity["build_observed"]
+                )
+            key = json.dumps(
+                identity,
+                sort_keys=True,
+            )
+            if key in binaries:
+                binaries[key]["rows"] += int(binary.get("rows") or 0)
+            else:
+                binaries[key] = {**binary, "rows": int(binary.get("rows") or 0)}
+    return list(binaries.values())
 
 
 def main() -> int:

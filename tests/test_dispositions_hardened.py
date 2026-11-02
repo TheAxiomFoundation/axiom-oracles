@@ -643,7 +643,20 @@ def test_first_entry_still_wins_outside_taxsim_lanes() -> None:
         _report(rows, engines=("axiom", "policyengine")), _doc([first, second])
     )
     assert merged["mismatches"][0]["disposition"]["id"] == "first"
-    assert _block(merged)["expired_reasons"] == {"second": "no_live_rows"}
+    # Outside TAXSIM lanes a legacy-only expiry adds no reasons block, so
+    # reports merged before reasons existed keep their bytes.
+    assert _block(merged)["expired_entries"] == ["second"]
+    assert "expired_reasons" not in _block(merged)
+
+
+def test_a_new_expiry_reason_is_recorded_outside_taxsim_lanes() -> None:
+    rows = [_row("case-1", 10, 0)]
+    entry = _bound(_entry(), rows)
+    entry["selector_binding"]["units"] += 1
+    merged = apply_dispositions(
+        _report(rows, engines=("axiom", "policyengine")), _doc([entry])
+    )
+    assert _block(merged)["expired_reasons"] == {"example": "selector_binding_violated"}
 
 
 def test_select_rows_reports_every_claimant_only_under_conservation() -> None:
@@ -741,7 +754,7 @@ def test_expression_evaluator_named_variables_only() -> None:
     # Without variables the evaluator is the plain constant evaluator.
     with pytest.raises(ArithmeticEvaluationError, match="unsupported syntax"):
         evaluate_expression("left", None)
-    with pytest.raises(ArithmeticEvaluationError, match="division by zero"):
+    with pytest.raises(ArithmeticEvaluationError, match="divides by zero"):
         evaluate_expression("1 / 0", None)
 
 
@@ -795,7 +808,7 @@ def test_row_arithmetic_validation() -> None:
     assert any("unknown variable" in e for e in errors_for([{"expression": "wages", "equals": 4}]))
     assert any("numeric `equals`" in e for e in errors_for([{"expression": "left", "equals": "4"}]))
     assert any("numeric `equals`" in e for e in errors_for([{"expression": "left", "equals": []}]))
-    assert any("tolerance must be >= 0" in e for e in errors_for([{"expression": "left", "equals": 1, "tolerance": -1}]))
+    assert any("tolerance must be finite and >= 0" in e for e in errors_for([{"expression": "left", "equals": 1, "tolerance": -1}]))
     assert any("unknown keys" in e for e in errors_for([{"expression": "left", "equals": 1, "why": "x"}]))
     assert errors_for([{"expression": "right", "equals": [0, 500]}]) == []
 

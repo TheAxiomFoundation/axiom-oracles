@@ -1,7 +1,7 @@
 """Prove the TAXSIM disposition migration left every row assignment unchanged.
 
 Loads the pre-migration merge module, dispositions and reports from a baseline
-commit (default: the audited origin/main, 69d6e1b1), merges both versions from
+commit (default: the audited origin/main, 358f433b), merges both versions from
 annotation-free reports, and compares assignment digests (no engine runs). See
 docs/taxsim-disposition-migration-audit.md.
 
@@ -21,13 +21,18 @@ sys.path.insert(0, str(ROOT))
 from axiom_oracles.comparison import dispositions as current  # noqa: E402
 
 BASELINE = (
-    sys.argv[1] if len(sys.argv) > 1 else "69d6e1b121b76b1406dfd8c73a5d45cc12d932cc"
+    sys.argv[1] if len(sys.argv) > 1 else "358f433b9"
 )
 REF = subprocess.check_output(["git", "rev-parse", BASELINE], text=True).strip()
 TRACKED = subprocess.check_output(
     ["git", "ls-tree", "-r", "--name-only", REF], text=True
 ).splitlines()
 TRACKED_SET = set(TRACKED)
+# Modules the baseline merge imports from its package.
+BASELINE_SIBLINGS = (
+    "axiom_oracles/comparison/pe_axiom_standard.py",
+    "axiom_oracles/conformance/unexplained.py",
+)
 
 
 def before_bytes(path):
@@ -47,8 +52,16 @@ with tempfile.TemporaryDirectory(prefix="disposition-migration-baseline-") as di
     temp = Path(directory)
     source = temp / "dispositions_original.py"
     source.write_bytes(before_bytes("axiom_oracles/comparison/dispositions.py"))
-    spec = importlib.util.spec_from_file_location("pr3_dispositions_original", source)
+    # The baseline module imports its siblings relatively, so load it inside
+    # the axiom_oracles.comparison package. Those siblings come from this
+    # checkout; BASELINE_SIBLINGS must be byte-identical at the baseline.
+    for sibling in BASELINE_SIBLINGS:
+        assert (ROOT / sibling).read_bytes() == before_bytes(sibling), sibling
+    spec = importlib.util.spec_from_file_location(
+        "axiom_oracles.comparison._baseline_dispositions", source
+    )
     original = importlib.util.module_from_spec(spec)
+    original.__package__ = "axiom_oracles.comparison"
     spec.loader.exec_module(original)
     report_paths = []
     for path in TRACKED:
@@ -192,18 +205,35 @@ with tempfile.TemporaryDirectory(prefix="disposition-migration-baseline-") as di
         json.loads(before_bytes(non_taxsim_path)),
         json.loads((ROOT / non_taxsim_path).read_text()),
     )
-    delta = after_ssc["summary"]["dispositioned"].pop("expired_reasons")
+    # Outside TAXSIM lanes a legacy-only expiry records no reasons block, so
+    # the one non-TAXSIM report with an expired entry is byte-identical.
+    assert before_bytes(non_taxsim_path) == (ROOT / non_taxsim_path).read_bytes()
     assert before_ssc == after_ssc
-    assert delta == {"dataset-uprating-bridge-artifact-resolved": "no_live_rows"}
+    reasons = current.apply_dispositions(
+        {
+            **before_ssc,
+            "mismatches": [
+                {k: v for k, v in row.items() if k != "disposition"}
+                for row in before_ssc.get("mismatches") or []
+            ],
+        },
+        current.load_dispositions(
+            ROOT / "dispositions/be-worker-ssc.yaml", repo_root=ROOT
+        ),
+    )["summary"]["dispositioned"]
+    assert "expired_reasons" not in reasons
+    assert reasons["expired_entries"] == before_ssc["summary"]["dispositioned"][
+        "expired_entries"
+    ]
     result = {
         "baseline_ref": "origin/main",
         "baseline_commit": REF,
         "baseline_module_sha256": digest(source.read_bytes()),
         "reports": rows,
         "unchanged_case_artifacts": chunks,
-        "non_taxsim_metadata_only_change": {
+        "non_taxsim_unchanged": {
             "path": non_taxsim_path,
-            "expired_reasons": delta,
+            "sha256": digest((ROOT / non_taxsim_path).read_bytes()),
         },
     }
     out = ROOT / "docs/taxsim-disposition-migration-baseline.json"

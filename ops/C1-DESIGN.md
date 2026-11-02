@@ -12,7 +12,7 @@ The literal Cartesian universe is too large for an initial routinely reproducibl
 
 ### Oracle-defined spine
 
-The supervised extractor will read `/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/timeseries/rate_timeseries.rds` at the reviewed Yale commit and in its default legal-date mode. It will select the panel's own spine columns (`hts10`, Census `country`, `revision`, `valid_from`, `valid_until`) and the complete upstream `statutory_*` column set. No RuleSpec line list, compiled artifact, B1.6 support file, incidence table, import weight, or engine output may determine whether a reference row exists or what its expected value is.
+The supervised extractor will read `<workspace>/_tariff-yale/data/timeseries/rate_timeseries.rds` at the reviewed Yale commit and in its default legal-date mode. It will select the panel's own spine columns (`hts10`, Census `country`, `revision`, `valid_from`, `valid_until`) and the complete upstream `statutory_*` column set. No RuleSpec line list, compiled artifact, B1.6 support file, incidence table, import weight, or engine output may determine whether a reference row exists or what its expected value is.
 
 The rated-line universe is the set of HTS-10 lines present in Yale's panel with a valid statutory rate vector during the window, including zero-rate vectors when Yale retains the line as a rated schedule line. The country universe is the exact Census-country set in Yale's panel. The extractor will fail on missing/non-finite/negative rates, duplicate keys, interval gaps or overlaps, unequal country sets by line, unclassified new `statutory_*` columns, or an unbridged Census country. Provenance will pin the Yale commit, RDS SHA-256, legal-date build invocation, complete schema, full-universe counts, selected-universe counts, country bridge SHA-256, extract SHA-256, and extraction timestamp.
 
@@ -46,9 +46,9 @@ This stratification is unbiased with respect to reference outcomes and mismatch 
 
 ### Bulk program and inputs
 
-The Axiom side is the 100 generated chapter compositions under `us/policies/cbp/us-tariff-schedule/generated/chNN/chNN.yaml`, compiled with absolute source/output paths using the pinned engine at `/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine` and:
+The Axiom side is the 100 generated chapter compositions under `us/policies/cbp/us-tariff-schedule/generated/chNN/chNN.yaml`, compiled with absolute source/output paths using the pinned engine at `<workspace>/axiom-rules-engine-pinned/target/release/axiom-rules-engine` and:
 
-`AXIOM_RULESPEC_REPO_ROOTS=/Users/maxghenis/TheAxiomFoundation/_b1wt`.
+`AXIOM_RULESPEC_REPO_ROOTS=<workspace>/_b1wt`.
 
 Compilation and execution receipts pin the RuleSpec commit containing merge `96d5e7c1`, engine binary SHA-256, each source and compiled-artifact SHA-256, absolute paths, environment allowlist, batch sizes, and output hashes. The five-line `us-tariff-duty/composition` remains an independent witness gate; it is not substituted for the bulk compositions.
 

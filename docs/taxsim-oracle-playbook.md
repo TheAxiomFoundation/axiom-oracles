@@ -1,12 +1,17 @@
 # TAXSIM Oracle Playbook
 
 How the NBER TAXSIM-35 oracle is wired into axiom-oracles as a first-class
-oracle, where it is authoritative, and how to extend its coverage. The
+oracle, which side a disagreement is presumed to be on, and how to extend its
+coverage. The
 mechanics of the comparison path (shared input row, state-code conversion,
 law-year support) live in [policyengine-taxsim.md](policyengine-taxsim.md);
 this page is the standing recipe and the standing *judgment*.
 
-Every TAXSIM lane grades **Axiom** against TAXSIM. Oracle-vs-oracle
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
+Every TAXSIM lane compares **Axiom** with TAXSIM. Oracle-vs-oracle
 comparisons (PolicyEngine vs TAXSIM) are diagnostic tooling for triage
 sessions, not published lanes — an agreement rate that does not bear on
 Axiom's correctness does not go on the dashboard.
@@ -59,18 +64,17 @@ every child row a known NBER artifact).
   mapped to `staxbc` the same day; the probe notes live on their mapping
   entries.
 
-## Standing: where TAXSIM is authoritative vs advisory
+## Standing: which side a TAXSIM disagreement is presumed to be on
 
-**Authoritative** (a disagreement is presumptively an Axiom-side or
-PolicyEngine-side issue):
+**Disagreement presumed Axiom- or PolicyEngine-side:**
 
 - Federal core at 2026: OBBBA rate schedule, standard deduction, AGI
   (`v10`), taxable income, tax before credits, childless EITC, FICA/SECA
   (`tfica`).
 - State flat-rate cores (e.g. CO's taxable × 4.40%).
 
-**Advisory** (a disagreement is presumptively a TAXSIM-side vintage or model
-gap; disposition it, do not chase the Axiom encoding):
+**Disagreement presumed TAXSIM-side** (a vintage or model gap; disposition it,
+do not chase the Axiom encoding):
 
 - Any child-credit machinery at law year 2026: the pinned binary's CTC
   collapses to the $500 ODC path; ACTC, CDCC, and EITC-with-children return
@@ -90,6 +94,33 @@ gap; disposition it, do not chase the Axiom encoding):
   benefits (`gssi`) follow the same rule: the §86 member is exactly
   0.85 × the non-earner members' benefits, plus the H.R.1 §70103
   senior-deduction phaseout knock-on of the shifted MAGI.
+- Units with **tax-exempt interest** (Form 1040 line 2a): the complete
+  [NBER input list](https://taxsim.nber.org/taxsimtest/) has no input for it
+  and defines `intrec` as taxable interest. The pinned macOS binary rejected
+  an added `exint` column with `STOP 901` in the independent review; the
+  reproduction below checks that observation against the binary's hash.
+  The projection therefore leaves
+  `Concepts.TAX_EXEMPT_INTEREST_INCOME` out of the row and records the
+  dropped signed head+spouse sum when nonzero under the attached Case's
+  `metadata.taxsim_unprojected_inputs`, including preprojected Cases.
+  Direct `TaxsimPackageRunner.run_cases` calls carry the same diagnostic in
+  `EngineResult.raw`; the state campaign carries it in each affected
+  comparison case row's metadata. These paths preserve the row and output
+  values. TAXSIM therefore computes as if
+  line 2a were 0: its taxable Social Security (`v12`) omits the §86(b)(2)(B)
+  add-back to modified AGI, and its EITC investment-income test omits
+  Pub. 596 Worksheet 1 line 2 (§32(i)(2)(B)), while the Axiom side counts
+  both. **Classification rule, limited to this omission:** an affected
+  Axiom-vs-TAXSIM row may be dispositioned as `bridge_artifact` only when
+  per-row causal evidence and arithmetic reconcile the mismatch to the
+  dropped filer input's effect on the compared output, under
+  [the disposition rules](../dispositions/README.md#rules). This class
+  describes a projection-surface limitation rather than an oracle
+  disagreement. A nonzero diagnostic alone does not establish the cause,
+  and must not hide any residual beyond what the omission can explain.
+  Retain and investigate the unreconciled portion, including a mismatch
+  larger than the explained effect. No automatic disposition follows from
+  this key, and this rule makes no claim about other omitted income.
 - **SE-tax ALD**: the pinned binary deducts half of the §1401(b)(2)
   additional Medicare tax in its self-employment-tax ALD, which §164(f)(1)
   excludes (isolated probe: w=0, se=810,431 → ALD 24,759.23 = 22,291.28
@@ -117,6 +148,68 @@ gap; disposition it, do not chase the Axiom encoding):
   inflation projections; axiom reproduces the ND Commissioner's official
   2026 schedule ($49,575 single 0% bracket) and RI's ADV 2025-22 amounts to
   the cent, so these residuals attribute to TAXSIM without triangulation.
+
+### Reproducing the tax-exempt-interest input rejection
+
+Run this from the repository root on macOS with Python. It downloads the
+wheel URL recorded in [the pin](../axiom_oracles/adapters/taxsim/taxsim_pins.json),
+checks the wheel and macOS executable hashes, then sends the control CSV and
+the same CSV with `exint=10000` to separate subprocesses. The pin at this
+review head records wheel SHA-256
+`2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1`
+and macOS binary SHA-256
+`0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319`.
+
+```bash
+python - <<'PY'
+import hashlib
+import io
+import json
+from pathlib import Path
+import subprocess
+import tempfile
+from urllib.request import urlopen
+import zipfile
+
+pin = json.loads(Path("axiom_oracles/adapters/taxsim/taxsim_pins.json").read_text())
+wheel = pin["distribution"]["wheel"]
+with urlopen(wheel["url"], timeout=20) as response:
+    wheel_bytes = response.read()
+assert hashlib.sha256(wheel_bytes).hexdigest() == wheel["sha256"]
+key = "taxsimtest/taxsimtest-osx.exe"
+with zipfile.ZipFile(io.BytesIO(wheel_bytes)) as archive:
+    (entry,) = [name for name in archive.namelist() if name.endswith("/" + key)]
+    binary_bytes = archive.read(entry)
+assert hashlib.sha256(binary_bytes).hexdigest() == pin["bundled_binaries"][key]["sha256"]
+with tempfile.TemporaryDirectory(prefix="taxsim-exint-") as scratch:
+    binary = Path(scratch) / "taxsimtest-osx.exe"
+    binary.write_bytes(binary_bytes)
+    binary.chmod(0o755)
+    for label, csv_input in (
+        ("control", "year,mstat,taxsimid,pwages,idtl\n2026,1,1,8000,2\n"),
+        ("exint", "year,mstat,taxsimid,pwages,idtl,exint\n2026,1,1,8000,2,10000\n"),
+    ):
+        try:
+            result = subprocess.run(
+                [str(binary)], input=csv_input, text=True,
+                capture_output=True, timeout=20,
+            )
+        except subprocess.TimeoutExpired:
+            print(label, "timed out; no rejection or calculation result observed")
+            continue
+        print(label, "exit", result.returncode)
+        print("stdout:", result.stdout)
+        print("stderr:", result.stderr)
+PY
+```
+
+The independent review's initial control exited 0 with `v10=8000.00` and
+`v25=612.00`. The `exint` input exited 133, with
+`TAXSIM: ERROR 'exint' is not a taxsimtest input variable.` on stdout and
+`STOP 901` on stderr. Later retries timed out at 20 seconds; a timeout is
+not a reproduced rejection or a passing calculation. The input-list
+evidence and this rejection establish the missing surface; they do not
+reconcile any particular liability mismatch.
 
 **Axiom-side, classified `axiom_encoding_gap` (visible until fixed):**
 
@@ -157,7 +250,12 @@ TAXSIM lane now fails CI.
    federal `qbid` and `v17` (itemized deductions allowed): unmapped until an
    Axiom concept exists.
 4. **Law year**: `TAXSIM_MAX_YEAR` (adapter) and the pinned release cap
-   modeled law at 2026. When Axiom moves to 2027 before NBER does, the
+   modeled law at 2026, but of the platform executables only the macOS one is
+   known to accept 2026. Each bundled executable's accepted range is pinned in
+   `taxsim_pins.json` (`law_years`; the Linux build stops at 2024), and the
+   code paths that run the pinned binary refuse a law year outside its range
+   before running it (`pins.require_law_years`). When Axiom moves to 2027
+   before NBER does, the
    TAXSIM lanes stay pinned at their last supported year and their suites'
    `period` must NOT silently advance — bump the pin (a new
    `taxsim_pins.json`, full identity refresh, and re-baselined dispositions)

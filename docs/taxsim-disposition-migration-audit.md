@@ -1,6 +1,6 @@
 # TAXSIM disposition migration audit
 
-Baseline: `origin/main` resolved to `69d6e1b121b76b1406dfd8c73a5d45cc12d932cc`. Its unmodified `axiom_oracles/comparison/dispositions.py` bytes hash to `bc1548e356c4aefd0588bc8aa841a95eba407eb0fd82f0e02c66b3cbb8152969`.
+Baseline: `origin/main` resolved to `358f433b9b5511e097f0375cec7e33c815b36a3e`. Its unmodified `axiom_oracles/comparison/dispositions.py` bytes hash to `ba8b75b0200fd57282934cb3e91caab71a71fc3f74f95a0e34b3f7bd1aac8100`. The proof loads that module inside the `axiom_oracles.comparison` package, because it imports `pe_axiom_standard` relatively, and first checks that this checkout's `pe_axiom_standard.py` and `conformance/unexplained.py` are byte-identical to the baseline's.
 
 The inherited work was **partial** on requirement 6: it migrated all 75 entries and hard-coded three expected digests in `tests/test_dispositions_hardened.py`, but did not supply an independently reconstructed origin/main baseline or cover the slim national report, other TAXSIM reports, and case chunks. The completed proof below reconstructs the old merge from old code **and** old data, removes stored row annotations before merging, and compares complete assignment digests.
 
@@ -177,6 +177,6 @@ The three SECA-chain pending-triage mechanisms are pre-existing attribution limi
 
 ## Non-TAXSIM worker SSC change
 
-The sole diff in `dashboard/public/data/axiom-euromod-be-worker-ssc.json` is the new metadata mapping `expired_reasons: {dataset-uprating-bridge-artifact-resolved: no_live_rows}`. A structural comparison against origin/main is exactly equal after removing that mapping. Origin/main already listed this ID in `expired_entries`; its unchanged `dispositions/be-worker-ssc.yaml` mechanism says the historical bridge artifact was resolved and its gross contribution now matches. No row assignment, count, rate, value, source, or expiry status changes. The generated metadata is therefore intentional and does not reclassify the non-TAXSIM suite.
+`dashboard/public/data/axiom-euromod-be-worker-ssc.json` is byte-identical to origin/main. It is the one non-TAXSIM report with an expired entry (`dataset-uprating-bridge-artifact-resolved`, already listed in origin/main's `expired_entries`). Outside TAXSIM lanes the merge writes `expired_reasons` only when a reason is new to this schema, and this entry's reason is the older `no_live_rows`, so a fresh merge of the report adds no reasons block. The proof checks both the bytes and that fresh merge.
 
 Rerun `uv run python scripts/prove_disposition_migration.py` and `uv run pytest -q tests/test_dispositions_migration.py` to reproduce the proof.

@@ -436,7 +436,12 @@ def expression_variables(expression: str) -> set[str]:
     """
 
     names: set[str] = set()
-    _walk(_parse(expression), expression, names=names, variables=None)
+    try:
+        _walk(_parse(expression), expression, names=names, variables=None)
+    except (RecursionError, MemoryError) as exc:
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to check"
+        ) from exc
     return names
 
 
@@ -452,14 +457,34 @@ def evaluate_expression(
     attribute access). Calls, subscripts, comparisons, and every other
     construct raise :class:`ArithmeticEvaluationError`: evidence must be
     checkable without executing code.
+
+    Every literal, intermediate and final value must be finite: a literal
+    such as ``1e309`` (infinity), an overflowing integer, a division by zero,
+    or ``inf - inf`` (NaN) raises :class:`ArithmeticEvaluationError`, because
+    a NaN comparison is always false and would let any stated target pass.
+    A step that overflows and a later step that makes it finite again (for
+    example ``1/(1e200*1e200)``) is refused too.
     """
 
-    result = _walk(_parse(expression), expression, names=None, variables=variables)
-    if not math.isfinite(result):
-        raise ArithmeticEvaluationError(
-            f"non-finite result in arithmetic expression {expression!r}"
+    try:
+        result = _walk(
+            _parse(expression), expression, names=None, variables=variables
         )
-    return result
+    except (RecursionError, MemoryError) as exc:
+        # A deeply nested expression must fail closed, not crash validation.
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to check"
+        ) from exc
+    return _finite(result, expression)
+
+
+def _finite(value: float, expression: str) -> float:
+    if not math.isfinite(value):
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} produces a non-finite "
+            f"value ({value!r})"
+        )
+    return value
 
 
 @lru_cache(maxsize=4096)
@@ -471,6 +496,10 @@ def _parse(expression: str) -> ast.AST:
     except SyntaxError as exc:
         raise ArithmeticEvaluationError(
             f"invalid arithmetic expression {expression!r}: {exc.msg}"
+        ) from exc
+    except (RecursionError, MemoryError) as exc:
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to parse"
         ) from exc
 
 
@@ -506,24 +535,32 @@ def _walk(
         if names is not None:
             return 0.0
         if isinstance(node.op, ast.Add):
-            return left + right
+            return _finite(left + right, expression)
         if isinstance(node.op, ast.Sub):
-            return left - right
+            return _finite(left - right, expression)
         if isinstance(node.op, ast.Mult):
-            return left * right
+            return _finite(left * right, expression)
         if right == 0:
             raise ArithmeticEvaluationError(
-                f"division by zero in arithmetic expression {expression!r}"
+                f"arithmetic expression {expression!r} divides by zero"
             )
-        return left / right
+        return _finite(left / right, expression)
     if isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.USub | ast.UAdd):
         value = recurse(node.operand)
         return -value if isinstance(node.op, ast.USub) else value
     if (
         isinstance(node, ast.Constant)
-        and _is_number(node.value)
+        and isinstance(node.value, int | float)
+        and not isinstance(node.value, bool)
     ):
-        return float(node.value)
+        try:
+            value = float(node.value)
+        except OverflowError as exc:
+            raise ArithmeticEvaluationError(
+                f"arithmetic expression {expression!r} has a literal too "
+                "large for a finite float"
+            ) from exc
+        return _finite(value, expression)
     name = _variable_name(node)
     if name is not None and (names is not None or variables is not None):
         if name not in ROW_VARIABLES and not name.startswith("facts."):

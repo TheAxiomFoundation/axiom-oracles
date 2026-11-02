@@ -1,12 +1,17 @@
 # GETTSIM oracle playbook
 
 GETTSIM — the German Taxes and Transfers SIMulator (IZA and an academic
-consortium) — is the **second, independent** German comparison oracle in the
+consortium) — is the second German comparison oracle in the
 dual-oracle lane (`rulespec-de#1`), running alongside `EuromodPlatformRunner`.
-Germany is the org's first lane where every instrument validates against *two*
-oracles: where the two disagree, the statute print adjudicates and the
-divergence is a finding against the losing model; where both agree against the
-Axiom encoding, the encoding is presumed wrong until the print says otherwise.
+The German lane has *two* oracles. The 13-household worker grid compares six
+amounts between EUROMOD and GETTSIM. The Axiom side runs for Kindergeld only so
+far. It matches each oracle in all 13 cases, but 11 are childless households
+where every engine pays zero; the two households with children (EUR 255 and
+EUR 510 a month) are the only nonzero matches. The other five amounts have no
+Axiom values yet (`leg-pending` in `comparisons/de-worker-dual-oracle/axiom-*.json`).
+Where the two oracles disagree, the statute print adjudicates and the divergence
+is a finding against the losing model; where both agree against the Axiom
+encoding, the encoding is presumed wrong until the print says otherwise.
 
 Why GETTSIM is the complement to the EUROMOD engine path: it is pure Python with
 an explicit policy DAG, date-parameterized, deterministic, and free of take-up
@@ -177,6 +182,8 @@ Python 3.13 and 3.14 — the conflict is with PolicyEngine, not a Python
 version). The main CI job syncs `[dev]`; the dedicated `gettsim-live` CI job
 syncs the gettsim fork and runs the live adapter tests, so a broken adapter
 cannot ride in on skips.
+
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
 
 ## 6. Germany dual-oracle suite (realized)
 

@@ -86,7 +86,7 @@ the v1 shim without changing the universe or ratchet discipline.
 
 `scripts/nz_closure.py` keeps a jurisdiction ledger over the complete
 `nz/statutes`, `nz/regulations`, and `nz/policies` file inventory at RuleSpec
-commit `89a7d25dc03a4d045348620283332de10b1047da`. It also computes a separate
+commit `c8ec92e855f835e8348803449836791aa56f5d38`. It also computes a separate
 closure verdict for each IncomeExplorer certificate. Each certificate starts
 at the exact RuleSpec output nodes its comparison calls, follows formula
 dependencies through the encoded node graph, and collects the reached nodes'
@@ -95,7 +95,42 @@ only when that program subgraph cites it. Filenames are never used as a
 membership filter or as evidence of coverage.
 
 The versioned denominator and node graph are `closure/nz/source.json`, pinned
-in the generator and populated from corpus release `nz-rulespec-2026-07-18`.
+in the generator and populated from the named corpus release
+`nz-rulespec-2026-10-23-amendment-markers`, the release pinned by that RuleSpec
+commit's `.axiom/toolchain.toml`. Its content SHA-256 is
+`4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2`;
+the selector file SHA-256 is
+`b9b73e48e2652bdb9bf4f0740139f6130512d8bd63d7fc9f6197b7ae4c717daf`.
+The selector and corpus locks bind the release cut at axiom-corpus commit
+`4aa31fa00fec0706f00cbda3bd4fb53fb0adf3ca`, without relying on a movable git
+release branch. Every provision file records its own SHA-256 and row count.
+
+The universe retains the statute, regulation, and district-plan classes read
+by the prior generator. It includes all four statute scopes (June 16, July 19,
+July 25, and October 23), both regulation scopes (June 16 and July 19), and
+the July 18 Wellington district-plan scope. Guidance remains outside this
+denominator: the existing `CORPUS_FILES` join did not read guidance, including
+for `nz/policies` files. The policy inventory still joins exact citations
+against the same declared corpus classes.
+
+Regenerate the source from a local corpus checkout whose provision bytes
+match the release cut's locks; `--corpus-repo` overrides `CORPUS_REPO`:
+
+```console
+uv run python scripts/nz_closure.py --bootstrap-source --corpus-repo /path/to/axiom-corpus
+# Review and update SOURCE_SHA256 to the generated source's SHA-256.
+uv run python scripts/nz_closure.py --refresh-denominator-ratchet
+uv run python scripts/nz_closure.py
+uv run python scripts/nz_closure.py --check --corpus-repo /path/to/axiom-corpus
+```
+
+Ordinary `--check` remains hermetic and validates the frozen release and
+per-file commitments. Supplying `--corpus-repo` additionally checks the local
+selector and locks against the cut commit and hashes each provision file.
+The denominator ratchet records the content pins; only matching baselines
+participate in ancestor comparisons. Changing the corpus or RuleSpec pin
+starts a new reviewed baseline, with floors generated from reached program
+citations and execution-trace output roots.
 Per-node citation and dependency commitments make a silently dropped path or
 edge fail closed, while the ratified program-root sets are checked exactly.
 

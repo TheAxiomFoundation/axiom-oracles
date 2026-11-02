@@ -1,7 +1,8 @@
 """Functional tests for scripts/commit_refreshed_report.sh (affected-rerun bot).
 
-The affected-rerun workflow pushes refreshed comparison reports straight to
-main. A report refresh changes the inputs of derived, CI-validated artifacts
+The affected-rerun workflow publishes refreshed comparison reports to
+oracle-data while main remains protected. A report refresh changes the inputs
+of derived, CI-validated artifacts
 (conformance scoreboard + detail, freshness, burn-down); pushing one without
 regenerating them turns main red at ci.yml's staleness gates — the 2026-07-14
 il/ky/oh/va incident, repaired by hand in #282. These tests drive the real
@@ -12,6 +13,8 @@ gates ci.yml runs.
 
 from __future__ import annotations
 
+import ctypes
+import hashlib
 import json
 import os
 import shutil
@@ -23,14 +26,20 @@ from pathlib import Path
 
 import pytest
 import yaml
+from test_oracle_data import data as oracle_data
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = "scripts/commit_refreshed_report.sh"
-#: A committed report the tests perturb the way a rerun would (score-bearing
-#: dispositioned rate + provenance timestamp) — the exact 2026-07-14 class.
+DATA_BRANCH = "oracle-data"
+#: Reports used for push/race and freshness controls. Their policies no longer
+#: have registered covering suites, so these cannot stale the scoreboard.
 REPORT = "dashboard/public/data/axiom-policyengine-taxsim-nc-income-tax-liability.json"
 SIBLING_REPORT = (
     "dashboard/public/data/axiom-policyengine-taxsim-mi-income-tax-liability.json"
+)
+#: A registered, attested covering report whose summary feeds policy detail.
+SCOREBOARD_REPORT = (
+    "dashboard/public/data/axiom-policyengine-us-additional-medicare-grid.json"
 )
 #: Everything the script and its regeneration scripts read or write. `docs`
 #: and `reports` (plus the root-level *.md files copied in seed_repo) are
@@ -95,6 +104,46 @@ GIT_ENV = {
     "GIT_CONFIG_SYSTEM": os.devnull,
 }
 
+_CLONEFILE = (
+    getattr(ctypes.CDLL(None, use_errno=True), "clonefile", None)
+    if sys.platform == "darwin" else None
+)
+if _CLONEFILE is not None:
+    _CLONEFILE.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
+    _CLONEFILE.restype = ctypes.c_int
+
+
+def _copy_fixture_file(source: str | Path, destination: str | Path) -> str:
+    """Use APFS copy-on-write so exact fixture copies do not fill the disk.
+
+    Other platforms, or a different destination filesystem, retain copy2's
+    normal semantics. Reflinks keep writes isolated between test checkouts.
+    """
+    # clonefile already copies attributes, including the executable bit and
+    # timestamps. Repeating copystat adds several syscalls per fixture file.
+    if _CLONEFILE is not None and _CLONEFILE(
+        os.fsencode(source), os.fsencode(destination), 0
+    ) == 0:
+        return str(destination)
+    return shutil.copy2(source, destination)
+
+
+@pytest.fixture(autouse=True)
+def _isolated_rulespec_checkout(tmp_path, monkeypatch):
+    # Bare CI has no RuleSpec checkout. Keep the absent source under this
+    # test's own directory so developer scratch cannot change publication.
+    monkeypatch.setitem(
+        GIT_ENV,
+        "RULESPEC_DE_REPO",
+        str(tmp_path / "absent-rulespec-de"),
+    )
+
+
+def test_rulespec_fixture_uses_test_temporary_directory(tmp_path):
+    absent_repo = Path(GIT_ENV["RULESPEC_DE_REPO"])
+    assert absent_repo.parent == tmp_path
+    assert not absent_repo.exists()
+
 
 def _git(cwd: Path, *args: str) -> str:
     return subprocess.run(
@@ -107,28 +156,125 @@ def _git(cwd: Path, *args: str) -> str:
     ).stdout.strip()
 
 
+def _bind_seed_snapshot(seed: Path) -> None:
+    """Bind the staged fixture's identities without claiming freshness gates.
+
+    Both initial branches represent an already published baseline. Recording
+    its binding here keeps idle tests focused on actual refresh behavior.
+    """
+    tree = _git(seed, "write-tree")
+    document = oracle_data._snapshot_document(seed, tree)
+    (seed / oracle_data.SNAPSHOT_PATH).write_text(
+        json.dumps(document, sort_keys=True) + "\n"
+    )
+    _git(seed, "add", "--", oracle_data.SNAPSHOT_PATH)
+
+
+def _seed_source_fingerprint() -> str:
+    """Bind a reusable seed to source blobs, edits, new files, and factory code.
+
+    Unchanged report bytes are already named by the source index's Git blob
+    IDs, avoiding another 500 MB hashing pass for each bounded pytest batch.
+    """
+    def output(*args: str) -> bytes:
+        return subprocess.run(
+            ["git", *args], cwd=REPO_ROOT, env={**os.environ, **GIT_ENV},
+            check=True, capture_output=True,
+        ).stdout
+
+    root_markdown = [
+        path for path in output("ls-files", "--cached", "--others", "-z", "--", "*.md")
+        .decode().split("\0")
+        if path and Path(path).parent == Path(".")
+    ]
+    scope = [
+        *SEED_DIRS, SEED_DATA, "dashboard/src/utils/suites.js",
+        "tests/test_commit_refreshed_report.py", *root_markdown,
+    ]
+    untracked = []
+    for relative in output("ls-files", "--others", "-z", "--", *scope).decode().split("\0"):
+        path = Path(relative)
+        if not relative or any(
+            part in {"__pycache__", ".venv"} or part.endswith(".pyc")
+            for part in path.parts
+        ):
+            continue
+        untracked.append((relative, hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()))
+    fingerprint = {
+        "index": hashlib.sha256(output("ls-files", "--stage", "-z", "--", *scope)).hexdigest(),
+        "diff": hashlib.sha256(output(
+            "diff", "--no-ext-diff", "--no-textconv", "--binary", "HEAD", "--", *scope,
+        )).hexdigest(),
+        "untracked": sorted(untracked),
+        "factory": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    }
+    return hashlib.sha256(json.dumps(fingerprint, sort_keys=True).encode()).hexdigest()
+
+
 @pytest.fixture(scope="session")
 def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """This repo's relevant subtrees, committed once as a throwaway git repo."""
-    seed = tmp_path_factory.mktemp("affected-rerun") / "seed"
+    cache = os.environ.get("AXIOM_ORACLES_PUBLICATION_SEED")
+    fingerprint = _seed_source_fingerprint() if cache else None
+    seed = Path(cache).expanduser().resolve() if cache else (
+        tmp_path_factory.mktemp("affected-rerun") / "seed"
+    )
+    marker = seed.parent / f"{seed.name}.source-fingerprint.json"
+    if cache and seed.exists():
+        if not marker.exists():
+            raise RuntimeError(f"publication seed cache is incomplete: {seed}")
+        recorded = json.loads(marker.read_text())
+        if recorded.get("fingerprint") != fingerprint:
+            raise RuntimeError(f"publication seed cache is stale for the current sources: {seed}")
+        if (
+            _git(seed, "rev-parse", "HEAD") != recorded.get("commit")
+            or _git(seed, "rev-parse", "refs/heads/main") != recorded.get("commit")
+            or _git(seed, "symbolic-ref", "HEAD") != f"refs/heads/{DATA_BRANCH}"
+            or _git(seed, "status", "--porcelain", "--untracked-files=all")
+        ):
+            raise RuntimeError(f"publication seed cache was modified: {seed}")
+        return seed
+    if cache:
+        seed.mkdir(parents=True)
     ignore = shutil.ignore_patterns("__pycache__", "*.pyc", ".venv")
     for d in SEED_DIRS:
-        shutil.copytree(REPO_ROOT / d, seed / d, ignore=ignore)
-    shutil.copytree(REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore)
+        shutil.copytree(
+            REPO_ROOT / d, seed / d, ignore=ignore, copy_function=_copy_fixture_file
+        )
+    shutil.copytree(
+        REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore,
+        copy_function=_copy_fixture_file,
+    )
     # The unexplained publication gate scopes out kind:"diagnostic" suites via
     # the dashboard's suite table; without it, nyc-synthetic (a diagnostic
     # suite the gate must ignore) would trip the fixture's ratchet.
     suites_table = Path("dashboard/src/utils/suites.js")
     (seed / suites_table).parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
+    _copy_fixture_file(REPO_ROOT / suites_table, seed / suites_table)
     for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
-        shutil.copy2(md, seed / md.name)
+        _copy_fixture_file(md, seed / md.name)
     _grant_perturbation_headroom(seed)
     _git(seed, "init", "-q", "-b", "main")
-    _git(seed, "add", "-A")
+    if cache:
+        # Borrow only source objects, never its refs/history: the synthetic
+        # ratchet baseline must remain independent of real repository history.
+        objects = _git(
+            REPO_ROOT, "rev-parse", "--path-format=absolute", "--git-path", "objects"
+        )
+        (seed / ".git/objects/info/alternates").write_text(objects + "\n")
+        for directory in (*SEED_DIRS, SEED_DATA):
+            _git(seed, "add", "--", directory)
+        _git(seed, "add", "--", "dashboard/src/utils/suites.js", "*.md")
+    else:
+        _git(seed, "add", "-A")
+    _bind_seed_snapshot(seed)
     _git(seed, "commit", "-q", "-m", "seed")
+    _git(seed, "checkout", "-q", "-b", DATA_BRANCH)
+    if cache:
+        marker.write_text(json.dumps({
+            "fingerprint": fingerprint, "commit": _git(seed, "rev-parse", "HEAD"),
+        }) + "\n")
     return seed
-
 
 
 #: Suites whose reports the tests perturb to simulate a rerun.
@@ -136,6 +282,7 @@ _PERTURBED_SUITES = (
     "nc-income-tax-liability",
     "mi-income-tax-liability",
     "be-article-51-forfait",
+    "us-additional-medicare-grid",
 )
 
 
@@ -170,24 +317,103 @@ def _grant_perturbation_headroom(seed: Path) -> None:
     doc["ratchets"] = sorted(rows, key=lambda row: row["suite"])
     path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
 
+
 @pytest.fixture()
 def origin(seed_repo: Path, tmp_path: Path) -> Path:
     """A fresh BARE origin per test (pushable; hardlinked, so cheap)."""
     bare = tmp_path / "origin.git"
     _git(seed_repo.parent, "clone", "-q", "--bare", str(seed_repo), str(bare))
+    _git(bare, "config", "test.seedSnapshot", str(seed_repo))
     return bare
 
 
-def _clone(origin: Path, dst: Path) -> Path:
-    _git(origin.parent, "clone", "-q", str(origin), str(dst))
+def _clone(origin: Path, dst: Path, branch: str = DATA_BRANCH) -> Path:
+    # Git's ordinary checkout writes a fresh ~500 MB per clone. Materialize
+    # unchanged blobs from the seed using independent copy-on-write files;
+    # every different blob still comes from the actual branch being tested.
+    _git(
+        origin.parent, "clone", "-q", "--no-checkout", "--branch", branch,
+        str(origin), str(dst),
+    )
+    seed = Path(_git(origin, "config", "--get", "test.seedSnapshot"))
+
+    def entries(root: Path) -> dict[str, tuple[str, str]]:
+        result = {}
+        for entry in _git(root, "ls-tree", "-r", "-z", "HEAD").split("\0"):
+            if entry:
+                metadata, path = entry.split("\t", 1)
+                mode, _, digest = metadata.split(" ")
+                result[path] = (mode, digest)
+        return result
+
+    seed_entries = entries(seed)
+    for relative, identity in entries(dst).items():
+        path = dst / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        mode, _ = identity
+        if seed_entries.get(relative) == identity:
+            if mode == "120000":
+                path.symlink_to(os.readlink(seed / relative))
+            else:
+                _copy_fixture_file(seed / relative, path)
+        else:
+            blob = subprocess.run(
+                ["git", "show", f"HEAD:{relative}"], cwd=dst,
+                env={**os.environ, **GIT_ENV}, capture_output=True, check=True,
+            ).stdout
+            if mode == "120000":
+                path.symlink_to(os.fsdecode(blob))
+            else:
+                path.write_bytes(blob)
+                path.chmod(int(mode, 8) & 0o777)
+    _git(dst, "read-tree", "HEAD")
+    _git(dst, "update-index", "--refresh")
     return dst
+
+
+def test_fixture_clones_materialize_branch_blobs_modes_and_isolated_copies(tmp_path):
+    seed = tmp_path / "tiny-seed"
+    seed.mkdir()
+    _git(seed, "init", "-q", "-b", DATA_BRANCH)
+    (seed / "unchanged").write_text("independent copy\n")
+    (seed / "updated").write_text("old branch\n")
+    (seed / "removed").write_text("removed in next commit\n")
+    _git(seed, "add", ".")
+    _git(seed, "commit", "-q", "-m", "baseline")
+    origin = tmp_path / "tiny-origin.git"
+    _git(tmp_path, "clone", "-q", "--bare", str(seed), str(origin))
+    _git(origin, "config", "test.seedSnapshot", str(seed))
+    producer = tmp_path / "tiny-producer"
+    _git(tmp_path, "clone", "-q", str(origin), str(producer))
+    (producer / "updated").write_text("actual branch\n")
+    (producer / "updated").chmod(0o755)
+    (producer / "removed").unlink()
+    (producer / "new-link").symlink_to("updated")
+    _git(producer, "add", "-A")
+    _git(producer, "commit", "-q", "-m", "changed branch")
+    _git(producer, "push", "-q", "origin", DATA_BRANCH)
+    checkout = _clone(origin, tmp_path / "tiny-checkout")
+    assert _git(checkout, "status", "--porcelain") == ""
+    assert (checkout / "updated").read_text() == "actual branch\n"
+    assert (checkout / "updated").stat().st_mode & 0o111
+    assert (checkout / "new-link").is_symlink()
+    assert not (checkout / "removed").exists()
+    (checkout / "unchanged").write_text("changed only in clone\n")
+    assert (seed / "unchanged").read_text() == "independent copy\n"
+
+
+def _main_tip(clone: Path) -> str:
+    """Read the protected source ref from the local bare remote, not a cache."""
+    origin = Path(_git(clone, "remote", "get-url", "origin"))
+    return _git(origin, "rev-parse", "refs/heads/main")
 
 
 def _run_script(
     clone: Path, suite: str = "nc-income-tax-liability", attempts: str = "4"
 ) -> subprocess.CompletedProcess:
-    return subprocess.run(
-        [str(clone / SCRIPT), suite, "main"],
+    protected_main = _main_tip(clone)
+    result = subprocess.run(
+        [str(clone / SCRIPT), suite, DATA_BRANCH],
         cwd=clone,
         env={
             **os.environ,
@@ -200,6 +426,8 @@ def _run_script(
         capture_output=True,
         text=True,
     )
+    assert _main_tip(clone) == protected_main, "the publisher moved protected main"
+    return result
 
 
 def _perturb_report(clone: Path, report: str = REPORT) -> str:
@@ -208,7 +436,7 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
 
     Moves score-bearing summary counts direction-aware (a report with matches
     loses one to mismatch and vice versa, so counts stay valid — flipping the
-    conformance detail and the freshness register, the #282 incident class)
+    freshness register and, for a covered policy, conformance detail)
     and stamps a fresh, format-valid provenance timestamp. Only fields the
     dispositions merge PRESERVES are touched: for suites with a dispositions
     file, apply_dispositions.py recomputes the `summary.dispositioned` block
@@ -232,8 +460,18 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
         "committed report timestamp collides with now; cannot discriminate"
     )
     doc["provenance"]["generated_at"] = sentinel
+    _stamp_test_engine(doc)
     path.write_text(json.dumps(doc, indent=2) + "\n")
     return sentinel
+
+
+def _stamp_test_engine(report: dict) -> None:
+    """The synthetic rerun has a resolved engine, as real new runs must."""
+    report.setdefault("provenance", {})["engine"] = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "a" * 40,
+        "binary_sha256": hashlib.sha256(b"synthetic test engine").hexdigest(),
+    }
 
 
 def _staleness_gate(
@@ -274,8 +512,10 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
         "conformance_burndown.py",
         "check_vacuous_gate.py",
         "generate_dashboard_overview.py",
+        "publish_issue_ledgers.py",
         "exercise_census.py",
         "certify.py",
+        "check_engine_identity.py",
     ):
         result = _staleness_gate(verify, script)
         assert result.returncode == 0, (
@@ -356,6 +596,186 @@ def test_de_refresh_chain_is_ordered_checked_and_staged():
         )
 
 
+#: A committed report from a real SNAP QC replay (no versioned case chunks, so
+#: the only report class the 2026-09-23 affected rerun could overwrite).
+SNAPQC_REPORT = "dashboard/public/data/axiom-snapqc-ny-snap.json"
+
+
+def _reemit(clone: Path, report: str = SNAPQC_REPORT) -> None:
+    """Rewrite a real report the way a skip re-emission publishes it: the same
+    numbers, with provenance saying re-emitted and naming no rulespec SHA."""
+    path = clone / report
+    doc = json.loads(path.read_text())
+    provenance = doc["provenance"]
+    assert provenance.get("rulespecs") and not provenance.get("reemitted_report")
+    provenance.pop("rulespecs")
+    provenance.update(
+        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        run_kind="affected-rerun",
+        reemitted_report=True,
+    )
+    path.write_text(json.dumps(doc, indent=2, sort_keys=True))
+
+
+def test_reemission_guard_runs_on_every_attempt_before_regeneration():
+    """The guard must see each attempt's freshly reset tip (a real report can
+    land while the leg runs) and must run before derived artifacts are
+    regenerated from the report bytes."""
+    shell = (REPO_ROOT / SCRIPT).read_text()
+    loop = shell.split('for attempt in $(seq 1 "$MAX_ATTEMPTS"); do', 1)[1]
+    guard = loop.index('"$PYTHON" scripts/guard_reemitted_reports.py')
+    assert loop.index('"$PYTHON" scripts/oracle_data.py prepare') < guard
+    assert loop.index('cp -p "$stash/$path" "$path"') < guard
+    assert guard < loop.index("regenerate_derived")
+    assert guard < loop.index("git add -A")
+    identity = loop.index('"$PYTHON" scripts/check_engine_identity.py --check')
+    assert guard < identity < loop.index("regenerate_derived")
+    assert loop.index("verify_derived") < loop.rindex(
+        '"$PYTHON" scripts/check_engine_identity.py --check'
+    ) < loop.index("git add -A")
+
+
+@pytest.mark.parametrize("resolved", [False, True])
+def test_generic_publication_check_validates_engine_identity(tmp_path, resolved):
+    """The generic publisher's check-only route uses the real identity gate.
+
+    Unrelated freshness commands are recorded successful prerequisites here;
+    the full end-to-end tests exercise those gates against the complete seed.
+    """
+    checkout = tmp_path / "generic-publication"
+    (checkout / "scripts").mkdir(parents=True)
+    for relative in (SCRIPT, "scripts/check_engine_identity.py"):
+        _copy_fixture_file(REPO_ROOT / relative, checkout / relative)
+    shutil.copytree(
+        REPO_ROOT / "axiom_oracles", checkout / "axiom_oracles",
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+        copy_function=_copy_fixture_file,
+    )
+    report = {"engines": {"left": "axiom", "right": "policyengine"}}
+    if resolved:
+        _stamp_test_engine(report)
+    path = checkout / REPORT
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(report))
+    allowlist = checkout / "conformance/legacy-engine-identity.json"
+    allowlist.parent.mkdir()
+    allowlist.write_text(json.dumps({
+        "schema": "axiom_oracles.legacy-engine-identity.v1", "reports": {},
+    }))
+    _git(checkout, "init", "-q", "-b", "main")
+    _git(checkout, "add", "--", REPORT, "conformance/legacy-engine-identity.json")
+    _git(checkout, "commit", "-q", "-m", "generic publication candidate")
+    checks = tmp_path / "checks.log"
+    wrapper = tmp_path / "python-wrapper"
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        f'printf "%s\\n" "$1" >> "{checks}"\n'
+        'if [ "$1" = "scripts/check_engine_identity.py" ]; then\n'
+        f'  exec "{sys.executable}" "$@"\n'
+        "fi\n"
+    )
+    wrapper.chmod(0o755)
+    result = subprocess.run(
+        [str(checkout / SCRIPT), "recovery", DATA_BRANCH], cwd=checkout,
+        env=_mode_env(
+            PYTHON=str(wrapper), VERIFY_DERIVED_REFRESH="1", SIMULATE_DERIVED_REFRESH="0",
+        ),
+        capture_output=True, text=True,
+    )
+    called = checks.read_text().splitlines()
+    identity = called.index("scripts/check_engine_identity.py")
+    assert called.index("scripts/certify.py") < identity
+    assert "engine identity: 1 Axiom reports" in result.stdout
+    if resolved:
+        assert result.returncode == 0, result.stderr
+        assert identity < called.index("scripts/unexplained_ratchet.py")
+    else:
+        assert result.returncode != 0
+        assert "provenance.engine.commit must be 40 hex characters" in result.stderr
+        assert "scripts/unexplained_ratchet.py" not in called
+
+
+def test_reemission_never_replaces_a_real_report(origin, tmp_path):
+    """2026-09-23: affected-rerun legs with no engine or QC file committed
+    re-emissions over the real NY/MD/AZ/CA/GA SNAP QC reports. Whatever wrote the
+    leg's dashboard copy, the push keeps the tip's real report."""
+    clone = _clone(origin, tmp_path / "job-reemit")
+    committed = (clone / SNAPQC_REPORT).read_bytes()
+    before = _git(origin, "rev-parse", DATA_BRANCH)
+    _reemit(clone)
+
+    result = _run_script(clone, "ny-snap-qc")
+    assert result.returncode == 0, result.stderr
+    assert "a re-emission never replaces a committed report" in result.stdout
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert (verify / SNAPQC_REPORT).read_bytes() == committed
+    # Whatever else the leg pushed (a host-dependent derived artifact, say),
+    # none of it touched the report.
+    pushed = _git(origin, "diff", "--name-only", before, DATA_BRANCH).splitlines()
+    assert SNAPQC_REPORT not in pushed
+
+
+#: A UKMOD report the bot's legs can only re-emit (no model on the runners).
+EUROMOD_REPORT = "dashboard/public/data/axiom-euromod-uk-winter-fuel.json"
+
+
+def test_reemission_over_a_reemission_pushes_nothing(origin, tmp_path):
+    """The churn: once a re-emission was committed, every later leg re-emitted
+    it again with only generated_at changed, and the bot pushed that diff, plus
+    the census, certificate pins, freshness and overview it moves, for 35
+    EUROMOD, UKMOD and tariff suites every sweep. The tip's copy now stays and
+    nothing is pushed."""
+    # The tip as the churn left it: a committed re-emission, with every derived
+    # artifact regenerated around it (the script's own simulate mode).
+    seed = _clone(origin, tmp_path / "seed-reemitted")
+    # This fixture edits the historical bytes, so give its source run a
+    # resolved test identity before copying it. Both re-emissions preserve
+    # that source identity, including when the publisher runs later.
+    source_path = seed / EUROMOD_REPORT
+    source_report = json.loads(source_path.read_text())
+    _stamp_test_engine(source_report)
+    source_engine = source_report["provenance"]["engine"]
+    source_path.write_text(json.dumps(source_report, indent=2) + "\n")
+    _reemit(seed, EUROMOD_REPORT)
+    assert json.loads(source_path.read_text())["provenance"]["engine"] == source_engine
+    simulate = subprocess.run(
+        [str(seed / SCRIPT), "uk-winter-fuel-ukmod", DATA_BRANCH],
+        cwd=seed,
+        env={
+            **os.environ,
+            **GIT_ENV,
+            "PYTHONPATH": str(seed),
+            "PYTHON": sys.executable,
+            "SIMULATE_DERIVED_REFRESH": "1",
+        },
+        capture_output=True,
+        text=True,
+    )
+    assert simulate.returncode == 0, simulate.stderr
+    _git(seed, "add", "-A")
+    _git(seed, "commit", "-q", "-m", "committed re-emission")
+    _git(seed, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
+    committed = (seed / EUROMOD_REPORT).read_bytes()
+    before = _git(origin, "rev-parse", DATA_BRANCH)
+
+    # The next sweep's leg re-emits it again.
+    clone = _clone(origin, tmp_path / "job-reemit-again")
+    path = clone / EUROMOD_REPORT
+    doc = json.loads(path.read_text())
+    doc["provenance"]["generated_at"] = "2099-01-01T00:00:00Z"
+    path.write_text(json.dumps(doc, indent=2, sort_keys=True))
+
+    result = _run_script(clone, "uk-winter-fuel-ukmod")
+    assert result.returncode == 0, result.stderr
+    assert "a re-emission never replaces a committed report" in result.stdout
+    assert "nothing to commit" in result.stdout
+    assert _git(origin, "rev-parse", DATA_BRANCH) == before
+    verify = _clone(origin, tmp_path / "verify-reemit-again")
+    assert (verify / EUROMOD_REPORT).read_bytes() == committed
+    assert json.loads((verify / EUROMOD_REPORT).read_text())["provenance"]["engine"] == source_engine
+
+
 def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     """A report refresh lands together with regenerated scoreboard/detail,
     freshness, and burn-down — the pushed tip passes ci.yml's staleness gates
@@ -368,6 +788,68 @@ def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     verify = _assert_origin_tip_green(origin, tmp_path)
     pushed = json.loads((verify / REPORT).read_text())
     assert pushed["provenance"]["generated_at"] == sentinel
+    # Single-suite mode (pack + publish of one bundle) keeps its commit shape.
+    subject = _git(origin, "log", "-1", "--format=%s", DATA_BRANCH)
+    assert subject.startswith("data: refresh nc-income-tax-liability (affected rerun ")
+
+
+def test_refresh_bootstraps_missing_data_branch_without_moving_main(origin, tmp_path):
+    """The first scheduled publication starts from main and creates oracle-data."""
+    _git(origin, "update-ref", "-d", f"refs/heads/{DATA_BRANCH}")
+    clone = _clone(origin, tmp_path / "first-publication", branch="main")
+    protected_main = _main_tip(clone)
+    sentinel = _perturb_report(clone)
+
+    result = _run_script(clone)
+    assert result.returncode == 0, result.stderr
+    assert _git(origin, "rev-parse", "main") == protected_main
+    assert _git(origin, "rev-parse", DATA_BRANCH) != protected_main
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert protected_main in _git(verify, "rev-list", "HEAD").splitlines()
+    report = json.loads((verify / REPORT).read_text())
+    assert report["provenance"]["generated_at"] == sentinel
+
+
+def test_refresh_uses_current_main_source_and_preserves_latest_data(origin, tmp_path):
+    """Publication integrates new producer code and both report generations."""
+    previous = _clone(origin, tmp_path / "previous-data")
+    previous_sentinel = _perturb_report(previous, REPORT)
+    _git(previous, "add", "--", REPORT)
+    _git(previous, "commit", "-q", "-m", "previous data publication")
+    previous_sha = _git(previous, "rev-parse", "HEAD")
+    _git(previous, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
+    publisher = _clone(origin, tmp_path / "publisher-before-source-change")
+    sentinel = _perturb_report(publisher, SIBLING_REPORT)
+
+    source = _clone(origin, tmp_path / "main-source", branch="main")
+    producer = source / "scripts/generate_dashboard_overview.py"
+    code = producer.read_text()
+    future_import = "from __future__ import annotations\n"
+    assert future_import in code
+    marker = "publisher used current main producer"
+    producer.write_text(
+        code.replace(future_import, f'{future_import}\nprint("{marker}")\n')
+    )
+    (source / "SOURCE_NOTE.md").write_text("new source release\n")
+    _git(
+        source, "add", "--", "scripts/generate_dashboard_overview.py", "SOURCE_NOTE.md"
+    )
+    _git(source, "commit", "-q", "-m", "update source producer")
+    source_sha = _git(source, "rev-parse", "HEAD")
+    _git(source, "push", "-q", "origin", "HEAD:main")
+
+    result = _run_script(publisher, "mi-income-tax-liability")
+    assert result.returncode == 0, result.stderr
+    assert marker in result.stdout, "the publisher executed stale producer code"
+    assert _git(origin, "rev-parse", "main") == source_sha
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    ancestors = _git(verify, "rev-list", "HEAD").splitlines()
+    assert source_sha in ancestors
+    assert previous_sha in ancestors
+    assert (verify / "SOURCE_NOTE.md").read_text() == "new source release\n"
+    for report, expected in ((REPORT, previous_sentinel), (SIBLING_REPORT, sentinel)):
+        doc = json.loads((verify / report).read_text())
+        assert doc["provenance"]["generated_at"] == expected
 
 
 def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
@@ -381,6 +863,7 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     assert report["provenance"]["generated_at"] != sentinel
     report["provenance"]["generated_at"] = sentinel
     report_path.write_text(json.dumps(report, indent=2) + "\n")
+    assert _staleness_gate(clone, "de_unified_comparison.py").returncode == 1
 
     result = _run_script(clone, "de-worker-dual-oracle")
     assert result.returncode == 0, result.stderr
@@ -397,8 +880,8 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     # subordinate-instrument frontier is undeclared: a refresh must rebind
     # every artifact while keeping the honest certified=no.
     assert certificate["blockers"] == [
-        'closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)',
-        'closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)',
+        "closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)",
     ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
@@ -418,7 +901,9 @@ def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
     doc = json.loads(path.read_text())
     doc["summary"]["match_count"] -= 1
     doc["summary"]["mismatch_count"] += 1
+    _stamp_test_engine(doc)
     path.write_text(json.dumps(doc, indent=2) + "\n")
+    assert _staleness_gate(clone, "apply_dispositions.py").returncode == 1
 
     result = _run_script(clone, "be-article-51-forfait")
     assert result.returncode == 0, result.stderr
@@ -431,7 +916,7 @@ def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
     assert after != before
 
 
-def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
+def test_concurrent_siblings_never_leave_data_branch_stale(origin, tmp_path):
     """Two matrix siblings refresh different suites; the second job's clone
     predates the first job's push. The script must rebuild on the new tip (a
     rebase would conflict on the shared derived files) and every pushed tip —
@@ -443,12 +928,12 @@ def test_concurrent_siblings_never_leave_main_stale(origin, tmp_path):
 
     result_a = _run_script(job_a, "nc-income-tax-liability")
     assert result_a.returncode == 0, result_a.stderr
-    intermediate = _git(origin, "rev-parse", "main")
+    intermediate = _git(origin, "rev-parse", DATA_BRANCH)
     _assert_origin_tip_green(origin, tmp_path)
 
     result_b = _run_script(job_b, "mi-income-tax-liability")
     assert result_b.returncode == 0, result_b.stderr
-    assert _git(origin, "rev-parse", "main") != intermediate
+    assert _git(origin, "rev-parse", DATA_BRANCH) != intermediate
 
     verify = _assert_origin_tip_green(origin, tmp_path)
     for report, sentinel in ((REPORT, sentinel_a), (SIBLING_REPORT, sentinel_b)):
@@ -473,12 +958,12 @@ def test_rejected_push_retries_by_rebuilding_on_tip(origin, tmp_path):
     hook.chmod(0o755)
 
     clone = _clone(origin, tmp_path / "job")
-    before = _git(origin, "rev-parse", "main")
+    before = _git(origin, "rev-parse", DATA_BRANCH)
     _perturb_report(clone)
     result = _run_script(clone)
     assert result.returncode == 0, result.stderr
     assert "push rejected (attempt 1" in result.stderr
-    assert _git(origin, "rev-parse", "main") != before
+    assert _git(origin, "rev-parse", DATA_BRANCH) != before
     _assert_origin_tip_green(origin, tmp_path)
 
 
@@ -497,16 +982,25 @@ def test_exhausted_retries_fail_loudly(origin, tmp_path):
 
 
 def test_self_heals_preexisting_staleness(origin, tmp_path):
-    """A stale tree already on main (what the pre-fix workflow used to push;
+    """A stale tree already on oracle-data (what an incomplete refresh could push;
     the #282 state) converges back to green on the next rerun with NO local
     report change — no manual regeneration PR needed."""
     # Reproduce the old broken bot: push a perturbed report WITHOUT
     # regenerating anything derived.
     broken = _clone(origin, tmp_path / "broken-bot")
-    _perturb_report(broken)
+    # NC no longer covers a registered output. Use a report that contributes
+    # actual scores, and guard against this control losing coverage again.
+    detail_path = "conformance/detail/us-pe.json"
+    policies = json.loads((broken / detail_path).read_text())["policies"]
+    policy = next(
+        row for row in policies if row["id"] == "us-pe:additional_medicare_tax"
+    )
+    assert policy["covered"] and policy["output_attestation"] == "attested"
+    assert policy["attested_outputs"] == ["additional_medicare_tax"]
+    sentinel = _perturb_report(broken, SCOREBOARD_REPORT)
     _git(broken, "add", "--", "dashboard/public/data/")
     _git(broken, "commit", "-q", "-m", "data: refresh (no derived regen)")
-    _git(broken, "push", "-q", "origin", "HEAD:main")
+    _git(broken, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
 
     # NEGATIVE control: that tip must actually fail the scoreboard gate,
     # otherwise this test could not discriminate.
@@ -517,7 +1011,13 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     healer = _clone(origin, tmp_path / "healer")
     result = _run_script(healer)
     assert result.returncode == 0, result.stderr
-    _assert_origin_tip_green(origin, tmp_path)
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    repaired = json.loads((verify / detail_path).read_text())["policies"]
+    repaired_policy = next(row for row in repaired if row["id"] == policy["id"])
+    assert repaired_policy["covered"]
+    assert repaired_policy["matches"] == policy["matches"] - 1
+    report = json.loads((verify / SCOREBOARD_REPORT).read_text())
+    assert report["provenance"]["generated_at"] == sentinel
 
 
 def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
@@ -534,7 +1034,7 @@ def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
     chunk_path.write_text(json.dumps(rows, separators=(",", ":")))
     _git(broken, "add", "--", NZ_CHUNK)
     _git(broken, "commit", "-q", "-m", "seed stale NZ bound evidence")
-    _git(broken, "push", "-q", "origin", "HEAD:main")
+    _git(broken, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
 
     stale = _clone(origin, tmp_path / "stale-nz-check")
     assert _staleness_gate(stale, "nz_incomeexplorer.py").returncode == 1
@@ -568,7 +1068,7 @@ def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tm
         NZ_CLOSURE_SUMMARY,
     )
     _git(broken, "commit", "-q", "-m", "seed stale NZ producer outputs")
-    _git(broken, "push", "-q", "origin", "HEAD:main")
+    _git(broken, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
 
     stale = _clone(origin, tmp_path / "stale-nz-producer-check")
     assert _staleness_gate(stale, "nz_executable_reproduction.py").returncode == 1
@@ -583,7 +1083,7 @@ def test_refresh_reconstructs_and_stages_stale_nz_receipt_and_closure(origin, tm
 
 
 def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path):
-    """A sibling advances main BETWEEN this leg's rebuild and its push — the
+    """A sibling advances oracle-data BETWEEN this leg's rebuild and its push — the
     genuine race, made deterministic with a two-marker barrier: the hook
     intercepting the leg's first push signals the test thread (`racing`),
     then BLOCKS until the test has pushed the sibling commit through and
@@ -610,7 +1110,7 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
         "#!/bin/sh\n"
         f'racing="{racing}"\nlanded="{landed}"\n'
         "while read old new ref; do\n"
-        '  if [ "$ref" = "refs/heads/main" ] && [ ! -f "$racing" ]; then\n'
+        '  if [ "$ref" = "refs/heads/oracle-data" ] && [ ! -f "$racing" ]; then\n'
         '    touch "$racing"\n'
         "    i=0\n"
         '    while [ ! -f "$landed" ] && [ "$i" -lt 1200 ]; do\n'
@@ -625,9 +1125,10 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
     hook.chmod(0o755)
 
     clone = _clone(origin, tmp_path / "job")
+    protected_main = _main_tip(clone)
     sentinel = _perturb_report(clone)
     proc = subprocess.Popen(
-        [str(clone / SCRIPT), "nc-income-tax-liability", "main"],
+        [str(clone / SCRIPT), "nc-income-tax-liability", DATA_BRANCH],
         cwd=clone,
         env={
             **os.environ,
@@ -654,11 +1155,12 @@ def test_racing_pusher_converges_when_remote_advances_mid_push(origin, tmp_path)
         assert time.monotonic() < deadline, "leg never attempted its first push"
         assert proc.poll() is None, proc.communicate()[1]
         time.sleep(0.05)
-    _git(sibling, "push", "-q", "origin", "HEAD:main")
+    _git(sibling, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
     landed.touch()
     stdout, stderr = proc.communicate(timeout=240)
     assert proc.returncode == 0, stderr
     assert "push rejected (attempt 1" in stderr
+    assert _main_tip(clone) == protected_main, "the racing publisher moved main"
 
     verify = _assert_origin_tip_green(origin, tmp_path)
     assert sibling_sha in _git(verify, "rev-list", "HEAD"), (
@@ -678,6 +1180,7 @@ def _add_first_time_report(clone: Path, suite: str) -> str:
     filename = f"axiom-policyengine-{suite}.json"
     doc = json.loads((clone / REPORT).read_text())
     doc["suite"] = suite
+    _stamp_test_engine(doc)
     (clone / SEED_DATA / filename).write_text(json.dumps(doc, indent=2) + "\n")
     manifest_path = clone / SEED_DATA / "manifest.json"
     manifest = (
@@ -722,7 +1225,7 @@ def test_first_time_reports_race_when_head_has_no_manifest(origin, tmp_path):
     setup = _clone(origin, tmp_path / "setup")
     _git(setup, "rm", "-q", "--", f"{SEED_DATA}/manifest.json")
     _git(setup, "commit", "-q", "-m", "seed variant: no manifest yet")
-    _git(setup, "push", "-q", "origin", "HEAD:main")
+    _git(setup, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
 
     job_a = _clone(origin, tmp_path / "job-a")
     job_b = _clone(origin, tmp_path / "job-b")  # cloned BEFORE a's push
@@ -763,10 +1266,12 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
     wrapper.chmod(0o755)
 
     clone = _clone(origin, tmp_path / "job")
-    before = _git(origin, "rev-parse", "main")
+    protected_main = _main_tip(clone)
+    before = _git(origin, "rev-parse", DATA_BRANCH)
     _perturb_report(clone)
+    assert _staleness_gate(clone, "check_vacuous_gate.py").returncode == 1
     result = subprocess.run(
-        [str(clone / SCRIPT), "nc-income-tax-liability", "main"],
+        [str(clone / SCRIPT), "nc-income-tax-liability", DATA_BRANCH],
         cwd=clone,
         env={
             **os.environ,
@@ -782,9 +1287,10 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
     assert result.returncode != 0, (
         "a vacuous-gate failure the arbiter can't clear must fail the job"
     )
-    assert _git(origin, "rev-parse", "main") == before, (
+    assert _git(origin, "rev-parse", DATA_BRANCH) == before, (
         "nothing may be pushed when the freshness gate can't be verified"
     )
+    assert _main_tip(clone) == protected_main
 
 
 def test_no_changes_second_run_is_a_noop(origin, tmp_path):
@@ -794,13 +1300,13 @@ def test_no_changes_second_run_is_a_noop(origin, tmp_path):
     captured BEFORE the first run and the no-op message asserted on both, so
     a variant that pushes a snapshot-churn commit on the first idle run (the
     pre-amendment behavior) fails here."""
-    tip = _git(origin, "rev-parse", "main")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
 
     first = _clone(origin, tmp_path / "first")
     result = _run_script(first)
     assert result.returncode == 0, result.stderr
     assert "no report or derived-artifact changes" in result.stdout
-    assert _git(origin, "rev-parse", "main") == tip, (
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip, (
         "an idle run must not churn a commit"
     )
     _assert_origin_tip_green(origin, tmp_path)
@@ -809,4 +1315,507 @@ def test_no_changes_second_run_is_a_noop(origin, tmp_path):
     result = _run_script(second)
     assert result.returncode == 0, result.stderr
     assert "no report or derived-artifact changes" in result.stdout
-    assert _git(origin, "rev-parse", "main") == tip
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+# ---------------------------------------------------------------------------
+# Pack in the legs, publish once (the affected rerun's single publisher).
+#
+# Run 36239293795 (2026-09-26) lost 7 legs, and run 35958364304 lost 11, to
+# the 90-minute job timeout inside the per-leg push loop: ~47 legs each
+# regenerated every derived artifact (~4 minutes) and pushed, so every
+# successful push invalidated every other leg's attempt. Legs now `--pack`
+# (collect + vet, never touching a remote) and one job `--publish`es every
+# bundle in one commit, retrying only a rejected push.
+# ---------------------------------------------------------------------------
+
+#: The git subcommands that move a branch, the worktree's HEAD, or a remote.
+#: Pack must never run one.
+_REMOTE_OR_HISTORY_SUBCOMMANDS = frozenset(
+    {"fetch", "pull", "push", "reset", "commit", "clean", "rebase", "merge"}
+)
+
+
+def _mode_env(attempts: str = "4", **extra: str) -> dict[str, str]:
+    return {
+        **os.environ,
+        **GIT_ENV,
+        "PYTHON": sys.executable,
+        "MAX_ATTEMPTS": attempts,
+        "PUSH_RETRY_DELAY": "0",
+        **extra,
+    }
+
+
+def _pack(
+    clone: Path, bundles: Path, suite: str, **extra: str
+) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [str(clone / SCRIPT), "--pack", str(bundles), suite],
+        cwd=clone,
+        env=_mode_env(PYTHONPATH=str(clone), **extra),
+        capture_output=True,
+        text=True,
+    )
+
+
+def _publish(
+    clone: Path, bundles: Path, attempts: str = "4", **extra: str
+) -> subprocess.CompletedProcess:
+    protected_main = _main_tip(clone)
+    result = subprocess.run(
+        [str(clone / SCRIPT), "--publish", str(bundles), DATA_BRANCH],
+        cwd=clone,
+        env=_mode_env(attempts, PYTHONPATH=str(clone), **extra),
+        capture_output=True,
+        text=True,
+    )
+    assert _main_tip(clone) == protected_main, "the publisher moved protected main"
+    return result
+
+
+def _git_subcommands(trace: Path) -> list[str]:
+    """Every git subcommand a GIT_TRACE log records (scripts and Python)."""
+    if not trace.exists():
+        return []
+    found = []
+    for line in trace.read_text().splitlines():
+        marker = "trace: built-in: git "
+        if marker in line:
+            found.append(line.split(marker, 1)[1].split()[0])
+        elif "upload-pack" in line or "receive-pack" in line:
+            found.append("fetch-or-push")
+    return found
+
+
+@pytest.mark.parametrize(
+    "target",
+    ["main", "master", "other", "refs/heads/oracle-data", "oracle-data:main"],
+)
+@pytest.mark.parametrize("mode", ["single", "publish", "simulate"])
+def test_invalid_publication_target_fails_before_any_git_command(
+    tmp_path, target, mode
+):
+    """Reject protected branches and alternate ref spellings before any action."""
+    script = tmp_path / SCRIPT
+    script.parent.mkdir()
+    shutil.copy2(REPO_ROOT / SCRIPT, script)
+    trace = tmp_path / "invalid-target-trace.log"
+    args = (
+        ["--publish", str(tmp_path / "refreshed"), target]
+        if mode == "publish"
+        else ["nc-income-tax-liability", target]
+    )
+    result = subprocess.run(
+        [str(script), *args],
+        cwd=tmp_path,
+        env=_mode_env(
+            GIT_TRACE=str(trace),
+            SIMULATE_DERIVED_REFRESH="1" if mode == "simulate" else "0",
+        ),
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 2
+    assert "refusing publication target" in result.stderr
+    assert "expected oracle-data" in result.stderr
+    assert _git_subcommands(trace) == [], "target rejection came after a git call"
+
+
+def _write_bundle(
+    bundles: Path,
+    suite: str,
+    files: dict[str, bytes],
+    deletions: tuple[str, ...] = (),
+    manifest_added: tuple[str, ...] = (),
+    directory: str | None = None,
+    baseline_root: Path | None = None,
+) -> Path:
+    """A bundle exactly as --pack lays one out (the pack/publish contract)."""
+    baseline = {}
+    for path in [*files, *deletions]:
+        assert baseline_root is not None, "nonempty bundles need their packing baseline"
+        entry = subprocess.run(
+            ["git", "--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", path],
+            cwd=baseline_root,
+            env={**os.environ, **GIT_ENV},
+            capture_output=True,
+            check=True,
+        )
+        if not entry.stdout:
+            baseline[path] = None
+            continue
+        original = subprocess.run(
+            ["git", "show", f"HEAD:{path}"],
+            cwd=baseline_root,
+            env={**os.environ, **GIT_ENV},
+            capture_output=True,
+            check=True,
+        )
+        baseline[path] = hashlib.sha256(original.stdout).hexdigest()
+    root = bundles / (directory or suite)
+    for path, content in files.items():
+        (root / "files" / path).parent.mkdir(parents=True, exist_ok=True)
+        (root / "files" / path).write_bytes(content)
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "bundle.json").write_text(
+        json.dumps(
+            {
+                "schema": "axiom_oracles.refreshed_report_bundle.v1",
+                "suite": suite,
+                "private": sorted(files),
+                "deletions": list(deletions),
+                "baseline": baseline,
+                "manifest_added": list(manifest_added),
+            }
+        )
+    )
+    return root
+
+
+def _pin_ratchet_at_live(origin: Path, tmp_path: Path, suite: str) -> None:
+    """Land a ratchet whose ceiling for ``suite`` is its live count on the tip,
+    so one more unexplained disagreement in that suite is refused. (The seed
+    grants the perturbed suites one row of headroom; this takes it back.)"""
+    setup = _clone(origin, tmp_path / f"pin-{suite}")
+    live = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import json, sys; sys.path.insert(0, 'scripts');"
+            "import unexplained_ratchet as u; print(json.dumps(u.live_counts()))",
+        ],
+        cwd=setup,
+        env={**os.environ, **GIT_ENV, "PYTHONPATH": str(setup)},
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    count = json.loads(live.stdout)[suite]
+    path = setup / "conformance" / "unexplained-ratchet.yaml"
+    doc = yaml.safe_load(path.read_text())
+    for row in doc["ratchets"]:
+        if row["suite"] == suite:
+            row["unexplained_max"] = count
+    path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
+    _git(setup, "commit", "-q", "-am", f"pin {suite} at its live count")
+    _git(setup, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
+
+
+def test_pack_never_fetches_resets_commits_or_pushes():
+    """Structural: the pack path has no remote or history operation at all."""
+    shell = (REPO_ROOT / SCRIPT).read_text()
+    pack = shell.split("\npack() {", 1)[1].split("\n}\n", 1)[0]
+    for command in ("git fetch", "git reset", "git commit", "git push", "git clean"):
+        assert command not in pack, f"pack must never run `{command}`"
+    for step in (
+        '"$PYTHON" scripts/guard_reemitted_reports.py',
+        '"$PYTHON" scripts/check_engine_identity.py --check',
+        "regenerate_derived",
+        "verify_derived",
+        '"$PYTHON" scripts/unexplained_ratchet.py --check',
+    ):
+        assert step in pack, f"pack must vet with {step}"
+    # The bundle appears only after the ratchet passed.
+    assert pack.index("unexplained_ratchet.py --check") < pack.index('mv "$staging"')
+    assert pack.index("guard_reemitted_reports.py") < pack.index("check_engine_identity.py")
+    assert pack.index("check_engine_identity.py") < pack.index("regenerate_derived")
+    assert pack.index("verify_derived") < pack.rindex("check_engine_identity.py")
+
+
+def test_pack_writes_a_bundle_and_never_touches_git_remotes(origin, tmp_path):
+    """A leg's pack writes a self-contained bundle of its pre-regeneration
+    private outputs and leaves the remote, HEAD and history alone. The remote
+    URL is broken on purpose: any fetch or push would fail the pack."""
+    clone = _clone(origin, tmp_path / "leg")
+    _git(clone, "remote", "set-url", "origin", str(tmp_path / "no-such-remote"))
+    head = _git(clone, "rev-parse", "HEAD")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    sentinel = _perturb_report(clone)
+    leg_output = (clone / REPORT).read_bytes()
+    filename = _add_first_time_report(clone, "zz-fake-pack")
+    trace = tmp_path / "git-trace.log"
+
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability", GIT_TRACE=str(trace))
+    assert result.returncode == 0, result.stderr
+
+    used = _git_subcommands(trace)
+    assert used, "GIT_TRACE recorded nothing; the assertion below would be vacuous"
+    assert not set(used) & (_REMOTE_OR_HISTORY_SUBCOMMANDS | {"fetch-or-push"}), used
+    assert _git(clone, "rev-parse", "HEAD") == head
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+    assert not (clone / ".git" / "FETCH_HEAD").exists()
+
+    bundle = bundles / "nc-income-tax-liability"
+    assert sorted(p.name for p in bundles.iterdir()) == ["nc-income-tax-liability"]
+    doc = json.loads((bundle / "bundle.json").read_text())
+    assert doc["schema"] == "axiom_oracles.refreshed_report_bundle.v1"
+    assert doc["suite"] == "nc-income-tax-liability"
+    new_report = f"{SEED_DATA}/{filename}"
+    assert sorted(doc["private"]) == sorted([REPORT, new_report])
+    assert doc["deletions"] == []
+    assert doc["manifest_added"] == [filename]
+    # The bundle holds what the comparison wrote, before any regeneration
+    # rewrote the worktree copy.
+    assert (bundle / "files" / REPORT).read_bytes() == leg_output
+    bundled = json.loads((bundle / "files" / REPORT).read_text())
+    assert bundled["provenance"]["generated_at"] == sentinel
+    # Only private outputs: nothing derived and never the shared manifest.
+    assert not (bundle / "files" / SEED_DATA / "manifest.json").exists()
+    assert not (bundle / "files" / "conformance").exists()
+
+
+def test_pack_with_nothing_changed_packs_nothing(origin, tmp_path):
+    """The fast no-op path survives the split: no bundle, nothing to upload."""
+    clone = _clone(origin, tmp_path / "idle-leg")
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode == 0, result.stderr
+    assert "no report or derived-artifact changes" in result.stdout
+    assert [p for p in bundles.iterdir() if not p.name.startswith(".")] == []
+
+
+def test_pack_ratchet_refusal_packs_nothing_and_fails(origin, tmp_path):
+    """A refresh that raises an unexplained-mismatch ceiling fails its own leg
+    loudly and leaves no bundle, so the publish job never sees it."""
+    _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    clone = _clone(origin, tmp_path / "regressing-leg")
+    _perturb_report(clone)
+
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode != 0
+    assert "REFUSED" in result.stderr
+    assert "[nc-income-tax-liability] RATCHET regressed" in result.stderr
+    assert [p for p in bundles.iterdir() if not p.name.startswith(".")] == []
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_pack_rejects_new_report_without_resolved_engine(origin, tmp_path):
+    clone = _clone(origin, tmp_path / "unresolved-leg")
+    _perturb_report(clone)
+    path = clone / REPORT
+    report = json.loads(path.read_text())
+    report["provenance"]["engine"] = {"binary_sha256": "b" * 64}
+    path.write_text(json.dumps(report, indent=2) + "\n")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    bundles = tmp_path / "unresolved-bundles"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode != 0
+    assert "provenance.engine.commit must be 40 hex characters" in result.stderr
+    assert not (bundles / "nc-income-tax-liability").exists()
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_publish_rejects_unresolved_engine_in_prepacked_bundle(origin, seed_repo, tmp_path):
+    # A malformed prepacked payload needs no producer checkout. Read the
+    # immutable baseline, then exercise the independent publisher unchanged.
+    report = json.loads((seed_repo / REPORT).read_text())
+    report["provenance"]["engine"] = {"commit": "a" * 40}
+    bundles = tmp_path / "unresolved-bundles"
+    _write_bundle(
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (json.dumps(report, indent=2) + "\n").encode()},
+        baseline_root=seed_repo,
+    )
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    publisher = _clone(origin, tmp_path / "unresolved-publisher")
+    result = _publish(publisher, bundles)
+    assert result.returncode != 0
+    assert "provenance.engine.binary_sha256 must be 64 hex characters" in result.stderr
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_publish_two_bundles_makes_one_commit(origin, tmp_path):
+    """Two legs pack from the same starting tip; the publisher applies both
+    bundles and pushes ONE commit holding both suites' files, the union of
+    their manifest additions, and a deletion one leg's refresh made — and the
+    tip passes every ci.yml gate. The bundle directories carry
+    download-artifact names, not suite names."""
+    retired = "dashboard/public/data/zz-retired-note.txt"
+    setup = _clone(origin, tmp_path / "setup-retired")
+    (setup / retired).write_text("deleted by leg b's refresh\n")
+    _git(setup, "add", "--", retired)
+    _git(setup, "commit", "-q", "-m", "seed a file leg b's refresh deletes")
+    _git(setup, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
+
+    leg_a = _clone(origin, tmp_path / "leg-a")
+    leg_b = _clone(origin, tmp_path / "leg-b")
+    sentinel_a = _perturb_report(leg_a, REPORT)
+    sentinel_b = _perturb_report(leg_b, SIBLING_REPORT)
+    file_a = _add_first_time_report(leg_a, "zz-fake-a")
+    file_b = _add_first_time_report(leg_b, "zz-fake-b")
+    (leg_b / retired).unlink()
+
+    bundles = tmp_path / "refreshed"
+    bundles.mkdir()
+    for leg, suite in (
+        (leg_a, "nc-income-tax-liability"),
+        (leg_b, "mi-income-tax-liability"),
+    ):
+        packed = tmp_path / f"packed-{suite}"
+        result = _pack(leg, packed, suite)
+        assert result.returncode == 0, result.stderr
+        shutil.move(packed / suite, bundles / f"refreshed-{suite}")
+    leg_b_bundle = bundles / "refreshed-mi-income-tax-liability" / "bundle.json"
+    assert json.loads(leg_b_bundle.read_text())["deletions"] == [retired]
+
+    before = _git(origin, "rev-parse", DATA_BRANCH)
+    publisher = _clone(origin, tmp_path / "publisher")
+    result = _publish(publisher, bundles)
+    assert result.returncode == 0, result.stderr
+
+    commits = _git(origin, "rev-list", f"{before}..{DATA_BRANCH}").splitlines()
+    assert len(commits) == 1, "both refreshes must land in exactly one commit"
+    subject = _git(origin, "log", "-1", "--format=%s", DATA_BRANCH)
+    assert subject.startswith("data: refresh 2 suites (affected rerun ")
+    body = _git(origin, "log", "-1", "--format=%b", DATA_BRANCH)
+    assert "mi-income-tax-liability" in body and "nc-income-tax-liability" in body
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    for report, sentinel in ((REPORT, sentinel_a), (SIBLING_REPORT, sentinel_b)):
+        doc = json.loads((verify / report).read_text())
+        assert doc["provenance"]["generated_at"] == sentinel, report
+    manifest = json.loads((verify / SEED_DATA / "manifest.json").read_text())
+    for filename in (file_a, file_b):
+        assert filename in manifest["reports"], filename
+        assert (verify / SEED_DATA / filename).exists()
+    assert not (verify / retired).exists(), "the bundled deletion was not applied"
+    changed = _git(origin, "diff", "--name-only", before, DATA_BRANCH).splitlines()
+    for path in (
+        REPORT,
+        SIBLING_REPORT,
+        f"{SEED_DATA}/{file_a}",
+        f"{SEED_DATA}/{file_b}",
+        retired,
+    ):
+        assert path in changed, path
+
+
+def test_publish_retries_after_a_rejected_push(origin, tmp_path):
+    """The publisher retries only a rejected push, rebuilding from scratch on
+    the tip each time. A human commit that landed after the publisher checked
+    out survives, and the second attempt lands."""
+    human = _clone(origin, tmp_path / "human")
+    (human / "HUMAN_NOTE.md").write_text("a human pushed while the bot ran\n")
+    _git(human, "add", "--", "HUMAN_NOTE.md")
+    _git(human, "commit", "-q", "-m", "human commit")
+    human_sha = _git(human, "rev-parse", "HEAD")
+
+    racing = origin / "racing"
+    hook = origin / "hooks" / "pre-receive"
+    hook.write_text(
+        "#!/bin/sh\n"
+        f'racing="{racing}"\n'
+        "while read old new ref; do\n"
+        '  if [ "$ref" = "refs/heads/oracle-data" ] && [ ! -f "$racing" ]; then\n'
+        '    touch "$racing"\n'
+        '    echo "simulated concurrent push" >&2\n'
+        "    exit 1\n"
+        "  fi\n"
+        "done\n"
+        "exit 0\n"
+    )
+    hook.chmod(0o755)
+
+    publisher = _clone(origin, tmp_path / "publisher-retry")
+    leg = _clone(origin, tmp_path / "leg-retry")
+    sentinel = _perturb_report(leg)
+    bundles = tmp_path / "refreshed"
+    _write_bundle(
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (leg / REPORT).read_bytes()},
+        directory="refreshed-nc-income-tax-liability",
+        baseline_root=leg,
+    )
+    # The human commit lands first (the hook only rejects the bot's push), so
+    # the publisher's clone is behind before it even starts.
+    racing.touch()
+    _git(human, "push", "-q", "origin", f"HEAD:{DATA_BRANCH}")
+    racing.unlink()
+
+    result = _publish(publisher, bundles)
+    assert result.returncode == 0, result.stderr
+    assert "push rejected (attempt 1" in result.stderr
+    assert "push rejected (attempt 2" not in result.stderr
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert human_sha in _git(verify, "rev-list", "HEAD")
+    assert (verify / "HUMAN_NOTE.md").exists()
+    doc = json.loads((verify / REPORT).read_text())
+    assert doc["provenance"]["generated_at"] == sentinel
+
+
+def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(origin, tmp_path):
+    """Each bundle passed the ratchet where it ran, but the tip moved: the
+    combined tree is over a ceiling. The publisher refuses the whole publish
+    loudly, naming every suite in it, rather than dropping any silently."""
+    leg = _clone(origin, tmp_path / "leg-refuse")
+    _perturb_report(leg, REPORT)
+    _perturb_report(leg, SIBLING_REPORT)
+    bundles = tmp_path / "refreshed"
+    _write_bundle(
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (leg / REPORT).read_bytes()},
+        baseline_root=leg,
+    )
+    _write_bundle(
+        bundles,
+        "mi-income-tax-liability",
+        {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()},
+        baseline_root=leg,
+    )
+    _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+
+    publisher = _clone(origin, tmp_path / "publisher-refuse")
+    result = _publish(publisher, bundles)
+    assert result.returncode == 1
+    assert "REFUSED" in result.stderr
+    assert "nc-income-tax-liability" in result.stderr
+    assert "mi-income-tax-liability" in result.stderr
+    assert "push rejected" not in result.stderr
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_publish_with_zero_bundles_is_a_noop(origin, tmp_path):
+    """No bundles (every leg was a no-op, or failed) publishes nothing and
+    never even fetches; a missing bundles directory is the same."""
+    publisher = _clone(origin, tmp_path / "publisher-idle")
+    head = _git(publisher, "rev-parse", "HEAD")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    empty = tmp_path / "refreshed"
+    empty.mkdir()
+    (empty / ".pack.leftover").mkdir()  # a half-written pack is not a bundle
+    for bundles in (empty, tmp_path / "never-downloaded"):
+        trace = tmp_path / f"trace-{bundles.name}.log"
+        result = _publish(publisher, bundles, GIT_TRACE=str(trace))
+        assert result.returncode == 0, result.stderr
+        assert "nothing to publish" in result.stdout
+        assert not set(_git_subcommands(trace)) & (
+            _REMOTE_OR_HISTORY_SUBCOMMANDS | {"fetch-or-push"}
+        )
+    assert _git(publisher, "rev-parse", "HEAD") == head
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_publish_rejects_a_bundle_path_outside_the_derived_trees(origin, tmp_path):
+    """A bundle may only carry what pack collects: paths under the derived
+    trees, never the shared manifest. Anything else fails before the checkout
+    is touched."""
+    publisher = _clone(origin, tmp_path / "publisher-bad")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    for bad in ("scripts/certify.py", f"{SEED_DATA}/manifest.json", "../escape.json"):
+        bundles = tmp_path / f"bad-{len(list(tmp_path.iterdir()))}"
+        root = _write_bundle(bundles, "nc-income-tax-liability", {})
+        doc = json.loads((root / "bundle.json").read_text())
+        doc["deletions"] = [bad]
+        (root / "bundle.json").write_text(json.dumps(doc))
+        result = _publish(publisher, bundles)
+        assert result.returncode != 0, bad
+        assert "outside the derived paths" in result.stderr, result.stderr
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip

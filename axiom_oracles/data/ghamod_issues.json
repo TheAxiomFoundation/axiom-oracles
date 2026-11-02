@@ -1,0 +1,409 @@
+{
+ "schema": "axiom_oracles.ghamod_issues.v1",
+ "updated_at": "2026-10-04",
+ "purpose": "Track GHAMOD (SOUTHMOD Ghana, EUROMOD engine) oracle-side behaviours that affect household-level Axiom comparisons for rulespec-gh, and the oracle conventions a comparison adopts for parity. These are observations of the model's outputs on synthetic households, not statutory encoding gaps: in each the encoded RuleSpec follows current Ghana law and GHAMOD is the simplified oracle. The SOUTHMOD bundle is licensed and non-redistributable; entries describe observed outputs and reference input and output variable names and GHAMOD-produced values only, never model content. Probe values are from live GH_2025 runs on 2026-10-04 unless stated otherwise.",
+ "entries": [
+  {
+   "id": "ghamod-tin-s-missing-act-1111-35pct-top-band",
+   "classification": "southmod_model_schedule_issue",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "upstream_filed",
+   "summary": "GHAMOD's simulated labour income tax tin_s matches the Income Tax (Amendment) (No. 2) Act 2023 (Act 1111) First Schedule to the cedi at every probed chargeable income up to 605,000 GHS, but taxes the slice above 605,000 at 30% and never applies the 35% top marginal rate on income exceeding 605,000 GHS (the six explicit band widths sum to 605,000; the First Schedule labels the band 'Exceeding GH¢600,000'). Observed live: at chargeable income 700,000 GHS GHAMOD returns tin_s = 193,244 while the encoded Act 1111 schedule returns 197,994; the 4,750 difference is exactly 5% of the 95,000 above 605,000. The encoded rulespec-gh schedule applies the statutory 35% band.",
+   "affected_comparisons": [
+    "gh-income-tax-rate-schedule"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax"
+   ],
+   "reported_upstream": "Reported to the SOUTHMOD team at UNU-WIDER (southmod@wider.unu.edu) on 2026-07-07. On 2026-07-16 the GHAMOD maintainers confirmed the top band is defined in the model but not applied, an omission from the migration to SOUTHMOD A4.0, and said the next release corrects it."
+  },
+  {
+   "id": "ghamod-tinta04-training-relief-not-modelled",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "GHAMOD does not model the Act 896 Fifth Schedule paragraph 1(f) professional/technical/vocational training relief: GH_2025 produces no tinta04_s output column (a missing column, not a zero; checked live 2026-10-04), so there is no GHAMOD value to compare against. The encoded rulespec-gh training_personal_relief pays min(cost, 2,000 GHS) per Act 896 as amended by Act 1007 and is exercised by the module's companion tests. Because the missing column cannot form a clean per-case comparison, the gh-personal-reliefs suite carries no live training case; the concept stays mapped (unused) in concept_mappings.yaml for the day a SOUTHMOD release models it.",
+   "affected_comparisons": [
+    "gh-personal-reliefs"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief"
+   ]
+  },
+  {
+   "id": "ghamod-tinta02-lone-parent-relief-does-not-fire",
+   "classification": "southmod_model_behaviour",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "GHAMOD reports the Act 896 Fifth Schedule paragraph 1(a) 'dependant spouse or at least two dependant children' relief as two outputs: a dependent-spouse relief tinta01_s and a lone-parent relief tinta02_s. tinta01_s fires correctly (1,200 GHS a year, live) and is the parity case for the encoded dependant_spouse_or_children_personal_relief. tinta02_s returned 0 for every synthetic lone-parent household tried on 2026-10-04: a formal-sector single father or single mother (dms 1, 3 or 4, and dms 2 with no partner present) with two children aged 5 to 12 linked by idfather or idmother, and the gh-personal-reliefs child-education households (a single father with two or four children in education). Those households received only the separate child-education relief tinta05_s. The encoded RuleSpec grants the 1,200 GHS relief for dependant_child_count >= 2 per paragraph 1(a). The suite gives Axiom the true child count in its child-education cases but scores this output only where the dependent-spouse limb applies, because the concept is bound to tinta01_s; the two-child limb is recorded here rather than asserted against a non-firing output.",
+   "affected_comparisons": [
+    "gh-personal-reliefs"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief"
+   ]
+  },
+  {
+   "id": "ghamod-tscee-tscer-age-15-45-contributor-cap",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tscee_s",
+    "tscer_s"
+   ],
+   "statute": "National Pensions Act, 2008 (Act 766) s.3",
+   "observed": "GHAMOD pays SSNIT contributions only for formal earners aged 15 to 45. Probed on formal-sector earners (lfo=1) with post-uprating yem of 1,000 a month: ages 15, 35 and 45 get tscee_s = 55 and tscer_s = 130 (exactly 5.5% and 13%); ages 14, 46 and 50 get 0 for both.",
+   "axiom_position": "Act 766 s.3, the section rulespec-gh encodes (gh/statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme.yaml), sets the worker's 5.5% and the employer's 13% on 'the worker's salary' with no age condition; whether other provisions of Act 766 limit coverage by age has not been checked here. The gh-ssnit-contributions suite keeps its live cases at age 35, inside GHAMOD's window, and records this entry for the out-of-window divergence.",
+   "reported_upstream": "Candidate finding for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-ssnit-contributions"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+    "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution"
+   ]
+  },
+  {
+   "id": "ghamod-tiniy-15pct-rate-unsupported-by-para-8",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tiniy_s",
+    "tinkt_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) First Schedule paragraph 8(1)(b); Act 907 s.1",
+   "observed": "GHAMOD withholds a flat 15% on investment income: probed, 1,000 a month of post-uprating yiy gives tiniy_s = tinkt_s = 150. The paragraph 8(1)(b) rows rulespec-gh encodes from Act 896 as in force carry no 15% rate for investment income proper: dividends are 8% (row (i)); interest paid to an individual is 1% (row (ii)), with interest from a resident financial institution or on Government of Ghana bonds exempt under the section 7 exemptions inserted by Act 907; other interest is 8% (row (iii)). Among the encoded rows, 15% applies only to non-residential rent and to natural-resource payments and royalties.",
+   "axiom_position": "The encoded module (rulespec-gh gh/statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax.yaml) follows the statutory rows. The gh-capital-income suite compares rent (tinrt_s, 8%, exact) live and records this entry instead of running yiy cases, which would all diverge.",
+   "reported_upstream": "Candidate finding #6 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-capital-income"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#dividend_final_withholding",
+    "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#interest_paid_to_individual_withholding"
+   ]
+  },
+  {
+   "id": "ghamod-ttn-eligibility-band-10k-120k-superseded",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "ttn01_s",
+    "ttn02_s",
+    "ttn_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) Second Schedule paragraph 5, as substituted by Act 902 (2015) and Act 1071 (2021); COVID-19 Health Recovery Levy Act, 2021 (Act 1068)",
+   "observed": "GHAMOD charges the presumptive turnover tax (ttn01_s, 3%) and the COVID-19 levy component (ttn02_s, 1%) only on annual turnover from 10,000 to 120,000. Probed: turnover 15,000 a year gives 450 + 150 although every printed version of paragraph 5 starts at 'more than twenty thousand'; 200,000 a year gives 0 although the in-force band (Act 1071, December 2021) runs to five hundred thousand cedis (the statute charges 6,000 plus the levy); 30,000, 60,000 and 119,999 a year give exactly 3% and 1% (900 + 300, 1,800 + 600, 3,599.97 + 1,199.99). The 120,000 ceiling is a cliff: two monthly inputs a few floating-point steps apart, both uprating to 120,000 a year to within 1e-10, straddle it (just below gets the full 3,600 + 1,200; just above gets 0), and 120,012 a year gets 0. The ceiling matches only the original Act 896 text (assented 1 September 2015: 'more than twenty thousand cedis but does not exceed one hundred and twenty thousand cedis'); Act 902 (assented 30 December 2015) raised it to two hundred thousand and Act 1071 to five hundred thousand. The 10,000 floor (probed 2026-10-04: 9,990 a year gives 0; 10,010 gives 300.30 + 100.10) appears in none of the three texts.",
+   "axiom_position": "The encoded modules (rulespec-gh act-1071 second-schedule-substitutions; act-1068 section-1-imposition-of-levy) follow the in-force texts. The gh-presumptive-turnover suite keeps live cases inside the shared band, uses 119,999 rather than 120,000 for its top case so floating-point noise in the uprating cannot tip it over GHAMOD's cliff, and records this entry for the band divergence.",
+   "reported_upstream": "Candidate finding #7 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-presumptive-turnover"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable",
+    "gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount"
+   ]
+  },
+  {
+   "id": "ghamod-tva-wedge-double-and-triple-counts-levies",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tva_s",
+    "ils_taxco"
+   ],
+   "statute": "Value Added Tax Act, 2013 (Act 870) chain (2025 cascade: levies 6% + VAT 15% on the levy-inclusive value = 21.9% of the standard base)",
+   "observed": "On one standard-rated item (x0111105) with matching xhh and a post-uprating standard-rated base (ils_vat_std) of 1,000 a month, GH_2025 returns tva01_s / tva02_s / tva03_s = 25 / 25 / 10 (2.5%, 2.5% and 1%, the statutory levy rates), tva_s = 270 (27%) and ils_taxco = 330 (33%). Both totals exceed the 15% VAT rate plus the 60 of levies (210), by one and two further multiples of the levy total respectively. GH_2024 gives the same shares (tva_s 237.10 and ils_taxco 289.78 on a base of 878.13: 27% and 33%). The statutory 2025 cascade is 21.9% of the base: levies of 6% plus VAT of 15% on the levy-inclusive value.",
+   "axiom_position": "The encoded 2026 modules (Act 1151 VAT 15%; Act 1152 GETFund 2.5%; Act 1156 NHIL 2.5%) follow the reform texts; the levy rates carry unchanged across the boundary, so the gh-vat-levies suite compares the two levies against tva01_s/tva02_s exactly and records this entry for VAT, which has no live case because GHAMOD emits no pure-VAT output.",
+   "reported_upstream": "Candidate finding #8 for UNU-WIDER (southmod@wider.unu.edu), the largest in magnitude so far: about 5 points of the standard-rated base on tva_s (27% against 21.9%) and about 11 on ils_taxco (33%). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-vat-levies"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1151/value-added-tax-2025/section-3-rate-of-the-tax#value_added_tax_amount"
+   ]
+  },
+  {
+   "id": "ghamod-fuel-levies-diverge-from-esla-2025-schedule",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "texsx01_s",
+    "texsx04_s",
+    "texsx06_s",
+    "texsx02_s",
+    "texsx05_s",
+    "texsx07_s",
+    "texsx03_s",
+    "texry01_s",
+    "texry02_s"
+   ],
+   "statute": "Energy Sector Levies Act, 2025 (Act 1135) Schedule as amended by Acts 1141 and 1145",
+   "observed": "Probed on single-person households buying 100 litres a year, with positive household expenditure xhh (GH_2025 returns zero fuel duty when xhh is 0): the petrol outputs texsx01_s / texsx04_s / texsx06_s come to 1.65 / 0.20 / 0.20 per litre (2.05 in all) and the diesel outputs texsx02_s / texsx05_s / texsx07_s to 1.63 / 0.20 / 0.10 (1.93). Diesel's total equals the Act 1141 shortfall-and-debt-repayment rate on diesel (GHp 193); petrol's is GHp 10 above the Act 1141 petrol rate (GHp 195), and its third output per litre is double diesel's third. Neither fuel carries the Road Fund Levy (GHp 48 per litre) or the Energy Fund Levy (GHp 1 per litre), which the Schedule levies on both. The Act 1135 Schedule (2 April 2025) has no other per-litre petrol or diesel rows, so the statutory totals are GHp 244 on petrol and GHp 242 on diesel from 29 July 2025 (Act 1141 rates from 4 June 2025, Act 1145 road and energy fund rows from 29 July 2025). The kerosene output is negative (texsx03_s, -0.0271 per unit of q045301) and the LPG outputs total 0.7408 per unit of q045302 (texry01_s + texry02_s), against the Schedule's GHp 73 per kilogramme on LPG (Act 1141) and GHp 1 per kilogramme on kerosene (Energy Fund Levy).",
+   "axiom_position": "The encoded fuel-levy modules (rulespec-gh act-1141 schedule-shortfall-row-substituted, importing the act-1145 road and energy fund rows) follow the in-force schedule (petrol 244 / diesel 242 GHp per litre; LPG 73 GHp/kg; kerosene 1 GHp/kg). No live fuel cases run because every row diverges; this entry records the probes.",
+   "reported_upstream": "Candidate finding #9 for UNU-WIDER (southmod@wider.unu.edu), with the petrol third-row question called out separately. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#petrol_fuel_levies_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#diesel_fuel_levies_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#lpg_shortfall_levy_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#kerosene_energy_fund_levy_amount"
+   ]
+  },
+  {
+   "id": "ghamod-leap-pays-bimonthly-amounts-monthly",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bsa_s"
+   ],
+   "statute": "LEAP administrative schedule (MoGCSP 97th payment cycle, June 2025 indexation)",
+   "observed": "The official LEAP grants are paid per two-month cycle: GH¢320 / 380 / 440 / 530 by 1 / 2 / 3 / 4+ eligible members (MoGCSP 97th-cycle announcement, which calls the payment 'bi-monthly'). GHAMOD pays the same four amounts every month: probed, households with one to four dependants aged 70 or over get bsa_s = 320 / 380 / 440 / 530 a month. A two-member household therefore gets 4,560 a year from GHAMOD against 2,280 at six bi-monthly cycles a year, 2x on every band.",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/mogcsp-leap/payment-cycle-grants) carries the per-cycle amounts and has no annual output; six cycles a year follows from the bi-monthly schedule. No live LEAP cases run (every case would show the 2x); this entry records the probe.",
+   "reported_upstream": "Candidate finding #10 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/mogcsp-leap/payment-cycle-grants#leap_grant_per_cycle"
+   ]
+  },
+  {
+   "id": "ghamod-free-shs-amounts-have-no-official-basis",
+   "classification": "southmod_source_gap",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bedes_s"
+   ],
+   "statute": "Free SHS programme (administrative; 2025 Budget Statement paragraphs 376-379 fund it via the uncapped GETFund)",
+   "observed": "GHAMOD pays bedes_s = 83.54 a month to a residential student and 54.04 a month to a day student (1,002.47 and 648.47 a year). rulespec-gh found no official public per-student Free SHS subsidy schedule (its fee-free-structure module records a search of the Ministry of Education, the Free SHS Secretariat and the 2025/2026 Budget Statements on 2026-07-07). Also probed: a household member with deh=4 receives the residential amount even with der=0 and dpp=0 (not a boarder, not in a public school).",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/free-shs/fee-free-structure) encodes the fee-free structure and defers the per-student value output pending an official schedule; bedes_s is recorded here rather than compared.",
+   "reported_upstream": "Candidate finding #11 for UNU-WIDER (southmod@wider.unu.edu): what is the official basis for the amounts, and should the residential amount reach non-boarders outside public schools? Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/free-shs/fee-free-structure#free_shs_subsidy_value_per_year"
+   ]
+  },
+  {
+   "id": "ghamod-excise-buckets-diverge-from-act-1108-table",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tvl01_s",
+    "tvl02_s",
+    "tvl03_s",
+    "tvl05_s",
+    "tvl06_s",
+    "tvl07_s"
+   ],
+   "statute": "Excise Duty Act, 2014 (Act 878) First Schedule as substituted by Act 1108 (29 Dec 2023)",
+   "observed": "Probed at 100 of spend on single items (with matching xhh), each of GHAMOD's seven ad-valorem alcohol and tobacco excise outputs charges one flat share of the spend it covers: tvl01_s 25%, tvl02_s 20%, tvl03_s 22.5%, tvl04_s 47.5%, tvl05_s 10%, tvl06_s 150% and tvl07_s 170.65%. Only tvl04_s (47.5% on beer spend, x021302 and x021303) equals an Act 1108 rate (beer, stout other than indigenous beer, below 50 per cent local raw material). The Act 1108 table charges wine 45%, blended or compounded spirits 50%, akpeteshie 20% and cigarettes 50% plus a specific duty of 28 pesewas per stick, all on the ex-factory price; 22.5% is exactly half the wine rate, and no output carries a per-stick component.",
+   "axiom_position": "The encoded module (rulespec-gh act-1108 first-schedule-goods-liable-to-excise-duty) carries the statutory table. The gh-excise suite compares the beer under-50 band live and records the other outputs under this entry.",
+   "reported_upstream": "Candidate finding #12 for UNU-WIDER (southmod@wider.unu.edu), a documentation question: which statutory rows the other outputs stand for, and whether their shares are retail-price conversions or ad-valorem equivalents of specific duties. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#wine_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#blended_spirits_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#akpeteshie_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#cigarette_excise_amount_ghp"
+   ]
+  },
+  {
+   "id": "ghamod-tin-taxes-gross-employment-income-omitting-s112-deduction",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tin_s",
+    "il_tintb3",
+    "ils_dispy"
+   ],
+   "statute": "National Pensions Act, 2008 (Act 766) s.112(2); Income Tax Act, 2015 (Act 896) chargeable-income base",
+   "observed": "GHAMOD's income-tax base il_tintb3 equals gross employment income yem (probed), so tin_s applies the Act 1111 rate schedule to gross pay with no deduction of the mandatory 5.5% SSNIT employee contribution that Act 766 s.112(2) makes deductible for the contributor (contributions up to 16.5% of income). Probed at 60,000 gross a year: tin_s = 10,182 and ils_dispy = 46,518 (= 60,000 - 10,182 - 3,300), where the statutory chain gives tax 9,357 on chargeable income 56,700 and disposable income 47,343: an overtax of 825 a year at the 25% marginal rate (3,300 x 0.25). The overtax is the tax on gross pay minus the tax on gross pay less the 5.5% contribution: 825 at 60,000 (the whole 3,300 deduction sits in the 25% band), but smaller where the deduction crosses a band edge, e.g. 6.00 at 6,000 gross (the statutory base 5,670 is below the 5,880 nil band) and 67.50 at 9,000 gross.",
+   "axiom_position": "The composed rulespec-gh pipeline (gh/statutes/composed/pilot-worker-disposable-income-pipeline) deducts the imported Act 766 s.3(1) contribution from the tax base per s.112(2) before applying the imported Act 1111 bands. The gh-dispy suite keeps its live cases in the shared-nil zone (gross at or below the 5,880 first-band bound, where both engines charge no tax and dispy = 94.5% of gross) and records this entry for the taxed-zone divergence.",
+   "reported_upstream": "Candidate finding #13 for UNU-WIDER (southmod@wider.unu.edu); with #8 (VAT wedge) the second defect candidate that shifts household-level statistics: every formal-sector taxpayer whose pay reaches a taxed band is overtaxed by the tax on their SSNIT contribution. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-dispy"
+   ],
+   "affected_concepts": [
+    "gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income"
+   ]
+  },
+  {
+   "id": "ghamod-beer-excise-charged-on-household-expenditure",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "tvl04_s"
+   ],
+   "statute": "Excise Duty Act, 2014 (Act 878) First Schedule as substituted by Act 1108 (beer, stout other than indigenous beer)",
+   "observed": "GHAMOD charges the Act 1108 beer rate on household beer expenditure: tvl04_s is 47.5% of the uprated beer spend (live in gh-excise: 1,200 a year gives 570.00, 6,000 gives 2,850.00). Act 1108 charges 47.5 per centum of the ex-factory price, which leaves out the margins and taxes added after the factory gate, so on a retail purchase GHAMOD's base is larger than the statutory one.",
+   "axiom_position": "The gh-excise cases give Axiom the same amount as beer_ex_factory_value (bridged from GHAMOD's post-uprating ils_coicop02, which in these cases holds only the beer spend), so they test the 47.5% rate on an identical base. They are not evidence that GHAMOD's beer excise matches the statute in level: the base definitions differ, and the gap depends on the retail-to-ex-factory price ratio, which neither engine models here.",
+   "reported_upstream": "A convention adopted for the comparison, not a defect report.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount"
+   ]
+  },
+  {
+   "id": "ghamod-nhil-getfund-charged-on-household-expenditure",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "tva01_s",
+    "tva02_s",
+    "ils_vat_std"
+   ],
+   "statute": "National Health Insurance Act, 2012 (Act 852) s.47 as substituted by Act 1156; Ghana Education Trust Fund Act, 2000 (Act 581) s.3A as substituted by Act 1152",
+   "observed": "GHAMOD charges NHIL (tva01_s) and the GETFund Levy (tva02_s) at 2.5% each of household expenditure on standard-rated items, its ils_vat_std (probed: 25 each on a base of 1,000 a month; live in gh-vat-levies: 300 each on 12,000 a year and 1,500 each on 60,000). Acts 1156 and 1152 charge each levy on taxable supplies, that is on the value of the supply. Household expenditure recorded at purchase prices already includes the levies and VAT, so on such expenditure GHAMOD's base is larger than the statutory one.",
+   "axiom_position": "The gh-vat-levies cases give Axiom the same amount (GHAMOD's post-uprating ils_vat_std) as levy_chargeable_value and taxable_value_of_goods_or_services, so they test the 2.5% rates on an identical base, not the base definition.",
+   "reported_upstream": "A convention adopted for the comparison, not a defect report.",
+   "affected_comparisons": [
+    "gh-vat-levies"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+    "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount"
+   ]
+  },
+  {
+   "id": "ghamod-school-feeding-every-weekday-of-the-year",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "bed_s"
+   ],
+   "statute": "2025 Budget Statement paragraph 381 (Ghana School Feeding Programme, GH¢2.00 per meal per child per day)",
+   "observed": "GHAMOD pays the GH¢2.00 daily feeding grant for every weekday of the year: a public basic-school pupil aged 8 gets bed_s = 43.45 a month, 521.43 a year, which is 2.00 x 260.71 days (365 / 7 x 5). The programme pays per child per school day, and a school year has fewer days than that. The rulespec-gh feeding-grant module takes the number of school days fed as an input (school_days_fed); its companion fixture uses 190 days, which gives 380 a year, so GHAMOD's amount would be 37% higher at that count.",
+   "axiom_position": "The gh-transfers case gives Axiom the every-weekday calendar (365 x 5/7 days), which was inferred from GHAMOD's own output, so it is a regression check that GHAMOD's annual value stays at GH¢2.00 over that calendar; it cannot separate a rate error from an offsetting calendar error. It is not evidence that GHAMOD's annual feeding value is right: Axiom does not encode a school-year day count, and the calendar is a methodology input the comparison takes from the oracle.",
+   "reported_upstream": "A convention adopted for the comparison; candidate question for UNU-WIDER on the day count. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/gsfp/feeding-grant#school_feeding_value_per_year"
+   ]
+  }
+ ]
+}
