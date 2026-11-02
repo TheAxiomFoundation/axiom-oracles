@@ -28,6 +28,7 @@ import hashlib
 import json
 import subprocess
 import sys
+from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
 
@@ -87,7 +88,7 @@ DIALOGUE_SAMPLE = None  # None = full database
 
 def _dispositioned_block(
     *,
-    counts: dict[str, int],
+    classified_counts: dict[str, int],
     comparison_count: int,
     match_count: int,
     unexplained_count: int,
@@ -98,15 +99,36 @@ def _dispositioned_block(
     ``CLASSIFIED_DISPOSITION_KINDS`` formula ``apply_dispositions`` uses —
     so a future encoding-gap classification here cannot silently diverge
     from the merge pipeline's definition of "explained".
+
+    ``counts["unexplained"]`` is ``unexplained_count``, every row left
+    unexplained, as ``apply_dispositions`` writes it. The caller passes only
+    the classified kinds; the bucket is never supplied separately, so the
+    two figures cannot disagree.
     """
     from axiom_oracles.comparison.dispositions import (
         CLASSIFIED_DISPOSITION_KINDS,
         DISPOSITIONS_SCHEMA_VERSION,
     )
 
+    unknown = set(classified_counts) - set(CLASSIFIED_DISPOSITION_KINDS)
+    if unknown:
+        raise ValueError(f"not classified disposition kinds: {sorted(unknown)}")
+    counts = {
+        kind: classified_counts.get(kind, 0)
+        for kind in CLASSIFIED_DISPOSITION_KINDS
+    }
+    counts["unexplained"] = unexplained_count
     classified = sum(
-        counts.get(kind, 0) for kind in CLASSIFIED_DISPOSITION_KINDS
+        counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
+    # Every compared row is a match, a classified mismatch or an unexplained
+    # one, exactly once.
+    if match_count + classified + unexplained_count != comparison_count:
+        raise ValueError(
+            f"matches ({match_count}) + classified ({classified}) + "
+            f"unexplained ({unexplained_count}) != comparisons "
+            f"({comparison_count})"
+        )
     n = comparison_count
     return {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
@@ -258,33 +280,22 @@ def database_fingerprints() -> list[dict]:
     return rows
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--extract", type=Path, default=None)
-    parser.add_argument("--run-spsm", action="store_true")
-    parser.add_argument("--output-name", default="fed25")
-    args = parser.parse_args()
+@dataclass(frozen=True)
+class Classification:
+    """Every compared taxfiler row, sorted into exactly one class."""
 
-    if args.run_spsm or args.extract is None:
-        prn = run_spsm(args.output_name)
-    else:
-        prn = args.extract.expanduser()
+    comparison_count: int
+    matches: int
+    amt_class: int
+    split_class: int
+    unclassified: list[dict]
 
-    households = parse_case_output(prn)
-    rows: list[tuple[int, int, float, float, float, float]] = []
-    for household in households:
-        taxable = household.values.get("imitax", [])
-        fedtax = household.values.get("imfedtax", [])
-        amtdf = household.values.get("imamtdf", [])
-        pension = household.total("idipens")
-        for member in range(len(fedtax)):
-            ti = taxable[member] if member < len(taxable) else 0.0
-            amt = amtdf[member] if member < len(amtdf) else 0.0
-            rows.append(
-                (household.sequence, member, ti, fedtax[member], amt, pension)
-            )
 
-    axiom_values = axiom_schedule_tax([row[2] for row in rows])
+def classify_rows(
+    rows: list[tuple[int, int, float, float, float, float]],
+    axiom_values: list[float],
+) -> Classification:
+    """Sort each (row, Axiom value) pair into match, AMT, splitting or other."""
 
     matches = 0
     amt_class = 0
@@ -331,7 +342,78 @@ def main() -> int:
                 }
             )
 
-    n = len(rows)
+    return Classification(
+        comparison_count=len(rows),
+        matches=matches,
+        amt_class=amt_class,
+        split_class=split_class,
+        unclassified=other,
+    )
+
+
+def build_summary(classification: Classification) -> dict:
+    """The report ``summary``, every count taken from one classification."""
+
+    n = classification.comparison_count
+    matches = classification.matches
+    return {
+        "comparison_count": n,
+        "match_count": matches,
+        "mismatch_count": n - matches,
+        "amt_overwrite_class_count": classification.amt_class,
+        "pension_splitting_class_count": classification.split_class,
+        "unclassified_count": len(classification.unclassified),
+        "match_rate": round(100.0 * matches / n, 2) if n else 0,
+        # Standard disposition accounting: the AMT-overwrite class is
+        # verified per-row (imamtdf > 0; glass-box Atxcalc.cpp T691
+        # row 94 replaces imfedtax with netminamt) and attributed to
+        # the oracle's variable semantics — an upstream engine
+        # behavior, not a rules disagreement.
+        "dispositioned": _dispositioned_block(
+            classified_counts={
+                "upstream_engine_gap": (
+                    classification.amt_class + classification.split_class
+                ),
+            },
+            comparison_count=n,
+            match_count=matches,
+            unexplained_count=len(classification.unclassified),
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--extract", type=Path, default=None)
+    parser.add_argument("--run-spsm", action="store_true")
+    parser.add_argument("--output-name", default="fed25")
+    args = parser.parse_args()
+
+    if args.run_spsm or args.extract is None:
+        prn = run_spsm(args.output_name)
+    else:
+        prn = args.extract.expanduser()
+
+    households = parse_case_output(prn)
+    rows: list[tuple[int, int, float, float, float, float]] = []
+    for household in households:
+        taxable = household.values.get("imitax", [])
+        fedtax = household.values.get("imfedtax", [])
+        amtdf = household.values.get("imamtdf", [])
+        pension = household.total("idipens")
+        for member in range(len(fedtax)):
+            ti = taxable[member] if member < len(taxable) else 0.0
+            amt = amtdf[member] if member < len(amtdf) else 0.0
+            rows.append(
+                (household.sequence, member, ti, fedtax[member], amt, pension)
+            )
+
+    axiom_values = axiom_schedule_tax([row[2] for row in rows])
+    classification = classify_rows(rows, axiom_values)
+    n = classification.comparison_count
+    matches = classification.matches
+    summary = build_summary(classification)
+
     report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": "ca-federal-schedule-tax-spsm",
@@ -367,33 +449,8 @@ def main() -> int:
             }
         ],
         "case_count": len(households),
-        "summary": {
-            "comparison_count": n,
-            "match_count": matches,
-            "mismatch_count": n - matches,
-            "amt_overwrite_class_count": amt_class,
-            "pension_splitting_class_count": split_class,
-            "unclassified_count": len(other),
-            "match_rate": round(100.0 * matches / n, 2) if n else 0,
-            # Standard disposition accounting: the AMT-overwrite class is
-            # verified per-row (imamtdf > 0; glass-box Atxcalc.cpp T691
-            # row 94 replaces imfedtax with netminamt) and attributed to
-            # the oracle's variable semantics — an upstream engine
-            # behavior, not a rules disagreement.
-            "dispositioned": _dispositioned_block(
-                counts={
-                    "axiom_encoding_gap": 0,
-                    "bridge_artifact": 0,
-                    "explained_residual": 0,
-                    "unexplained": 0,
-                    "upstream_engine_gap": amt_class + split_class,
-                },
-                comparison_count=n,
-                match_count=matches,
-                unexplained_count=len(other),
-            ),
-        },
-        "mismatches": other[:50],
+        "summary": summary,
+        "mismatches": classification.unclassified[:50],
         "provenance": {
             "generated": date.today().isoformat(),
             "generated_at": datetime.now(timezone.utc).strftime(
@@ -419,9 +476,10 @@ def main() -> int:
     )
     out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(
-        f"{n} taxfilers: {matches} match ({report['summary']['match_rate']}%), "
-        f"{amt_class} AMT-class, {split_class} splitting-class, "
-        f"{len(other)} unclassified"
+        f"{n} taxfilers: {matches} match ({summary['match_rate']}%), "
+        f"{classification.amt_class} AMT-class, "
+        f"{classification.split_class} splitting-class, "
+        f"{len(classification.unclassified)} unclassified"
     )
     print(f"wrote {out}")
     return 0
