@@ -3314,6 +3314,15 @@ _INPUT_REF_OVERRIDES.update(
 )
 _INPUT_REF_OVERRIDES.update(
     {
+        name: f"us:statutes/26/1402/b#input.{name}"
+        for name in (
+            "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins",
+            "wages_paid_to_individual_during_taxable_year_for_section_1401_a",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
         name: f"us:statutes/26/1401#input.{name}"
         for name in (
             "international_social_security_agreement_under_section_233_in_effect",
@@ -3662,6 +3671,16 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
+        # 26 USC 1402(b)(1): 1401(a) reaches net earnings only up to the
+        # contribution and benefit base minus the individual's wages. The
+        # pinned us:statutes/26/1402/b reads both names; without them its
+        # self_employment_income_for_section_1401_a never evaluates. The
+        # base is the constant social_security_wage_base reads, so the SECA
+        # tax and its 164(f) deduction use one base.
+        "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins": (
+            OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026
+        ),
+        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": wages,
         "employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.

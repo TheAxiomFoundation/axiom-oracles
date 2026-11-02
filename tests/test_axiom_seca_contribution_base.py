@@ -101,7 +101,6 @@ def _tax_unit_inputs(case: Case) -> dict[str, object]:
     }
 
 
-@pytest.mark.xfail(strict=True, reason="#612: the projection omits 1402(b) inputs")
 def test_projection_supplies_the_1402_b_base_and_wages() -> None:
     inputs = _tax_unit_inputs(_self_employed(50_000))
 
@@ -109,7 +108,6 @@ def test_projection_supplies_the_1402_b_base_and_wages() -> None:
     assert inputs[WAGES_INPUT] == 50_000
 
 
-@pytest.mark.xfail(strict=True, reason="#612: the projection omits 1402(b) inputs")
 def test_one_base_for_seca_and_its_deduction() -> None:
     """The 1402(b) base the SECA tax reads is the bridge's own wage base."""
     [wage_base] = [
@@ -123,7 +121,6 @@ def test_one_base_for_seca_and_its_deduction() -> None:
     assert float(wage_base) == inputs[BASE_INPUT]
 
 
-@pytest.mark.xfail(strict=True, reason="#612: the projection omits 1402(b) inputs")
 @PROPERTY_SETTINGS
 @given(
     head_wages=st.floats(min_value=0, max_value=400_000, allow_nan=False),
