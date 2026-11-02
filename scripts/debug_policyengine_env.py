@@ -35,7 +35,13 @@ def ensure_pinned_policyengine_env(script_path: Path, repo_root: Path) -> None:
         "--with-editable",
         str(repo_root),
     ]
-    for pin in PE_ORACLE_PINS:
-        cmd.extend(["--with", pin])
+    # A pin PyPI's index no longer lists installs from its verified
+    # hashed-URL file (axiom_oracles/pinned_artifacts.py), as in
+    # scripts/run_comparison.py.
+    if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
+    from axiom_oracles import pinned_artifacts
+
+    cmd.extend(pinned_artifacts.with_args(PE_ORACLE_PINS))
     cmd.extend(["python", str(script_path), *sys.argv[1:]])
     os.execvpe("uv", cmd, env)

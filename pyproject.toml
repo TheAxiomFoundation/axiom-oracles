@@ -48,7 +48,11 @@ policyengine = [
   "policyengine[us]==5.0.0",
   # policyengine-us declares spm-calculator>=0.2.0 but imports
   # spm_calculator.geoadj, which spm-calculator 1.0.0 removed. CI installs this
-  # extra with `uv pip install -e '.[policyengine]'`, which ignores uv.lock.
+  # extra from uv.lock (`uv sync --locked --extra policyengine`); the bound
+  # keeps a fresh resolve (`uv lock`, `uv pip install`) off 1.x too. A fresh
+  # resolve of this extra fails today: policyengine[us]==5.0.0 requires
+  # policyengine-us==1.764.6, which PyPI's index no longer lists, while the
+  # hashed URL uv.lock records still downloads.
   "spm-calculator>=0.2.0,<1",
 ]
 taxsim = [

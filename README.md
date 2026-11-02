@@ -72,10 +72,13 @@ Requires Python 3.13 or newer.
 uv pip install -e ".[dev]"
 ```
 
-Install the PolicyEngine extra only when running PE calculations:
+Install the PolicyEngine extra only when running PE calculations. Install it
+from the lock: `policyengine[us]==5.0.0` requires `policyengine-us==1.764.6`,
+which PyPI's index no longer lists, so a fresh `uv pip install` of the extra
+fails, while `uv.lock` records the release's hashed URL and SHA-256:
 
 ```bash
-uv pip install -e ".[policyengine,dev]"
+uv sync --locked --extra policyengine --extra dev
 ```
 
 Install the TAXSIM extra only when running local TAXSIM comparisons:

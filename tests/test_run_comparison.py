@@ -15,7 +15,9 @@ from hypothesis import example, given, settings, strategies as st
 
 def assert_pe_companion_pinned(cmd):
     """A `uv run` that installs PolicyEngine-US must also pin spm-calculator."""
-    assert any(arg.startswith("policyengine-us==") for arg in cmd), cmd
+    assert any(
+        arg.startswith(("policyengine-us==", "policyengine-us @ ")) for arg in cmd
+    ), cmd
     assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with", cmd
 
 
@@ -3490,21 +3492,29 @@ def test_pe_us_companion_pins_match_uv_lock():
         name, version = pin.split("==")
         assert f'name = "{name}"\nversion = "{version}"\n' in lock, pin
         assert pin in debug.PE_ORACLE_PINS
-    # CI installs the extra with `uv pip install -e '.[policyengine]'`, which
-    # ignores uv.lock, so the extra itself must exclude spm-calculator 1.x.
+    # CI installs the extra from uv.lock, but `uv lock` and any `uv pip
+    # install` resolve it afresh, so the extra itself must exclude
+    # spm-calculator 1.x.
     pyproject = (root / "pyproject.toml").read_text()
     assert '"spm-calculator>=0.2.0,<1",' in pyproject
 
 
 def test_pe_oracle_with_args_appends_the_companion_pins():
+    from axiom_oracles import pinned_artifacts
+
     run_comparison = load_run_comparison_module()
+    # PyPI's index no longer lists policyengine-us 1.752.2, so the default
+    # oracle installs the verified wheel from its recorded hashed URL.
+    wheel = pinned_artifacts.cache_path(
+        pinned_artifacts.lookup("policyengine-us", "1.752.2")
+    )
     assert run_comparison._pe_oracle_with_args(
         run_comparison._resolve_pe_oracle_pins({})
     ) == [
         "--with",
         "policyengine==4.18.9",
         "--with",
-        "policyengine-us==1.752.2",
+        f"policyengine-us @ {wheel.resolve().as_uri()}",
         "--with",
         "policyengine-core==3.28.0",
         "--with",
