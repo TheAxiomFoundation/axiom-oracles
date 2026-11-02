@@ -705,7 +705,8 @@ def test_axiom_tax_projection_floors_eitc_adjusted_earnings_per_filer() -> None:
     )
 
 
-def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> None:
+def test_axiom_tax_projection_uses_filer_social_security_for_section_86() -> None:
+    """86(d)(1): a dependent's benefits are not received by the filers."""
     case = Case(
         case_id="dependent-social-security",
         period="2026",
@@ -743,7 +744,7 @@ def test_axiom_tax_projection_uses_tax_unit_social_security_for_section_86() -> 
             "us:statutes/26/86#input."
             "title_II_monthly_benefits_received_during_taxable_year",
         )
-    ] == 5_500
+    ] == 0
 
 
 def test_axiom_tax_projection_uses_tax_unit_wages_for_ctc_payroll_tax() -> None:

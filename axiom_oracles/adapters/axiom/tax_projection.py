@@ -3592,7 +3592,9 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     tax_unit_dividends = _sum_dividends(people)
     tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
     filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
-    social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)
+    # 26 USC 86(d)(1): benefits "received by the taxpayer by reason of
+    # entitlement"; a dependent's benefits are the dependent's.
+    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
     filer_unemployment = _sum_concept(
         earners,
         Concepts.UNEMPLOYMENT_INSURANCE_INCOME,

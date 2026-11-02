@@ -79,12 +79,10 @@ def _joint_filers_with_child_beneficiary():
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#623: dependents' benefits are summed in")
 def test_child_beneficiary_benefits_stay_off_the_filers_base() -> None:
     assert _tax_unit_inputs(_joint_filers_with_child_beneficiary())[TITLE_II] == 0
 
 
-@pytest.mark.xfail(strict=True, reason="#623: dependents' benefits are summed in")
 def test_disabled_adult_dependent_benefits_stay_off_the_filers_base() -> None:
     # ecps-tax-unit-59151's shape: filers with their own benefits and a
     # disabled 37-year-old dependent receiving 23,091.88.
@@ -141,7 +139,6 @@ _DEPENDENTS = st.lists(
 )
 
 
-@pytest.mark.xfail(strict=True, reason="#623: dependents' benefits are summed in")
 @PROPERTY_SETTINGS
 @given(
     head_ss=_MONEY,
@@ -157,7 +154,6 @@ def test_a_dependents_benefits_never_move_a_tax_unit_input(
     assert _tax_unit_inputs(with_benefits) == _tax_unit_inputs(without)
 
 
-@pytest.mark.xfail(strict=True, reason="#623: dependents' benefits are summed in")
 @PROPERTY_SETTINGS
 @given(
     head_ss=_MONEY,
