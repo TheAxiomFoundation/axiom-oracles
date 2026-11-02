@@ -6,6 +6,8 @@ import importlib.util
 import os
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location(
     "prune_superseded_reports", ROOT / "scripts" / "prune_superseded_reports.py"
@@ -21,22 +23,34 @@ def _write(directory: Path, name: str, mtime: int) -> Path:
     return path
 
 
-def test_v2_generations_group_with_their_suite(tmp_path):
-    old = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-01.json", 1)
-    v2 = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json", 2)
-    newest = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-20.json", 3)
+def test_raw_and_v2_reports_are_pruned_separately(tmp_path):
+    # A run writes its raw report X-0-D.json and then its FULL v2 sibling
+    # X-0-D-v2.json (run_comparison._write_full_v2_report). The newest of
+    # each kind survives; the v2 never deletes its own run's raw report.
+    old_raw = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-01.json", 1)
+    old_v2 = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-01-v2.json", 2)
+    raw = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-20.json", 3)
+    v2 = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-20-v2.json", 4)
     other = _write(tmp_path, "axiom-policyengine-ssi-ecps-0-2026-10-01.json", 1)
 
     removed, _ = prune.prune(tmp_path, tracked=set())
 
-    assert sorted(removed) == sorted([old, v2])
-    assert newest.exists() and other.exists()
-    assert not old.exists() and not v2.exists()
+    assert sorted(removed) == sorted([old_raw, old_v2])
+    assert raw.exists() and v2.exists() and other.exists()
 
 
-def test_older_v2_generations_of_one_day_are_pruned(tmp_path):
+def test_a_failed_run_keeps_the_previous_v2(tmp_path):
+    # The raw report landed but the run failed before writing its v2: the
+    # previous v2 is still the newest v2 and must survive.
+    old_v2 = _write(tmp_path, "suite-0-2026-10-14-v2.json", 1)
+    raw = _write(tmp_path, "suite-0-2026-10-20.json", 2)
+    removed, _ = prune.prune(tmp_path, tracked=set())
+    assert removed == [] and old_v2.exists() and raw.exists()
+
+
+def test_older_v2_generations_are_pruned(tmp_path):
     first = _write(tmp_path, "suite-0-2026-10-14-v2.json", 1)
-    second = _write(tmp_path, "suite-0-2026-10-14-v3.json", 2)
+    second = _write(tmp_path, "suite-0-2026-10-20-v2.json", 2)
     prune.prune(tmp_path, tracked=set())
     assert not first.exists() and second.exists()
 
@@ -55,3 +69,10 @@ def test_committed_reports_are_tracked_by_the_real_listing():
     assert (
         prune.REPORTS / "axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json"
     ).resolve() in tracked
+
+
+def test_tracked_reports_raises_when_git_cannot_list(tmp_path):
+    # Outside a Git checkout `git ls-files` fails; the guard must not fail
+    # open into an empty set and let a tracked report be deleted.
+    with pytest.raises(RuntimeError, match="git ls-files"):
+        prune.tracked_reports(tmp_path)
