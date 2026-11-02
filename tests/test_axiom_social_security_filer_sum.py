@@ -127,7 +127,13 @@ def _household(head_ss, spouse_ss, dependent_ss):
                 Concepts.SOCIAL_SECURITY_BENEFITS: benefits,
             })
         )
-    return Case(case_id="ss-property", period="2026", entities=tuple(people))
+    # TAXSIM's projection needs a state; Colorado matches the CO lanes.
+    return Case(
+        case_id="ss-property",
+        period="2026",
+        metadata={"scope": {"type": "census_state", "geoid": "08"}},
+        entities=tuple(people),
+    )
 
 
 _DEPENDENTS = st.lists(
