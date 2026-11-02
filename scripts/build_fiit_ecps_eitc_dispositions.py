@@ -296,8 +296,12 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
     # its verdict must pass; do not replace it with equality to the target,
     # which would reject legitimate counterfactual-only base rows.
     base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
-    if base_check in stage3 and stage3[base_check] is not True:
-        problems.append(f"stage3 {base_check}: must be true")
+    if base_check in stage3:
+        # Save the verdict so the offline audit sees it for future runs. The
+        # historical payload lacks the key, so its evidence is unchanged.
+        checks[base_check] = stage3[base_check]
+        if stage3[base_check] is not True:
+            problems.append(f"stage3 {base_check}: must be true")
     if problems:
         raise ValueError("; ".join(problems))
     assignment: dict[str, str] = {}

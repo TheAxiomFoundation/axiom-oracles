@@ -239,9 +239,10 @@ def build_payloads():
         base_reproduces_stage1_all_mechanisms=True,
         variants={"se_loss+seca": {"rows": {}}},
     )
+    # The historical stage-3 run predates the base check, so its payload
+    # carries no bridge_aggregate_variant_leaves_stage1_investment_rows.
     stages["stage3"].update(
         switch_model_exact=True,
-        bridge_aggregate_variant_leaves_stage1_investment_rows=True,
         policyengine_aggregate_variant_clears_all=True,
     )
     return {"full": full, "evidence": evidence, **stages}
@@ -729,3 +730,23 @@ def test_stage3_switches_are_the_data_edits_they_name(unit, flags):
         floored = stage3.aggregate(persons, pe_people, flags)
         unfloored = stage3.aggregate(persons, pe_people, flags | {"rental_unfloor"})
         assert unfloored <= floored + 1e-6
+
+
+def test_builder_saves_the_stage3_base_check_for_the_offline_audit(
+    build_payloads, repo_copy
+):
+    # The historical evidence lacks the key and stays byte-identical (see the
+    # rebuild test); a run that records it must save it, so the offline audit
+    # can see a later failure (#643).
+    base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
+    evidence, _ = _build(build_payloads)
+    assert base_check not in evidence["checks"]
+
+    build_payloads["stage3"][base_check] = True
+    evidence, assignment = _build(build_payloads)
+    assert evidence["checks"][base_check] is True
+    builder.build_dispositions(evidence, assignment)
+
+    evidence["checks"][base_check] = False
+    (repo_copy / builder.EVIDENCE).write_text(json.dumps(evidence))
+    assert any(base_check in problem for problem in builder.check(repo_copy))
