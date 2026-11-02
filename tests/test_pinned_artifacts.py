@@ -64,6 +64,65 @@ def test_table_entries_are_unique_hashed_wheels():
         assert artifact.recorded_in
 
 
+# Each pruned release a comparison pins, with the SHA-256 checked against the
+# downloaded bytes and the blake2b-256 digest in the URL path when the row was
+# added. A row that drifts from these fails here, offline.
+EXPECTED_ROWS = {
+    "1.700.0": "7633d8aefcaf02d7628f841bc56750606f1d7fe409ff3ae7b0ef7e364a88e945",
+    "1.705.1": "9db5121748d62961cb4867f18dab03da1be9abc986676e12e147e19afc6fd6aa",
+    "1.729.0": "8d21d3f7c0e82a9415edffe8ea53939330a63d9c8f6bd334299bddb697cf2c00",
+    "1.752.2": "7e30468ae369ddd14e5d834c12cacbc5b5159c809b0990caf204c0747ef4c096",
+    "1.764.6": "2b2c5c02c26ab212270948db1f30129728b625fc6109fc9ca0c604b714546909",
+    "1.767.3": "777be3f3a66cbd266959791b007571a8fce94b1d0c2d13f40f8e991ca106fa6f",
+}
+EXPECTED_URL_DIGESTS = {
+    "1.700.0": "49e92837a0d98e99efaf4d82aade276eee6eeff419df614863f08e3512961d2d",
+    "1.705.1": "871d71653e73a243ffb6e74463403b2a198cdea9ce9fa2dab8038d99ad70991b",
+    "1.729.0": "b97d778f92ae94997b00c3c9ac34b345f6c9333435f905670ee4eeb2f5e19809",
+    "1.752.2": "7f85bbee92f747a382779bae41a67da39fa5a8592d068853a64226279e6c32a7",
+    "1.764.6": "e25a0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3",
+    "1.767.3": "d19eb2685b9ab9639d81a29d7da7fa02619d2e9b916f65ec4ef6d6c9230744a6",
+}
+
+
+def test_table_holds_exactly_the_expected_rows():
+    rows = {
+        artifact.version: artifact
+        for artifact in pinned_artifacts.PRUNED_ARTIFACTS
+        if artifact.name == "policyengine-us"
+    }
+    assert {v: a.sha256 for v, a in rows.items()} == EXPECTED_ROWS
+    for version, artifact in rows.items():
+        digest = "".join(artifact.url.split("/packages/", 1)[1].split("/")[:3])
+        assert digest == EXPECTED_URL_DIGESTS[version], version
+
+
+@pytest.mark.parametrize("version", sorted(EXPECTED_ROWS))
+def test_each_row_installs_as_its_verified_wheel(version):
+    artifact = pinned_artifacts.lookup("policyengine-us", version)
+    assert artifact is not None
+    requirement = pinned_artifacts.requirement(f"policyengine-us=={version}")
+    path = pinned_artifacts.cache_path(artifact)
+    assert requirement == f"policyengine-us @ {path.resolve().as_uri()}"
+    assert path.parent.name == EXPECTED_ROWS[version]
+    assert path.name == f"policyengine_us-{version}-py3-none-any.whl"
+
+
+def test_every_runtime_policyengine_us_pin_is_listed_or_recorded():
+    """Only versions PyPI's index lists may stay out of the table."""
+    check = _load_check_module()
+    pins, _sources = check.inventory()
+    pruned = {
+        version
+        for (package, version) in pins
+        if package == "policyengine-us"
+        and pinned_artifacts.lookup(package, version) is None
+    }
+    # 1.784.4 (comparisons/ri-income-tax-liability.yaml) has no recorded
+    # wheel; its recovery is tracked in #659.
+    assert pruned == {"1.784.4"}
+
+
 def test_table_agrees_with_uv_lock():
     """The CI install reads uv.lock; runtime pins read the table. Same bytes."""
     locked = _lock_files("policyengine-us")
@@ -235,7 +294,7 @@ def test_check_names_the_file_for_each_unrecoverable_pin(monkeypatch):
     monkeypatch.setattr(check.pinned_artifacts, "fetch", lambda artifact: None)
     pins = {
         ("policyengine-us", "1.752.2"): {check.Use("scripts/run_comparison.py", 7)},
-        ("policyengine-us", "1.767.3"): {check.Use("comparisons/x.yaml")},
+        ("policyengine-us", "1.784.4"): {check.Use("comparisons/x.yaml")},
         ("policyengine-uk", "2.89.2"): {check.Use("scripts/run_comparison.py", 9)},
     }
     sources = {"https://github.com/a.tar.gz": {check.Use("comparisons/y.yaml")}}
@@ -247,7 +306,7 @@ def test_check_names_the_file_for_each_unrecoverable_pin(monkeypatch):
     )
     failures = check.check()
     assert failures == [
-        "comparisons/x.yaml: policyengine-us==1.767.3: PyPI's index no longer "
+        "comparisons/x.yaml: policyengine-us==1.784.4: PyPI's index no longer "
         "lists it and axiom_oracles/pinned_artifacts.py has no hashed URL for it",
         "comparisons/y.yaml: policyengine_us_source https://github.com/a.tar.gz: "
         "HTTP 404",

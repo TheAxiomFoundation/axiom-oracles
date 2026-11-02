@@ -17,8 +17,12 @@ from the index. The CI install of the ``policyengine`` extra reads the same
 files from ``uv.lock``; ``tests/test_pinned_artifacts.py`` keeps the two in
 agreement.
 
-Each URL and hash comes from a ``uv.lock`` this repository committed, so the
-SHA-256 is the one uv recorded when the release was still on the index.
+Each row's ``recorded_in`` names where its URL and SHA-256 were recorded
+while the release was still on the index: a ``uv.lock`` this repository
+committed, a ``uv.lock`` in PolicyEngine's own policyengine-us-data
+repository, or PyPI's JSON API as an archived snapshot kept it. The path of a
+files.pythonhosted.org URL encodes the file's blake2b-256 digest; ``fetch``
+checks the SHA-256.
 ``scripts/check_pinned_artifacts.py`` fails, naming the file that pins it,
 when a recorded file stops downloading or when a runtime pin is neither on
 the index nor in this table.
@@ -41,7 +45,7 @@ class PinnedArtifact:
     version: str
     url: str
     sha256: str
-    #: Where the URL and hash were recorded (a commit of uv.lock).
+    #: Where the URL and hash were recorded while the release was listed.
     recorded_in: str
 
     @property
@@ -52,6 +56,39 @@ class PinnedArtifact:
 #: The one table of pruned PolicyEngine files. Wheels only: uv installs a
 #: local wheel without building it.
 PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
+    PinnedArtifact(
+        name="policyengine-us",
+        version="1.700.0",
+        url=(
+            "https://files.pythonhosted.org/packages/49/e9/"
+            "2837a0d98e99efaf4d82aade276eee6eeff419df614863f08e3512961d2d/"
+            "policyengine_us-1.700.0-py3-none-any.whl"
+        ),
+        sha256="7633d8aefcaf02d7628f841bc56750606f1d7fe409ff3ae7b0ef7e364a88e945",
+        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at 0eac8dc990",
+    ),
+    PinnedArtifact(
+        name="policyengine-us",
+        version="1.705.1",
+        url=(
+            "https://files.pythonhosted.org/packages/87/1d/"
+            "71653e73a243ffb6e74463403b2a198cdea9ce9fa2dab8038d99ad70991b/"
+            "policyengine_us-1.705.1-py3-none-any.whl"
+        ),
+        sha256="9db5121748d62961cb4867f18dab03da1be9abc986676e12e147e19afc6fd6aa",
+        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at b58cf3b38d",
+    ),
+    PinnedArtifact(
+        name="policyengine-us",
+        version="1.729.0",
+        url=(
+            "https://files.pythonhosted.org/packages/b9/7d/"
+            "778f92ae94997b00c3c9ac34b345f6c9333435f905670ee4eeb2f5e19809/"
+            "policyengine_us-1.729.0-py3-none-any.whl"
+        ),
+        sha256="8d21d3f7c0e82a9415edffe8ea53939330a63d9c8f6bd334299bddb697cf2c00",
+        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at 17e87f1026",
+    ),
     PinnedArtifact(
         name="policyengine-us",
         version="1.752.2",
@@ -74,6 +111,17 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
         ),
         sha256="2b2c5c02c26ab212270948db1f30129728b625fc6109fc9ca0c604b714546909",
         recorded_in="uv.lock (the policyengine extra, since 29cb47dad4)",
+    ),
+    PinnedArtifact(
+        name="policyengine-us",
+        version="1.767.3",
+        url=(
+            "https://files.pythonhosted.org/packages/d1/9e/"
+            "b2685b9ab9639d81a29d7da7fa02619d2e9b916f65ec4ef6d6c9230744a6/"
+            "policyengine_us-1.767.3-py3-none-any.whl"
+        ),
+        sha256="777be3f3a66cbd266959791b007571a8fce94b1d0c2d13f40f8e991ca106fa6f",
+        recorded_in="PyPI JSON API via Wayback snapshot 20260715063216",
     ),
 )
 
@@ -187,3 +235,26 @@ def requirement(pin: str) -> str:
 def with_args(pins) -> list[str]:
     """``uv run --with`` arguments for ``pins``, pruned releases resolved."""
     return [arg for pin in pins for arg in ("--with", requirement(pin))]
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Print the requirement uv should install for each ``name==version``.
+
+    For manual runs: ``uv run --with "$(python3 -m
+    axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" ...`` installs
+    the verified wheel of a pruned release.
+    """
+    import sys
+
+    pins = sys.argv[1:] if argv is None else argv
+    if not pins:
+        print("usage: python3 -m axiom_oracles.pinned_artifacts NAME==VERSION ...",
+              file=sys.stderr)
+        return 2
+    for pin in pins:
+        print(requirement(pin))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

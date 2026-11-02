@@ -2432,8 +2432,10 @@ def _pe_oracle_with_args(pins) -> list[str]:
 
 
 # PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
-# 1.729.0 were gone by 2026-10-14), so a suite can pin its oracle to the
-# release commit instead. Only GitHub's archive of a full 40-hex commit is
+# 1.729.0 were gone by 2026-10-14). A pruned release with a recorded hashed
+# URL installs from axiom_oracles/pinned_artifacts.py through the version pin;
+# a suite can instead pin its oracle to the release commit. Only GitHub's
+# archive of a full 40-hex commit is
 # accepted: a branch, tag or short SHA could move under the version label.
 _PE_US_SOURCE_RE = re.compile(
     r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"

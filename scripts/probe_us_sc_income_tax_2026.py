@@ -6,10 +6,14 @@ an income-tax surface.  These cases exercise the actual surface pinned by the
 US conformance universe: SCIAD and schedule tax, the two-wage-earner credit,
 the net-capital-gain deduction, and the new 200-dollar EITC cap.
 
-Run against the conformance release:
+Run against the conformance release.
+PyPI's index no longer lists policyengine-us 1.767.3; from the repository
+root, install its verified wheel (axiom_oracles/pinned_artifacts.py):
 
-    uv run --python 3.13 --with policyengine-us==1.767.3 \
-        python scripts/probe_us_sc_income_tax_2026.py
+    uv run --python 3.13 --no-project \
+      --with "$(python3 -m axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" \
+      --with spm-calculator==0.3.1 \
+      python scripts/probe_us_sc_income_tax_2026.py
 """
 
 from __future__ import annotations

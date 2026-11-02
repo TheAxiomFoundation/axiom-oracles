@@ -11,11 +11,13 @@ Census SPM reference and formula, records the indirect HUD parameter values,
 and forces its three immediate operands. This isolates the outer SPM
 resource-accounting cap from the underlying statutory HUD payment surface.
 
-Run against the exact oracle release with a warm uv cache:
+Run against the exact oracle release.
+PyPI's index no longer lists policyengine-us 1.767.3; from the repository
+root, install its verified wheel (axiom_oracles/pinned_artifacts.py):
 
-    UV_CACHE_DIR=/private/tmp/axiom-tier3-uv-cache \
-    uv run --offline --isolated --no-project --python 3.13 \
-      --with policyengine-us==1.767.3 \
+    uv run --python 3.13 --no-project \
+      --with "$(python3 -m axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" \
+      --with spm-calculator==0.3.1 \
       python scripts/probe_us_ira_2026.py
 """
 

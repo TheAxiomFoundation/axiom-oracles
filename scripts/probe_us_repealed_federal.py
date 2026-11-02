@@ -28,10 +28,14 @@ Programs and their repeal/lapse:
    current-law rebate for 2026. PolicyEngine sums ``rrc_cares + rrc_caa +
    rrc_arpa``, each $0 at 2026.
 
-Run (pin the oracle to the us-pe universe label, policyengine-us 1.767.3):
+Run (pin the oracle to the us-pe universe label, policyengine-us 1.767.3).
+PyPI's index no longer lists policyengine-us 1.767.3; from the repository
+root, install its verified wheel (axiom_oracles/pinned_artifacts.py):
 
-    uv run --python 3.13 --with policyengine-us==1.767.3 \
-        python scripts/probe_us_repealed_federal.py
+    uv run --python 3.13 --no-project \
+      --with "$(python3 -m axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" \
+      --with spm-calculator==0.3.1 \
+      python scripts/probe_us_repealed_federal.py
 
 The verdict lines are the evidence pointer recorded in conformance/us-pe.yaml.
 """

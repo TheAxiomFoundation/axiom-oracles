@@ -12,6 +12,8 @@ from types import SimpleNamespace
 import pytest
 from hypothesis import example, given, settings, strategies as st
 
+from axiom_oracles import pinned_artifacts
+
 
 def assert_pe_companion_pinned(cmd):
     """A `uv run` that installs PolicyEngine-US must also pin spm-calculator."""
@@ -125,7 +127,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     # 1.729.0 is the version the certified pinned Populace artifact was built
     # with and clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723);
     # the old 1.705.16 pin was below the floor and failed hard.
-    assert "policyengine-us==1.729.0" in cmd
+    assert pinned_artifacts.requirement("policyengine-us==1.729.0") in cmd
     assert "policyengine-core==3.26.11" in cmd
     assert_pe_companion_pinned(cmd)
     assert "--data-folder" not in cmd
@@ -3500,8 +3502,6 @@ def test_pe_us_companion_pins_match_uv_lock():
 
 
 def test_pe_oracle_with_args_appends_the_companion_pins():
-    from axiom_oracles import pinned_artifacts
-
     run_comparison = load_run_comparison_module()
     # PyPI's index no longer lists policyengine-us 1.752.2, so the default
     # oracle installs the verified wheel from its recorded hashed URL.
@@ -3603,7 +3603,7 @@ def test_snap_abawd_boundary_grid_pins_the_companion(monkeypatch, tmp_path):
         },
         tmp_path / "out.json",
     )
-    assert "policyengine-us==1.767.3" in calls[-1]
+    assert pinned_artifacts.requirement("policyengine-us==1.767.3") in calls[-1]
     assert_pe_companion_pinned(calls[-1])
 
 
