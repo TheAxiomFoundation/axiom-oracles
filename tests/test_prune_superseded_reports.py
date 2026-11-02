@@ -60,6 +60,8 @@ def test_tracked_reports_are_never_deleted(tmp_path):
     # binds by digest is committed. A newer local run must not delete it.
     bound = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json", 1)
     _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-20.json", 2)
+    # A newer v2 of the same suite: without the guard the bound one would go.
+    _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-20-v2.json", 3)
     removed, _ = prune.prune(tmp_path, tracked={bound.resolve()})
     assert removed == [] and bound.exists()
 
