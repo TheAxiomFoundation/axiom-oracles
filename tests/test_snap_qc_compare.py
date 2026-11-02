@@ -752,7 +752,9 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     unit = _unit(members=[_member(age=40, _earned=1000.0)], shelter_expense=500.0)
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-live-", dir=tmp_path))
-    build = build_overlay(spec, _RULESPEC_FY2024, overlay_dir)
+    build = build_overlay(
+        spec, _RULESPEC_FY2024, overlay_dir, nominal_month=sc.nominal_month()
+    )
     env = snap_populace.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
     env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
 

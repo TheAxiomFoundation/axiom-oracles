@@ -2,9 +2,22 @@
 
 An overlay replays an existing program composition against a different
 parameter vintage without editing the source repo. The listed modules get
-textual module-id rewrites (for example ``fy-2026-cola`` -> ``fy-2024-cola``)
-and the listed parameter rules get structural patches to their
-``versions[0].formula`` value.
+textual module-id rewrites (for example ``fy-2026-cola`` -> ``fy-2024-cola``),
+the listed parameter rules get structural patches to their
+``versions[0].formula`` value, and, when the spec has a ``version_windows``
+block, every rule in each module the rewrites point at has its version window
+moved onto the fiscal year that contains the caller's nominal month.
+
+The window mapping exists because the replay cannot evaluate at a true
+fiscal-year-2024 month: the shared SNAP chain's versions start 2025-10-01, so
+the caller evaluates at a nominal month inside the chain's window (the SNAP QC
+replay uses 2026-01, ``snap_qc_compare.NOMINAL_PERIOD``). The ``fy-2024-cola``
+modules carry the FNS FY 2024 window, ``2023-10-01`` to ``2024-09-30``; a
+version with an ``effective_to`` there selects nothing at the nominal month and
+the engine aborts with "has no formula version". The mapping moves each version
+from ``2023-10-01``..``2024-09-30`` to ``2025-10-01``..``2026-09-30`` (a version
+with only ``effective_from`` keeps its open end) and leaves every formula and
+value as encoded, so the engine reads FY 2024's numbers at the nominal month.
 
 The overlay is *materialized* into a single self-contained rulespec root: it
 copies the referenced top-level prefix trees (``us/``, ``us-co/``) as real
@@ -28,13 +41,20 @@ edits and symlinks the rest, because its .NET engine reads files by path).
 The overlay is a stopgap for a monorepo that hardcodes a vintage; the durable
 fix is the parameter-set inversion tracked in
 TheAxiomFoundation/rulespec-us#759, after which the fiscal year is a run-time
-choice and the overlay retires.
+choice, the replay evaluates at true FY 2024 months, and the overlay retires
+together with its window mapping and the nominal month.
 
 Every mutation asserts its precondition and raises a clear error otherwise: a
-rewrite that matches nothing, or a patch whose from-value has drifted, both
-mean the base repo moved and the overlay is stale. The build records
-provenance (rewrite counts, applied patches, and a sha256 of every changed
-file) so a report can prove exactly which vintage it ran against.
+rewrite that matches nothing, a patch whose from-value has drifted, or a
+mapped version whose window is not the source fiscal year's (start on the
+fiscal year's first day, end on its last day or open) all mean the base repo
+moved and the overlay is stale. After mapping, the build checks that every
+versioned rule in the program's import closure has exactly one version whose
+window contains the nominal month, and raises :class:`OverlayDriftError`
+naming each file and rule that does not. The build records provenance
+(rewrite counts, applied patches, the window mapping with per-file rule and
+version counts, and a sha256 of every changed file) so a report can prove
+exactly which vintage it ran against.
 
 The converse drift — the base repo gains a module that imports a rewritten id
 but is not listed in ``rewrite_files`` — is caught after rewriting: the build
@@ -53,6 +73,7 @@ import os
 import re
 import shutil
 from dataclasses import dataclass
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -68,9 +89,14 @@ _CANONICAL_PREFIX = re.compile(r"[a-z0-9_-]+")
 
 
 class OverlayDriftError(ValueError):
-    """A module in the overlaid program's import closure still imports a
-    module id the overlay rewrites: the base repo gained an importer that the
-    spec's ``rewrite_files`` does not list, so the overlay is stale."""
+    """The base repo moved under the overlay, so the overlay is stale.
+
+    Raised when a module in the overlaid program's import closure still
+    imports a module id the overlay rewrites (the base repo gained an importer
+    that the spec's ``rewrite_files`` does not list), when a version the
+    window mapping would move does not carry the source fiscal year's window,
+    or when a versioned rule in the closure does not have exactly one version
+    in force at the nominal month after the mapping."""
 
 
 @dataclass(frozen=True)
@@ -85,6 +111,19 @@ class ParameterPatch:
 
 
 @dataclass(frozen=True)
+class VersionWindowMapping:
+    """Move the rewrite targets' versions off ``source_fiscal_year``.
+
+    Every rule in each module a ``module_id_rewrites`` value names must carry
+    one version whose window is the source fiscal year (federal: October 1 of
+    the prior year to September 30); the build moves it onto the fiscal year
+    that contains the nominal month it is given.
+    """
+
+    source_fiscal_year: int
+
+
+@dataclass(frozen=True)
 class OverlaySpec:
     """A parsed ``axiom_oracles.rulespec_overlay.v1`` overlay spec."""
 
@@ -94,6 +133,7 @@ class OverlaySpec:
     module_id_rewrites: dict[str, str]
     rewrite_files: tuple[str, ...]
     parameter_patches: tuple[ParameterPatch, ...]
+    version_windows: VersionWindowMapping | None = None
 
 
 @dataclass(frozen=True)
@@ -141,6 +181,18 @@ def load_overlay_spec(name_or_path: str | Path) -> OverlaySpec:
         )
         for index, entry in enumerate(data.get("parameter_patches", []) or [])
     )
+    version_windows = None
+    raw_windows = data.get("version_windows")
+    if raw_windows is not None:
+        if not isinstance(raw_windows, dict):
+            raise ValueError(f"overlay spec {path}: version_windows must be a mapping")
+        fiscal_year = _require(raw_windows, "source_fiscal_year", "version_windows")
+        if not re.fullmatch(r"[0-9]{4}", fiscal_year):
+            raise ValueError(
+                f"overlay spec {path}: version_windows.source_fiscal_year must be "
+                f"a four-digit year, not {fiscal_year!r}"
+            )
+        version_windows = VersionWindowMapping(source_fiscal_year=int(fiscal_year))
     return OverlaySpec(
         name=_require(data, "name", "the spec"),
         program=_require(data, "program", "the spec"),
@@ -148,6 +200,7 @@ def load_overlay_spec(name_or_path: str | Path) -> OverlaySpec:
         module_id_rewrites={str(k): str(v) for k, v in rewrites.items()},
         rewrite_files=tuple(str(item) for item in data.get("rewrite_files", []) or []),
         parameter_patches=patches,
+        version_windows=version_windows,
     )
 
 
@@ -170,18 +223,30 @@ def build_overlay(
     spec: OverlaySpec,
     rulespec_root: str | Path,
     dest_dir: str | Path,
+    *,
+    nominal_month: date | None = None,
 ) -> OverlayBuild:
     """Materialize ``spec`` as a single self-contained rulespec root.
 
     Copies the top-level prefix trees the spec touches (derived from the
-    program path, ``rewrite_files``, and ``parameter_patches``) as real files
-    into an overlay root that reuses ``rulespec_root``'s basename, then applies
-    the module-id rewrites (asserting at least one replacement per file) and
-    the structural parameter patches (asserting each rule's
-    ``versions[0].formula`` equals its from-value). The overlay root is the
-    sole repo root the engine should be given. Returns the overlay root, the
-    path to the overlaid program composition, and a provenance dict.
+    program path, ``rewrite_files``, ``parameter_patches``, and, with
+    ``version_windows``, the rewrite targets) as real files into an overlay
+    root that reuses ``rulespec_root``'s basename, then applies the module-id
+    rewrites (asserting at least one replacement per file), the structural
+    parameter patches (asserting each rule's ``versions[0].formula`` equals
+    its from-value), and the version-window mapping (asserting every mapped
+    version carries the source fiscal year's window, then that every versioned
+    rule in the program's import closure has exactly one version in force at
+    ``nominal_month``). A spec with ``version_windows`` needs
+    ``nominal_month``, the date the caller will evaluate at. The overlay root
+    is the sole repo root the engine should be given. Returns the overlay
+    root, the path to the overlaid program composition, and a provenance dict.
     """
+    if spec.version_windows is not None and nominal_month is None:
+        raise ValueError(
+            f"overlay {spec.name} maps version windows onto a nominal month; "
+            f"pass nominal_month, the date the engine will evaluate at"
+        )
     rulespec_root = Path(rulespec_root)
     overlay_root = Path(dest_dir) / rulespec_root.name
 
@@ -251,6 +316,16 @@ def build_overlay(
             }
         )
 
+    window_record: dict[str, Any] | None = None
+    if spec.version_windows is not None:
+        assert nominal_month is not None  # checked on entry
+        window_record = _apply_version_windows(
+            spec, overlay_root, spec.version_windows, nominal_month
+        )
+        for relative in window_record["files"]:
+            if relative not in changed:
+                changed.append(relative)
+
     unrewritten = find_unrewritten_importers(
         overlay_root, spec.program, spec.module_id_rewrites
     )
@@ -268,6 +343,25 @@ def build_overlay(
             f"spec's rewrite_files; the base repo moved and the overlay is stale"
         )
 
+    if nominal_month is not None:
+        uncovered = rules_without_one_version_at(
+            overlay_root, spec.program, nominal_month
+        )
+        if uncovered:
+            listing = "; ".join(
+                f"{relative}#{rule} has {count}"
+                for relative, rule, count in uncovered[:20]
+            )
+            more = f" (and {len(uncovered) - 20} more)" if len(uncovered) > 20 else ""
+            raise OverlayDriftError(
+                f"overlay {spec.name}: {len(uncovered)} versioned rule(s) in the "
+                f"import closure of {spec.program} do not have exactly one version "
+                f"in force at the nominal month {nominal_month.isoformat()} "
+                f"({listing}{more}); the engine would abort with no formula "
+                f"version, or pick between overlapping ones. The base repo moved "
+                f"and the overlay is stale"
+            )
+
     file_sha256 = {relative: _sha256(overlay_root / relative) for relative in changed}
     # overlay_root (the per-run materialization tempdir) is deliberately NOT
     # recorded: it is nondeterministic machine-local state that would make
@@ -283,6 +377,8 @@ def build_overlay(
         "patches": patch_records,
         "file_sha256": file_sha256,
     }
+    if window_record is not None:
+        provenance["version_windows"] = window_record
     return OverlayBuild(
         overlay_root=overlay_root,
         program_path=overlay_root / spec.program,
@@ -310,11 +406,69 @@ def find_unrewritten_importers(
     itself). Returns ``{relative file: [offending imports]}`` in walk order;
     empty when the closure is clean.
     """
+    root_resolved = Path(overlay_root).resolve()
+    offenders: dict[str, list[str]] = {}
+    for relative, _data, references in _walk_import_closure(overlay_root, program):
+        for raw, target in references:
+            module_id = _module_id_for_path(root_resolved, target) or raw
+            if _rewrite_module_ids(module_id, module_id_rewrites)[1]:
+                offenders.setdefault(relative, []).append(raw.strip())
+    return offenders
+
+
+def rules_without_one_version_at(
+    overlay_root: str | Path,
+    program: str,
+    on: date,
+) -> list[tuple[str, str, int]]:
+    """List the versioned rules in ``program``'s closure not in force once at ``on``.
+
+    Walks the same import closure as :func:`find_unrewritten_importers` and,
+    for every rule with a non-empty ``versions`` list, counts the versions
+    whose window contains ``on``; the engine's window test is
+    ``effective_from <= on`` and, when ``effective_to`` is set,
+    ``on <= effective_to`` (``from`` and ``to`` are the loader's aliases). A
+    rule without ``versions`` carries no window here (a ``source_relation``,
+    for example) and is skipped. Returns ``(relative file, rule name, number
+    of versions in force)`` for every rule where that number is not exactly
+    one, in walk order; empty when every versioned rule resolves.
+    """
+    offenders: list[tuple[str, str, int]] = []
+    for relative, data, _references in _walk_import_closure(overlay_root, program):
+        rules = data.get("rules")
+        if not isinstance(rules, list):
+            continue
+        for rule in rules:
+            if not isinstance(rule, dict):
+                continue
+            versions = rule.get("versions")
+            if not isinstance(versions, list) or not versions:
+                continue
+            in_force = sum(
+                1
+                for version in versions
+                if isinstance(version, dict) and _window_contains(version, on)
+            )
+            if in_force != 1:
+                offenders.append((relative, str(rule.get("name")), in_force))
+    return offenders
+
+
+def _walk_import_closure(
+    overlay_root: str | Path, program: str
+) -> list[tuple[str, dict[str, Any], list[tuple[str, Path]]]]:
+    """``(relative file, parsed module, [(raw reference, target path)])`` per
+    module in ``program``'s import closure, breadth first.
+
+    Follows ``imports`` and ``extends`` as :func:`find_unrewritten_importers`
+    documents; files outside the root, missing files, and files that do not
+    parse to a mapping are not followed.
+    """
     root = Path(overlay_root)
     root_resolved = root.resolve()
     queue: list[Path] = [root / program]
     seen: set[Path] = set()
-    offenders: dict[str, list[str]] = {}
+    modules: list[tuple[str, dict[str, Any], list[tuple[str, Path]]]] = []
     while queue:
         path = queue.pop(0)
         resolved = path.resolve()
@@ -343,12 +497,180 @@ def find_unrewritten_importers(
         extends = data.get("extends")
         if isinstance(extends, str) and extends.strip():
             references.append((extends, resolved.parent / extends.strip()))
-        for raw, target in references:
-            module_id = _module_id_for_path(root_resolved, target) or raw
-            if _rewrite_module_ids(module_id, module_id_rewrites)[1]:
-                offenders.setdefault(relative, []).append(raw.strip())
-            queue.append(target)
-    return offenders
+        modules.append((relative, data, references))
+        queue.extend(target for _raw, target in references)
+    return modules
+
+
+def fiscal_year_window(fiscal_year: int) -> tuple[date, date]:
+    """Federal fiscal year ``fiscal_year``: October 1 of the prior year to
+    September 30, both inclusive."""
+    return date(fiscal_year - 1, 10, 1), date(fiscal_year, 9, 30)
+
+
+def fiscal_year_containing(day: date) -> int:
+    """The federal fiscal year that contains ``day``."""
+    return day.year + 1 if day.month >= 10 else day.year
+
+
+def _version_date(version: dict[str, Any], key: str, alias: str) -> tuple[str | None, date | None]:
+    """``(key used, parsed date)`` for one window bound, honoring the alias."""
+    for name in (key, alias):
+        if name in version:
+            value = version[name]
+            if value is None:
+                return name, None
+            if isinstance(value, date):
+                return name, value
+            return name, date.fromisoformat(str(value).strip())
+    return None, None
+
+
+def _window_contains(version: dict[str, Any], on: date) -> bool:
+    _, start = _version_date(version, "effective_from", "from")
+    _, end = _version_date(version, "effective_to", "to")
+    return (start is None or start <= on) and (end is None or on <= end)
+
+
+def _module_id_file(module_id: str) -> str | None:
+    """``us:policies/x#rule`` -> ``us/policies/x.yaml`` (None if not canonical)."""
+    target = module_id.split("#", 1)[0].strip()
+    prefix, sep, rest = target.partition(":")
+    rest = rest.strip().strip("/")
+    if not sep or not _CANONICAL_PREFIX.fullmatch(prefix) or not rest:
+        return None
+    if ".." in Path(rest).parts:
+        return None
+    return f"{prefix}/{_with_yaml_suffix(rest)}"
+
+
+def _window_mapping_files(spec: OverlaySpec) -> list[str]:
+    """The files of the modules the rewrites point at, in spec order."""
+    files: list[str] = []
+    for target in spec.module_id_rewrites.values():
+        relative = _module_id_file(target)
+        if relative is None:
+            raise ValueError(
+                f"overlay {spec.name}: version_windows needs every "
+                f"module_id_rewrites value to be a canonical module id "
+                f"(prefix:path), not {target!r}"
+            )
+        if relative not in files:
+            files.append(relative)
+    return files
+
+
+def _apply_version_windows(
+    spec: OverlaySpec,
+    overlay_root: Path,
+    mapping: VersionWindowMapping,
+    nominal_month: date,
+) -> dict[str, Any]:
+    """Move every rewrite-target version onto the nominal month's fiscal year.
+
+    Precondition, per rule with versions: exactly one version, starting on the
+    source fiscal year's first day and either ending on its last day or open.
+    A rule without ``versions`` must not carry a top-level window or formula
+    either (the engine accepts one, and the mapping would miss it). Anything
+    else raises :class:`OverlayDriftError` naming the file and rule. Formulas
+    and values are never touched. Returns the provenance record.
+    """
+    source_start, source_end = fiscal_year_window(mapping.source_fiscal_year)
+    target_fiscal_year = fiscal_year_containing(nominal_month)
+    target_start, target_end = fiscal_year_window(target_fiscal_year)
+    files: dict[str, dict[str, int]] = {}
+    for relative in _window_mapping_files(spec):
+        target = overlay_root / relative
+        if not target.exists():
+            raise ValueError(
+                f"overlay {spec.name}: version-window module {relative} not "
+                f"materialized; the base repo moved and the overlay is stale"
+            )
+        data = yaml.safe_load(target.read_text(encoding="utf-8"))
+        rules = data.get("rules") if isinstance(data, dict) else None
+        if not isinstance(rules, list):
+            raise OverlayDriftError(
+                f"overlay {spec.name}: {relative} has no rules list to map; "
+                f"the base repo moved and the overlay is stale"
+            )
+        counts = {"rules": 0, "closed_versions": 0, "open_versions": 0}
+        for rule in rules:
+            if not isinstance(rule, dict):
+                continue
+            name = rule.get("name")
+            versions = rule.get("versions")
+            if not versions:
+                stray = sorted(
+                    key
+                    for key in ("effective_from", "from", "effective_to", "to", "formula")
+                    if key in rule
+                )
+                if stray:
+                    raise OverlayDriftError(
+                        f"overlay {spec.name}: {relative}#{name} carries "
+                        f"{', '.join(stray)} outside a versions list, which the "
+                        f"window mapping does not move; the base repo moved and "
+                        f"the overlay is stale"
+                    )
+                continue
+            if not isinstance(versions, list) or len(versions) != 1:
+                count = len(versions) if isinstance(versions, list) else versions
+                raise OverlayDriftError(
+                    f"overlay {spec.name}: {relative}#{name} has {count} versions, "
+                    f"expected exactly one for the FY {mapping.source_fiscal_year} "
+                    f"window; the base repo moved and the overlay is stale"
+                )
+            version = versions[0]
+            if not isinstance(version, dict):
+                raise OverlayDriftError(
+                    f"overlay {spec.name}: {relative}#{name} versions[0] is not a "
+                    f"mapping; the base repo moved and the overlay is stale"
+                )
+            try:
+                from_key, start = _version_date(version, "effective_from", "from")
+                to_key, end = _version_date(version, "effective_to", "to")
+            except ValueError as error:
+                raise OverlayDriftError(
+                    f"overlay {spec.name}: {relative}#{name} versions[0] has an "
+                    f"unreadable window ({error}); the base repo moved and the "
+                    f"overlay is stale"
+                ) from error
+            if from_key is None or start != source_start or end not in (None, source_end):
+                shown_end = end.isoformat() if end is not None else "open"
+                shown_start = start.isoformat() if start is not None else "none"
+                raise OverlayDriftError(
+                    f"overlay {spec.name}: {relative}#{name} versions[0] window is "
+                    f"{shown_start}..{shown_end}, expected "
+                    f"{source_start.isoformat()}..{source_end.isoformat()} (or an "
+                    f"open end), the FY {mapping.source_fiscal_year} window; the "
+                    f"base repo moved and the overlay is stale"
+                )
+            version[from_key] = target_start.isoformat()
+            if end is None:
+                counts["open_versions"] += 1
+            else:
+                assert to_key is not None
+                version[to_key] = target_end.isoformat()
+                counts["closed_versions"] += 1
+            counts["rules"] += 1
+        if counts["rules"] == 0:
+            raise OverlayDriftError(
+                f"overlay {spec.name}: {relative} has no versioned rules to map; "
+                f"the base repo moved and the overlay is stale"
+            )
+        _write_text_unlinked(
+            target,
+            yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1_000_000),
+        )
+        files[relative] = counts
+    return {
+        "nominal_month": nominal_month.isoformat(),
+        "source_fiscal_year": mapping.source_fiscal_year,
+        "source_window": [source_start.isoformat(), source_end.isoformat()],
+        "target_fiscal_year": target_fiscal_year,
+        "target_window": [target_start.isoformat(), target_end.isoformat()],
+        "files": files,
+    }
 
 
 def _resolve_import_path(root: Path, importer: Path, entry: str) -> Path | None:
@@ -394,6 +716,10 @@ def _prefix_dirs(spec: OverlaySpec) -> list[str]:
     prefixes = {Path(spec.program).parts[0]}
     prefixes.update(Path(relative).parts[0] for relative in spec.rewrite_files)
     prefixes.update(Path(patch.file).parts[0] for patch in spec.parameter_patches)
+    if spec.version_windows is not None:
+        prefixes.update(
+            Path(relative).parts[0] for relative in _window_mapping_files(spec)
+        )
     return sorted(prefixes)
 
 

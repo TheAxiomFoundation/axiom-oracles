@@ -25,6 +25,14 @@ module_id_rewrites:
   us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
   us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
   us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+version_windows:
+  # The fy-2024-cola modules carry the FNS FY 2024 window (2023-10-01 to
+  # 2024-09-30), but the replay evaluates at a nominal month inside the shared
+  # chain's 2025-10-01 window (snap_qc_compare.NOMINAL_PERIOD). The build moves
+  # every rule in each rewrite target onto the fiscal year that contains that
+  # month and keeps its formula and values; rulespec-us#759 retires it with
+  # this overlay.
+  source_fiscal_year: 2024
 rewrite_files:
   - us/policies/usda/snap/state-plan-composition.yaml
   - us/statutes/7/2017/a.yaml

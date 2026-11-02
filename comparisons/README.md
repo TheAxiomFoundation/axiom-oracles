@@ -318,7 +318,9 @@ the oracle lives in this repo, so there is no encoder CLI to shell out to.
 FY2024 law is evaluated through a sparse compile-time overlay (SNAP COLA module
 ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus the
 state's standard-utility-allowance amount patches — four Colorado amounts,
-seven New York regional amounts, one California amount) at the nominal period
+seven New York regional amounts, one California amount, and the `fy-2024-cola`
+modules' FY 2024 version windows moved onto the fiscal year that contains the
+nominal month, formulas and values unchanged) at the nominal period
 `2026-01`, because the federal-regulation and state-manual chain is snapshot-
 dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
