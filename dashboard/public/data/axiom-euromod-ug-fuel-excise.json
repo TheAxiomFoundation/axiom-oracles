@@ -1,0 +1,241 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty",
+      "description": "Uganda fuel excise (2024 amendment Schedule 2 items 8(a)-(b): petrol 1550/l, diesel 1230/l)",
+      "left_weighted_sum": 1053000,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1053000,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "ug-fuel-100l-each",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty",
+          "left": 278000.0,
+          "right": 278000.0
+        }
+      ],
+      "metadata": {
+        "annual_diesel_litres": 100.0,
+        "annual_petrol_litres": 100.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2024-excise/excise-duty-amendment-2024#input.diesel_litres": 100.0,
+          "ug:statutes/act-2024-excise/excise-duty-amendment-2024#input.petrol_litres": 100.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "q0722101": 8.333333333333334,
+            "q0722102": 8.333333333333334,
+            "x0722101": 1.0,
+            "x0722102": 1.0,
+            "xhh": 1.0,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "single-consumer-fuel-excise",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-fuel-petrol-only-500l",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty",
+          "left": 775000.0,
+          "right": 775000.0
+        }
+      ],
+      "metadata": {
+        "annual_diesel_litres": 0.0,
+        "annual_petrol_litres": 500.0,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2024-excise/excise-duty-amendment-2024#input.diesel_litres": 0.0,
+          "ug:statutes/act-2024-excise/excise-duty-amendment-2024#input.petrol_litres": 500.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "q0722101": 41.666666666666664,
+            "q0722102": 0.0,
+            "x0722101": 1.0,
+            "x0722102": 0.0,
+            "xhh": 1.0,
+            "yem": 0.0,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "single-consumer-fuel-excise",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Uganda fuel excise (2024 amendment Schedule 2 items 8(a)-(b): petrol 1550/l, diesel 1230/l)",
+      "id": "ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "UG"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:16:01Z",
+    "generated_by": "scripts/run_comparison.py::ug-fuel-excise",
+    "oracle": {
+      "euromod_country": "UG",
+      "euromod_dataset": "ug_2024_a1",
+      "euromod_system": "UG_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-ug",
+        "sha": "c0b6597047472a1277a0eeb4b4fe7837079f68b3"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "ug-fuel-excise",
+  "summary": {
+    "comparison_count": 2,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 2,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 2,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_weight": 0
+    }
+  }
+}

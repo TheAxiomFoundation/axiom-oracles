@@ -1,9 +1,12 @@
 from __future__ import annotations
 
-import math
+import logging
+import os
+import subprocess
 from collections.abc import Callable, Mapping
-from dataclasses import replace
-from numbers import Integral, Real
+from dataclasses import dataclass, replace
+from importlib import import_module
+from pathlib import Path
 from typing import Any
 
 from ...comparison.mappings import engine_targets_for_concepts
@@ -12,10 +15,45 @@ from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
 from . import pins
-from .execution import TaxsimExecutionError, pinned_taxsim_runner_class
-from .projection import taxsim_input_for_case
+from .output import TaxsimRecord, TaxsimStdout, id_key, parse_taxsim_stdout
+from .projection import (
+    TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
+    taxsim_input_for_case,
+    taxsim_unprojected_inputs_for_case,
+)
 
-DEFAULT_MAX_CRASH_RERUNS = 64
+log = logging.getLogger(__name__)
+
+#: Key under which a result's ``raw`` payload carries the diagnostic lines the
+#: binary wrote to stdout before that record's CSV row.
+DIAGNOSTICS_KEY = "taxsim_stdout_diagnostics"
+
+_STDERR_EXCERPT = 2_000
+
+
+#: Keys under which a result's ``raw`` payload records the pinned binary that
+#: produced it and the profile scope ("default" or "override:<id>") that
+#: selected that binary.
+BINARY_SHA256_KEY = "taxsim_binary_sha256"
+PIN_SCOPE_KEY = "taxsim_pin_scope"
+
+
+@dataclass(frozen=True)
+class TaxsimSelection:
+    """The verified binary one partition of rows runs on."""
+
+    sha256: str
+    path: Path
+
+
+@dataclass(frozen=True)
+class TaxsimExecution:
+    """One invocation of the TAXSIM executable over a batch input file."""
+
+    stdout: str
+    stderr: str
+    returncode: int
+    binary: str | None = None
 
 
 class TaxsimPackageRunner(EngineAdapter):
@@ -23,51 +61,77 @@ class TaxsimPackageRunner(EngineAdapter):
 
     Cases may carry a TAXSIM-format row in ``metadata["taxsim_input"]``. When
     absent, the adapter projects the thin Axiom case into a TAXSIM input row.
+    Submitted ids must be unique after normalization.
 
-    Every row runs on a pinned TAXSIM binary (``pins.py``): rows are
-    partitioned by the binary their (state, year) resolves to under the
-    active pin profile, each partition runs on SHA-256-verified bytes, and
-    results come back in input order with ``raw["taxsim_binary_sha256"]``.
-    A partition whose executable fails is bisected to isolate the rows that
-    fail on their own (:meth:`_run_isolated`).
+    The default path writes the batch with policyengine-taxsim's own input
+    formatter, runs the pinned binary directly and parses its stdout with
+    :func:`parse_taxsim_stdout`, so diagnostic lines the binary interleaves
+    with its CSV rows are attributed to the record they precede instead of
+    surfacing as phantom NaN-id rows. Every submitted case yields exactly one
+    :class:`EngineResult`: a case the binary produced no row for gets an
+    ``errors`` entry naming it, and any output row that matches no submitted
+    case aborts the batch.
 
-    Subclasses that override ``_runner_factory`` to run a different engine
-    over TAXSIM-format rows (``PolicyEngineTaxsimRunner``) keep the original
-    single-run path: no partitioning, no binary lookup.
+    The default path runs only pinned binaries. Each row's binary is
+    resolved from its (TAXSIM SOI state, law year) under the active pin
+    profile (:func:`pins.active_profile`: ``pin_profile``, then
+    ``$AXIOM_TAXSIM_PIN_PROFILE``, then the pin file's ``default_profile``).
+    Rows are partitioned by resolved binary, and every partition's binary is
+    located as verified bytes (:func:`pins.locate_binary`: SHA-256 and size
+    equal the pin) before any partition runs. An unknown profile, a binary
+    that is not on disk, or bytes whose hash differs from the pin raise
+    :class:`pins.TaxsimPinError`; nothing falls back to another executable.
+
+    Before running a partition, the default path refuses law years outside
+    the range pinned for its binary (:func:`pins.require_law_years`), so a
+    Linux host fails with the pinned range instead of the binary's own
+    ``STOP 1``. It hashes the binary again before and after the run. After
+    each run it records the binary's path, SHA-256, build stamp (embedded
+    and printed), platform and rows per profile scope;
+    :meth:`taxsim_identity` returns them, with the profile name, for the
+    report's ``engine_identity.taxsim`` block. Results come back in input
+    order, each stamped with the SHA-256 and scope that produced it.
+
+    ``runner_factory`` keeps the older protocol (an object whose ``run()``
+    returns records) for tests and for policyengine-taxsim's PolicyEngine
+    runner; ``executor`` replaces the binary invocation (tests feed captured
+    stdout through it) and, without ``binary_locator``, the binary lookup.
     """
 
     name = "taxsim"
 
     def __init__(
         self,
-        runner_factory: Callable[..., Any] | None = None,
+        runner_factory: Callable[[Any], Any] | None = None,
         *,
         id_column: str = "taxsimid",
+        executor: Callable[[Any], TaxsimExecution] | None = None,
         pin_profile: str | None = None,
         platform: str | None = None,
-        binary_locator: Callable[..., Any] | None = None,
-        max_crash_reruns: int = DEFAULT_MAX_CRASH_RERUNS,
+        binary_locator: Callable[..., Path] | None = None,
     ) -> None:
-        """Build the adapter.
-
-        ``runner_factory`` is called as ``factory(frame, taxsim_path=path)``
-        when a binary locator is active and ``factory(frame)`` otherwise. The
-        default (no factory) always locates verified bytes with
-        ``pins.locate_binary``; an injected factory skips binary lookup unless
-        ``binary_locator`` is also given (test seam).
-        """
         self.runner_factory = runner_factory
         self.id_column = id_column
+        self.executor = executor
         self.pin_profile = pin_profile
         self.platform = platform
-        if binary_locator is None and runner_factory is None:
-            binary_locator = pins.locate_binary
         self.binary_locator = binary_locator
-        self.max_crash_reruns = max_crash_reruns
-        self.crash_log: list[dict[str, Any]] = []
+        self.identity = pins.TaxsimIdentityRecorder()
         self._profile_name: str | None = None
-        self._binary_usage: dict[tuple[str, str], int] = {}
-        self._build_observed: dict[str, str | None] = {}
+
+    def resolved_pin_profile(self) -> str:
+        """The active pin profile, resolved once per runner.
+
+        Raises :class:`pins.TaxsimPinError` for a name the pin file does not
+        declare.
+        """
+        if self._profile_name is None:
+            self._profile_name = pins.active_profile_name(self.pin_profile)
+        return self._profile_name
+
+    def taxsim_identity(self) -> dict[str, Any] | None:
+        """Identity of every binary this runner executed, or ``None``."""
+        return self.identity.to_dict()
 
     def run_cases(
         self,
@@ -76,63 +140,25 @@ class TaxsimPackageRunner(EngineAdapter):
     ) -> list[EngineResult]:
         input_rows = self._input_rows(cases)
         target_variables = self._target_variables(variables)
-        if not self._uses_pinned_taxsim_binary():
-            input_frame = self._frame_from_rows(input_rows)
-            runner = self._runner_factory()(input_frame)
-            output = self._run_runner(runner)
-            return self._engine_results(output, cases, target_variables, input_rows)
-        return self._run_pinned(cases, input_rows, target_variables)
+        if self._runs_pinned_binaries():
+            return self._run_pinned(cases, input_rows, target_variables)
+        input_frame = self._frame_from_rows(input_rows)
+        output = self._run(input_frame)
+        return self._engine_results(output, cases, target_variables, input_rows)
 
-    def run_households(
-        self,
-        households: list[Household],
-        variables: list[str] | None = None,
-    ) -> list[EngineResult]:
-        del households, variables
-        raise RuntimeError(
-            "TAXSIM comparisons require Case inputs so the adapter can project "
-            "or read TAXSIM rows."
-        )
+    def _runs_pinned_binaries(self) -> bool:
+        """Whether this runner executes pinned TAXSIM binaries.
 
-    # ------------------------------------------------------------------
-    # Pinned-binary execution
-
-    def _uses_pinned_taxsim_binary(self) -> bool:
-        return type(self)._runner_factory is TaxsimPackageRunner._runner_factory
-
-    def resolved_pin_profile(self) -> str:
-        """The active pin profile (explicit > env > default), resolved once."""
-        if self._profile_name is None:
-            self._profile_name = pins.active_profile_name(self.pin_profile)
-        return self._profile_name
-
-    def taxsim_identity(self) -> dict[str, Any] | None:
-        """C1 identity: the pin profile and each binary's row count so far."""
-        if not self._binary_usage:
-            return None
-        doc = pins.pin_document()
-        binaries = []
-        for (sha, scope), rows in self._binary_usage.items():
-            binary = doc.binaries[sha]
-            binaries.append(
-                {
-                    "sha256": sha,
-                    "build": binary.build,
-                    "build_observed": self._build_observed.get(sha),
-                    "platform": binary.platform,
-                    "bytes": binary.bytes,
-                    "rows": rows,
-                    "scope": scope,
-                }
-            )
-        binaries.sort(
-            key=lambda item: (
-                item["scope"] != pins.DEFAULT_SCOPE,
-                item["scope"],
-                item["sha256"],
-            )
-        )
-        return {"pin_profile": self.resolved_pin_profile(), "binaries": binaries}
+        False for a subclass that runs another engine over TAXSIM rows
+        (``PolicyEngineTaxsimRunner`` overrides ``_run``), for the legacy
+        ``runner_factory`` protocol, and for an injected ``executor`` given
+        without a ``binary_locator`` (a test seam that runs no binary).
+        """
+        if type(self)._run is not TaxsimPackageRunner._run:
+            return False
+        if self.runner_factory is not None:
+            return False
+        return self.executor is None or self.binary_locator is not None
 
     def _run_pinned(
         self,
@@ -145,197 +171,226 @@ class TaxsimPackageRunner(EngineAdapter):
         partitions: dict[str, list[int]] = {}
         scopes: list[str] = []
         for index, row in enumerate(input_rows):
-            if row.get("year") is None:
-                raise pins.TaxsimPinError(
-                    f"case {cases[index].case_id!r}: TAXSIM row has no year, "
-                    "so no pinned binary can be resolved"
+            # policyengine-taxsim's input formatter fills a missing state
+            # with 0 (TAXSIM "no state"); resolve it the same way.
+            try:
+                resolution = profile.resolve(
+                    row.get("state", 0), row.get("year"), system
                 )
-            # A missing state column is filled with 0 (TAXSIM "no state") by
-            # policyengine-taxsim's input formatter; resolve it the same way.
-            resolution = profile.resolve(row.get("state", 0), row["year"], system)
+            except pins.TaxsimPinError as exc:
+                raise pins.TaxsimPinError(
+                    f"case {cases[index].case_id!r}: {exc}"
+                ) from exc
             partitions.setdefault(resolution.sha256, []).append(index)
             scopes.append(resolution.scope)
 
-        # Locate every partition's verified bytes before running any, so a
-        # missing or mismatched binary fails the batch without partial runs.
-        binary_paths: dict[str, Any] = {}
+        # Locate and range-check every partition's binary before running any,
+        # so a missing or mismatched binary fails without partial runs.
+        locate = self.binary_locator or pins.locate_binary
+        selections: dict[str, TaxsimSelection] = {}
         for sha, indices in partitions.items():
             first = input_rows[indices[0]]
-            binary_paths[sha] = (
-                self.binary_locator(
+            path = Path(
+                locate(
                     sha,
                     profile=profile.name,
                     state=first.get("state", 0),
                     year=first.get("year"),
                 )
-                if self.binary_locator is not None
-                else None
             )
-            if binary_paths[sha] is not None and sha not in self._build_observed:
-                self._build_observed[sha] = pins.read_build_stamp(binary_paths[sha])
+            if not path.is_absolute():
+                raise pins.TaxsimPinError(
+                    f"TAXSIM binary {sha} located at non-absolute path {path}; "
+                    "only verified absolute paths may execute"
+                )
+            pins.require_law_years(
+                _frame_years(self._frame_from_rows([input_rows[i] for i in indices])),
+                binary_path=path,
+                system=system,
+            )
+            selections[sha] = TaxsimSelection(sha256=sha, path=path)
 
+        self.identity.pin_profile = profile.name
+        results: list[EngineResult | None] = [None] * len(cases)
         for sha, indices in partitions.items():
+            chunk_rows = [input_rows[i] for i in indices]
+            chunk_cases = [cases[i] for i in indices]
+            frame = self._frame_from_rows(chunk_rows)
+            chunk_scopes: dict[str, int] = {}
             for index in indices:
-                key = (sha, scopes[index])
-                self._binary_usage[key] = self._binary_usage.get(key, 0) + 1
-
-        results_by_index: dict[int, list[EngineResult]] = {}
-        unmatched: list[EngineResult] = []
-        for sha, indices in partitions.items():
-            successes, failures = self._run_isolated(
-                indices, input_rows, binary_paths[sha], sha
+                chunk_scopes[scopes[index]] = chunk_scopes.get(scopes[index], 0) + 1
+            output = self._run_selected(frame, selections[sha], chunk_scopes)
+            chunk_results = self._engine_results(
+                output, chunk_cases, variables, chunk_rows
             )
-            for chunk, output, bisected in successes:
-                chunk_cases = [cases[i] for i in chunk]
-                chunk_rows = [input_rows[i] for i in chunk]
-                index_by_case_id = {
-                    _id_key(cases[i].case_id): i for i in chunk
-                }
-                for result in self._engine_results(
-                    output, chunk_cases, variables, chunk_rows
-                ):
-                    stamped = _stamp(result, sha, bisected)
-                    index = index_by_case_id.get(_id_key(result.household_id))
-                    if index is None:
-                        unmatched.append(stamped)
-                    else:
-                        results_by_index.setdefault(index, []).append(stamped)
-            for index, error, isolation in failures:
-                results_by_index.setdefault(index, []).append(
-                    self._crash_result(cases[index], error, sha, isolation)
+            if len(chunk_results) != len(indices):
+                raise RuntimeError(
+                    f"TAXSIM binary {sha[:12]} returned {len(chunk_results)} "
+                    f"result(s) for {len(indices)} case(s)"
                 )
+            for index, result in zip(indices, chunk_results, strict=True):
+                results[index] = _stamp(result, sha, scopes[index])
+        return [result for result in results if result is not None]
 
-        ordered: list[EngineResult] = []
-        for index in range(len(cases)):
-            ordered.extend(results_by_index.get(index, []))
-        ordered.extend(unmatched)
-        return ordered
-
-    def _run_isolated(
+    def _run_selected(
         self,
-        indices: list[int],
-        input_rows: list[dict[str, Any]],
-        binary_path: Any,
-        sha: str,
-    ) -> tuple[
-        list[tuple[list[int], Any, bool]],
-        list[tuple[int, TaxsimExecutionError, str]],
-    ]:
-        """Run one partition, bisecting on executable failure.
-
-        A failed run is split at its midpoint (input order) and each half is
-        re-run, left first, until a failing run is a single row. Every run
-        after the first counts against ``max_crash_reruns``; the split depth
-        is at most ceil(log2(n)) + 1. Rows whose single-row run fails get a
-        ``taxsim-crash`` error (isolation ``single-row``); rows left when the
-        budget or depth bound runs out get the failure of the smallest run
-        that contained them (isolation ``budget-exhausted``). Rows that
-        succeed in a sub-run keep those outputs and are marked ``bisected``.
-
-        TAXSIM failures can depend on record order (policyengine-taxsim
-        #1214: a Delaware record followed by a Maryland record crashes the
-        September Linux build; either alone or reversed succeeds), so a
-        failure can vanish once its rows are split. The split sequence is a
-        fixed function of the input order, so the outcome is deterministic
-        for a given input and binary; a bisected row's output comes from a
-        smaller run than its partition and need not equal what the full run
-        would have produced.
-        """
-        successes: list[tuple[list[int], Any, bool]] = []
-        failures: list[tuple[int, TaxsimExecutionError, str]] = []
-        max_depth = math.ceil(math.log2(len(indices))) + 1 if len(indices) > 1 else 0
-        reruns = 0
-        stack: list[tuple[list[int], int, TaxsimExecutionError | None]] = [
-            (list(indices), 0, None)
-        ]
-        while stack:
-            chunk, depth, parent_error = stack.pop()
-            if depth > 0:
-                if reruns >= self.max_crash_reruns or depth > max_depth:
-                    assert parent_error is not None
-                    failures.extend(
-                        (index, parent_error, "budget-exhausted") for index in chunk
-                    )
-                    continue
-                reruns += 1
-            try:
-                output = self._execute_chunk(chunk, input_rows, binary_path)
-            except TaxsimExecutionError as error:
-                self.crash_log.append(
-                    {
-                        "binary_sha256": sha,
-                        "rows": len(chunk),
-                        "depth": depth,
-                        "signature": error.signature,
-                        "returncode": error.returncode,
-                    }
-                )
-                if len(chunk) == 1:
-                    failures.append((chunk[0], error, "single-row"))
-                    continue
-                middle = len(chunk) // 2
-                stack.append((chunk[middle:], depth + 1, error))
-                stack.append((chunk[:middle], depth + 1, error))
-                continue
-            successes.append((chunk, output, depth > 0))
-        return successes, failures
-
-    def _execute_chunk(
-        self,
-        chunk: list[int],
-        input_rows: list[dict[str, Any]],
-        binary_path: Any,
+        input_frame: Any,
+        selection: TaxsimSelection,
+        scopes: Mapping[str, int],
     ) -> Any:
-        frame = self._frame_from_rows([input_rows[index] for index in chunk])
-        factory = self._runner_factory()
-        if binary_path is not None:
-            runner = factory(frame, taxsim_path=binary_path)
+        if self.executor is not None:
+            execution = self.executor(input_frame)
         else:
-            runner = factory(frame)
-        return self._run_runner(runner)
+            execution = self._execute_binary(
+                input_frame, selection=selection, scopes=scopes
+            )
+        if execution.returncode != 0:
+            raise RuntimeError(
+                f"TAXSIM exited with status {execution.returncode}"
+                f"{_binary_suffix(execution)}; stderr: "
+                f"{_excerpt(execution.stderr)!r}; stdout tail: "
+                f"{_excerpt(execution.stdout, tail=True)!r}"
+            )
+        parsed = parse_taxsim_stdout(execution.stdout, id_column=self.id_column)
+        return _ParsedOutput(parsed=parsed, execution=execution)
 
-    def _crash_result(
+    def run_households(
         self,
-        case: Case,
-        error: TaxsimExecutionError,
-        sha: str,
-        isolation: str,
-    ) -> EngineResult:
-        return EngineResult(
-            engine=self.name,
-            household_id=case.case_id,
-            values={},
-            raw={
-                "taxsim_error": {
-                    "signature": error.signature,
-                    "returncode": error.returncode,
-                    "stderr_tail": error.stderr_tail,
-                    "binary_sha256": sha,
-                    "isolation": isolation,
-                }
-            },
-            errors=(f"taxsim-crash:{error.signature}",),
+        households: list[Household],
+        variables: list[str] | None = None,
+    ) -> list[EngineResult]:
+        del households, variables
+        raise RuntimeError(
+            "TAXSIM comparisons require Case inputs so the adapter can project "
+            "or read TAXSIM rows."
         )
+
+    def _run(self, input_frame: Any) -> Any:
+        if self.runner_factory is not None:
+            return self._run_runner(self.runner_factory(input_frame))
+        executor = self.executor or self._execute_binary
+        execution = executor(input_frame)
+        if execution.returncode != 0:
+            raise RuntimeError(
+                f"TAXSIM exited with status {execution.returncode}"
+                f"{_binary_suffix(execution)}; stderr: "
+                f"{_excerpt(execution.stderr)!r}; stdout tail: "
+                f"{_excerpt(execution.stdout, tail=True)!r}"
+            )
+        parsed = parse_taxsim_stdout(execution.stdout, id_column=self.id_column)
+        return _ParsedOutput(parsed=parsed, execution=execution)
+
+    def _execute_binary(
+        self,
+        input_frame: Any,
+        *,
+        selection: TaxsimSelection | None = None,
+        scopes: Mapping[str, int] | None = None,
+    ) -> TaxsimExecution:
+        """Write the batch with policyengine-taxsim's formatter and run the binary.
+
+        policyengine-taxsim's ``TaxsimRunner.run()`` reads the whole stdout
+        stream with ``pandas.read_csv`` and coerces every column to numeric,
+        which turns the binary's diagnostic lines into rows with NaN ids. Use
+        its input formatting, but capture the raw bytes and parse them here.
+
+        Only a pinned ``selection`` runs: the formatter is given its verified
+        absolute path, and the bytes must still hash to the pinned SHA-256
+        immediately before the run (and again after it, in the recorder).
+        """
+        if selection is None:
+            raise pins.TaxsimPinError(
+                "no pinned TAXSIM binary was selected for this batch; the "
+                "default runner executes only binaries resolved from a pin "
+                "profile"
+            )
+        runner = self._runner_factory()(input_frame, taxsim_path=selection.path)
+        write_input = getattr(runner, "_create_taxsim_input_file", None)
+        binary = getattr(runner, "taxsim_path", None)
+        if write_input is None or binary is None:
+            raise RuntimeError(
+                "policyengine-taxsim's TaxsimRunner no longer exposes "
+                "_create_taxsim_input_file/taxsim_path; the pinned release in "
+                "taxsim_pins.json does. Refresh the adapter with the pin."
+            )
+        if Path(binary) != selection.path:
+            raise pins.TaxsimPinError(
+                f"policyengine-taxsim's TaxsimRunner chose {binary}, not the "
+                f"verified binary {selection.path} (sha256 {selection.sha256})"
+            )
+        binary = selection.path
+        checked = pins.require_law_years(
+            _frame_years(input_frame), binary_path=binary
+        )
+        pre_run_sha256 = (
+            checked["sha256"] if checked is not None else pins.sha256_file(binary)
+        )
+        if pre_run_sha256 != selection.sha256:
+            raise pins.TaxsimPinError(
+                f"TAXSIM binary {binary} changed after it was verified: sha256 "
+                f"{selection.sha256[:12]} pinned and located, "
+                f"{pre_run_sha256[:12]} before the run"
+            )
+        input_path = write_input(runner.input_df)
+        try:
+            with open(input_path, "rb") as stdin:
+                process = subprocess.run(
+                    [str(binary)],
+                    stdin=stdin,
+                    capture_output=True,
+                    check=False,
+                )
+        finally:
+            try:
+                os.unlink(input_path)
+            except OSError:
+                pass
+        execution = TaxsimExecution(
+            stdout=process.stdout.decode("utf-8", errors="replace"),
+            stderr=process.stderr.decode("utf-8", errors="replace"),
+            returncode=process.returncode,
+            binary=str(binary),
+        )
+        if execution.returncode == 0:
+            self.identity.observe(
+                binary,
+                rows=len(_frame_records(input_frame)),
+                build_observed=pins.build_stamp_from_stdout(execution.stdout),
+                sha256=pre_run_sha256,
+                scopes=scopes,
+            )
+        return execution
 
     def _runner_factory(self) -> Callable[..., Any]:
         if self.runner_factory is not None:
             return self.runner_factory
-        try:
-            return pinned_taxsim_runner_class()
-        except ImportError as exc:
-            raise RuntimeError(
-                "Could not import policyengine-taxsim's TaxsimRunner. Install "
-                "the package or pass runner_factory=..."
-            ) from exc
-
-    # ------------------------------------------------------------------
-    # Input rows and result mapping
+        for module_name, attr_name in (
+            ("policyengine_taxsim", "TaxsimRunner"),
+            ("policyengine_taxsim.runners", "TaxsimRunner"),
+        ):
+            try:
+                module = import_module(module_name)
+            except ImportError:
+                continue
+            runner = getattr(module, attr_name, None)
+            if runner is not None:
+                # The binary is always passed explicitly as the verified
+                # absolute path (_execute_binary), never found by
+                # policyengine-taxsim's own executable search. Its signature
+                # annotates taxsim_path as str, but _validate_executable
+                # calls .exists() on it, so a Path is what works.
+                return runner
+        raise RuntimeError(
+            "Could not import policyengine-taxsim's TaxsimRunner. Install the "
+            "package or pass runner_factory=..."
+        )
 
     def _input_frame(self, cases: list[Case]) -> Any:
         return self._frame_from_rows(self._input_rows(cases))
 
     def _input_rows(self, cases: list[Case]) -> list[dict[str, Any]]:
         rows = []
+        cases_by_id: dict[str, Case] = {}
         for index, case in enumerate(cases, start=1):
             row = case.metadata.get("taxsim_input") or case.fact("taxsim_input")
             if row is not None and not isinstance(row, Mapping):
@@ -348,6 +403,14 @@ class TaxsimPackageRunner(EngineAdapter):
             else:
                 normalized = dict(row)
                 normalized.setdefault(self.id_column, case.case_id)
+            submitted = normalized.get(self.id_column)
+            key = id_key(case.case_id if submitted is None else submitted)
+            if key in cases_by_id:
+                raise RuntimeError(
+                    f"Duplicate submitted TAXSIM {self.id_column}={key} for "
+                    f"cases {cases_by_id[key].case_id!r} and {case.case_id!r}"
+                )
+            cases_by_id[key] = case
             rows.append(normalized)
         return rows
 
@@ -367,34 +430,142 @@ class TaxsimPackageRunner(EngineAdapter):
         variables: list[str] | None,
         input_rows: list[dict[str, Any]],
     ) -> list[EngineResult]:
-        records = _records(output)
-        case_ids_by_input_id = {
-            _id_key(row.get(self.id_column)): case.case_id
-            for row, case in zip(input_rows, cases, strict=True)
-            if row.get(self.id_column) is not None
-        }
-        case_ids_by_text = {_id_key(case.case_id): case.case_id for case in cases}
-        case_ids = [case.case_id for case in cases]
-        results = []
-        for index, record in enumerate(records):
-            household_id = record.get(self.id_column)
-            if household_id is None and index < len(case_ids):
-                household_id = case_ids[index]
-            household_id = case_ids_by_input_id.get(
-                _id_key(household_id),
-                case_ids_by_text.get(_id_key(household_id), household_id),
+        if isinstance(output, _ParsedOutput):
+            records = output.parsed.records
+            trailing = output.parsed.trailing_diagnostics
+            execution: TaxsimExecution | None = output.execution
+        else:
+            records = _records_from_legacy_output(
+                output, self.id_column, cases, input_rows
             )
+            trailing = ()
+            execution = None
+        return self._results_for_cases(
+            records,
+            trailing,
+            execution,
+            cases,
+            variables,
+            input_rows,
+        )
+
+    def _results_for_cases(
+        self,
+        records: list[TaxsimRecord],
+        trailing_diagnostics: tuple[str, ...],
+        execution: TaxsimExecution | None,
+        cases: list[Case],
+        variables: list[str] | None,
+        input_rows: list[dict[str, Any]],
+    ) -> list[EngineResult]:
+        expected: list[tuple[str, Case]] = []
+        for row, case in zip(input_rows, cases, strict=True):
+            submitted = row.get(self.id_column)
+            key = id_key(case.case_id if submitted is None else submitted)
+            expected.append((key, case))
+        expected_keys = {key for key, _ in expected}
+
+        by_key: dict[str, TaxsimRecord] = {}
+        unexpected: list[TaxsimRecord] = []
+        for record in records:
+            if record.id_key not in expected_keys:
+                unexpected.append(record)
+                continue
+            if record.id_key in by_key:
+                raise RuntimeError(
+                    f"TAXSIM returned more than one output row for "
+                    f"{self.id_column}={record.id_key} (stdout lines "
+                    f"{by_key[record.id_key].line_number} and "
+                    f"{record.line_number}){_binary_suffix(execution)}"
+                )
+            by_key[record.id_key] = record
+        if unexpected:
+            shown = [
+                f"{self.id_column}={record.id_key} (stdout line {record.line_number})"
+                for record in unexpected[:10]
+            ]
+            raise RuntimeError(
+                f"TAXSIM returned {len(unexpected)} output row(s) matching no "
+                f"submitted case: {', '.join(shown)}{_binary_suffix(execution)}"
+            )
+
+        missing = [(key, case) for key, case in expected if key not in by_key]
+        if trailing_diagnostics and not missing:
+            raise RuntimeError(
+                f"TAXSIM wrote {len(trailing_diagnostics)} non-record stdout "
+                f"line(s) after its last output row although every submitted "
+                f"case has a row; they cannot be attributed to a case: "
+                f"{list(trailing_diagnostics[:5])!r}{_binary_suffix(execution)}"
+            )
+
+        results = []
+        first_missing = missing[0][0] if missing else None
+        for key, case in expected:
+            record = by_key.get(key)
+            unprojected = taxsim_unprojected_inputs_for_case(case)
+            if unprojected is None:
+                unprojected = case.metadata.get(TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY)
+            if record is None:
+                results.append(
+                    EngineResult(
+                        engine=self.name,
+                        household_id=case.case_id,
+                        values={},
+                        raw=(
+                            {TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY: unprojected}
+                            if unprojected
+                            else None
+                        ),
+                        errors=(
+                            _missing_row_error(
+                                self.id_column,
+                                key,
+                                execution,
+                                trailing_diagnostics if key == first_missing else (),
+                            ),
+                        ),
+                    )
+                )
+                continue
+            raw: dict[str, Any] = dict(record.values)
+            if unprojected:
+                raw[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] = unprojected
+            if record.diagnostics:
+                raw[DIAGNOSTICS_KEY] = list(record.diagnostics)
             results.append(
                 EngineResult(
                     engine=self.name,
-                    household_id=household_id,
+                    household_id=case.case_id,
                     values=_selected_values(
-                        record,
+                        record.values,
                         variables,
                         excluded_keys={self.id_column},
                     ),
-                    raw=record,
+                    raw=raw,
                 )
+            )
+
+        flagged = [record for record in by_key.values() if record.diagnostics]
+        if flagged:
+            flagged.sort(key=lambda record: record.line_number)
+            ids = [record.id_key for record in flagged]
+            shown = ", ".join(ids[:10]) + (", ..." if len(ids) > 10 else "")
+            log.warning(
+                "TAXSIM wrote %d non-record stdout line(s) before the rows of %d "
+                "record(s) (%s=%s); kept on EngineResult.raw[%r]. First: %r",
+                sum(len(record.diagnostics) for record in flagged),
+                len(flagged),
+                self.id_column,
+                shown,
+                DIAGNOSTICS_KEY,
+                flagged[0].diagnostics[0],
+            )
+        if missing:
+            log.warning(
+                "TAXSIM produced no output row for %d of %d submitted case(s); "
+                "each carries an error naming it.",
+                len(missing),
+                len(expected),
             )
         return results
 
@@ -415,12 +586,17 @@ class TaxsimPackageRunner(EngineAdapter):
             return runner.run()
 
 
-def _stamp(result: EngineResult, sha: str, bisected: bool) -> EngineResult:
-    raw = dict(result.raw) if isinstance(result.raw, Mapping) else {"record": result.raw}
-    raw["taxsim_binary_sha256"] = sha
-    if bisected:
-        raw["taxsim_rerun"] = "bisected"
+def _stamp(result: EngineResult, sha256: str, scope: str) -> EngineResult:
+    raw = dict(result.raw) if isinstance(result.raw, Mapping) else {}
+    raw[BINARY_SHA256_KEY] = sha256
+    raw[PIN_SCOPE_KEY] = scope
     return replace(result, raw=raw)
+
+
+@dataclass(frozen=True)
+class _ParsedOutput:
+    parsed: TaxsimStdout
+    execution: TaxsimExecution
 
 
 class _SimpleFrame:
@@ -442,6 +618,26 @@ class _SimpleFrameIloc:
         return self._rows[index]
 
 
+def _frame_records(frame: Any) -> list[dict[str, Any]]:
+    if hasattr(frame, "to_dict"):
+        return frame.to_dict(orient="records")
+    return [dict(row) for row in frame]
+
+
+def _frame_years(frame: Any) -> set[int]:
+    """Distinct law years in a TAXSIM input frame.
+
+    Rows with no year, or one that is not a number, are skipped.
+    """
+    years = set()
+    for row in _frame_records(frame):
+        try:
+            years.add(int(float(row.get("year"))))
+        except (TypeError, ValueError, OverflowError):
+            continue
+    return years
+
+
 def _records(output: Any) -> list[dict[str, Any]]:
     if output is None:
         return []
@@ -452,6 +648,77 @@ def _records(output: Any) -> list[dict[str, Any]]:
     return [dict(row) for row in output]
 
 
+def _records_from_legacy_output(
+    output: Any,
+    id_column: str,
+    cases: list[Case],
+    input_rows: list[dict[str, Any]],
+) -> list[TaxsimRecord]:
+    """Adapt ``runner.run()`` records to :class:`TaxsimRecord`.
+
+    A record without an id column takes the submitted id at its position,
+    or the case id if the submitted id is None (the pre-existing positional
+    convention for runners that drop the column). An id
+    that is not a finite number or text — pandas' NaN for a line it could not
+    read, for example — is rejected here rather than passed on as a phantom
+    household.
+    """
+    records = []
+    fallback_ids = [
+        case.case_id if row.get(id_column) is None else row[id_column]
+        for row, case in zip(input_rows, cases, strict=True)
+    ]
+    for index, record in enumerate(_records(output)):
+        household_id = record.get(id_column)
+        if household_id is None and index < len(fallback_ids):
+            household_id = fallback_ids[index]
+        if household_id is None or (
+            isinstance(household_id, float) and household_id != household_id
+        ):
+            raise RuntimeError(
+                f"TAXSIM runner output record {index + 1} carries an unusable "
+                f"{id_column}={household_id!r}; refusing to attribute it to a "
+                "case."
+            )
+        records.append(
+            TaxsimRecord(
+                id_key=id_key(household_id),
+                values=dict(record),
+                line_number=index + 1,
+            )
+        )
+    return records
+
+
+def _missing_row_error(
+    id_column: str,
+    key: str,
+    execution: TaxsimExecution | None,
+    trailing_diagnostics: tuple[str, ...],
+) -> str:
+    message = f"TAXSIM produced no output row for {id_column}={key}"
+    if execution is not None and execution.stderr.strip():
+        message += f"; stderr: {_excerpt(execution.stderr)!r}"
+    if trailing_diagnostics:
+        message += f"; trailing stdout lines: {list(trailing_diagnostics[:10])!r}"
+    return message
+
+
+def _binary_suffix(execution: TaxsimExecution | None) -> str:
+    if execution is None or not execution.binary:
+        return ""
+    return f" (binary {execution.binary})"
+
+
+def _excerpt(text: str, *, tail: bool = False) -> str:
+    text = text.strip()
+    if len(text) <= _STDERR_EXCERPT:
+        return text
+    if tail:
+        return "..." + text[-_STDERR_EXCERPT:]
+    return text[:_STDERR_EXCERPT] + "..."
+
+
 def _selected_values(
     record: Mapping[str, Any],
     variables: list[str] | None,
@@ -459,21 +726,9 @@ def _selected_values(
     excluded_keys: set[str],
 ) -> dict[str, Any]:
     if variables is None:
-        return {
-            key: value
-            for key, value in record.items()
-            if key not in excluded_keys
-        }
+        return {key: value for key, value in record.items() if key not in excluded_keys}
     return {variable: record[variable] for variable in variables if variable in record}
 
 
 def _id_key(value: Any) -> str:
-    if isinstance(value, bool):
-        return str(value)
-    if isinstance(value, Integral):
-        return str(int(value))
-    if isinstance(value, Real):
-        number = float(value)
-        if number.is_integer():
-            return str(int(number))
-    return str(value)
+    return id_key(value)

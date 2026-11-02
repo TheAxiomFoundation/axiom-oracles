@@ -1,10 +1,14 @@
 import copy
+import hashlib
 import json
 import subprocess
+import tempfile
 from pathlib import Path
 
 import pytest
 import yaml
+from hypothesis import HealthCheck, example, given, settings
+from hypothesis import strategies as st
 
 from scripts import de_axiom_legs as legs
 
@@ -267,3 +271,101 @@ def test_exact_ref_inspection_ignores_checkout_head(monkeypatch, tmp_path):
     assert observed[ESTG_MODULE]["presence"] == "module-not-on-main"
     assert observed[ESTG_MANIFEST]["presence"] == "module-not-on-main"
     assert observed[SGB_MODULE]["presence"] == "on-pinned-ref"
+
+
+def _replaced_blob_contract(monkeypatch, repo, original, replacement):
+    repo.mkdir()
+    _git(repo, "init", "--quiet")
+    module = repo / SGB_MODULE
+    module.parent.mkdir(parents=True)
+    module.write_bytes(original)
+    _git(repo, "add", SGB_MODULE)
+    _git(
+        repo,
+        "-c",
+        "user.name=DE leg test",
+        "-c",
+        "user.email=de-leg@example.test",
+        "commit",
+        "--quiet",
+        "-m",
+        "original pinned content",
+    )
+    commit = _git(repo, "rev-parse", "HEAD")
+    tree = _git(repo, "rev-parse", "HEAD^{tree}")
+    original_blob = _git(repo, "rev-parse", f"HEAD:{SGB_MODULE}")
+    replacement_file = repo / "replacement-bytes"
+    replacement_file.write_bytes(replacement)
+    replacement_blob = _git(repo, "hash-object", "-w", str(replacement_file))
+    _git(repo, "replace", original_blob, replacement_blob)
+    assert _git(repo, "rev-parse", "HEAD") == commit
+    assert _git(repo, "rev-parse", "HEAD^{tree}") == tree
+    # Establish that ordinary exact-ref reads return the replacement bytes.
+    substituted = subprocess.run(
+        ["git", "-C", str(repo), "show", f"{commit}:{SGB_MODULE}"],
+        check=True,
+        capture_output=True,
+    ).stdout
+    assert substituted == replacement
+
+    plan = legs._load_plan()
+    config = copy.deepcopy(legs._load_config("euromod", plan))
+    config["runner"]["parameters"].update(
+        rulespec_root=str(repo),
+        rulespec_upstream_sha=commit,
+        rulespec_upstream_tree=tree,
+    )
+    monkeypatch.setattr(
+        legs,
+        "_shared_contract",
+        lambda _oracle: (plan, config, commit, tree),
+    )
+    return config, commit, tree
+
+
+def test_exact_ref_inspection_ignores_blob_replacement(monkeypatch, tmp_path):
+    """An unchanged pin must observe its original blob, despite replace refs."""
+    monkeypatch.delenv("GIT_NO_REPLACE_OBJECTS", raising=False)
+    original = b"format: rulespec/v1\nrules: {rate: 0.18}\n"
+    replacement = b"format: rulespec/v1\nrules: {rate: 0.17}\n"
+    repo = tmp_path / "rulespec-de"
+    config, commit, tree = _replaced_blob_contract(
+        monkeypatch, repo, original, replacement
+    )
+
+    record = legs.run_registered_leg(config["runner"], tmp_path / "leg.json")
+    inspection = record["provenance"]["rulespec_ref_inspection"]
+    observed = {row["path"]: row for row in inspection["artifacts"]}
+
+    assert inspection["commit"] == commit
+    assert inspection["tree"] == tree
+    assert observed[SGB_MODULE]["sha256"] == hashlib.sha256(original).hexdigest()
+    assert observed[SGB_MODULE]["sha256"] != hashlib.sha256(replacement).hexdigest()
+
+
+@settings(
+    max_examples=12,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@example(original=b"rate: 0.18\n", replacement=b"rate: 0.17\n")
+@given(original=st.binary(max_size=128), replacement=st.binary(max_size=128))
+def test_exact_ref_artifact_digest_binds_original_blob_property(
+    monkeypatch, tmp_path, original, replacement
+):
+    """Replace refs cannot change the bytes certified by a commit/tree pin."""
+    if original == replacement:
+        replacement += b"\x00"
+    monkeypatch.delenv("GIT_NO_REPLACE_OBJECTS", raising=False)
+    with tempfile.TemporaryDirectory(dir=tmp_path) as directory:
+        repo = Path(directory) / "rulespec-de"
+        _config, commit, tree = _replaced_blob_contract(
+            monkeypatch, repo, original, replacement
+        )
+
+        inspection = legs.inspect_pinned_ref("euromod", rulespec_root=repo)
+        observed = {row["path"]: row for row in inspection["artifacts"]}
+
+        assert inspection["commit"] == commit
+        assert inspection["tree"] == tree
+        assert observed[SGB_MODULE]["sha256"] == hashlib.sha256(original).hexdigest()

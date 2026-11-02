@@ -198,9 +198,9 @@ entries:
       equals: 342.18
     sources:
     - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
     - https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: fl-bbce-net-waiver-snap_eligible
@@ -446,9 +446,9 @@ entries:
       equals: 1345.39
     sources:
     - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
     - https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: fl-bbce-gross-band-snap_benefit
@@ -596,9 +596,9 @@ entries:
       tolerance: 0.005
     sources:
     - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
     - https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: fl-bbce-net-waiver-snap_benefit
@@ -826,9 +826,9 @@ entries:
       equals: 23.84
     sources:
     - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/gross.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/income_limit/net_applies/non_hheod.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/hhs/tanf/non_cash/asset_limit.yaml
     - https://github.com/TheAxiomFoundation/rulespec-us/issues/1098
   expires_on_source_change: true
 - id: pe-lone-minor-child-earnings-eligibility
@@ -1891,7 +1891,7 @@ entries:
       tolerance: 0.5
     sources:
     - dashboard/public/data/axiom-policyengine-fl-snap-ecps.json
-    - https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/policyengine_us/parameters/gov/usda/snap/income/deductions/self_employment/rate.yaml
+    - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/usda/snap/income/deductions/self_employment/rate.yaml
     - https://github.com/TheAxiomFoundation/axiom-oracles/issues/397
   expires_on_source_change: true
 - id: disability-shelter-cap-33921

@@ -19,7 +19,8 @@ from pathlib import Path
 import pytest
 from click.testing import CliRunner
 
-from axiom_oracles.adapters.taxsim import pins
+from axiom_oracles.adapters.taxsim import TaxsimPackageRunner, pins
+from axiom_oracles.core.case import Case
 from axiom_oracles.cli import cli
 
 SEP_LINUX = "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059"
@@ -83,6 +84,7 @@ def fake_doc(binaries: dict[str, dict[str, bytes]], *, git_commit: str = "a" * 4
         "schema_version": pins.SCHEMA_VERSION,
         "default_profile": "new",
         "distribution": real["distribution"],
+        "bundled_binaries": real["bundled_binaries"],
         "probes": {},
         "binaries": doc_binaries,
         "profiles": {
@@ -124,18 +126,17 @@ def install_doc(monkeypatch, doc) -> pins.PinDocument:
 
 
 def test_profile_precedence_explicit_env_suite_default(monkeypatch) -> None:
-    suite = {"taxsim_pin_profile": "policyengine-taxsim-2.30.0"}
-    assert pins.active_profile() == ("dashboard-2026-09", "default_profile")
-    assert pins.active_profile(suite_parameters=suite)[0] == (
-        "policyengine-taxsim-2.30.0"
-    )
+    suite = {"taxsim_pin_profile": "dashboard-2026-09"}
+    # The default stays the policyengine-taxsim 2.30.0 binaries.
+    assert pins.active_profile() == ("policyengine-taxsim-2.30.0", "default_profile")
+    assert pins.active_profile(suite_parameters=suite)[0] == "dashboard-2026-09"
     monkeypatch.setenv(pins.PROFILE_ENV, "pe-taxsim-main-2026-08")
     assert pins.active_profile(suite_parameters=suite) == (
         "pe-taxsim-main-2026-08",
         f"${pins.PROFILE_ENV}",
     )
-    assert pins.active_profile("dashboard-2026-09", suite) == (
-        "dashboard-2026-09",
+    assert pins.active_profile("policyengine-taxsim-2.30.0", suite) == (
+        "policyengine-taxsim-2.30.0",
         "argument",
     )
 
@@ -287,7 +288,8 @@ def test_each_binary_is_hashed_once_per_path_mtime_and_size(
 
 
 def test_build_stamp_reader_normalizes_both_stamp_formats() -> None:
-    assert pins.build_stamp_from_bytes(b'xx"cdate-20260521"yy') == "20260521"
+    assert pins.build_stamp_from_bytes(b'xx"cdate-20260521"yy') == "cdate-20260521"
+    assert pins.same_build("cdate-20260521", "20260521")
     assert pins.build_stamp_from_bytes(b'xx"cd2026090910"yy') == "cd2026090910"
     assert pins.build_stamp_from_bytes(b"nothing here cd20260909") is None
 
@@ -537,7 +539,7 @@ def test_provenance_lifts_taxsim_engine_identity(monkeypatch, tmp_path) -> None:
             "platform": "linux",
             "bytes": 2153328,
             "rows": 9,
-            "scope": "default",
+            "scopes": {"default": 9},
         },
         {
             "sha256": AUG_LINUX,
@@ -546,7 +548,7 @@ def test_provenance_lifts_taxsim_engine_identity(monkeypatch, tmp_path) -> None:
             "platform": "linux",
             "bytes": 2129624,
             "rows": 1,
-            "scope": "override:ga-md-2024-2025-sigfpe",
+            "scopes": {"override:ga-md-2024-2025-sigfpe": 1},
         },
     ]
     output = tmp_path / "r.json"
@@ -568,16 +570,7 @@ def test_provenance_lifts_taxsim_engine_identity(monkeypatch, tmp_path) -> None:
     assert oracle["policyengine_taxsim"] == pins.pinned_version()
     assert oracle["taxsim_pin_profile"] == "dashboard-2026-09"
     assert oracle["taxsim_binaries"] == binaries
-    for item in oracle["taxsim_binaries"]:
-        assert set(item) == {
-            "sha256",
-            "build",
-            "build_observed",
-            "platform",
-            "bytes",
-            "rows",
-            "scope",
-        }
+    assert sum(item["rows"] for item in oracle["taxsim_binaries"]) == 10
 
 
 def test_provenance_of_a_legacy_report_keeps_only_the_version(
@@ -627,7 +620,8 @@ def test_run_comparison_passes_the_resolved_profile_to_the_cli(
                     "left": "axiom",
                     "right": "taxsim",
                     "concept": "us:tax/federal-income-tax#eitc",
-                    "period": "2026",
+                    # 2024: the 2.30.0 Linux binary's pinned range ends there.
+                    "period": "2024",
                     "sample_size": 5,
                     **parameters,
                 },
@@ -637,14 +631,15 @@ def test_run_comparison_passes_the_resolved_profile_to_the_cli(
         cmd = calls[-1]
         return cmd[cmd.index("--taxsim-pin-profile") + 1]
 
-    assert run() == "dashboard-2026-09"
-    assert run(taxsim_pin_profile="policyengine-taxsim-2.30.0") == (
-        "policyengine-taxsim-2.30.0"
-    )
+    assert run() == "policyengine-taxsim-2.30.0"
+    assert run(taxsim_pin_profile="dashboard-2026-09") == "dashboard-2026-09"
     monkeypatch.setenv(pins.PROFILE_ENV, "pe-taxsim-main-2026-08")
-    assert run(taxsim_pin_profile="policyengine-taxsim-2.30.0") == (
+    assert run(taxsim_pin_profile="dashboard-2026-09") == (
         "pe-taxsim-main-2026-08"
     )
+    monkeypatch.setenv(pins.PROFILE_ENV, "nope")
+    with pytest.raises(SystemExit, match="unknown TAXSIM pin profile 'nope'"):
+        run()
     assert f"policyengine-taxsim=={pins.pinned_version()}" in calls[-1]
 
 
@@ -669,12 +664,16 @@ def test_relative_binary_dir_returns_absolute_verified_path(
     assert located == (tmp_path / "fake-linux.exe").resolve()
 
 
-def test_execution_refuses_non_absolute_binary(tmp_path) -> None:
-    from axiom_oracles.adapters.taxsim import execution
-
-    source = tmp_path / "in.txt"
-    source.write_text("taxsimid year state\n")
-    with pytest.raises(ValueError, match="non-absolute"):
-        execution.execute_taxsim_binary(
-            "taxsimtest-linux.exe", source, tmp_path / "out.txt"
-        )
+def test_runner_refuses_a_non_absolute_located_binary() -> None:
+    """Only verified absolute paths may execute; a bare name is looked up on PATH."""
+    runner = TaxsimPackageRunner(
+        executor=lambda frame: pytest.fail("ran a binary"),
+        binary_locator=lambda sha, **_: Path("taxsimtest-linux.exe"),
+    )
+    case = Case(
+        case_id="1",
+        period="2024",
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024, "state": 0}},
+    )
+    with pytest.raises(pins.TaxsimPinError, match="non-absolute"):
+        runner.run_cases([case])

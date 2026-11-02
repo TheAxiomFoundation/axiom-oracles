@@ -1,0 +1,65 @@
+name: et-vat
+title: Ethiopia VAT on domestic electricity and water — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et VAT (Proclamation 1341/2024, 15%) with the
+  Directive No. 1021/2024 domestic electricity (200 kWh) and water (15 cubic
+  meters) monthly thresholds against ETMOD tva_s (SOUTHMOD A4.0, country ET,
+  system ET_2025 = EFY2025/26, dataset et_2022_a2). Expenditures bridge from
+  ETMOD's own post-uprating x0451/x044 values, which the engine echoes
+  (per-group indices probed: 1.4959 utilities, 1.4427 water); threshold
+  quantities pass unuprated. Convention adopted for parity: ETMOD treats
+  household spending on electricity and water as the VAT-exclusive taxable
+  value, and Axiom is given that same value, so the cases test the 15% rate
+  and the thresholds on the model's base, not the statutory taxable value.
+  Each arm runs well above, at, and one unit above the threshold, and both
+  engines exempt the whole expenditure at 200 kWh / 15 m3 and tax all of it at
+  201 kWh / 16 m3 (a cliff); run live exact on all six cases. The cliff is the
+  reading the rulespec-et VAT module encodes and ETMOD shares, not a settled
+  one: rulespec-et's separately encoded Directive 1021/2024 module exempts
+  min(consumption, limit), so the first 200 kWh (15 m3) would stay exempt for
+  heavier users, and the directive's wording supports either. That choice is
+  an open methodology question; this suite compares the VAT module only. Each
+  case zero-fills the other arm's inputs because the runner queries both VAT
+  concepts on every case. Results are based on the tax-benefit microsimulation
+  model for Ethiopia (ETMOD) in SOUTHMOD_A4.0, developed, maintained and
+  managed by UNU-WIDER with SASPRI, the LSE International Inequalities
+  Institute and local partners, run on the EUROMOD software (EM_Executable
+  1.0.0 via the euromod connector 0.2.18) under the et_2022_a2 dataset
+  configuration (Central Statistical Agency of Ethiopia, Ethiopia
+  Socioeconomic Panel Survey Wave 5, 2021-2022); only the dataset's variable
+  list is read and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_et.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-vat
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-vat.json
+
+artifacts:
+  report_basename: axiom-euromod-et-vat
+
+dashboard:
+  filename: axiom-euromod-et-vat.json
+  suite: et-vat

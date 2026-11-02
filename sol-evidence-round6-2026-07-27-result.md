@@ -151,12 +151,12 @@ All commits are local. Nothing was pushed.
 ## Delivery
 
 Requested path:
-`/Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-round6-2026-07-27/result.md`.
+`<workspace>/ops/reviews/sol-evidence-round6-2026-07-27/result.md`.
 
 The copy was attempted and the sandbox rejected it:
 
 ```text
-cp: /Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-round6-2026-07-27/result.md: Operation not permitted
+cp: <workspace>/ops/reviews/sol-evidence-round6-2026-07-27/result.md: Operation not permitted
 ```
 
 Per the standing fallback instruction, this report is committed in the

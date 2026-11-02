@@ -1,0 +1,61 @@
+name: ug-nssf-contributions
+title: Uganda NSSF contributions — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug NSSF standard-contribution module (Cap. 230:
+  fifteen percent employer-paid standard contribution on monthly total wages,
+  s.10; five percent employee's share, s.11; employer-net share derived as
+  their difference) against UGAMOD tscee_s (employee share) and tscer_s
+  (employer share) on a wage sweep from 1.2m to 124.5m UGX/year at age 35, and
+  at the 6,225,375.60 probe income at ages 60 and 70. Run live exact at every
+  case. Neither engine applies a wage ceiling, and UGAMOD still charges the
+  full shares at 60 and 70 (uncommitted probes at ages 15, 17, 55, 56, 65, 80
+  and 95 gave the same), in contrast to GHAMOD's age-15-45 contributor cap
+  (rulespec-gh finding #4). The s.10 module has no age input. Whether the Act
+  limits contributions by age is not settled here: the captured corpus lacks
+  the Act's definition of "eligible employee", and s.12 requires a ten percent
+  special contribution in place of the standard one for employees aged 55 or
+  over only where the Minister applies it by statutory order. Each case
+  pre-divides the euromod input by the UG_2025 uprating index and bridges the
+  Axiom total_wages input on the engine's own post-uprating yem. Results are
+  based on the tax-benefit microsimulation model for Uganda (UGAMOD) in
+  SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER with SASPRI,
+  the LSE International Inequalities Institute and local partners, run on the
+  EUROMOD software (EM_Executable 1.0.0 via the euromod connector 0.2.18)
+  under the ug_2024_a1 dataset configuration (Uganda Bureau of Statistics,
+  Uganda National Household Survey 2023/24); only the dataset's variable list
+  is read and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_ug.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-nssf-contributions
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-nssf-contributions.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-nssf-contributions
+
+dashboard:
+  filename: axiom-euromod-ug-nssf-contributions.json
+  suite: ug-nssf-contributions

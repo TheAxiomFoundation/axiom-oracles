@@ -36,7 +36,7 @@ RULESPEC_REPO = Path.home() / "rulespec-us"
 
 def upstream_text(path: str) -> str:
     return subprocess.run(
-        ["git", "-C", str(RULESPEC_REPO), "show", f"origin/main:{path}"],
+        ["git", "--no-replace-objects", "-C", str(RULESPEC_REPO), "show", f"origin/main:{path}"],
         capture_output=True,
         text=True,
         check=True,

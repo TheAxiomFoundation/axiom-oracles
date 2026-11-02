@@ -898,7 +898,7 @@ def _run_git(repo: Path, *args: str) -> subprocess.CompletedProcess[bytes]:
     """Run a bounded, non-interactive Git query for ratchet history."""
 
     return subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
         check=False,
         capture_output=True,
         timeout=15,
