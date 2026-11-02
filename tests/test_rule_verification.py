@@ -269,7 +269,32 @@ _NAME_CHARS = st.characters(
     )
 )
 def test_property_list_tree_round_trips_any_utf8_name(tmp_path_factory, names) -> None:
+    # Every listed name reads back its own bytes through batch_blobs, so no
+    # blob can shift to another path.
     repo = tmp_path_factory.mktemp("repo")
-    files = {f"mod/{name}.yaml": name.encode() for name in names}
+    files = {f"mod/{name}.yaml": f"body of {name}\n".encode() for name in names}
     _commit_tree(repo, files)
-    assert sorted(rv.list_tree(repo, "HEAD")) == sorted(files)
+    tree = rv.list_tree(repo, "HEAD")
+    assert sorted(tree) == sorted(files)
+    assert rv.batch_blobs(repo, "HEAD", tree) == files
+
+
+def test_list_tree_refuses_a_newline_in_a_path(tmp_path):
+    # batch_blobs speaks newline-separated `git cat-file --batch`; a name with
+    # a newline would split into two requests and shift every later blob to
+    # the wrong path (us/e.yaml would get us/d.yaml's bytes).
+    files = {
+        "us/a.yaml": b"A\n",
+        "us/b\nc.yaml": b"BC\n",
+        "us/d.yaml": b"D\n",
+        "us/e.yaml": b"E\n",
+    }
+    _commit_tree(tmp_path, files)
+    with pytest.raises(ValueError, match="newline"):
+        rv.list_tree(tmp_path, "HEAD")
+
+
+def test_batch_blobs_refuses_a_newline_name(tmp_path):
+    _commit_tree(tmp_path, {"us/a.yaml": b"A\n"})
+    with pytest.raises(ValueError, match="newline"):
+        rv.batch_blobs(tmp_path, "HEAD", ["us/a.yaml", "us/b\nc.yaml"])
