@@ -159,6 +159,32 @@ def _git_env(**overrides: str) -> dict[str, str]:
     return env
 
 
+def _git_read_env(**overrides: str) -> dict[str, str]:
+    """``_git_env`` for provenance reads, which must never fetch objects.
+
+    In a partial (promisor) clone Git fetches a missing promised object on
+    demand and stores it in the checkout's object store, even from a private
+    git directory, because objects live in the common directory. A read must
+    not change the repository it describes, so it disables lazy fetching:
+    ``GIT_NO_LAZY_FETCH`` where Git honours it, and ``protocol.allow=never``
+    for every Git, so a fetch that still starts cannot reach any remote. A
+    read that needs a missing object then fails, and the caller records the
+    tree as unverifiable. The setting is appended after any inherited
+    ``GIT_CONFIG_COUNT`` entries, so it wins over them.
+    """
+    env = _git_env(**overrides)
+    env["GIT_NO_LAZY_FETCH"] = "1"
+    try:
+        count = int(env.get("GIT_CONFIG_COUNT") or 0)
+    except ValueError:
+        count = 0
+    count = max(count, 0)
+    env[f"GIT_CONFIG_KEY_{count}"] = "protocol.allow"
+    env[f"GIT_CONFIG_VALUE_{count}"] = "never"
+    env["GIT_CONFIG_COUNT"] = str(count + 1)
+    return env
+
+
 def _git_sha(repo: Path) -> str | None:
     """Best-effort 40-hex HEAD SHA of a git checkout; None if unavailable."""
     if repo is None:
@@ -169,7 +195,7 @@ def _git_sha(repo: Path) -> str | None:
             capture_output=True,
             text=True,
             check=True,
-            env=_git_env(),
+            env=_git_read_env(),
         )
     except (subprocess.CalledProcessError, FileNotFoundError, OSError):
         return None
@@ -201,7 +227,7 @@ def _git_output(
         input=stdin,
         capture_output=True,
         check=True,
-        env=env if env is not None else _git_env(),
+        env=env if env is not None else _git_read_env(),
     ).stdout
 
 
@@ -236,7 +262,7 @@ def _private_index(toplevel: Path, workdir: Path) -> dict[str, str]:
         shutil.copy2(source, workdir / source.name)
     if not (workdir / "index").exists():
         raise OSError("checkout index unavailable")
-    return _git_env(
+    return _git_read_env(
         GIT_DIR=str(workdir),
         GIT_COMMON_DIR=common,
         GIT_WORK_TREE=str(toplevel),
@@ -439,6 +465,9 @@ def worktree_state(
     child's recursive digest. The same tracked change on the same commit
     hashes the same whatever the checkout path or local Git config. Reads
     use private index/shared-index copies and never write the checkout.
+    They never fetch either (:func:`_git_read_env`): in a partial clone a
+    tree whose objects are missing locally is unverifiable (``None``), and
+    the object store is left as it was.
     Never raises: provenance must annotate a run, never fail one.
     """
     if repo is None:
