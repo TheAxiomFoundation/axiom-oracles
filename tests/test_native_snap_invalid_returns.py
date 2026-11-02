@@ -470,3 +470,77 @@ def test_every_support_variable_read_for_inputs_is_validated():
         "is_snap_eligible",
     }
     assert read <= allowed, read - allowed
+
+
+# ── generic US variable comparison (us_populace) ─────────────────────────────
+def us_compare(pe_value, axiom_value):
+    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges.registry import PolicyEngineMapping
+
+    mapping = PolicyEngineMapping(
+        legal_id="us-ca:regulations/cdss/eas/49/49-055#ca_capi",
+        country="us",
+        mapping_type="direct_variable",
+        policyengine_variable="ca_capi",
+    )
+    cases = [
+        us_populace.USVariableCase(
+            variable="ca_capi",
+            person_id=person,
+            spm_unit_id=person,
+            state="CA",
+            inputs={},
+            pe_outputs={"ca_capi": value},
+        )
+        for person, value in ((1, 600.0), (2, pe_value))
+    ]
+    outputs = [
+        {"outputs": {mapping.legal_id: {"value": {"value": value}}}}
+        for value in (600.0, axiom_value)
+    ]
+    return us_populace.compare_outputs(
+        variables=("ca_capi",),
+        cases_by_variable={"ca_capi": cases},
+        mappings_by_variable={"ca_capi": (mapping,)},
+        axiom_outputs_by_variable={"ca_capi": outputs},
+        skipped_reasons={},
+        tolerance=0.01,
+        relative_tolerance=1e-9,
+    )
+
+
+@pytest.mark.parametrize("invalid", INVALID)
+@pytest.mark.parametrize("side", ["policyengine", "axiom"])
+def test_us_variable_comparison_keeps_invalid_returns_out_of_counts(invalid, side):
+    report = us_compare(
+        invalid if side == "policyengine" else 0.0,
+        invalid if side == "axiom" else 0.0,
+    )
+    raw = json.loads(json.dumps(report.to_json(), allow_nan=False))
+    assert raw["compared_values"] == 1
+    assert raw["mismatch_count"] == raw["uncompared_mismatches"] == 1
+    assert raw["errors"] == [
+        {
+            "engine": side,
+            "case_id": "person_2",
+            "variable": "ca_capi",
+            "output": "us-ca:regulations/cdss/eas/49/49-055#ca_capi",
+            "error": "missing_or_nonfinite_output",
+        }
+    ]
+    [summary] = raw["output_summary"]
+    assert (
+        summary["compared"]
+        == summary["mismatches"]
+        == summary["uncompared_mismatches"]
+        == 1
+    )
+    assert raw["mismatches"][0]["reason"] == "invalid_output"
+
+
+@pytest.mark.parametrize("value", [0, 0.0, False])
+def test_us_variable_comparison_keeps_genuine_zero(value):
+    raw = us_compare(value, 0.0).to_json()
+    assert raw["compared_values"] == 2
+    assert raw["mismatch_count"] == raw["uncompared_mismatches"] == 0
+    assert raw["errors"] == []
