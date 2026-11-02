@@ -993,18 +993,26 @@ def test_snap_qc_lane_maps_only_the_root_its_overlay_is_built_from():
     ) == {RULESPEC_US}
 
 
-def test_every_snap_qc_suite_is_manual_and_maps_only_rulespec_us():
-    """Bare CI runners can only re-emit a SNAP QC report, so no snap-qc suite
-    may be dispatched by the affected rerun or the weekly matrix."""
+def test_every_snap_qc_suite_routes_away_from_the_bare_matrix():
+    """Bare CI runners can only re-emit a SNAP QC report, so every snap-qc
+    suite either runs in the live replay lane (keeping its registry name for
+    that lane's workflow) or is manual; none reaches the bare rerun matrix."""
     gam = _load("generate_affected_map.py")
     entries = {e["suite"]: e for e in gam.build_map()["suites"]}
     configs = _snap_qc_configs()
     assert len(configs) >= 7
+    lane_suites = 0
     for config in configs:
         entry = entries[config["dashboard"]["suite"]]
-        assert config.get("ci") == "manual", config["name"]
-        assert entry["name"] is None, config["name"]
         assert entry["repos"] == [RULESPEC_US], config["name"]
+        if config.get("ci") == "snap-qc-replay":
+            lane_suites += 1
+            assert entry["name"] == config["name"]
+            assert entry["lane"] == "snap-qc-replay"
+        else:
+            assert config.get("ci") == "manual", config["name"]
+            assert entry["name"] is None and "lane" not in entry
+    assert lane_suites >= 6
 
 
 def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
@@ -1085,12 +1093,18 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
         # rulespec-us unmoved: fresh, whatever the archived state repos say.
         fresh = sel.select(affected, {**archived, RULESPEC_US: ran_against}, reports)
         assert suite not in {d["suite"] for d in fresh}
-        # rulespec-us moved: stale, but routed to the manual lane.
+        # rulespec-us moved: stale, and routed to the live replay lane (or
+        # the manual lane), never the bare matrix.
         moved = sel.select(affected, {**archived, RULESPEC_US: "b" * 40}, reports)
         decision = next(d for d in moved if d["suite"] == suite)
-        assert decision["name"] is None
         assert config["name"] not in sel.runnable_names(moved)
-        assert suite in sel.manual_suites(moved)
+        if config.get("ci") == "snap-qc-replay":
+            assert decision["lane"] == "snap-qc-replay"
+            assert config["name"] in sel.lane_names(moved, "snap-qc-replay")
+            assert suite not in sel.manual_suites(moved)
+        else:
+            assert decision["name"] is None
+            assert suite in sel.manual_suites(moved)
 
 
 #: Runner types the bare CI legs (affected-rerun.yml's rerun matrix and the
@@ -1215,3 +1229,194 @@ def test_committed_reports_of_lanes_the_bot_cannot_run_are_real_runs():
             if not is_real_run_report(json.loads(path.read_text())):
                 reemitted.append(path.name)
     assert reemitted == []
+
+
+
+# --- CI lanes (ci: <lane>) ------------------------------------------------------
+
+
+def test_ci_routing_names_lanes_and_rejects_anything_else():
+    gam = _load("generate_affected_map.py")
+
+    def config(**extra):
+        return {"name": "ny-snap-qc", "runner": {"type": "snap-qc-compare"}, **extra}
+
+    assert gam.ci_routing(config()) == ("ny-snap-qc", None)
+    assert gam.ci_routing(config(ci="manual")) == (None, None)
+    assert gam.ci_routing(config(ci="snap-qc-replay")) == (
+        "ny-snap-qc",
+        "snap-qc-replay",
+    )
+    # NEGATIVE: an unknown lane, or a lane for another runner type, fails
+    # loudly rather than silently dropping the suite from every matrix.
+    with pytest.raises(SystemExit, match="unknown ci"):
+        gam.ci_routing(config(ci="snap-qc-live"))
+    with pytest.raises(SystemExit, match="runner type"):
+        gam.ci_routing(
+            {"name": "fiit", "runner": {"type": "axiom-oracles-compare"},
+             "ci": "snap-qc-replay"}
+        )
+
+
+def test_selector_rejects_a_malformed_lane():
+    sel = _load("select_affected_suites.py")
+    for entry in (
+        {"suite": "s", "name": "s", "repos": ["r"], "lane": ""},
+        {"suite": "s", "name": None, "repos": ["r"], "lane": "snap-qc-replay"},
+    ):
+        with pytest.raises(SystemExit, match="malformed lane"):
+            sel.select({"suites": [entry]}, {"r": "x"}, {})
+
+
+def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys):
+    """force_all (and a normal sweep) put lane suites in lane_<lane>, never in
+    the bare matrix the rerun job dispatches, and never in the manual list."""
+    sel = _load("select_affected_suites.py")
+    monkeypatch.setattr(
+        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+    )
+    assert sel.main() == 0
+    out = dict(
+        line.split("=", 1) for line in capsys.readouterr().out.splitlines() if "=" in line
+    )
+    lane = json.loads(out["lane_snap_qc_replay"])
+    assert int(out["lane_snap_qc_replay_count"]) == len(lane) >= 6
+    matrix = {row["name"] for row in json.loads(out["matrix"])["include"]}
+    assert not matrix & set(lane)
+    assert not set(out["manual"].split()) & set(lane)
+    for config in _snap_qc_configs():
+        if config.get("ci") == "snap-qc-replay":
+            assert config["name"] in lane
+
+
+
+# --- CI lane routing: properties and a differential check ---------------------
+
+_ENTRY = st.fixed_dictionaries(
+    {
+        "name": st.one_of(st.none(), st.sampled_from(["a", "b", "c", "d"])),
+        "lane": st.sampled_from([None, "snap-qc-replay", "other-lane"]),
+        "repos": st.lists(st.sampled_from(["o/r1", "o/r2"]), max_size=2, unique=True),
+        "recorded": st.one_of(st.none(), st.sampled_from(["x" * 40, "y" * 40])),
+    }
+)
+
+
+def _lane_map(raw: list[dict]) -> tuple[dict, dict]:
+    """A schema-valid affected map (a lane only on a named entry) and its reports."""
+    suites, reports = [], {}
+    for index, item in enumerate(raw):
+        entry = {"suite": f"s{index}", "name": item["name"], "repos": item["repos"]}
+        if item["lane"] and item["name"] is not None:
+            entry["lane"] = item["lane"]
+        suites.append(entry)
+        if item["recorded"]:
+            reports[f"s{index}"] = {
+                "suite": f"s{index}",
+                "provenance": {
+                    "rulespecs": [{"repo": r, "sha": item["recorded"]} for r in item["repos"]]
+                },
+            }
+    return {"suites": suites}, reports
+
+
+@settings(max_examples=200, deadline=None)
+@given(st.lists(_ENTRY, max_size=8), st.booleans())
+def test_every_selected_suite_has_exactly_one_route(raw, force_all):
+    """Each selected decision goes to exactly one place: the bare matrix (a
+    name and no lane), its lane's workflow (a name and a lane), or the manual
+    list (no name). A lane suite never reaches the bare matrix or the manual
+    list, and every route is deduplicated."""
+    sel = _load("select_affected_suites.py")
+    affected, reports = _lane_map(raw)
+    heads = {"o/r1": "x" * 40, "o/r2": "z" * 40}
+    selected = (
+        sel.force_all_selection(affected)
+        if force_all
+        else sel.select(affected, heads, reports)
+    )
+    matrix = sel.runnable_names(selected)
+    manual = sel.manual_suites(selected)
+    by_lane = {lane: sel.lane_names(selected, lane) for lane in sel.lanes(affected)}
+    assert len(matrix) == len(set(matrix))
+    for names in by_lane.values():
+        assert len(names) == len(set(names))
+    for decision in selected:
+        name, lane = decision["name"], decision.get("lane")
+        if name is None:
+            assert lane is None
+            assert decision["suite"] in manual
+        elif lane:
+            assert name in by_lane[lane]
+        else:
+            assert name in matrix
+    # Nothing is routed that was not selected.
+    assert set(matrix) <= {d["name"] for d in selected if d["name"] and not d.get("lane")}
+    for lane, names in by_lane.items():
+        assert set(names) <= {d["name"] for d in selected if d.get("lane") == lane}
+
+
+@settings(max_examples=100, deadline=None)
+@given(st.lists(_ENTRY, max_size=8))
+def test_force_all_routes_a_superset_of_any_sweep(raw):
+    """force_all and a normal sweep share one routing: whatever a sweep sends
+    to the matrix, a lane or the manual list, force_all sends there too."""
+    sel = _load("select_affected_suites.py")
+    affected, reports = _lane_map(raw)
+    heads = {"o/r1": "x" * 40, "o/r2": "z" * 40}
+    sweep = sel.select(affected, heads, reports)
+    forced = sel.force_all_selection(affected)
+    assert set(sel.runnable_names(sweep)) <= set(sel.runnable_names(forced))
+    assert set(sel.manual_suites(sweep)) <= set(sel.manual_suites(forced))
+    for lane in sel.lanes(affected):
+        assert set(sel.lane_names(sweep, lane)) <= set(sel.lane_names(forced, lane))
+
+
+def test_weekly_discover_and_the_map_agree_on_what_the_bare_matrix_runs(tmp_path):
+    """Two implementations decide which registry suites a bare runner gets:
+    comparisons.yml's discover step (the weekly matrix) and
+    generate_affected_map.ci_routing (the affected rerun's matrix). Run the
+    discover step as written and compare: a suite is in the weekly matrix
+    exactly when its map entry keeps a name and has no lane."""
+    import os
+    import subprocess
+    import sys
+    import textwrap
+
+    import yaml
+
+    workflow = yaml.safe_load((REPO / ".github/workflows/comparisons.yml").read_text())
+    run = next(
+        step["run"]
+        for step in workflow["jobs"]["discover"]["steps"]
+        if step.get("id") == "list"
+    )
+    code = textwrap.dedent(run.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0])
+    output = tmp_path / "github-output"
+    subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=REPO,
+        env={**os.environ, "ONLY": "", "GITHUB_OUTPUT": str(output)},
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    weekly = {
+        leg["name"]
+        for leg in json.loads(output.read_text().strip().split("=", 1)[1])["include"]
+    }
+    gam = _load("generate_affected_map.py")
+    bare = set()
+    for path in sorted((REPO / "comparisons").glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if not isinstance(config, dict) or "name" not in config:
+            continue
+        if not (config.get("runner") or {}).get("type"):
+            continue
+        name, lane = gam.ci_routing(config)
+        if name is not None and lane is None:
+            bare.add(path.stem)
+    assert weekly == bare
+    assert {"ny-snap-qc", "tx-snap-qc"}.isdisjoint(weekly)
