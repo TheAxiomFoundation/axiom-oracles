@@ -4209,6 +4209,13 @@ def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
 
 
 def _hoh_qualifying_dependent(dependent: Entity) -> bool:
+    # 26 USC 152(c)(3)(B): a permanently and totally disabled individual
+    # meets the qualifying-child age test at any age, and 152(c) has no
+    # gross-income test, so 2(b)(1)(A)(i) applies. The Case's disabled fact
+    # stands for "permanently and totally disabled"; relationship, abode and
+    # support are unrecorded and assumed met, as for dependents under 19.
+    if bool(dependent.fact(Concepts.DISABLED, False)):
+        return True
     age = _age(dependent)
     if age < 19:
         return True

@@ -86,12 +86,10 @@ def _filer_with_disabled_adult():
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#625: disabled adults are not counted")
 def test_disabled_adult_dependent_makes_filer_head_of_household() -> None:
     assert _filing_status(_filer_with_disabled_adult()) == HEAD_OF_HOUSEHOLD
 
 
-@pytest.mark.xfail(strict=True, reason="#625: disabled adults are not counted")
 def test_disabled_dependent_has_no_gross_income_test() -> None:
     """152(c)(1) has no gross-income test, so a disabled 34-year-old earning
     26,876 still qualifies the filer (the projection used to file single)."""
@@ -136,7 +134,6 @@ def _household(has_spouse, dependents):
     return Case(case_id="hoh-property", period="2026", entities=tuple(people))
 
 
-@pytest.mark.xfail(strict=True, reason="#625: disabled adults are not counted")
 @PROPERTY_SETTINGS
 @given(
     has_spouse=st.booleans(),
