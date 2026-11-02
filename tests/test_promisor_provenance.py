@@ -16,6 +16,8 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles.provenance import (
     _git_sha,
@@ -186,3 +188,68 @@ def test_inherited_git_config_survives_the_read_guard(tmp_path, monkeypatch):
     assert env["GIT_CONFIG_KEY_1"] == "protocol.allow"
     assert env["GIT_CONFIG_VALUE_1"] == "never"
     assert env["GIT_NO_LAZY_FETCH"] == "1"
+
+
+_TREE_PATHS = ("", "a", "a/b", "c")
+
+
+def _layered_promisor_clone(root: Path, missing_path: str) -> Path:
+    """A blob-filtered clone of a nested layout lacking one promised tree."""
+    upstream = root / "upstream"
+    upstream.mkdir(parents=True)
+    _git(upstream, "init", "-q")
+    _git(upstream, "config", "uploadpack.allowFilter", "true")
+    _git(upstream, "config", "uploadpack.allowAnySHA1InWant", "true")
+    for relative in ("top.yaml", "a/one.yaml", "a/b/two.yaml", "c/three.yaml"):
+        target = upstream / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(f"{relative}: 1\n")
+    _git(upstream, "add", ".")
+    _git(upstream, "commit", "-qm", "rules")
+    clone = root / "clone"
+    subprocess.run(
+        ["git", "clone", "-q", "--filter=blob:none", f"file://{upstream}", str(clone)],
+        check=True,
+        capture_output=True,
+        env={**os.environ, **_GIT_ENV},
+    )
+    spec = f"HEAD:{missing_path}" if missing_path else "HEAD^{tree}"
+    missing = _git(clone, "rev-parse", spec).strip()
+    objects = _git(
+        clone, "cat-file", "--batch-all-objects", "--batch-check=%(objectname)"
+    ).split()
+    keep = b"".join(oid + b"\n" for oid in objects if oid != missing)
+    pack_dir = clone / ".git" / "objects" / "pack"
+    old = list(pack_dir.iterdir())
+    name = _git(clone, "pack-objects", str(pack_dir / "pack"), stdin=keep).strip()
+    for path in old:
+        path.unlink()
+    (pack_dir / f"pack-{name.decode()}.promisor").write_bytes(b"")
+    return clone
+
+
+@settings(
+    max_examples=12,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(
+    missing_path=st.sampled_from(_TREE_PATHS),
+    edit=st.sampled_from([None, "top.yaml", "a/one.yaml", "a/b/two.yaml"]),
+)
+def test_property_missing_tree_never_attests_clean_or_fetches(
+    tmp_path_factory, missing_path, edit
+):
+    """Whatever tree is missing, and dirty or not, the read never fetches.
+
+    Every tree on the path to a tracked file is read, so a missing one makes
+    the whole measurement unverifiable rather than clean or dirty.
+    """
+    clone = _layered_promisor_clone(tmp_path_factory.mktemp("promisor"), missing_path)
+    if edit is not None:
+        (clone / edit).write_text("edited: 1\n")
+    objects = clone / ".git" / "objects"
+    before = _snapshot(objects)
+    assert worktree_state(clone) == {"dirty": None}
+    assert worktree_attestation(clone)["dirty"] is None
+    assert _snapshot(objects) == before
