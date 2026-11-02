@@ -34,6 +34,7 @@ export const JURISDICTION_LABELS = {
   US: "Federal (US)",
   UK: "United Kingdom",
   BE: "Belgium",
+  DEU: "Germany",
   CAN: "Canada",
   NYC: "New York City",
 };
@@ -58,6 +59,7 @@ export const FAMILY_LABELS = {
   energy_rebates: "IRA home energy rebates",
   head_start: "Head Start",
   lifeline: "Lifeline (phone / broadband subsidy)",
+  csfp: "CSFP (commodity supplemental food)",
   other_federal: "Other federal provisions",
   universal_credit: "Universal Credit",
   uk_tax_benefits: "UK tax & benefits",
@@ -67,11 +69,169 @@ export const FAMILY_LABELS = {
   be_social_security: "Belgium social security",
   be_social_assistance: "Belgium social assistance",
   be_health_insurance: "Belgium health insurance",
+  be_family_benefits: "Belgium family benefits",
+  be_unemployment: "Belgium unemployment benefits",
+  be_study_allowance: "Belgium study allowance",
+  be_disposable_income: "Belgium disposable income",
+  de_worker_tax_contributions: "Germany worker tax and social insurance",
+  de_kindergeld: "Germany Kindergeld",
   canada_personal_income_tax: "Canada personal income tax",
   canada_family_benefits: "Canada family and disability benefits",
 };
 
+/**
+ * SOUTHMOD country models (UNU-WIDER), run on the EUROMOD engine. Their
+ * reports carry engine id "euromod", so the oracle is told apart by the
+ * suite's country prefix: each key is both the suite-slug prefix and the
+ * dashboard region. Add a country here and its region, jurisdiction and
+ * suite labels follow (each suite is its own program; see southmodSuiteMeta).
+ */
+export const SOUTHMOD_MODELS = {
+  gh: {
+    model: "GHAMOD",
+    country: "Ghana",
+    jurisdiction: "GHA",
+    // The input-dataset configuration the comparison runs under (its
+    // uprating and variable list; every household is synthetic). Cited per
+    // the SOUTHMOD_A4.0 Adhesion Agreement, Annex 1.
+    data: "Ghana Statistical Service (GSS) (2020). Ghana Living Standards Survey Round 7 (GLSS7), 2016–2017. Accra: GSS. https://microdata.fao.org/index.php/catalog/1397",
+  },
+  ug: {
+    model: "UGAMOD",
+    country: "Uganda",
+    jurisdiction: "UGA",
+    data: "Uganda Bureau of Statistics (UBOS) (2025). Uganda National Household Survey, 2023/24 (UNHS 2023/24). Kampala: UBOS. https://microdata.ubos.org:7070/index.php/catalog/80/download/275",
+  },
+  zm: {
+    model: "MicroZAMOD",
+    country: "Zambia",
+    jurisdiction: "ZMB",
+    data: "Zambia Statistics Agency (ZamStats) (2024). Living Conditions Monitoring Survey, 2022 (LCMS 2022). Lusaka: ZamStats. https://www.zamstats.gov.zm/wp-content/uploads/2024/07/2022-LCMS-Report-2022.pdf",
+  },
+  et: {
+    model: "ETMOD",
+    country: "Ethiopia",
+    jurisdiction: "ETH",
+    data: "Central Statistical Agency of Ethiopia (CSA) (2024). Ethiopia Socioeconomic Panel Survey, Wave 5 (ESPS-5) 2021–2022. Addis Ababa: CSA. https://microdata.worldbank.org/index.php/catalog/6161",
+  },
+  rw: {
+    model: "RWAMOD",
+    country: "Rwanda",
+    jurisdiction: "RWA",
+    // No input data: the bundle ships no Rwandan microdata, so runs use a
+    // header-only file built locally (scripts/southmod_rw_header.py).
+    data: null,
+  },
+};
+
+/**
+ * The acknowledgement the SOUTHMOD_A4.0 Adhesion Agreement (clause 2,
+ * Annex 1.2) requires on any output that uses the models, naming every
+ * country model the dashboard publishes and the data behind each.
+ */
+export function southmodAcknowledgement() {
+  const models = Object.values(SOUTHMOD_MODELS);
+  const named = models.map((m) => `${m.country} (${m.model})`).join(", ");
+  const data = models
+    .map((m) =>
+      m.data
+        ? `${m.model}: ${m.data}`
+        : `${m.model}: no input data (the bundle ships none; runs use a header-only file and synthetic rows)`,
+    )
+    .join(" ");
+  // Annex 1.2 of the SOUTHMOD_A4.0 Adhesion Agreement with its bracketed
+  // fields filled in ("models", plural, because several countries are
+  // named), followed by the input-data citations clause 8 requires.
+  return (
+    `The results presented here are based on the tax-benefit microsimulation models for ${named} in SOUTHMOD_A4.0. ` +
+    "Models in the SOUTHMOD bundle are developed, maintained and managed by UNU-WIDER in collaboration with SASPRI (Southern African Social Policy Research Insights), the International Inequalities Institute at the London School of Economics and Political Science, and local partners in selected developing countries (Bolivia, Colombia, Ecuador, Egypt, Ethiopia, Ghana, Mozambique, Peru, Rwanda, Mainland Tanzania, Uganda, Viet Nam, Zambia, and Zanzibar) in the scope of the SOUTHMOD project. " +
+    "The results presented here are based on EUROMOD version EM_Executable 1.0.0 (run through the euromod Python connector 0.2.18). " +
+    "Originally maintained, developed and managed by the Institute for Social and Economic Research (ISER), since 2021 EUROMOD is maintained, developed and managed by the Joint Research Centre (JRC) of the European Commission, in collaboration with EUROSTAT and national teams from the EU countries. " +
+    "We are indebted to the many people who have contributed to the development of SOUTHMOD and EUROMOD. " +
+    "The results and their interpretation presented in this publication are solely the Axiom Foundation's responsibility. " +
+    `Input data: the policy systems run under the input-dataset configurations UNU-WIDER built from these surveys; only each dataset's variable list is read, and every comparison household is synthetic. ${data}`
+  );
+}
+
+/**
+ * UKMOD, CeMPA's model for the UK and its four nations, also runs on the
+ * EUROMOD platform, so its reports carry engine id "euromod" too. Every UK
+ * suite on that engine runs this registration-free public release (the
+ * euromod_model_root of comparisons/uk-*-ukmod.yaml); the dashboard test
+ * scripts/test-oracle-attribution.mjs holds the configs and reports to it.
+ */
+export const UKMOD_RELEASE = "B2026.03";
+
+/**
+ * The acknowledgement UKMOD's Terms and Conditions ask of every output that
+ * uses it (microsimulation.ac.uk/ukmod/access): the version, CeMPA as its
+ * developers and the reference paper, plus the changes the comparison
+ * makes, which its CC BY-NC-ND 4.0 licence asks users to indicate.
+ * scripts/test-oracle-attribution.mjs checks every override the UKMOD
+ * configs and reports record is named here.
+ */
+export function ukmodAcknowledgement() {
+  // The Terms' recommended wording, verbatim except for the version and the
+  // author it leaves for the user to fill in.
+  return (
+    `The results presented here are based on UKMOD version ${UKMOD_RELEASE}. ` +
+    "UKMOD is maintained, developed and managed by the Centre for Microsimulation and Policy Analysis (CeMPA) at the University of Essex. " +
+    "The process of extending and updating UKMOD was financially supported by the Nuffield Foundation (2018-2021) and the abrdn Financial Fairness Trust (2023-2024). " +
+    "The results and their interpretation are the Axiom Foundation's sole responsibility. " +
+    "Reference: Richiardi M, Collado D, Popova D (2021). UKMOD – A new tax-benefit model for the four nations of the UK. International Journal of Microsimulation, 14(1): 92-101. DOI: 10.34196/IJM.00231. " +
+    "Changes: the runs override some UKMOD parameters on a temporary overlay of the model, never the model itself. Most benefit suites switch off UKMOD's take-up policies (BTA_uk, random_uk); some set take-up rates to 1; the Scottish Child Payment suite also sets the Universal Credit transition parameter ($UCtransition) to 0. Switching the take-up policies off does not remove UKMOD's take-up draw or its Universal Credit transition, so some Universal Credit, Pension Credit and Housing Benefit results stay zero; the record marks each as a UKMOD gap. " +
+    "Input data: every comparison household is synthetic; of UKMOD's bundled training_data file only the column header is read."
+  );
+}
+
+// Suite-slug words spelled out (or capitalized) in SOUTHMOD suite labels.
+const SOUTHMOD_WORDS = {
+  dispy: "disposable income",
+  paye: "PAYE",
+  vat: "VAT",
+  ssnit: "SSNIT",
+  cbhi: "CBHI",
+  mat: "MAT",
+  napsa: "NAPSA",
+  nhima: "NHIMA",
+  sct: "Social Cash Transfer",
+  nssf: "NSSF",
+  lst: "local service tax",
+  scg: "Senior Citizens Grant",
+};
+
+function southmodSuiteMeta(slug) {
+  const [prefix, ...rest] = slug.split("-");
+  const entry = SOUTHMOD_MODELS[prefix];
+  if (!entry) return null;
+  const words = rest.map((w) => SOUTHMOD_WORDS[w] || w).join(" ");
+  // One program per suite: the dashboard groups reports by family and
+  // labels the group with its first suite, so a shared country family would
+  // file every Ghana comparison under "Ghana income tax rate schedule".
+  return {
+    suite: slug,
+    family: `southmod_${slug.replaceAll("-", "_")}`,
+    jurisdiction: entry.jurisdiction,
+    label: `${entry.country} ${words} (${entry.model})`,
+    region: prefix,
+    kind: "household",
+    order: 700,
+  };
+}
+
+const SOUTHMOD_JURISDICTION_LABELS = Object.fromEntries(
+  Object.values(SOUTHMOD_MODELS).map((m) => [m.jurisdiction, m.country]),
+);
+
 const SUITE_OVERRIDES = {
+  "ca-federal-schedule-tax-spsm": {
+    family: "canada_personal_income_tax",
+    jurisdiction: "CAN",
+    label: "Canada federal schedule tax (vs SPSD/M)",
+    region: "ca",
+    kind: "household",
+    order: 300,
+  },
   "fiit-ecps": {
     family: "federal_income_tax",
     jurisdiction: "US",
@@ -79,6 +239,30 @@ const SUITE_OVERRIDES = {
     region: "us",
     kind: "household",
     order: 10,
+  },
+  "fiit-taxsim-ecps": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal income tax (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 12,
+  },
+  "co-tax-intersection-taxsim": {
+    family: "federal_income_tax",
+    jurisdiction: "CO",
+    label: "Full federal tax, with Colorado for the SALT deduction (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 202,
+  },
+  "taxcalc-fiit-ecps": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal income tax (Tax-Calculator vs PolicyEngine)",
+    region: "us",
+    kind: "household",
+    order: 11,
   },
   "ssa-parameters": {
     family: "social_security",
@@ -272,6 +456,38 @@ const SUITE_OVERRIDES = {
     kind: "parameter",
     order: 290,
   },
+  "csfp-parameters": {
+    family: "csfp",
+    jurisdiction: "US",
+    label: "CSFP income limit",
+    region: "us",
+    kind: "parameter",
+    order: 291,
+  },
+  "hi-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "HI",
+    label: "Hawaii income tax amounts",
+    region: "us",
+    kind: "parameter",
+    order: 118,
+  },
+  "ia-income-tax-parameters": {
+    family: "state_income_tax",
+    jurisdiction: "IA",
+    label: "Iowa income tax exemption credits",
+    region: "us",
+    kind: "parameter",
+    order: 119,
+  },
+  "irs-adjustment-parameters": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal IRC adjustment/deduction amounts",
+    region: "us",
+    kind: "parameter",
+    order: 11,
+  },
   "co-state-income-tax-taxsim": {
     family: "state_income_tax",
     jurisdiction: "CO",
@@ -351,6 +567,14 @@ const SUITE_OVERRIDES = {
     region: "uk",
     kind: "household",
     order: 300,
+  },
+  "uk-universal-credit": {
+    family: "universal_credit",
+    jurisdiction: "UK",
+    label: "UK Universal Credit (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 301,
   },
   "uk-tax-benefits-efrs": {
     family: "uk_tax_benefits",
@@ -464,6 +688,142 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 541,
   },
+  "be-marital-quotient": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium marital quotient",
+    region: "be",
+    kind: "household",
+    order: 501,
+  },
+  "be-regional-pit-surcharge": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium regional PIT surcharge",
+    region: "be",
+    kind: "household",
+    order: 502,
+  },
+  "be-local-municipal-pit": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium municipal PIT surcharge",
+    region: "be",
+    kind: "household",
+    order: 503,
+  },
+  "be-capital-income-tax": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium capital income tax",
+    region: "be",
+    kind: "household",
+    order: 504,
+  },
+  "be-article-51-forfait": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium Article 51 forfait",
+    region: "be",
+    kind: "household",
+    order: 505,
+  },
+  "be-worker-tax-income-list": {
+    family: "be_personal_income_tax",
+    jurisdiction: "BE",
+    label: "Belgium worker tax income grid",
+    region: "be",
+    kind: "household",
+    order: 506,
+  },
+  "be-pensioner-contributions": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium pensioner contributions",
+    region: "be",
+    kind: "household",
+    order: 513,
+  },
+  "be-work-bonus-credit": {
+    family: "be_social_security",
+    jurisdiction: "BE",
+    label: "Belgium work bonus",
+    region: "be",
+    kind: "household",
+    order: 514,
+  },
+  "be-unemployment": {
+    family: "be_unemployment",
+    jurisdiction: "BE",
+    label: "Belgium unemployment benefits",
+    region: "be",
+    kind: "household",
+    order: 525,
+  },
+  "be-study-allowance": {
+    family: "be_study_allowance",
+    jurisdiction: "BE",
+    label: "Belgium study allowance",
+    region: "be",
+    kind: "household",
+    order: 545,
+  },
+  "be-family-child-benefit-base": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium child benefit — base amounts",
+    region: "be",
+    kind: "household",
+    order: 550,
+  },
+  "be-family-child-benefit-social-supplement": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium child benefit — social supplement",
+    region: "be",
+    kind: "household",
+    order: 551,
+  },
+  "be-family-child-benefit-wallonia-social-supplement": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium child benefit — Wallonia social supplement",
+    region: "be",
+    kind: "household",
+    order: 552,
+  },
+  "be-family-child-benefit-brussels-same-age-household": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium child benefit — Brussels same-age household",
+    region: "be",
+    kind: "household",
+    order: 553,
+  },
+  "be-family-child-benefit-income-list": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium child benefit — income grid",
+    region: "be",
+    kind: "household",
+    order: 554,
+  },
+  "be-family-birth-allowance": {
+    family: "be_family_benefits",
+    jurisdiction: "BE",
+    label: "Belgium birth allowance",
+    region: "be",
+    kind: "household",
+    order: 555,
+  },
+  "be-worker-disposable-income-list": {
+    family: "be_disposable_income",
+    jurisdiction: "BE",
+    label: "Belgium worker disposable income",
+    region: "be",
+    kind: "household",
+    order: 560,
+  },
   "uk-worker-pit": {
     family: "uk_income_tax",
     jurisdiction: "UK",
@@ -479,6 +839,150 @@ const SUITE_OVERRIDES = {
     region: "uk",
     kind: "household",
     order: 322,
+  },
+  "uk-income-tax-scottish": {
+    family: "uk_income_tax",
+    jurisdiction: "UK",
+    label: "UK income tax — Scottish rates (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 321,
+  },
+  "uk-income-tax-dividend": {
+    family: "uk_income_tax",
+    jurisdiction: "UK",
+    label: "UK income tax — dividends (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 321.1,
+  },
+  "uk-income-tax-savings": {
+    family: "uk_income_tax",
+    jurisdiction: "UK",
+    label: "UK income tax — savings (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 321.2,
+  },
+  "uk-income-tax-mixed": {
+    family: "uk_income_tax",
+    jurisdiction: "UK",
+    label: "UK income tax — mixed income (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 321.3,
+  },
+  "uk-employer-nic": {
+    family: "uk_national_insurance",
+    jurisdiction: "UK",
+    label: "UK employer NIC (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 323,
+  },
+  "uk-self-employed-nic": {
+    family: "uk_national_insurance",
+    jurisdiction: "UK",
+    label: "UK self-employed NIC (UKMOD)",
+    region: "uk",
+    kind: "household",
+    order: 324,
+  },
+  "uk-child-benefit": {
+    family: "uk_child_benefit",
+    jurisdiction: "UK",
+    label: "UK Child Benefit",
+    region: "uk",
+    kind: "household",
+    order: 330,
+  },
+  "uk-pension-credit": {
+    family: "uk_pension_credit",
+    jurisdiction: "UK",
+    label: "UK Pension Credit",
+    region: "uk",
+    kind: "household",
+    order: 332,
+  },
+  "uk-benefit-cap": {
+    family: "uk_benefit_cap",
+    jurisdiction: "UK",
+    label: "UK benefit cap",
+    region: "uk",
+    kind: "household",
+    order: 334,
+  },
+  "uk-winter-fuel": {
+    family: "uk_winter_fuel",
+    jurisdiction: "UK",
+    label: "UK Winter Fuel Payment",
+    region: "uk",
+    kind: "household",
+    order: 336,
+  },
+  "uk-maternity-allowance": {
+    family: "uk_maternity_allowance",
+    jurisdiction: "UK",
+    label: "UK Maternity Allowance",
+    region: "uk",
+    kind: "household",
+    order: 338,
+  },
+  "uk-statutory-maternity-pay": {
+    family: "uk_statutory_maternity_pay",
+    jurisdiction: "UK",
+    label: "UK Statutory Maternity Pay",
+    region: "uk",
+    kind: "household",
+    order: 339,
+  },
+  "uk-statutory-paternity-pay": {
+    family: "uk_statutory_paternity_pay",
+    jurisdiction: "UK",
+    label: "UK Statutory Paternity Pay",
+    region: "uk",
+    kind: "household",
+    order: 340,
+  },
+  "uk-sure-start-maternity-grant": {
+    family: "uk_sure_start_maternity_grant",
+    jurisdiction: "UK",
+    label: "UK Sure Start Maternity Grant",
+    region: "uk",
+    kind: "household",
+    order: 341,
+  },
+  "uk-best-start-foods": {
+    family: "uk_best_start_foods",
+    jurisdiction: "UK",
+    label: "Scotland Best Start Foods",
+    region: "uk",
+    kind: "household",
+    order: 342,
+  },
+  "uk-healthy-start": {
+    family: "uk_healthy_start",
+    jurisdiction: "UK",
+    label: "UK Healthy Start",
+    region: "uk",
+    kind: "household",
+    order: 343,
+  },
+  "de-worker-dual-oracle": {
+    family: "de_worker_tax_contributions",
+    jurisdiction: "DEU",
+    label: "Germany worker tax and social insurance",
+    region: "de",
+    kind: "household",
+    order: 600,
+  },
+  "de-kindergeld-eligibility": {
+    family: "de_kindergeld",
+    jurisdiction: "DEU",
+    label: "Germany Kindergeld child eligibility",
+    region: "de",
+    kind: "household",
+    order: 601,
   },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
@@ -506,7 +1010,52 @@ const SUITE_OVERRIDES = {
   },
 };
 
+// State-tax Populace campaign — one suite per ready state, projected from
+// reports/state-tax-populace-campaign-*.json by
+// scripts/emit_populace_campaign_artifacts.py. Each groups into its
+// state's income-tax program page beside the six-case grid suite; the
+// campaign is the full pinned US Populace (every routed tax unit), so it
+// leads the grid in ordering.
+const POPULACE_CAMPAIGN_STATES = [
+  "AL", "AR", "AZ", "CO", "CT", "DE", "GA", "HI", "IA", "IL", "IN", "KS",
+  "LA", "MI", "MS", "MT", "NC", "NJ", "NM", "NY", "OH", "OK", "PA", "SC",
+  "UT", "VA", "VT", "WV",
+];
+for (const st of POPULACE_CAMPAIGN_STATES) {
+  SUITE_OVERRIDES[`${st.toLowerCase()}-income-tax-populace`] = {
+    family: "state_income_tax",
+    jurisdiction: st,
+    label: `${US_STATE_NAMES[st]} income tax — full Populace`,
+    region: "us",
+    kind: "household",
+    order: 90,
+  };
+}
+
 const SNAP_SUITE_RE = /^([a-z]{2})-snap-ecps$/;
+// USDA SNAP Quality Control lanes: same program family as the ECPS suites,
+// compared against the QC administrative sample instead.
+const SNAP_QC_SUITE_RE = /^([a-z]{2})-snap-qc$/;
+// State income-tax liability grids (completed-return boundary).
+const STATE_TAX_SUITE_RE = /^([a-z]{2})-income-tax-liability$/;
+// TANF household suites without an explicit override.
+const TANF_ECPS_SUITE_RE = /^([a-z]{2})-tanf-ecps$/;
+
+// Fallback labels: humanize the slug instead of echoing it raw
+// ("uk-council-tax-reduction" → "UK council tax reduction").
+const SLUG_ACRONYMS = new Set([
+  "uk", "us", "dk", "be", "de", "tv", "vat", "jsa", "pe", "lbtt", "ltt",
+  "ecps", "qc",
+]);
+function humanizeSlug(slug) {
+  return slug
+    .split("-")
+    .map((part) =>
+      SLUG_ACRONYMS.has(part) ? part.toUpperCase() : part,
+    )
+    .join(" ")
+    .replace(/^./, (c) => c.toUpperCase());
+}
 
 /** Resolve display + grouping metadata for a suite slug. */
 export function suiteMeta(suite) {
@@ -528,18 +1077,67 @@ export function suiteMeta(suite) {
     };
   }
 
+  const snapQc = slug.match(SNAP_QC_SUITE_RE);
+  if (snapQc && US_STATE_NAMES[snapQc[1].toUpperCase()]) {
+    const abbr = snapQc[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "snap",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} SNAP (vs SNAP QC)`,
+      region: "us",
+      kind: "household",
+      order: 105,
+    };
+  }
+
+  const stateTax = slug.match(STATE_TAX_SUITE_RE);
+  if (stateTax && US_STATE_NAMES[stateTax[1].toUpperCase()]) {
+    const abbr = stateTax[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "state_income_tax",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} income tax`,
+      region: "us",
+      kind: "household",
+      order: 45,
+    };
+  }
+
+  const southmod = southmodSuiteMeta(slug);
+  if (southmod) return southmod;
+
+  const tanf = slug.match(TANF_ECPS_SUITE_RE);
+  if (tanf && US_STATE_NAMES[tanf[1].toUpperCase()]) {
+    const abbr = tanf[1].toUpperCase();
+    return {
+      suite: slug,
+      family: "tanf",
+      jurisdiction: abbr,
+      label: `${US_STATE_NAMES[abbr]} TANF`,
+      region: "us",
+      kind: "household",
+      order: 222,
+    };
+  }
+
   return {
     suite: slug,
     family: slug || "unknown",
     jurisdiction: null,
-    label: slug || "Unnamed run",
+    label: slug ? humanizeSlug(slug) : "Unnamed run",
     region: slug.startsWith("uk-")
       ? "uk"
       : slug.startsWith("be-")
         ? "be"
         : slug.startsWith("ca-")
           ? "ca"
-          : "us",
+          : slug.startsWith("de-")
+            ? "de"
+            : slug.startsWith("dk-")
+              ? "dk"
+              : "us",
     kind: "household",
     order: 500,
   };
@@ -562,12 +1160,55 @@ export function isAxiomPair(report) {
   return report?.engines?.left === "axiom" || report?.engines?.right === "axiom";
 }
 
-/** The non-Axiom engine in an Axiom-pair report (e.g. policyengine, taxsim). */
+/**
+ * The oracle behind an Axiom-pair report (e.g. policyengine, taxsim): the
+ * non-Axiom engine, named for the model it ran (see platformOracle).
+ */
 export function otherOracle(report) {
   if (!isAxiomPair(report)) return null;
-  return report.engines.left === "axiom"
-    ? report.engines.right
-    : report.engines.left;
+  const engine =
+    report.engines.left === "axiom" ? report.engines.right : report.engines.left;
+  return platformOracle(engine, report.suite);
+}
+
+/**
+ * A report's engine pair as the dashboard names them: each side through
+ * platformOracle, so labels that name both sides ("UKMOD returned no
+ * value") credit the model that ran. Matching against known causes keeps
+ * the raw report.engines.
+ */
+export function displayEngines(report) {
+  const engines = report?.engines || {};
+  return {
+    left: platformOracle(engines.left, report?.suite),
+    right: platformOracle(engines.right, report?.suite),
+  };
+}
+
+/** An engine id named for the model it ran: only "euromod" is refined. */
+export function platformOracle(engine, suite) {
+  return engine === "euromod" ? euromodPlatformModel(suite) : engine;
+}
+
+/**
+ * Which model a EUROMOD-platform suite ran. Every model on the platform
+ * reports engine id "euromod", so the suite's region tells them apart.
+ * SOUTHMOD models are UNU-WIDER's and UKMOD is CeMPA's, each licensed with
+ * its own acknowledgement: never credit either to the European Commission's
+ * EUROMOD. Every other region stays "euromod": Axiom runs the JRC's
+ * EUROMOD J2.0+ release for BE and DK, and for DE in the EUROMOD-vs-GETTSIM
+ * cross-checks.
+ */
+export function euromodPlatformModel(suite) {
+  const region = suiteRegion(suite);
+  if (SOUTHMOD_MODELS[region]) return "southmod";
+  if (region === "uk") return "ukmod";
+  return "euromod";
+}
+
+/** The SOUTHMOD country model behind a suite (e.g. "GHAMOD"), or null. */
+export function southmodModel(suite) {
+  return SOUTHMOD_MODELS[suiteRegion(suite)]?.model || null;
 }
 
 /**
@@ -611,11 +1252,25 @@ export function reportProgramCount(report) {
   return Math.max(1, pieces.size);
 }
 
+/**
+ * Some suites (fiit, UK EFRS) report a concept HIERARCHY: a parent row
+ * (e.g. #liability) plus component rows (#ctc, #eitc, …) that break the
+ * parent down. Components are the parent's anatomy, not extra checks —
+ * summing every row double-counts. Keep a row only when its parent is
+ * absent from the same report (flat suites have no parents at all; the
+ * NYC components suite names a parent that lives in another suite).
+ */
+export function topLevelAggregates(aggregates) {
+  const rows = aggregates || [];
+  const concepts = new Set(rows.map((agg) => agg.concept));
+  return rows.filter((agg) => !(agg.parent && concepts.has(agg.parent)));
+}
+
 /** Aggregate one report's aggregates into a single matched/total metric. */
 export function reportMetric(report) {
   let total = 0;
   let mismatches = 0;
-  for (const agg of report?.aggregates || []) {
+  for (const agg of topLevelAggregates(report?.aggregates)) {
     total += agg.comparison_count || 0;
     mismatches += agg.mismatch_count || 0;
   }
@@ -636,13 +1291,74 @@ export function reportMetric(report) {
 }
 
 /**
+ * Accumulate one report's contribution to a group's weighted explained
+ * rate. A report carrying a disposition merge contributes its canonical
+ * explained_rate (visible-row arithmetic overstates truncated
+ * premerged-slim suites); a report without one contributes its
+ * known-causes rate over `unexplained`. Every compared row stays in the
+ * denominator either way — a raw suite grouped with a dispositioned one
+ * must not vanish from the headline (its unexplained mass would silently
+ * drop out, re-creating the false-100% this rate work removed).
+ */
+export function accumulateExplainedRate(entry, metric, unexplained) {
+  if (metric.total <= 0) return;
+  const rate =
+    metric.explainedRate != null
+      ? metric.explainedRate
+      : ((metric.total - unexplained) / metric.total) * 100;
+  entry.explainedWeighted = (entry.explainedWeighted || 0) + rate * metric.total;
+  entry.explainedTotal = (entry.explainedTotal || 0) + metric.total;
+}
+
+/** Finalize a group's weighted explained rate (null when nothing compared). */
+export function resolveExplainedRate(entry) {
+  return entry.explainedTotal > 0
+    ? entry.explainedWeighted / entry.explainedTotal
+    : null;
+}
+
+/**
  * Plain-language status for a measured agreement rate. Tiers match
  * rateColor() in utils/colors.js so a tile and its run row never disagree:
  * 90%+ reads as verified, not as a warning.
  */
+/**
+ * Near-agreement: exact matches plus mismatches within a dollar threshold.
+ * Only computable when the report carries its COMPLETE mismatch list —
+ * large suites slim the dashboard copy to the first 1,000 rows, and a
+ * partial list would overstate closeness. Returns null when not computable
+ * or when it would not differ from the exact rate.
+ */
+export const NEAR_THRESHOLD_USD = 100;
+
+export function nearMetric(report, threshold = NEAR_THRESHOLD_USD) {
+  const metric = reportMetric(report);
+  if (!metric.total || !metric.mismatches) return null;
+  const list = report?.mismatches || [];
+  const declared = report?.summary?.mismatch_count;
+  if (declared == null || list.length !== declared) return null;
+  let near = 0;
+  for (const m of list) {
+    const diff = m?.difference;
+    if (typeof diff === "number" && Math.abs(diff) <= threshold) near += 1;
+  }
+  if (near === 0) return null;
+  const rate = ((metric.matched + near) / metric.total) * 100;
+  return { rate, near, threshold };
+}
+
+/** Stable, URL-safe program identity: family__jurisdiction. */
+export function programKey(meta) {
+  return `${meta.family}__${meta.jurisdiction}`;
+}
+
 export function rateStatus(rate) {
   if (rate == null) return "unmeasured";
   if (rate >= 90) return "verified";
   if (rate >= 70) return "diverging";
   return "attention";
 }
+
+// SOUTHMOD jurisdiction labels are derived from SOUTHMOD_MODELS (declared
+// after the label tables), so merge them in once the registry exists.
+Object.assign(JURISDICTION_LABELS, SOUTHMOD_JURISDICTION_LABELS);

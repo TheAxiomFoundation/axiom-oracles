@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: in-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: in-taxsim-2024-single-30000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "855.5 - 870"
+          equals: -14.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 855.5
+      right: 870
+  - id: in-taxsim-2024-single-60000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "1740.5 - 1770"
+          equals: -29.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1740.5
+      right: 1770
+  - id: in-taxsim-2024-single-150000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "4395.5 - 4470"
+          equals: -74.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4395.5
+      right: 4470
+  - id: in-taxsim-2024-married-60000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "1711 - 1740"
+          equals: -29
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1711
+      right: 1740
+  - id: in-taxsim-2024-married-120000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "3481 - 3540"
+          equals: -59
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 3481
+      right: 3540
+  - id: in-taxsim-2024-married-300000
+    concept: us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability
+    case_id: in-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Indiana's 2.95 percent 2026 rate and current exemption base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "8791 - 8940"
+          equals: -149
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 8791
+      right: 8940

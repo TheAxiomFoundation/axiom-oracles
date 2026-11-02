@@ -5,6 +5,8 @@ This is a work queue, not an attempt to force Axiom to match PolicyEngine.
 TANF, TAFDC, and Families First residuals stay visible until those cash
 assistance programs or source-backed case inputs are available.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Summary
 
 | State | Current result | Fixability | Next action |
@@ -171,7 +173,7 @@ Fixable only after new facts or program coverage:
 ## CO Wrapper Status
 
 The CO encoder-backed dashboard comparison is clean. The generic
-`rulespec-us/us-co/programs/snap/fy-2026.yaml` wrapper now compiles and has a
+`axiom-programs/us-co/snap/fy-2026.yaml` wrapper now compiles and has a
 source-backed generic adapter path for:
 
 - `us:statutes/7/2014/u#snap_benefit`

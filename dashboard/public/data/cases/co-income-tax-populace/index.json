@@ -1,0 +1,15 @@
+{
+ "suite": "co-income-tax-populace",
+ "count": 1201,
+ "total_cases": 1201,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

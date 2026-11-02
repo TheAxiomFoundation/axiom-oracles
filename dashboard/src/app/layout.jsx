@@ -1,6 +1,7 @@
 import Script from "next/script";
 import { Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { BASE_PATH } from "../utils/basePath";
 
 const GA_ID = "G-2YHG89FY0N";
 const TOOL_NAME = "axiom-oracles";
@@ -24,8 +25,8 @@ export const metadata = {
   description:
     "Cross-engine validation of executable rule systems. Every divergence is a question about the law or its encoding.",
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: "/apple-icon.png",
+    icon: [{ url: `${BASE_PATH}/favicon.svg`, type: "image/svg+xml" }],
+    apple: `${BASE_PATH}/apple-icon.png`,
   },
 };
 

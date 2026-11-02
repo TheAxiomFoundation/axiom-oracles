@@ -1,0 +1,17 @@
+{
+ "suite": "nc-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-nc:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "nc_income_tax_before_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-nc-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

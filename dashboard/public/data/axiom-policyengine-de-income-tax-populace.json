@@ -1,0 +1,81 @@
+{
+ "aggregates": [
+  {
+   "compared": 936,
+   "comparison": "amount",
+   "comparison_count": 936,
+   "components": [],
+   "concept": "us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax",
+   "description": "Delaware Code title 30 section 1102(a)(14) individual schedule component before nonrefundable credits, computed from caller-supplied completed Delaware taxable income at Person grain and summed to TaxUnit only for comparison accounting over every routed tax unit and linked person in the pinned US Populace; this bounded suite excludes filing-method selection, combined-return computation, credits, payments, and final liability",
+   "match_count": 936,
+   "match_rate": 100.0,
+   "matched": 936,
+   "mismatch_count": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 936,
+ "cases": [],
+ "engines": {
+  "axiom": "us-de:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "de_income_tax_before_non_refundable_credits_indv"
+ },
+ "errors": [],
+ "mismatches": [],
+ "population": "populace-us",
+ "provenance": {
+  "branch_diagnostics": null,
+  "campaign_report": "state-tax-populace-de-campaign-2026-07-28.json",
+  "dataset_identity": {
+   "built_with": "1.729.0",
+   "country": "us",
+   "path": "/Users/pavelmakarchuk/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+   "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+   "sha256": "16be6338f9d0",
+   "source": "pinned"
+  },
+  "generated_at": "2026-07-28T08:27:53Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::de-income-tax-populace",
+  "max_absolute_difference": 0.2319999998435378,
+  "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "f06d6dbbdb4ba376e991020c13d1656d3839e1ec"
+   }
+  ],
+  "run_kind": "manual",
+  "runtime_provenance": {
+   "axiom_engine": {
+    "commit": "c4b62bdb740d4149f0872783964f917e74cffe42",
+    "executable_sha256": "813ea1cea9fc77a86d53a6dba34af97060cdb9786f1b86e3d469a13f38d02bd7",
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
+    "working_tree": "clean"
+   },
+   "packages": {
+    "policyengine": "5.0.0",
+    "policyengine-us": "1.764.6"
+   },
+   "rulespec": {
+    "commit": "f06d6dbbdb4ba376e991020c13d1656d3839e1ec",
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "working_tree": "clean"
+   }
+  },
+  "schema": "axiom_oracles.provenance.v1",
+  "tolerance": 0.01,
+  "weighted_compared_tax_units": 538740.5832625218
+ },
+ "schema_version": "axiom.comparison_report.v2",
+ "suite": "de-income-tax-populace",
+ "summary": {
+  "comparison_count": 936,
+  "match_count": 936,
+  "match_rate": 100.0,
+  "mismatch_count": 0
+ }
+}

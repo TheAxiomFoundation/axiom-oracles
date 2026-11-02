@@ -28,19 +28,17 @@ penny across petrol-only, diesel-only, combined, rural-relief, and zero cases.
 Run locally (needs PolicyEngine-UK 2.89.2, a built axiom rules engine, and the
 rulespec-uk checkout)::
 
-    uv run python scripts/generate_uk_fuel_duty.py \
-      --rulespec-root /path/to/rulespec-uk \
-      --axiom-binary /path/to/axiom-rules-engine
+    RULESPEC_UK_CHECKOUT=/path/to/rulespec-uk \
+      uv run python scripts/generate_uk_fuel_duty.py
 """
 
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
-
-from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -49,6 +47,10 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
+RULESPEC_UK = Path(
+    os.environ.get("RULESPEC_UK_CHECKOUT")
+    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
+)
 
 FD_PROGRAM = "uk/policies/govuk/fuel-duty.yaml"
 FD_BASE = "uk:policies/govuk/fuel-duty"
@@ -125,7 +127,9 @@ def _policyengine_rows(cases: list[FDCase]) -> dict[str, dict]:
             "fuel_duty": float(sim.calculate(_PE_FUEL, year).sum()),
             "petrol_litres": float(sim.calculate("petrol_litres", year).sum()),
             "diesel_litres": float(sim.calculate("diesel_litres", year).sum()),
-            "rural": bool(sim.calculate("in_rural_fuel_duty_relief_area", year)[0]),
+            "rural": bool(
+                sim.calculate("in_rural_fuel_duty_relief_area", year)[0]
+            ),
             # Temporary Budget-resolution reduction from the s.6(1A) standing rate
             # to PolicyEngine's in-force effective main rate.
             "temporary_reduction": STANDING_RATE - pe_main_rate,
@@ -134,20 +138,15 @@ def _policyengine_rows(cases: list[FDCase]) -> dict[str, dict]:
     return rows
 
 
-def _axiom_awards(
-    cases: list[FDCase],
-    pe_rows: dict[str, dict],
-    *,
-    rulespec_root: Path,
-    axiom_binary: Path,
-) -> dict[str, float]:
+def _axiom_awards(cases: list[FDCase], pe_rows: dict[str, dict]) -> dict[str, float]:
     import sys
 
     sys.path.insert(0, str(REPO_ROOT))
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = rulespec_root / FD_PROGRAM
+    program = RULESPEC_UK / FD_PROGRAM
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -173,10 +172,10 @@ def _axiom_awards(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=axiom_binary,
+        binary_path=binary,
         default_entity="Household",
         default_entity_id="household",
-        rulespec_root=rulespec_root,
+        rulespec_repo_roots=(RULESPEC_UK,),
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [FD_OUTPUT])
@@ -302,16 +301,10 @@ def build_report(
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
+def main() -> int:
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_awards(
-        cases,
-        pe_rows,
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
-    )
+    axiom = _axiom_awards(cases, pe_rows)
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

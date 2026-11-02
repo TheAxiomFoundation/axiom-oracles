@@ -1,134 +1,245 @@
 {
   "case_count": 6,
-  "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
+  "cases": [
+    {
+      "axiom": 932.956240234375,
+      "axiom_vs_policyengine": {
+        "difference": 2.441406195430318e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -132.32375976562503,
+        "match": false
+      },
+      "case_id": "ky-single-30000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 932.9562377929688,
+      "taxsim": 1065.28
+    },
+    {
+      "axiom": 1982.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812390860636e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -282.3238281250001,
+        "match": false
+      },
+      "case_id": "ky-single-60000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1982.9561767578125,
+      "taxsim": 2265.28
+    },
+    {
+      "axiom": 5132.956171875,
+      "axiom_vs_policyengine": {
+        "difference": 0.00011718750010913936,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -732.3238281249996,
+        "match": false
+      },
+      "case_id": "ky-single-150000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 5132.9560546875,
+      "taxsim": 5865.28
+    },
+    {
+      "axiom": 1982.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -4.882812390860636e-06,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -282.3238281250001,
+        "match": false
+      },
+      "case_id": "ky-married-60000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 1982.9561767578125,
+      "taxsim": 2265.28
+    },
+    {
+      "axiom": 4082.956171875,
+      "axiom_vs_policyengine": {
+        "difference": -0.00012695312489086064,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -582.3238281249996,
+        "match": false
+      },
+      "case_id": "ky-married-120000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 4082.956298828125,
+      "taxsim": 4665.28
+    },
+    {
+      "axiom": 10382.95671875,
+      "axiom_vs_policyengine": {
+        "difference": -0.0003125000002910383,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -1482.323281250001,
+        "match": false
+      },
+      "case_id": "ky-married-300000",
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 10382.95703125,
+      "taxsim": 11865.28
+    }
+  ],
+  "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
   "engines": {
-    "axiom": "us-ky:policies/income_tax/pilot_liability_pipeline",
-    "policyengine": "ky_income_tax_before_refundable_credits",
+    "axiom": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits",
+    "policyengine": "ky_income_tax_before_non_refundable_credits_unit",
     "taxsim": "siitax"
   },
   "mismatches": [
     {
       "case_id": "ky-single-30000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -140.64384999999993,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -132.32375976562503,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-single-30000"
+        "id": "ky-taxsim-rate-surface-single-30000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 932.95615,
+      "left": 932.956240234375,
       "left_engine": "axiom",
-      "right": 1073.6,
+      "right": 1065.28,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ky-single-60000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -290.64384999999993,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -282.3238281250001,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-single-60000"
+        "id": "ky-taxsim-rate-surface-single-60000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 1982.95615,
+      "left": 1982.956171875,
       "left_engine": "axiom",
-      "right": 2273.6,
+      "right": 2265.28,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ky-single-150000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -740.6438500000004,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -732.3238281249996,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-single-150000"
+        "id": "ky-taxsim-rate-surface-single-150000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 5132.95615,
+      "left": 5132.956171875,
       "left_engine": "axiom",
-      "right": 5873.6,
+      "right": 5865.28,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ky-married-60000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -290.64384999999993,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -282.3238281250001,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-married-60000"
+        "id": "ky-taxsim-rate-surface-married-60000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 1982.95615,
+      "left": 1982.956171875,
       "left_engine": "axiom",
-      "right": 2273.6,
+      "right": 2265.28,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ky-married-120000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -590.6438500000004,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -582.3238281249996,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-married-120000"
+        "id": "ky-taxsim-rate-surface-married-120000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 4082.95615,
+      "left": 4082.956171875,
       "left_engine": "axiom",
-      "right": 4673.6,
+      "right": 4665.28,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ky-married-300000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "difference": -1490.6438500000004,
+      "concept": "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits",
+      "difference": -1482.323281250001,
       "disposition": {
         "disposition": "explained_residual",
-        "id": "ky-taxsim-2024-vintage-married-300000"
+        "id": "ky-taxsim-rate-surface-married-300000"
       },
       "engines": [
         "axiom",
         "taxsim"
       ],
       "kind": "amount_difference",
-      "left": 10382.95615,
+      "left": 10382.95671875,
       "left_engine": "axiom",
-      "right": 11873.6,
+      "right": 11865.28,
       "right_engine": "taxsim"
     }
   ],
   "population": "case-grid",
   "provenance": {
-    "axiom_source": "engine-verified pilot_liability_pipeline.test.yaml fixtures",
-    "generated": "2026-07-08",
-    "generator": "scripts/generate_state_income_tax_liability.py",
-    "note": "axiom-vs-PolicyEngine matches every case at the 2026 validation year; the mismatches array carries the axiom-vs-TAXSIM-2024 residuals, whose 2024-to-2026 indexation vintage is dispositioned."
+    "engine": {},
+    "generated_at": "2026-07-27T04:13:58Z",
+    "generated_by": "scripts/run_comparison.py::ky-income-tax-liability",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "ky-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2024_match_rate": 0.0,
-    "comparison_count": 6,
+    "axiom_vs_taxsim_match_rate": 0.0,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -141,123 +252,19 @@
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 0,
+      "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 0,
+    "match_count": 6,
     "mismatch_count": 6,
     "policyengine_matches": 6,
-    "taxsim_2024_matches": 0
+    "taxsim_matches": 0
   },
-  "taxsim_law_year": 2024,
+  "taxsim_law_year": 2026,
   "tolerance": {
-    "absolute": 1.0,
-    "relative": 0.0
+    "absolute": 0.01,
+    "relative": 1e-07
   },
-  "validation_year": 2026,
-  "cases": [
-    {
-      "axiom": 932.95615,
-      "axiom_vs_policyengine": {
-        "difference": -8.779296877037268e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -140.64384999999993,
-        "match": false
-      },
-      "case_id": "ky-single-30000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 932.9562377929688,
-      "taxsim_2024": 1073.6
-    },
-    {
-      "axiom": 1982.95615,
-      "axiom_vs_policyengine": {
-        "difference": -2.675781252037268e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -290.64384999999993,
-        "match": false
-      },
-      "case_id": "ky-single-60000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1982.9561767578125,
-      "taxsim_2024": 2273.6
-    },
-    {
-      "axiom": 5132.95615,
-      "axiom_vs_policyengine": {
-        "difference": 9.531249997962732e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -740.6438500000004,
-        "match": false
-      },
-      "case_id": "ky-single-150000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 5132.9560546875,
-      "taxsim_2024": 5873.6
-    },
-    {
-      "axiom": 1982.95615,
-      "axiom_vs_policyengine": {
-        "difference": -2.675781252037268e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -290.64384999999993,
-        "match": false
-      },
-      "case_id": "ky-married-60000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 1982.9561767578125,
-      "taxsim_2024": 2273.6
-    },
-    {
-      "axiom": 4082.95615,
-      "axiom_vs_policyengine": {
-        "difference": -0.00014882812502037268,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -590.6438500000004,
-        "match": false
-      },
-      "case_id": "ky-married-120000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 4082.956298828125,
-      "taxsim_2024": 4673.6
-    },
-    {
-      "axiom": 10382.95615,
-      "axiom_vs_policyengine": {
-        "difference": -0.0008812500000203727,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -1490.6438500000004,
-        "match": false
-      },
-      "case_id": "ky-married-300000",
-      "concept": "us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 10382.95703125,
-      "taxsim_2024": 11873.6
-    }
-  ]
+  "validation_year": 2026
 }

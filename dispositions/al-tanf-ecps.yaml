@@ -1,0 +1,126 @@
+schema: axiom_oracles.dispositions.v1
+suite: al-tanf-ecps
+updated: '2026-08-02'
+entries:
+- id: al-childcare-deduction-missing-37103
+  concept: us-al:policies/dhr/tanf#al_tanf_benefit
+  case_id: ecps-37103
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: >-
+      The Alabama DHR Public Assistance Payment Manual (Appendix N Section
+      2) orders earned-income work-expense deductions as "1. 20% of gross
+      earnings ... 2. Child care or care of an incapacitated adult". Both
+      engines encode both steps - PolicyEngine's
+      al_tanf_countable_earned_income deducts childcare_expenses, and the
+      Axiom payment-computation module subtracts its
+      child_or_incapacitated_adult_care_expenses free input - but the
+      populace projection carried no mapping rule for that input and the
+      populace loader did not extract the ECPS childcare_expenses fact, so
+      the harness fed PolicyEngine the household's imputed childcare while
+      Axiom's input defaulted to zero. A harness gap, not an engine or
+      encoding defect (initially misfiled as a rulespec encoding gap in
+      rulespec-us#1184; the rulespec module already encodes the step-2
+      deduction). Fixed by populating the CHILDCARE_EXPENSES household
+      fact in populations/populace_us.py and adding the
+      child_or_incapacitated_adult_care_expenses monthly rule to
+      populace_input_mapping.yaml - with the fix the projected input is
+      35.79/month and Axiom computes 53 vs PolicyEngine's 53.390533,
+      inside the suite's $25 tolerance, so this entry expires at the next
+      report refresh. Exact-household replay in policyengine-us from this
+      repo's venv: size-2 unit, ages 23/0, yearly employment income 4296
+      (358/month) gives al_tanf 17.60 with zero childcare (matching
+      Axiom's rounded 18 = 304 payment standard minus countable 286, per
+      the manual's round-to-nearest-dollar rule), and exactly 53.390533 -
+      the reported right value - with yearly childcare_expenses 429.4864
+      (35.7905/month). The residual is the childcare deduction the bridge
+      withheld from Axiom.
+    arithmetic:
+    - expression: 304 - 286
+      equals: 18.0
+    - expression: 304 - (0.8 * 358 - 35.7905)
+      equals: 53.390533447265625
+    - expression: 18.0 - 53.390533447265625
+      equals: -35.390533447265625
+    upstream_url: https://dhr.alabama.gov/wp-content/uploads/2022/04/Appendix-N-Sec-2-Public-Assistance-Payment-Manual.pdf#page=37
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-tanf-ecps.json
+    - dashboard/public/data/cases/al-tanf-ecps/index.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+  expires_on_source_change: true
+  pinned:
+    left: 18.0
+    right: 53.390533447265625
+- id: al-childcare-deduction-missing-37187
+  concept: us-al:policies/dhr/tanf#al_tanf_benefit
+  case_id: ecps-37187
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: >-
+      Same harness gap as ecps-37103: both engines encode the manual's
+      step-2 child-care deduction, but the populace projection fed
+      childcare only to PolicyEngine (Axiom's
+      child_or_incapacitated_adult_care_expenses input defaulted to zero;
+      fixed by the CHILDCARE_EXPENSES fact feed and mapping rule, so this
+      entry expires at the next report refresh). Size-6 unit, yearly
+      earnings 3567 (297.25/month), payment standard 488: Axiom computes
+      488 minus countable 238 (0.8 x 297.24 = 237.79 rounded to the
+      nearest dollar per the manual) = 250, the left value. PolicyEngine's
+      right value 279.929443 reconciles with a monthly childcare deduction
+      of 29.7294 (356.75/year), identical to the deduction implied by
+      ecps-37415 for the same earnings pattern; with the fix Axiom
+      computes 280, a 0.07 residual inside the $25 tolerance.
+    arithmetic:
+    - expression: 488 - 238
+      equals: 250.0
+    - expression: 488 - (0.8 * 297.25 - 29.7294)
+      equals: 279.929443359375
+    - expression: 250.0 - 279.929443359375
+      equals: -29.929443359375
+    upstream_url: https://dhr.alabama.gov/wp-content/uploads/2022/04/Appendix-N-Sec-2-Public-Assistance-Payment-Manual.pdf#page=37
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-tanf-ecps.json
+    - dashboard/public/data/cases/al-tanf-ecps/index.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+  expires_on_source_change: true
+  pinned:
+    left: 250.0
+    right: 279.929443359375
+- id: al-childcare-deduction-missing-37415
+  concept: us-al:policies/dhr/tanf#al_tanf_benefit
+  case_id: ecps-37415
+  kind: amount_difference
+  disposition: bridge_artifact
+  evidence:
+    mechanism: >-
+      Same harness gap as ecps-37103: both engines encode the manual's
+      step-2 child-care deduction, but the populace projection fed
+      childcare only to PolicyEngine (Axiom's
+      child_or_incapacitated_adult_care_expenses input defaulted to zero;
+      fixed by the CHILDCARE_EXPENSES fact feed and mapping rule, so this
+      entry expires at the next report refresh). Size-8 unit, yearly
+      earnings 3567 (297.25/month), monthly unearned 41.67, payment
+      standard 584: Axiom computes 584 minus countable 279 (237.79 earned
+      + 41.67 unearned = 279.46 rounded to the nearest dollar per the
+      manual) = 305, the left value. PolicyEngine's right value 334.262756
+      reconciles with the same 29.7294/month childcare deduction implied
+      by ecps-37187 for the identical earnings pattern; with the fix Axiom
+      computes 334, a 0.26 residual inside the $25 tolerance.
+    arithmetic:
+    - expression: 584 - 279
+      equals: 305.0
+    - expression: 584 - (0.8 * 297.25 - 29.7294) - 41.6667
+      equals: 334.26275634765625
+    - expression: 305.0 - 334.26275634765625
+      equals: -29.26275634765625
+    upstream_url: https://dhr.alabama.gov/wp-content/uploads/2022/04/Appendix-N-Sec-2-Public-Assistance-Payment-Manual.pdf#page=37
+    sources:
+    - dashboard/public/data/axiom-policyengine-al-tanf-ecps.json
+    - dashboard/public/data/cases/al-tanf-ecps/index.json
+    - axiom_oracles/data/populace_input_mapping.yaml
+  expires_on_source_change: true
+  pinned:
+    left: 305.0
+    right: 334.26275634765625

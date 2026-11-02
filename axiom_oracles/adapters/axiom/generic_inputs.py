@@ -17,9 +17,9 @@ projection layer:
 5. Let an *ECPS mapping table* — pure data, not code — override the small set
    of facts ECPS actually measures.
 
-A new program comparison is then: declare the ECPS mapping alongside the
-canonical RuleSpec program or pass it inline. No new Python module per state.
-No new baselines copied from upstream test fixtures.
+A new program comparison is then: declare the ECPS mapping in axiom-programs
+or pass it inline. No new Python module per state. No new baselines copied
+from upstream test fixtures.
 
 See axiom-oracles#26 for the architectural background.
 """
@@ -31,6 +31,23 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
+
+from axiom_oracles.bridges.relation_binding import RelationBinder
+
+
+# Projection keys these entity scopes by the household id. This is an adapter
+# convention, never evidence for relation binding.
+_UNIT_ENTITIES = frozenset(
+    {
+        "Household",
+        "SnapUnit",
+        "TaxUnit",
+        "SpmUnit",
+        "TanfUnit",
+        "AssistanceUnit",
+        "Family",
+    }
+)
 
 
 # ---------------------------------------------------------------------------
@@ -60,19 +77,6 @@ class InputSlot:
 # back to Judgment because the SNAP program is judgment-dominated.
 _BOOLEAN_OPS = {"and", "or", "not", "comparison", "if"}
 _NUMERIC_OPS = {"add", "sub", "mul", "div", "max", "min", "ceil", "floor"}
-
-
-# Entities the engine keys by the case's household id; anything else is a
-# pseudo entity whose inputs get broadcast per person too (see below).
-_UNIT_ENTITIES = {
-    "Household",
-    "SnapUnit",
-    "TaxUnit",
-    "SpmUnit",
-    "TanfUnit",
-    "AssistanceUnit",
-    "Family",
-}
 
 
 def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
@@ -472,6 +476,7 @@ def attach_generic_inputs(
     with open(compiled_program_path) as f:
         compiled = json.load(f)
     program = compiled.get("program", compiled)
+    relation_binder = RelationBinder(compiled)
 
     # If the caller didn't pass a mapping, resolve one from the default YAML.
     # The mapping table itself is data
@@ -548,12 +553,53 @@ def attach_generic_inputs(
             _, fragment = member_relation.split("#", maxsplit=1)
             bare_name = fragment.removeprefix("relation.")
 
+        # A composed program can declare the same conceptual relation under
+        # more than one absolute id (e.g. the statutory
+        # us:statutes/7/2012/j#relation.member_of_household plus the
+        # state-plan composition module's own #relation.member_of_household).
+        # Emit tuples for every declared variant so whichever id the
+        # program's rules consume resolves; with multiple declared variants
+        # the engine rejects the ambiguous bare form, so emit the bare name
+        # only when it is unambiguous.
+        declared = [
+            str(rel.get("name"))
+            for rel in (program.get("relations") or [])
+            if isinstance(rel, dict) and rel.get("name")
+        ]
+        variants = [
+            name
+            for name in declared
+            if name.split("#", 1)[-1].removeprefix("relation.") == bare_name
+        ]
+        if member_relation not in variants:
+            variants.insert(0, member_relation)
+        emit_bare = bare_name != member_relation and len(variants) == 1
+        relation_names = [*variants, *([bare_name] if emit_bare else [])]
+        owner_kind_by_name = {
+            name: relation_binder.owner_kind(
+                name,
+                default_owner_kind=household_entity,
+                related_kind="Person",
+            )
+            for name in relation_names
+        }
+
         relation_records: list[dict[str, Any]] = []
         for pid in person_ids:
-            tuple_pair = [pid, household_entity_id]
-            relation_records.append({"name": member_relation, "tuple": tuple_pair})
-            if bare_name != member_relation:
-                relation_records.append({"name": bare_name, "tuple": tuple_pair})
+            for name in relation_names:
+                roles = {
+                    "owner_id": household_entity_id,
+                    "owner_kind": owner_kind_by_name[name],
+                    "related_id": pid,
+                    "related_kind": "Person",
+                }
+                relation_records.append(
+                    {
+                        "name": name,
+                        "tuple": relation_binder.tuple(name, **roles),
+                        "roles": roles,
+                    }
+                )
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [

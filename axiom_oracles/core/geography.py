@@ -14,7 +14,7 @@ _GEOID_LENGTHS = {
     "zcta": 5,
 }
 
-_SUPPORTED_COUNTRIES = frozenset({"BE", "UK", "US"})
+_SUPPORTED_COUNTRIES = frozenset({"BE", "CA", "DE", "DK", "ET", "GH", "RW", "UG", "UK", "US", "ZM"})
 
 
 @dataclass(frozen=True)
@@ -107,8 +107,9 @@ def scope_contains(
         return False
 
     if container_scope.type == "census_tract":
-        return item_scope.type == "census_block" and item_scope.geoid.startswith(
-            container_scope.geoid
+        return (
+            item_scope.type == "census_block"
+            and item_scope.geoid.startswith(container_scope.geoid)
         )
 
     return False

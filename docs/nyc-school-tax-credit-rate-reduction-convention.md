@@ -3,6 +3,8 @@
 The NYC school tax credit rate-reduction component has an exact, source-backed
 convention difference against PolicyEngine in second-band cases.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 The IT-201 instructions print rounded second-band base amounts:
 
 - joint or surviving spouse: `$37 plus 0.228% of excess over $21,600`

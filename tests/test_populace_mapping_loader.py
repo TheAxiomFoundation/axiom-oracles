@@ -230,13 +230,17 @@ def test_default_yaml_maps_snap_income_slots_separately() -> None:
         ]
     }
 
-    assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3000
+    # Earned income counts wages plus self-employment net of production
+    # costs (7 CFR 273.9(b)(1)(ii); 0.6 netting matching the oracle):
+    # 12000/12 + 0.6*6000/12 = 1000 + 300 per person over 3 people... see
+    # fixture: single person 12000 wages + 6000 SE -> 1000 + 300 = 1300;
+    # fixture people sum to 3300.
+    assert mapping["snap_gross_monthly_earned_income"](case_facts, None) == 3300
     assert mapping["snap_total_monthly_unearned_income"](case_facts, None) == 1980
     assert mapping["snap_gross_monthly_income"](case_facts, None) == 4980
-    assert (
-        mapping["state_agency_rounds_thirty_percent_net_income_up"](case_facts, None)
-        is True
-    )
+    assert mapping["state_agency_rounds_thirty_percent_net_income_up"](
+        case_facts, None
+    ) is True
 
 
 def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
@@ -244,6 +248,17 @@ def test_default_yaml_maps_ecps_snap_cases_as_non_initial_months() -> None:
     mapping = load_populace_mapping_for_program(program)
 
     assert mapping["household_initial_month"]({}, None) is False
+
+
+def test_default_yaml_leaves_calfresh_pub_275_household_facts_unmapped() -> None:
+    # axiom-compose preserves these two leaves as bare compiled input names;
+    # qualification happens only after the population mapping is resolved.
+    issued = "household_was_issued_pub_275"
+    online_access = "household_has_online_access_to_pub_275"
+    mapping = load_populace_mapping_for_program(_program([issued, online_access]))
+
+    assert issued not in mapping
+    assert online_access not in mapping
 
 
 def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> None:
@@ -284,10 +299,9 @@ def test_default_yaml_maps_snap_utility_allowance_projection_assumptions() -> No
         ]({}, None)
         is False
     )
-    assert (
-        mapping["liheaa_or_similar_energy_assistance_annual_payment_amount"]({}, None)
-        == 0
-    )
+    assert mapping["liheaa_or_similar_energy_assistance_annual_payment_amount"](
+        {}, None
+    ) == 0
     assert mapping["limited_utility_allowance_utility_count"]({}, None) == 0
     assert (
         mapping[
@@ -314,17 +328,18 @@ def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
     }
 
     assert (
-        mapping["all_members_receive_or_authorized_for_ssi_or_eaedc"](mixed_case, None)
-        is False
-    )
-    assert (
-        mapping["all_members_receive_or_authorized_for_tafdc"](mixed_case, None)
-        is False
-    )
-    assert (
-        mapping["all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"](
+        mapping["all_members_receive_or_authorized_for_ssi_or_eaedc"](
             mixed_case, None
         )
+        is False
+    )
+    assert mapping["all_members_receive_or_authorized_for_tafdc"](
+        mixed_case, None
+    ) is False
+    assert (
+        mapping[
+            "all_members_receive_or_authorized_for_combination_ssi_eaedc_tafdc"
+        ](mixed_case, None)
         is True
     )
 
@@ -339,7 +354,9 @@ def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> N
     with warnings.catch_warnings():
         warnings.simplefilter("error", DeprecationWarning)
         with pytest.raises(DeprecationWarning):
-            importlib.import_module("axiom_oracles.adapters.axiom.ecps_mapping_loader")
+            importlib.import_module(
+                "axiom_oracles.adapters.axiom.ecps_mapping_loader"
+            )
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", DeprecationWarning)
@@ -347,4 +364,6 @@ def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> N
             "axiom_oracles.adapters.axiom.ecps_mapping_loader"
         )
 
-    assert legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program
+    assert (
+        legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program
+    )

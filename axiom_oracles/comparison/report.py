@@ -5,11 +5,22 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .comparator import HouseholdComparison, VariableComparison
+from .comparator import (
+    HouseholdComparison,
+    VariableComparison,
+    require_same_ids,
+    require_unique_ids,
+)
 from .mappings import ProgramMapping
+from ..conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
+from ..bridges.relation_binding import (
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 
 
 COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2"
@@ -27,6 +38,13 @@ class MismatchKind:
     VALUE_MISMATCH = "value_mismatch"
 
 
+# Below this case count a suite is small enough to carry full evidence —
+# every household's raw input records and both engines' values for MATCHED
+# variables too, so a disagreement (or agreement) can be reproduced from the
+# report alone. Large suites keep the compact household_summary only.
+FULL_CASE_INPUT_LIMIT = 5_000
+
+
 def build_comparison_report(
     *,
     suite_name: str,
@@ -36,15 +54,23 @@ def build_comparison_report(
     cases: list[Case],
     mappings: list[ProgramMapping],
     comparisons: list[HouseholdComparison],
+    include_inputs: bool | None = None,
 ) -> dict:
-    """Build the stable JSON report shared by CLI, apps, and oracle wrappers."""
+    """Build the stable JSON report shared by CLI, apps, and oracle wrappers.
 
+    ``include_inputs=None`` (the default) resolves by suite size: suites at or
+    under ``FULL_CASE_INPUT_LIMIT`` cases persist full per-case evidence.
+    """
+
+    if include_inputs is None:
+        include_inputs = len(comparisons) <= FULL_CASE_INPUT_LIMIT
     accumulator = ComparisonReportAccumulator(
         suite_name=suite_name,
         population=population,
         locales=locales,
         scope=scope,
         mappings=mappings,
+        include_inputs=include_inputs,
     )
     accumulator.add_batch(cases, comparisons)
     return accumulator.to_dict()
@@ -67,12 +93,17 @@ class ComparisonReportAccumulator:
         scope: GeographyScope | None,
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
+        include_inputs: bool = False,
     ) -> None:
+        self.include_inputs = include_inputs
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
         self.scope = scope
         self.mappings = list(mappings)
+        require_unique_ids(
+            [mapping.concept_id for mapping in self.mappings], "mapping concepts"
+        )
         self._mappings_by_id = {
             mapping.concept_id: mapping for mapping in self.mappings
         }
@@ -90,10 +121,19 @@ class ComparisonReportAccumulator:
         self._match_weight = 0.0
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
+        self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
         self._right_engine: str | None = None
+        self._seen_case_ids: set[int | str] = set()
+        self._relation_binding_diagnostics: dict = {}
+        self._engine_receipt: dict = {}
+        self._axiom_receipt_presence: bool | None = None
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -104,11 +144,79 @@ class ComparisonReportAccumulator:
         cases: list[Case],
         comparisons: list[HouseholdComparison],
     ) -> None:
+        # Validate before mutating counters or appending rows: a partial batch
+        # must never replace the submitted-case denominator with its survivors.
+        case_ids = [case.case_id for case in cases]
+        comparison_ids = [item.household_id for item in comparisons]
+        require_unique_ids(case_ids, "submitted case IDs")
+        require_unique_ids(comparison_ids, "comparison household IDs")
+        require_same_ids(case_ids, comparison_ids, "comparison household IDs")
+        repeated = self._seen_case_ids.intersection(case_ids)
+        if repeated:
+            raise ValueError(
+                f"Case IDs repeated across batches: {sorted(repeated, key=repr)[:10]!r}"
+            )
         cases_by_id = {case.case_id: case for case in cases}
+        engine_pair = (
+            (self._left_engine, self._right_engine)
+            if self._left_engine is not None
+            else _engine_pair(comparisons)
+        )
+        for item in comparisons:
+            if (item.left_engine, item.right_engine) != engine_pair:
+                raise ValueError("Comparison engine pair changed within the report")
+            if not item.comparisons:
+                raise ValueError(
+                    f"No output comparisons for submitted case {item.household_id!r}"
+                )
+            actual_outputs = [value.variable for value in item.comparisons]
+            require_unique_ids(actual_outputs, "compared output concepts")
+            case = cases_by_id[item.household_id]
+            available_outputs = [
+                mapping.concept_id
+                for mapping in self.mappings
+                if mapping.target_for_engine(item.left_engine)
+                and mapping.target_for_engine(item.right_engine)
+            ]
+            expected_outputs = list(case.outputs) if case.outputs else available_outputs
+            unsupported = set(expected_outputs) - set(available_outputs)
+            if unsupported:
+                raise ValueError(
+                    f"Unmapped requested outputs for case {item.household_id!r}: "
+                    f"{sorted(unsupported)!r}"
+                )
+            require_unique_ids(expected_outputs, "requested output concepts")
+            require_same_ids(
+                expected_outputs,
+                actual_outputs,
+                f"output concepts for case {item.household_id!r}",
+            )
+
+        receipt = self._engine_receipt
+        receipt_presence = self._axiom_receipt_presence
+        for item in comparisons:
+            if "axiom" in (item.left_engine, item.right_engine):
+                present = bool(item.engine_receipt)
+                if receipt_presence is not None and receipt_presence != present:
+                    raise ValueError("Axiom comparisons mix missing and present executable receipts")
+                receipt_presence = present
+            if item.engine_receipt:
+                if receipt and receipt != item.engine_receipt:
+                    raise ValueError("Axiom executable identity changed between batches")
+                receipt = dict(item.engine_receipt)
+        self._engine_receipt = receipt
+        self._axiom_receipt_presence = receipt_presence
+        self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
 
-        self._case_count += len(comparisons)
+        self._case_count += len(cases)
+        for item in comparisons:
+            for diagnostics in item.relation_binding_diagnostics.values():
+                merge_relation_binding_diagnostics(
+                    self._relation_binding_diagnostics,
+                    public_relation_binding_diagnostics(diagnostics),
+                )
         self._match_count += sum(item.match_count for item in comparisons)
         self._mismatch_count += sum(item.mismatch_count for item in comparisons)
 
@@ -126,17 +234,41 @@ class ComparisonReportAccumulator:
                     comparison,
                     weight,
                 )
+                for engine, values in (
+                    (item.left_engine, comparison.left_output_values),
+                    (item.right_engine, comparison.right_output_values),
+                ):
+                    rows = [dict(case_id=item.household_id, engine=engine,
+                                 concept=comparison.variable, variable=variable, value=value)
+                            for variable, value in values]
+                    self._output_rows.extend(rows)
+                    evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
+                                "errors": list(item.left_errors) + list(item.right_errors)}
+                    for row in rows:
+                        if observed_output_value(
+                            evidence, case_id=item.household_id, engine=engine,
+                            concept=comparison.variable, output=row["variable"], value=row["value"],
+                        ):
+                            self._output_counts[(comparison.variable, engine, row["variable"])] += 1
 
         self._mismatch_rows.extend(
             _mismatch_rows(comparisons, cases_by_id, self._mappings_by_id)
         )
         self._error_rows.extend(_error_rows(comparisons))
         self._append_case_rows(
-            _case_rows(comparisons, cases_by_id, self._mappings_by_id)
+            _case_rows(
+                comparisons,
+                cases_by_id,
+                self._mappings_by_id,
+                include_inputs=self.include_inputs,
+            )
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
+            **({"provenance": {
+                "relation_binding_diagnostics": self._relation_binding_diagnostics,
+            }} if self._relation_binding_diagnostics.get("count") else {}),
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -164,15 +296,51 @@ class ComparisonReportAccumulator:
                     "scenario",
                 ),
                 "error_count": len(self._error_rows),
-                "errors_by_engine": _count_rows(self._error_rows, "engine"),
+                "errors_by_engine": _count_object(self._error_rows, "engine"),
             },
             "aggregates": _aggregate_rows_from_buckets(
                 self._aggregate_buckets,
                 self.mappings,
             ),
+            "output_bindings": {
+                mapping.concept_id: {
+                    engine: mapping.target_for_engine(engine)
+                    for engine in (self._left_engine, self._right_engine) if engine
+                }
+                for mapping in self.mappings
+            },
+            "observed_outputs": list(self._output_rows),
+            "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
+        }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
+        if receipt:
+            report.setdefault("provenance", {})["engine"] = dict(receipt)
+        return report
+
+    def _attestation(self) -> dict:
+        """Stamp what this run actually executed (axiom-oracles#355).
+
+        The conformance scoreboard reads this block to decide whether a report
+        can cover an in-scope policy. Counts come from the same accumulators the
+        summary is built from — a stamp that disagrees with the report body is
+        rejected — and ``outputs`` names, per compared concept, the ENGINE
+        VARIABLE each side was read from, so a covered policy's registered
+        outputs can be tied to comparisons that really happened rather than to
+        the suite's name.
+        """
+        return {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": self._case_count,
+            "comparison_count": self._comparison_count,
+            "error_count": len(self._error_rows),
+            "engines": {"left": self._left_engine, "right": self._right_engine},
+            "outputs": _attested_output_rows(self._output_counts),
         }
 
     def write_json(self, path: Path) -> None:
@@ -185,7 +353,7 @@ class ComparisonReportAccumulator:
             for key in sorted(key for key in report if key != "cases"):
                 handle.write(_top_level_json_entry(key, report[key]))
                 handle.write(",\n")
-            handle.write(f"  {json.dumps('cases')}: [")
+            handle.write(f'  {json.dumps("cases")}: [')
             wrote_case = False
             for row in self._iter_case_rows():
                 handle.write(",\n" if wrote_case else "\n")
@@ -313,23 +481,41 @@ def _case_rows(
     comparisons: list[HouseholdComparison],
     cases_by_id: dict[int | str, Case],
     mappings_by_id: dict[str, ProgramMapping],
+    *,
+    include_inputs: bool = False,
 ) -> list[dict]:
-    return [
-        {
+    rows = []
+    for item in comparisons:
+        row = {
             "case_id": item.household_id,
             "left_engine": item.left_engine,
             "right_engine": item.right_engine,
             "left_errors": list(item.left_errors),
             "right_errors": list(item.right_errors),
-            "metadata": _case_report_metadata(cases_by_id.get(item.household_id)),
+            "metadata": _case_report_metadata(
+                cases_by_id.get(item.household_id),
+                include_inputs=include_inputs,
+            ),
             "match_rate": item.match_rate,
             "mismatches": [
                 _case_mismatch_row(mismatch, mappings_by_id)
                 for mismatch in item.mismatches()
             ],
         }
-        for item in comparisons
-    ]
+        if include_inputs:
+            # Matched values are evidence too: with them, the report alone
+            # reproduces every compared value, not just the disagreements.
+            row["matches"] = [
+                {
+                    "concept": comparison.variable,
+                    "left": comparison.left_value,
+                    "right": comparison.right_value,
+                }
+                for comparison in item.comparisons
+                if comparison.matches
+            ]
+        rows.append(row)
+    return rows
 
 
 def _case_mismatch_row(
@@ -350,27 +536,37 @@ def _case_mismatch_row(
     }
 
 
-def _case_report_metadata(case: Case | None) -> dict:
+def _case_report_metadata(
+    case: Case | None,
+    *,
+    include_inputs: bool = False,
+) -> dict:
     if case is None:
         return {}
     metadata = dict(case.metadata)
-    compact = {
-        key: value
-        for key, value in metadata.items()
-        if key
-        not in {
-            "axiom_input_records",
-            "axiom_input_record_overlays",
-            "axiom_relations",
-        }
-    }
-    for key in (
+    stripped = {
         "axiom_input_records",
         "axiom_input_record_overlays",
         "axiom_relations",
-    ):
+        "axiom_all_outputs",
+    }
+    compact = {
+        key: value
+        for key, value in metadata.items()
+        if include_inputs or key not in stripped
+    }
+    relations = compact.get("axiom_relations")
+    if isinstance(relations, (list, tuple)):
+        # Roles guide tuple construction; public evidence keeps the tuple
+        # and all other relation fields without changing producer metadata.
+        compact["axiom_relations"] = [
+            {key: value for key, value in record.items() if key != "roles"}
+            if isinstance(record, dict) else record
+            for record in relations
+        ]
+    for key in stripped:
         value = metadata.get(key)
-        if isinstance(value, list | tuple):
+        if isinstance(value, (list, tuple, dict)):
             compact[f"{key}_count"] = len(value)
     summary = _household_summary(case)
     if summary:
@@ -476,6 +672,27 @@ def _update_aggregate_bucket(
         bucket["missing_both_count"] += 1
 
 
+def _attested_output_rows(
+    counts: Counter[tuple[str, str, str]],
+) -> list[dict]:
+    """Per-concept, per-engine evidence of which variables the run compared.
+
+    Counts include only targets with a nonmissing value in each engine result.
+    A missing list component makes its mapped value ``None``; other nonmissing
+    components remain evidence of the variables the engine returned.
+    """
+    return [
+        {
+            "concept": concept,
+            "engine": engine,
+            "variable": variable,
+            "comparisons": count,
+        }
+        for (concept, engine, variable), count in sorted(counts.items())
+        if count > 0
+    ]
+
+
 def _aggregate_rows_from_buckets(
     buckets: dict[str, dict],
     mappings: list[ProgramMapping],
@@ -515,7 +732,8 @@ def _aggregate_rows_from_buckets(
                     "left_weighted_sum": _clean_float(bucket["left_weighted_sum"]),
                     "right_weighted_sum": _clean_float(bucket["right_weighted_sum"]),
                     "weighted_difference": _clean_float(
-                        bucket["left_weighted_sum"] - bucket["right_weighted_sum"]
+                        bucket["left_weighted_sum"]
+                        - bucket["right_weighted_sum"]
                     ),
                 }
             )
@@ -559,55 +777,47 @@ def _quality_flags(left_rate: float, right_rate: float) -> list[dict]:
     """
     flags: list[dict] = []
     if left_rate == 0 and right_rate > 0:
-        flags.append(
-            {
-                "severity": "alarm",
-                "code": "left_always_false",
-                "message": (
-                    f"Left engine never returned True ({left_rate:.1f}%) while "
-                    f"right engine returned True for {right_rate:.1f}% of cases "
-                    "— match rate likely reflects agreement on the dominant False "
-                    "outcome, not real agreement."
-                ),
-            }
-        )
+        flags.append({
+            "severity": "alarm",
+            "code": "left_always_false",
+            "message": (
+                f"Left engine never returned True ({left_rate:.1f}%) while "
+                f"right engine returned True for {right_rate:.1f}% of cases "
+                "— match rate likely reflects agreement on the dominant False "
+                "outcome, not real agreement."
+            ),
+        })
     if left_rate == 100 and right_rate < 100:
-        flags.append(
-            {
-                "severity": "alarm",
-                "code": "left_always_true",
-                "message": (
-                    f"Left engine returned True for {left_rate:.1f}% of cases "
-                    f"while right engine returned True for {right_rate:.1f}% — "
-                    "likely over-permissive (missing eligibility tests) or "
-                    "always-true bug."
-                ),
-            }
-        )
+        flags.append({
+            "severity": "alarm",
+            "code": "left_always_true",
+            "message": (
+                f"Left engine returned True for {left_rate:.1f}% of cases "
+                f"while right engine returned True for {right_rate:.1f}% — "
+                "likely over-permissive (missing eligibility tests) or "
+                "always-true bug."
+            ),
+        })
     if right_rate == 0 and left_rate > 0:
-        flags.append(
-            {
-                "severity": "alarm",
-                "code": "right_always_false",
-                "message": (
-                    f"Right engine never returned True while left engine "
-                    f"returned True for {left_rate:.1f}% — right pipeline likely "
-                    "broken."
-                ),
-            }
-        )
+        flags.append({
+            "severity": "alarm",
+            "code": "right_always_false",
+            "message": (
+                f"Right engine never returned True while left engine "
+                f"returned True for {left_rate:.1f}% — right pipeline likely "
+                "broken."
+            ),
+        })
     if right_rate == 100 and left_rate < 100:
-        flags.append(
-            {
-                "severity": "alarm",
-                "code": "right_always_true",
-                "message": (
-                    f"Right engine returned True for 100% of cases while left "
-                    f"returned True for {left_rate:.1f}% — right likely "
-                    "over-permissive."
-                ),
-            }
-        )
+        flags.append({
+            "severity": "alarm",
+            "code": "right_always_true",
+            "message": (
+                f"Right engine returned True for 100% of cases while left "
+                f"returned True for {left_rate:.1f}% — right likely "
+                "over-permissive."
+            ),
+        })
     return flags
 
 
@@ -685,6 +895,15 @@ def _count_rows(rows: list[dict], key: str) -> list[dict]:
     ]
 
 
+def _count_object(rows: list[dict], key: str) -> dict[str, int]:
+    """Return certificate-safe named counters instead of display rows."""
+
+    counts = Counter(
+        str(row[key]) for row in rows if row.get(key) is not None
+    )
+    return dict(sorted(counts.items()))
+
+
 def _to_number(value: Value) -> float:
     if value is None:
         return 0.0
@@ -704,6 +923,39 @@ def _clean_float(value: float) -> float:
     if rounded.is_integer():
         return int(rounded)
     return rounded
+
+
+def strip_heavy_case_metadata(report: dict) -> dict:
+    """Drop raw input-record dumps from every case row, keeping counts.
+
+    Committed dashboard copies must never carry them — at roughly 2 MB per
+    generic-projector household they turn a small suite's dashboard copy
+    into gigabytes — while the full reports/ artifact stays the complete
+    record and feeds the case-explorer input panel via
+    scripts/emit_case_artifacts.py.
+    """
+
+    heavy = (
+        "axiom_input_records",
+        "axiom_input_record_overlays",
+        "axiom_relations",
+        "axiom_all_outputs",
+    )
+    cases = report.get("cases")
+    if not cases:
+        return report
+    slim_cases = []
+    for case in cases:
+        metadata = case.get("metadata")
+        if metadata and any(key in metadata for key in heavy):
+            metadata = dict(metadata)
+            for key in heavy:
+                value = metadata.pop(key, None)
+                if isinstance(value, (list, tuple, dict)):
+                    metadata.setdefault(f"{key}_count", len(value))
+            case = {**case, "metadata": metadata}
+        slim_cases.append(case)
+    return {**report, "cases": slim_cases}
 
 
 def _top_level_json_entry(key: str, value: object) -> str:

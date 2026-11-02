@@ -1,0 +1,16 @@
+{
+ "suite": "uk-scottish-child-payment",
+ "count": 3,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/govuk/scottish-child-payment#scottish_child_payment_annual_amount"
+ ],
+ "source": "axiom-euromod-uk-scottish-child-payment.json",
+ "total_cases": 4,
+ "partial": "mismatch-only"
+}

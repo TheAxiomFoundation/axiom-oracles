@@ -20,6 +20,7 @@ import argparse
 import csv
 import json
 import math
+import os
 import subprocess
 import tempfile
 from calendar import monthrange
@@ -30,6 +31,8 @@ from typing import Any
 
 import yaml
 
+from ..engine_identity import EngineIdentityError, engine_receipt, record_engine_receipt
+from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
@@ -37,13 +40,13 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
-from .rulespec_paths import (
-    require_rulespec_module,
-    require_axiom_binary,
-    require_rulespec_checkout,
-    resolve_rulespec_program,
-    rulespec_engine_env,
-    rulespec_root_args,
+from .relation_binding import (
+    RelationBinder,
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
 )
 
 try:
@@ -84,6 +87,7 @@ class JurisdictionConfig:
     temp_prefix: str
     display_name: str
     additional_relation_ids: tuple[str, ...] = ()
+    eligibility_oracle_bridge: bool = False
 
 
 JURISDICTION_CONFIGS = {
@@ -135,7 +139,7 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-ca:policies/cdss/snap/fy-2026-benefit-calculation#snap_benefit"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
@@ -168,7 +172,7 @@ JURISDICTION_CONFIGS = {
         },
         utility_allowance_labels=("snap_standard_utility_allowance",),
         relation_id=(
-            "us-ca:policies/cdss/snap/fy-2026-benefit-calculation#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ca-snap-pe-populace-",
@@ -183,29 +187,19 @@ JURISDICTION_CONFIGS = {
             "fy-2026-benefit-calculation.yaml"
         ),
         output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_regular_month_allotment": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_regular_month_allotment"
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
             ),
             "snap_gross_monthly_income": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
-            "snap_net_income": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_net_income"
-            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
             "snap_eligible": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_eligible"
-            ),
-            "snap_maximum_allotment": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_maximum_allotment"
+                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation#snap_eligible"
             ),
             "snap_excess_shelter_deduction": (
-                "us-az:policies/des/faa5/na-eligibility-and-benefit-determination/"
-                "fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+                "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income"
             ),
         },
         utility_allowance_labels=(),
@@ -213,6 +207,102 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
+        # The projector supplies PE eligibility and benefit inputs to this program.
+        # Remove only when compared outcomes are independent of PE-derived inputs.
+        eligibility_oracle_bridge=True,
+    ),
+    "us-ga": JurisdictionConfig(
+        jurisdiction="us-ga",
+        state_code="GA",
+        program_relative_path=Path(
+            "policies/dfcs/snap/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-ga:policies/dfcs/snap/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="ga-snap-pe-populace-",
+        display_name="Georgia SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
+    ),
+    "us-md": JurisdictionConfig(
+        jurisdiction="us-md",
+        state_code="MD",
+        program_relative_path=Path(
+            "policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-md:policies/dhs/fia/snap/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="md-snap-pe-populace-",
+        display_name="Maryland SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
+    ),
+    "us-tx": JurisdictionConfig(
+        jurisdiction="us-tx",
+        state_code="TX",
+        program_relative_path=Path(
+            "policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
+        ),
+        output_id_by_label={
+            **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
+            "snap_regular_month_allotment": (
+                "us:policies/usda/snap/state-plan-composition#snap_benefit"
+            ),
+            "snap_gross_monthly_income": (
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
+            ),
+            "snap_net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+            "snap_eligible": (
+                "us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_eligible"
+            ),
+            "snap_excess_shelter_deduction": (
+                "us-tx:policies/hhs/texas-works-handbook/fy-2026-benefit-calculation#snap_excess_shelter_deduction"
+            ),
+        },
+        utility_allowance_labels=(),
+        relation_id=(
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
+        ),
+        member_entity_type="Person",
+        temp_prefix="tx-snap-pe-populace-",
+        display_name="Texas SNAP",
+        additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
@@ -223,7 +313,7 @@ JURISDICTION_CONFIGS = {
         output_id_by_label={
             **COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
             "snap_gross_monthly_income": (
-                "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_gross_monthly_income"
+                "us:policies/usda/snap/state-plan-composition#snap_gross_monthly_income"
             ),
             "snap_eligible": (
                 "us-ny:policies/otda/snap/fy-2026-benefit-calculation#snap_eligible"
@@ -283,8 +373,7 @@ JURISDICTION_CONFIGS = {
             "snap_individual_utility_allowance",
         ),
         relation_id=(
-            "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
-            "#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ny-snap-pe-populace-",
@@ -645,10 +734,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--program",
         type=Path,
         default=None,
-        help=(
-            "Exact canonical jurisdiction program override. Defaults to the "
-            "configured path beneath --rulespec-root."
-        ),
+        help="Override the jurisdiction composition RuleSpec file.",
     )
     parser.add_argument(
         "--test-template",
@@ -659,14 +745,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
     parser.add_argument(
         "--axiom-binary",
         type=Path,
-        required=True,
-        help="Exact executable axiom-rules-engine binary.",
+        default=None,
+        help="Path to the axiom-rules-engine binary. Defaults to a sibling checkout.",
     )
     parser.add_argument(
-        "--rulespec-root",
+        "--workspace-root",
         type=Path,
-        required=True,
-        help="Exact canonical rulespec-us country checkout.",
+        default=None,
+        help="Workspace containing axiom-rules-engine and rulespec-* repos.",
     )
     parser.add_argument("--write-csv", type=Path, default=None)
     parser.add_argument(
@@ -703,39 +789,124 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _workspace_candidates() -> list[Path]:
+    candidates = [
+        Path.cwd(),
+        Path.cwd().parent,
+        Path.home() / "TheAxiomFoundation",
+    ]
+    module_path = Path(__file__).resolve()
+    candidates.extend(module_path.parents)
+    return candidates
+
+
+def resolve_workspace_root(override: Path | None = None) -> Path:
+    if override is not None:
+        return override.resolve()
+    for candidate in _workspace_candidates():
+        if (candidate / "axiom-rules-engine").exists() or any(
+            candidate.glob("rulespec-*")
+        ):
+            return candidate.resolve()
+        if (candidate / "_axiom" / "axiom-rules-engine").exists():
+            return candidate.resolve()
+    return (Path.home() / "TheAxiomFoundation").resolve()
+
+
 def resolve_program_path(
-    config: JurisdictionConfig,
-    rulespec_root: Path,
-    override: Path | None,
+    config: JurisdictionConfig, workspace_root: Path, override: Path | None
 ) -> Path:
-    return resolve_rulespec_program(
-        rulespec_root,
-        jurisdiction=config.jurisdiction,
-        relative_path=config.program_relative_path,
-        override=override,
+    if override is not None:
+        return override.resolve()
+    # A CWD program may override the workspace copy only from a country/state
+    # monorepo layout, with a matching upstream identity when a GitHub origin
+    # is available. Bare rsync'd layouts still work without a git remote.
+    # There is no standalone-path fallback; a missing workspace program fails
+    # at load, naming the monorepo path.
+    cwd = Path.cwd()
+    cwd_program = cwd / config.program_relative_path
+    if (
+        cwd.name == config.jurisdiction
+        and (cwd.parent / "us").is_dir()
+        and checkout_remote_matches_slug(cwd.parent, "TheAxiomFoundation/rulespec-us")
+        and cwd_program.exists()
+    ):
+        return cwd_program.resolve()
+    return (
+        workspace_root
+        / "rulespec-us"
+        / config.jurisdiction
+        / config.program_relative_path
+    ).resolve()
+
+
+def resolve_test_template_path(program: Path, override: Path | None) -> Path:
+    if override is not None:
+        return override.resolve()
+    return program.with_name(f"{program.stem}.test.yaml")
+
+
+def resolve_axiom_binary(workspace_root: Path, override: Path | None) -> Path:
+    if override is not None:
+        return override.resolve()
+    candidates = [
+        workspace_root
+        / "axiom-rules-engine"
+        / "target"
+        / "debug"
+        / "axiom-rules-engine",
+        workspace_root
+        / "_axiom"
+        / "axiom-rules-engine"
+        / "target"
+        / "debug"
+        / "axiom-rules-engine",
+        Path.cwd()
+        / "_axiom"
+        / "axiom-rules-engine"
+        / "target"
+        / "debug"
+        / "axiom-rules-engine",
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.resolve()
+    return candidates[0].resolve()
+
+
+def axiom_rules_env(program: Path, workspace_root: Path) -> dict[str, str]:
+    env = os.environ.copy()
+    active_roots: list[Path] = []
+    current_repo = program.resolve()
+    for parent in current_repo.parents:
+        if parent.name.startswith("rulespec-"):
+            active_roots.append(parent)
+            break
+    roots = [
+        workspace_root / "rulespec-us",
+        workspace_root / "_axiom" / "rulespec-us",
+        program.parent,
+        program.parent.parent,
+    ]
+    roots.extend(sorted(workspace_root.glob("rulespec-*")))
+    roots.extend(sorted((workspace_root / "_axiom").glob("rulespec-*")))
+    existing = [path.resolve() for path in roots if path.exists()]
+    configured = [
+        Path(path).resolve()
+        for path in env.get("AXIOM_RULESPEC_REPO_ROOTS", "").split(os.pathsep)
+        if path
+    ]
+    unique_roots = []
+    seen: set[Path] = set()
+    for path in [*active_roots, *configured, *existing]:
+        if path in seen:
+            continue
+        seen.add(path)
+        unique_roots.append(path)
+    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
+        str(path) for path in unique_roots
     )
-
-
-def resolve_test_template_path(
-    program: Path,
-    override: Path | None,
-    *,
-    rulespec_root: Path,
-) -> Path:
-    candidate = (
-        Path(override).expanduser()
-        if override is not None
-        else program.with_name(f"{program.stem}.test.yaml")
-    )
-    return require_rulespec_module(candidate, rulespec_root)
-
-
-def resolve_axiom_binary(override: Path) -> Path:
-    return require_axiom_binary(override)
-
-
-def axiom_engine_env() -> dict[str, str]:
-    return rulespec_engine_env()
+    return env
 
 
 def month_period(year: int, month: int) -> Period:
@@ -848,8 +1019,6 @@ def project_income_resource_inputs(
     assets = money(values["snap_assets"][idx])
     if config.jurisdiction == "us-ny":
         return {
-            "snap_countable_earned_income": earned_income,
-            "snap_countable_unearned_income": unearned_income,
             "snap_gross_monthly_earned_income": earned_income,
             "snap_total_monthly_unearned_income": unearned_income,
             "snap_income_exclusions": 0,
@@ -887,11 +1056,11 @@ def project_deduction_inputs(
     child_support_deduction: float,
     medical_deduction: float,
 ) -> dict[str, Any]:
-    if config.jurisdiction == "us-ca":
+    if config.jurisdiction in ("us-ca", "us-ga", "us-md", "us-az", "us-tx"):
+        # These compositions ride the federal state-plan module's 273.10
+        # chain only (the 2014(e) statutory modules are not composed), so
+        # just the regulatory inputs.
         return {
-            "dependent_care_deduction": dependent_care_deduction,
-            "child_support_deduction": child_support_deduction,
-            "medical_deduction": medical_deduction,
             "household_entitled_to_excess_medical_deduction": medical_deduction > 0,
             "snap_allowable_monthly_dependent_care_expenses": (
                 dependent_care_deduction
@@ -1200,10 +1369,6 @@ def load_policyengine_cases(
             **project_income_resource_inputs(config, values, idx),
             "household_size": int(values["snap_unit_size"][idx]),
             "household_shelter_costs_incurred": money(values["housing_cost"][idx]),
-            "household_lives_in_application_state": True,
-            "household_in_project_area_solely_for_vacation": False,
-            "household_contains_individual_participating_in_more_than_one_household_or_project_area": False,
-            "resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member": False,
             **project_deduction_inputs(
                 config,
                 dependent_care_deduction=dependent_care_deduction,
@@ -1213,6 +1378,17 @@ def load_policyengine_cases(
             **project_jurisdiction_household_inputs(config, values, idx),
             **utility_inputs,
         }
+        # The Arizona composition's current first companion case does not
+        # expose these federal residence inputs. Do not inject unbound names:
+        # legalize_inputs would fail before the household can be compared.
+        # This is a coverage limit, not evidence of residence parity.
+        if config.jurisdiction != "us-az":
+            projected_inputs.update(
+                household_lives_in_application_state=True,
+                household_in_project_area_solely_for_vacation=False,
+                household_contains_individual_participating_in_more_than_one_household_or_project_area=False,
+                resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member=False,
+            )
         for input_name, value in projected_inputs.items():
             set_input_value(inputs, input_name, value)
         set_input_value(
@@ -1295,18 +1471,17 @@ def project_jurisdiction_household_inputs(
         }
     if config.jurisdiction == "us-az":
         return {
-            "na_net_income": money(values["snap_net_income"][idx]),
             "na_budgetary_unit_is_eligible": bool(values["is_snap_eligible"][idx]),
             "budgetary_unit_participant_count": int(values["snap_unit_size"][idx]),
+            "az_utility_allowance_participant_count": int(
+                values["snap_unit_size"][idx]
+            ),
             "thrifty_food_plan_amount_for_budgetary_unit_size": money(
                 values["snap_max_allotment"][idx]
             ),
             "minimum_na_allotment": money(values["snap_min_allotment"][idx]),
             "initial_month_proration_applies": False,
             "prorated_initial_month_na_benefit": 0,
-            "snap_excess_shelter_deduction_for_net_income": money(
-                values["snap_excess_shelter_expense_deduction"][idx]
-            ),
         }
     return {}
 
@@ -1336,7 +1511,26 @@ def project_raw_utility_inputs(
     values: dict[str, np.ndarray],
     idx: int,
     utility_region: str,
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        heating = bool(values["heating_cooling_expense"][idx] > 0)
+        other_bills = [
+            bool(values[name][idx] > 0)
+            for name in (
+                "pre_subsidy_electricity_expense",
+                "water_expense",
+                "sewage_expense",
+                "trash_expense",
+                "gas_expense",
+                "phone_expense",
+            )
+        ]
+        return arizona_utility_inputs(
+            heating=heating,
+            non_heating_count=sum(other_bills),
+            telephone_only=other_bills[-1] and sum(other_bills) == 1 and not heating,
+            elderly_or_disabled=bool(values["has_usda_elderly_disabled"][idx]),
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": bool(
@@ -1389,7 +1583,14 @@ def project_raw_utility_inputs(
 
 def project_utility_allowance_type(
     config: JurisdictionConfig, utility_type: str, utility_region: str
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        return arizona_utility_inputs(
+            heating=utility_type == "SUA",
+            non_heating_count=2 if utility_type == "LUA" else 0,
+            telephone_only=utility_type == "TUA",
+            elderly_or_disabled=False,
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": (
@@ -1431,6 +1632,34 @@ def project_utility_allowance_type(
     elif utility_type == "IUA":
         inputs["household_pays_electricity_utility_cost"] = True
     return inputs
+
+
+def arizona_utility_inputs(
+    *,
+    heating: bool,
+    non_heating_count: int,
+    telephone_only: bool,
+    elderly_or_disabled: bool,
+) -> dict[str, bool | int]:
+    # Populace reports expenses but not DES verification or LIHEAP history.
+    # Treat a reported bill as verified for this diagnostic projection, and
+    # leave the unobserved LIHEAP conditions false. Neither assumption proves
+    # parity for households where those facts determine the allowance.
+    has_bill = heating or non_heating_count > 0 or telephone_only
+    return {
+        "budgetary_unit_billed_separately_for_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_allowable_utility_expenses": has_bill,
+        "budgetary_unit_has_verified_allowable_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis": heating,
+        "budgetary_unit_received_liheap_payment": False,
+        "liheap_annual_payment_amount": 0,
+        "liheap_payment_received_in_application_month_or_lookback_period": False,
+        "budgetary_unit_has_participant_who_is_elderly_or_has_disability": elderly_or_disabled,
+        "budgetary_unit_heating_or_cooling_expenses_exceed_energy_assistance_payments": False,
+        "budgetary_unit_obligated_to_pay_at_least_two_non_heating_or_non_cooling_utility_expenses": non_heating_count
+        >= 2,
+        "budgetary_unit_obligated_to_pay_only_telephone_expense": telephone_only,
+    }
 
 
 def new_york_utility_region_inputs(utility_region: str) -> dict[str, bool]:
@@ -1486,31 +1715,90 @@ def decimal_literal(value: float) -> str:
     return literal or "0"
 
 
+def _run_receipted_engine(
+    command: list[str], *, expected_receipt: dict[str, Any], **kwargs: Any
+) -> subprocess.CompletedProcess[str]:
+    """Verify and journal the exact executable used by a direct bridge call."""
+    before = engine_receipt(command[0])
+    if any(
+        before.get(field) != expected_receipt.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed before SNAP execution")
+    invocation = list(command)
+    if before.get("binary_sha256") is not None:
+        invocation[0] = before["binary_path"]
+    result = subprocess.run(invocation, **kwargs)
+    after = engine_receipt(invocation[0])
+    if any(
+        after.get(field) != before.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed during SNAP execution")
+    record_engine_receipt(before)
+    return result
+
+
 def compile_program(
     binary: Path,
     program: Path,
     output: Path,
     *,
-    rulespec_root: Path,
     env: dict[str, str],
+    workspace_root: Path | None = None,
 ) -> None:
-    result = subprocess.run(
-        [
-            str(binary),
-            "compile",
-            "--program",
-            str(program),
-            *rulespec_root_args(rulespec_root),
-            "--output",
-            str(output),
-        ],
-        text=True,
-        capture_output=True,
-        check=False,
-        env=env,
+    # Post-hard-cut engines take explicit --rulespec-root flags naming
+    # canonical rulespec-<cc> checkouts (staged pure: jurisdiction dirs only)
+    # and compile the composition via compile-composed; older engines reject
+    # both and fall back to the legacy env-resolved `compile` inside
+    # compile_with_engine (#296).
+    from axiom_oracles.engine_compat import (
+        compile_with_engine,
+        explicit_engine_roots,
+        import_prefixes,
+        stage_pure_root,
     )
-    if result.returncode != 0:
-        raise RuntimeError(result.stderr.strip() or result.stdout.strip())
+
+    expected_receipt = engine_receipt(binary)
+
+    def execute_engine(command: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+        return _run_receipted_engine(
+            command, expected_receipt=expected_receipt, **kwargs
+        )
+
+    program_doc: dict = {}
+    try:
+        program_doc = yaml.safe_load(Path(program).read_text()) or {}
+    except (OSError, yaml.YAMLError):
+        program_doc = {}
+    composed = (
+        isinstance(program_doc, dict)
+        and (program_doc.get("module") or {}).get("kind") == "composition"
+    )
+    candidates: list[Path | str] = []
+    if workspace_root is not None:
+        candidates.append(workspace_root)
+    roots = explicit_engine_roots(candidates, program=program)
+    jurisdictions = import_prefixes(
+        [e for e in (program_doc.get("imports") or []) if isinstance(e, str)]
+        if isinstance(program_doc, dict)
+        else []
+    )
+    staged_roots: list[Path] = []
+    if roots and jurisdictions:
+        with_stage = tempfile.mkdtemp(prefix="snap-populace-roots-")
+        staged_roots = [
+            stage_pure_root(root, jurisdictions, Path(with_stage)) for root in roots
+        ]
+    compile_with_engine(
+        binary,
+        Path(program),
+        Path(output),
+        roots=staged_roots or roots,
+        composed=composed,
+        env=env,
+        run=execute_engine,
+    )
 
 
 def run_axiom_cases(
@@ -1525,6 +1813,7 @@ def run_axiom_cases(
     member_entity_type: str,
     env: dict[str, str],
 ) -> list[dict[str, Any]]:
+    expected_receipt = engine_receipt(binary)
     interval = {
         "start": period.start.isoformat(),
         "end": period.end.isoformat(),
@@ -1535,9 +1824,12 @@ def run_axiom_cases(
         "end": period.end.isoformat(),
         "name": period.label,
     }
+    ambiguities = []
     inputs = []
     relations = []
     queries = []
+    artifact_payload = json.loads(artifact.read_text())
+    relation_binder = RelationBinder(artifact_payload)
     for case in cases:
         entity_id = f"spm-{case.spm_unit_id}"
         for name, value in case.inputs.items():
@@ -1556,7 +1848,14 @@ def run_axiom_cases(
                 relations.append(
                     {
                         "name": current_relation_id,
-                        "tuple": [member_entity_id, entity_id],
+                        "tuple": relation_binder.tuple(
+                            current_relation_id,
+                            owner_id=entity_id,
+                            owner_kind="Household",
+                            related_id=member_entity_id,
+                            related_kind=member_entity_type,
+                            binding_ambiguities=ambiguities,
+                        ),
                         "interval": interval,
                     }
                 )
@@ -1583,8 +1882,16 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
-    result = subprocess.run(
+    request, raw_ambiguities = bind_materialized_relations(
+        request,
+        artifact_payload,
+        materialized=set(range(len(relations))),
+        binder=bind_request_relations,
+    )
+    ambiguities.extend(raw_ambiguities)
+    result = _run_receipted_engine(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
+        expected_receipt=expected_receipt,
         input=json.dumps(request),
         text=True,
         capture_output=True,
@@ -1594,6 +1901,7 @@ def run_axiom_cases(
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     payload = json.loads(result.stdout)
+    attach_relation_binding_diagnostics(payload["results"], ambiguities)
     return payload["results"]
 
 
@@ -1624,9 +1932,11 @@ def compare(
     results: list[dict[str, Any]],
     tolerance: float,
     *,
-    output_id_by_label: dict[str, str],
-    utility_allowance_labels: tuple[str, ...],
+    config: JurisdictionConfig,
 ):
+    output_id_by_label = config.output_id_by_label
+    utility_allowance_labels = config.utility_allowance_labels
+    eligibility_oracle_bridge = config.eligibility_oracle_bridge
     rows = []
     for case, result in zip(cases, results, strict=True):
         raw_outputs = result.get("outputs", {})
@@ -1652,6 +1962,7 @@ def compare(
         axiom_snap = float(outputs[COMPARED_AXIOM_OUTPUT])
         pe_snap = float(case.pe_outputs[PE_COMPARED_OUTPUT])
         diff = axiom_snap - pe_snap
+        amount_match = abs(diff) <= tolerance
         row = {
             "spm_unit_id": case.spm_unit_id,
             "household_id": case.household_id,
@@ -1659,7 +1970,16 @@ def compare(
             "axiom_snap_allotment": axiom_snap,
             "difference": diff,
             "absolute_difference": abs(diff),
-            "match": abs(diff) <= tolerance,
+            "amount_match": amount_match,
+            "comparison_status": (
+                "not_comparable" if eligibility_oracle_bridge else "comparable"
+            ),
+            "not_comparable_reason": (
+                "PolicyEngine eligibility and benefit inputs are supplied to Axiom"
+                if eligibility_oracle_bridge
+                else ""
+            ),
+            "match": amount_match and not eligibility_oracle_bridge,
             "pe_snap_eligible": bool(case.pe_outputs["is_snap_eligible"]),
             "axiom_snap_eligible": outputs["snap_eligible"],
             "pe_gross_income": case.pe_outputs["snap_gross_income"],
@@ -1731,7 +2051,12 @@ def add_snapscreener_results(
         row["snapscreener_status"] = result.get("status")
         errors = result.get("errors") or []
         row["snapscreener_error"] = "; ".join(str(error) for error in errors)
-        row["snapscreener_comparable"] = primary_oracles_find_eligible(row)
+        eligible_in_primary_oracle = primary_oracles_find_eligible(row)
+        row["snapscreener_comparable"] = (
+            eligible_in_primary_oracle
+            and row.get("comparison_status", "comparable") == "comparable"
+        )
+        row["pe_snapscreener_comparable"] = eligible_in_primary_oracle
         if result.get("status") != "OK":
             row["snapscreener_snap"] = None
             row["snapscreener_eligible"] = None
@@ -1747,8 +2072,12 @@ def add_snapscreener_results(
         row["snapscreener_eligible"] = bool(result.get("estimated_eligibility"))
         row["axiom_snapscreener_difference"] = axiom_difference
         row["pe_snapscreener_difference"] = pe_difference
-        row["axiom_snapscreener_match"] = abs(axiom_difference) <= tolerance
-        row["pe_snapscreener_match"] = abs(pe_difference) <= tolerance
+        row["axiom_snapscreener_match"] = (
+            row["snapscreener_comparable"] and abs(axiom_difference) <= tolerance
+        )
+        row["pe_snapscreener_match"] = (
+            row["pe_snapscreener_comparable"] and abs(pe_difference) <= tolerance
+        )
 
 
 def primary_oracles_find_eligible(row: dict[str, Any]) -> bool:
@@ -1759,18 +2088,25 @@ def print_summary(
     rows: list[dict[str, Any]], tolerance: float, max_differences: int
 ) -> None:
     total = len(rows)
-    matches = sum(1 for row in rows if row["match"])
+    comparable_rows = [
+        row
+        for row in rows
+        if row.get("comparison_status", "comparable") == "comparable"
+    ]
+    matches = sum(1 for row in comparable_rows if row["match"])
     diffs = sorted(rows, key=lambda row: row["absolute_difference"], reverse=True)
     mean_abs = sum(row["absolute_difference"] for row in rows) / total if total else 0.0
     print()
-    print(f"Compared {total:,} PolicyEngine Populace SPM units")
+    print(f"Evaluated {total:,} PolicyEngine Populace SPM units")
+    print(f"Comparable rows: {len(comparable_rows):,}/{total:,}")
     print(f"Tolerance: ${tolerance:,.2f}")
     print(
-        f"Matches: {matches:,}/{total:,} ({matches / total:.1%})"
-        if total
-        else "No rows"
+        f"Matches: {matches:,}/{len(comparable_rows):,} "
+        f"({matches / len(comparable_rows):.1%})"
+        if comparable_rows
+        else "No comparable rows; parity is not established"
     )
-    print(f"Mean absolute difference: ${mean_abs:,.2f}")
+    print(f"Diagnostic mean absolute difference: ${mean_abs:,.2f}")
     if diffs:
         print(f"Max absolute difference: ${diffs[0]['absolute_difference']:,.2f}")
     print()
@@ -1795,6 +2131,9 @@ def print_snapscreener_summary(
         return
     valid_rows = [row for row in rows if row["snapscreener_status"] == "OK"]
     comparable_rows = [row for row in valid_rows if row["snapscreener_comparable"]]
+    pe_comparable_rows = [
+        row for row in valid_rows if row["pe_snapscreener_comparable"]
+    ]
     noncomparable_positive = [
         row
         for row in valid_rows
@@ -1806,24 +2145,22 @@ def print_snapscreener_summary(
         if bool(row["pe_snap_eligible"]) != (row["axiom_snap_eligible"] == "holds")
     ]
     axiom_matches = sum(1 for row in comparable_rows if row["axiom_snapscreener_match"])
-    pe_matches = sum(1 for row in comparable_rows if row["pe_snapscreener_match"])
+    pe_matches = sum(1 for row in pe_comparable_rows if row["pe_snapscreener_match"])
     disagreement_axiom_matches = sum(
         1 for row in disagreement_rows if row["axiom_snapscreener_match"]
-    )
-    disagreement_pe_matches = sum(
-        1 for row in disagreement_rows if row["pe_snapscreener_match"]
     )
     print()
     print("SnapScreener diagnostic oracle")
     print(f"Rows: {len(valid_rows):,}/{len(rows):,} OK")
     print(
-        f"Comparable rows: {len(comparable_rows):,} "
-        "(PolicyEngine or Axiom marks SNAP eligible)"
+        f"Axiom-comparable rows: {len(comparable_rows):,} "
+        "(eligible in a primary oracle and no oracle-fed outcome bridge)"
     )
+    print(f"PolicyEngine-comparable rows: {len(pe_comparable_rows):,}")
     if noncomparable_positive:
         print(
-            f"Excluded {len(noncomparable_positive):,} row(s) where PE and Axiom "
-            "both mark ineligible but SnapScreener estimates a positive benefit."
+            f"Excluded {len(noncomparable_positive):,} row(s) from Axiom/SnapScreener "
+            "comparison where SnapScreener estimates a positive benefit."
         )
     print(f"Tolerance: ${tolerance:,.2f}")
     if comparable_rows:
@@ -1832,16 +2169,16 @@ def print_snapscreener_summary(
             f"{axiom_matches:,}/{len(comparable_rows):,} "
             f"({axiom_matches / len(comparable_rows):.1%})"
         )
+    if pe_comparable_rows:
         print(
             f"PolicyEngine matches SnapScreener: "
-            f"{pe_matches:,}/{len(comparable_rows):,} "
-            f"({pe_matches / len(comparable_rows):.1%})"
+            f"{pe_matches:,}/{len(pe_comparable_rows):,} "
+            f"({pe_matches / len(pe_comparable_rows):.1%})"
         )
     if disagreement_rows:
         print(
-            f"On PE/Axiom eligibility disagreements: "
-            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,}, "
-            f"PolicyEngine {disagreement_pe_matches:,}/{len(disagreement_rows):,} "
+            f"On PE/Axiom eligibility disagreements in Axiom-comparable rows: "
+            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,} "
             "match SnapScreener."
         )
     diffs = sorted(
@@ -1874,16 +2211,12 @@ def main(args: argparse.Namespace | None = None) -> int:
     if args is None:
         args = parse_args()
     config = JURISDICTION_CONFIGS[args.jurisdiction]
-    rulespec_root = require_rulespec_checkout(args.rulespec_root, country="us")
-    program = resolve_program_path(config, rulespec_root, args.program)
-    test_template = resolve_test_template_path(
-        program,
-        args.test_template,
-        rulespec_root=rulespec_root,
-    )
-    axiom_binary = resolve_axiom_binary(args.axiom_binary)
+    workspace_root = resolve_workspace_root(args.workspace_root)
+    program = resolve_program_path(config, workspace_root, args.program)
+    test_template = resolve_test_template_path(program, args.test_template)
+    axiom_binary = resolve_axiom_binary(workspace_root, args.axiom_binary)
     state = (args.state or config.state_code).upper()
-    env = axiom_engine_env()
+    env = axiom_rules_env(program, workspace_root)
     period = month_period(args.year, args.month)
     base_inputs = load_base_inputs(test_template)
     print(f"Jurisdiction: {config.jurisdiction}")
@@ -1912,11 +2245,7 @@ def main(args: argparse.Namespace | None = None) -> int:
         artifact = Path(temp_dir) / "program.compiled.json"
         print(f"Compiling {config.display_name} RuleSpec composition...")
         compile_program(
-            axiom_binary,
-            program,
-            artifact,
-            rulespec_root=rulespec_root,
-            env=env,
+            axiom_binary, program, artifact, env=env, workspace_root=workspace_root
         )
         print("Running the Axiom rules engine over projected Populace records...")
         results = run_axiom_cases(
@@ -1935,9 +2264,19 @@ def main(args: argparse.Namespace | None = None) -> int:
         cases,
         results,
         args.tolerance,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
+        config=config,
     )
+    diagnostics: dict = {}
+    for result in results:
+        merge_relation_binding_diagnostics(
+            diagnostics, result.get("relation_binding_diagnostics", {})
+        )
+    if diagnostics.get("count"):
+        dataset_identity["relation_binding_diagnostics"] = (
+            public_relation_binding_diagnostics(
+                diagnostics,
+            )
+        )
     if "snapscreener" in args.external_oracle:
         bundle = snapscreener.ensure_api_js(
             api_js=args.snapscreener_api_js,
@@ -1972,7 +2311,12 @@ def main(args: argparse.Namespace | None = None) -> int:
             )
             print(f"Wrote {identity_path}")
 
-    match_rate = sum(1 for row in rows if row["match"]) / len(rows) if rows else 0
+    comparable_rows = [row for row in rows if row["comparison_status"] == "comparable"]
+    match_rate = (
+        sum(1 for row in comparable_rows if row["match"]) / len(comparable_rows)
+        if comparable_rows
+        else 0
+    )
     if args.min_match_rate is not None and match_rate < args.min_match_rate:
         print(
             f"Match rate {match_rate:.1%} is below required {args.min_match_rate:.1%}"

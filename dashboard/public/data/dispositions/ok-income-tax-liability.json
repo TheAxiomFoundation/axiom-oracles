@@ -1,0 +1,108 @@
+{
+ "suite": "ok-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "ok-taxsim-2024-single-30000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "804.5 - 887.37",
+     "equals": -82.87
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ok-taxsim-2024-single-60000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2154.5 - 2312.37",
+     "equals": -157.87
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ok-taxsim-2024-single-150000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6204.5 - 6587.37",
+     "equals": -382.87
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ok-taxsim-2024-married-60000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1609 - 1796.75",
+     "equals": -187.75
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ok-taxsim-2024-married-120000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4309 - 4646.75",
+     "equals": -337.75
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ok-taxsim-2024-married-300000",
+   "concept": "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.",
+   "cases": [
+    "ok-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12409 - 13196.75",
+     "equals": -787.75
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

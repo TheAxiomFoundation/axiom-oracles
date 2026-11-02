@@ -1,0 +1,11 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "cardinality-bound",
+  "case_count": 2,
+  "summary": {
+    "comparison_count": 2,
+    "match_count": 2,
+    "mismatch_count": 0
+  },
+  "cases": []
+}

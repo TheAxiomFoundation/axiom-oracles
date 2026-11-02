@@ -1,0 +1,172 @@
+schema: axiom_oracles.dispositions.v1
+suite: me-tanf-standards
+updated: "2026-07-13"
+# Maine TANF Rule 125A adult-included charts vs the PolicyEngine parameter
+# tree at 2026-01. The encoded rule carries the FFY2022-FFY2026 vintages and
+# evaluates the FFY2026 column (effective 2025-10-01, per the Rule 125A
+# charts); PolicyEngine's gov.states.me.dhhs.tanf tables end at the
+# 2024-10-01 (FFY2025) vintage — the October 2025 COLA has not been ingested
+# upstream. Every residual is that one-vintage lag, dispositioned as an
+# upstream engine gap. Entries expire on source change so a PE parameter
+# update that ingests FFY2026 retires them automatically.
+entries:
+  - id: me-ffy2026-vintage-adult_included_standard_of_need_base-size-1
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_standard_of_need_base@1
+    case_id: me-tanf-standards-adult_included_standard_of_need_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 500;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 489. The 11-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "500.0 - 489.0"
+          equals: 11.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 500.0
+      right: 489.0
+  - id: me-ffy2026-vintage-adult_included_standard_of_need_base-size-4
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_standard_of_need_base@4
+    case_id: me-tanf-standards-adult_included_standard_of_need_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 1324;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 1296. The 28-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "1324.0 - 1296.0"
+          equals: 28.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1324.0
+      right: 1296.0
+  - id: me-ffy2026-vintage-adult_included_standard_of_need_base-size-8
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_standard_of_need_base@8
+    case_id: me-tanf-standards-adult_included_standard_of_need_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 2400;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 2349. The 51-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "2400.0 - 2349.0"
+          equals: 51.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 2400.0
+      right: 2349.0
+  - id: me-ffy2026-vintage-adult_included_standard_of_need_add_member
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_standard_of_need_add_member
+    case_id: me-tanf-standards-adult_included_standard_of_need_add_member
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 269;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 263. The 6-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "269.0 - 263.0"
+          equals: 6.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 269.0
+      right: 263.0
+  - id: me-ffy2026-vintage-adult_included_maximum_grant_base-size-1
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_maximum_grant_base@1
+    case_id: me-tanf-standards-adult_included_maximum_grant_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 436;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 425. The 11-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "436.0 - 425.0"
+          equals: 11.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 436.0
+      right: 425.0
+  - id: me-ffy2026-vintage-adult_included_maximum_grant_base-size-4
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_maximum_grant_base@4
+    case_id: me-tanf-standards-adult_included_maximum_grant_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 1155;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 1127. The 28-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "1155.0 - 1127.0"
+          equals: 28.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1155.0
+      right: 1127.0
+  - id: me-ffy2026-vintage-adult_included_maximum_grant_base-size-8
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_maximum_grant_base@8
+    case_id: me-tanf-standards-adult_included_maximum_grant_base
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 2091;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 2040. The 51-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "2091.0 - 2040.0"
+          equals: 51.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 2091.0
+      right: 2040.0
+  - id: me-ffy2026-vintage-adult_included_maximum_grant_add_member
+    concept: us-me:regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need#adult_included_maximum_grant_add_member
+    case_id: me-tanf-standards-adult_included_maximum_grant_add_member
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        The encoded Rule 125A FFY2026 value (effective 2025-10-01) is 234;
+        PolicyEngine's latest vintage for the same table cell is the 2024-10-01
+        (FFY2025) value 228. The 6-dollar gap is the October 2025 COLA
+        PolicyEngine has not yet ingested — a PolicyEngine parameter-vintage gap,
+        not an encoding defect.
+      arithmetic:
+        - expression: "234.0 - 228.0"
+          equals: 6.0
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 234.0
+      right: 228.0

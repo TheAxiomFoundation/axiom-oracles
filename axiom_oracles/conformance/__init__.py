@@ -22,6 +22,7 @@ conformance predicate.
 """
 
 from axiom_oracles.conformance.compositions import (
+    AXIOM_RULESPEC_ROOT_ENV,
     COMPOSITIONS_SCHEMA_VERSION,
     CompositionsDocument,
     ResolvedComposition,
@@ -40,6 +41,7 @@ from axiom_oracles.conformance.schema import (
 )
 
 __all__ = [
+    "AXIOM_RULESPEC_ROOT_ENV",
     "COMPOSITIONS_SCHEMA_VERSION",
     "CONFORMANCE_SCHEMA_VERSION",
     "CompositionsDocument",

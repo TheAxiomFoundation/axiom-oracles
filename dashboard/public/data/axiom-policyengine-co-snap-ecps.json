@@ -9,20 +9,20 @@
       "components": [],
       "concept": "us:statutes/7/2014/u#snap_benefit",
       "description": "SNAP benefit amount",
-      "left_weighted_sum": 37944.0,
-      "match_count": 1072,
-      "match_rate": 100.0,
-      "match_weight": 1072,
-      "matched": 1072,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "left_weighted_sum": 37933.0,
+      "match_count": 1071,
+      "match_rate": 99.90671641791045,
+      "match_weight": 1071,
+      "matched": 1071,
+      "mismatch_count": 1,
+      "mismatch_weight": 1,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
       "right_weighted_sum": 37996.938652,
-      "weighted_difference": -52.93865199999709,
-      "weighted_match_rate": 100.0
+      "weighted_difference": -63.93865199999709,
+      "weighted_match_rate": 99.90671641791045
     },
     {
       "category": "food",
@@ -78,6 +78,12 @@
       "tolerance": 0
     }
   ],
+  "dashboard_truncation": {
+    "shown_case_rows": 0,
+    "shown_mismatches": 1,
+    "total_case_rows": 1072,
+    "total_mismatches": 1
+  },
   "engines": {
     "left": "axiom",
     "right": "policyengine"
@@ -86,19 +92,46 @@
   "locales": [
     "CO"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "case_id": "ecps-spm-50970",
+      "concept": "us:statutes/7/2014/u#snap_benefit",
+      "description": "SNAP benefit amount",
+      "difference": -1.7000120000000152,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "whole-dollar-rounding-chain-snap-benefit"
+      },
+      "kind": "amount_difference",
+      "left": 290.0,
+      "parent": null,
+      "relative_tolerance": 0,
+      "right": 291.700012,
+      "tolerance": 1.5
+    }
+  ],
   "population": "enhanced-cps",
   "provenance": {
     "engine": {
-      "axiom_rules_engine_sha": "e19f1b7573c74512f20a6b71a0c55dbbf333d41b",
+      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T20:51:04Z",
+    "generated_at": "2026-07-26T07:07:01Z",
     "generated_by": "scripts/run_comparison.py::co-snap-ecps",
     "oracle": {
       "name": "policyengine",
       "policyengine_us": "1.705.1"
     },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
+      },
+      {
+        "repo": "TheAxiomFoundation/rulespec-us-co",
+        "sha": "8e6369ddaf78127b8399e971e4cfd4c094851394"
+      }
+    ],
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
@@ -114,30 +147,41 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 1,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/co-snap-ecps.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 100,
+      "raw_match_rate": 99.953358,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": {},
-    "match_count": 2144,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
+    "match_count": 2143,
+    "mismatch_count": 1,
+    "mismatches_by_concept": [
+      {
+        "count": 1,
+        "value": "us:statutes/7/2014/u#snap_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 1,
+        "value": "amount_difference"
+      }
+    ],
     "mismatches_by_scenario": {},
+    "stored_mismatch_example_count": 1,
     "weighted": {
       "comparison_weight": 2144,
-      "match_rate": 100.0,
-      "match_weight": 2144,
-      "mismatch_weight": 0
+      "match_rate": 99.95335820895522,
+      "match_weight": 2143,
+      "mismatch_weight": 1
     }
   }
 }

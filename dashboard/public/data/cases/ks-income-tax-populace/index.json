@@ -1,0 +1,15 @@
+{
+ "suite": "ks-income-tax-populace",
+ "count": 989,
+ "total_cases": 989,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

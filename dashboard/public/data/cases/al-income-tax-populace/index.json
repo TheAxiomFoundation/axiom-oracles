@@ -1,0 +1,15 @@
+{
+ "suite": "al-income-tax-populace",
+ "count": 1632,
+ "total_cases": 1632,
+ "chunks": 4,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

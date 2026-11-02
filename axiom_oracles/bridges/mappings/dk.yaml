@@ -1,0 +1,24 @@
+prefixes:
+  - legal_id_prefix: "dk:"
+    country: dk
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: >-
+      PolicyEngine provides no Denmark runtime surface, so no dk legal ID
+      has a PolicyEngine target (the Belgium precedent). Denmark IS
+      oracle-validated, just not against PolicyEngine - the EUROMOD leg is
+      live in this repository. The dk-child-youth-benefit suites compare
+      the composed rulespec-dk pipelines against the public JRC release
+      (EUROMOD_RELEASES_J2.0+, systems DK_2025 and DK_2023, shipped
+      DK_training_data synthetic rows) with a pinned engine and full
+      provenance (comparisons/dk-child-youth-benefit-euromod.yaml and its
+      2023/couple siblings); three witness cases activate and disposition
+      the known EUROMOD gaps (ec-jrc 18 pre-2022 spousal taper, 19
+      600-vs-660 supplement, 20 missing pension gross-up) as
+      upstream_engine_gap; the ministry satser tables are a second,
+      EUROMOD-independent reference (reference/dk-satser/); and
+      conformance/dk.yaml carries the DK_2025-spine universe with the
+      honest coverage burndown. Exact PolicyEngine mappings should replace
+      this prefix only if a real Denmark PolicyEngine surface is ever
+      implemented. External context, verified outside this repository -
+      Statistics Denmark's Lovmodellen is government-internal.

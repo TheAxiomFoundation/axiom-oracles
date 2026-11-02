@@ -27,12 +27,14 @@ from axiom_oracles.populations.snap_qc import (
     EXCLUSION_SSI_CAP,
     UNEARNED_INCOME_SOURCES,
     QcExclusionLog,
+    SNAP_QC_PINS,
     QcMember,
     SnapQcPin,
     UtilityTier,
     _download_qc_csv,
     _member_income_field_names,
     _utility_tier_from_sua1,
+    fetch_pinned_puf,
     load_qc_units,
 )
 
@@ -85,6 +87,8 @@ _FIXTURE_COLUMNS = [
     "FSNETEST",
     "STATUS",
     "AMTERR",
+    "FSNELDER",
+    "FSNDIS",
 ] + [f"{prefix}{i}" for i in (1, 2) for prefix in _PERSON_COLUMNS]
 
 
@@ -466,10 +470,40 @@ def test_mfip_units_are_excluded_and_counted(tmp_path) -> None:
 
 def test_include_special_programs_keeps_mfip_units(tmp_path) -> None:
     _write_fixture(tmp_path)
-    units, log = load_qc_units(2024, data_dir=tmp_path, include_special_programs=True)
+    units, log = load_qc_units(
+        2024, data_dir=tmp_path, include_special_programs=True
+    )
     assert len(units) == 5
     assert log.total_excluded == 0
     assert 3 in {u.certified_size for u in units}
+
+
+def test_nyscap_units_are_kept_and_other_ssi_cap_codes_excluded(tmp_path) -> None:
+    # NYSCAP (SSI_CAP = 4) follows the regular SNAP benefit determination
+    # ("went through the standard editing process that non-SSI-CAP households
+    # undergo" — FY2024 tech doc), so it is replayable; every other nonzero
+    # code uses a separate benefit procedure and stays excluded.
+    import csv as _csv
+    import io as _io
+
+    rows = []
+    for ssi_cap in ("0", "1", "2", "3", "4"):
+        row = dict(_ROW_ELDERLY_MAX_ALLOTMENT)
+        row["SSI_CAP"] = ssi_cap
+        row["STATE"] = "36"
+        rows.append(row)
+    buffer = _io.StringIO()
+    writer = _csv.DictWriter(buffer, fieldnames=_FIXTURE_COLUMNS, restval=".")
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(row)
+    (tmp_path / "qc_pub_fy2024.csv").write_text(buffer.getvalue(), encoding="utf-8")
+
+    units, log = load_qc_units(2024, data_dir=tmp_path)
+    assert log.total_loaded == 2  # SSI_CAP 0 and 4
+    assert log.counts[EXCLUSION_SSI_CAP] == 3  # codes 1, 2, 3
+    raw_codes = {unit.raw["SSI_CAP"] for unit in units}
+    assert raw_codes == {"0", "4"}
 
 
 def test_state_filter_scopes_without_counting_out_of_scope_rows(tmp_path) -> None:
@@ -597,6 +631,100 @@ def test_download_raises_on_sha256_mismatch(tmp_path, monkeypatch) -> None:
         _download_qc_csv(pin, tmp_path)
 
 
+def _pin_for_payload(payload: bytes) -> SnapQcPin:
+    return SnapQcPin(
+        fiscal_year=2024,
+        url="https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip",
+        sha256=hashlib.sha256(payload).hexdigest(),
+        archive_member="qc_pub_fy2024.csv",
+    )
+
+
+def test_fetch_pinned_puf_downloads_keeps_and_reuses_the_verified_zip(
+    tmp_path, monkeypatch
+) -> None:
+    csv_text = _fixture_csv_text()
+    payload = _zip_bytes(csv_text)
+    pin = _pin_for_payload(payload)
+    monkeypatch.setitem(SNAP_QC_PINS, 2024, pin)
+    calls: list[str] = []
+
+    def fake_get(url, *, headers, timeout):
+        calls.append(url)
+        assert headers["User-Agent"].startswith("Mozilla/5.0")
+        return _FakeResponse(payload)
+
+    _install_fake_requests(monkeypatch, on_get=fake_get)
+    archive_dir = tmp_path / "archive"
+    path = fetch_pinned_puf(2024, tmp_path / "data", archive_dir=archive_dir)
+
+    assert path == tmp_path / "data" / "qc_pub_fy2024.csv"
+    assert path.read_bytes() == csv_text.encode("utf-8")
+    kept = archive_dir / f"{pin.sha256}.zip"
+    assert kept.read_bytes() == payload
+    assert calls == [pin.url]
+
+    # A second call reuses the kept zip (no network) and re-extracts, even
+    # over a CSV that was tampered with in between.
+    def exploding_get(*args, **kwargs):  # pragma: no cover - must not run
+        raise AssertionError("a verified kept zip must not be re-downloaded")
+
+    _install_fake_requests(monkeypatch, on_get=exploding_get)
+    path.write_text("tampered")
+    again = fetch_pinned_puf(2024, tmp_path / "data", archive_dir=archive_dir)
+    assert again.read_bytes() == csv_text.encode("utf-8")
+
+
+def test_fetch_pinned_puf_replaces_a_kept_zip_that_fails_its_pin(
+    tmp_path, monkeypatch
+) -> None:
+    payload = _zip_bytes(_fixture_csv_text())
+    pin = _pin_for_payload(payload)
+    monkeypatch.setitem(SNAP_QC_PINS, 2024, pin)
+    archive_dir = tmp_path / "archive"
+    archive_dir.mkdir()
+    kept = archive_dir / f"{pin.sha256}.zip"
+    kept.write_bytes(payload[:-10])  # a truncated cache restore
+    calls: list[str] = []
+
+    def fake_get(url, *, headers, timeout):
+        calls.append(url)
+        return _FakeResponse(payload)
+
+    _install_fake_requests(monkeypatch, on_get=fake_get)
+    fetch_pinned_puf(2024, tmp_path / "data", archive_dir=archive_dir)
+    assert calls == [pin.url]
+    assert kept.read_bytes() == payload
+
+
+def test_fetch_pinned_puf_refuses_a_download_that_fails_its_pin(
+    tmp_path, monkeypatch
+) -> None:
+    pin = SnapQcPin(
+        fiscal_year=2024,
+        url="https://snapqcdata.net/qcfy2024_csv.zip",
+        sha256="0" * 64,
+        archive_member="qc_pub_fy2024.csv",
+    )
+    monkeypatch.setitem(SNAP_QC_PINS, 2024, pin)
+
+    def fake_get(url, *, headers, timeout):
+        return _FakeResponse(_zip_bytes(_fixture_csv_text()))
+
+    _install_fake_requests(monkeypatch, on_get=fake_get)
+    archive_dir = tmp_path / "archive"
+    with pytest.raises(RuntimeError, match="failed its sha256 check"):
+        fetch_pinned_puf(2024, tmp_path / "data", archive_dir=archive_dir)
+    # Nothing unverified is kept or extracted.
+    assert not archive_dir.exists()
+    assert not (tmp_path / "data" / "qc_pub_fy2024.csv").exists()
+
+
+def test_fetch_pinned_puf_refuses_an_unpinned_year(tmp_path) -> None:
+    with pytest.raises(ValueError, match="No SNAP QC pin for fiscal year 2099"):
+        fetch_pinned_puf(2099, tmp_path)
+
+
 def test_data_dir_short_circuits_the_download(tmp_path, monkeypatch) -> None:
     _write_fixture(tmp_path)
 
@@ -648,19 +776,25 @@ def test_live_fy2024_row_counts() -> None:
     units, log = load_qc_units(2024)
     assert log.total_loaded + log.total_excluded == 44_891
     assert log.counts[EXCLUSION_MFIP] == 98
-    assert log.counts[EXCLUSION_SSI_CAP] == 874
-    assert log.total_loaded == 43_919
+    # SSI_CAP codes 1/2/3 (255 + 473 + 39); the 107 NYSCAP rows (code 4, all
+    # New York) follow the regular benefit determination and are kept.
+    assert log.counts[EXCLUSION_SSI_CAP] == 767
+    assert log.total_loaded == 44_026
     assert len(units) == log.total_loaded
 
     co_units, co_log = load_qc_units(2024, state_fips=8)
     assert len(co_units) == 856
+
+    ny_units, _ = load_qc_units(2024, state_fips=36)
+    assert len(ny_units) == 847  # 740 regular + 107 NYSCAP
+
+    ca_units, _ = load_qc_units(2024, state_fips=6)
+    assert len(ca_units) == 883
     assert co_log.total_excluded == 0
 
     # Member income reproduces the QC-constructed unit aggregates exactly.
     for unit in co_units:
-        fsearn = (
-            float(unit.raw["FSEARN"]) if unit.raw["FSEARN"] not in ("", ".") else 0.0
-        )
+        fsearn = float(unit.raw["FSEARN"]) if unit.raw["FSEARN"] not in ("", ".") else 0.0
         fsunearn = (
             float(unit.raw["FSUNEARN"])
             if unit.raw["FSUNEARN"] not in ("", ".")
@@ -719,3 +853,19 @@ def test_raw_row_is_read_only(tmp_path) -> None:
     units, _ = load_qc_units(2024, data_dir=directory)
     with pytest.raises(TypeError):
         units[0].raw["FSBEN"] = "999"
+
+
+def test_unit_elderly_or_disabled_uses_file_counts(tmp_path) -> None:
+    rows = [dict(_ROW_ELDERLY_MAX_ALLOTMENT), dict(_ROW_EARNER_SHELTER)]
+    rows[0]["FSNELDER"] = "1"
+    rows[0]["FSNDIS"] = "0"
+    rows[1]["FSNELDER"] = "0"
+    rows[1]["FSNDIS"] = "0"
+    text = _fixture_csv_text_for_rows(rows)
+    directory = tmp_path / "qc"
+    directory.mkdir()
+    (directory / "qc_pub_fy2024.csv").write_text(text)
+    units, _ = load_qc_units(2024, data_dir=directory)
+    by_month = {u.yrmonth: u for u in units}
+    assert by_month[202401].unit_has_elderly_or_disabled is True
+    assert by_month[202402].unit_has_elderly_or_disabled is False

@@ -1,0 +1,108 @@
+{
+ "suite": "mi-income-tax-liability",
+ "updated": "2026-07-13",
+ "entries": [
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-single-30000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 1 exemption(s) for the single 30,000-dollar filer. The 2026 pipeline reports 1022.125 and TAXSIM 2024 reports 1037.0, a -14.88-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1022.125 - 1037.0",
+     "equals": -14.88
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-single-60000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 1 exemption(s) for the single 60,000-dollar filer. The 2026 pipeline reports 2297.125 and TAXSIM 2024 reports 2312.0, a -14.88-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2297.125 - 2312.0",
+     "equals": -14.88
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-single-150000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 1 exemption(s) for the single 150,000-dollar filer. The 2026 pipeline reports 6122.125 and TAXSIM 2024 reports 6137.0, a -14.88-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6122.125 - 6137.0",
+     "equals": -14.88
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-married-60000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 2 exemption(s) for the married 60,000-dollar filer. The 2026 pipeline reports 2044.25 and TAXSIM 2024 reports 2074.0, a -29.75-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2044.25 - 2074.0",
+     "equals": -29.75
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-married-120000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 2 exemption(s) for the married 120,000-dollar filer. The 2026 pipeline reports 4594.25 and TAXSIM 2024 reports 4624.0, a -29.75-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4594.25 - 4624.0",
+     "equals": -29.75
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "mi-taxsim-2024-exemption-indexation-married-300000",
+   "concept": "us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Michigan applies the same flat 4.25 per cent rate (MCL 206.51(1)) in both years, so the gap is entirely the rate on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 to 5,950 per person): 0.0425 * (5,950 - 5,600) = 14.875 per exemption, 2 exemption(s) for the married 300,000-dollar filer. The 2026 pipeline reports 12244.25 and TAXSIM 2024 reports 12274.0, a -29.75-dollar gap \u2014 the exemption indexation vintage, not a pipeline defect.",
+   "cases": [
+    "mi-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12244.25 - 12274.0",
+     "equals": -29.75
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

@@ -1,0 +1,56 @@
+schema: axiom_oracles.dispositions.v1
+suite: dk-child-youth-benefit-couple
+updated: "2026-08-13"
+entries:
+  - id: euromod-dk-bfachnm-pre2022-spousal-taper
+    concept: dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit
+    case_id: dk-child-youth-benefit-couple-age5-yem1500000-spouse0
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Børne- og ungeydelsesloven § 5, stk. 3-4 establish the per-payment
+        cadence (quarterly for child benefit and monthly for youth benefit),
+        so the age-5 case uses four quarterly payments under stk. 3. Under
+        § 4, stk. 1 ligedeling, each 4.191 kr. payment is split in half and
+        that half is rounded upward, so each holder starts with 4 × 2.096 =
+        8.384 kr. annually. Section 1 a then applies the 2 pct.
+        taper to the income basis »hos modtageren af ydelsen«—the recipient's
+        own income. The ministry confirms both transition rules: "Fra og med
+        1. januar 2022 deles boerne- og ungeydelsen som udgangspunkt lige
+        mellem barnets foraeldre." and "Fra og med 1. januar 2022 sker der
+        alene indkomstaftrapning ud fra modtagerens egen indkomst." The live
+        Axiom run therefore gives the earner 0: own basis 1.380.000 minus the
+        917.000 allowance is 463.000, whose 9.260 reduction exhausts the 8.384
+        share. The non-earner's own basis is 0, so that recipient keeps 8.384;
+        the statutory household sum is 8.384. EUROMOD DK_2025 executed 7.504,
+        exactly the unsplit 16.764 amount less a 9.260 reduction on the legacy
+        spousal/couple basis. Its pre-2022 spousal test therefore understates
+        the current-law household total by 880 kr.
+      arithmetic:
+        - expression: "16764 / 4"
+          equals: 4191
+        - expression: "(4191 + 1) / 2"
+          equals: 2096
+        - expression: "4 * 2096"
+          equals: 8384
+        - expression: "1380000 - 917000"
+          equals: 463000
+        - expression: "463000 * 0.02"
+          equals: 9260
+        - expression: "0 + 8384"
+          equals: 8384
+        - expression: "16764 - 9260"
+          equals: 7504
+        - expression: "7504 - 8384"
+          equals: -880
+      upstream_url: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/18
+      sources:
+        - axiom_oracles/data/euromod_issues.json#euromod-dk-2025-bfachnm-pre2022-spousal-taper
+        - reference/dk-satser/provenance.json#pages[3].quotes
+    linked_issue: https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/18
+    expires_on_source_change: true
+    pinned:
+      left: 7504
+      right: 8384
+      difference: -880

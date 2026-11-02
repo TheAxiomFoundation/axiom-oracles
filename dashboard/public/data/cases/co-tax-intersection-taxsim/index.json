@@ -1,0 +1,29 @@
+{
+ "suite": "co-tax-intersection-taxsim",
+ "count": 1201,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "taxsim",
+  "versions": {
+   "axiom_rules_engine": "0.1.0",
+   "policyengine": "4.18.9",
+   "policyengine_core": "3.28.0",
+   "policyengine_us": "1.752.2"
+  }
+ },
+ "mismatch_concepts": [
+  "us:tax/federal-income-tax#amt",
+  "us:tax/federal-income-tax#ctc",
+  "us:tax/federal-income-tax#eitc",
+  "us:tax/federal-income-tax#liability",
+  "us:tax/federal-income-tax#standard_deduction",
+  "us:tax/federal-income-tax#tax_before_credits",
+  "us:tax/federal-income-tax#taxable_income",
+  "us:tax/payroll#employee_fica",
+  "us:tax/state-income-tax#liability"
+ ],
+ "source": "axiom-taxsim-co-tax-intersection-ecps-0-2026-08-23.json",
+ "total_cases": 1201
+}

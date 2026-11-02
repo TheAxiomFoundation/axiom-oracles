@@ -1,0 +1,30 @@
+{
+  "schema": "axiom_oracles.committed_exercise_receipt.v1",
+  "suite": "us-tariff-panel",
+  "cases": 122,
+  "evidence_mode": "committed-detail-rows",
+  "report": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
+  "report_sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
+  "evidence_artifacts": [
+    {
+      "path": "dashboard/public/data/axiom-yale-us-tariff-panel.json",
+      "sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5"
+    }
+  ],
+  "evidence_fields": {
+    "entry_date": {"distinct": 33, "state": "varied"},
+    "hts_number": {"distinct": 5, "state": "varied"},
+    "country_of_origin": {"distinct": 240, "state": "varied"},
+    "article_is_potash": {"distinct": 1, "state": "constant"},
+    "cbp_agrees_chapter_98_entry_is_appropriate": {"distinct": 1, "state": "constant"},
+    "entry_is_9802_excepted_entry": {"distinct": 1, "state": "constant"},
+    "entry_is_chapter_98_subchapter_xxiii_entry": {"distinct": 1, "state": "constant"},
+    "entry_is_entered_free_of_duty_under_usmca": {"distinct": 1, "state": "constant"},
+    "entry_is_humanitarian_donation_article": {"distinct": 1, "state": "constant"},
+    "entry_is_informational_material_article": {"distinct": 1, "state": "constant"},
+    "entry_is_personal_use_accompanied_baggage": {"distinct": 1, "state": "constant"},
+    "entry_is_properly_claimed_chapter_98_entry": {"distinct": 1, "state": "constant"},
+    "entry_is_usmca_duty_free_entry": {"distinct": 1, "state": "constant"},
+    "entry_loaded_and_in_transit_before_july_24_2026": {"distinct": 1, "state": "constant"}
+  }
+}

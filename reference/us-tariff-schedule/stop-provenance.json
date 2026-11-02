@@ -1,0 +1,16 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule_stop.v1",
+  "verdict": "STOP_CAP_EXCEEDED",
+  "window": {"start": "2026-02-15", "end": "2026-08-01"},
+  "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+  "yale_rds_sha256": "724a0be1dce45d423d5ce599bb56f2ab81cbf78b637ba59a3287738bfc488a35",
+  "extractor_sha256_at_measurement": "5b1fdd25c2255f9aa1d51491720ee35dd51c19536a9defd99ade549c55d23725",
+  "extractor_sha256_committed": "6b63412fa4adfa196db04e4faf438497b21c846c158b27b9247d9d81a82db58d",
+  "origin_regime_table_sha256": "1f322eac52a39fee2ca3380021fc3da3e298caf02dbfcc9c0c21692dbe7821c8",
+  "bridge_sha256": "4a5a96988c92f51938326cffa16fb5cdb3dd7ce81a56a941f287c8b7a0ffe6f7",
+  "bridge_additions_sha256": "3bceda1c45aa5a358dcaea0ce21814ab2bfd8f3b03fd6d5fadcf9344d2e5b48c",
+  "quotient_receipt": "reference/us-tariff-schedule/quotient-receipt.json",
+  "final_measurement_wall_clock_seconds": 594.53,
+  "engine_processes_started": 0,
+  "note": "The A1 guard is measured then dropped because it exceeds the cap; the representative-only expected-side quotient also exceeds the cap, so A2 prohibits engine execution and any second-stage sample."
+}

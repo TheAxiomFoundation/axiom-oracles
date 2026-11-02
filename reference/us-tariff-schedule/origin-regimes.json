@@ -1,0 +1,23 @@
+{
+  "schema": "axiom_oracles.us_tariff_origin_regimes.v1",
+  "description": "Fixed Axiom-origin gate table used only to select the A1 exhaustive-behavior guard; no engine output or Yale value is an input.",
+  "column_2": ["BY", "CU", "KP", "RU"],
+  "witness_cohorts": ["CN", "MX", "CA", "BR", "GB", "VN", "ZA", "DE", "US"],
+  "fta_preference": ["KR"],
+  "named_overlay_groups": {
+    "china": ["CN"],
+    "hong_kong": ["HK"],
+    "canada": ["CA"],
+    "mexico": ["MX"],
+    "korea": ["KR"],
+    "vietnam": ["VN"],
+    "south_africa": ["ZA"],
+    "uk": ["GB"],
+    "brazil": ["BR"],
+    "russia": ["RU"],
+    "eu": ["AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE", "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK"],
+    "japan": ["JP"],
+    "switzerland": ["CH"],
+    "taiwan": ["TW"]
+  }
+}

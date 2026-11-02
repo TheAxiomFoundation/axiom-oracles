@@ -614,6 +614,252 @@ case_sets:
         yearly_earned_income: 0.0
       facts:
         yearly_earned_income: 0.0
+  uk-ctr:
+    locale: UK
+    outputs:
+    - uk:policies/govuk/council-tax-reduction#council_tax_reduction_annual_amount
+    cases:
+    - id: ctr-eng-pa-birmingham-couple-gc
+      period: '2026'
+      scenario: england-pension-age-full-award-guarantee-credit
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Birmingham
+        local_authority_gss_code: E08000025
+        local_authority_postcode: B1 1BB
+        council_tax_band: C
+        annual_council_tax_liability: 1800.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 2000.0
+        couple: true
+        pension_age: true
+        claimant_employment_income: 0.0
+        claimant_state_pension: 8000.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 6000.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 68
+        relation: Spouse
+    - id: ctr-eng-pa-cornwall-single-taper
+      period: '2026'
+      scenario: england-pension-age-taper-interior
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Cornwall
+        local_authority_gss_code: E06000052
+        local_authority_postcode: TR1 1EN
+        council_tax_band: D
+        annual_council_tax_liability: 2000.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 5000.0
+        couple: false
+        pension_age: true
+        claimant_employment_income: 8000.0
+        claimant_state_pension: 9000.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+    - id: ctr-sco-wa-glasgow-single-earner
+      period: '2026'
+      scenario: scotland-working-age-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: Scotland
+        ctr_scheme: scotland-working-age-national
+        local_authority_name: Glasgow City
+        local_authority_gss_code: S12000049
+        local_authority_postcode: G1 1XW
+        council_tax_band: B
+        annual_council_tax_liability: 1300.0
+        tenure: private_rent
+        monthly_rent: 583.33
+        capital: 1000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-wal-wa-cardiff-couple-2kids
+      period: '2026'
+      scenario: wales-working-age-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: Wales
+        ctr_scheme: wales-working-age-national
+        local_authority_name: Cardiff
+        local_authority_gss_code: W06000015
+        local_authority_postcode: CF10 1EP
+        council_tax_band: C
+        annual_council_tax_liability: 1500.0
+        tenure: social_rent
+        monthly_rent: 500.0
+        capital: 500.0
+        couple: true
+        pension_age: false
+        claimant_employment_income: 22000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 0.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 35
+        relation: Spouse
+      - id: child-0
+        kind: person
+        age: 5
+        relation: Child
+      - id: child-1
+        kind: person
+        age: 3
+        relation: Child
+    - id: ctr-eng-wa-kingston-single-earner
+      period: '2026'
+      scenario: kingston-working-age-local-supported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: kingston-upon-thames-working-age-local
+        local_authority_name: Kingston upon Thames
+        local_authority_gss_code: E09000021
+        local_authority_postcode: KT1 1EU
+        council_tax_band: D
+        annual_council_tax_liability: 2171.0
+        tenure: private_rent
+        monthly_rent: 900.0
+        capital: 3000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-eng-pa-kingston-single
+      period: '2026'
+      scenario: kingston-pension-age-routes-to-national
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: england-pension-age-prescribed
+        local_authority_name: Kingston upon Thames
+        local_authority_gss_code: E09000021
+        local_authority_postcode: KT1 1EU
+        council_tax_band: D
+        annual_council_tax_liability: 2171.0
+        tenure: owner
+        monthly_rent: 0.0
+        capital: 4000.0
+        couple: false
+        pension_age: true
+        claimant_employment_income: 0.0
+        claimant_state_pension: 9000.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+    - id: ctr-eng-wa-manchester-single-earner
+      period: '2026'
+      scenario: manchester-working-age-local-unsupported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: manchester-working-age-local
+        local_authority_name: Manchester
+        local_authority_gss_code: E08000003
+        local_authority_postcode: M1 1AE
+        council_tax_band: B
+        annual_council_tax_liability: 1600.0
+        tenure: private_rent
+        monthly_rent: 700.0
+        capital: 3000.0
+        couple: false
+        pension_age: false
+        claimant_employment_income: 11000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+    - id: ctr-eng-wa-birmingham-couple-1kid
+      period: '2026'
+      scenario: birmingham-working-age-local-unsupported
+      parameters:
+        scheme_year: 2026-27
+        calculation_date: '2026-07-13'
+        country: England
+        ctr_scheme: birmingham-working-age-local
+        local_authority_name: Birmingham
+        local_authority_gss_code: E08000025
+        local_authority_postcode: B1 1BB
+        council_tax_band: B
+        annual_council_tax_liability: 1400.0
+        tenure: social_rent
+        monthly_rent: 500.0
+        capital: 2000.0
+        couple: true
+        pension_age: false
+        claimant_employment_income: 16000.0
+        claimant_state_pension: 0.0
+        claimant_private_pension: 0.0
+        partner_employment_income: 0.0
+        partner_state_pension: 0.0
+        partner_private_pension: 0.0
+      entities:
+      - id: claimant
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+      - id: partner
+        kind: person
+        age: 33
+        relation: Spouse
+      - id: child-0
+        kind: person
+        age: 8
+        relation: Child
   uk-employer-nic:
     locale: UK
     entity: Person

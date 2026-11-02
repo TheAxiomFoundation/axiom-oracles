@@ -1,0 +1,108 @@
+{
+ "suite": "ut-income-tax-liability",
+ "updated": "2026-07-27",
+ "entries": [
+  {
+   "id": "ut-taxsim-2026-rate-and-credit-single-30000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM siitax nets the downstream taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.",
+   "cases": [
+    "ut-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1335.0 - 530.13",
+     "equals": 804.87
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ut-taxsim-2026-rate-and-credit-single-60000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM siitax nets the downstream taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.",
+   "cases": [
+    "ut-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2670.0 - 2270.13",
+     "equals": 399.87
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ut-taxsim-2026-rate-vintage-single-150000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The taxpayer credit is fully phased out; the residual is TAXSIM's 4.50 percent rate versus the official 4.45 percent rate.",
+   "cases": [
+    "ut-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6675.0 - 6750.0",
+     "equals": -75.0
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ut-taxsim-2026-rate-and-credit-married-60000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM siitax nets the downstream married taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.",
+   "cases": [
+    "ut-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2670.0 - 1060.27",
+     "equals": 1609.73
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ut-taxsim-2026-rate-and-credit-married-120000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "TAXSIM siitax nets the downstream married taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.",
+   "cases": [
+    "ut-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "5340.0 - 4540.27",
+     "equals": 799.73
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ut-taxsim-2026-rate-vintage-married-300000",
+   "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The taxpayer credit is fully phased out; the residual is TAXSIM's 4.50 percent rate versus the official 4.45 percent rate.",
+   "cases": [
+    "ut-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "13350.0 - 13500.0",
+     "equals": -150.0
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

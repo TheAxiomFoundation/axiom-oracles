@@ -1,0 +1,14 @@
+rows:
+  - citation: "us-co/regulation/10-ccr-2506-1"
+    heading: "10 CCR 2506-1 RULE MANUAL VOLUME 4, SNAP"
+    status: excluded
+    reason: container_heading
+    basis: "The corpus row is the document node itself (kind=document), not a
+      provision: its body is zero-length and all regulatory content is carried
+      by its 289 child sections, every one of which is separately classified in
+      this universe. Verifiable from the pinned provisions file: the record
+      with this citation_path has kind 'document' and an empty body."
+    note: "Classified 2026-07-27 during the classification merge. Called out
+      explicitly because it is the row that takes this root's pending count to
+      zero — the reader should be able to check the one row that decides the
+      verdict."

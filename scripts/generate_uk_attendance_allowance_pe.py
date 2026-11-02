@@ -40,11 +40,10 @@ Fuel Payment grids.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-
-from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -53,6 +52,10 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
+RULESPEC_UK = Path(
+    os.environ.get("RULESPEC_UK_CHECKOUT")
+    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
+)
 
 #: Encoded program under comparison and its rate-given-category output.
 AA_PROGRAM = "uk/policies/attendance_allowance_composed_amount_pipeline.yaml"
@@ -136,12 +139,7 @@ def _policyengine_awards(cases: list[AACase]) -> dict[str, float]:
     return awards
 
 
-def _axiom_awards(
-    cases: list[AACase],
-    *,
-    rulespec_root: Path,
-    axiom_binary: Path,
-) -> dict[str, float]:
+def _axiom_awards(cases: list[AACase]) -> dict[str, float]:
     """Rulespec Attendance Allowance annual amount through the axiom rules engine.
 
     The pipeline exposes the weekly rate for the awarded category; this annualises
@@ -155,7 +153,8 @@ def _axiom_awards(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = rulespec_root / AA_PROGRAM
+    program = RULESPEC_UK / AA_PROGRAM
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -177,10 +176,10 @@ def _axiom_awards(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=axiom_binary,
+        binary_path=binary,
         default_entity="Person",
         default_entity_id="person",
-        rulespec_root=rulespec_root,
+        rulespec_repo_roots=(RULESPEC_UK,),
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [AA_ENGINE_OUTPUT])
@@ -188,7 +187,8 @@ def _axiom_awards(
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: {result.errors}"
+                f"axiom rules engine failed for {result.household_id}: "
+                f"{result.errors}"
             )
         weekly = result.values.get(AA_ENGINE_OUTPUT)
         if weekly is None:
@@ -301,7 +301,8 @@ def build_report(
         "provenance": {
             "generated": datetime.now(timezone.utc).date().isoformat(),
             "generator": "scripts/generate_uk_attendance_allowance_pe.py",
-            "axiom_engine": f"axiom rules engine over rulespec-uk {AA_PROGRAM}",
+            "axiom_engine": "axiom rules engine over "
+            f"rulespec-uk {AA_PROGRAM}",
             "policyengine_uk": POLICYENGINE_UK_VERSION,
             "comparability": "rate_only",
             "commensurability": (
@@ -318,15 +319,10 @@ def build_report(
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
+def main() -> int:
     cases = _grid()
     pe_awards = _policyengine_awards(cases)
-    axiom = _axiom_awards(
-        cases,
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
-    )
+    axiom = _axiom_awards(cases)
     report = build_report(cases, pe_awards, axiom)
 
     REPORTS.mkdir(exist_ok=True)

@@ -1,0 +1,55 @@
+{
+  "case_id": "ctr-eng-pa-cornwall-single-taper",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Cornwall",
+    "council_gss_code": "E06000052",
+    "council_tax_band": "D",
+    "ctr_scheme": "england-pension-age-prescribed",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "entitledto_council_tax_liability_gbp": null,
+    "notes": "Pending capture. Capturing this research grid requires entitledto's express written consent (see CAPTURE-PROTOCOL.md); the free calculator's terms bar systematic collection. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "single",
+    "country": "England",
+    "ctr_scheme": "england-pension-age-prescribed",
+    "local_authority": {
+      "name": "Cornwall",
+      "gss_code": "E06000052",
+      "postcode": "TR1 1EN"
+    },
+    "council_tax": {
+      "band": "D",
+      "annual_liability_gbp": 2000.0
+    },
+    "housing": {
+      "tenure": "owner",
+      "monthly_rent_gbp": 0.0,
+      "assessed_for_rent_rebate": false
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 70,
+        "employment_income_annual_gbp": 8000.0,
+        "state_pension_annual_gbp": 9000.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [],
+    "capital_gbp": 5000.0,
+    "income_basis": "annual GBP, gross (before income tax and National Insurance)"
+  },
+  "outputs": null
+}

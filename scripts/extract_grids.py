@@ -40,7 +40,19 @@ GRID_ROOT = _REPO_ROOT / "grids"
 
 # Map a country locale/scope to a grid jurisdiction filename. Locales are the
 # ``case.locale`` values the suites emit (``BE``, ``UK``, ``US-NY-NYC``, ...).
-_JURISDICTION_BY_COUNTRY = {"BE": "be", "UK": "uk", "US": "us"}
+_JURISDICTION_BY_COUNTRY = {
+    "BE": "be",
+    "CA": "ca",
+    "DE": "de",
+    "DK": "dk",
+    "ET": "et",
+    "GH": "gh",
+    "RW": "rw",
+    "UG": "ug",
+    "UK": "uk",
+    "US": "us",
+    "ZM": "zm",
+}
 
 
 def _country_of(cases: list[Case]) -> str:
@@ -143,7 +155,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--jurisdiction",
-        help="Only write/check this jurisdiction (us, be, uk).",
+        help="Only write/check this jurisdiction (us, be, ca, de, dk, uk).",
     )
     parser.add_argument(
         "--check",
@@ -155,7 +167,9 @@ def main() -> int:
     GRID_ROOT.mkdir(parents=True, exist_ok=True)
     payloads = build_grids()
     if args.jurisdiction:
-        payloads = {j: p for j, p in payloads.items() if j == args.jurisdiction}
+        payloads = {
+            j: p for j, p in payloads.items() if j == args.jurisdiction
+        }
         if not payloads:
             print(f"No suites found for jurisdiction {args.jurisdiction!r}.")
             return 1

@@ -1,0 +1,43 @@
+{
+ "suite": "dk-child-youth-benefit",
+ "updated": "2026-08-14",
+ "entries": [
+  {
+   "id": "euromod-dk-bfachnm-taper-pension-grossup-absent",
+   "concept": "dk:statutes/composed/boerne-og-ungeydelse-pipeline#single_recipient_annual_child_youth_benefit",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "B\u00f8rne- og ungeydelsesloven \u00a7 1 a, stk. 4-5 caps the recipient's qualifying pension contributions at the pensionsbeskatningslovens \u00a7 16, stk. 1 grundbel\u00f8b that applies to that recipient, and converts the capped amount to a gross amount by dividing by 0.6 before subtracting it from the taper basis. PBL \u00a7 16, stk. 1 sets two grundbel\u00f8b: the higher one applies only from the seventh income year before folkepensionsalderen; this recipient is 35, so the ORDINARY 2025 regulated cap of 9400 kr. applies (SKAT aldersopsparing satser; the case supplies it as the \u00a7 16 cap input). Axiom caps the 60000 kr. contribution at 9400, grosses it to 15666.67, and reduces its taper basis accordingly: excess 263333.33, reduction 5266.67, benefit 11497.33. EUROMOD bfachnm_dk has no taper input for qualifying contributions at all, so its excess stays 279000 and its reduction 5580, paying 11184. The missing gross-up lowers EUROMOD's benefit by exactly 2 pct. of the 15666.67 gross amount, 313.33 kr. (An earlier revision of this witness supplied the 61200 kr. within-seven-years cap to this age-35 recipient \u2014 legally impossible \u2014 and overstated the gap as 2000 kr.; caught in adversarial audit.)",
+   "cases": [
+    "dk-child-youth-benefit-age5-yem1300000-pension60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "9400 / 0.6",
+     "equals": 15666.666666666666
+    },
+    {
+     "expression": "(1196000 - 15666.666666666666 - 917000) * 0.02",
+     "equals": 5266.666666666667
+    },
+    {
+     "expression": "16764 - 5266.666666666667",
+     "equals": 11497.333333333334
+    },
+    {
+     "expression": "(1196000 - 917000) * 0.02",
+     "equals": 5580
+    },
+    {
+     "expression": "16764 - 5580",
+     "equals": 11184
+    },
+    {
+     "expression": "11184 - 11497.333333333334",
+     "equals": -313.33333333333394
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/20"
+  }
+ ]
+}

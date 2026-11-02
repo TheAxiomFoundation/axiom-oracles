@@ -1,0 +1,124 @@
+{
+ "suite": "uk-lbtt-ltt",
+ "updated": "2026-07-07",
+ "entries": [
+  {
+   "id": "lbtt-ads-surcharge-stale-6pct-vs-8pct",
+   "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The additional dwelling costs 300,000 pounds. The rulespec charges the SSI 2015/126 residential schedule (4,600) plus the LBTT(S)A 2013 Schedule 2A Additional Dwelling Supplement at 8% of 300,000 (24,000) = 28,600, the 8% rate in force since 5 December 2024. PolicyEngine-UK's gov.revenue_scotland.lbtt.residential.additional_residence_surcharge is still 6% (18,000), giving 22,600. The 6,000 gap is exactly the two-point ADS staleness (0.02 * 300,000), filed as PolicyEngine-UK #1795.",
+   "cases": [
+    "lbtt-additional-dwelling"
+   ],
+   "arithmetic": [
+    {
+     "expression": "28600 - 22600",
+     "equals": 6000
+    },
+    {
+     "expression": "0.02 * 300000",
+     "equals": 6000
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1795"
+  },
+  {
+   "id": "lbtt-ads-surcharge-stale-on-mixed-purchase",
+   "concept": "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Main home 300,000 (4,600, matching PolicyEngine) plus an additional dwelling of 250,000. The rulespec additional charge is the standard residential schedule (2,100) plus the 8% ADS (20,000); PolicyEngine applies its stale 6% surcharge (15,000). The 5,000 gap is the two-point ADS staleness on 250,000 (0.02 * 250,000), PolicyEngine-UK #1795.",
+   "cases": [
+    "lbtt-main-plus-additional"
+   ],
+   "arithmetic": [
+    {
+     "expression": "26700 - 21700",
+     "equals": 5000
+    },
+    {
+     "expression": "0.02 * 250000",
+     "equals": 5000
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1795"
+  },
+  {
+   "id": "ltt-primary-scale-stale-2022-threshold",
+   "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Main home 300,000. The rulespec charges the current WSI 2018/128 primary schedule (0% to 225,000, then 6%): 0.06 * (300,000 - 225,000) = 4,500. PolicyEngine-UK's gov.wra.land_transaction_tax.residential.primary scale is frozen at its 2021-07-01 vintage (0% to 180,000, 3.5% to 250,000, 5% thereafter): 0.035 * 70,000 + 0.05 * 50,000 = 4,950, missing the 10 October 2022 rise of the starting threshold to 225,000 and the first band to 6%. PolicyEngine-UK #1796.",
+   "cases": [
+    "ltt-main-six-percent-band"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4500 - 4950",
+     "equals": -450
+    },
+    {
+     "expression": "(0.035 * 70000 + 0.05 * 50000) - (0.06 * 75000)",
+     "equals": 450
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1796"
+  },
+  {
+   "id": "ltt-primary-scale-stale-high-value",
+   "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Main home 800,000. The rulespec applies the current WSI 2018/128 primary schedule: 0.06 * 175,000 + 0.075 * 350,000 + 0.10 * 50,000 = 41,750. PolicyEngine's stale 2021-07-01 primary scale gives 0.035 * 70,000 + 0.05 * 150,000 + 0.075 * 350,000 + 0.10 * 50,000 = 41,200. The 550 gap is the 10 October 2022 threshold and first-band change PolicyEngine has not adopted. PolicyEngine-UK #1796.",
+   "cases": [
+    "ltt-main-into-ten-percent-band"
+   ],
+   "arithmetic": [
+    {
+     "expression": "41750 - 41200",
+     "equals": 550
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1796"
+  },
+  {
+   "id": "ltt-higher-rate-scale-stale-2024-uplift",
+   "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Additional dwelling 300,000, charged under the WSI 2018/128 higher-rate schedule. The rulespec uses the current rates (5% to 180,000, 8.5% to 250,000, 10% thereafter): 0.05 * 180,000 + 0.085 * 70,000 + 0.10 * 50,000 = 19,950. PolicyEngine's gov.wra.land_transaction_tax.residential.higher_rate scale is frozen at its 2020-12-22 vintage (4%, 7.5%, 9%): 0.04 * 180,000 + 0.075 * 70,000 + 0.09 * 50,000 = 16,950, missing the 11 December 2024 one-point uplift. PolicyEngine-UK #1796.",
+   "cases": [
+    "ltt-additional-higher-rates"
+   ],
+   "arithmetic": [
+    {
+     "expression": "19950 - 16950",
+     "equals": 3000
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1796"
+  },
+  {
+   "id": "ltt-both-scales-stale-on-mixed-purchase",
+   "concept": "uk:policies/govuk/ltt#land_transaction_tax",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Main home 400,000 plus additional dwelling 300,000. The rulespec charges the current primary schedule on the main home (0.06 * 175,000 = 10,500) and the current higher-rate schedule on the additional dwelling (19,950) = 30,450. PolicyEngine applies its stale primary (9,950) and higher-rate (16,950) scales = 26,900. The 3,550 gap combines the stale 10 October 2022 primary change (550) and the stale 11 December 2024 higher-rate uplift (3,000). PolicyEngine-UK #1796.",
+   "cases": [
+    "ltt-main-plus-additional"
+   ],
+   "arithmetic": [
+    {
+     "expression": "30450 - 26900",
+     "equals": 3550
+    },
+    {
+     "expression": "550 + 3000",
+     "equals": 3550
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1796"
+  }
+ ]
+}

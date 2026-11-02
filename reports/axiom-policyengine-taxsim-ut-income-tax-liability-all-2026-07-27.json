@@ -1,0 +1,273 @@
+{
+  "case_count": 6,
+  "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+  "engines": {
+    "axiom": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule",
+    "policyengine": "ut_resident_income_tax_before_credits_derived",
+    "taxsim": "siitax"
+  },
+  "mismatches": [
+    {
+      "case_id": "ut-single-30000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": 804.87,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-and-credit-single-30000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 1335.0,
+      "left_engine": "axiom",
+      "right": 530.13,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ut-single-60000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": 399.8699999999999,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-and-credit-single-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 2670.0,
+      "left_engine": "axiom",
+      "right": 2270.13,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ut-single-150000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": -75.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-vintage-single-150000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 6675.0,
+      "left_engine": "axiom",
+      "right": 6750.0,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ut-married-60000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": 1609.73,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-and-credit-married-60000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 2670.0,
+      "left_engine": "axiom",
+      "right": 1060.27,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ut-married-120000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": 799.7299999999996,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-and-credit-married-120000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 5340.0,
+      "left_engine": "axiom",
+      "right": 4540.27,
+      "right_engine": "taxsim"
+    },
+    {
+      "case_id": "ut-married-300000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "difference": -150.0,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "ut-taxsim-2026-rate-vintage-married-300000"
+      },
+      "engines": [
+        "axiom",
+        "taxsim"
+      ],
+      "kind": "amount_difference",
+      "left": 13350.0,
+      "left_engine": "axiom",
+      "right": 13500.0,
+      "right_engine": "taxsim"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "schema": "axiom_oracles.provenance.v1",
+    "generated_at": "2026-07-27T07:57:49Z",
+    "generated_by": "scripts/run_comparison.py::ut-income-tax-liability",
+    "run_kind": "manual",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "eb654b6d7a5ae7f48e6e1a5d0ca365dbdb0ee53c"
+      }
+    ],
+    "engine": {
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0"
+    }
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "ut-income-tax-liability",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 100.0,
+    "axiom_vs_taxsim_match_rate": 0.0,
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 6,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/ut-income-tax-liability.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "match_count": 6,
+    "mismatch_count": 6,
+    "policyengine_matches": 6,
+    "taxsim_matches": 0
+  },
+  "taxsim_law_year": 2026,
+  "tolerance": {
+    "absolute": 1.0,
+    "relative": 0.0
+  },
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 1335.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 804.87,
+        "match": false
+      },
+      "case_id": "ut-single-30000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 1335.0,
+      "taxsim": 530.13
+    },
+    {
+      "axiom": 2670.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 399.8699999999999,
+        "match": false
+      },
+      "case_id": "ut-single-60000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 2670.0,
+      "taxsim": 2270.13
+    },
+    {
+      "axiom": 6675.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -75.0,
+        "match": false
+      },
+      "case_id": "ut-single-150000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 6675.0,
+      "taxsim": 6750.0
+    },
+    {
+      "axiom": 2670.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 1609.73,
+        "match": false
+      },
+      "case_id": "ut-married-60000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 2670.0,
+      "taxsim": 1060.27
+    },
+    {
+      "axiom": 5340.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 799.7299999999996,
+        "match": false
+      },
+      "case_id": "ut-married-120000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 5340.0,
+      "taxsim": 4540.27
+    },
+    {
+      "axiom": 13350.0,
+      "axiom_vs_policyengine": {
+        "difference": 0.0,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": -150.0,
+        "match": false
+      },
+      "case_id": "ut-married-300000",
+      "concept": "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 13350.0,
+      "taxsim": 13500.0
+    }
+  ]
+}

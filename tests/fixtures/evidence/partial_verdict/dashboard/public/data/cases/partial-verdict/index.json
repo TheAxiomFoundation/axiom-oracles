@@ -1,0 +1,15 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/partial_verdict/dashboard/public/data/report.json",
+  "report_sha256": "3cbbeb6f6d4ab0c5bab6dcbbbd64c71dfa6497243cc50329965abaa44905443a",
+  "suite": "partial-verdict",
+  "count": 1,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "f91a1017e3f42abed34684551f117b7a4a9f02b8b624b6e25b39c32a9344a1e2",
+      "cases": 1
+    }
+  ]
+}

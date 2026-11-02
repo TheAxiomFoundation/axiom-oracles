@@ -1,0 +1,1702 @@
+{
+  "aggregates": [
+    {
+      "compared": 17,
+      "comparison": "amount",
+      "comparison_count": 17,
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "left_positive_rate": 94.11764705882354,
+      "match_count": 15,
+      "match_rate": 88.23529411764706,
+      "matched": 15,
+      "mismatch_count": 2,
+      "mismatched": 2,
+      "right_positive_rate": 94.11764705882354
+    }
+  ],
+  "case_count": 17,
+  "cases": [
+    {
+      "axiom": 0.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 0.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 100000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-zero",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 0,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 100000
+      },
+      "match": true,
+      "policyengine": 0.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 0.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 0.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 0.0
+      },
+      "scenario_id": "itemized-zero"
+    },
+    {
+      "axiom": 10000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 10000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 10000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 90000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-charity-only",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 10000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 10000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 10000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 90000
+      },
+      "match": true,
+      "policyengine": 10000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 10000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 10000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 10000.0
+      },
+      "scenario_id": "itemized-charity-only"
+    },
+    {
+      "axiom": 8000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 8000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 8000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 92000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-interest-only",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 8000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 8000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 0,
+        "interest_deduction": 8000,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 92000
+      },
+      "match": true,
+      "policyengine": 8000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 0.0,
+        "exemptions": 0.0,
+        "interest_deduction": 8000.0,
+        "itemized_taxable_income_deductions": 8000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 8000.0
+      },
+      "scenario_id": "itemized-interest-only"
+    },
+    {
+      "axiom": 10000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 10000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 2000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 8000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 90000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-salt-only",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 10000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 10000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 0,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 2000,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 8000,
+        "taxable_income_determined_without_section_68": 90000
+      },
+      "match": true,
+      "policyengine": 10000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 0.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 10000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 10000.0,
+        "total_itemized_taxable_income_deductions": 10000.0
+      },
+      "scenario_id": "itemized-salt-only"
+    },
+    {
+      "axiom": 2000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 2000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 2000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 98000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-medical-only",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 2000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 2000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 0,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 2000,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 98000
+      },
+      "match": true,
+      "policyengine": 2000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 0.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 2000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 2000.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 2000.0
+      },
+      "scenario_id": "itemized-medical-only"
+    },
+    {
+      "axiom": 3000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 3000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 3000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 97000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-casualty-completed",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 3000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 3000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 3000,
+        "charitable_deduction": 0,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 97000
+      },
+      "match": true,
+      "policyengine": 3000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 3000.0,
+        "charitable_deduction": 0.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 3000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 3000.0
+      },
+      "scenario_id": "itemized-casualty-completed"
+    },
+    {
+      "axiom": 30000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 30000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 10000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 8000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 2000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 100000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 2000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 8000,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 70000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-mixed",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 30000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 30000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 100000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 10000,
+        "interest_deduction": 8000,
+        "medical_expense_deduction": 2000,
+        "misc_deduction": 0,
+        "real_estate_taxes": 2000,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 8000,
+        "taxable_income_determined_without_section_68": 70000
+      },
+      "match": true,
+      "policyengine": 30000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 100000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 10000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 8000.0,
+        "itemized_taxable_income_deductions": 30000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 2000.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 10000.0,
+        "total_itemized_taxable_income_deductions": 30000.0
+      },
+      "scenario_id": "itemized-mixed"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 640600,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 590600,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-single-at",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 640600,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 590600
+      },
+      "match": true,
+      "policyengine": 50000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 640600.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 50000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-single-at"
+    },
+    {
+      "axiom": 49999.94594594595,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.05405405405405406,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 640601,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 590601,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-single-plus-one",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.05405405405405406,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 2.4164045209218443e-09,
+          "policyengine": 0.054054051637649536,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.000633445946732536,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 640601,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 590601
+      },
+      "match": true,
+      "policyengine": 49999.9453125,
+      "policyengine_components": {
+        "adjusted_gross_income": 640601.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 49999.9453125,
+        "itemized_taxable_income_deductions_reduction": 0.054054051637649536,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-single-plus-one"
+    },
+    {
+      "axiom": 49459.45945945946,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 540.5405405405405,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 650600,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 600600,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-single-income-lesser",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 540.5405405405405,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 1.319679051903222e-05,
+          "policyengine": 540.54052734375,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": -0.001478040539950598,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 650600,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 600600
+      },
+      "match": true,
+      "policyengine": 49459.4609375,
+      "policyengine_components": {
+        "adjusted_gross_income": 650600.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 49459.4609375,
+        "itemized_taxable_income_deductions_reduction": 540.54052734375,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-single-income-lesser"
+    },
+    {
+      "axiom": 47297.2972972973,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 2702.7027027027025,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 800000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 750000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-single-deduction-lesser",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 2702.7027027027025,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.00031012457748147426,
+          "policyengine": 2702.702392578125,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.00042229730024700984,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 800000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 750000
+      },
+      "match": true,
+      "policyengine": 47297.296875,
+      "policyengine_components": {
+        "adjusted_gross_income": 800000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 47297.296875,
+        "itemized_taxable_income_deductions_reduction": 2702.702392578125,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-single-deduction-lesser"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 640600,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 3,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 590600,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-hoh-at",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "head_of_household",
+      "inputs": {
+        "adjusted_gross_income": 640600,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 590600
+      },
+      "match": true,
+      "policyengine": 50000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 640600.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 50000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-hoh-at"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 768700,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 1,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 718700,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-joint-at",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "joint",
+      "inputs": {
+        "adjusted_gross_income": 768700,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 718700
+      },
+      "match": true,
+      "policyengine": 50000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 768700.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 50000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-joint-at"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 768700,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 4,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 718700,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-surviving-at",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "surviving_spouse",
+      "inputs": {
+        "adjusted_gross_income": 768700,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 718700
+      },
+      "match": true,
+      "policyengine": 50000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 768700.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 50000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-surviving-at"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 384350,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 2,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 334350,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-mfs-at",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0,
+          "policyengine": 0.0,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 0.0,
+      "filing_status": "separate",
+      "inputs": {
+        "adjusted_gross_income": 384350,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 334350
+      },
+      "match": true,
+      "policyengine": 50000.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 384350.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 50000.0,
+        "itemized_taxable_income_deductions_reduction": 0.0,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-mfs-at"
+    },
+    {
+      "axiom": 50000.0,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 0.0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 50000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 50000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 700000,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 550000,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-other-deduction-base",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 50000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 50000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 0.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": -2702.702392578125,
+          "policyengine": 2702.702392578125,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": 2702.703125,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 700000,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 50000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 550000
+      },
+      "match": false,
+      "policyengine": 47297.296875,
+      "policyengine_components": {
+        "adjusted_gross_income": 700000.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 50000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 47297.296875,
+        "itemized_taxable_income_deductions_reduction": 2702.702392578125,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 50000.0
+      },
+      "scenario_id": "itemized-68-other-deduction-base"
+    },
+    {
+      "axiom": 9459459.45945946,
+      "axiom_diagnostics": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": 540540.5405405406,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": 10000000.0
+      },
+      "axiom_fixture_inputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.casualty_loss_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.charitable_deduction": 10000000,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.interest_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.medical_expense_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.misc_deduction": 0,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.no_other_component_in_pe_six_item_itemized_aggregate": true,
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#input.taxpayer_is_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.adjusted_gross_income": 10640600,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_are_net_of_refunds": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_business_and_section_212_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.completed_personal_tax_amounts_exclude_nondeductible_taxes": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.filing_status": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.real_estate_taxes": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.section_911_exclusion_relation_includes_every_tax_unit_individual": true,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_personal_property_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#input.state_and_local_sales_or_income_tax": 0,
+        "us:policies/income_tax/salt_deduction_pipeline#relation.salt_section_911_individual_of_tax_unit": [],
+        "us:statutes/26/68#input.taxable_income_determined_without_section_68": 640600,
+        "us:statutes/26/931#input.amounts_paid_for_services_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/931#input.bona_fide_resident_of_specified_possession_during_entire_taxable_year": false,
+        "us:statutes/26/931#input.income_derived_from_sources_within_specified_possessions": 0,
+        "us:statutes/26/931#input.income_effectively_connected_with_trade_or_business_within_specified_possessions": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency": 0,
+        "us:statutes/26/933#input.amounts_received_for_services_performed_as_employee_of_united_states_or_agency_attributable_to_period_before_change": 0,
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change": 0,
+        "us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico": 0,
+        "us:statutes/26/933#input.individual_changes_residence_from_puerto_rico_during_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_bona_fide_resident_of_puerto_rico_during_entire_taxable_year": false,
+        "us:statutes/26/933#input.individual_is_citizen_of_united_states": false,
+        "us:statutes/26/933#input.puerto_rico_source_income_attributable_to_puerto_rican_residence_period_before_change": 0
+      },
+      "case_id": "itemized-68-rational-rate",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "diagnostic_reconciliation": [
+        {
+          "axiom": 10000000.0,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations",
+          "difference": 0.0,
+          "policyengine": 10000000.0,
+          "policyengine_variable": "total_itemized_taxable_income_deductions"
+        },
+        {
+          "axiom": 540540.5405405406,
+          "axiom_output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction",
+          "difference": 0.0405405405908823,
+          "policyengine": 540540.5,
+          "policyengine_variable": "itemized_taxable_income_deductions_reduction"
+        }
+      ],
+      "difference": -0.5405405405908823,
+      "filing_status": "single",
+      "inputs": {
+        "adjusted_gross_income": 10640600,
+        "casualty_loss_deduction": 0,
+        "charitable_deduction": 10000000,
+        "interest_deduction": 0,
+        "medical_expense_deduction": 0,
+        "misc_deduction": 0,
+        "real_estate_taxes": 0,
+        "section_911_exclusions": [],
+        "state_and_local_personal_property_tax": 0,
+        "state_and_local_sales_or_income_tax": 0,
+        "taxable_income_determined_without_section_68": 640600
+      },
+      "match": false,
+      "policyengine": 9459460.0,
+      "policyengine_components": {
+        "adjusted_gross_income": 10640600.0,
+        "casualty_loss_deduction": 0.0,
+        "charitable_deduction": 10000000.0,
+        "exemptions": 0.0,
+        "interest_deduction": 0.0,
+        "itemized_taxable_income_deductions": 9459460.0,
+        "itemized_taxable_income_deductions_reduction": 540540.5,
+        "medical_expense_deduction": 0.0,
+        "misc_deduction": 0.0,
+        "salt_deduction": 0.0,
+        "total_itemized_taxable_income_deductions": 10000000.0
+      },
+      "scenario_id": "itemized-68-rational-rate"
+    }
+  ],
+  "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Itemized taxable-income deductions",
+      "id": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0.0,
+      "tolerance": 0.01
+    }
+  ],
+  "engine_bindings": {
+    "axiom": {
+      "bridge_outputs": {},
+      "diagnostic_outputs": {
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_section_68_reduction": "itemized_taxable_income_deductions_reduction",
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#itemized_deductions_otherwise_allowable_after_other_limitations": "total_itemized_taxable_income_deductions"
+      },
+      "fixture": "us/policies/income_tax/itemized_taxable_income_deductions_pipeline.test.yaml",
+      "module": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline",
+      "output": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "outputs": [
+        "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions"
+      ],
+      "supplemental_fixtures": []
+    },
+    "policyengine": {
+      "boundary": "TaxUnit six-component completed itemized aggregate after the 2026 section 68 limitation",
+      "comparison_bindings": [
+        {
+          "comparison": "amount",
+          "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+          "mapping_type": "direct_variable",
+          "variable": "itemized_taxable_income_deductions"
+        }
+      ],
+      "diagnostic_outputs": [
+        "total_itemized_taxable_income_deductions",
+        "itemized_taxable_income_deductions_reduction",
+        "itemized_taxable_income_deductions",
+        "adjusted_gross_income",
+        "exemptions",
+        "charitable_deduction",
+        "interest_deduction",
+        "salt_deduction",
+        "medical_expense_deduction",
+        "casualty_loss_deduction",
+        "misc_deduction"
+      ],
+      "outputs": [
+        "itemized_taxable_income_deductions"
+      ]
+    }
+  },
+  "engines": {
+    "left": "axiom",
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
+  },
+  "mismatches": [
+    {
+      "case_id": "itemized-68-other-deduction-base",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "difference": 2702.703125,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "itemized-section-68-base-uses-agi-proxy"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 50000.0,
+      "left_engine": "axiom",
+      "right": 47297.296875,
+      "right_engine": "policyengine"
+    },
+    {
+      "case_id": "itemized-68-rational-rate",
+      "concept": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions",
+      "difference": -0.5405405405908823,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "itemized-section-68-rate-truncated-float32"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 9459459.45945946,
+      "left_engine": "axiom",
+      "right": 9459460.0,
+      "right_engine": "policyengine"
+    }
+  ],
+  "population": "case-grid",
+  "provenance": {
+    "engine": {},
+    "generated_at": "2026-08-06T04:14:50Z",
+    "generated_by": "scripts/run_comparison.py::us-itemized-taxable-income-deductions-grid",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_core": "3.30.3",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.767.3"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ae64af2740340a40d04ed3c652254f53e62fab61"
+      }
+    ],
+    "run_kind": "affected-rerun",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "scenario_count": 17,
+  "schema_version": "axiom.comparison_report.v2.1",
+  "suite": "us-itemized-taxable-income-deductions-grid",
+  "summary": {
+    "axiom_vs_policyengine_match_rate": 88.23529411764706,
+    "comparison_count": 17,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 2
+      },
+      "dispositions_file": "dispositions/us-itemized-taxable-income-deductions-grid.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 88.235294,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 15,
+    "mismatch_count": 2,
+    "mismatches_by_concept": [
+      {
+        "count": 2,
+        "value": "us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 2,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": {}
+  },
+  "tolerance": {
+    "absolute": 0.01,
+    "relative": 0.0
+  },
+  "validation_year": 2026
+}

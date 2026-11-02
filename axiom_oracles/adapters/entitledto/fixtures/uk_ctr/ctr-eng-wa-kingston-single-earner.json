@@ -1,0 +1,55 @@
+{
+  "case_id": "ctr-eng-wa-kingston-single-earner",
+  "oracle": "entitledto",
+  "provenance": {
+    "capture_status": "pending_capture",
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "scheme_year": "2026-27",
+    "council_name": "Kingston upon Thames",
+    "council_gss_code": "E09000021",
+    "council_tax_band": "D",
+    "ctr_scheme": "kingston-upon-thames-working-age-local",
+    "capture_date": null,
+    "captured_by": null,
+    "calculator_version": null,
+    "entitledto_council_tax_liability_gbp": null,
+    "notes": "Pending capture. Capturing this research grid requires entitledto's express written consent (see CAPTURE-PROTOCOL.md); the free calculator's terms bar systematic collection. Do not invent or estimate values: an uncaptured fixture stays pending."
+  },
+  "inputs": {
+    "calculator": "entitledto",
+    "calculator_url": "https://www.entitledto.co.uk/benefits-calculator/",
+    "calculation_date": "2026-07-13",
+    "scheme_year": "2026-27",
+    "relationship_status": "single",
+    "country": "England",
+    "ctr_scheme": "kingston-upon-thames-working-age-local",
+    "local_authority": {
+      "name": "Kingston upon Thames",
+      "gss_code": "E09000021",
+      "postcode": "KT1 1EU"
+    },
+    "council_tax": {
+      "band": "D",
+      "annual_liability_gbp": 2171.0
+    },
+    "housing": {
+      "tenure": "private_rent",
+      "monthly_rent_gbp": 900.0,
+      "assessed_for_rent_rebate": true
+    },
+    "adults": [
+      {
+        "role": "claimant",
+        "age": 30,
+        "employment_income_annual_gbp": 11000.0,
+        "state_pension_annual_gbp": 0.0,
+        "private_pension_annual_gbp": 0.0
+      }
+    ],
+    "children": [],
+    "capital_gbp": 3000.0,
+    "income_basis": "annual GBP, gross (before income tax and National Insurance)"
+  },
+  "outputs": null
+}

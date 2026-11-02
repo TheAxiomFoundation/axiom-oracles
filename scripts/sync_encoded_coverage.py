@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""Regenerate encoded-program coverage from canonical RuleSpec checkouts.
+"""Regenerate encoded-program coverage from upstream corpus git trees.
 
-The script reads only explicitly supplied ``rulespec-<country>`` checkouts,
-classifies canonical ``.yaml`` rule files into program/jurisdiction buckets, and
+Local corpus checkouts drift hundreds of commits behind origin/main, so this
+script reads ``git ls-tree origin/main`` (after a fetch) for upstream rulespec
+repos, classifies rule files into (program family, jurisdiction) buckets, and
 rewrites the *generated* entries in ``dashboard/public/data/coverage_overview.json``'s
 ``axiom.programs`` list.
 
@@ -13,9 +14,10 @@ so classification gaps are visible instead of silently dropped.
 
 Usage::
 
+    python scripts/sync_encoded_coverage.py            # fetch + rewrite
+    python scripts/sync_encoded_coverage.py --no-fetch # offline rerun
     python scripts/sync_encoded_coverage.py \
-      --rulespec-root ~/TheAxiomFoundation/rulespec-us \
-      --rulespec-root ~/TheAxiomFoundation/rulespec-ca
+      --rulespec /path/to/rulespec-us --ref <commit> --no-fetch
 """
 
 from __future__ import annotations
@@ -23,15 +25,9 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import subprocess
 from collections import defaultdict
 from pathlib import Path
-
-from axiom_oracles.bridges.repo_routing import (
-    RULESPEC_ATOMIC_ROOTS,
-    canonical_rulespec_module_path,
-    iter_jurisdiction_content_dirs,
-)
-from axiom_oracles.bridges.rulespec_paths import require_rulespec_checkout
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COVERAGE_PATH = REPO_ROOT / "dashboard" / "public" / "data" / "coverage_overview.json"
@@ -65,6 +61,17 @@ STATE_RULES = {
     "al": [
         (r"^policies/dhr/poe/", ("snap", None)),
         (r"^regulations/660-4/", ("snap", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_section_40_18_5_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ar": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "az": [
         (r"^policies/des/ccap/", ("childcare_assistance", None)),
@@ -80,6 +87,10 @@ STATE_RULES = {
         (r"^(policies/cdss/snap|regulations/mpp/)", ("snap", None)),
         (r"^policies/cdss/calworks/", ("tanf", None)),
         (r"^regulations/cdss/eas/49/", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "co": [
         (r"^(policies/cdhs/snap|regulations/10-ccr-2506-1/)", ("snap", None)),
@@ -87,6 +98,26 @@ STATE_RULES = {
         (r"^regulations/9-ccr-2503-5/", ("state_ssi_supplement", None)),
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
         (r"^statutes/39/", ("state_income_tax", None)),
+    ],
+    "ct": [
+        (
+            r"^policies/income_tax/"
+            r"2026_resident_ordinary_tax_before_personal_credit\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "dc": [
+        (
+            r"^policies/income_tax/"
+            r"2026_section_47_1806_03_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "de": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "fl": [
         (r"ess-program-policy-manual/.*fs-tca", ("snap", None)),
@@ -102,32 +133,100 @@ STATE_RULES = {
     ],
     "il": [
         (r"^(policies/dhs/csmm/|statutes/320/)", ("state_ssi_supplement", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
-    "ks": [(r"^policies/dcf/keesm/", ("tanf", None))],
+    "in": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ks": [
+        (r"^policies/dcf/keesm/", ("tanf", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_k40es_schedule_before_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ky": [(r"^policies/income_tax/", ("state_income_tax", None))],
     "mi": [(r"^policies/mdhhs/", ("state_ssi_supplement", None))],
     "mn": [
         (r"^policies/dhs/combined-manual/0020", ("state_ssi_supplement", None)),
         (r"^policies/dhs/combined-manual/0022", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "mt": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "ms": [
+        (
+            r"^policies/income_tax/"
+            r"2026_section_27_7_5_schedule\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "ga": [
         (r"^policies/cms/", ("medicaid_chip_bhp_thresholds", None)),
         (r"^policies/decal/caps/", ("childcare_assistance", None)),
+        (
+            r"^policies/income_tax/"
+            r"2026_annual_tax_before_nonrefundable_credits\.yaml$",
+            ("state_income_tax", None),
+        ),
     ],
     "id": [(r"^regulations/idapa/16/03/04/", ("snap", None))],
     "ma": [(r"^(policies/dta/snap|regulations/106-cmr/)", ("snap", None))],
     "nc": [
         (r"^policies/dhhs/fns/", ("snap", None)),
         (r"^regulations/10a-ncac/71u/", ("snap", None)),
+        (
+            r"^policies/income_tax/"
+            r"(pilot|resident_core)_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+        (r"^statutes/105/105-15[1-9]([./]|$)", ("state_income_tax", None)),
     ],
     "nh": [(r"^regulations/he-w-700/", ("snap", None))],
     "ny": [
         (r"^(policies/otda/snap|regulations/18-nycrr/387)", ("snap", None)),
         (r"^(policies/otda/tanf|regulations/18-nycrr/385)", ("tanf", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
         (r"^policies/tax/", ("state_income_tax", None)),
         (r"^statutes/NYC", ("nyc_income_tax", "NYC")),
     ],
+    "oh": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
+    "pa": [
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "or": [(r"^policies/odhs/", ("snap", None))],
-    "sc": [(r"^(policies/dss/snap|regulations/114/)", ("snap", None))],
+    "sc": [
+        (r"^(policies/dss/snap|regulations/114/)", ("snap", None)),
+        (
+            r"^policies/income_tax/pilot_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+    ],
     "tn": [
         (r"^policies/dhs/snap/", ("snap", None)),
         (r"^regulations/1240-01/", ("snap", None)),
@@ -157,35 +256,33 @@ SKIP_DIRS = re.compile(
 )
 
 
-def rule_files(repo: Path) -> list[str]:
-    """Return canonical ``.yaml`` modules relative to one country checkout."""
+def git(repo: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout
 
+
+def rule_files(repo: Path, fetch: bool, ref: str = "origin/main") -> list[str]:
+    if fetch:
+        subprocess.run(
+            ["git", "-C", str(repo), "fetch", "-q", "origin", "main"],
+            capture_output=True,
+            check=False,
+        )
+    try:
+        listing = git(repo, "ls-tree", "-r", "--name-only", ref)
+    except subprocess.CalledProcessError:
+        return []
     out = []
-    for _jurisdiction, content_root in iter_jurisdiction_content_dirs(repo):
-        for root_name in RULESPEC_ATOMIC_ROOTS:
-            canonical_root = content_root / root_name
-            if not canonical_root.is_dir() or canonical_root.is_symlink():
-                continue
-            for path in canonical_root.rglob("*"):
-                relative = path.relative_to(repo).as_posix()
-                if path.is_symlink():
-                    raise ValueError(
-                        f"symlinked RuleSpec content is unsupported: {path}"
-                    )
-                if path.is_file() and path.suffix == ".yml":
-                    raise ValueError(
-                        f"legacy .yml RuleSpec module is unsupported: {path}"
-                    )
-                if path.suffix != ".yaml" or not path.is_file():
-                    continue
-                if (
-                    canonical_rulespec_module_path(path, content_root=content_root)
-                    is None
-                ):
-                    raise ValueError(f"noncanonical RuleSpec module path: {path}")
-                if relative.endswith(".test.yaml") or SKIP_DIRS.search(relative):
-                    continue
-                out.append(relative)
+    for line in listing.splitlines():
+        if not line.endswith(".yaml") or line.endswith(".test.yaml"):
+            continue
+        if SKIP_DIRS.search(line):
+            continue
+        out.append(line)
     return out
 
 
@@ -231,41 +328,58 @@ def classify_canada(path: str):
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--no-fetch", action="store_true")
     parser.add_argument(
-        "--rulespec-root",
-        action="append",
+        "--rulespec",
         type=Path,
-        required=True,
-        help="Exact canonical country checkout; repeat for each country.",
+        default=Path.home() / "rulespec-us",
+        help="Path to the rulespec-us checkout (default: ~/rulespec-us).",
+    )
+    parser.add_argument(
+        "--ref",
+        default="origin/main",
+        help="rulespec-us git ref to classify (default: origin/main).",
+    )
+    parser.add_argument(
+        "--skip-canada",
+        action="store_true",
+        help="Preserve existing rulespec-ca generated entries.",
     )
     args = parser.parse_args()
 
     buckets: dict[tuple[str, str], dict] = defaultdict(
-        lambda: {"count": 0, "areas": set(), "repos": set()}
+        lambda: {"count": 0, "areas": set(), "trees": set()}
     )
     unclassified: dict[str, int] = defaultdict(int)
 
-    checkouts = [require_rulespec_checkout(path) for path in args.rulespec_root]
-    for repo in checkouts:
-        country = repo.name.removeprefix("rulespec-")
-        if country not in {"us", "ca"}:
-            parser.error(f"unsupported coverage classifier country: {country}")
-        for path in rule_files(repo):
-            if country == "us":
-                hit = classify(path)
-                area = "/".join(path.split("/")[1:4])
-            else:
-                _jurisdiction, _, content_path = path.partition("/")
-                hit = classify_canada(content_path)
-                area = "/".join(content_path.split("/")[:3])
+    # Upstream rulespec-us is a monorepo: us/ holds federal law, us-xx/ holds
+    # each state's tree. The standalone rulespec-us-xx checkouts under ~ are
+    # historical worktrees of the same content — reading only the monorepo
+    # avoids double counting.
+    repo = args.rulespec
+    for path in rule_files(repo, fetch=not args.no_fetch, ref=args.ref):
+        hit = classify(path)
+        if hit is None:
+            unclassified["/".join(path.split("/")[:3])] += 1
+            continue
+        family, jurisdiction = hit
+        bucket = buckets[(family, jurisdiction)]
+        bucket["count"] += 1
+        bucket["areas"].add("/".join(path.split("/")[1:4]))
+        bucket["trees"].add(f"rulespec-us {args.ref}")
+
+    if not args.skip_canada:
+        canada_repo = Path.home() / "rulespec-ca"
+        for path in rule_files(canada_repo, fetch=not args.no_fetch):
+            hit = classify_canada(path)
             if hit is None:
-                unclassified[f"{repo.name}:{'/'.join(path.split('/')[:3])}"] += 1
+                unclassified[f"rulespec-ca:{'/'.join(path.split('/')[:3])}"] += 1
                 continue
             family, jurisdiction = hit
             bucket = buckets[(family, jurisdiction)]
             bucket["count"] += 1
-            bucket["areas"].add(area)
-            bucket["repos"].add(repo.name)
+            bucket["areas"].add("/".join(path.split("/")[:3]))
+            bucket["trees"].add("rulespec-ca origin/main")
 
     data = json.loads(COVERAGE_PATH.read_text())
     programs = data["axiom"]["programs"]
@@ -274,7 +388,15 @@ def main() -> None:
         for p in programs
         if not p.get("generated")
     }
-    programs[:] = [p for p in programs if not p.get("generated")]
+    programs[:] = [
+        p
+        for p in programs
+        if not p.get("generated")
+        or (
+            args.skip_canada
+            and str(p.get("source") or "").startswith("rulespec-ca ")
+        )
+    ]
 
     for (family, jurisdiction), bucket in sorted(buckets.items()):
         if (family, jurisdiction) in manual_keys:
@@ -282,14 +404,14 @@ def main() -> None:
         areas = ", ".join(sorted(bucket["areas"]))
         if len(areas) > 160:
             areas = areas[:157] + "…"
-        repos = ", ".join(sorted(bucket["repos"]))
+        trees = ", ".join(sorted(bucket["trees"]))
         programs.append(
             {
                 "program": family,
                 "jurisdiction": jurisdiction,
                 "status": "coverageOnly",
                 "generated": True,
-                "source": f"{repos}: {areas} ({bucket['count']} rule files)",
+                "source": f"{trees}: {areas} ({bucket['count']} rule files)",
                 "known_non_tanf_gaps": [
                     "encoded upstream; no comparison suite yet",
                 ],

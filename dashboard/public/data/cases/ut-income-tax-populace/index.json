@@ -1,0 +1,15 @@
+{
+ "suite": "ut-income-tax-populace",
+ "count": 1251,
+ "total_cases": 1251,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

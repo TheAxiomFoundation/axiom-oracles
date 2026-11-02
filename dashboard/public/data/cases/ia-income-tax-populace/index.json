@@ -1,0 +1,15 @@
+{
+ "suite": "ia-income-tax-populace",
+ "count": 976,
+ "total_cases": 976,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

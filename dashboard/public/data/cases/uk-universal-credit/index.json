@@ -1,0 +1,16 @@
+{
+ "suite": "uk-universal-credit",
+ "count": 11,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount"
+ ],
+ "source": "axiom-euromod-uk-universal-credit.json",
+ "total_cases": 19,
+ "partial": "mismatch-only"
+}

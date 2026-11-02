@@ -1,0 +1,108 @@
+{
+ "suite": "nc-income-tax-liability",
+ "updated": "2026-07-13",
+ "entries": [
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-single-30000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the single 30,000-dollar filer the 2026 pipeline reports 688.275 and TAXSIM 2024 reports 776.25, a -87.98-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "688.275 - 776.25",
+     "equals": -87.98
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-single-60000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the single 60,000-dollar filer the 2026 pipeline reports 1885.275 and TAXSIM 2024 reports 2126.25, a -240.97-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1885.275 - 2126.25",
+     "equals": -240.97
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-single-150000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the single 150,000-dollar filer the 2026 pipeline reports 5476.275 and TAXSIM 2024 reports 6176.25, a -699.98-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "5476.275 - 6176.25",
+     "equals": -699.98
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-married-60000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the married 60,000-dollar filer the 2026 pipeline reports 1376.55 and TAXSIM 2024 reports 1552.5, a -175.95-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1376.55 - 1552.5",
+     "equals": -175.95
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-married-120000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the married 120,000-dollar filer the 2026 pipeline reports 3770.55 and TAXSIM 2024 reports 4252.5, a -481.95-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "3770.55 - 4252.5",
+     "equals": -481.95
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "nc-taxsim-2024-rate-stepdown-vintage-married-300000",
+   "concept": "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "North Carolina's standard deduction is unchanged between the years (12,750 single / 25,500 joint; TAXSIM 2024 implies the same offsets), so the gap is entirely the section 105-153.7 scheduled rate step-down from 4.5 per cent in 2024 to 3.99 per cent in 2026 on the same taxable income: taxable * (0.0399 - 0.045). For the married 300,000-dollar filer the 2026 pipeline reports 10952.55 and TAXSIM 2024 reports 12352.5, a -1399.95-dollar gap \u2014 the rate vintage, not a pipeline defect.",
+   "cases": [
+    "nc-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "10952.55 - 12352.5",
+     "equals": -1399.95
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

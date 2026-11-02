@@ -1,0 +1,114 @@
+{
+  "provenance": {
+    "engine": "policyengine-uk",
+    "version": "2.89.2",
+    "period": "2026",
+    "method": "Constructed single-household situations derived from uk_ctr_cases() (no survey data). claims_all_entitled_benefits forced True so would_claim=1. council_tax supplied as input; savings = capital. Unsupported councils return council_tax_benefit_reported (0 on a constructed household).",
+    "generator": "scripts/generate_uk_ctr_pe_reference.py",
+    "ctr_national_scheme_parameters": {
+      "england_pensioner": {
+        "maximum_support_rate": 1.0,
+        "withdrawal_rate": 0.2,
+        "capital_limit": 16000.0
+      },
+      "scotland": {
+        "maximum_support_rate": 1.0,
+        "withdrawal_rate": 0.2,
+        "capital_limit": 16000.0
+      },
+      "wales": {
+        "maximum_support_rate": 1.0,
+        "withdrawal_rate": 0.2,
+        "capital_limit": 16000.0
+      },
+      "kingston_upon_thames": {
+        "withdrawal_rate": 0.2,
+        "capital_limit": 16000.0,
+        "tariff_income_threshold": 6000.0,
+        "tariff_income_step": 250.0
+      }
+    }
+  },
+  "cases": {
+    "ctr-eng-pa-birmingham-couple-gc": {
+      "council_tax": 1800.0,
+      "council_tax_reduction": 1800.0,
+      "scheme_supported": true,
+      "universal_credit": 0.0,
+      "housing_benefit": 0.0,
+      "pension_credit": 4889.0,
+      "applicable_amount": 19934.2,
+      "applicable_income": 14000.0
+    },
+    "ctr-eng-pa-cornwall-single-taper": {
+      "council_tax": 2000.0,
+      "council_tax_reduction": 1439.6,
+      "scheme_supported": true,
+      "universal_credit": 0.0,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 16114.0
+    },
+    "ctr-sco-wa-glasgow-single-earner": {
+      "council_tax": 1300.0,
+      "council_tax_reduction": 0.0,
+      "scheme_supported": true,
+      "universal_credit": 4509.84,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 4968.6,
+      "applicable_income": 15509.84
+    },
+    "ctr-wal-wa-cardiff-couple-2kids": {
+      "council_tax": 1500.0,
+      "council_tax_reduction": 0.0,
+      "scheme_supported": true,
+      "universal_credit": 13330.02,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 7807.8,
+      "applicable_income": 35279.02
+    },
+    "ctr-eng-wa-kingston-single-earner": {
+      "council_tax": 2171.0,
+      "council_tax_reduction": 1181.0,
+      "scheme_supported": true,
+      "universal_credit": 4509.84,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 4968.6,
+      "applicable_income": 15509.84
+    },
+    "ctr-eng-pa-kingston-single": {
+      "council_tax": 2171.0,
+      "council_tax_reduction": 2171.0,
+      "scheme_supported": true,
+      "universal_credit": 0.0,
+      "housing_benefit": 0.0,
+      "pension_credit": 3376.0,
+      "applicable_amount": 13312.0,
+      "applicable_income": 9000.0
+    },
+    "ctr-eng-wa-manchester-single-earner": {
+      "council_tax": 1600.0,
+      "council_tax_reduction": 0.0,
+      "scheme_supported": false,
+      "universal_credit": 4509.84,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 4968.6,
+      "applicable_income": 15509.84
+    },
+    "ctr-eng-wa-birmingham-couple-1kid": {
+      "council_tax": 1400.0,
+      "council_tax_reduction": 0.0,
+      "scheme_supported": false,
+      "universal_credit": 12058.74,
+      "housing_benefit": 0.0,
+      "pension_credit": 0.0,
+      "applicable_amount": 7807.8,
+      "applicable_income": 28756.94
+    }
+  }
+}

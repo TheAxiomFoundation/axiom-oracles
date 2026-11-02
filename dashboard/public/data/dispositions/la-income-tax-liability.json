@@ -1,0 +1,108 @@
+{
+ "suite": "la-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "la-taxsim-2024-single-30000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "514.95 - 760.5",
+     "equals": -245.55
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "la-taxsim-2024-single-60000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1414.95 - 1885.5",
+     "equals": -470.55
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "la-taxsim-2024-single-150000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "4114.95 - 5710.5",
+     "equals": -1595.55
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "la-taxsim-2024-married-60000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1029.9 - 1521",
+     "equals": -491.1
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "la-taxsim-2024-married-120000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2829.9 - 3771",
+     "equals": -941.1
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "la-taxsim-2024-married-300000",
+   "concept": "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.",
+   "cases": [
+    "la-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "8229.9 - 11421",
+     "equals": -3191.1
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

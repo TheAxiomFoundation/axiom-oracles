@@ -9,10 +9,12 @@ oracle-compared, or already live-compared to PolicyEngine.
 This is the PolicyEngine-oracle analogue of `docs/be-coverage-matrix.md` (the
 EUROMOD Belgium scoper).
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Provenance (facts from code/config, not memory)
 
 - **PolicyEngine-UK facts** are read from the installed model at
-  `/Users/maxghenis/PolicyEngine/policyengine-uk` (HEAD `45eb181c`), by grepping
+  `<policyengine-uk checkout>` (HEAD `45eb181c`), by grepping
   `policyengine_uk/variables/**/*.py` for `def formula` / `adds = [...]`, reading
   formula bodies, and querying the live `Microsimulation` tax-benefit system.
   The repo's self-reported `programs.yaml` registry was **not** used as ground
@@ -70,8 +72,9 @@ EUROMOD Belgium scoper).
 - **axiom-oracles** live-compares to PolicyEngine-UK through **two** suites
   (`uk-tax-benefits-efrs`, `uk-universal-credit-efrs`) on the same
   `enhanced_frs_2023_24` population at 2026, PE-UK `2.88.56` / core `3.26.11`.
-  The six `uk-*-ukmod` suites target **UKMOD/EUROMOD, not PolicyEngine** —
-  excluded from this matrix except as noted. The `uk-pe` **conformance
+  The 25 `uk-*-ukmod` suites target **UKMOD (CeMPA, University of Essex; run
+  on the EUROMOD platform), not PolicyEngine** — excluded from this matrix
+  except as noted. The `uk-pe` **conformance
   universe** (`conformance/uk-pe.yaml`, #188) pins PolicyEngine-UK **2.89.2**;
   where a program's PE behaviour differs between the running-suite pin
   (2.88.56) and the universe pin (2.89.2) — notably Council Tax Reduction,
@@ -101,7 +104,7 @@ PE suite.
 | 2 | **Income tax (final)** | 314 (42.9) | 1 | `income_tax` | ENCODED end-to-end — ITA 2007 ss.6–35 + FA 2021/2023/2026; pilot pipelines to `uk_pit_/uk_svdv_income_tax_liability` | **compared** — `uk-tax-benefits-efrs` (`income_tax_liability`→`income_tax`, +`total_income`, `adjusted_net_income`, `personal_allowance`, all §10/§11D/§13 bands) | — (broaden: **Scottish/Welsh rates** — PE branches `earned_income_tax` via `pays_scottish_income_tax`, Axiom compares UK-branch only) |
 | 3 | **National Insurance (incl. employer)** | 211 (33.0) | 1 | `total_national_insurance`; employee `national_insurance` £55bn | Class 1/2/4 ENCODED — SSCBA 1992 ss.1/8/15 + uksi/2001/1004 reg.10/100; 3 NIC pilot pipelines (employee, employer secondary, self-employed). **Class 3 NOT ENCODED** | **compared** — `uk-tax-benefits-efrs` (`national_insurance`, `ni_class_1_employee(_primary/_additional)`, `ni_class_4(_main/_maximum)`) | — (encode Class 3 voluntary → SSCBA 1992 s.13–14; broaden employer/secondary threshold provenance) |
 | 4 | **State Pension** | 129 (11.9) | 3 | `state_pension` = `basic_state_pension`+`new_state_pension`+`additional_state_pension` | ENCODED (rates) — Pensions Act 2014 + Up-rating Order 2026 arts.4/6; `state-pension.yaml` → `state_pension_weekly_amount` | **encoded, not compared** — `state-pension-final` bridge surface **removed** (rulespec-uk 60501ec re-grounded `state-pension.yaml` to accrual basis); `additional_state_pension`+`state_pension` are `direct_variable`-mapped | build final suite; PE pro-rates a *reported* amount so structural (accrual-rule) reforms won't flow → Pensions Act 2014; SSCBA 1992 Pt II |
-| 5 | **Universal Credit (final)** | 84 (6.4) | 1 | `universal_credit` (after `would_claim_uc` + benefit cap) | ENCODED deeply — WRA 2012 ss.1–27/40 + UC Regs 2013 (regs 22/24/26/27/29/34/36, Sch.4/5/10) + composed `uc_pilot_award_amount` pipeline (49 rules) | **compared** — `uk-universal-credit-efrs` runs 13 surfaces at 100% match: final award (`derived_expression`→`universal_credit`) + all elements as parameter rows + `uc_assessable_capital`/`uc_childcare_work_condition`/`uc_tariff_income`. The `universal-credit-final` (`would_claim`-inclusive) bridge surface was removed (rulespec retired in 829ab1a) | — (broaden: reg.90 MIF thresholds; sanction *amounts*; reconcile the two UC compose specs — `rulespec-uk/uk/programs/universal-credit/fy-2026-27.yaml` vs `universal_credit_composed_award_pipeline.yaml`) |
+| 5 | **Universal Credit (final)** | 84 (6.4) | 1 | `universal_credit` (after `would_claim_uc` + benefit cap) | ENCODED deeply — WRA 2012 ss.1–27/40 + UC Regs 2013 (regs 22/24/26/27/29/34/36, Sch.4/5/10) + composed `uc_pilot_award_amount` pipeline (49 rules) | **compared** — `uk-universal-credit-efrs` runs 13 surfaces at 100% match: final award (`derived_expression`→`universal_credit`) + all elements as parameter rows + `uc_assessable_capital`/`uc_childcare_work_condition`/`uc_tariff_income`. The `universal-credit-final` (`would_claim`-inclusive) bridge surface was removed (rulespec retired in 829ab1a) | — (broaden: reg.90 MIF thresholds; sanction *amounts*; reconcile the two UC compose specs — `programs/uk/universal-credit/fy-2026-27.yaml` vs `universal_credit_composed_award_pipeline.yaml`) |
 | 6 | **Council tax (gross)** | 62 (31.2) | 4 (INPUT) | `council_tax` (reported liability) | NOT ENCODED (the tax itself; no bands/valuation) | — | encode base liability → LGFA 1992 Pt I; band ratios |
 | 7 | **Business rates** | 32 (26.0) | 1 | `business_rates` | NOT ENCODED | — | encode → LGFA 1988 Pt III; multiplier + reliefs |
 | 8 | **PIP** | 29 (3.7) | 2 | `pip` = `pip_dl`+`pip_m` (category is frozen FRS input) | ENCODED (entitlement + rates) — WRA 2012 ss.77–79 + uksi/2013/377 reg.24 → `personal_independence_payment_weekly_amount` | **encoded, not compared** — `pip`/`pip_dl`/`pip_m`/`receives_enhanced_pip_dl` all `direct_variable`; **no PIP surface in either running suite** | build PIP suite (8 comparable outputs waiting) → WRA 2012 ss.77–79; uksi/2013/377 |
@@ -165,9 +168,9 @@ in any running suite** (dominated by the 7 excluded "final wrapper" surfaces plu
 PIP/state-pension/WFA/AA/TFC/CTC families). Nothing already-compared is marked
 missing above.
 
-The six `uk-*-ukmod` suites (+4 more found: dividend/savings/mixed income-tax,
-UC) target **UKMOD/EUROMOD**, not PolicyEngine — synthetic 5-point grids, out of
-scope here. `comparisons/parameter-oracles.yaml` has **zero UK entries**.
+The 25 `uk-*-ukmod` suites (`git ls-files 'comparisons/uk-*-ukmod.yaml'`)
+target **UKMOD** (CeMPA's model, run on the EUROMOD platform), not PolicyEngine —
+synthetic grids, out of scope here. `comparisons/parameter-oracles.yaml` has **zero UK entries**.
 
 ## Wave plan — gap workers grouped (PE var names + legal source families)
 
@@ -243,3 +246,49 @@ suite; "PE-blocked" = PolicyEngine-UK must add the variable first.
     IS/JSA/ESA/WTC/CTC final entitlement (only tariff/rates encoded). Fix the
     documented WTC 30-hour element PE bug (£1,015 vs £1,010.22) in passing. →
     IS Regs 1987 / JSA Regs 1996 / ESA Regs 2008 / WTC & CTC Regs 2002.
+
+## Council Tax Reduction — per-council reference (entitledto oracle)
+
+Row 29 records CTR against the two *engine* oracles (PolicyEngine-UK, UKMOD),
+both of which are **national** on the working-age side: PolicyEngine models the
+three national schemes (England pension-age, Scotland, Wales) plus five named
+English councils (Merton, Kingston upon Thames, Newham, Westminster, Oxford);
+UKMOD models the country grain only. For every *other* English billing
+authority's working-age scheme neither reproduces the local rules — PolicyEngine
+falls back to the survey-reported benefit (`council_tax_benefit_reported`, i.e.
+`0` on a constructed household). There are ~300 English billing authorities, so
+this is a large blind spot the engine oracles structurally cannot close.
+
+The `entitledto` recorded-fixture oracle
+(`axiom_oracles/adapters/entitledto/`, suite `uk-ctr`; its report artifact is
+`reports/axiom-uk-council-tax-reduction-entitledto.json`, deliberately
+uncommitted until fixtures are captured) is meant to give per-council reference
+values for part of it. Its 8 fixtures cover 6 councils (4 in England), and all
+8 are `pending_capture`; once captured, a case is graded against PolicyEngine
+only where PolicyEngine models that council's scheme and prices the same
+council-tax liability. entitledto models every
+council's CTR scheme, so it is the most complete per-council reference
+(entitledto publishes estimates, not authoritative awards). It is a *recorded*
+oracle — entitledto's legal notices bar systematic collection on the free
+public calculator, so every fixture ships as a `pending_capture` stub and is
+filled only through a channel entitledto has expressly authorised (a research
+or API licence; `fixtures/uk_ctr/CAPTURE-PROTOCOL.md` is the procedure and the
+permission gate). The runner replays recorded responses with provenance; CI
+never probes entitledto, and nothing grades until real captures exist.
+
+The eight-case grid demonstrates the gap at one income point: an identical single
+private-renter earning £11,000 returns, on PolicyEngine-UK 2.89.2, **£0** in
+Scotland (national scheme, tapered out because PolicyEngine counts the UC award
+itself as CTR applicable income — applicable income £15,510 vs a £4,969 applicable
+amount), **£1,181** in Kingston upon Thames (a supported local scheme), and **£0**
+in Manchester (an unsupported council → reported fallback). entitledto models
+the local scheme for all three — its estimate is the only per-council reference
+available for the ~295 councils the engine oracles cannot express (no captured
+values exist yet; the grid's PolicyEngine and statutory columns are computed,
+the entitledto column is pending capture). How these slot into the coverage
+classifier: today a per-council CTR output is `known_not_comparable`/`unmapped`
+against the PolicyEngine registry (`bridges/mappings/uk.yaml`, axiom-oracles#78
+/ #278) because no PolicyEngine variable models that council; once its
+entitledto fixtures are captured, the council's CTR award becomes `comparable`
+against the entitledto oracle — a per-council comparability the
+PolicyEngine-only classifier cannot express.

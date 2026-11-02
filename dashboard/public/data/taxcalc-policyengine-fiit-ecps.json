@@ -20,7 +20,8 @@
         "us:tax/payroll#employee_oasdi",
         "us:tax/payroll#employee_medicare",
         "us:tax/payroll#employer_oasdi",
-        "us:tax/payroll#employer_medicare"
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica"
       ],
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
@@ -192,6 +193,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 498.91464843750003,
+          "right": 498.9146423339844
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 21089.146484375,
+          "right": 21089.146484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 4989.146484375,
+          "right": 4989.146484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 498.91464843750003,
+          "right": 498.9146423339844
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -258,6 +301,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 27521.752358365058,
+          "right": 27521.75
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 35500.0,
+          "right": 35500.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -326,6 +411,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 5251.36703125,
+          "right": 5251.3671875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 61928.05859375,
+          "right": 61928.05859375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 45828.05859375,
+          "right": 45828.05859375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 5251.36703125,
+          "right": 5251.3671875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -392,6 +519,43 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 87.5,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": -8699.139624938965,
+          "right": -8699.1396484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 40736.734924316406,
+          "right": 40736.734375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 8536.734924316406,
+          "right": 8536.734375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 853.6734924316406,
+          "right": 853.6734619140625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 5299.1396249389645,
+          "right": 5299.1396484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -476,6 +640,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": -4409.14625,
+          "right": -4409.146484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 72923.78125,
+          "right": 72923.78125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 40723.78125,
+          "right": 40723.78125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4390.85375,
+          "right": 4390.853515625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 8800.0,
+          "right": 8800.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -552,6 +758,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 29.9650390625,
+          "right": 29.965038299560547
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 16399.650390625,
+          "right": 16399.650390625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 299.650390625,
+          "right": 299.650390625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 29.9650390625,
+          "right": 29.965038299560547
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -618,6 +866,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 4689.316645847321,
+          "right": 4689.31689453125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 57244.50578916073,
+          "right": 57244.5078125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 41144.30538206101,
+          "right": 41144.30859375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4689.316645847321,
+          "right": 4689.31689453125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -684,6 +974,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 4930.739031250001,
+          "right": 4930.73876953125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 67306.15859375,
+          "right": 67306.15625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 43156.158593750006,
+          "right": 43156.15625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4930.739031250001,
+          "right": 4930.73876953125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -750,6 +1082,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 4582.32859375,
+          "right": 4582.32861328125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 56352.73828125,
+          "right": 56352.73828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 40252.73828125,
+          "right": 40252.73828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4582.32859375,
+          "right": 4582.32861328125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -817,6 +1191,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 696.7603759765625,
+          "right": 696.7603759765625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -883,6 +1299,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 3555.880234375,
+          "right": 3555.8798828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 47799.001953125,
+          "right": 47799.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 31699.001953125,
+          "right": 31699.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 3555.880234375,
+          "right": 3555.8798828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -949,6 +1407,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 996.9527343750001,
+          "right": 996.9527587890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 26069.52734375,
+          "right": 26069.52734375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 9969.52734375,
+          "right": 9969.52734375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 996.9527343750001,
+          "right": 996.9527587890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1015,6 +1515,38 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 75.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 683879.4707554817,
+          "right": 683879.4375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 665729.4707554817,
+          "right": 665729.4375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 98453.39415109635,
+          "right": 98453.390625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1104,6 +1636,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 35900.71628307343,
+          "right": 35900.71875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 243457.8012866974,
+          "right": 243457.8125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 211257.8012866974,
+          "right": 211257.8125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 35900.71628307343,
+          "right": 35900.71875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1172,6 +1746,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 4142.832026743362,
+          "right": 4142.83203125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 60828.26944019109,
+          "right": 60828.26953125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 36590.266889528015,
+          "right": 36590.265625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4142.832026743362,
+          "right": 4142.83203125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1238,6 +1854,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": -9970.181732457982,
+          "right": -9970.181640625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 20194.544883053222,
+          "right": 20194.544921875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 7316.0,
+          "right": 7316.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 2654.1817324579833,
+          "right": 2654.181884765625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1310,6 +1968,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 4221.476709996865,
+          "right": 4221.47705078125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 53458.78539059235,
+          "right": 53458.78515625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 37245.63924997388,
+          "right": 37245.640625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 4221.476709996865,
+          "right": 4221.47705078125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1376,6 +2076,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 61586.876546875,
+          "right": 61586.875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 339981.5703125,
+          "right": 339981.5625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 33850.0,
+          "right": 33850.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 306131.5703125,
+          "right": 306131.5625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 58667.576875,
+          "right": 58667.57421875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 500.0,
+          "right": 500.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1446,6 +2188,38 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 75.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 64988.39772605896,
+          "right": 64988.3984375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 48888.39772605896,
+          "right": 48888.3984375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1535,6 +2309,38 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 75.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 305643.54052734375,
+          "right": 305643.5625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 273443.54052734375,
+          "right": 273443.5625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 2200.0,
+          "right": 2200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1628,6 +2434,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 139.29609375,
+          "right": 139.2960968017578
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 17492.9609375,
+          "right": 17492.9609375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 1392.9609375,
+          "right": 1392.9609375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 139.29609375,
+          "right": 139.2960968017578
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1694,6 +2542,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 3596.8831048381253,
+          "right": 3596.8828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 91171.15213373047,
+          "right": 91171.1484375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 56607.35920698438,
+          "right": 56607.35546875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 6296.883104838125,
+          "right": 6296.8828125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 2700.0,
+          "right": 2700.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1766,6 +2656,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 27937.317886906738,
+          "right": 27937.318359375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1834,6 +2766,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 576.6201171875,
+          "right": 576.6201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 21866.201171875,
+          "right": 21866.201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 5766.201171875,
+          "right": 5766.201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 576.6201171875,
+          "right": 576.6201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -1900,6 +2874,33 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 62.5,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 50369.47667557324,
+          "right": 50369.4765625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 1357.325627243396,
+          "right": 1357.32568359375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 2200.0,
+          "right": 2200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2004,6 +3005,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 576.6201171875,
+          "right": 576.6201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 21866.201171875,
+          "right": 21866.201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 16100.0,
+          "right": 16100.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 5766.201171875,
+          "right": 5766.201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 576.6201171875,
+          "right": 576.6201171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2070,6 +3113,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 262.2890625,
+          "right": 262.2890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 20772.890625,
+          "right": 20772.890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 2622.890625,
+          "right": 2622.890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 262.2890625,
+          "right": 262.2890625
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2136,6 +3221,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 2034.8013516578674,
+          "right": 2034.801513671875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 37173.54500424862,
+          "right": 37173.546875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 19023.344597148895,
+          "right": 19023.345703125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 2034.8013516578674,
+          "right": 2034.801513671875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2202,6 +3329,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 480.951171875,
+          "right": 480.951171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 22959.51171875,
+          "right": 22959.51171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 18150.0,
+          "right": 18150.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 4809.51171875,
+          "right": 4809.51171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 480.951171875,
+          "right": 480.951171875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2268,6 +3437,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 5301.19068725109,
+          "right": 5301.193359375
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 136034.17760324478,
+          "right": 136034.1875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 32200.0,
+          "right": 32200.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 103834.17760324478,
+          "right": 103834.1875
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 9701.19068725109,
+          "right": 9701.193237304688
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 4400.0,
+          "right": 4400.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2340,6 +3551,48 @@
       "left_engine": "taxcalc",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "left": 25004.7041015625,
+          "right": 25004.705078125
+        },
+        {
+          "concept": "us:tax/federal-income-tax#standard_deduction",
+          "left": 33850.0,
+          "right": 33850.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "left": 0.0,
+          "right": 0.0
+        },
+        {
+          "concept": "us:tax/federal-income-tax#amt",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "case_unit": "tax_unit",
         "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
@@ -2423,7 +3676,8 @@
         "us:tax/payroll#employee_oasdi",
         "us:tax/payroll#employee_medicare",
         "us:tax/payroll#employer_oasdi",
-        "us:tax/payroll#employer_medicare"
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica"
       ],
       "description": "Federal income tax liability",
       "id": "us:tax/federal-income-tax#liability",
@@ -2725,10 +3979,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-06T04:16:03Z",
+    "generated_at": "2026-07-24T12:05:38Z",
     "generated_by": "scripts/run_comparison.py::taxcalc-fiit-ecps",
     "oracle": {
       "name": "policyengine",

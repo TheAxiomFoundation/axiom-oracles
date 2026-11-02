@@ -5,15 +5,16 @@ For each conformance-covered suite in a committed universe
 (``conformance/<jur>.yaml``), record the runnable Axiom program the harness
 composes — the RuleSpec import-set (identical to what ``axiom_oracles.cli``
 builds when ``--axiom-program`` is omitted), its repo-relative files, the query
-entity, the supplied-input surface, and the engine->input bridge — into
+entity, its flat and record-targeted supplied inputs and relations, and the
+engine->input bridge (including target records and transforms) — into
 ``conformance/compositions/<jur>.yaml``.
 
 The record is derived, never hand-invented: it reads the same suite definitions
 and the same import derivation the runner uses, so it cannot describe a program
 the harness would not run. ``--check`` re-derives and fails if the committed
 record drifts from the suites (the ``generate_conformance_universe --check``
-pattern), so a suite change that alters the composition cannot land without
-refreshing the record.
+pattern), so a suite change that alters any of those structural inputs cannot
+land without refreshing the record.
 
 Usage::
 
@@ -90,17 +91,13 @@ def main() -> int:
         nargs="?",
         help="Jurisdiction key (be). Omit with --all.",
     )
-    parser.add_argument(
-        "--all", action="store_true", help="Process every jurisdiction."
-    )
+    parser.add_argument("--all", action="store_true", help="Process every jurisdiction.")
     parser.add_argument(
         "--check",
         action="store_true",
         help="CI: fail if the committed record drifts from the suites.",
     )
-    parser.add_argument(
-        "--list", action="store_true", help="List configured jurisdictions."
-    )
+    parser.add_argument("--list", action="store_true", help="List configured jurisdictions.")
     args = parser.parse_args()
 
     if args.list:

@@ -1,0 +1,132 @@
+# Bridge manifest — the comparison's experiment design, declared.
+#
+# Schema axiom_oracles.bridge_manifest.v1. Every input the bridge feeds the
+# program under test is declared as exactly one binding kind:
+#
+#   mapped    — carries a population fact per unit; this dimension is varied
+#               by the data and the comparison bears evidence about it.
+#   projected — computed per unit from population facts by a named projection
+#               (still varied; the projection itself is part of the harness
+#               and named so it can be audited).
+#   bridged   — one engine's computed value fed into the other's input; the
+#               receiving derivation is satisfied by construction. Effect
+#               tested, derivation deliberately out of scope here, covered
+#               where `covered_by` says.
+#   constant  — one value for every unit. No evidence about this dimension
+#               exists in this suite, full stop.
+#
+# `audit` marks how the entry was established: `read` means a person read the
+# bridge code and recorded exactly what it does; `partial` means the entry
+# points at a function whose internals have not been line-audited yet. A
+# partial entry is a to-do, not a certification.
+#
+# The exercise census derives its bridged-through report from this file, and
+# the program certificate cites this file's sha. Editing the bridge without
+# editing this manifest is the failure mode the validator exists to catch —
+# once report provenance carries a bridge-manifest sha, drift becomes
+# mechanical to detect.
+
+schema: axiom_oracles.bridge_manifest.v1
+suite: co-snap-populace
+aliases:
+  - co-snap-ecps  # historical name; committed reports and case ids keep it
+program: us-co/snap
+period: "2026-01"
+bridge:
+  module: axiom_oracles/bridges/snap_populace.py
+  entrypoint: axiom-encode snap-populace-compare
+population:
+  family: populace-us
+  pin_required: true
+  # FINDING (charter #374, increment 3): this lane does not stamp the exact
+  # population artifact today — the committed report says only
+  # `population: "enhanced-cps"` with a null dataset identity, while the fiit
+  # lane stamps revision + sha256 + built_with. Until the lane stamps, the
+  # certificate treats the population identity as unpinned.
+  pinned: null
+oracle:
+  name: policyengine-us
+  version: "1.705.1"
+
+bindings:
+  - kind: mapped
+    input: household_size
+    source: population:snap_unit_size
+    audit: read
+  - kind: mapped
+    input: household_shelter_costs_incurred
+    source: population:housing_cost
+    audit: read
+  - kind: projected
+    input: snap_utility_allowance_type
+    source: project_utility_allowance_type(snap_utility_allowance_type, region)
+    note: utility_projection mode `policyengine-type` carries PE's allowance
+      type per unit; raw utility inputs path exists but is not the mode this
+      suite runs.
+    audit: read
+  - kind: mapped
+    group: income and resources
+    source_function: project_income_resource_inputs
+    note: per-unit income and resource facts; function not yet line-audited,
+      so individual fields are not enumerated here.
+    audit: partial
+  - kind: bridged
+    dimension: dependent_care_deduction
+    inputs:
+      - dependent_care_expenses_paid
+      - dependent_care_expense_necessary_for_work_or_training
+      - dependent_care_reimbursed_or_paid_by_other_program
+    source: policyengine:snap_dependent_care_deduction
+    mechanism: PE's computed deduction is fed as expenses_paid with
+      reimbursed=0 and necessary=(deduction>0); the receiving formula
+      max(0, paid - reimbursed) reproduces it identically.
+    covered_by:
+      - dashboard/public/data/axiom-snapqc-co-snap.json — the co-snap-qc suite
+        exercises this derivation with real sampled expenses from the FY2024
+        administrative sample
+      - rulespec-us us-co/regulations/10-ccr-2506-1/4.407.4.test.yaml ($500
+        nonzero cases, reimbursement netting and necessity gate) — cross-repo,
+        not verifiable from this checkout
+    audit: read
+  # Reclassified 2026-07-26 (cross-family audit, finding 8): the value is a
+  # population fact projected per unit, not a PE-computed derivation — the
+  # exclusion's qualification logic is still not independently exercised
+  # here, but the binding kind was wrong.
+  - kind: projected
+    input: child_support_deduction
+    source: projected_child_support_payment(values)
+    note: population child-support payment projected per unit; the
+      exclusion's own qualification logic is not exercised in this suite.
+    audit: read
+  - kind: bridged
+    dimension: medical_deduction
+    source: policyengine:snap_excess_medical_expense_deduction
+    mechanism: PE's computed medical deduction fed through.
+    covered_by:
+      - dashboard/public/data/axiom-snapqc-co-snap.json — real sampled medical
+        expenses from the FY2024 administrative sample
+    audit: read
+  - kind: mapped
+    group: member relation (ages, citizenship) and categorical-eligibility
+      and utility-region inputs
+    source_function: snap_populace per-unit member/categorical/region blocks
+    note: named by the 2026-07-26 audit as omitted from this manifest;
+      recorded as explicit debt until line-audited and enumerated.
+    audit: partial
+  - kind: constant
+    group: base fixture remainder
+    source_function: project_base_inputs
+    note: every input slot not bound above inherits a neutral constant from
+      the bridge's base-input builder (e.g. snap_expanded_categorical_eligible
+      = false). Not yet enumerated field-by-field; enumeration is what turns
+      this entry into per-dimension constants the census can count.
+    audit: partial
+
+completeness:
+  status: unverified
+  reason: the composed artifact this suite runs predates the engine's
+    metadata.input_catalog (required on engine main), so "every input slot is
+    bound exactly once" cannot be machine-checked yet. Verify when the
+    catalog-bearing artifacts land; until then the constant/base entry above
+    is the catch-all and this manifest is an audited description, not a
+    verified enumeration.

@@ -1,0 +1,11 @@
+prefixes:
+  - legal_id_prefix: "de:"
+    country: de
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: >-
+      Germany RuleSpec outputs use Germany-specific household oracles. The
+      realized worker baseline compares EUROMOD DE_2025 directly with GETTSIM
+      1.2.1; PolicyEngine has no German runtime surface with one-to-one targets.
+      Add exact PolicyEngine mappings only if a real German PolicyEngine oracle
+      target is implemented.

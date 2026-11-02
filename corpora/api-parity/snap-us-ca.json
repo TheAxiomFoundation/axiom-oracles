@@ -1,0 +1,51 @@
+{
+  "id": "snap-us-ca-family-1",
+  "description": "California SNAP canonical two-person household on the corpus-direct CDSS composition.",
+  "axiom_request": {
+    "program_id": "snap",
+    "jurisdiction": "us-ca",
+    "household": {
+      "period": "2026-01",
+      "people": {
+        "person_1": {
+          "age": 42
+        },
+        "person_2": {
+          "age": 9
+        }
+      },
+      "spm_units": {
+        "unit_1": {
+          "household_size": 2,
+          "snap_gross_monthly_earned_income": 1200,
+          "household_shelter_costs_incurred": 900
+        }
+      }
+    },
+    "variables": [
+      "snap_benefit_amount",
+      "snap_net_income",
+      "snap_gross_income"
+    ]
+  },
+  "expected_axiom_outputs": {
+    "snap_benefit_amount": 478,
+    "snap_net_income": 226,
+    "snap_gross_income": 1200
+  },
+  "trace_variables": [
+    "snap_gross_income",
+    "snap_standard_deduction",
+    "snap_net_income_before_shelter",
+    "snap_net_income",
+    "snap_maximum_allotment",
+    "snap_benefit_amount"
+  ],
+  "notes": [
+    "Canonical values are monthly. Inputs use the package-native slot names (snap_gross_monthly_earned_income, household_shelter_costs_incurred).",
+    "The California corpus-direct composition rounds the excess shelter deduction to whole dollars, like Colorado: net income is 226 where PolicyEngine keeps cents (226.5). See the Colorado case's rulespec-us#1167 note; the fifty-cent net-income delta does not move the 478 allotment."
+  ],
+  "tolerance": {
+    "amount": 0.01
+  }
+}

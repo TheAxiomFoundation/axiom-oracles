@@ -734,7 +734,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "17fc102363f7a9a32a2751e9f8cf92d5bdc1c79c"
+        "sha": null
       }
     ],
     "run_kind": "manual",

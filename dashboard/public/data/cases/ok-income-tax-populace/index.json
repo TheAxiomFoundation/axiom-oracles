@@ -1,0 +1,15 @@
+{
+ "suite": "ok-income-tax-populace",
+ "count": 1292,
+ "total_cases": 1292,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

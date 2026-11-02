@@ -1,7 +1,6 @@
 """Project thin Axiom Cases into Colorado SNAP RuleSpec input records.
 
-Colorado SNAP FY 2026
-(rulespec-us/us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml)
+Colorado SNAP FY 2026 (rules-us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml)
 declares >340 fully-namespaced ``#input.X`` slots across federal SNAP statutes,
 USDA policies, 7-CFR regulations, and the 10-CCR-2506-1 Colorado SNAP manual.
 This module ships a baseline drawn from the upstream test fixture and lets a
@@ -15,9 +14,13 @@ records up via ``case.metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]``.
 
 from __future__ import annotations
 
+import json
 from dataclasses import replace
+from functools import cache
+from pathlib import Path
 from typing import Any
 
+from ...bridges.relation_binding import RelationBinder
 from ...core.case import Case, Concepts, Entity
 from ._snap_co_base_inputs import BASE_INPUTS, BASE_MEMBER
 from .runner import (
@@ -81,15 +84,62 @@ _FEDERAL_MEMBER_DEFAULTS = {
     "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility": False,
 }
 
+US_SNAP_CO_PROGRAM_PATH = "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
+
+# Precompiled artifact shipped alongside this projection. Bundling the
+# artifact lets axiom-oracles use `axiom-rules-engine run-compiled` and
+# avoid recompiling the CO SNAP YAML on every case — which would also
+# require an engine binary that supports `kind: reiteration`.
+US_SNAP_CO_COMPILED_ARTIFACT_PATH = (
+    Path(__file__).parent / "artifacts" / "co-snap.compiled.json"
+)
+
+
+@cache
+def _compiled_reference_targets() -> frozenset[str]:
+    artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
+    program = artifact.get("program") if isinstance(artifact, dict) else {}
+    if not isinstance(program, dict):
+        return frozenset()
+    targets: set[str] = set()
+    for collection in ("derived", "parameters"):
+        for item in program.get(collection, []):
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            if isinstance(item_id, str) and "#" in item_id:
+                targets.add(item_id.split("#", 1)[0])
+    return frozenset(targets)
+
+
+def _supported_input_records(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    reference_targets = _compiled_reference_targets()
+    if not reference_targets:
+        return records
+    supported = []
+    for record in records:
+        name = str(record.get("name"))
+        if "#" not in name:
+            supported.append(record)
+            continue
+        if name.split("#", 1)[0] in reference_targets:
+            supported.append(record)
+    return supported
+
 
 def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
     """Attach Axiom CO SNAP input records to cases that lack them."""
+    artifact = None
+    relation_binder = None
     projected = []
     for case in cases:
         metadata = dict(case.metadata)
         if metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY):
             projected.append(case)
             continue
+        if artifact is None:
+            artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
+            relation_binder = RelationBinder(artifact)
 
         people = _people(case)
         household_size = max(len(people), 1)
@@ -115,10 +165,23 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         # Member relation: one entry per person, with age and citizenship
         # carried from the Case.
         member_records = []
-        relation_tuples = []
+        relation_records = []
         for index, person in enumerate(people):
             person_id = f"snap-member-{index}"
-            relation_tuples.append([person_id, _SNAP_HOUSEHOLD_ID])
+            roles = {
+                "owner_id": _SNAP_HOUSEHOLD_ID,
+                "owner_kind": _SNAP_HOUSEHOLD_ENTITY,
+                "related_id": person_id,
+                "related_kind": "Person",
+            }
+            for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME):
+                relation_records.append(
+                    {
+                        "name": relation_name,
+                        "tuple": relation_binder.tuple(relation_name, **roles),
+                        "roles": roles,
+                    }
+                )
             for input_name, default in BASE_MEMBER.items():
                 value = _member_value(input_name, person, default)
                 member_records.append(
@@ -134,14 +197,12 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
                     )
                 )
 
-        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = records + member_records
+        metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = _supported_input_records(
+            records + member_records
+        )
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
             *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
-            *[
-                {"name": relation_name, "tuple": tup}
-                for tup in relation_tuples
-                for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME)
-            ],
+            *relation_records,
         ]
         # Output entity for SNAP outputs is the Household, not the default
         # TaxUnit used by the federal-income-tax projection.

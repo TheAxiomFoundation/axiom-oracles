@@ -1,0 +1,94 @@
+# Bridge manifest for the one-case DK_2023 statutory-supplement witness.
+
+schema: axiom_oracles.bridge_manifest.v1
+suite: dk-child-youth-benefit-2023
+program: dk/boerne-og-ungeydelse
+period: "2023"
+logical_period: "2023"
+execution_period: "2025-06-01"
+strict: true
+bridge:
+  module: axiom_oracles/suites/dk_child_youth_benefit.py
+  entrypoint: dk_child_youth_benefit_2023_cases
+population:
+  family: synthetic
+  case_source: suite
+  pin_required: false
+  pinned: null
+  note: The single case is constructed and enumerated in the named suite;
+    there is no external population dataset identity to pin.
+oracle:
+  name: euromod
+  release: J2.0+
+  system: DK_2023
+  dataset: DK_training_data
+
+bindings:
+  - kind: mapped
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years
+    source: case constructor child_age / metadata.child_age
+    note: Directly copied from the synthetic case demographic (age 5), not
+      projected from Entity facts. Its single observed value does not make its
+      source a harness constant.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place
+    reason: The witness supplies the period-correct DK_2023 CPI change 0.156.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase
+    reason: The witness supplies true to activate the one-off 2023 increase.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts
+    reason: The witness uses the constructor default of 0 qualifying contributions.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16
+    reason: The suite actually supplies its shared ordinary-cap default of 9400.
+    note: This records harness behavior exactly; it does not substitute a
+      different historical value merely because the logical case period is 2023.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year
+    reason: The witness supplies false, so the full-year basis is selected.
+    audit: read
+
+  - kind: constant
+    input: dk:statutes/composed/boerne-og-ungeydelse-pipeline#input.current_year_income_reduction_allowance
+    reason: The witness supplies the period-correct 2023 allowance of 852600.
+    audit: read
+
+  - kind: bridged
+    dimension: personskatteloven_section_7_income_basis
+    inputs:
+      - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis
+      - dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation
+    source: euromod:tintbto_s
+    mechanism: The runner copies the executed annual tintbto_s value, without
+      scaling, into both section-7-basis slots before Axiom executes. The
+      witness selects the full-year slot; the companion fixture independently
+      exercises the recalculated slot.
+    covered_by:
+      - report: dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json
+        claim: >-
+          executed bridge receipt and rulespec-dk commit
+          bbc987b0e32413369b8f80ee2e4f721bf3c8a5db provenance for module
+          paragraf-1-a
+      - report: dashboard/public/data/axiom-euromod-dk-child-youth-benefit-2023.json
+        claim: >-
+          this suite's own provenance pins the same rulespec-dk commit, so its
+          pinned companion fixtures module paragraf-1-a companion fixture and
+          composed boerne-og-ungeydelse-pipeline companion fixture
+    audit: read
+
+completeness:
+  status: verified
+  source: suite_cases
+  note: The validator reconciles these bindings against the flat Axiom inputs
+    and bridge targets returned by the suite registry.

@@ -136,6 +136,57 @@ def test_surface_index_prefers_oracle_status_over_coverage_only():
     assert surfaces[("tanf", "TX")]["status"] == "coverageOnly"
 
 
+def test_ct_ordinary_income_tax_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ct/policies/income_tax/"
+        "2026_resident_ordinary_tax_before_personal_credit.yaml"
+    ) == ("state_income_tax", "CT")
+    assert (
+        rv.classify(
+            "us-ct/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
+def test_ga_annual_tax_component_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ga/policies/income_tax/"
+        "2026_annual_tax_before_nonrefundable_credits.yaml"
+    ) == ("state_income_tax", "GA")
+    assert (
+        rv.classify(
+            "us-ga/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
+def test_al_schedule_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-al/policies/income_tax/"
+        "2026_section_40_18_5_schedule_before_credits.yaml"
+    ) == ("state_income_tax", "AL")
+    assert (
+        rv.classify(
+            "us-al/policies/income_tax/2026_resident_liability_source_hold.yaml"
+        )
+        is None
+    )
+
+
+def test_ms_schedule_module_classifies_to_reviewed_surface():
+    assert rv.classify(
+        "us-ms/policies/income_tax/2026_section_27_7_5_schedule.yaml"
+    ) == ("state_income_tax", "MS")
+    assert (
+        rv.classify(
+            "us-ms/policies/income_tax/pilot_liability_pipeline.yaml"
+        )
+        is None
+    )
+
+
 def test_oracle_status_constants_match_plan_headline():
     # The strict headline counts only 'executable' surfaces (the plan's 14/56);
     # the broader ORACLE_STATUSES set additionally admits parameter/partial runs.

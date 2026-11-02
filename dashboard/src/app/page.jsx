@@ -1,5 +1,5 @@
-import DashboardContent from "../components/DashboardContent";
+import OraclesV2 from "../components/OraclesV2";
 
 export default function Home() {
-  return <DashboardContent />;
+  return <OraclesV2 />;
 }

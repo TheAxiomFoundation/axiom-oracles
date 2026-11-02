@@ -36,9 +36,8 @@ float32 artifacts, inside the tolerance.
 Run locally (needs a PolicyEngine-UK 2.89.2 environment, a built axiom rules
 engine, and the rulespec-uk checkout)::
 
-    uv run python scripts/generate_uk_vat.py \
-      --rulespec-root /path/to/rulespec-uk \
-      --axiom-binary /path/to/axiom-rules-engine
+    RULESPEC_UK_CHECKOUT=/path/to/rulespec-uk \
+      uv run python scripts/generate_uk_vat.py
 
 On a runner without those, the committed dashboard report stands (the runner in
 run_comparison.py reuses it), exactly like the council-tax-reduction grid.
@@ -47,11 +46,10 @@ run_comparison.py reuses it), exactly like the council-tax-reduction grid.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
-
-from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -60,6 +58,10 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
+RULESPEC_UK = Path(
+    os.environ.get("RULESPEC_UK_CHECKOUT")
+    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
+)
 
 VAT_PROGRAM = "uk/policies/govuk/vat.yaml"
 VAT_BASE = "uk:policies/govuk/vat"
@@ -143,11 +145,7 @@ def _policyengine_rows(cases: list[VATCase]) -> dict[str, dict[str, float]]:
 
 
 def _axiom_awards(
-    cases: list[VATCase],
-    pe_rows: dict[str, dict[str, float]],
-    *,
-    rulespec_root: Path,
-    axiom_binary: Path,
+    cases: list[VATCase], pe_rows: dict[str, dict[str, float]]
 ) -> dict[str, float]:
     import sys
 
@@ -155,7 +153,8 @@ def _axiom_awards(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = rulespec_root / VAT_PROGRAM
+    program = RULESPEC_UK / VAT_PROGRAM
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -179,10 +178,10 @@ def _axiom_awards(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=axiom_binary,
+        binary_path=binary,
         default_entity="Household",
         default_entity_id="household",
-        rulespec_root=rulespec_root,
+        rulespec_repo_roots=(RULESPEC_UK,),
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [VAT_OUTPUT])
@@ -316,16 +315,10 @@ def build_report(
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
+def main() -> int:
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_awards(
-        cases,
-        pe_rows,
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
-    )
+    axiom = _axiom_awards(cases, pe_rows)
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

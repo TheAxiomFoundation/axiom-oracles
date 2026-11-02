@@ -1,0 +1,15 @@
+{
+ "suite": "ct-income-tax-populace",
+ "count": 951,
+ "total_cases": 951,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
+ ],
+ "source": "state-tax-populace-campaign"
+}

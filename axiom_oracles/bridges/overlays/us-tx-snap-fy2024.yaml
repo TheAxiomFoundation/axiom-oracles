@@ -1,0 +1,38 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-tx-snap-fy2024
+program: us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay replaying the Texas SNAP composition against fiscal
+  year 2024 federal parameters: the three USDA cola module ids rewrite to
+  fy-2024-cola in the federal state-plan composition module (where the
+  imports live) and the three Works Handbook C-121.1 utility standards
+  patch to the FY 2024 values in QC technical documentation Table F.7
+  (Texas publishes single statewide values: SUA 424, BUA 391, telephone
+  60). Same union-not-shadowing materialized root and #759 retirement
+  path as the sibling state specs.
+module_id_rewrites:
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/policies/usda/snap/state-plan-composition.yaml
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+parameter_patches:
+  - file: us-tx/policies/hhs/texas-works-handbook/snap-utility-allowance-amounts.yaml
+    rule: tx_standard_utility_allowance_amount
+    from: "445"
+    to: "424"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-184
+  - file: us-tx/policies/hhs/texas-works-handbook/snap-utility-allowance-amounts.yaml
+    rule: tx_basic_utility_allowance_amount
+    from: "400"
+    to: "391"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-184
+  - file: us-tx/policies/hhs/texas-works-handbook/snap-utility-allowance-amounts.yaml
+    rule: tx_telephone_standard_amount
+    from: "62"
+    to: "60"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-184

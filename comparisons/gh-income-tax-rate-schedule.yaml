@@ -1,0 +1,69 @@
+name: gh-income-tax-rate-schedule
+title: Ghana resident income-tax rate schedule — Axiom vs GHAMOD
+description: >-
+  Compares the rulespec-gh resident individual income-tax rate schedule
+  (Income Tax (Amendment) (No. 2) Act 2023 (Act 1111) First Schedule bands
+  over chargeable income: 5,880 nil / +1,320 5% / +1,560 10% / +38,000 17.5% /
+  +192,000 25% / +366,240 30% / >605,000 35%) encoded in Axiom RuleSpec
+  against GHAMOD's tin_s on a band-boundary and interior income sweep. GHAMOD
+  is the SOUTHMOD tax-benefit model for Ghana (UNU-WIDER), run on the EUROMOD
+  engine (SOUTHMOD A4.0, country GH, system GH_2025, dataset gh_2017_a8). The
+  Act 1111 bands are in force from 29 December 2023 and unchanged for 2025 and
+  2026, so GH_2025 applies the schedule the Axiom module validates for 2026.
+  Each case is a single formal-sector employee with no reliefs and GHAMOD
+  taxes gross employment income (probed: its tax base il_tintb3 equals yem),
+  so the case pre-divides the euromod input by the GH_2025 employment-income
+  uprating index and bridges Axiom's chargeable_income on the engine's own
+  post-uprating yem; both engines price the same gross. Live result: 10 of 11
+  cases match to the cedi (every income at or below 605,000). The 700,000 case
+  is the one divergence: GHAMOD returns 193,244, which is 30% on the slice
+  above 605,000, where Act 1111 charges 35% (Axiom 197,994; the 4,750 gap is
+  5% of 95,000). It is dispositioned as an upstream engine gap in
+  dispositions/gh-income-tax-rate-schedule.yaml. The committed report
+  refreshes only through a supervised run (scripts/regenerate_euromod_gh.sh)
+  where the x64 EUROMOD runtime and the local SOUTHMOD bundle exist. Results
+  are based on the tax-benefit microsimulation model for Ghana (GHAMOD) in
+  SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER with SASPRI,
+  the LSE International Inequalities Institute and local partners, run on the
+  EUROMOD software (EM_Executable 1.0.0 via the euromod connector 0.2.18)
+  under the gh_2017_a8 dataset configuration (Ghana Statistical Service, Ghana
+  Living Standards Survey Round 7, 2016-2017); only the dataset's variable
+  list is read and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_gh.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: gh-income-tax-rate-schedule
+    population: synthetic
+    sample_size: 0
+    # Ghana year of assessment 2026 (the rulespec-gh validation year). GHAMOD
+    # resolves its policy year from euromod_system (GH_2025) and ignores the
+    # case period; the Act 1111 schedule is frozen across 2024-2026.
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: GH
+    euromod_system: GH_2025
+    euromod_dataset: gh_2017_a8
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-gh-income-tax-rate-schedule.json
+
+artifacts:
+  report_basename: axiom-euromod-gh-income-tax-rate-schedule
+
+dashboard:
+  filename: axiom-euromod-gh-income-tax-rate-schedule.json
+  suite: gh-income-tax-rate-schedule

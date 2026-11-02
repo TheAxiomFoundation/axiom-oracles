@@ -1,0 +1,13 @@
+{
+ "suite": "tx-snap-qc",
+ "count": 906,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "snap-qc",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [],
+ "source": "axiom-snapqc-tx-snap-0-2026-07-25.json",
+ "total_cases": 906
+}

@@ -11,15 +11,31 @@ committed, reviewable source of truth instead of re-parsing configs in bash.
 
 Derivation, per suite, unions three signals (all deterministic):
 
-1. **rulespec checkout path** — the singular explicit ``rulespec_root``. Its
-   exact ``rulespec-<country>`` basename names the repo directly.
+1. **rulespec checkout paths** — ``rulespec_root`` / ``rulespec_roots`` /
+   ``rulespec_remote``. The path basename (or the remote's ``owner/repo``)
+   names the repo directly. This is the authoritative signal.
 2. **concept id prefixes** — a concept like ``us-co:policies/…#co_tanf_benefit``
-   is encoded in ``rulespec-us``; ``us:statutes/…`` is in the same checkout;
-   ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``. This backstops
-   suites whose rulespec paths are indirected (e.g. rsync'd roots).
+   is encoded in ``rulespec-us`` (its ``us-co/`` directory), as is
+   ``us:statutes/…``; ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``.
+   This backstops suites whose rulespec paths are indirected (e.g. rsync'd
+   roots). US state prefixes map to the country dependency ``rulespec-us``;
+   this routing does not depend on a standalone repository's existence or
+   archive history.
+   ``axiom_oracles.provenance.canonical_rulespec_slug`` folds absorbed names
+   (``ABSORBED_RULESPEC_REPOS``) in the path and prefix signals. A declared
+   ``rulespec_remote`` stays as-is, as the report stamper keeps a git remote:
+   a harness that clones an archived remote really reads it, and
+   ``tests/test_affected_map.py`` rejects the archived and unreadable names
+   in its regression fixtures and requires country-shaped dependency names.
 3. **parameter-suite ``file:`` prefixes** — the non-registry
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.
+
+A few runner types add their own rules (the encoder SNAP lane's jurisdiction,
+the EUROMOD country). A SNAP QC replay (``snap-qc-compare``) uses only a
+configured ``rulespec_root`` (signal 1), defaulting to rulespec-us, and ignores
+concept prefixes and the jurisdiction: it maps to exactly the one rulespec root
+its overlay is built from (see ``snap_qc_repos``).
 
 The output is sorted and stable; ``--check`` fails if the committed file drifts
 from a fresh regeneration, so CI keeps it honest.
@@ -33,6 +49,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -57,7 +74,6 @@ from axiom_oracles.provenance import (  # noqa: E402
     RULESPEC_OWNER,
     canonical_rulespec_slug as _slug,
 )
-from axiom_oracles.bridges.repo_routing import jurisdiction_country  # noqa: E402
 
 
 def _rel(path: Path) -> str:
@@ -69,29 +85,39 @@ def _rel(path: Path) -> str:
 
 
 def _repo_from_path(path_str: str) -> str | None:
-    """Map a declared exact canonical checkout path to its repository slug.
+    """``$HOME/.axiom-oracles/roots/rulespec-uk`` → the repo slug."""
+    name = Path(os.path.expandvars(str(path_str))).name
+    if not name.startswith("rulespec-"):
+        return None
+    return _slug(name)
 
-    This generator is deterministic metadata tooling: it validates the lexical
-    basename in the registry without inspecting whatever happens to exist at
-    the expanded local path on the machine running ``--check``.
-    """
 
-    path = Path(os.path.expandvars(os.path.expanduser(str(path_str))))
-    try:
-        return _slug(path.name)
-    except ValueError as exc:
-        raise ValueError(
-            f"not an exact canonical RuleSpec checkout path: {path}"
-        ) from exc
+def _repo_from_remote(remote: str) -> str | None:
+    """``https://github.com/TheAxiomFoundation/rulespec-us.git`` → slug."""
+    url = remote.strip()
+    if url.endswith(".git"):
+        url = url[: -len(".git")]
+    if "github.com/" in url:
+        url = url.split("github.com/", 1)[1]
+    elif url.startswith("git@") and ":" in url:
+        url = url.split(":", 1)[1]
+    else:
+        return None
+    parts = [p for p in url.split("/") if p]
+    if len(parts) < 2:
+        return None
+    return f"{parts[-2]}/{parts[-1]}"
 
 
 def _repo_from_prefix(prefix: str) -> str | None:
     """Map a concept/file jurisdiction prefix (``us``, ``us-co``, ``uk``, ``be``)
-    to its canonical country-checkout slug."""
+    to its rulespec repo slug. ``us`` and ``us-co`` → ``rulespec-us`` (the
+    state lives in the monorepo's ``us-co/``); ``uk``/``be`` →
+    ``rulespec-uk``/``rulespec-be``."""
     prefix = prefix.strip().lower()
     if not prefix:
         return None
-    return _slug(f"rulespec-{jurisdiction_country(prefix)}")
+    return _slug(f"rulespec-{prefix}")
 
 
 def _concept_prefix(concept: str) -> str | None:
@@ -104,62 +130,170 @@ def _concept_prefix(concept: str) -> str | None:
     return head or None
 
 
+def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
+    """``{repo_slug: sha}`` for a suite pinning one rulespec snapshot.
+
+    A pinned grid (``rulespec_upstream_sha`` + ``rulespec_upstream_tree`` in
+    its parameters) replays the reviewed snapshot regardless of where the
+    repo's main has moved, so the affected-rerun selector must judge its
+    freshness against the PIN, not against main's HEAD — otherwise the suite
+    is re-selected on every sweep forever (its report can only ever stamp the
+    pinned SHA). The pin is attributed to the repos named by the suite's
+    checkout-path/remote signals; anything other than exactly one repo is a
+    config error and fails loudly rather than guessing.
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    sha = str(params.get("rulespec_upstream_sha") or "").strip()
+    if not sha:
+        # An axiom-oracles-compare suite pins its snapshot through the roots
+        # its engine compiles against: run_comparison's _verify_declared_pins
+        # refuses to run unless every rulespec checkout under
+        # axiom_rulespec_repo_roots holds this revision. One revision can pin
+        # only one repo (two repos never share a commit), so the suite must
+        # exercise exactly one. The declared value may be a SHA prefix; the
+        # selector matches recorded SHAs by prefix, so require a real one.
+        revision = str(
+            params.get("axiom_rulespec_repo_roots_revision")
+            or runner.get("axiom_rulespec_repo_roots_revision")
+            or ""
+        ).strip()
+        if not revision:
+            return {}
+        if not re.fullmatch(r"[0-9a-f]{7,40}", revision):
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                f"axiom_rulespec_repo_roots_revision {revision!r}; a pin must be "
+                "7-40 lowercase hex characters"
+            )
+        exercised = sorted(repos_for_registry_config(config))
+        if len(exercised) != 1:
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                "axiom_rulespec_repo_roots_revision but exercises "
+                f"{exercised or 'no'} rulespec repos; a pin needs exactly one"
+            )
+        return {exercised[0]: revision}
+    repos: set[str] = set()
+    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
+    if remote:
+        slug = _repo_from_remote(str(remote))
+        if slug:
+            repos.add(slug)
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    if root:
+        slug = _repo_from_path(str(root))
+        if slug:
+            repos.add(slug)
+    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
+        slug = _repo_from_path(str(entry))
+        if slug:
+            repos.add(slug)
+    if len(repos) != 1:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares rulespec_upstream_sha but "
+            f"its checkout signals name {sorted(repos) or 'no'} rulespec "
+            "repos; a pin needs exactly one"
+        )
+    return {repos.pop(): sha}
+
+
+def snap_qc_repos(config: dict) -> set[str]:
+    """The one rulespec repo a ``snap-qc-compare`` replay reads.
+
+    The bridge builds its fiscal-year overlay from a single rulespec root:
+    ``build_overlay`` copies both the federal ``us/`` chain and the state's
+    ``us-<st>/`` layer out of that root, and the engine is pointed at the
+    overlay alone (``bridges/snap_qc_compare.run_snap_qc_comparison``). That
+    root's repo is therefore the suite's whole rules dependency, and the only
+    repo whose SHA its report can record (``provenance.rulespecs``). The root is
+    the rulespec-us monorepo unless the config names another one.
+
+    The per-state ``rulespec-us-<st>`` repos are never read: they were archived
+    into ``rulespec-us/us-<st>`` on 2026-06-27. Mapping them anyway meant no
+    report could ever prove it was fresh, so the affected-rerun selector picked
+    every snap-qc suite on every sweep ("rulespec-us-<st>: report ran against
+    unknown SHA").
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    slug = _repo_from_path(str(root)) if root else None
+    return {slug or _slug("rulespec-us")}
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
 
-    legacy_keys = {
-        key
-        for section in (runner, params)
-        for key in ("rulespec_roots", "rulespec_remote", "axiom_rulespec_repo_roots")
-        if key in section
-    }
-    if legacy_keys:
-        raise ValueError(
-            "legacy RuleSpec routing keys are unsupported: "
-            + ", ".join(sorted(legacy_keys))
-        )
+    # The SNAP QC administrative-data lane depends on exactly the root its
+    # overlay is built from; no other signal (concept prefixes, the
+    # jurisdiction) names a repo it reads. See snap_qc_repos.
+    if runner.get("type") == "snap-qc-compare":
+        return snap_qc_repos(config)
 
-    uses_axiom = runner.get("type") != "axiom-oracles-compare" or "axiom" in {
-        params.get("left"),
-        params.get("right"),
-    }
-    root = runner.get("rulespec_root") or params.get("rulespec_root")
-    if uses_axiom and not root:
-        raise ValueError(
-            f"comparison {config.get('name', '<unnamed>')!r} must declare "
-            "one explicit rulespec_root"
-        )
-    if root:
-        repos.add(_repo_from_path(str(root)))
-
-    concepts = params.get("concepts") or (
-        [params["concept"]] if params.get("concept") else []
-    )
-    for concept in concepts if uses_axiom else ():
-        prefix = _concept_prefix(str(concept))
-        slug = _repo_from_prefix(prefix) if prefix else None
+    remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
+    if remote:
+        slug = _repo_from_remote(str(remote))
         if slug:
             repos.add(slug)
 
-    # State and federal US rules share the same canonical country checkout.
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    if root:
+        slug = _repo_from_path(str(root))
+        if slug:
+            repos.add(slug)
+
+    for entry in params.get("rulespec_roots") or runner.get("rulespec_roots") or []:
+        slug = _repo_from_path(str(entry))
+        if slug:
+            repos.add(slug)
+
+    # Direct oracle-to-oracle baselines use durable concept ids to name the
+    # compared amounts, but they do not execute the jurisdiction's RuleSpec.
+    # Treating those ids as dependencies would make the affected-rerun selector
+    # rerun (and merely re-emit) the baseline whenever rulespec-de moves, while
+    # its report correctly carries no rulespec provenance. The same holds for
+    # an axiom-oracles-compare suite with no `axiom` side (e.g. the
+    # Tax-Calculator-vs-PolicyEngine triangulation): no rulespec executes, so
+    # rules movement cannot change its numbers (#296).
+    engines = {str(params.get("left", "")), str(params.get("right", ""))}
+    # Both sides must be declared to qualify — a config missing left/right
+    # keeps its concept-derived dependencies (over-rerunning is safe; silently
+    # unmapping a suite is not).
+    direct_oracle_pair = (
+        runner.get("type") == "axiom-oracles-compare"
+        and bool(params.get("left"))
+        and bool(params.get("right"))
+        and "axiom" not in engines
+    )
+    if runner.get("type") != "gettsim-synthetic-compare" and not direct_oracle_pair:
+        concepts = params.get("concepts") or (
+            [params["concept"]] if params.get("concept") else []
+        )
+        for concept in concepts:
+            prefix = _concept_prefix(str(concept))
+            slug = _repo_from_prefix(prefix) if prefix else None
+            if slug:
+                repos.add(slug)
+
+    # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
+    # `jurisdiction: us-ca` and runs the state's SNAP program over federal SNAP
+    # rules. The bridge reads that program from rulespec-us/us-ca
+    # (bridges/snap_populace.resolve_program_path), and every state SNAP
+    # inherits the 7 USC/7 CFR federal chain, so both signals name rulespec-us.
     jurisdiction = params.get("jurisdiction")
-    if runner.get("type") == "axiom-encode-snap-populace-compare" and jurisdiction:
+    if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
         repos.add(_slug("rulespec-us"))
 
-    # The SNAP QC administrative-data lane uses that same country checkout.
-    if runner.get("type") == "snap-qc-compare" and jurisdiction:
-        state_slug = _repo_from_prefix(str(jurisdiction))
-        if state_slug:
-            repos.add(state_slug)
-        repos.add(_slug("rulespec-us"))
-
-    # EUROMOD/UKMOD also declares an exact country checkout; the country field
-    # remains a cross-checking dependency signal.
+    # The EUROMOD/UKMOD synthetic lane (euromod-synthetic-compare) points
+    # `axiom_rulespec_repo_roots` at the whole org dir and names the model
+    # country (`euromod_country: UK`/`BE`); the encoded rules live in that
+    # country's rulespec repo.
     euromod_country = params.get("euromod_country")
     if runner.get("type") == "euromod-synthetic-compare" and euromod_country:
         country_slug = _repo_from_prefix(str(euromod_country))
@@ -189,9 +323,41 @@ def parameter_suite_entries(config: dict) -> list[dict]:
         entries.append(
             {
                 "suite": suite["suite"],
+                # Parameter suites are run by scripts/run_parameter_comparisons.py
+                # (needs a local rulespec-us checkout + PolicyEngine), not by
+                # scripts/run_comparison.py — there is no registry name the CI
+                # rerun matrix could dispatch, so `name` is null and the
+                # selector must leave these to the manual parameter lane.
+                "name": None,
                 "report": f"axiom-policyengine-{suite['suite']}.json",
                 "repos": sorted(repos),
                 "source": "comparisons/parameter-oracles.yaml",
+            }
+        )
+    return entries
+
+
+def campaign_projection_suite_entries(config: dict, source: Path) -> list[dict]:
+    """Derive affected-map rows for manually projected campaign reports.
+
+    Campaign runners emit one source-of-record report which a projector turns
+    into dashboard suites. They are real oracle comparisons, but they are not
+    dispatchable through ``run_comparison.py``. Their declarative suite list
+    therefore supplies exact report and RuleSpec provenance while keeping
+    ``name`` null so the affected-rerun matrix does not invent a runner.
+    """
+
+    inherited_repos = config.get("rulespec_repos") or []
+    entries: list[dict] = []
+    for suite in config.get("suites") or []:
+        repos = suite.get("rulespec_repos") or inherited_repos
+        entries.append(
+            {
+                "suite": suite["suite"],
+                "name": None,
+                "report": suite["report"],
+                "repos": sorted(_slug(str(repo)) for repo in repos),
+                "source": f"comparisons/{source.name}",
             }
         )
     return entries
@@ -210,20 +376,46 @@ def build_map() -> dict:
         if config.get("kind") == "parameter-suite-list":
             entries.extend(parameter_suite_entries(config))
             continue
+        if config.get("kind") == "campaign-projection-suite-list":
+            entries.extend(campaign_projection_suite_entries(config, path))
+            continue
         if "name" not in config:
             # Defensive: any other non-registry file is skipped, not crashed
             # on (the #73 lesson — never let one odd file break the tool).
             continue
         suite = (config.get("dashboard") or {}).get("suite", config["name"])
-        report = (config.get("dashboard") or {}).get("filename")
-        entries.append(
-            {
-                "suite": suite,
-                "report": report,
-                "repos": sorted(repos_for_registry_config(config)),
-                "source": f"comparisons/{path.name}",
-            }
-        )
+        # Most selector inputs are dashboard reports.  Certificate-grade
+        # unified tuple records can instead declare a stable repo-relative
+        # selector report while retaining a dated reports/ run artifact.
+        report = (config.get("selector") or {}).get("report") or (
+            config.get("dashboard") or {}
+        ).get("filename")
+        entry = {
+            "suite": suite,
+            # The run_comparison.py registry name — what the CI rerun
+            # matrix must dispatch. Often equal to `suite`, but not always
+            # (e.g. dashboard suite `uk-benefit-cap` runs under registry
+            # name `uk-benefit-cap-ukmod`); dispatching the dashboard
+            # suite key crashes the leg with "unknown comparison".
+            # A suite declaring `ci: manual` cannot produce a real report
+            # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
+            # has no jurisdiction config for them yet; the SNAP QC replays:
+            # no CI matrix provisions the engine or the QC file, so a leg
+            # could only re-emit) — emit null so the selector and the
+            # weekly matrix leave it to the manual lane.
+            "name": None if config.get("ci") == "manual" else config["name"],
+            "report": report,
+            "repos": sorted(repos_for_registry_config(config)),
+            "source": f"comparisons/{path.name}",
+        }
+        pinned = pinned_repos_for_registry_config(config)
+        if pinned:
+            # Freshness for these repos is judged against the pin, not HEAD
+            # (see select_affected_suites.py) — a pinned grid's report can
+            # only ever stamp the pinned SHA, so comparing to a moving HEAD
+            # would re-select it every sweep forever.
+            entry["pinned"] = pinned
+        entries.append(entry)
 
     entries.sort(key=lambda e: (e["suite"], e.get("source", "")))
     return {
@@ -233,7 +425,11 @@ def build_map() -> dict:
             "Maps each comparison suite to the rulespec repos its concepts "
             "exercise. The affected-rerun workflow reruns only suites whose "
             "affected repos have advanced past the SHA their report last ran "
-            "against (report provenance.rulespecs)."
+            "against (report provenance.rulespecs). `suite` keys the dashboard "
+            "report; `name` is the run_comparison.py registry name the rerun "
+            "matrix dispatches (null = not CI-runnable: parameter suites run "
+            "by the manual parameter lane, and registry suites declaring "
+            "`ci: manual` in their YAML)."
         ),
         "owner": RULESPEC_OWNER,
         "suites": entries,

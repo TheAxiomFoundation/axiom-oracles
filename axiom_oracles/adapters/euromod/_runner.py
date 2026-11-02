@@ -261,7 +261,9 @@ def _patch_policy_switch(
     policy_start = system_xml.rfind("<Policy>", 0, name_at)
     policy_end = system_xml.find("</Policy>", name_at)
     if policy_start < 0 or policy_end < 0:
-        raise ValueError(f"EUROMOD policy {policy_name!r} has no complete XML block.")
+        raise ValueError(
+            f"EUROMOD policy {policy_name!r} has no complete XML block."
+        )
     policy_end += len("</Policy>")
 
     policy_xml = system_xml[policy_start:policy_end]
@@ -284,6 +286,23 @@ def _patch_policy_switch(
         f"{policy_xml[switch_end:]}"
     )
     return f"{system_xml[:policy_start]}{patched_policy}{system_xml[policy_end:]}"
+
+
+def _dataset_template(header, extra_columns):
+    """Zero-filled input template: dataset header plus caller-named extras.
+
+    ``extra_columns`` are standard EUROMOD variables the model conditions on
+    but the bundled demo dataset omits (e.g. Germany's Bundesland ``drgn1``,
+    which gates the West/East pension and unemployment contribution
+    functions). They join the template — and therefore the DataFrame column
+    set — so case rows can set them like any schema column; without the
+    column every row fails those gates and the contributions are silently
+    zero.
+    """
+    template = {str(name): 0.0 for name in header}
+    for name in extra_columns:
+        template.setdefault(str(name), 0.0)
+    return template
 
 
 def _rows_by_household(rows: list) -> dict:
@@ -323,7 +342,8 @@ def main() -> None:
         header = handle.readline().rstrip("\n").split("\t")
     header = [name.strip() for name in header if name.strip()]
 
-    template = {name: 0.0 for name in header}
+    template = _dataset_template(header, job.get("extra_columns") or [])
+    header = list(template)
     households = _rows_by_household(job["rows"])
 
     requested = job.get("outputs") or []

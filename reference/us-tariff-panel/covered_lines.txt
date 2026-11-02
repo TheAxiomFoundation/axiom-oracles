@@ -1,0 +1,10 @@
+# HTS-10 lines in the covered slice of the us-tariff-panel comparison.
+# One line per row, digits only (no dots). The Yale panel extract
+# (yale_panel_slice.csv) is regenerated from this list by
+# scripts/extract_yale_panel.R — supervised leg, see README.md.
+# Burn-up: append lines here as rulespec-us coverage grows, then re-extract.
+7202111000
+7601103000
+9506624040
+2203000030
+8541420010

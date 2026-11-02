@@ -1,9 +1,16 @@
 import argparse
-import os
+import hashlib
+import json
+from pathlib import Path
 
 import pytest
 
 import axiom_oracles.bridges.tax_populace as tax_populace
+from axiom_oracles.engine_identity import (
+    ENGINE_RECEIPT_OUTPUT_ENV,
+    EngineIdentityError,
+    engine_binding_receipt_path,
+)
 from axiom_oracles.bridges.tax_populace import (
     AOTC_BASE,
     AOTC_OUTPUTS,
@@ -163,28 +170,36 @@ def test_remove_raw_columns_replaced_by_outputs_prefers_period_values():
     assert merged.loc[0, "american_opportunity_credit"] == 2_500
 
 
-def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
+def test_run_axiom_program_compiles_through_canonical_repo_alias(
     monkeypatch,
     tmp_path,
 ):
-    rulespec_root = tmp_path / "rulespec-uk"
-    program = rulespec_root / "uk" / "statutes" / "ukpga" / "2007" / "3" / "35.yaml"
+    rulespec_root = tmp_path / "rulespec-uk-worktree"
+    program = rulespec_root / "statutes" / "ukpga" / "2007" / "3" / "35.yaml"
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n")
-    binary = tmp_path / "axiom-rules-engine"
+    axiom_rules_path = tmp_path / "axiom-rules-engine"
+    binary = axiom_rules_path / "target" / "release" / "axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
     binary.write_text("")
-    binary.chmod(0o755)
 
     compiled_programs = []
-    compile_commands = []
+    compile_env_roots = []
     runtime_requests = []
 
     def fake_run(cmd, **kwargs):
+        if len(cmd) >= 6 and cmd[:3] == ["git", "-C", str(rulespec_root)]:
+            return tax_populace.subprocess.CompletedProcess(
+                cmd,
+                0,
+                stdout="https://github.com/TheAxiomFoundation/rulespec-uk.git\n",
+                stderr="",
+            )
         if "compile" in cmd:
             compiled_programs.append(cmd[cmd.index("--program") + 1])
-            compile_commands.append(cmd)
-            assert "AXIOM_RULESPEC_REPO_ROOTS" not in kwargs["env"]
-            assert "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE" not in kwargs["env"]
+            compile_env_roots.extend(
+                kwargs["env"]["AXIOM_RULESPEC_REPO_ROOTS"].split(tax_populace.os.pathsep)
+            )
             output_path = cmd[cmd.index("--output") + 1]
             with open(output_path, "w") as artifact:
                 artifact.write(
@@ -194,7 +209,7 @@ def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
                                 "parameters": [],
                                 "derived": [
                                     {
-                                        "id": "uk:statutes/ukpga/2007/3/35#personal_allowance",
+                                        "id": "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance",
                                         "name": "personal_allowance",
                                         "entity": "Person",
                                     }
@@ -203,9 +218,7 @@ def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
                         }
                     )
                 )
-            return tax_populace.subprocess.CompletedProcess(
-                cmd, 0, stdout="", stderr=""
-            )
+            return tax_populace.subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
         if "run-compiled" in cmd:
             runtime_requests.append(tax_populace.json.loads(kwargs["input"]))
             return tax_populace.subprocess.CompletedProcess(
@@ -216,7 +229,7 @@ def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
                         "results": [
                             {
                                 "outputs": {
-                                    "uk:statutes/ukpga/2007/3/35#personal_allowance": {
+                                    "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance": {
                                         "kind": "scalar",
                                         "value": {
                                             "kind": "integer",
@@ -278,7 +291,7 @@ def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
             ],
         },
         rulespec_root=rulespec_root,
-        axiom_binary=binary,
+        axiom_rules_path=axiom_rules_path,
     )
 
     assert (
@@ -288,19 +301,20 @@ def test_run_axiom_program_uses_exact_canonical_checkout_and_binary(
         == 12570
     )
     assert compiled_programs
-    assert compiled_programs == [str(program.resolve())]
+    assert "rulespec-uk" in compiled_programs[0].split("/")
+    assert "rulespec-uk-worktree" not in compiled_programs[0].split("/")
     assert runtime_requests[0]["dataset"]["inputs"][0]["name"] == (
-        "uk:statutes/ukpga/2007/3/35#input.adjusted_net_income"
+        "uk-worktree:statutes/ukpga/2007/3/35#input.adjusted_net_income"
     )
     assert runtime_requests[0]["dataset"]["relations"][0]["name"] == (
-        "uk:statutes/ukpga/2007/3/35#relation.members"
+        "uk-worktree:statutes/ukpga/2007/3/35#relation.members"
     )
     assert runtime_requests[0]["queries"][0]["outputs"] == [
-        "uk:statutes/ukpga/2007/3/35#personal_allowance"
+        "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance"
     ]
-    assert compile_commands[0][compile_commands[0].index("--rulespec-root") + 1] == str(
-        rulespec_root.resolve()
-    )
+    assert str(rulespec_root) in compile_env_roots
+    assert str(rulespec_root.parent) in compile_env_roots
+    assert compile_env_roots[0] != str(rulespec_root)
 
 
 @pytest.mark.parametrize(
@@ -687,6 +701,8 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
     assert projected["filing_status"] == 3
     assert "earned_income" not in projected
     assert projected["adjusted_gross_income"] == 22_000
+    # Pub. 596 Worksheet 1 over the filer only: lines 1-3 = 40 + 20 + 100 +
+    # 50; line 7 = max(0, 400 - 100) = 300; line 13 = max(0, 0) = 0.
     assert projected["eitc_relevant_investment_income"] == 510
     assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
     assert (
@@ -715,7 +731,7 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
     )
     assert earned_income_inputs == {
         "employee_compensation_includible_in_gross_income": 18_000,
-        "net_earnings_from_self_employment_after_self_employment_tax_deduction": 0.0,
+            "net_earnings_from_self_employment_after_self_employment_tax_deduction": 0.0,
         "pension_or_annuity_amount": 0,
         "nonresident_alien_income_not_connected_with_united_states_business": 0,
         "penal_institution_service_compensation": 0,
@@ -766,7 +782,12 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
     projected = project_eitc_tax_unit_inputs(row=row, persons=persons)
     contexts = project_tax_unit_person_contexts(persons)
 
-    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
+    # 26 USC 32(c)(1)(A)(ii)(II) tests "such individual (or, if the individual
+    # is married, either the individual or the individual's spouse)". The only
+    # filer here is 66, and the 34-year-old is a dependent, so the test fails.
+    # PolicyEngine-US 1.764.6 counted the dependent's age; PolicyEngine-US
+    # #9132 (first released in 1.779.8) restricts it to the filer and spouse.
+    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is False
     assert (
         projected["taxpayer_includes_required_social_security_number_on_return"] is True
     )
@@ -787,12 +808,30 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
         project_section_32_c_2_tax_unit_inputs(
             persons=persons,
             contexts=contexts,
-        )["employee_compensation_includible_in_gross_income"]
+        )[
+            "employee_compensation_includible_in_gross_income"
+        ]
         == 0
     )
 
 
-def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible():
+@pytest.mark.parametrize(
+    ("ssn_card_type", "expected"),
+    [("CITIZEN", True), ("OTHER", False)],
+)
+def test_eitc_projection_identification_checks_the_fallback_filer(
+    ssn_card_type, expected
+):
+    """PolicyEngine names no head here: a 16-year-old alone, every role flag
+    false. ``tax_unit_filers`` still files the 16-year-old, and identification
+    reads that same filer, so the answer is that filer's own SSN.
+
+    26 USC 32(c)(1)(E): "No credit shall be allowed under this section to an
+    eligible individual who does not include on the return of tax for the
+    taxable year— (i) such individual's taxpayer identification number".
+    The person contexts still treat the 16-year-old as a dependent; moving
+    them onto the same filer list is axiom-oracles#633.
+    """
     row = {
         "filing_status": "HEAD_OF_HOUSEHOLD",
         "adjusted_gross_income": 0,
@@ -800,7 +839,7 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     persons = [
         {
             "age": 16,
-            "ssn_card_type": "CITIZEN",
+            "ssn_card_type": ssn_card_type,
             "is_tax_unit_head": False,
             "is_tax_unit_spouse": False,
             "is_tax_unit_head_or_spouse": False,
@@ -814,10 +853,12 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     context = project_tax_unit_person_contexts(persons)[0]
 
     assert (
-        projected["taxpayer_includes_required_social_security_number_on_return"] is True
+        projected["taxpayer_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert (
-        projected["spouse_includes_required_social_security_number_on_return"] is True
+        projected["spouse_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert context.is_tax_unit_dependent is True
     assert context.qualifying_child_under_section_152_c is True
@@ -877,7 +918,9 @@ def test_eitc_projection_sends_self_employment_to_section_1402_not_earned_income
         contexts=contexts,
     ) == {
         "net_earnings_from_self_employment": 3_647.825,
-        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": (3_647.825),
+        "net_earnings_from_self_employment_for_paragraph_2_threshold_test": (
+            3_647.825
+        ),
     }
     assert project_section_164_f_tax_unit_inputs() == {
         "taxpayer_is_individual": True,
@@ -975,6 +1018,8 @@ def test_section_152_c_projection_uses_leaf_child_facts():
 
 
 def test_eitc_relevant_investment_income_replaces_limited_loss_with_nonnegative_gain():
+    """Pub. 596 Worksheet 1: lines 1-3 = 10 + 20 + 30 + 40; line 5 is a loss
+    (200 - 1,000), so line 7 = 0; line 13 = max(0, 50) = 50; line 14 = 150."""
     assert (
         project_eitc_relevant_investment_income(
             row={"filing_status": "SINGLE"},
@@ -1065,6 +1110,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1074,6 +1126,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1347,6 +1406,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1356,6 +1422,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1526,6 +1599,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1535,6 +1615,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1830,14 +1917,15 @@ def test_resolve_rulespec_program_path_supports_country_monorepo_root(tmp_path):
     )
 
 
-def test_resolve_rulespec_program_path_rejects_flat_layout(tmp_path):
+def test_resolve_rulespec_program_path_keeps_direct_layout(tmp_path):
     root = tmp_path / "rulespec-us"
     program = root / "statutes" / "26" / "1" / "j.yaml"
     program.parent.mkdir(parents=True)
     program.write_text("program: {}\n")
 
-    with pytest.raises(ValueError, match="jurisdiction root is not canonical"):
-        resolve_rulespec_program_path(root, TAX_BEFORE_CREDITS_PROGRAM_PATH)
+    assert (
+        resolve_rulespec_program_path(root, TAX_BEFORE_CREDITS_PROGRAM_PATH) == program
+    )
 
 
 def test_select_tax_unit_indices_rejects_filtered_requested_case():
@@ -1971,7 +2059,7 @@ def test_build_contribution_and_benefit_base_request_queries_encoded_ssa_policy(
     request = build_contribution_and_benefit_base_request(year=2026)
 
     assert request == {
-        "mode": "explain",
+        "mode": "fast",
         "dataset": {"inputs": [], "relations": []},
         "queries": [
             {
@@ -2079,11 +2167,8 @@ def test_contribution_and_benefit_base_comes_from_selected_axiom_result():
 
 
 def test_contribution_and_benefit_base_can_come_from_rulespec_test(tmp_path):
-    rulespec_root = tmp_path / "rulespec-us"
-    test_path = (
-        rulespec_root
-        / "us"
-        / contribution_and_benefit_base_program_path(2024).with_suffix(".test.yaml")
+    test_path = tmp_path / contribution_and_benefit_base_program_path(2024).with_suffix(
+        ".test.yaml"
     )
     test_path.parent.mkdir(parents=True)
     output = "us:policies/ssa/contribution-and-benefit-base/2024#contribution_and_benefit_base"
@@ -2102,7 +2187,7 @@ def test_contribution_and_benefit_base_can_come_from_rulespec_test(tmp_path):
 
     assert (
         contribution_and_benefit_base_from_rulespec_test(
-            rulespec_root,
+            tmp_path,
             year=2024,
             output=output,
         )
@@ -2283,8 +2368,8 @@ def test_build_medicare_payroll_request_uses_projected_fica_wages():
 
 
 def test_policyengine_variables_for_payroll_surface_are_person_scoped():
-    tax_unit_variables, person_variables = (
-        tax_populace.policyengine_variables_for_surfaces(["employee-medicare"])
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+        ["employee-medicare"]
     )
 
     assert tax_unit_variables == ()
@@ -2298,11 +2383,9 @@ def test_policyengine_variables_for_payroll_surface_are_person_scoped():
 
 
 def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
-    tax_unit_variables, person_variables = (
-        tax_populace.policyengine_variables_for_surfaces(
-            ["employee-oasdi"],
-            positive_ctc_only=True,
-        )
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+        ["employee-oasdi"],
+        positive_ctc_only=True,
     )
 
     assert tax_unit_variables == ("ctc",)
@@ -2315,17 +2398,15 @@ def test_policyengine_variables_for_non_payroll_surfaces_use_legacy_sets():
         tax_populace.PE_TAX_UNIT_VARIABLES,
         tax_populace.PE_PERSON_VARIABLES,
     )
-    assert tax_populace.policyengine_variables_for_surfaces(
-        ["employee-oasdi", "ctc"]
-    ) == (
+    assert tax_populace.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
         tax_populace.PE_TAX_UNIT_VARIABLES,
         tax_populace.PE_PERSON_VARIABLES,
     )
 
 
 def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs():
-    tax_unit_variables, person_variables = (
-        tax_populace.policyengine_variables_for_surfaces(["tax-before-credits"])
+    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+        ["tax-before-credits"]
     )
 
     assert "income_tax_main_rates" in tax_unit_variables
@@ -2386,7 +2467,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
     assert request["dataset"]["inputs"] == [
         {
             "name": "us:statutes/26/3101/a#input.wages",
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "person_7",
             "interval": {
                 "period_kind": "tax_year",
@@ -2424,7 +2505,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         OASDI_WAGE_BASE_PROGRAM_PATH,
         EMPLOYEE_OASDI_PROGRAM_PATH,
     ):
-        target = rulespec_root / "us" / program_path
+        target = rulespec_root / program_path
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text("format: rulespec/v1\nrules: []\n")
 
@@ -2462,9 +2543,9 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
 
     calls = []
 
-    def fake_run_axiom_program(*, program, request, rulespec_root, axiom_binary):
-        del rulespec_root, axiom_binary
-        calls.append((program.relative_to(tmp_path / "rulespec-us" / "us"), request))
+    def fake_run_axiom_program(*, program, request, rulespec_root, axiom_rules_path):
+        del rulespec_root, axiom_rules_path
+        calls.append((program.relative_to(tmp_path / "rulespec-us"), request))
         if program.name == "2026.yaml":
             return [
                 {
@@ -2477,7 +2558,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
                 }
             ]
         if (
-            program.relative_to(tmp_path / "rulespec-us" / "us")
+            program.relative_to(tmp_path / "rulespec-us")
             == OASDI_WAGE_BASE_PROGRAM_PATH
         ):
             input_values = {
@@ -2512,13 +2593,11 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         ]
 
     monkeypatch.setattr(tax_populace, "run_axiom_program", fake_run_axiom_program)
-    axiom_binary = tmp_path / "axiom-rules-engine"
-    axiom_binary.write_text("")
-    axiom_binary.chmod(0o755)
 
     report = compare_tax_ecps(
+        workspace_root=tmp_path,
         rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
+        axiom_rules_path=tmp_path / "axiom-rules-engine",
         year=2026,
         sample_size=1,
         positive_ctc_only=False,
@@ -2580,4 +2659,180 @@ def test_policyengine_data_certification_override_noop_for_populace(monkeypatch)
 
     tax_populace._install_policyengine_data_certification_override()
 
-    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in os.environ
+    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+
+
+def test_engine_timeouts_default_without_an_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.delenv(tp.ENGINE_RUN_TIMEOUT_ENV, raising=False)
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "  ")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 600
+    assert tp.engine_timeout_seconds(tp.ENGINE_COMPILE_TIMEOUT_ENV, 60) == 60
+
+
+def test_engine_timeouts_take_a_positive_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 7200
+
+
+@pytest.mark.parametrize("raw", ["0", "-5", "1.5", "ten", "600s"])
+def test_engine_timeouts_refuse_a_malformed_override(monkeypatch, raw):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, raw)
+    with pytest.raises(SystemExit, match=tp.ENGINE_RUN_TIMEOUT_ENV):
+        tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600)
+
+
+def test_run_axiom_program_passes_the_configured_timeouts(monkeypatch, tmp_path):
+    """The override reaches both engine subprocesses: compile and run."""
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "90")
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    seen = []
+
+    class Stop(Exception):
+        pass
+
+    real_run = tp.subprocess.run
+
+    def fake_run(cmd, **kwargs):
+        if not str(cmd[0]).endswith("axiom-rules-engine"):
+            return real_run(cmd, **kwargs)
+        seen.append((cmd[1], kwargs.get("timeout")))
+        raise Stop
+
+    monkeypatch.setattr(tp.subprocess, "run", fake_run)
+    rulespec = tmp_path / "rulespec-us"
+    (rulespec / "us" / "statutes").mkdir(parents=True)
+    program = rulespec / "us" / "statutes" / "p.yaml"
+    program.write_text("format: rulespec/v1\n")
+    engine = tmp_path / "engine"
+    (engine / "target" / "release").mkdir(parents=True)
+    (engine / "target" / "release" / "axiom-rules-engine").write_text("")
+    with pytest.raises(Stop):
+        tp.run_axiom_program(
+            program=program, request={}, rulespec_root=rulespec, axiom_rules_path=engine
+        )
+    assert seen == [("compile", 90)]
+
+
+def _receipted_program_fixture(monkeypatch, tmp_path):
+    rulespec = tmp_path / "rulespec-us"
+    program = rulespec / "us/fixtures/program.yaml"
+    engine = tmp_path / "engine"
+    binary = engine / "target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True)
+    binary.write_bytes(b"original engine")
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "a" * 40,
+        "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+    }))
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    monkeypatch.setattr(tax_populace, "_rulespec_repo_alias_parent", lambda _: None)
+    monkeypatch.setattr(tax_populace, "_canonical_rulespec_compile_path", lambda path, _: path)
+    monkeypatch.setattr(tax_populace, "_runtime_axiom_request", lambda request, **kwargs: (request, {}))
+    arguments = {
+        "program": program, "request": {"queries": []},
+        "rulespec_root": rulespec, "axiom_rules_path": engine,
+    }
+    return binary, journal, arguments
+
+
+def test_run_axiom_program_journals_compile_fallback_and_runtime_bytes(
+    monkeypatch, tmp_path
+):
+    binary, journal, arguments = _receipted_program_fixture(monkeypatch, tmp_path)
+    executed = []
+
+    def execute(command, **kwargs):
+        executed.append((command[1], Path(command[0]).read_bytes()))
+        if command[1] == "compile":
+            if "--rulespec-root" in command:
+                return tax_populace.subprocess.CompletedProcess(
+                    command, 1, stdout="", stderr="unknown compile argument",
+                )
+            Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
+            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+        return tax_populace.subprocess.CompletedProcess(
+            command, 0, stdout='{"results": []}', stderr="",
+        )
+
+    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
+    real_record = tax_populace.record_engine_receipt
+    observed = []
+
+    def record(receipt):
+        real_record(receipt)
+        observed.append(json.loads(journal.read_text()))
+
+    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
+    assert tax_populace.run_axiom_program(**arguments) == []
+    assert executed == [
+        ("compile", b"original engine"), ("compile", b"original engine"),
+        ("run-compiled", b"original engine"),
+    ]
+    assert len(observed) == 3
+    for receipt in observed:
+        assert receipt["commit"] == "a" * 40
+        assert receipt["binary_sha256"] == hashlib.sha256(binary.read_bytes()).hexdigest()
+
+
+@pytest.mark.parametrize(
+    ("change_phase", "expected_commands"),
+    [("during_compile", ["compile"]), ("before_fallback", ["compile"]),
+     ("before_run", ["compile", "compile"]),
+     ("during_run", ["compile", "compile", "run-compiled"])],
+)
+def test_run_axiom_program_rejects_changed_engine_at_each_invocation(
+    monkeypatch, tmp_path, change_phase, expected_commands
+):
+    binary, journal, arguments = _receipted_program_fixture(monkeypatch, tmp_path)
+    executed = []
+
+    def execute(command, **kwargs):
+        executed.append(command[1])
+        if command[1] == "compile":
+            if change_phase == "during_compile":
+                binary.write_bytes(b"replacement engine")
+            if "--rulespec-root" in command:
+                return tax_populace.subprocess.CompletedProcess(
+                    command, 1, stdout="", stderr="unknown compile argument",
+                )
+            Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
+            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+        if change_phase == "during_run":
+            binary.write_bytes(b"replacement engine")
+        elif change_phase == "before_run":
+            # A whole-program before/after check would miss this A -> B -> A.
+            binary.write_bytes(b"original engine")
+        return tax_populace.subprocess.CompletedProcess(
+            command, 0, stdout='{"results": []}', stderr="",
+        )
+
+    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
+    real_record = tax_populace.record_engine_receipt
+
+    def record(receipt):
+        real_record(receipt)
+        if (
+            change_phase == "before_fallback" and len(executed) == 1
+            or change_phase == "before_run" and len(executed) == 2
+        ):
+            binary.write_bytes(b"replacement engine")
+
+    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
+    with pytest.raises(EngineIdentityError, match="changed .*program invocation"):
+        tax_populace.run_axiom_program(**arguments)
+    assert executed == expected_commands
+    if change_phase == "during_compile":
+        assert not journal.exists()
+    else:
+        assert json.loads(journal.read_text())["binary_sha256"] == (
+            hashlib.sha256(b"original engine").hexdigest()
+        )

@@ -318,6 +318,12 @@ def test_national_insurance_class_1_request_projects_weekly_inputs(monkeypatch):
         record["name"] + ":" + record["entity_id"]: record["value"]
         for record in request["dataset"]["inputs"]
     }
+    assert {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    } == {
+        "person_7": "Person",
+    }
     assert inputs[
         f"{NATIONAL_INSURANCE_SECTION_8_BASE}#input.primary_class_1_contribution_payable_as_mentioned_in_section_6_1_a:person_7"
     ] == {"kind": "bool", "value": True}
@@ -1012,6 +1018,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_employment_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_employment_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1021,6 +1031,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_private_pension_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_private_pension_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1035,6 +1049,14 @@ def test_income_tax_income_base_request_projects_section_23_relation():
     assert inputs[
         f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax:person_7_income_employment_income"
     ] == {"kind": "decimal", "value": "30000.0"}
+    assert {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    } == {
+        "person_7": "Person",
+        "person_7_income_employment_income": "Payment",
+        "person_7_income_private_pension_income": "Payment",
+    }
     assert inputs[
         f"{INCOME_TAX_SECTION_23_BASE}#input.relief_deducted_under_section_24:person_7_income_employment_income"
     ] == {"kind": "decimal", "value": "750.0"}
@@ -1423,6 +1445,9 @@ def test_benefit_cap_relevant_amount_request_filters_to_finite_caps():
     )
 
     assert request["mode"] == "explain"
+    assert {record["entity"] for record in request["dataset"]["inputs"]} == {
+        "Family"
+    }
     assert request["queries"] == [
         {
             "entity_id": "benunit_12",
@@ -1467,7 +1492,7 @@ def test_pension_credit_projection_uses_relation_type():
     }
 
 
-def test_state_pension_credit_qualifying_age_projection_uses_equalized_age():
+def test_state_pension_credit_qualifying_age_projection_without_months_uses_whole_age():
     assert project_state_pension_credit_qualifying_age_inputs(
         {
             "gender": "FEMALE",
@@ -1516,8 +1541,8 @@ def test_state_pension_credit_qualifying_age_request_projects_people():
             "period": {
                 "period_kind": "custom",
                 "name": "day",
-                "start": "2026-04-06",
-                "end": "2026-04-06",
+                "start": "2026-10-06",
+                "end": "2026-10-06",
             },
             "outputs": list(
                 output["axiom"]
@@ -2425,9 +2450,7 @@ def test_pip_final_projection_maps_categories_to_rate_band_leaves():
         f"{PIP_FINAL_BASE}#input.mobility_is_standard_rate": True,
     }
 
-    nil = project_pip_final_inputs(
-        {"pip_dl_category": "NONE", "pip_m_category": "NONE"}
-    )
+    nil = project_pip_final_inputs({"pip_dl_category": "NONE", "pip_m_category": "NONE"})
     assert all(value is False for value in nil.values())
 
 
@@ -3346,21 +3369,99 @@ def test_universal_credit_child_element_request_filters_to_positive_rows():
     ]
 
 
-def test_run_axiom_surface_executes_scalar_parameters_through_engine(
-    monkeypatch, tmp_path
-):
-    rulespec_root = tmp_path / "rulespec-uk"
-    program = rulespec_root / "uk" / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
-    axiom_binary = tmp_path / "axiom-rules-engine"
-    request = {
-        "queries": [
-            {
-                "period": {"start": "2026-04-01"},
-                "outputs": ["uk:regulations/uksi/2013/376/36#carer_element_amount"],
+def test_run_axiom_parameter_outputs_reads_generated_rulespec_parameters(tmp_path):
+    program = tmp_path / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text(
+        """
+format: rulespec/v1
+rules:
+  - name: standard_allowance_single_under_25_amount
+    kind: parameter
+    dtype: Money
+    period: Month
+    versions:
+      - effective_from: '0001-01-01'
+        formula: |-
+          300
+      - effective_from: '2026-04-01'
+        formula: |-
+          338.58
+""".strip()
+    )
+
+    results = efrs_uk.run_axiom_parameter_outputs(
+        program=program,
+        rulespec_root=tmp_path,
+        request={
+            "queries": [
+                {
+                    "period": {"start": "2026-04-01"},
+                    "outputs": [
+                        "uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25_amount"
+                    ],
+                }
+            ]
+        },
+    )
+
+    assert results == [
+        {
+            "outputs": {
+                "uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25_amount": {
+                    "value": {"value": "338.58"}
+                }
             }
-        ]
-    }
-    expected = [
+        }
+    ]
+
+
+def test_run_axiom_parameter_outputs_resolves_composed_program_imports(tmp_path):
+    rulespec_root = tmp_path / "rulespec-uk"
+    source = rulespec_root / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
+    source.parent.mkdir(parents=True)
+    source.write_text(
+        """
+format: rulespec/v1
+rules:
+  - name: carer_element_amount
+    kind: parameter
+    dtype: Money
+    period: Month
+    versions:
+      - effective_from: '0001-01-01'
+        formula: |-
+          200
+      - effective_from: '2026-04-01'
+        formula: |-
+          209.34
+""".strip()
+    )
+    composed = tmp_path / "uk-uc-composed.yaml"
+    composed.write_text(
+        """
+format: rulespec/v1
+module:
+  kind: composition
+imports:
+  - uk:regulations/uksi/2013/376/36
+""".strip()
+    )
+
+    results = efrs_uk.run_axiom_parameter_outputs(
+        program=composed,
+        rulespec_root=rulespec_root,
+        request={
+            "queries": [
+                {
+                    "period": {"start": "2026-04-01"},
+                    "outputs": ["uk:regulations/uksi/2013/376/36#carer_element_amount"],
+                }
+            ]
+        },
+    )
+
+    assert results == [
         {
             "outputs": {
                 "uk:regulations/uksi/2013/376/36#carer_element_amount": {
@@ -3369,29 +3470,6 @@ def test_run_axiom_surface_executes_scalar_parameters_through_engine(
             }
         }
     ]
-    captured = {}
-
-    def fake_run_axiom_program(**kwargs):
-        captured.update(kwargs)
-        return expected
-
-    monkeypatch.setattr(efrs_uk, "run_axiom_program", fake_run_axiom_program)
-
-    assert (
-        efrs_uk.run_axiom_surface(
-            program=program,
-            request=request,
-            rulespec_root=rulespec_root,
-            axiom_binary=axiom_binary,
-        )
-        == expected
-    )
-    assert captured == {
-        "program": program,
-        "request": request,
-        "rulespec_root": rulespec_root,
-        "axiom_binary": axiom_binary,
-    }
 
 
 def test_select_person_indices_uses_positive_weights_and_explicit_ids():
@@ -3473,6 +3551,7 @@ def test_policyengine_variables_for_surfaces_deduplicates_person_variables():
         "age",
         "gender",
         "is_SP_age",
+        "months_since_last_birthday",
         "state_pension_age",
     )
     assert policyengine_person_variables_for_surfaces(
@@ -3980,7 +4059,9 @@ class hbai_household_net_income(Variable):
     )
     assert by_name["esa_income"].status == "partial"
     assert by_name["esa_income"].surfaces == ("esa-income-tariff-income",)
-    assert by_name["esa_income"].covered_outputs == ("esa_income_tariff_income",)
+    assert by_name["esa_income"].covered_outputs == (
+        "esa_income_tariff_income",
+    )
     assert by_name["housing_benefit"].status == "partial"
     assert by_name["housing_benefit"].surfaces == (
         "housing-benefit-working-age-tariff-income",
@@ -5927,12 +6008,11 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     tmp_path,
 ):
     rulespec_root = tmp_path / "rulespec-uk"
-    program = rulespec_root / "uk" / PERSONAL_ALLOWANCE_PROGRAM_PATH
+    program = rulespec_root / PERSONAL_ALLOWANCE_PROGRAM_PATH
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\n")
     axiom_rules = tmp_path / "axiom-rules-engine"
-    axiom_rules.write_text("")
-    axiom_rules.chmod(0o755)
+    axiom_rules.mkdir()
     captured = {}
 
     monkeypatch.setattr(
@@ -5967,8 +6047,9 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     monkeypatch.setattr(efrs_uk, "run_axiom_surface", fake_run_axiom_program)
 
     report = compare_uk_efrs(
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_rules,
+        workspace_root=tmp_path,
+        rulespec_root=None,
+        axiom_rules_path=None,
         year=2026,
         sample_size=100,
         surface="personal-allowance",
@@ -5983,11 +6064,12 @@ def test_compare_uk_efrs_runs_axiom_personal_allowance(
     assert report.mismatches == []
     assert captured["program"] == program
     assert captured["rulespec_root"] == rulespec_root.resolve()
-    assert captured["axiom_binary"] == axiom_rules.resolve()
+    assert captured["axiom_rules_path"] == axiom_rules.resolve()
     assert captured["request"]["queries"][0]["entity_id"] == "person_7"
 
 
 def test_main_returns_nonzero_when_requested_for_mismatches(monkeypatch, tmp_path):
+    monkeypatch.setattr(efrs_uk, "resolve_workspace_root", lambda root: tmp_path)
     monkeypatch.setattr(
         efrs_uk,
         "compare_uk_efrs",
@@ -6015,8 +6097,9 @@ def test_main_returns_nonzero_when_requested_for_mismatches(monkeypatch, tmp_pat
     assert (
         efrs_uk.main(
             argparse.Namespace(
-                rulespec_root=tmp_path / "rulespec-uk",
-                axiom_binary=tmp_path / "axiom-rules-engine",
+                root=None,
+                rulespec_root=None,
+                axiom_rules_engine_path=None,
                 year=2026,
                 sample_size=100,
                 surface="all",

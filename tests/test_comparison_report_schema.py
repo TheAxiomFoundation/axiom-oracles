@@ -36,6 +36,7 @@ def test_report_has_stable_schema_and_eligibility_mismatch_kind() -> None:
     assert report["summary"]["mismatches_by_kind"] == [
         {"value": MismatchKind.ELIGIBILITY_LEFT_ONLY, "count": 1}
     ]
+    assert report["summary"]["errors_by_engine"] == {}
     assert report["mismatches"][0]["kind"] == MismatchKind.ELIGIBILITY_LEFT_ONLY
     assert report["cases"][0]["mismatches"][0]["kind"] == (
         MismatchKind.ELIGIBILITY_LEFT_ONLY
@@ -107,9 +108,7 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
         {"value": MismatchKind.MISSING_LEFT, "count": 1}
     ]
     assert report["summary"]["error_count"] == 1
-    assert report["summary"]["errors_by_engine"] == [
-        {"value": "policyengine", "count": 1}
-    ]
+    assert report["summary"]["errors_by_engine"] == {"policyengine": 1}
     assert report["mismatches"][0]["difference"] is None
     assert report["errors"] == [
         {
@@ -123,7 +122,7 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
     assert report["aggregates"][0]["missing_left_count"] == 1
 
 
-def test_report_compacts_generated_axiom_metadata() -> None:
+def _metadata_fixture_report(*, include_inputs: bool | None) -> dict:
     mapping = ProgramMapping(
         standard="us:test#income_tax",
         description="Federal income tax",
@@ -136,7 +135,7 @@ def test_report_compacts_generated_axiom_metadata() -> None:
         [EngineResult("policyengine", "case-1", {"income_tax": 0})],
     )
 
-    report = build_comparison_report(
+    return build_comparison_report(
         suite_name="taxsim-fixture",
         population="synthetic",
         locales=set(),
@@ -155,7 +154,12 @@ def test_report_compacts_generated_axiom_metadata() -> None:
         ],
         mappings=[mapping],
         comparisons=comparisons,
+        include_inputs=include_inputs,
     )
+
+
+def test_report_compacts_generated_axiom_metadata() -> None:
+    report = _metadata_fixture_report(include_inputs=False)
 
     metadata = report["cases"][0]["metadata"]
     assert metadata["household_weight"] == 10
@@ -165,3 +169,60 @@ def test_report_compacts_generated_axiom_metadata() -> None:
     assert "axiom_input_records" not in metadata
     assert "axiom_input_record_overlays" not in metadata
     assert "axiom_relations" not in metadata
+
+
+def test_small_suite_default_keeps_full_evidence() -> None:
+    # include_inputs=None resolves by suite size; one case is well under the
+    # limit, so the report keeps raw inputs and matched values.
+    report = _metadata_fixture_report(include_inputs=None)
+
+    case = report["cases"][0]
+    assert case["metadata"]["axiom_input_records"] == [{"name": "large"}]
+    assert case["metadata"]["axiom_input_records_count"] == 1
+    assert case["matches"] == [
+        {"concept": "us:test#income_tax", "left": 0, "right": 0}
+    ]
+
+
+def test_strip_heavy_case_metadata_keeps_counts() -> None:
+    from axiom_oracles.comparison.report import strip_heavy_case_metadata
+
+    report = {
+        "cases": [
+            {
+                "case_id": "c1",
+                "metadata": {
+                    "axiom_input_records": [{"name": "a"}, {"name": "b"}],
+                    "axiom_relations": [{"name": "r"}],
+                    "household_summary": {"ages": [40]},
+                },
+            }
+        ]
+    }
+    slim = strip_heavy_case_metadata(report)
+    md = slim["cases"][0]["metadata"]
+    assert "axiom_input_records" not in md
+    assert md["axiom_input_records_count"] == 2
+    assert md["axiom_relations_count"] == 1
+    assert md["household_summary"] == {"ages": [40]}
+    # original untouched
+    assert "axiom_input_records" in report["cases"][0]["metadata"]
+
+
+def test_executed_axiom_receipt_survives_comparison_and_report():
+    receipt = {"repository": "TheAxiomFoundation/axiom-rules-engine",
+               "commit": "b" * 40, "binary_sha256": "e" * 64, "version": "0.2.2"}
+    mapping = ProgramMapping(
+        standard="us:test#amount", targets={"axiom": "amount", "oracle": "amount"},
+        description="Receipt propagation", category="fixture",
+    )
+    comparisons = Comparator([mapping]).compare(
+        [EngineResult("axiom", 1, {"amount": 10}, raw={"engine_receipt": receipt})],
+        [EngineResult("oracle", 1, {"amount": 10})],
+    )
+    report = build_comparison_report(
+        suite_name="receipt", population="fixture", locales=set(), scope=None,
+        cases=[Case(case_id=1, period="2026")], mappings=[mapping],
+        comparisons=comparisons,
+    )
+    assert report["provenance"]["engine"] == receipt

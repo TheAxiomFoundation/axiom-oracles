@@ -19,25 +19,25 @@ from typing import Any
 
 from policyengine_us import Simulation
 
-from axiom_oracles.bridges.rulespec_paths import (
-    require_axiom_binary,
-    require_rulespec_checkout,
-    rulespec_engine_env,
-)
 from axiom_oracles.comparison.dispositions import apply_dispositions_from_dir
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
-SCHOOL_PROGRAM_RELATIVE = (
-    Path("us-ny")
+RULESPEC_NY = Path.home() / "rulespec-us-ny"
+AXIOM_ENGINE = (
+    Path.home() / "axiom-rules-engine" / "target" / "release" / "axiom-rules-engine"
+)
+
+SCHOOL_PROGRAM = (
+    RULESPEC_NY
     / "policies"
     / "tax"
     / "it-201-instructions"
     / "nyc-school-tax-credit-rate-reduction.yaml"
 )
-CDCC_PROGRAM_RELATIVE = (
-    Path("us-ny")
+CDCC_PROGRAM = (
+    RULESPEC_NY
     / "policies"
     / "tax"
     / "it-216-instructions"
@@ -45,10 +45,15 @@ CDCC_PROGRAM_RELATIVE = (
 )
 
 SCHOOL_BASE = (
-    "us-ny:policies/tax/it-201-instructions/nyc-school-tax-credit-rate-reduction"
+    "us-ny:policies/tax/it-201-instructions/"
+    "nyc-school-tax-credit-rate-reduction"
 )
-SCHOOL_OUTPUT = f"{SCHOOL_BASE}#nyc_school_tax_credit_rate_reduction_amount"
-CDCC_BASE = "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit"
+SCHOOL_OUTPUT = (
+    f"{SCHOOL_BASE}#nyc_school_tax_credit_rate_reduction_amount"
+)
+CDCC_BASE = (
+    "us-ny:policies/tax/it-216-instructions/nyc-child-dependent-care-credit"
+)
 CDCC_OUTPUT = f"{CDCC_BASE}#form_it216_line_24_nyc_child_dependent_care_credit"
 
 TAX_YEAR_PERIOD = {
@@ -76,8 +81,6 @@ class ComponentCase:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--rulespec-root", required=True, type=Path)
-    parser.add_argument("--axiom-binary", required=True, type=Path)
     parser.add_argument(
         "--output",
         type=Path,
@@ -90,11 +93,6 @@ def main() -> int:
         help="Also write dashboard/public/data report and update manifest.",
     )
     args = parser.parse_args()
-    try:
-        rulespec_root = require_rulespec_checkout(args.rulespec_root, country="us")
-        axiom_binary = require_axiom_binary(args.axiom_binary)
-    except ValueError as exc:
-        parser.error(str(exc))
 
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     output = args.output or (
@@ -102,23 +100,17 @@ def main() -> int:
         / "reports"
         / f"axiom-policyengine-nyc-income-tax-components-0-{today}.json"
     )
-    cases = _cases(rulespec_root)
-    school_program = rulespec_root / SCHOOL_PROGRAM_RELATIVE
-    cdcc_program = rulespec_root / CDCC_PROGRAM_RELATIVE
+    cases = _cases()
     artifacts = {
-        school_program: Path("/tmp/nyc-school-rate.compiled.json"),
-        cdcc_program: Path("/tmp/nyc-cdcc.compiled.json"),
+        SCHOOL_PROGRAM: Path("/tmp/nyc-school-rate.compiled.json"),
+        CDCC_PROGRAM: Path("/tmp/nyc-cdcc.compiled.json"),
     }
     for program, artifact in artifacts.items():
-        _compile(program, artifact, rulespec_root, axiom_binary)
+        _compile(program, artifact)
 
     rows = []
     for case in cases:
-        axiom_value = _run_axiom_case(
-            artifacts[case.axiom_program],
-            case,
-            axiom_binary,
-        )
+        axiom_value = _run_axiom_case(artifacts[case.axiom_program], case)
         pe_value = _run_policyengine_case(case)
         rows.append((case, axiom_value, pe_value))
 
@@ -142,15 +134,10 @@ def main() -> int:
     return 0
 
 
-def _compile(
-    program: Path,
-    artifact: Path,
-    rulespec_root: Path,
-    axiom_binary: Path,
-) -> None:
+def _compile(program: Path, artifact: Path) -> None:
     subprocess.run(
         [
-            str(axiom_binary),
+            str(AXIOM_ENGINE),
             "compile",
             "--program",
             str(program),
@@ -161,15 +148,10 @@ def _compile(
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
-        env=rulespec_engine_env(rulespec_root),
     )
 
 
-def _run_axiom_case(
-    artifact: Path,
-    case: ComponentCase,
-    axiom_binary: Path,
-) -> float:
+def _run_axiom_case(artifact: Path, case: ComponentCase) -> float:
     request = {
         "mode": "fast",
         "dataset": {
@@ -188,7 +170,7 @@ def _run_axiom_case(
         ],
     }
     completed = subprocess.run(
-        [str(axiom_binary), "run-compiled", "--artifact", str(artifact)],
+        [str(AXIOM_ENGINE), "run-compiled", "--artifact", str(artifact)],
         check=True,
         input=json.dumps(request),
         stdout=subprocess.PIPE,
@@ -201,9 +183,9 @@ def _run_axiom_case(
 
 
 def _input_record(program: Path, name: str, value: Any) -> dict[str, Any]:
-    if program.name == SCHOOL_PROGRAM_RELATIVE.name:
+    if program == SCHOOL_PROGRAM:
         base = SCHOOL_BASE
-    elif program.name == CDCC_PROGRAM_RELATIVE.name:
+    elif program == CDCC_PROGRAM:
         base = CDCC_BASE
     else:
         raise ValueError(f"unknown program: {program}")
@@ -231,7 +213,7 @@ def _run_policyengine_case(case: ComponentCase) -> float:
     return float(value[0])
 
 
-def _cases(rulespec_root: Path) -> list[ComponentCase]:
+def _cases() -> list[ComponentCase]:
     cases: list[ComponentCase] = []
     for status, income, table, expected_case in [
         ("SINGLE", 20_000, "single", "single-20k"),
@@ -247,7 +229,7 @@ def _cases(rulespec_root: Path) -> list[ComponentCase]:
                 concept=SCHOOL_OUTPUT,
                 description="NYC school tax credit rate-reduction amount",
                 component="school_rate_reduction",
-                axiom_program=rulespec_root / SCHOOL_PROGRAM_RELATIVE,
+                axiom_program=SCHOOL_PROGRAM,
                 axiom_output=SCHOOL_OUTPUT,
                 axiom_inputs={
                     "nyc_taxable_income": income,
@@ -295,7 +277,7 @@ def _cases(rulespec_root: Path) -> list[ComponentCase]:
                 concept=CDCC_OUTPUT,
                 description="NYC child and dependent care credit, full-year slice",
                 component="cdcc_full_year",
-                axiom_program=rulespec_root / CDCC_PROGRAM_RELATIVE,
+                axiom_program=CDCC_PROGRAM,
                 axiom_output=CDCC_OUTPUT,
                 axiom_inputs={
                     "fagi": agi,

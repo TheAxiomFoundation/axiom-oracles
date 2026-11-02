@@ -1,0 +1,15 @@
+{
+ "suite": "ny-income-tax-populace",
+ "count": 3741,
+ "total_cases": 3741,
+ "chunks": 8,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax"
+ ],
+ "source": "state-tax-populace-campaign"
+}

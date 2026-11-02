@@ -1,0 +1,242 @@
+census_code,iso2,name
+1000,US,United States of America
+1010,GL,Greenland
+1220,CA,Canada
+1610,PM,Saint Pierre and Miquelon
+2010,MX,Mexico
+2050,GT,Guatemala
+2080,BZ,Belize
+2110,SV,El Salvador
+2150,HN,Honduras
+2190,NI,Nicaragua
+2230,CR,Costa Rica
+2250,PA,Panama
+2320,BM,Bermuda
+2360,BS,Bahamas
+2390,CU,Cuba
+2410,JM,Jamaica
+2430,TC,Turks and Caicos Islands
+2440,KY,Cayman Islands
+2450,HT,Haiti
+2470,DO,Dominican Republic
+2481,AI,Anguilla
+2482,VG,British Virgin Islands
+2483,KN,Saint Kitts and Nevis
+2484,AG,Antigua and Barbuda
+2485,MS,Montserrat
+2486,DM,Dominica
+2487,LC,Saint Lucia
+2488,VC,Saint Vincent and the Grenadines
+2489,GD,Grenada
+2720,BB,Barbados
+2740,TT,Trinidad and Tobago
+2774,SX,Sint Maarten
+2777,CW,Curacao
+2779,AW,Aruba
+2831,GP,Guadeloupe
+2839,MQ,Martinique
+3010,CO,Colombia
+3070,VE,Venezuela
+3120,GY,Guyana
+3150,SR,Suriname
+3170,GF,French Guiana
+3310,EC,Ecuador
+3330,PE,Peru
+3350,BO,Bolivia
+3370,CL,Chile
+3510,BR,Brazil
+3530,PY,Paraguay
+3550,UY,Uruguay
+3570,AR,Argentina
+3720,FK,Falkland Islands (Islas Malvinas)
+4000,IS,Iceland
+4010,SE,Sweden
+4031,SJ,Svalbard and Jan Mayen
+4039,NO,Norway
+4050,FI,Finland
+4091,FO,Faroe Islands
+4099,DK,"Denmark, except Greenland"
+4120,GB,United Kingdom
+4190,IE,Ireland
+4210,NL,Netherlands
+4231,BE,Belgium
+4239,LU,Luxembourg
+4271,AD,Andorra
+4272,MC,Monaco
+4279,FR,France
+4280,DE,Germany (Federal Republic of Germany)
+4330,AT,Austria
+4351,CZ,Czech Republic
+4359,SK,Slovakia
+4370,HU,Hungary
+4411,LI,Liechtenstein
+4419,CH,Switzerland
+4470,EE,Estonia
+4490,LV,Latvia
+4510,LT,Lithuania
+4550,PL,Poland
+4621,RU,Russia
+4622,BY,Belarus
+4623,UA,Ukraine
+4631,AM,Armenia
+4632,AZ,Azerbaijan
+4633,GE,Georgia
+4634,KZ,Kazakhstan
+4635,KG,Kyrgyzstan
+4641,MD,Moldova (Republic of Moldova)
+4642,TJ,Tajikistan
+4643,TM,Turkmenistan
+4644,UZ,Uzbekistan
+4700,ES,Spain
+4710,PT,Portugal
+4720,GI,Gibraltar
+4730,MT,Malta
+4751,SM,San Marino
+4752,VA,Holy See (Vatican City)
+4759,IT,Italy
+4791,HR,Croatia
+4792,SI,Slovenia
+4793,BA,Bosnia and Herzegovina
+4794,MK,North Macedonia
+4801,RS,Serbia
+4803,KV,Kosovo
+4804,ME,Montenegro
+4810,AL,Albania
+4840,GR,Greece
+4850,RO,Romania
+4870,BG,Bulgaria
+4890,TR,Turkey
+4910,CY,Cyprus
+5020,SY,Syria (Syrian Arab Republic)
+5040,LB,Lebanon
+5050,IQ,Iraq
+5070,IR,Iran
+5081,IL,Israel
+5082,GZ,Gaza Strip administered by Israel
+5083,WE,West Bank administered by Israel
+5110,JO,Jordan
+5130,KW,Kuwait
+5170,SA,Saudi Arabia
+5180,QA,Qatar
+5200,AE,United Arab Emirates
+5210,YE,Yemen (Republic of Yemen)
+5230,OM,Oman
+5250,BH,Bahrain
+5310,AF,Afghanistan
+5330,IN,India
+5350,PK,Pakistan
+5360,NP,Nepal
+5380,BD,Bangladesh
+5420,LK,Sri Lanka
+5460,MM,Burma (Myanmar)
+5490,TH,Thailand
+5520,VN,Vietnam
+5530,LA,Laos (Lao People's Democratic Republic)
+5550,KH,Cambodia
+5570,MY,Malaysia
+5590,SG,Singapore
+5600,ID,Indonesia
+5601,TL,Timor-Leste
+5610,BN,Brunei
+5650,PH,Philippines
+5660,MO,Macao
+5682,BT,Bhutan
+5683,MV,Maldives
+5700,CN,China
+5740,MN,Mongolia
+5790,KP,North Korea (Democratic People's Republic of Korea)
+5800,KR,South Korea (Republic of Korea)
+5820,HK,Hong Kong
+5830,TW,Taiwan
+5880,JP,Japan
+6021,AU,Australia
+6022,NF,Norfolk Island
+6023,CC,Cocos (Keeling) Islands
+6024,CX,Christmas Island (in the Indian Ocean)
+6029,HM,Heard Island and McDonald Islands
+6040,PG,Papua New Guinea
+6141,NZ,New Zealand
+6142,CK,Cook Islands
+6143,TK,Tokelau
+6144,NU,Niue
+6150,WS,Samoa (Western Samoa)
+6223,SB,Solomon Islands
+6224,VU,Vanuatu
+6225,PN,Pitcairn Islands
+6226,KI,Kiribati
+6227,TV,Tuvalu
+6412,NC,New Caledonia
+6413,WF,Wallis and Futuna
+6414,PF,French Polynesia
+6810,MH,Marshall Islands
+6820,FM,"Micronesia, Federated States of"
+6830,PW,Palau
+6862,NR,Nauru
+6863,FJ,Fiji
+6864,TO,Tonga
+7140,MA,Morocco
+7210,DZ,Algeria
+7230,TN,Tunisia
+7250,LY,Libya
+7290,EG,Egypt
+7321,SD,Sudan
+7323,SS,South Sudan
+7370,EH,Western Sahara
+7380,GQ,Equatorial Guinea
+7410,MR,Mauritania
+7420,CM,Cameroon
+7440,SN,Senegal
+7450,ML,Mali
+7460,GN,Guinea
+7470,SL,Sierra Leone
+7480,CI,Cote d'Ivoire
+7490,GH,Ghana
+7500,GM,Gambia
+7510,NE,Niger
+7520,TG,Togo
+7530,NG,Nigeria
+7540,CF,Central African Republic
+7550,GA,Gabon
+7560,TD,Chad
+7580,SH,Saint Helena
+7600,BF,Burkina Faso
+7610,BJ,Benin
+7620,AO,Angola
+7630,CG,"Congo, Republic of the Congo"
+7642,GW,Guinea-Bissau
+7643,CV,Cabo Verde
+7644,ST,Sao Tome and Principe
+7650,LR,Liberia
+7660,CD,"Congo, Democratic Republic of the Congo (formerly Za"
+7670,BI,Burundi
+7690,RW,Rwanda
+7700,SO,Somalia
+7741,ER,Eritrea
+7749,ET,Ethiopia
+7770,DJ,Djibouti
+7780,UG,Uganda
+7790,KE,Kenya
+7800,SC,Seychelles
+7810,IO,British Indian Ocean Territory
+7830,TZ,Tanzania (United Republic of Tanzania)
+7850,MU,Mauritius
+7870,MZ,Mozambique
+7880,MG,Madagascar
+7881,YT,Mayotte
+7890,KM,Comoros
+7904,RE,Reunion
+7905,TF,French Southern and Antarctic Lands
+7910,ZA,South Africa
+7920,NA,Namibia
+7930,BW,Botswana
+7940,ZM,Zambia
+7950,SZ,Eswatini
+7960,ZW,Zimbabwe
+7970,MW,Malawi
+7990,LS,Lesotho
+9030,PR,Puerto Rico
+9110,VI,Virgin Islands of the United States
+9350,GU,Guam
+9510,AS,American Samoa
+9610,MP,Northern Mariana Islands
+9800,UM,United States Minor Outlying Islands

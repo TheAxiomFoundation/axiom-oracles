@@ -1,0 +1,15 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/stale_report_sha/dashboard/public/data/report.json",
+  "report_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "suite": "stale-report-sha",
+  "count": 1,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "7371219428cb5af2248353e73f728dc45a9c3a7c181df3d51fb8942809b8a312",
+      "cases": 1
+    }
+  ]
+}

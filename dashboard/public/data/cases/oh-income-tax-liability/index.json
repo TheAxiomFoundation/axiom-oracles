@@ -1,0 +1,17 @@
+{
+ "suite": "oh-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-oh:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "oh_income_tax_before_refundable_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-oh-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

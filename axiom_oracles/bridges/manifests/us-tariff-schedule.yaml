@@ -1,0 +1,78 @@
+# Strict experiment boundary for the C1 full-schedule bulk-path campaign.
+schema: axiom_oracles.bridge_manifest.v1
+suite: us-tariff-schedule
+program: us/tariff-schedule
+period: "2026-02-15..2026-08-01"
+strict: true
+bridge:
+  module: scripts/us_tariff_schedule_campaign.py
+  entrypoint: _case_feed
+population:
+  family: yale-defined-trajectory-quotient
+  pin_required: true
+  pinned:
+    revision: 2026-08-01-legal-date
+    sha256: 94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826
+oracle:
+  name: yale-budget-lab-tariff-rate-tracker
+  mode: legal-date-statutory-panel-trajectory-quotient
+
+bindings:
+  - kind: mapped
+    inputs: [hts_number, hts_line, country_of_origin, entry_date, origin_regime]
+    source: >-
+      selected-interval row plus disposition routing; entry_date is the
+      inclusive clipped endpoint probe and origin_regime is committed context
+      carried into every comparison row
+    audit: read
+  - kind: projected
+    inputs:
+      - entry_is_brazil_301_listed
+      - entry_is_china_301_2024_action
+      - entry_is_china_301_list123
+      - entry_is_china_301_list4a
+      - entry_is_china_301_solar
+      - entry_is_forced_labor_301_listed
+      - entry_is_line_a
+      - entry_is_line_b
+      - entry_is_line_d
+      - entry_is_section_122_exempt
+      - entry_is_section_201_cspv
+      - entry_is_section_232_aluminum
+      - entry_is_section_232_covered
+      - entry_is_section_232_steel
+    source_function: >-
+      pinned rulespec-us tools/b16_entry_flags.py followed by the compiled
+      declared-input filter; entry_is_line_c and entry_is_line_e are emitted
+      but intentionally dropped because no generated chapter declares them
+    audit: read
+  - kind: constant
+    inputs:
+      - article_is_potash
+      - cbp_agrees_chapter_98_entry_is_appropriate
+      - entry_is_9802_excepted_entry
+      - entry_is_chapter_98_subchapter_xxiii_entry
+      - entry_is_entered_free_of_duty_under_usmca
+      - entry_is_humanitarian_donation_article
+      - entry_is_informational_material_article
+      - entry_is_personal_use_accompanied_baggage
+      - entry_is_properly_claimed_chapter_98_entry
+      - entry_is_usmca_duty_free_entry
+      - entry_loaded_and_in_transit_before_july_24_2026
+    reason: >-
+      Neutral entry facts are deliberately false for every case. This includes
+      no GN6/Chapter-98 utilization or appropriateness, no partial-value or
+      transit treatment, and no USMCA preference eligibility or claim. These
+      are construction constants, not exercised transaction dimensions.
+    audit: read
+
+completeness:
+  status: verified
+  source: committed_exercise_receipt
+  receipt: axiom_oracles/bridges/exercise_receipts/us-tariff-schedule.json
+  note: >-
+    The receipt was computed in one pass over all 19,118,619 locally present,
+    hash-verified shard records. Committed MANIFEST.json content-addresses all
+    100 shards and comparison-summary.json commits the comparison artifact
+    hash; raw shard bodies remain external and are not claimed as repository
+    files.

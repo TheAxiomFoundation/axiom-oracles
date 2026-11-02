@@ -1,0 +1,15 @@
+{
+ "suite": "il-income-tax-populace",
+ "count": 2332,
+ "total_cases": 2332,
+ "chunks": 5,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

@@ -1,0 +1,15 @@
+{
+ "suite": "ky-income-tax-populace",
+ "count": 891,
+ "total_cases": 891,
+ "chunks": 2,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

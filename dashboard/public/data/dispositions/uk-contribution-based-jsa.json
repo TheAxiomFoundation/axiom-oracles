@@ -1,0 +1,56 @@
+{
+ "suite": "uk-contribution-based-jsa",
+ "updated": "2026-07-07",
+ "entries": [
+  {
+   "id": "weeks-convention-residual-under25",
+   "concept": "uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Identical weekly contribution-based JSA rate (75.65/week for an under-25 claimant) on both engines; the 10.81/year difference is only the annualization convention \u2014 UKMOD uses 365/7 weeks/year, the pipeline uses 52.",
+   "cases": [
+    "uk-jsa-contributory-under25"
+   ],
+   "arithmetic": [
+    {
+     "expression": "75.65 * 365 / 7",
+     "equals": 3944.607142857143
+    },
+    {
+     "expression": "75.65 * 52",
+     "equals": 3933.8
+    },
+    {
+     "expression": "3944.607142857143 - 3933.80",
+     "equals": 10.807142857143
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "weeks-convention-residual-25plus",
+   "concept": "uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Identical weekly contribution-based JSA rate (95.55/week for a 25-or-over claimant) on both engines; the 13.65/year difference is only the annualization convention (UKMOD 365/7 vs the pipeline's 52 weeks/year).",
+   "cases": [
+    "uk-jsa-contributory-25plus"
+   ],
+   "arithmetic": [
+    {
+     "expression": "95.55 * 365 / 7",
+     "equals": 4982.25
+    },
+    {
+     "expression": "95.55 * 52",
+     "equals": 4968.6
+    },
+    {
+     "expression": "4982.25 - 4968.60",
+     "equals": 13.65
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

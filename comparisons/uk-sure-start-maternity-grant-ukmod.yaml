@@ -28,9 +28,21 @@ description: >-
   checkout are available; on runners without them it re-emits the committed
   dashboard report.
 
+# Not runnable on the CI matrix runners. The EUROMOD-platform runner needs
+# UKMOD's x64 engine (EM_Executable.dll), the euromod connector under
+# EUROMOD_PYTHON, a .NET runtime and the model checkout; the 6-hourly affected
+# rerun and the weekly matrix provide none of them, so there run_comparison.py
+# can only re-emit the committed report. For this lane the affected rerun
+# committed those re-emissions, first over the real runs and then over each
+# other on every sweep. Manual lane only: scripts/regenerate_euromod_uk.sh (or
+# a supervised run_comparison.py run) where the model and runtime exist
+# refreshes the committed report. Drop this marker only once a workflow
+# provisions the model and runtime.
+ci: manual
+
 runner:
   type: euromod-synthetic-compare
-  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
   parameters:
     suite: uk-sure-start-maternity-grant
     population: synthetic
@@ -44,7 +56,7 @@ runner:
     # benefit is deterministically in payment (bsauc_s > 0) rather than a take-up
     # lottery realization; the grant's Elig_Cond then passports off UC.
     euromod_constant_overrides: $ISTUNochild=1.0,$ISTUChild=1.0
-    rulespec_root: $HOME/TheAxiomFoundation/rulespec-uk
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
     dashboard_filename: axiom-euromod-uk-sure-start-maternity-grant.json
 
 artifacts:

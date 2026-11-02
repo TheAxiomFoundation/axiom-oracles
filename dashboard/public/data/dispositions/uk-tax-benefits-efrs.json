@@ -1,0 +1,86 @@
+{
+ "suite": "uk-tax-benefits-efrs",
+ "updated": "2026-07-06",
+ "entries": [
+  {
+   "id": "carers-allowance-reported-receipt-under-16",
+   "concept": "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "PolicyEngine UK's carers_allowance formula treats carers_allowance_reported > 0 as an eligibility trigger and pays the statutory weekly rate (86.45 * 52 = 4495.40) with no minimum-age condition, so it awards Carer's Allowance to child-aged Enhanced FRS records (all 152 mismatching persons are aged 0-15, each carrying a reported CA amount of 4004.71 that the survey attributes to a child record). The Axiom RuleSpec applies the statutory 16-or-over gate (SSCBA 1992 s.70(3)), so entitled_to_carers_allowance is false and the annual amount is 0. Axiom is statutorily correct; PolicyEngine overpays by omitting the age condition. Filed upstream as PolicyEngine/policyengine-uk#1793. The residual equals the full statutory annual award PolicyEngine pays.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "86.45 * 52",
+     "equals": 4495.4
+    },
+    {
+     "expression": "4495.40 - 0",
+     "equals": 4495.4
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+  },
+  {
+   "id": "carer-support-payment-reported-receipt-under-16",
+   "concept": "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Carer Support Payment (the Scottish Carer's Allowance replacement from 2025) has the same mechanism as Carer's Allowance: PolicyEngine UK pays the statutory weekly rate (98.15 * 52 = 5103.80) on reported carer receipt with no minimum-age gate, awarding CSP to child-aged records (all 12 mismatching persons are aged 0-15). The Axiom RuleSpec applies the statutory 16-or-over gate (Carer's Assistance (Carer Support Payment) (Scotland) Regs 2023, reg. 5), returning 0. Axiom is correct; PolicyEngine overpays. Filed upstream as PolicyEngine/policyengine-uk#1793.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "98.15 * 52",
+     "equals": 5103.8
+    },
+    {
+     "expression": "5103.80 - 0",
+     "equals": 5103.8
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+  },
+  {
+   "id": "dla-higher-mobility-under-3-no-age-gate",
+   "concept": "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "PolicyEngine UK's dla_m pays the higher-rate mobility component (80.00/week) from the frozen dla_m_category FRS input with no minimum-age condition. All 34 mismatching children are aged 0-2 yet carry dla_m_category = HIGHER. Statute (SSCBA 1992 s.73(1); the higher-rate mobility age floor is 3, lowered from 5 by the Welfare Reform and Pensions Act 1999 from April 2001) bars the higher-rate mobility component below age 3. The Axiom RuleSpec gates on child_is_aged_3_or_over, returning 0. Axiom is correct; PolicyEngine pays a component the child cannot legally receive. Filed upstream as PolicyEngine/policyengine-uk#1793. The residual is the full weekly higher-rate mobility amount.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "80.00 - 0",
+     "equals": 80.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+  },
+  {
+   "id": "dla-annual-higher-mobility-under-3-no-age-gate",
+   "concept": "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "The annual child DLA residual is exactly the higher-rate mobility component (80.00/week) annualised. Both engines agree on the highest self-care component (114.60/week * 52 = 5959.20, the Axiom value); PolicyEngine additionally pays higher-rate mobility (80.00/week) to the same 34 children aged 0-2, giving 194.60/week * 52 = 10119.20. The Axiom RuleSpec omits the mobility component because those children are under 3 (SSCBA 1992 s.73(1)), so its annual amount is 5959.20. Same PolicyEngine age-gate omission as the weekly mobility entry; filed upstream as PolicyEngine/policyengine-uk#1793.",
+   "cases": [],
+   "arithmetic": [
+    {
+     "expression": "114.60 * 52",
+     "equals": 5959.2
+    },
+    {
+     "expression": "(114.60 + 80.00) * 52",
+     "equals": 10119.2
+    },
+    {
+     "expression": "10119.20 - 5959.20",
+     "equals": 4160.0
+    },
+    {
+     "expression": "80.00 * 52",
+     "equals": 4160.0
+    }
+   ],
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1793"
+  }
+ ]
+}

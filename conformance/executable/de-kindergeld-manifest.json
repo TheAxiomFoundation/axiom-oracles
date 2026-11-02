@@ -1,0 +1,116 @@
+{
+  "schema": "axiom_oracles.de_executable_manifest.v1",
+  "program": "de/kindergeld",
+  "period": "2025",
+  "subgraph": {
+    "scope": "amount",
+    "root_nodes": [
+      "de:statutes/estg/66#monthly_kindergeld_per_child"
+    ]
+  },
+  "engine": {
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
+    "release": "v0.2.2",
+    "commit": "2c0e1edac0dccc355297eb9663e0aa0c4e97e5b4",
+    "target": "x86_64-unknown-linux-gnu",
+    "asset": "axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz",
+    "archive_sha256": "76565685230d64edf33e4205f01f77c57ef341ba2d3cf75dc967fc12c883f1f4",
+    "binary_in_archive": "axiom-rules-engine-x86_64-unknown-linux-gnu/axiom-rules-engine"
+  },
+  "comparison_record": {
+    "path": "comparisons/de-worker-dual-oracle/unified-record.json",
+    "binding": "generator_rederived",
+    "generator": "scripts/de_unified_comparison.py",
+    "record_schema": "axiom.unified_comparison_record.v1",
+    "suite": "de-worker-dual-oracle",
+    "view": "de/kindergeld",
+    "population": {
+      "id": "de-worker-dual-oracle-13-households",
+      "sha256": "db63064fed6fa91fb3a34096b0997fed2e11ac52db2b22516e2e00da2aace951",
+      "case_count": 13
+    },
+    "axiom_leg_slots": [
+      {
+        "id": "axiom-euromod",
+        "oracle": "euromod",
+        "path": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+        "suite": "de-worker-dual-oracle-axiom-euromod"
+      },
+      {
+        "id": "axiom-gettsim",
+        "oracle": "gettsim",
+        "path": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+        "suite": "de-worker-dual-oracle-axiom-gettsim"
+      }
+    ],
+    "leg_record_contract": {
+      "record_schema": "axiom.unified_comparison_record.v1",
+      "view_kind": "subgraph",
+      "leg_producer": "scripts/de_executable.py::produce",
+      "oracle_execution": "live_no_reemit_case_results",
+      "oracle_result_claim_mode": "attested",
+      "oracle_result_digest_claim_mode": "computed",
+      "comparison_claim_mode": "computed",
+      "replay_fixture_field": "executable_replay",
+      "expected_results_source": "axiom_execution_case_records",
+      "case_value_binding": "left_equals_live_oracle_execution_and_right_equals_root_output_times_computed_child_count",
+      "request_contract": "exact_empty_dataset_2025_tax_year_amount_root_per_case",
+      "result_contract": "exact_case_entity_period_scalar_eur_root",
+      "oracle_identity_source": "unified_record_pinned_oracles",
+      "axiom_identity_source": "manifest_engine_release",
+      "source_aggregate_conservation": "oracle_and_axiom_household_totals_equal_765_eur",
+      "rulespec_binding": "exact_pinned_commit_tree_signed_module_and_apply_manifest_sha256",
+      "aggregate_expected_results": "forbidden"
+    }
+  },
+  "signed_rulespec_artifact": {
+    "descriptor_path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+    "descriptor_schema": "axiom_oracles.de_signed_rulespec_artifact.v2",
+    "repository": "TheAxiomFoundation/rulespec-de",
+    "commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+    "tree": "1e75a045e32100544f057ffe335065c1ef99c1bc",
+    "module_path": "de/statutes/estg/66.yaml",
+    "encoding_manifest_path": ".axiom/encoding-manifests/de/statutes/estg/66.json",
+    "encoding_manifest_schema": "axiom-encode/applied-rulespec/v5",
+    "citation_path": "de/statute/estg/66",
+    "rule_name": "monthly_kindergeld_per_child",
+    "effective_on": "2025-06-30",
+    "imports": "forbidden",
+    "signature_algorithm": "ed25519-domain-v1",
+    "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a",
+    "corpus_release": "de-rulespec-2026-07-21",
+    "corpus_release_content_sha256": "b4b405a06bfcf21331cff50a45844fd0117b52212dc24d0f4912ed07575fd574"
+  },
+  "replay": {
+    "receipt_path": "conformance/executable/de-kindergeld-replay-receipt.json",
+    "receipt_schema": "axiom_oracles.de_release_binary_replay.v2",
+    "request_source": "exact_common_fixture_from_axiom_leg_slots",
+    "expected_results_source": "exact_common_axiom_results_from_axiom_leg_slots",
+    "aggregate_expected_results": "forbidden",
+    "verification_mode": "fresh_replay_from_embedded_release_archive",
+    "archive_storage": "receipt_embedded_base64",
+    "required_commands": [
+      [
+        "axiom-rules-engine",
+        "--version"
+      ],
+      [
+        "axiom-rules-engine",
+        "compile",
+        "--program",
+        "de/statutes/estg/66.yaml",
+        "--rulespec-root",
+        "rulespec-de",
+        "--output",
+        "program.compiled.json"
+      ],
+      [
+        "axiom-rules-engine",
+        "run-compiled",
+        "--artifact",
+        "program.compiled.json"
+      ]
+    ]
+  },
+  "status_path": "conformance/executable/de-kindergeld-status.json"
+}

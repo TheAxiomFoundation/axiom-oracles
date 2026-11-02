@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: nm-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: nm-taxsim-2024-single-30000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "319.3 - 381.3"
+          equals: -62
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 319.3
+      right: 381.3
+  - id: nm-taxsim-2024-single-60000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "1654.3 - 1945.1"
+          equals: -290.8
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1654.3
+      right: 1945.1
+  - id: nm-taxsim-2024-single-150000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "6019.1 - 6355.1"
+          equals: -336
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 6019.1
+      right: 6355.1
+  - id: nm-taxsim-2024-married-60000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "784.4 - 1101.2"
+          equals: -316.8
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 784.4
+      right: 1101.2
+  - id: nm-taxsim-2024-married-120000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "3515.6 - 4041.2"
+          equals: -525.6
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 3515.6
+      right: 4041.2
+  - id: nm-taxsim-2024-married-300000
+    concept: us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability
+    case_id: nm-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies New Mexico's rate bands effective after 2024 and the 2026 taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the reform and law-vintage difference.
+      arithmetic:
+        - expression: "12311.2 - 12861.2"
+          equals: -550
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 12311.2
+      right: 12861.2

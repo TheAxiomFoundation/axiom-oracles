@@ -16,6 +16,20 @@ from axiom_oracles.conformance.schema import (
     CONFORMANCE_SCHEMA_VERSION,
     UniversePolicy,
 )
+from axiom_oracles.evidence import strict_json_loads
+
+
+def load_dashboard_reports(directory: Path) -> list[dict]:
+    """Load comparison reports, failing on unreadable or malformed JSON."""
+    reports = []
+    for path in sorted(directory.glob("*.json")):
+        try:
+            payload = strict_json_loads(path.read_text())
+        except (OSError, ValueError) as exc:
+            raise ValueError(f"{path}: invalid dashboard JSON: {exc}") from exc
+        if isinstance(payload, dict) and payload.get("suite") and payload.get("engines"):
+            reports.append({**payload, "_file": path.name})
+    return reports
 
 
 @dataclass
@@ -146,7 +160,8 @@ def parse(path: str | Path) -> Universe:
     schema = document.get("schema")
     if schema != CONFORMANCE_SCHEMA_VERSION:
         raise ValueError(
-            f"{path}: expected schema {CONFORMANCE_SCHEMA_VERSION!r}, got {schema!r}"
+            f"{path}: expected schema {CONFORMANCE_SCHEMA_VERSION!r}, got "
+            f"{schema!r}"
         )
     oracle = OracleIdentity.from_header(document["oracle"])
     policies: list[UniversePolicy] = []
@@ -162,6 +177,7 @@ def parse(path: str | Path) -> Universe:
                 note=row.get("note"),
                 comparability=row.get("comparability", "full"),
                 oracle_policy_type=row.get("oracle_policy_type"),
+                oracle_switch=row.get("oracle_switch"),
                 internal_only_vars=tuple(row.get("internal_only_vars") or ()),
             )
         )

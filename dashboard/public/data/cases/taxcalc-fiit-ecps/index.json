@@ -1,0 +1,20 @@
+{
+ "suite": "taxcalc-fiit-ecps",
+ "count": 5,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "taxcalc",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us:tax/federal-income-tax#amt",
+  "us:tax/federal-income-tax#ctc",
+  "us:tax/federal-income-tax#liability",
+  "us:tax/federal-income-tax#tax_before_credits",
+  "us:tax/federal-income-tax#taxable_income"
+ ],
+ "source": "taxcalc-policyengine-fiit-ecps.json",
+ "total_cases": 31,
+ "partial": "mismatch-only"
+}

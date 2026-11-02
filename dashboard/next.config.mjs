@@ -6,6 +6,7 @@ const dashboardRoot = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "export",
+  basePath: "/oracles",
   images: { unoptimized: true },
   trailingSlash: true,
   outputFileTracingRoot: dashboardRoot,

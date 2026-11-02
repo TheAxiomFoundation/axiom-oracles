@@ -1,0 +1,108 @@
+{
+ "suite": "ia-income-tax-liability",
+ "updated": "2026-07-15",
+ "entries": [
+  {
+   "id": "ia-taxsim-2024-single-30000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-single-30000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "528.2 - 676.2",
+     "equals": -148
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ia-taxsim-2024-single-60000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-single-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1668.2 - 2248.48",
+     "equals": -580.28
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ia-taxsim-2024-single-150000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-single-150000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "5088.2 - 7378.48",
+     "equals": -2290.28
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ia-taxsim-2024-married-60000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-married-60000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "1056.4 - 1352.4",
+     "equals": -296
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ia-taxsim-2024-married-120000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-married-120000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "3336.4 - 4496.96",
+     "equals": -1160.56
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "ia-taxsim-2024-married-300000",
+   "concept": "us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "The Axiom/PolicyEngine leg applies Iowa's 2026 flat-rate schedule, while the pinned TAXSIM leg applies Iowa's 2024 pre-flat-tax law. The exact residual is the documented law-vintage difference.",
+   "cases": [
+    "ia-married-300000"
+   ],
+   "arithmetic": [
+    {
+     "expression": "10176.4 - 14756.96",
+     "equals": -4580.56
+    }
+   ],
+   "linked_issue": null
+  }
+ ]
+}

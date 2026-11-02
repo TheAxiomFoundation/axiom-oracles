@@ -1,109 +1,5 @@
 {
   "case_count": 6,
-  "cases": [
-    {
-      "axiom": 216.11175341179944,
-      "axiom_vs_policyengine": {
-        "difference": 1.3299494753482577e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": 31.06175341179943,
-        "match": false
-      },
-      "case_id": "ca-single-30000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 30000.0,
-      "filing_status": "single",
-      "policyengine": 216.1117401123047,
-      "taxsim_2024": 185.05
-    },
-    {
-      "axiom": 1602.8589174250637,
-      "axiom_vs_policyengine": {
-        "difference": 3.070631373702781e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -90.55108257493634,
-        "match": false
-      },
-      "case_id": "ca-single-60000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "single",
-      "policyengine": 1602.85888671875,
-      "taxsim_2024": 1693.41
-    },
-    {
-      "axiom": 9620.80174126074,
-      "axiom_vs_policyengine": {
-        "difference": -1.655175947234966e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -204.5882587392589,
-        "match": false
-      },
-      "case_id": "ca-single-150000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 150000.0,
-      "filing_status": "single",
-      "policyengine": 9620.8017578125,
-      "taxsim_2024": 9825.39
-    },
-    {
-      "axiom": 432.2235068235989,
-      "axiom_vs_policyengine": {
-        "difference": 2.6598989506965154e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -27.58649317640112,
-        "match": false
-      },
-      "case_id": "ca-married-60000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 60000.0,
-      "filing_status": "married",
-      "policyengine": 432.2234802246094,
-      "taxsim_2024": 459.81
-    },
-    {
-      "axiom": 3205.7178348501275,
-      "axiom_vs_policyengine": {
-        "difference": 6.141262747405563e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -181.1021651498727,
-        "match": false
-      },
-      "case_id": "ca-married-120000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 120000.0,
-      "filing_status": "married",
-      "policyengine": 3205.7177734375,
-      "taxsim_2024": 3386.82
-    },
-    {
-      "axiom": 19241.60348252148,
-      "axiom_vs_policyengine": {
-        "difference": -3.310351894469932e-05,
-        "match": true
-      },
-      "axiom_vs_taxsim_2024": {
-        "difference": -409.1865174785198,
-        "match": false
-      },
-      "case_id": "ca-married-300000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "employment_income": 300000.0,
-      "filing_status": "married",
-      "policyengine": 19241.603515625,
-      "taxsim_2024": 19650.79
-    }
-  ],
   "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
   "engines": {
     "axiom": "us-ca:policies/income_tax/pilot_liability_pipeline",
@@ -114,10 +10,10 @@
     {
       "case_id": "ca-single-30000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": 31.06175341179943,
+      "difference": 41.00175341179943,
       "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-low-income-credit-scope"
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-ca-module-divergence-axiom-pe-agree"
       },
       "engines": [
         "axiom",
@@ -126,52 +22,16 @@
       "kind": "amount_difference",
       "left": 216.11175341179944,
       "left_engine": "axiom",
-      "right": 185.05,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ca-single-60000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": -90.55108257493634,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-bracket-indexation-vintage-single-60000"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 1602.8589174250637,
-      "left_engine": "axiom",
-      "right": 1693.41,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ca-single-150000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": -204.5882587392589,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-bracket-indexation-vintage-single-150000"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 9620.80174126074,
-      "left_engine": "axiom",
-      "right": 9825.39,
+      "right": 175.11,
       "right_engine": "taxsim"
     },
     {
       "case_id": "ca-married-60000",
       "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": -27.58649317640112,
+      "difference": 10.723506823598882,
       "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-bracket-indexation-vintage-married-60000"
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-ca-module-divergence-axiom-pe-agree"
       },
       "engines": [
         "axiom",
@@ -180,55 +40,19 @@
       "kind": "amount_difference",
       "left": 432.2235068235989,
       "left_engine": "axiom",
-      "right": 459.81,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ca-married-120000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": -181.1021651498727,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-bracket-indexation-vintage-married-120000"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 3205.7178348501275,
-      "left_engine": "axiom",
-      "right": 3386.82,
-      "right_engine": "taxsim"
-    },
-    {
-      "case_id": "ca-married-300000",
-      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
-      "difference": -409.1865174785198,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "ca-taxsim-2024-bracket-indexation-vintage"
-      },
-      "engines": [
-        "axiom",
-        "taxsim"
-      ],
-      "kind": "amount_difference",
-      "left": 19241.60348252148,
-      "left_engine": "axiom",
-      "right": 19650.79,
+      "right": 421.5,
       "right_engine": "taxsim"
     }
   ],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-08T20:45:20Z",
+    "generated_at": "2026-07-27T04:12:25Z",
     "generated_by": "scripts/run_comparison.py::ca-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "cd11c24d6536f0f8aa866650ea0987117df72cbc"
       }
     ],
     "run_kind": "affected-rerun",
@@ -238,33 +62,137 @@
   "suite": "ca-income-tax-liability",
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
-    "axiom_vs_taxsim_2024_match_rate": 0.0,
-    "comparison_count": 6,
+    "axiom_vs_taxsim_match_rate": 66.67,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 6,
+        "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 2
       },
       "dispositions_file": "dispositions/ca-income-tax-liability.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 0,
+      "raw_match_rate": 83.333333,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 0,
-    "mismatch_count": 6,
+    "match_count": 10,
+    "mismatch_count": 2,
     "policyengine_matches": 6,
-    "taxsim_2024_matches": 0
+    "taxsim_matches": 4
   },
-  "taxsim_law_year": 2024,
+  "taxsim_law_year": 2026,
   "tolerance": {
     "absolute": 5.0,
     "relative": 0.02
   },
-  "validation_year": 2026
+  "validation_year": 2026,
+  "cases": [
+    {
+      "axiom": 216.11175341179944,
+      "axiom_vs_policyengine": {
+        "difference": 1.3299494753482577e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 41.00175341179943,
+        "match": false
+      },
+      "case_id": "ca-single-30000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 30000.0,
+      "filing_status": "single",
+      "policyengine": 216.1117401123047,
+      "taxsim": 175.11
+    },
+    {
+      "axiom": 1602.8589174250637,
+      "axiom_vs_policyengine": {
+        "difference": 3.070631373702781e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 22.15891742506369,
+        "match": true
+      },
+      "case_id": "ca-single-60000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "single",
+      "policyengine": 1602.85888671875,
+      "taxsim": 1580.7
+    },
+    {
+      "axiom": 9620.80174126074,
+      "axiom_vs_policyengine": {
+        "difference": -1.655175947234966e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 43.201741260740164,
+        "match": true
+      },
+      "case_id": "ca-single-150000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 150000.0,
+      "filing_status": "single",
+      "policyengine": 9620.8017578125,
+      "taxsim": 9577.6
+    },
+    {
+      "axiom": 432.2235068235989,
+      "axiom_vs_policyengine": {
+        "difference": 2.6598989506965154e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 10.723506823598882,
+        "match": false
+      },
+      "case_id": "ca-married-60000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 60000.0,
+      "filing_status": "married",
+      "policyengine": 432.2234802246094,
+      "taxsim": 421.5
+    },
+    {
+      "axiom": 3205.7178348501275,
+      "axiom_vs_policyengine": {
+        "difference": 6.141262747405563e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 44.30783485012762,
+        "match": true
+      },
+      "case_id": "ca-married-120000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 120000.0,
+      "filing_status": "married",
+      "policyengine": 3205.7177734375,
+      "taxsim": 3161.41
+    },
+    {
+      "axiom": 19241.60348252148,
+      "axiom_vs_policyengine": {
+        "difference": -3.310351894469932e-05,
+        "match": true
+      },
+      "axiom_vs_taxsim": {
+        "difference": 86.39348252148193,
+        "match": true
+      },
+      "case_id": "ca-married-300000",
+      "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability",
+      "employment_income": 300000.0,
+      "filing_status": "married",
+      "policyengine": 19241.603515625,
+      "taxsim": 19155.21
+    }
+  ]
 }

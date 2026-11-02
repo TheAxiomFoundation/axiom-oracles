@@ -1,0 +1,16 @@
+{
+ "suite": "uk-scottish-carer-supplement",
+ "count": 1,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/govuk/scottish-carer-supplement#scottish_carer_supplement_annual_amount"
+ ],
+ "source": "axiom-euromod-uk-scottish-carer-supplement.json",
+ "total_cases": 1,
+ "partial": "mismatch-only"
+}

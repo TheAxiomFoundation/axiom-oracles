@@ -1,0 +1,15 @@
+{
+ "suite": "ms-income-tax-populace",
+ "count": 1497,
+ "total_cases": 1497,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax"
+ ],
+ "source": "state-tax-populace-campaign"
+}

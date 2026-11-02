@@ -1439,6 +1439,97 @@ case_sets:
         age: 70
         relation: HeadOfHousehold
         pension_income: 48000.0
+  be-pensioner-pit:
+    locale: BE
+    entity: Person
+    entity_id: head
+    cases:
+    - id: be-pensioner-pit-pension-15k
+      period: '2025'
+      scenario: single-pensioner-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits
+      parameters:
+        yearly_pension_income: 15000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#pension_15k_reduction_consumes_all_remaining_tax
+        euromod_input_uprating_factors:
+          poa: 1.0
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 15000.0
+        yearly_earned_income: 0.0
+    - id: be-pensioner-pit-pension-25k
+      period: '2025'
+      scenario: single-pensioner-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits
+      parameters:
+        yearly_pension_income: 25000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#pension_25k_article_191_band_and_partial_additional_reduction
+        euromod_input_uprating_factors:
+          poa: 1.0
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 25000.0
+        yearly_earned_income: 0.0
+    - id: be-pensioner-pit-pension-40k
+      period: '2025'
+      scenario: single-pensioner-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits
+      parameters:
+        yearly_pension_income: 40000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#pension_40k_solidarity_band_and_article_152_phaseout
+        euromod_input_uprating_factors:
+          poa: 1.0
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 40000.0
+        yearly_earned_income: 0.0
+    - id: be-pensioner-pit-pension-30k-wage-15k
+      period: '2025'
+      scenario: mixed-pension-wage-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      parameters:
+        yearly_pension_income: 30000.0
+        yearly_earned_income: 15000.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#mixed_30k_pension_15k_wage_prorates_reductions
+        euromod_input_uprating_factors:
+          poa: 1.0
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        pension_income: 30000.0
+        yearly_earned_income: 15000.0
   be-property-tax:
     locale: BE
     entity: Property
@@ -1519,6 +1610,125 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 40000.0
+  be-replacement-income-pit:
+    locale: BE
+    entity: Person
+    entity_id: head
+    cases:
+    - id: be-replacement-income-pit-bun-12k
+      period: '2025'
+      scenario: unemployment-replacement-income-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits
+      parameters:
+        yearly_unemployment_income: 12000.0
+        yearly_sickness_income: 0.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_12k_euromod_input_bun_zero_tax
+        euromod_input_uprating_factors:
+          bun: 1.0793082886106142
+          bhl: 1.1096513390601312
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        unemployment_insurance: 12000.0
+        yearly_earned_income: 0.0
+    - id: be-replacement-income-pit-bun-18k
+      period: '2025'
+      scenario: unemployment-replacement-income-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits
+      parameters:
+        yearly_unemployment_income: 18000.0
+        yearly_sickness_income: 0.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_18k_euromod_input_bun_zero_tax
+        euromod_input_uprating_factors:
+          bun: 1.0793082886106142
+          bhl: 1.1096513390601312
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        unemployment_insurance: 18000.0
+        yearly_earned_income: 0.0
+    - id: be-replacement-income-pit-bun-24k
+      period: '2025'
+      scenario: unemployment-replacement-income-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits
+      parameters:
+        yearly_unemployment_income: 24000.0
+        yearly_sickness_income: 0.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_24k_euromod_articles_147_to_153
+        euromod_input_uprating_factors:
+          bun: 1.0793082886106142
+          bhl: 1.1096513390601312
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        unemployment_insurance: 24000.0
+        yearly_earned_income: 0.0
+    - id: be-replacement-income-pit-bhl-18k
+      period: '2025'
+      scenario: sickness-replacement-income-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits
+      parameters:
+        yearly_unemployment_income: 0.0
+        yearly_sickness_income: 18000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#sickness_18k_euromod_bhl_article_153_cap
+        euromod_input_uprating_factors:
+          bun: 1.0793082886106142
+          bhl: 1.1096513390601312
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        unemployment_insurance: 0.0
+        yearly_earned_income: 0.0
+    - id: be-replacement-income-pit-bun-15k-yem-15k
+      period: '2025'
+      scenario: unemployment-replacement-income-pit
+      outputs:
+      - be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding
+      parameters:
+        yearly_unemployment_income: 15000.0
+        yearly_sickness_income: 0.0
+        yearly_earned_income: 15000.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/pensioner_pit_oracle_pipeline.test.yaml#unemployment_15k_plus_wage_15k_no_activity_exclusion
+        euromod_input_uprating_factors:
+          bun: 1.0793082886106142
+          bhl: 1.1096513390601312
+          yem: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        unemployment_insurance: 15000.0
+        yearly_earned_income: 15000.0
   be-self-employed-ssc:
     locale: BE
     entity: Person
@@ -1606,6 +1816,116 @@ case_sets:
         age: 66
         relation: HeadOfHousehold
         self_employment_income: 10000.0
+  be-self-employment-pit:
+    locale: BE
+    entity: Person
+    entity_id: head
+    cases:
+    - id: be-self-employment-pit-yse-25k
+      period: '2025'
+      scenario: self-employment-pit
+      outputs:
+      - be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+      parameters:
+        yearly_self_employment_income: 25000.0
+        yearly_euromod_yse: 25000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/self_employed_oracle_pipeline.test.yaml#euromod_exact_gross_yse_25000_exposes_credit_before_local_tax_engine_order
+        euromod_input_uprating_factors:
+          yem: 1.055022392834293
+          yse: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 25000.0
+        yearly_earned_income: 0.0
+    - id: be-self-employment-pit-yse-45k
+      period: '2025'
+      scenario: self-employment-pit
+      outputs:
+      - be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+      parameters:
+        yearly_self_employment_income: 45000.0
+        yearly_euromod_yse: 45000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/self_employed_oracle_pipeline.test.yaml#euromod_exact_gross_yse_45000_matches_to_machine_precision
+        euromod_input_uprating_factors:
+          yem: 1.055022392834293
+          yse: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 45000.0
+        yearly_earned_income: 0.0
+    - id: be-self-employment-pit-yse-70k
+      period: '2025'
+      scenario: self-employment-pit
+      outputs:
+      - be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+      parameters:
+        yearly_self_employment_income: 70000.0
+        yearly_euromod_yse: 70000.0
+        yearly_earned_income: 0.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/self_employed_oracle_pipeline.test.yaml#euromod_exact_gross_yse_70000_matches_to_machine_precision
+        euromod_input_uprating_factors:
+          yem: 1.055022392834293
+          yse: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 70000.0
+        yearly_earned_income: 0.0
+    - id: be-self-employment-pit-yem-30k-yse-20k
+      period: '2025'
+      scenario: self-employment-pit
+      outputs:
+      - be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+      parameters:
+        yearly_self_employment_income: 20000.0
+        yearly_euromod_yse: 20000.0
+        yearly_earned_income: 30000.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/self_employed_oracle_pipeline.test.yaml#mixed_yem_30000_yse_20000_exposes_imported_semantics
+        euromod_input_uprating_factors:
+          yem: 1.055022392834293
+          yse: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 20000.0
+        yearly_earned_income: 30000.0
+    - id: be-self-employment-pit-negative-yse-1k-yem-10k
+      period: '2025'
+      scenario: negative-self-employment-netting
+      outputs:
+      - be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income
+      parameters:
+        yearly_self_employment_income: 1000.0
+        yearly_euromod_yse: -1000.0
+        yearly_earned_income: 10000.0
+        rulespec_fixture_commit: b105e2b3a3086ddd2de447d58a9b951346870dd1
+        rulespec_fixture: be/statutes/income_tax/individual/self_employed_oracle_pipeline.test.yaml#article_23_current_self_employment_loss_nets_across_worker_activity
+        euromod_input_uprating_factors:
+          yem: 1.055022392834293
+          yse: 1.055022392834293
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        self_employment_income: 1000.0
+        yearly_earned_income: 10000.0
   be-social-assistance:
     locale: BE
     entity: Person

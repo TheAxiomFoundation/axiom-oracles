@@ -28,6 +28,11 @@ class PolicyEngineTaxsimRunner(TaxsimPackageRunner):
     ) -> None:
         super().__init__(runner_factory=runner_factory, id_column=id_column)
 
+    def _run(self, input_frame: Any) -> Any:
+        # policyengine-taxsim's PolicyEngineRunner computes in-process and
+        # returns records; there is no TAXSIM binary stdout to parse here.
+        return self._run_runner(self._runner_factory()(input_frame))
+
     def _runner_factory(self) -> Callable[[Any], Any]:
         if self.runner_factory is not None:
             return self.runner_factory
@@ -103,18 +108,35 @@ def _selected_policyengine_values(
 
 
 def _taxsim_to_policyengine_pairs(variables: list[str]) -> dict[str, str]:
+    """Map TAXSIM output columns to the PolicyEngine names the comparator reads.
+
+    Mappings are visited in file order and each TAXSIM column is claimed by
+    the first requested mapping that carries it, so canonical concepts
+    (declared before suite-specific blocks) win shared columns — e.g.
+    ``siitax`` belongs to ``us:tax/state-income-tax#liability``, not to
+    whichever state pilot concept happens to be requested last. When the
+    PolicyEngine target is a summed list (``tax_before_credits``,
+    ``employee_fica``), its first component carries the TAXSIM aggregate:
+    the comparator sums the components that are present, so the
+    concept-level value reproduces the aggregate exactly.
+    """
+    requested = set(variables)
     pairs: dict[str, str] = {}
-    for requested in variables:
-        for mapping in load_program_mappings():
-            policyengine_target = mapping.target_for_engine("policyengine")
-            taxsim_target = mapping.target_for_engine("taxsim")
-            if not isinstance(policyengine_target, str) or not isinstance(
-                taxsim_target, str
-            ):
-                continue
-            if requested in {mapping.concept_id, policyengine_target, taxsim_target}:
-                pairs[taxsim_target] = policyengine_target
-                break
+    for mapping in load_program_mappings():
+        policyengine_target = mapping.target_for_engine("policyengine")
+        taxsim_target = mapping.target_for_engine("taxsim")
+        if not isinstance(taxsim_target, str) or taxsim_target in pairs:
+            continue
+        if isinstance(policyengine_target, str):
+            carrier = policyengine_target
+            keys = {mapping.concept_id, policyengine_target, taxsim_target}
+        elif isinstance(policyengine_target, list) and policyengine_target:
+            carrier = policyengine_target[0]
+            keys = {mapping.concept_id, taxsim_target, *policyengine_target}
+        else:
+            continue
+        if requested & keys:
+            pairs[taxsim_target] = carrier
     return pairs
 
 

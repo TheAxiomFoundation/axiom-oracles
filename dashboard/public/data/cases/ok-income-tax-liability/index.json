@@ -1,0 +1,17 @@
+{
+ "suite": "ok-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-ok:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "ok_income_tax_before_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-ok-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

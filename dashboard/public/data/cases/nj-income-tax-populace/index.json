@@ -1,0 +1,15 @@
+{
+ "suite": "nj-income-tax-populace",
+ "count": 1693,
+ "total_cases": 1693,
+ "chunks": 4,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability"
+ ],
+ "source": "state-tax-populace-campaign"
+}

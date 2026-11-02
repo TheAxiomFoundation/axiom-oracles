@@ -9,11 +9,14 @@ overlay builder, ``map_qc_unit``, and run path.
 from __future__ import annotations
 
 import os
+import hashlib
+import json
 import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.bridges import snap_populace, snap_qc_compare as sc
 from axiom_oracles.bridges.rulespec_overlay import (
@@ -22,6 +25,7 @@ from axiom_oracles.bridges.rulespec_overlay import (
     rewrite_output_ids,
 )
 from axiom_oracles.comparison.report import COMPARISON_REPORT_SCHEMA_VERSION
+from axiom_oracles.engine_identity import engine_binding_receipt_path
 
 # --------------------------------------------------------------------------- #
 # Legal-reference input keys the projection writes (subset of the CO template).
@@ -48,9 +52,7 @@ SEWER = f"{CO}/4.407.31#input.household_pays_sewer_utility_cost"
 TRASH = f"{CO}/4.407.31#input.household_pays_trash_utility_cost"
 COOK = f"{CO}/4.407.31#input.household_pays_cooking_fuel_utility_cost"
 PHONE = f"{CO}/4.407.31#input.household_pays_telephone_service_cost"
-DEPCARE_NEC = (
-    f"{CO}/4.407.4#input.dependent_care_expense_necessary_for_work_or_training"
-)
+DEPCARE_NEC = f"{CO}/4.407.4#input.dependent_care_expense_necessary_for_work_or_training"
 DEPCARE_PAID = f"{CO}/4.407.4#input.dependent_care_expenses_paid"
 CS_VERIFIED = f"{CO}/4.407.5#input.child_support_payment_verified"
 CS_MONTHS = f"{CO}/4.407.5#input.child_support_payment_history_months"
@@ -66,21 +68,8 @@ _UTILITY_KEYS = (HEAT, ELEC, WATER, SEWER, TRASH, COOK, PHONE)
 
 def _base_inputs() -> dict:
     keys = [
-        EARNED,
-        SHELTER,
-        SIZE,
-        CATEG,
-        RET,
-        ASSIST,
-        DIRECT,
-        OTHER,
-        DEPCARE_NEC,
-        DEPCARE_PAID,
-        CS_VERIFIED,
-        CS_MONTHS,
-        CS_AVG,
-        MEDICAL,
-        LIQUID,
+        EARNED, SHELTER, SIZE, CATEG, RET, ASSIST, DIRECT, OTHER,
+        DEPCARE_NEC, DEPCARE_PAID, CS_VERIFIED, CS_MONTHS, CS_AVG, MEDICAL, LIQUID,
     ]
     base = {key: 0 for key in keys}
     base[CATEG] = False
@@ -128,10 +117,18 @@ def _member(**kwargs):
     )
 
 
-#: The per-tier standard amounts come from the shipped overlay spec — the same
+#: The per-tier standard amounts come from the shipped overlay specs — the same
 #: single source the run path derives them from — so the tests can never pin a
 #: stale copy of the FY 2024 values.
-_SUA_AMOUNTS = sc.sua_amounts_from_overlay(load_overlay_spec("us-co-snap-fy2024"))
+_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-co-snap-fy2024"), sc.QC_JURISDICTIONS["us-co"]
+)
+_NY_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-ny-snap-fy2024"), sc.QC_JURISDICTIONS["us-ny"]
+)
+_CA_SUA_AMOUNTS = sc.sua_amounts_from_overlay(
+    load_overlay_spec("us-ca-snap-fy2024"), sc.QC_JURISDICTIONS["us-ca"]
+)
 
 
 def _unit(**kwargs):
@@ -158,7 +155,7 @@ def _unit(**kwargs):
     # an explicit utility_amount must not evaluate the table lookup at all.
     if "utility_amount" not in values:
         tier = str(getattr(values["utility_tier"], "value", values["utility_tier"]))
-        values["utility_amount"] = _SUA_AMOUNTS[tier]
+        values["utility_amount"] = _SUA_AMOUNTS[tier][sc.STATEWIDE]
     members = values["members"]
     values.setdefault(
         "earned_income",
@@ -176,6 +173,7 @@ def _map(unit, base_inputs=None, base_member=None):
         unit,
         base_inputs if base_inputs is not None else _base_inputs(),
         base_member if base_member is not None else _base_member(),
+        config=sc.QC_JURISDICTIONS["us-co"],
         sua_amount_by_tier=_SUA_AMOUNTS,
     )
 
@@ -254,9 +252,7 @@ def test_map_qc_unit_homeless_deduction_claim_sets_flat_path() -> None:
     inputs = _map(
         _unit(homeless_deduction_claimed=True, utility_tier="telephone"),
     ).inputs
-    homeless_flag = (
-        f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
-    )
+    homeless_flag = f"{CO}/4.407.3#input.all_household_members_experiencing_homelessness"
     has_costs = f"{CO}/4.407.3#input.homeless_household_has_shelter_costs"
     assert inputs[homeless_flag] is True
     assert inputs[has_costs] is True
@@ -277,17 +273,26 @@ def test_map_qc_unit_nonstandard_utility_amount_rides_as_shelter_cost() -> None:
 
 
 def test_expected_gross_nets_out_child_support_deduction() -> None:
-    # Colorado elects the 7 USC 2014(e)(4) child-support income exclusion, so
-    # the QC-recorded deduction is netted out of FSGRINC for the gross label.
-    # In deduction states FSCSDED equals FSCSEXP; in exclusion states FSCSDED
-    # is 0 and the netting is skipped — the FY2024 file has no partial rows.
-    label = next(label for label in sc._LABELS if label.expected_attr == "gross_income")
+    # Exclusion states (Colorado's 7 USC 2014(e)(4) election) net the
+    # QC-recorded deduction out of FSGRINC for the gross label; deduction
+    # states (New York, California) compare gross unadjusted, because their
+    # compositions deduct the same amount after the gross stage.
+    label = next(
+        label for label in sc._LABELS if label.expected_attr == "gross_income"
+    )
     unit = _unit(
         expected=SimpleNamespace(
             benefit=81, gross_income=1469.0, child_support_deduction=281.0
         )
     )
-    assert sc._expected_value(label, unit) == 1188.0
+    assert (
+        sc._expected_value(label, unit, child_support_convention="exclusion")
+        == 1188.0
+    )
+    assert (
+        sc._expected_value(label, unit, child_support_convention="deduction")
+        == 1469.0
+    )
 
 
 def test_map_qc_unit_missing_utility_amount_presumes_tier_standard() -> None:
@@ -305,7 +310,7 @@ def test_map_qc_unit_accepts_utility_tier_enum_instances() -> None:
     inputs = _map(
         _unit(
             utility_tier=UtilityTier.TELEPHONE,
-            utility_amount=_SUA_AMOUNTS["telephone"],
+            utility_amount=_SUA_AMOUNTS["telephone"][sc.STATEWIDE],
         )
     ).inputs
     assert inputs[PHONE] is True
@@ -330,10 +335,11 @@ def test_map_qc_unit_missing_certified_size_raises() -> None:
 
 
 def test_map_qc_unit_medical_feeds_applied_deduction() -> None:
-    # The engine input reconstructs the deduction FNS applied (FSMEDDED plus
-    # the $35 threshold): in standard-medical-deduction demonstration states
-    # FSMEDDED is a flat standard that differs from the excess FSMEDEXP, so
-    # FSMEDDED is the operative amount (10 such rows in FY2024, none in CO).
+    # The engine input reconstructs the file's calculated medical deduction
+    # (FSMEDDED plus the $35 threshold): in standard-medical-deduction
+    # demonstration states FSMEDDED is a flat standard that differs from the
+    # excess FSMEDEXP, so FSMEDDED is the operative amount (10 such rows in
+    # FY2024, none in CO).
     unit = _unit(
         medical_expenses=130.0,
         expected=SimpleNamespace(benefit=291, medical_deduction=135.0),
@@ -347,7 +353,7 @@ def test_validate_months_rejects_calendar_month_integers() -> None:
     sc._validate_months((202310, 202409), 2024)
 
 
-def test_sua_amounts_from_overlay_requires_all_four_patches() -> None:
+def test_sua_amounts_from_overlay_requires_all_expected_patches() -> None:
     spec = SimpleNamespace(
         name="partial",
         parameter_patches=[
@@ -358,7 +364,23 @@ def test_sua_amounts_from_overlay_requires_all_four_patches() -> None:
         ],
     )
     with pytest.raises(ValueError, match="does not patch"):
-        sc.sua_amounts_from_overlay(spec)
+        sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-co"])
+
+
+def test_sua_amounts_from_overlay_builds_ny_regional_table() -> None:
+    assert _NY_SUA_AMOUNTS["heating_cooling"] == {
+        "new_york_city": 992.0,
+        "nassau_suffolk": 923.0,
+        "rest_of_state": 819.0,
+    }
+    assert _NY_SUA_AMOUNTS["limited"] == {
+        "new_york_city": 391.0,
+        "nassau_suffolk": 363.0,
+        "rest_of_state": 332.0,
+    }
+    assert _NY_SUA_AMOUNTS["telephone"] == {"rest_of_state": 31.0}
+    assert _CA_SUA_AMOUNTS["heating_cooling"] == {sc.STATEWIDE: 596.0}
+    assert "limited" not in _CA_SUA_AMOUNTS
 
 
 @pytest.mark.parametrize(
@@ -371,15 +393,40 @@ def test_map_qc_unit_elderly_or_disabled_flag(age, elderly_flag, expected) -> No
     assert inputs.member_inputs[0][ELDERLY] is expected
 
 
-def test_map_qc_unit_projects_dependent_care_and_child_support_expense() -> None:
+def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> None:
+    # The child-support feed is the file's constructed deduction (FSCSDED) in
+    # place of the reported payment: the file carries rows whose reported
+    # FSCSEXP was not allowed as a deduction, and the applied amount is what
+    # enters FSTOTDED.
     inputs = _map(
-        _unit(dependent_care_expense=120.0, child_support_expense=80.0),
+        _unit(
+            dependent_care_expense=120.0,
+            child_support_expense=80.0,
+            expected=SimpleNamespace(
+                benefit=291, medical_deduction=None, child_support_deduction=80.0
+            ),
+        ),
     ).inputs
     assert inputs[DEPCARE_NEC] is True
     assert inputs[DEPCARE_PAID] == 120
     assert inputs[CS_VERIFIED] is True
     assert inputs[CS_MONTHS] == 3
     assert inputs[CS_AVG] == 80
+
+
+def test_map_qc_unit_disallowed_child_support_payment_feeds_zero() -> None:
+    # A reported payment with FSCSDED = 0 must not produce an engine-side
+    # deduction (one in-scope FY2024 New York row: FSCSEXP 139, FSCSDED 0).
+    inputs = _map(
+        _unit(
+            child_support_expense=139.0,
+            expected=SimpleNamespace(
+                benefit=291, medical_deduction=None, child_support_deduction=0.0
+            ),
+        ),
+    ).inputs
+    assert inputs[CS_VERIFIED] is False
+    assert inputs[CS_AVG] == 0
 
 
 # --------------------------------------------------------------------------- #
@@ -393,10 +440,7 @@ def _decimal(value: float) -> dict:
 
 def _result(output_id_by_label: dict, values: dict) -> dict:
     outputs = {
-        output_id_by_label[label]: {
-            "id": output_id_by_label[label],
-            "value": _decimal(v),
-        }
+        output_id_by_label[label]: {"id": output_id_by_label[label], "value": _decimal(v)}
         for label, v in values.items()
     }
     return {"outputs": outputs}
@@ -459,6 +503,11 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
         total_loaded=5, total_excluded=1, counts={"mfip_unit": 1}
     )
     overlay_build = SimpleNamespace(provenance={"overlay": "us-co-snap-fy2024"})
+    engine = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "a" * 40,
+        "binary_sha256": "b" * 64,
+    }
     report = sc._build_report(
         units=units,
         results=results,
@@ -473,29 +522,20 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
         rulespec_root=Path("/rulespec-us"),
         axiom_binary=Path("/engine"),
         pins=None,
+        engine=engine,
     )
 
     assert set(report) == {
-        "aggregates",
-        "case_count",
-        "cases",
-        "concepts",
-        "engines",
-        "errors",
-        "locales",
-        "mismatches",
-        "population",
-        "provenance",
-        "schema_version",
-        "scope",
-        "suite",
-        "summary",
+        "aggregates", "case_count", "cases", "concepts", "engines", "errors",
+        "locales", "mismatches", "population", "provenance", "schema_version",
+        "scope", "suite", "summary",
     }
     assert report["schema_version"] == COMPARISON_REPORT_SCHEMA_VERSION
     assert report["suite"] == "co-snap-qc"
     assert report["engines"] == {"left": "snap-qc", "right": "axiom"}
     assert report["locales"] == ["US-CO"]
     assert report["case_count"] == 2
+    assert report["provenance"]["engine"] == engine
 
     summary = report["summary"]
     assert summary["match_count"] == 1
@@ -539,30 +579,153 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     assert len(report["cases"]) == 2
 
 
+def _stub_snap_runtime(monkeypatch, tmp_path):
+    from axiom_oracles.populations import snap_qc
+
+    monkeypatch.setattr(sc, "resolve_workspace_root", lambda _: tmp_path)
+    monkeypatch.setattr(sc, "resolve_axiom_binary", lambda _root, binary: binary)
+    monkeypatch.setattr(sc, "load_overlay_spec", lambda _: SimpleNamespace(module_id_rewrites={}))
+    monkeypatch.setattr(snap_qc, "load_qc_units", lambda *a, **k: ([], None))
+    monkeypatch.setattr(sc, "load_base_inputs", lambda _: {})
+    monkeypatch.setattr(sc, "_load_base_member", lambda *a: {})
+    monkeypatch.setattr(sc, "sua_amounts_from_overlay", lambda *a: {})
+    monkeypatch.setattr(sc, "axiom_rules_env", lambda *a: {})
+    monkeypatch.setattr(sc, "build_overlay", lambda *a: SimpleNamespace(
+        program_path=tmp_path / "program.yaml", overlay_root=tmp_path,
+        provenance={"fixture": "cached executable"},
+    ))
+
+
+@settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(payload=st.binary(max_size=4096))
+def test_snap_cache_hit_receipt_hashes_executed_bytes_without_checkout(
+    monkeypatch, tmp_path, payload
+):
+    _stub_snap_runtime(monkeypatch, tmp_path)
+    binary = tmp_path / "engine/target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True, exist_ok=True)
+    binary.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "a" * 40,
+        "binary_sha256": digest,
+    }))
+    executed = []
+
+    def execute(**kwargs):
+        executed.append(hashlib.sha256(kwargs["binary"].read_bytes()).hexdigest())
+        return []
+
+    monkeypatch.setattr(sc, "_run_cases", execute)
+    report = sc.run_snap_qc_comparison(
+        fiscal_year=2024, jurisdiction="us-co", axiom_binary=binary,
+        rulespec_root=tmp_path / "rulespec-us",
+    )
+
+    assert executed == [digest]
+    assert report["provenance"]["engine"]["binary_sha256"] == digest
+    assert report["provenance"]["engine"]["commit"] == "a" * 40
+    assert not (binary.parents[2] / ".git").exists()
+
+
+def test_snap_rejects_engine_bytes_changed_during_execution(monkeypatch, tmp_path):
+    _stub_snap_runtime(monkeypatch, tmp_path)
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"before")
+
+    def execute(**kwargs):
+        kwargs["binary"].write_bytes(b"after")
+        return []
+
+    monkeypatch.setattr(sc, "_run_cases", execute)
+    with pytest.raises(RuntimeError, match="changed during SNAP QC execution"):
+        sc.run_snap_qc_comparison(
+            fiscal_year=2024, jurisdiction="us-co", axiom_binary=binary,
+            rulespec_root=tmp_path / "rulespec-us",
+        )
+
+
+@pytest.mark.parametrize("change_phase", ["compile", "during_chunk", "between_chunks"])
+def test_snap_checks_same_engine_bytes_at_compile_and_each_chunk(
+    monkeypatch, tmp_path, change_phase
+):
+    binary = tmp_path / "engine"
+    original_bytes = b"original engine"
+    binary.write_bytes(original_bytes)
+    expected_receipt = sc.engine_receipt(binary)
+    monkeypatch.setattr(sc, "CHUNK_SIZE", 1)
+    executed = []
+
+    def compile_program(*args, **kwargs):
+        if change_phase == "compile":
+            binary.write_bytes(b"replacement engine")
+
+    class Cases(list):
+        def __getitem__(self, selection):
+            chunk = super().__getitem__(selection)
+            if change_phase == "between_chunks" and selection.start == 1:
+                binary.write_bytes(b"replacement engine")
+            return chunk
+
+    def execute(**kwargs):
+        executed.append(binary.read_bytes())
+        if change_phase == "during_chunk":
+            binary.write_bytes(b"replacement engine")
+        elif change_phase == "between_chunks" and len(executed) == 2:
+            # A whole-run before/after check would miss the A -> B -> A swap.
+            binary.write_bytes(original_bytes)
+        return []
+
+    monkeypatch.setattr(sc, "compile_program", compile_program)
+    monkeypatch.setattr(sc, "run_axiom_cases", execute)
+    with pytest.raises(RuntimeError, match="identity changed during SNAP QC execution"):
+        sc._run_cases(
+            binary=binary, program_path=tmp_path / "program.yaml",
+            cases=Cases([object(), object()]),
+            period=snap_populace.month_period(2026, 1), output_ids=[],
+            config=sc.QC_JURISDICTIONS["us-co"], env={},
+            expected_engine_receipt=expected_receipt,
+        )
+
+    assert executed == ([] if change_phase == "compile" else [original_bytes])
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(sc.QC_JURISDICTIONS))
+def test_stage_concepts_are_the_ids_a_replay_report_lists(jurisdiction) -> None:
+    config = sc.QC_JURISDICTIONS[jurisdiction]
+    output_id_by_label = sc._output_id_by_label(
+        config, load_overlay_spec(config.overlay).module_id_rewrites
+    )
+    stages = sc.stage_concepts(jurisdiction)
+    assert list(stages) == [label.stage for label in sc._LABELS]
+    assert sc._benefit_stage() in stages
+    assert len(set(stages.values())) == len(stages)
+    assert list(stages.values()) == [
+        row["id"] for row in sc._concept_rows(output_id_by_label, 0.0, 1.0)
+    ]
+
+
 # --------------------------------------------------------------------------- #
 # Engine-gated live test: reproduce the proven worked example end to end
 # --------------------------------------------------------------------------- #
 
-_ENGINE_RAW = os.environ.get("AXIOM_RULES_ENGINE_BIN")
-_RULESPEC_FY2024_RAW = os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT")
-_ENGINE = Path(_ENGINE_RAW) if _ENGINE_RAW else Path("__missing_axiom_binary__")
-_RULESPEC_FY2024 = (
-    Path(_RULESPEC_FY2024_RAW)
-    if _RULESPEC_FY2024_RAW
-    else Path("__missing_rulespec_root__")
-)
+# Both come from the environment (the snap-qc-replay workflow sets them); with
+# either unset the live test skips.
+_ENGINE = Path(os.environ.get("AXIOM_RULES_ENGINE_BIN", ""))
+_RULESPEC_FY2024 = Path(os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT", ""))
 _LIVE = (
-    bool(_ENGINE_RAW)
-    and bool(_RULESPEC_FY2024_RAW)
-    and _RULESPEC_FY2024.name == "rulespec-us"
-    and _ENGINE.is_file()
-    and (_RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola").is_dir()
+    _ENGINE.is_file()
+    and _RULESPEC_FY2024 != Path()
+    and (_RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola").exists()
 )
 
 
 @pytest.mark.skipif(
     not _LIVE,
-    reason="axiom-rules-engine binary and rulespec-us fy-2024-cola worktree required",
+    reason=(
+        "set AXIOM_RULES_ENGINE_BIN to an axiom-rules-engine binary and "
+        "RULESPEC_US_SNAP_FY2024_ROOT to a rulespec-us fy-2024-cola checkout"
+    ),
 )
 def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     config = sc.QC_JURISDICTIONS["us-co"]
@@ -590,13 +753,15 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-live-", dir=tmp_path))
     build = build_overlay(spec, _RULESPEC_FY2024, overlay_dir)
-    env = snap_populace.axiom_engine_env()
+    env = snap_populace.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
+    env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
 
     case = sc.map_qc_unit(
         unit,
         base_inputs,
         base_member,
-        sua_amount_by_tier=sc.sua_amounts_from_overlay(spec),
+        config=config,
+        sua_amount_by_tier=sc.sua_amounts_from_overlay(spec, config),
     )
     results = sc._run_cases(
         binary=_ENGINE,
@@ -605,7 +770,6 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
         period=snap_populace.month_period(*sc.NOMINAL_PERIOD),
         output_ids=list(output_id_by_label.values()),
         config=config,
-        rulespec_root=build.overlay_root,
         env=env,
     )
 
@@ -621,3 +785,407 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     assert value("snap_standard_deduction") == 198
     assert value("snap_maximum_allotment") == 291
     assert value("snap_standard_utility_allowance") == 560
+
+
+def test_unit_level_elderly_or_disabled_overrides_member_flags() -> None:
+    # A disabled non-participant makes the member-derived flag true, but the
+    # file's own FSNELDER/FSNDIS counts say the unit is not elderly/disabled
+    # (observed on a real Colorado row: QC capped its shelter deduction).
+    member = _member(age=45, elderly_or_disabled=True, _unearned=881.0)
+    case = _map(_unit(members=[member], unit_has_elderly_or_disabled=False))
+    assert case.member_inputs[0][ELDERLY] is False
+    case = _map(_unit(members=[_member(age=30)], unit_has_elderly_or_disabled=True))
+    assert case.member_inputs[0][ELDERLY] is True
+
+
+# --------------------------------------------------------------------------- #
+# New York and California per-jurisdiction projections
+# --------------------------------------------------------------------------- #
+
+NY_COMP = "us-ny:policies/otda/snap/fy-2026-benefit-calculation"
+NY_SUA_A = "us-ny:regulations/18-nycrr/387/12/f/3/v/a"
+NY_SUA_B = "us-ny:regulations/18-nycrr/387/12/f/3/v/b"
+NY_SUA_C = "us-ny:regulations/18-nycrr/387/12/f/3/v/c"
+NY_HOMELESS = "us-ny:regulations/18-nycrr/387/12/f/3/vi"
+NY_CATEG = "us-ny:regulations/18-nycrr/387/14/a/5"
+NY_HEAT = (
+    f"{NY_SUA_A}#input."
+    "household_incurred_or_anticipated_heating_or_cooling_costs_separate_from_"
+    "rent_or_mortgage"
+)
+NY_NYC = f"{NY_SUA_A}#input.household_resides_in_new_york_city"
+NY_NASSAU = f"{NY_SUA_A}#input.household_resides_in_nassau_or_suffolk_county"
+NY_LIMITED = (
+    f"{NY_SUA_B}#input.household_billed_separately_for_non_telephone_standard_utility"
+)
+NY_PHONE = (
+    f"{NY_SUA_C}#input."
+    "household_incurred_or_anticipated_basic_service_cost_for_one_telephone"
+)
+NY_SHELTER = f"{NY_COMP}#input.household_shelter_costs_incurred"
+NY_GROSS_EARNED = "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income"
+NY_CS_2014 = "us:statutes/7/2014/e/6/A#input.child_support_deduction"
+NY_CS_273 = (
+    "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments"
+)
+NY_UTILITY_KEYS = (NY_HEAT, NY_NYC, NY_NASSAU, NY_LIMITED, NY_PHONE)
+
+
+def _ny_base_inputs() -> dict:
+    base = {
+        NY_GROSS_EARNED: 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
+        "us:regulations/7-cfr/273/10#input.snap_income_exclusions": 0,
+        "us:regulations/7-cfr/273/8#input.snap_countable_financial_resources": 0,
+        "us:policies/usda/snap/fy-2026-cola/maximum-allotments#input.household_size": 1,
+        NY_SHELTER: 0,
+        NY_HEAT: True,
+        f"{NY_SUA_A}#input.household_in_central_meter_housing_charged_only_for_excess_heating_or_cooling": False,
+        f"{NY_SUA_A}#input.household_entitled_to_heap_or_liheaa_payment": False,
+        NY_NYC: False,
+        NY_NASSAU: False,
+        NY_LIMITED: False,
+        NY_PHONE: False,
+        f"{NY_HOMELESS}#input.all_household_members_experiencing_homelessness": False,
+        f"{NY_HOMELESS}#input.homeless_household_has_shelter_costs": False,
+        f"{NY_HOMELESS}#input.homeless_household_free_shelter_all_month": False,
+        f"{NY_HOMELESS}#input.verified_higher_homeless_shelter_costs": False,
+        f"{NY_CATEG}#input.household_has_out_of_pocket_dependent_care_expenses": False,
+        f"{NY_CATEG}#input.household_has_earned_income_budgeted_for_snap": False,
+        "us:statutes/7/2014/e/6/A#input.dependent_care_deduction": 0,
+        NY_CS_2014: 0,
+        "us:statutes/7/2014/e/6/A#input.medical_deduction": 0,
+    }
+    return base
+
+
+def _map_ny(unit):
+    return sc.map_qc_unit(
+        unit,
+        _ny_base_inputs(),
+        _base_member(),
+        config=sc.QC_JURISDICTIONS["us-ny"],
+        sua_amount_by_tier=_NY_SUA_AMOUNTS,
+    )
+
+
+@pytest.mark.parametrize(
+    "tier, util, true_flags",
+    [
+        ("heating_cooling", 992.0, {NY_HEAT, NY_NYC}),
+        ("heating_cooling", 923.0, {NY_HEAT, NY_NASSAU}),
+        ("heating_cooling", 819.0, {NY_HEAT}),
+        ("limited", 391.0, {NY_LIMITED, NY_NYC}),
+        ("limited", 332.0, {NY_LIMITED}),
+        ("telephone", 31.0, {NY_PHONE}),
+        ("none", 0.0, set()),
+    ],
+)
+def test_ny_region_and_tier_inferred_from_util(tier, util, true_flags) -> None:
+    inputs = _map_ny(_unit(utility_tier=tier, utility_amount=util)).inputs
+    for flag in NY_UTILITY_KEYS:
+        assert inputs[flag] is (flag in true_flags), flag
+    assert inputs[NY_SHELTER] == 500
+
+
+def test_ny_nonstandard_util_rides_as_shelter_cost() -> None:
+    # UTIL 922 is one dollar off the Nassau/Suffolk HCSUA standard — a real
+    # FY2024 New York pattern (footnote 20: the state system auto-generates
+    # SUAs). It matches no encoded schedule, so it rides as an incurred cost.
+    inputs = _map_ny(
+        _unit(utility_tier="heating_cooling", utility_amount=922.0)
+    ).inputs
+    assert all(inputs[flag] is False for flag in NY_UTILITY_KEYS)
+    assert inputs[NY_SHELTER] == 1422
+
+
+def test_ny_income_feeds_gross_inputs() -> None:
+    member = _member(_earned=1000.0, _unearned=300.0)
+    inputs = _map_ny(_unit(members=[member])).inputs
+    assert inputs[NY_GROSS_EARNED] == 1000
+    assert (
+        inputs["us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income"]
+        == 300
+    )
+
+
+def test_ny_child_support_feeds_both_deduction_inputs() -> None:
+    unit = _unit(
+        expected=SimpleNamespace(
+            benefit=291, medical_deduction=None, child_support_deduction=80.0
+        )
+    )
+    inputs = _map_ny(unit).inputs
+    assert inputs[NY_CS_2014] == 80
+    assert inputs[NY_CS_273] == 80
+
+
+def test_ny_categorical_member_flag_rides_on_every_member() -> None:
+    members = [_member(_earned=1000.0), _member(index=1)]
+    case = _map_ny(_unit(members=members, categorically_eligible=True))
+    assert all(
+        member[sc._NY_CATEGORICAL_MEMBER_INPUT] is True
+        for member in case.member_inputs
+    )
+    assert (
+        case.inputs[f"{NY_CATEG}#input.household_has_earned_income_budgeted_for_snap"]
+        is True
+    )
+
+
+CA_COMP = "us-ca:policies/cdss/snap/fy-2026-benefit-calculation"
+CA_SUA = "us-ca:policies/cdss/snap/standard-utility-allowance"
+CA_HEAT = (
+    f"{CA_SUA}#input."
+    "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage"
+)
+CA_SHELTER = f"{CA_COMP}#input.household_shelter_costs_incurred"
+CA_HOMELESS_CLAIMED = (
+    "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction"
+)
+CA_CATEG = (
+    "us:regulations/7-cfr/273/8#input.snap_categorically_eligible_for_resource_exemption"
+)
+
+
+def _ca_base_inputs() -> dict:
+    return {
+        "us:regulations/7-cfr/273/10#input.snap_gross_monthly_earned_income": 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_monthly_unearned_income": 0,
+        "us:regulations/7-cfr/273/8#input.snap_countable_financial_resources": 0,
+        "us:policies/usda/snap/fy-2026-cola/maximum-allotments#input.household_size": 1,
+        CA_SHELTER: 0,
+        CA_HEAT: False,
+        CA_HOMELESS_CLAIMED: 0,
+        CA_CATEG: False,
+        "us:statutes/7/2014/e/6/A#input.dependent_care_deduction": 0,
+        "us:statutes/7/2014/e/6/A#input.child_support_deduction": 0,
+        "us:statutes/7/2014/e/6/A#input.medical_deduction": 0,
+        "us:regulations/7-cfr/273/10#input.household_entitled_to_excess_medical_deduction": False,
+        "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_dependent_care_expenses": 0,
+        "us:regulations/7-cfr/273/10#input.snap_allowable_monthly_child_support_payments": 0,
+        "us:regulations/7-cfr/273/10#input.snap_total_medical_expenses": 0,
+    }
+
+
+def _map_ca(unit):
+    return sc.map_qc_unit(
+        unit,
+        _ca_base_inputs(),
+        _base_member(),
+        config=sc.QC_JURISDICTIONS["us-ca"],
+        sua_amount_by_tier=_CA_SUA_AMOUNTS,
+    )
+
+
+def test_ca_heating_flag_when_util_matches_standard() -> None:
+    inputs = _map_ca(
+        _unit(utility_tier="heating_cooling", utility_amount=596.0)
+    ).inputs
+    assert inputs[CA_HEAT] is True
+    assert inputs[CA_SHELTER] == 500
+
+
+def test_ca_unencoded_tier_rides_as_shelter_cost() -> None:
+    # California encodes only the heating/cooling SUA; a telephone-tier unit's
+    # applied 19-dollar allowance rides as an incurred shelter cost.
+    inputs = _map_ca(_unit(utility_tier="telephone", utility_amount=19.0)).inputs
+    assert inputs[CA_HEAT] is False
+    assert inputs[CA_SHELTER] == 519
+
+
+def test_ca_homeless_claim_feeds_applied_amount() -> None:
+    unit = _unit(
+        homeless_deduction_claimed=True,
+        homeless_deduction_amount=180.0,
+        utility_tier="none",
+        utility_amount=0.0,
+    )
+    inputs = _map_ca(unit).inputs
+    assert inputs[CA_HOMELESS_CLAIMED] == 180
+    assert _map_ca(_unit()).inputs[CA_HOMELESS_CLAIMED] == 0
+
+
+def test_ca_categorical_rides_resource_exemption_flag() -> None:
+    inputs = _map_ca(_unit(categorically_eligible=True)).inputs
+    assert inputs[CA_CATEG] is True
+
+
+def test_output_id_overrides_replace_base_ids_before_rewrite() -> None:
+    # New York's headline compares the composition's issued benefit
+    # (rulespec-us#836); the net and shelter stages ride the 273.10 rules,
+    # whose whole-dollar values are what the QC intermediates carry.
+    config = sc.QC_JURISDICTIONS["us-ny"]
+    spec = load_overlay_spec(config.overlay)
+    ids = sc._output_id_by_label(config, spec.module_id_rewrites)
+    assert ids["snap_regular_month_allotment"] == (
+        "us:policies/usda/snap/state-plan-composition#snap_benefit"
+    )
+    assert ids["snap_net_income"] == (
+        "us:regulations/7-cfr/273/10#snap_net_monthly_income"
+    )
+    assert ids["snap_excess_shelter_deduction"] == (
+        "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income"
+    )
+    # The standard deduction still rides the overlay-rewritten COLA module.
+    assert ids["snap_standard_deduction"] == (
+        "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction"
+    )
+
+
+def test_ny_pins_only_the_genuine_federal_inputs() -> None:
+    # The chain's shelter total and claimed homeless deduction are
+    # composition rules since rulespec-us#836 — pinning them would collide
+    # with the defined rules — so only the three genuine inputs are pinned.
+    case = _map_ny(_unit(utility_tier="heating_cooling", utility_amount=819.0))
+    inputs = case.inputs
+    assert (
+        "us:regulations/7-cfr/273/10#input.snap_total_allowable_shelter_expenses"
+        not in inputs
+    )
+    assert (
+        "us:regulations/7-cfr/273/10#input.snap_claimed_homeless_shelter_deduction"
+        not in inputs
+    )
+    assert (
+        inputs["us:regulations/7-cfr/273/10#input.household_initial_month"] is False
+    )
+    assert inputs[
+        "us:regulations/7-cfr/273/10#input."
+        "state_agency_rounds_thirty_percent_net_income_up"
+    ] is True
+    assert inputs["us:regulations/7-cfr/273/10#input.household_size"] == 1
+
+
+def test_ny_blank_util_on_multi_schedule_tier_raises() -> None:
+    # A recorded tier with a blank UTIL is presumable only against a single
+    # schedule; with New York's three regional schedules the standard is
+    # ambiguous and must fail loudly rather than silently understate shelter
+    # (zero FY2024 rows hit this).
+    with pytest.raises(ValueError, match="ambiguous"):
+        _map_ny(_unit(utility_tier="heating_cooling", utility_amount=None))
+
+
+def test_blank_util_on_single_schedule_tier_still_presumes() -> None:
+    # The Colorado presumption is unchanged: one schedule, standard presumed.
+    inputs = _map(_unit(utility_tier="heating_cooling", utility_amount=None)).inputs
+    assert inputs[HEAT] is True
+
+
+def test_sua_amounts_from_overlay_rejects_duplicate_regional_amounts() -> None:
+    # Region inference matches UTIL against the schedule; two regions sharing
+    # an amount within a tier would misroute silently.
+    spec = SimpleNamespace(
+        name="dup",
+        parameter_patches=[
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_new_york_city",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_nassau_suffolk",
+                to_value="900",
+            ),
+            SimpleNamespace(
+                rule="heating_cooling_standard_amount_rest_of_state",
+                to_value="819",
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_new_york_city", to_value="391"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_nassau_suffolk", to_value="363"
+            ),
+            SimpleNamespace(
+                rule="utilities_standard_amount_rest_of_state", to_value="332"
+            ),
+            SimpleNamespace(
+                rule="telephone_standard_allowance_amount", to_value="31"
+            ),
+        ],
+    )
+    with pytest.raises(ValueError, match="duplicate standard amounts"):
+        sc.sua_amounts_from_overlay(spec, sc.QC_JURISDICTIONS["us-ny"])
+
+
+def test_az_bracket_inconsistent_util_rides_as_shelter_cost() -> None:
+    # A 3-participant Arizona unit whose applied UTIL equals the 4+ bracket
+    # SUA cannot be reproduced through the tier flags (the engine derives the
+    # bracket from the unit's own size), so the applied amount rides as an
+    # incurred shelter cost — one real FY2024 row.
+    config = sc.QC_JURISDICTIONS["us-az"]
+    spec = load_overlay_spec(config.overlay)
+    table = sc.sua_amounts_from_overlay(spec, config)
+    unit = _unit(
+        certified_size=3, utility_tier="heating_cooling", utility_amount=431.0
+    )
+    shelter, matched, flags = sc._project_shelter_and_utilities(
+        "us-az", unit, table
+    )
+    assert shelter == 931  # 500 incurred + 431 applied
+    assert matched == 0.0
+    unit = _unit(
+        certified_size=3, utility_tier="heating_cooling", utility_amount=318.0
+    )
+    shelter, matched, flags = sc._project_shelter_and_utilities(
+        "us-az", unit, table
+    )
+    assert shelter == 500
+    assert matched == 318.0
+
+
+@pytest.mark.parametrize(
+    "jurisdiction, tier, expected_true",
+    [
+        (
+            "us-ga",
+            "heating_cooling",
+            {"household_qualifies_for_heating_cooling_standard_utility_allowance"},
+        ),
+        ("us-ga", "limited", {"household_qualifies_for_limited_standard_utility_allowance"}),
+        ("us-ga", "telephone", {"household_qualifies_for_telephone_standard"}),
+        ("us-ga", "none", set()),
+        ("us-md", "heating_cooling", {"household_qualifies_for_standard_utility_allowance"}),
+        ("us-md", "limited", {"household_qualifies_for_limited_utility_allowance"}),
+        ("us-md", "telephone", {"household_qualifies_for_telephone_allowance"}),
+        ("us-md", "none", set()),
+    ],
+)
+def test_ga_md_qualification_flags(jurisdiction, tier, expected_true) -> None:
+    flags = sc._utility_flag_inputs(jurisdiction, tier, sc.STATEWIDE)
+    for name, value in flags.items():
+        assert value is (name in expected_true), (jurisdiction, tier, name)
+
+
+def test_az_flag_emission_sets_prerequisites_and_tier_obligation() -> None:
+    flags = sc._utility_flag_inputs("us-az", "heating_cooling", "1_to_3")
+    assert flags["budgetary_unit_billed_separately_for_utility_expenses"] is True
+    assert flags[
+        "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_"
+        "separately_from_rent_or_mortgage_on_regular_basis"
+    ] is True
+    assert flags[
+        "budgetary_unit_obligated_to_pay_only_telephone_expense"
+    ] is False
+    none_flags = sc._utility_flag_inputs("us-az", "none", None)
+    assert none_flags["budgetary_unit_billed_separately_for_utility_expenses"] is False
+
+
+def test_az_categorical_feeds_the_eligibility_bridge() -> None:
+    inputs = sc._categorical_inputs("us-az", _unit(), 0)
+    assert inputs == {"na_budgetary_unit_is_eligible": True}
+
+
+@pytest.mark.parametrize(
+    "tier, expected_true",
+    [
+        ("heating_cooling", {"household_qualifies_for_standard_utility_allowance"}),
+        ("limited", {"household_qualifies_for_basic_utility_allowance"}),
+        ("telephone", {"household_qualifies_for_telephone_standard"}),
+        ("none", set()),
+    ],
+)
+def test_tx_qualification_flags(tier, expected_true) -> None:
+    flags = sc._utility_flag_inputs("us-tx", tier, sc.STATEWIDE)
+    for name, value in flags.items():
+        assert value is (name in expected_true), (tier, name)

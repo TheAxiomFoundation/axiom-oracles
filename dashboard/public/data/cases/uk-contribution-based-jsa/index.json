@@ -1,0 +1,16 @@
+{
+ "suite": "uk-contribution-based-jsa",
+ "count": 2,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/govuk/contribution-based-jobseekers-allowance#contribution_based_jsa_annual_amount"
+ ],
+ "source": "axiom-euromod-uk-contribution-based-jsa.json",
+ "total_cases": 2,
+ "partial": "mismatch-only"
+}

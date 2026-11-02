@@ -1,0 +1,155 @@
+schema: axiom_oracles.dispositions.v1
+suite: vt-income-tax-liability
+updated: "2026-07-16"
+entries:
+  - id: vt-taxsim-2024-single-30000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine use the current 2026 section 5822 indexation.
+        Pinned TAXSIM's detailed 2024 state calculation reports a $5,112
+        exemption and $7,378 standard deduction (its internal pre-rounding
+        parameters, versus the booklet's printed $5,100 and $7,400) and applies
+        the official 3.35-percent first rate to the resulting $17,510 base.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/Income%20Booklet-2024.pdf
+      arithmetic:
+        - expression: "0.0335 * (30000 - 5112 - 7378)"
+          equals: 586.59
+          tolerance: 0.01
+        - expression: "562.017105 - 586.59"
+          equals: -24.572895
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 562.017105, right: 586.59}
+  - id: vt-taxsim-2024-single-60000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine use the current 2026 section 5822 indexation.
+        Pinned TAXSIM's detailed 2024 state calculation reports a $5,112
+        exemption and $7,378 standard deduction and applies the official
+        3.35-percent first rate to the resulting $47,510 base.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/Income%20Booklet-2024.pdf
+      arithmetic:
+        - expression: "0.0335 * (60000 - 5112 - 7378)"
+          equals: 1591.59
+          tolerance: 0.01
+        - expression: "1567.017105 - 1591.59"
+          equals: -24.572895
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 1567.017105, right: 1591.59}
+  - id: vt-taxsim-2024-single-150000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Federal AGI equals $150,000, so section 5822's strict "exceeds"
+        condition and the Axiom branch do not activate the minimum. PolicyEngine's
+        inclusive SingleAmount threshold computes a $4,500 minimum at exactly
+        $150,000, but its max still selects the $7,529.01 indexed schedule, so
+        the selected target matches the statutory outcome. Pinned TAXSIM applies
+        the official 2024 single thresholds to its detailed $137,510 taxable
+        base after its internal $5,112 exemption and $7,378 standard deduction.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/RateSched-2024.pdf
+      arithmetic:
+        - expression: "0.0335 * 47900 + 0.066 * (116000 - 47900) + 0.076 * ((150000 - 5112 - 7378) - 116000)"
+          equals: 7734.01
+          tolerance: 0.001
+        - expression: "0.03 * 150000"
+          equals: 4500
+          tolerance: 0.001
+        - expression: "7529.011005 - 4500"
+          equals: 3029.011005
+          tolerance: 0.0001
+        - expression: "7529.011005 - 7734.01"
+          equals: -204.998995
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 7529.011005, right: 7734.01}
+  - id: vt-taxsim-2024-married-60000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine use the current 2026 section 5822 indexation.
+        Pinned TAXSIM's detailed 2024 state calculation reports $10,224 of
+        exemptions and a $14,806 joint standard deduction and applies the
+        official 3.35-percent first rate to the resulting $34,970 base.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/Income%20Booklet-2024.pdf
+      arithmetic:
+        - expression: "0.0335 * (60000 - 10224 - 14806)"
+          equals: 1171.5
+          tolerance: 0.01
+        - expression: "1124.03421 - 1171.5"
+          equals: -47.46579
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 1124.03421, right: 1171.5}
+  - id: vt-taxsim-2024-married-120000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Axiom and PolicyEngine use the current 2026 section 5822 indexation.
+        Pinned TAXSIM applies the official 2024 joint rates to its detailed
+        $94,970 taxable base after $10,224 of exemptions and its $14,806 joint
+        standard deduction.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/RateSched-2024.pdf
+      arithmetic:
+        - expression: "0.0335 * 79950 + 0.066 * ((120000 - 10224 - 14806) - 79950)"
+          equals: 3669.64
+          tolerance: 0.01
+        - expression: "3432.500235 - 3669.64"
+          equals: -237.139765
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 3432.500235, right: 3669.64}
+  - id: vt-taxsim-2024-married-300000
+    concept: us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability
+    case_id: vt-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Both years compare the schedule against the three-percent federal-AGI
+        minimum ($9,000), and the schedule wins. Pinned TAXSIM reports a
+        $274,970 taxable base from $10,224 of exemptions and its $14,806 joint
+        standard deduction. The printed 2024 Schedule Y-1 reconstructs
+        $16,365.92; TAXSIM's internal unrounded indexed threshold/base returns
+        $16,365.84, an eight-cent implementation-rounding difference. The
+        remaining residual is the 2024-to-2026 indexation vintage.
+      upstream_url: https://tax.vermont.gov/sites/tax/files/documents/RateSched-2024.pdf
+      arithmetic:
+        - expression: "300000 - 10224 - 14806"
+          equals: 274970
+          tolerance: 0.001
+        - expression: "10159 + 0.076 * (274970 - 193300)"
+          equals: 16365.92
+          tolerance: 0.001
+        - expression: "16365.92 - 16365.84"
+          equals: 0.08
+          tolerance: 0.0001
+        - expression: "0.03 * 300000"
+          equals: 9000
+          tolerance: 0.001
+        - expression: "16008.330875 - 9000"
+          equals: 7008.330875
+          tolerance: 0.0001
+        - expression: "16008.330875 - 16365.84"
+          equals: -357.509125
+          tolerance: 0.0001
+    expires_on_source_change: true
+    pinned: {left: 16008.330875, right: 16365.84}

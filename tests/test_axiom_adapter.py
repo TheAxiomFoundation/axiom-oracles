@@ -2,7 +2,6 @@ import json
 import subprocess
 from pathlib import Path
 
-import click
 import pytest
 import yaml
 
@@ -20,53 +19,11 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 
 
 @pytest.fixture(autouse=True)
-def _canonical_axiom_inputs(tmp_path: Path) -> None:
-    binary = tmp_path / "axiom-rules"
-    binary.write_text("#!/bin/sh\nexit 0\n")
-    binary.chmod(0o755)
-    (tmp_path / "rulespec-us" / "us").mkdir(parents=True)
-    (tmp_path / "rulespec-be" / "be").mkdir(parents=True)
-    module_refs = {
-        *US_TAX_ORACLE_IMPORTS,
-        "us:statutes/26/example",
-        "be:regulations/health_insurance/birth_leave/indemnity_rates",
-    }
-    for module_ref in module_refs:
-        jurisdiction, relative = module_ref.split(":", 1)
-        country = jurisdiction.split("-", 1)[0]
-        module = tmp_path / f"rulespec-{country}" / jurisdiction / f"{relative}.yaml"
-        module.parent.mkdir(parents=True, exist_ok=True)
-        module.write_text("format: rulespec/v1\nrules: []\n")
-    program = tmp_path / "rulespec-us/us/policies/tests/program.yaml"
-    program.parent.mkdir(parents=True)
-    program.write_text("format: rulespec/v1\nrules: []\n")
-
-
-def test_axiom_runner_rejects_program_outside_canonical_layout(tmp_path: Path) -> None:
-    legacy_program = tmp_path / "program.yaml"
-    legacy_program.write_text("format: rulespec/v1\nrules: []\n")
-
-    with pytest.raises(ValueError, match="four atomic roots"):
-        AxiomRulesRunner(
-            program_path=legacy_program,
-            binary_path=tmp_path / "axiom-rules",
-            rulespec_root=tmp_path / "rulespec-us",
-        )
-
-
-def test_axiom_runner_rejects_noncanonical_generated_target(tmp_path: Path) -> None:
-    runner = AxiomRulesRunner(
-        binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
-        program_imports=("us:statutes/26/example",),
-        generated_program_target="us:tax/oracle-bridge",
-    )
-
-    with pytest.raises(RuntimeError, match="absolute canonical"):
-        runner.run_cases(
-            [Case(case_id="case-1", period="2026")],
-            ["us:statutes/26/example#tax"],
-        )
+def _isolated_rulespec_roots(monkeypatch, tmp_path):
+    """Keep unit tests off the machine's real supervised layout: with no
+    isolation, the adapter's default root resolution finds a real
+    ~/TheAxiomFoundation checkout and stages a filtered copy of it (#296)."""
+    monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "no-roots"))
 
 
 def test_axiom_runner_executes_rulespec_program_with_case_inputs(
@@ -76,7 +33,7 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["queries"][0]["outputs"] == ["us:statutes/26/6401#income_tax"]
@@ -131,9 +88,8 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        program_path=tmp_path / "program.yaml",
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -153,6 +109,132 @@ def test_axiom_runner_executes_rulespec_program_with_case_inputs(
     assert calls[1][0][1] == "run-compiled"
     assert result.errors == ()
     assert result.values == {"us:statutes/26/6401#income_tax": 750.0}
+
+
+def test_axiom_runner_sums_outputs_across_entity_queries(tmp_path: Path) -> None:
+    qualified_output = "dk:statutes/example#annual_benefit"
+
+    def fake_run(args, **kwargs):
+        if args[1] in ("compile", "compile-composed"):
+            output_path = Path(args[args.index("--output") + 1])
+            output_path.write_text(
+                json.dumps(
+                    {
+                        "program": {
+                            "derived": [
+                                {
+                                    "name": "annual_benefit",
+                                    "entity": "Person",
+                                    "expr": {
+                                        "kind": "derived",
+                                        "name": "own_reduction",
+                                    },
+                                },
+                                {
+                                    "name": "own_reduction",
+                                    "entity": "Person",
+                                    "expr": {"kind": "literal", "value": 0},
+                                },
+                            ]
+                        }
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert [query["entity_id"] for query in request["queries"]] == [
+            "earner",
+            "non-earner",
+        ]
+        # Full evidence queries only the compared output; the intermediate
+        # comes back in the explain trace, never as a forced query.
+        assert request["queries"][0]["outputs"] == ["annual_benefit"]
+
+        def scalar(value):
+            return {"kind": "scalar", "value": {"kind": "integer", "value": value}}
+
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {"annual_benefit": scalar(0)},
+                            "trace": {
+                                "annual_benefit": scalar(0),
+                                "own_reduction": scalar(9260),
+                            },
+                        },
+                        {
+                            "outputs": {"annual_benefit": scalar(8384)},
+                            "trace": {
+                                "annual_benefit": scalar(8384),
+                                "own_reduction": scalar(0),
+                            },
+                        },
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        program_path=tmp_path / "program.yaml",
+        binary_path=tmp_path / "axiom-rules",
+        record_all_outputs=True,
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="couple",
+        period="2025",
+        metadata={
+            "axiom_entity": "Person",
+            "axiom_entity_id": "earner",
+            "axiom_input_records": [
+                {
+                    "name": "own_income",
+                    "entity": "Person",
+                    "entity_id": entity_id,
+                    "value": value,
+                }
+                for entity_id, value in (("earner", 1_380_000), ("non-earner", 0))
+            ],
+            "axiom_result_aggregation": {
+                "strategy": "sum",
+                "entity_ids": ["earner", "non-earner"],
+            },
+        },
+    )
+
+    [result] = runner.run_cases([case], [qualified_output])
+
+    assert result.errors == ()
+    assert result.values == {
+        "annual_benefit": 8384,
+        qualified_output: 8384,
+    }
+    assert result.raw["aggregation"] == {
+        "strategy": "sum",
+        "components": [
+            {
+                "entity_id": "earner",
+                "values": {
+                    "annual_benefit": 0,
+                    "own_reduction": 9260,
+                    qualified_output: 0,
+                },
+            },
+            {
+                "entity_id": "non-earner",
+                "values": {
+                    "annual_benefit": 8384,
+                    "own_reduction": 0,
+                    qualified_output: 8384,
+                },
+            },
+        ],
+    }
 
 
 def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
@@ -202,7 +284,6 @@ def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
     runner = AxiomRulesRunner(
         compiled_artifact_path=artifact_path,
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
 
@@ -217,7 +298,7 @@ def test_axiom_runner_aliases_unique_local_output_to_qualified_id(
 
 def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["dataset"]["inputs"] == [
@@ -237,9 +318,8 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        program_path=tmp_path / "program.yaml",
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -260,6 +340,98 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     [result] = runner.run_cases([case], [])
 
     assert result.errors == ()
+
+
+@pytest.mark.parametrize(
+    ("typed", "member_inputs"),
+    [(False, False), (False, True), (True, False), (True, True)],
+)
+@pytest.mark.parametrize("batched", [False, True])
+def test_axiom_runner_binds_relations_against_the_executed_artifact(
+    tmp_path: Path, typed: bool, member_inputs: bool, batched: bool
+) -> None:
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "relations": [
+                        {
+                            "name": "child_of_unit",
+                            "arity": 2,
+                            **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
+                        }
+                    ],
+                    "derived": [
+                        {
+                            "name": "child_count",
+                            "entity": "TaxUnit",
+                            "expr": {
+                                "kind": "count_related",
+                                "relation": "child_of_unit",
+                                "current_slot": 0 if typed else 1,
+                                "related_slot": 1 if typed else 0,
+                            },
+                        }
+                    ],
+                }
+            }
+        )
+    )
+    requests = []
+
+    def capture_request(args, **kwargs):
+        assert args[args.index("--artifact") + 1] == str(artifact)
+        request = json.loads(kwargs["input"])
+        requests.append(request)
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps({"results": [{"outputs": {}}]}),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        compiled_artifact_path=artifact,
+        binary_path=tmp_path / "axiom-rules",
+        subprocess_run=capture_request,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": "income",
+                    "entity": "TaxUnit",
+                    "entity_id": "tax_unit",
+                    "value": 0,
+                },
+                *(
+                    [{"name": "age", "entity": "Person", "entity_id": "child", "value": 5}]
+                    if member_inputs
+                    else []
+                ),
+            ],
+            "axiom_relations": [
+                {"name": "child_of_unit", "tuple": ["child", "tax_unit"]}
+            ],
+        },
+    )
+    if batched:
+        [result] = runner._run_case_batch_once([case], ["child_count"], artifact)
+    else:
+        result = runner._run_case_once(case, ["child_count"], artifact)
+    assert result.errors == ()
+    [request] = requests
+    namespace = "case-0::" if batched else ""
+    ids = [f"{namespace}tax_unit", f"{namespace}child"]
+    assert request["dataset"]["relations"][0]["tuple"] == (ids if typed else ids[::-1])
+    assert "relation_binding" not in request
+    if not member_inputs:
+        assert [record["entity_id"] for record in request["dataset"]["inputs"]] == [
+            f"{namespace}tax_unit"
+        ]
 
 
 def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
@@ -332,7 +504,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         itemization_records = [
@@ -368,9 +540,8 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        program_path=tmp_path / "program.yaml",
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
     case = Case(
@@ -428,7 +599,7 @@ def test_axiom_runner_selects_best_input_overlay_candidate(tmp_path: Path) -> No
 def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
     def fake_run(args, **kwargs):
         del kwargs
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         return subprocess.CompletedProcess(
             args,
@@ -438,9 +609,8 @@ def test_axiom_runner_records_execution_errors_per_case(tmp_path: Path) -> None:
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        program_path=tmp_path / "program.yaml",
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         subprocess_run=fake_run,
     )
 
@@ -460,7 +630,7 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile":
+        if args[1] in ("compile", "compile-composed"):
             output_path = Path(args[args.index("--output") + 1])
             output_path.write_text(
                 json.dumps(
@@ -542,9 +712,8 @@ def test_axiom_runner_can_prune_inputs_not_consumed_by_generated_program(
         )
 
     runner = AxiomRulesRunner(
-        program_path=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
+        program_path=tmp_path / "program.yaml",
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         prune_unsupported_inputs=True,
         subprocess_run=fake_run,
     )
@@ -597,12 +766,21 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile-composed":
+        if args[1] in ("compile", "compile-composed"):
             program_path = Path(args[args.index("--program") + 1])
             program = yaml.safe_load(program_path.read_text())
+            # Post-hard-cut engines compile the composition-form twin (the
+            # module.kind mapping makes the out-of-root generated program
+            # acceptable to compile-composed, #296); the payload is otherwise
+            # the legacy generated program unchanged.
             assert program == {
                 "format": "rulespec/v1",
-                "module": {"kind": "composition"},
+                "module": {
+                    "kind": "composition",
+                    "summary": (
+                        "axiom-oracles generated oracle-bridge program (generated)"
+                    ),
+                },
                 "imports": ["us:statutes/26/example"],
                 "rules": [
                     {
@@ -667,9 +845,7 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
 
     runner = AxiomRulesRunner(
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         program_imports=("us:statutes/26/example",),
-        generated_program_target="us:programs/oracles/test",
         program_rules=(
             {
                 "name": "bridge_amount",
@@ -699,17 +875,23 @@ def test_axiom_runner_writes_generated_program_rules(tmp_path: Path) -> None:
     assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
-def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
+def test_axiom_runner_writes_generated_program_under_canonical_target(
     tmp_path: Path,
 ) -> None:
     calls = []
 
     def fake_run(args, **kwargs):
         calls.append((args, kwargs))
-        if args[1] == "compile-composed":
+        if args[1] in ("compile", "compile-composed"):
             program_path = Path(args[args.index("--program") + 1])
-            assert program_path.name == "program.composed.yaml"
-            assert "programs" not in program_path.parts
+            # The new-engine attempt compiles the composition-form twin at the
+            # temp root; the legacy generated program still lands under its
+            # canonical target path for the old-engine fallback (#296).
+            assert program_path.name == "generated-program.composed.yaml"
+            legacy_program = (
+                program_path.parent / "rulespec-us" / "tax" / "oracle-bridge.yaml"
+            )
+            assert legacy_program.exists()
             output_path = Path(args[args.index("--output") + 1])
             output_path.write_text(
                 json.dumps(
@@ -717,7 +899,7 @@ def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
                         "program": {
                             "derived": [
                                 {
-                                    "id": ("us:programs/oracles/tax#taxable_income"),
+                                    "id": ("us:tax/oracle-bridge#taxable_income"),
                                     "name": "taxable_income",
                                     "expr": {"kind": "integer", "value": 0},
                                 }
@@ -732,7 +914,7 @@ def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
             return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
         request = json.loads(kwargs["input"])
         assert request["queries"][0]["outputs"] == [
-            "us:programs/oracles/tax#taxable_income"
+            "us:tax/oracle-bridge#taxable_income"
         ]
         return subprocess.CompletedProcess(
             args,
@@ -742,7 +924,7 @@ def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
                     "results": [
                         {
                             "outputs": {
-                                "us:programs/oracles/tax#taxable_income": {
+                                "us:tax/oracle-bridge#taxable_income": {
                                     "kind": "scalar",
                                     "value": {
                                         "kind": "integer",
@@ -759,7 +941,6 @@ def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
 
     runner = AxiomRulesRunner(
         binary_path=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
         program_imports=("us:statutes/26/example",),
         program_rules=(
             {
@@ -784,11 +965,11 @@ def test_axiom_runner_writes_generated_program_to_neutral_composed_path(
 
     [result] = runner.run_cases(
         [Case(case_id="case-1", period="2026")],
-        ["us:programs/oracles/tax#taxable_income"],
+        ["us:tax/oracle-bridge#taxable_income"],
     )
 
     assert result.errors == ()
-    assert result.values == {"us:programs/oracles/tax#taxable_income": 0}
+    assert result.values == {"us:tax/oracle-bridge#taxable_income": 0}
     assert [call[0][1] for call in calls] == ["compile-composed", "run-compiled"]
 
 
@@ -820,26 +1001,25 @@ def test_federal_ctc_component_maps_to_total_ctc_value() -> None:
         if mapping.concept_id == Concepts.CTC
     )
 
-    assert mapping.targets["axiom"] == "us:programs/oracles/tax#ctc_value"
+    assert mapping.targets["axiom"] == "us:tax/oracle-bridge#ctc_value"
     assert mapping.targets["policyengine"] == "ctc_value"
 
 
-def test_cli_builds_axiom_runner(tmp_path: Path) -> None:
+def test_cli_builds_axiom_runner() -> None:
     runner = _build_runner(
         "axiom",
         "api",
         None,
         None,
         (),
-        axiom_program=tmp_path / "rulespec-us/us/policies/tests/program.yaml",
-        axiom_engine_binary=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
+        axiom_program=Path("/tmp/program.yaml"),
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
     )
 
     assert isinstance(runner, AxiomRulesRunner)
 
 
-def test_cli_builds_generated_federal_tax_axiom_runner(tmp_path: Path) -> None:
+def test_cli_builds_generated_federal_tax_axiom_runner() -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -847,13 +1027,21 @@ def test_cli_builds_generated_federal_tax_axiom_runner(tmp_path: Path) -> None:
         None,
         (Concepts.FEDERAL_INCOME_TAX,),
         axiom_program=None,
-        axiom_engine_binary=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
     )
 
     assert isinstance(runner, AxiomRulesRunner)
     assert runner.program_imports
-    assert runner.program_rules == US_TAX_ORACLE_PROGRAM_RULES
+    # Every composition drops the generated `self_employment_income` shim
+    # (the encoded us:statutes/26/1402/b now defines the statutory rule of
+    # that name) and the us:statutes/26/1411 import (the upstream 911/a vs
+    # 911/a/1 duplicate-rule encoding); see the carve-outs in cli.py.
+    assert runner.program_rules == tuple(
+        rule
+        for rule in US_TAX_ORACLE_PROGRAM_RULES
+        if rule["name"] != "self_employment_income"
+    )
+    assert "us:statutes/26/1411" not in runner.program_imports
     assert runner.generated_program_target == US_TAX_ORACLE_BRIDGE_TARGET
     assert runner.prune_unsupported_inputs
     assert (
@@ -891,44 +1079,7 @@ def test_cli_builds_generated_federal_tax_axiom_runner(tmp_path: Path) -> None:
     assert "state_withheld_income_tax" in generated_rule_names
 
 
-def test_cli_requires_explicit_snap_program_or_artifact(tmp_path: Path) -> None:
-    with pytest.raises(click.ClickException, match="explicit canonical"):
-        _build_runner(
-            "axiom",
-            "api",
-            None,
-            None,
-            (Concepts.SNAP_BENEFIT,),
-            axiom_program=None,
-            axiom_engine_binary=tmp_path / "axiom-rules",
-            rulespec_root=tmp_path / "rulespec-us",
-        )
-
-
-def test_cli_builds_snap_runner_from_explicit_canonical_program(
-    tmp_path: Path,
-) -> None:
-    program = tmp_path / "rulespec-us/us/policies/tests/program.yaml"
-    runner = _build_runner(
-        "axiom",
-        "api",
-        None,
-        None,
-        (Concepts.SNAP_BENEFIT,),
-        axiom_program=program,
-        axiom_engine_binary=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
-    )
-
-    assert isinstance(runner, AxiomRulesRunner)
-    assert runner.program_path == program.resolve()
-    assert runner.compiled_artifact_path is None
-    assert runner.prune_unsupported_inputs is True
-
-
-def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept(
-    tmp_path: Path,
-) -> None:
+def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept() -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -936,8 +1087,7 @@ def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept(
         None,
         (Concepts.BE_BIRTH_LEAVE_TOTAL_COMPENSATION,),
         axiom_program=None,
-        axiom_engine_binary=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-be",
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
     )
 
     assert isinstance(runner, AxiomRulesRunner)
@@ -945,13 +1095,14 @@ def test_cli_builds_generated_rulespec_axiom_runner_for_belgium_concept(
         "be:regulations/health_insurance/birth_leave/indemnity_rates",
     )
     assert runner.program_rules == ()
-    assert runner.generated_program_target == "be:programs/oracles/comparison"
+    assert (
+        runner.generated_program_target
+        == "be:regulations/health_insurance/birth_leave/indemnity_rates"
+    )
     assert runner.prune_unsupported_inputs
 
 
-def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax(
-    tmp_path: Path,
-) -> None:
+def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
     runner = _build_runner(
         "axiom",
         "api",
@@ -959,8 +1110,7 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax(
         None,
         (Concepts.STATE_INCOME_TAX,),
         axiom_program=None,
-        axiom_engine_binary=tmp_path / "axiom-rules",
-        rulespec_root=tmp_path / "rulespec-us",
+        axiom_engine_binary=Path("/tmp/axiom-rules"),
     )
 
     assert isinstance(runner, AxiomRulesRunner)
@@ -1041,3 +1191,211 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax(
     assert "deduction_provided_in_section_199A" in generated_rule_names
     assert "us:statutes/26/24/d" not in US_TAX_ORACLE_IMPORTS
     assert "us:statutes/26/63" not in US_TAX_ORACLE_IMPORTS
+
+
+def test_output_aliases_map_qualified_requests_to_bare_artifact_ids(tmp_path):
+    """Originless compile-composed programs (compose output, the generated
+    oracle bridge) compile rules under BARE ids while the concept map requests
+    the qualified `module#name` form — the alias layer must bridge that
+    direction too, but only on an unambiguous local-name match (#296)."""
+    from axiom_oracles.adapters.axiom.runner import _output_aliases_from_artifact
+
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
+                        # Post-hard-cut engines emit generated rules with a
+                        # bare name and NO id field at all.
+                        {"name": "state_income_tax"},
+                        # True ambiguity: two BARE program-owned candidates.
+                        {"id": "dup_a", "name": "ambiguous"},
+                        {"id": "dup_b", "name": "ambiguous"},
+                        {"id": "us:x/y#present", "name": "present"},
+                    ]
+                }
+            }
+        )
+    )
+    aliases = _output_aliases_from_artifact(
+        [
+            "us:tax/oracle-bridge#state_income_tax",
+            "us:tax/oracle-bridge#ambiguous",
+            "us:x/y#present",
+        ],
+        artifact,
+    )
+    # The bare rule stands in for the missing qualified id; two bare
+    # candidates stay unaliased; an exactly-present qualified id needs none.
+    assert aliases == {"us:tax/oracle-bridge#state_income_tax": "state_income_tax"}
+
+
+def test_qualified_requests_never_alias_to_another_modules_output(tmp_path):
+    """NEGATIVE (cross-family review): a request qualified under module A must
+    never be satisfied by a same-named output qualified under module B — only
+    a BARE, originless rule (which by construction belongs to the program
+    under execution) may stand in for a missing qualified id (#296)."""
+    from axiom_oracles.adapters.axiom.runner import _output_aliases_from_artifact
+
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "derived": [
+                        {"id": "us:other/module-b#foo", "name": "foo"},
+                    ]
+                }
+            }
+        )
+    )
+    aliases = _output_aliases_from_artifact(["us:tax/module-a#foo"], artifact)
+    assert aliases == {}
+
+
+def test_candidate_selection_sees_remapped_bare_ids(tmp_path: Path) -> None:
+    """The overlay-candidate path must remap bare artifact ids onto the
+    qualified result-selection output BEFORE selection runs — engine-main
+    compile-composed artifacts key values bare, and selection previously read
+    only the qualified id off raw candidates, yielding None for every case
+    (#296)."""
+    calls = []
+
+    def fake_run(args, **kwargs):
+        calls.append((args, kwargs))
+        if args[1] in ("compile", "compile-composed"):
+            output_path = Path(args[args.index("--output") + 1])
+            output_path.write_text(
+                json.dumps(
+                    {
+                        "program": {
+                            "derived": [
+                                {"id": "state_income_tax", "name": "state_income_tax"}
+                            ],
+                            "parameters": [],
+                            "relations": [],
+                        }
+                    }
+                )
+            )
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        request = json.loads(kwargs["input"])
+        assert request["queries"][0]["outputs"] == ["state_income_tax"]
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [
+                        {
+                            "outputs": {
+                                "state_income_tax": {
+                                    "kind": "scalar",
+                                    "value": {"kind": "integer", "value": 1234},
+                                }
+                            }
+                        }
+                    ]
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("us:statutes/26/1",),
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_inputs": {"us:statutes/26/1#input.agi": 50_000},
+            "axiom_input_record_overlays": [
+                [
+                    {
+                        "name": "us:statutes/26/1#input.filing",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": 1,
+                    }
+                ],
+                [
+                    {
+                        "name": "us:statutes/26/1#input.filing",
+                        "entity": "TaxUnit",
+                        "entity_id": "tax_unit",
+                        "value": 2,
+                    }
+                ],
+            ],
+            "axiom_result_selection": {
+                "strategy": "min",
+                "output": "us:tax/oracle-bridge#state_income_tax",
+            },
+        },
+    )
+
+    [result] = runner.run_cases([case], ["us:tax/oracle-bridge#state_income_tax"])
+
+    assert result.errors == ()
+    assert result.values["us:tax/oracle-bridge#state_income_tax"] == 1234.0
+
+
+def test_staging_skips_roots_without_a_requested_jurisdiction(
+    tmp_path: Path,
+) -> None:
+    """A sibling checkout carrying none of the program's jurisdictions must
+    not be staged: it stages as an empty directory, and the hard-cut engine
+    contract rejects empty roots ("must contain a direct matching
+    jurisdiction"). The legacy compile path tolerated the empties, so this
+    only bites pinned post-hard-cut engines (seen live on the dk EUROMOD
+    lane with a be sibling under the shared roots dir)."""
+    dk_root = tmp_path / "rulespec-dk"
+    (dk_root / "dk" / "statutes").mkdir(parents=True)
+    (dk_root / "dk" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+    be_root = tmp_path / "rulespec-be"
+    (be_root / "be" / "statutes").mkdir(parents=True)
+    (be_root / "be" / "statutes" / "mod.yaml").write_text("format: rulespec/v1\n")
+
+    compile_calls = []
+
+    def fake_run(args, **kwargs):
+        if args[1] in ("compile", "compile-composed"):
+            compile_calls.append([str(a) for a in args])
+            return subprocess.CompletedProcess(args, 0, stdout="", stderr="")
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps(
+                {
+                    "metadata": {
+                        "requested_mode": "explain",
+                        "actual_mode": "explain",
+                    },
+                    "results": [],
+                }
+            ),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        binary_path=tmp_path / "axiom-rules",
+        program_imports=("dk:statutes/mod",),
+        generated_program_target="dk:statutes/mod",
+        rulespec_repo_roots=(dk_root, be_root),
+        subprocess_run=fake_run,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2025",
+        metadata={"axiom_inputs": {}},
+    )
+
+    runner.run_cases([case], [])
+
+    assert compile_calls, "expected a compile invocation"
+    joined = " ".join(compile_calls[0])
+    assert "rulespec-dk" in joined
+    assert "rulespec-be" not in joined

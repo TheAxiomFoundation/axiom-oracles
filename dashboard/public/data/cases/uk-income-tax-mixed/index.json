@@ -1,0 +1,16 @@
+{
+ "suite": "uk-income-tax-mixed",
+ "count": 3,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:statutes/income_tax/individual/savings_dividend_oracle_pipeline#uk_svdv_income_tax_liability"
+ ],
+ "source": "axiom-euromod-uk-income-tax-mixed.json",
+ "total_cases": 3,
+ "partial": "mismatch-only"
+}

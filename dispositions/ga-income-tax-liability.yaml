@@ -1,0 +1,151 @@
+schema: axiom_oracles.dispositions.v1
+suite: ga-income-tax-liability
+updated: "2026-07-27"
+# GA canonical annual section 48-7-20 tax-before-nonrefundable-credits surface
+# vs PolicyEngine (2026) and pinned policyengine-taxsim 2.30.0 requested at
+# 2026 on the historical six-case grid. The
+# RuleSpec accepts completed Georgia taxable net income and applies only the
+# 4.99 percent rate; it does not compute the grid's standard deduction. It
+# matches PolicyEngine to the cent on all six cases, so the PolicyEngine leg
+# needs no disposition. Every Axiom-vs-TAXSIM-2024 residual is the external
+# boundary and external TAXSIM model-vintage residual, dispositioned below with
+# the exact pinned values.
+entries:
+  - id: ga-taxsim-2-30-0-2026-model-vintage-single-30000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the single 30,000-dollar grid label,
+        RuleSpec reports 748.50 and TAXSIM reports 915.51. The residual is the
+        pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "748.5 - 915.51"
+          equals: -167.01
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 748.5
+      right: 915.51
+  - id: ga-taxsim-2-30-0-2026-model-vintage-single-60000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the single 60,000-dollar grid label,
+        RuleSpec reports 2,245.50 and TAXSIM reports 2,472.51. The residual is
+        the pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "2245.5 - 2472.51"
+          equals: -227.01
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 2245.5
+      right: 2472.51
+  - id: ga-taxsim-2-30-0-2026-model-vintage-single-150000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the single 150,000-dollar grid label,
+        RuleSpec reports 6,736.50 and TAXSIM reports 7,143.51. The residual is
+        the pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "6736.5 - 7143.51"
+          equals: -407.01
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 6736.5
+      right: 7143.51
+  - id: ga-taxsim-2-30-0-2026-model-vintage-married-60000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the married 60,000-dollar grid label,
+        RuleSpec reports 1,497.00 and TAXSIM reports 1,831.02. The residual is
+        the pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "1497.0 - 1831.02"
+          equals: -334.02
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1497.0
+      right: 1831.02
+  - id: ga-taxsim-2-30-0-2026-model-vintage-married-120000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the married 120,000-dollar grid label,
+        RuleSpec reports 4,491.00 and TAXSIM reports 4,945.02. The residual is
+        the pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "4491.0 - 4945.02"
+          equals: -454.02
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 4491.0
+      right: 4945.02
+  - id: ga-taxsim-2-30-0-2026-model-vintage-married-300000
+    concept: us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits
+    case_id: ga-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Pinned policyengine-taxsim 2.30.0 was requested at 2026, but its Georgia
+        siitax results have a 5.19 percent slope ((2,472.51 - 915.51) / 30,000)
+        and imply taxable-income offsets of 12,360 single and 24,720 joint. The
+        canonical RuleSpec instead applies the enacted 4.99 percent rate to the
+        explicitly supplied completed Georgia taxable-net-income boundary; it
+        constructs no deduction. For the married 300,000-dollar grid label,
+        RuleSpec reports 13,473.00 and TAXSIM reports 14,287.02. The residual is
+        the pinned external model vintage and boundary, not a RuleSpec computation.
+      arithmetic:
+        - expression: "13473.0 - 14287.02"
+          equals: -814.02
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 13473.0
+      right: 14287.02

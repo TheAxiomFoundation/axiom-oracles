@@ -1,0 +1,17 @@
+{
+ "suite": "nd-income-tax-liability",
+ "count": 3,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-nd:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "nd_income_tax_before_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-nd-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

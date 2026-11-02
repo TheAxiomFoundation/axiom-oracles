@@ -1,0 +1,28 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "uncontested-foreign",
+  "case_count": 1,
+  "concepts": [
+    {
+      "id": "benefit",
+      "comparison": "amount",
+      "tolerance": 0,
+      "relative_tolerance": 0
+    }
+  ],
+  "summary": {
+    "comparison_count": 1,
+    "match_count": 1,
+    "mismatch_count": 0
+  },
+  "aggregates": [
+    {
+      "concept": "benefit",
+      "comparison_count": 1,
+      "match_count": 1,
+      "mismatch_count": 0
+    }
+  ],
+  "mismatches": [],
+  "cases": []
+}

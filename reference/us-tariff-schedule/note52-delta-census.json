@@ -1,0 +1,2946 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule.note52_delta_census.v1",
+  "instrument": {
+    "note_text": "us/statute/hts/chapter-99/page-553",
+    "tier_and_ceiling_pages": [
+      "us/statute/hts/chapter-99/page-639",
+      "us/statute/hts/chapter-99/page-640",
+      "us/statute/hts/chapter-99/page-641",
+      "us/statute/hts/chapter-99/page-642",
+      "us/statute/hts/chapter-99/page-643",
+      "us/statute/hts/chapter-99/page-644",
+      "us/statute/hts/chapter-99/page-645",
+      "us/statute/hts/chapter-99/page-646",
+      "us/statute/hts/chapter-99/page-647",
+      "us/statute/hts/chapter-99/page-648",
+      "us/statute/hts/chapter-99/page-649",
+      "us/statute/hts/chapter-99/page-650",
+      "us/statute/hts/chapter-99/page-651",
+      "us/statute/hts/chapter-99/page-652"
+    ],
+    "effective_from": "2026-07-24"
+  },
+  "formula_receipt": "Exact component deltas are Axiom 0 minus Yale's Note-52 component. Fixed-tier cells are -tier. Ceiling cells are -(country ceiling minus the applicable concurrent/base allocation); for example Switzerland 12.5% - 6.8% = 5.7%, hence delta -5.7%. No interval or unreceipted numeric range is admitted.",
+  "units": 1499038,
+  "admitted_value_count": 208,
+  "admitted_delta_census": [
+    {
+      "delta": -0.125,
+      "units": 707756,
+      "receipt_pages": [
+        639,
+        640,
+        641,
+        642,
+        643,
+        644,
+        645,
+        646,
+        647,
+        648
+      ],
+      "arithmetic": "Axiom 0 - Yale fixed tier"
+    },
+    {
+      "delta": -0.124,
+      "units": 16,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.123,
+      "units": 40,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.122,
+      "units": 8,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.121,
+      "units": 16,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.12,
+      "units": 160,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.119,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.118,
+      "units": 40,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.117,
+      "units": 88,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.116,
+      "units": 232,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.115,
+      "units": 152,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.114,
+      "units": 272,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.113,
+      "units": 192,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.112,
+      "units": 80,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.111,
+      "units": 232,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.11,
+      "units": 232,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.109,
+      "units": 72,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.108,
+      "units": 80,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.107,
+      "units": 248,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.106,
+      "units": 176,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.105,
+      "units": 456,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.104,
+      "units": 136,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.103,
+      "units": 120,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.102,
+      "units": 240,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.101,
+      "units": 704,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.1005,
+      "units": 8,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.1,
+      "units": 533420,
+      "receipt_pages": [
+        639,
+        640,
+        641,
+        642,
+        643,
+        644,
+        645,
+        646,
+        647,
+        648
+      ],
+      "arithmetic": "Axiom 0 - Yale fixed tier"
+    },
+    {
+      "delta": -0.099,
+      "units": 448,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.098,
+      "units": 876,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.097,
+      "units": 1012,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.096,
+      "units": 400,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.095,
+      "units": 1688,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.094,
+      "units": 540,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.093,
+      "units": 820,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0925,
+      "units": 16,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.092,
+      "units": 908,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.091,
+      "units": 716,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.09,
+      "units": 852,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.089,
+      "units": 616,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.088,
+      "units": 2000,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.087,
+      "units": 592,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.086,
+      "units": 1108,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.085,
+      "units": 1236,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.084,
+      "units": 212,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.083,
+      "units": 1376,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.082,
+      "units": 704,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.081,
+      "units": 1872,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.08,
+      "units": 1056,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.079,
+      "units": 340,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.078,
+      "units": 508,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.077,
+      "units": 764,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.076,
+      "units": 1448,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0755,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.075,
+      "units": 2916,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.074,
+      "units": 948,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.073,
+      "units": 1364,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.072,
+      "units": 2132,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.071,
+      "units": 708,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.07,
+      "units": 3228,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.069,
+      "units": 1572,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.068,
+      "units": 1296,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0675,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.067,
+      "units": 2032,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.066,
+      "units": 576,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.065,
+      "units": 2656,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.064,
+      "units": 396,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.063,
+      "units": 3016,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0625,
+      "units": 30460,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.062,
+      "units": 1068,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.061,
+      "units": 1964,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0605,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.06,
+      "units": 4276,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.059,
+      "units": 404,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.058,
+      "units": 2132,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0575,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.057,
+      "units": 704,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0565,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.056,
+      "units": 2696,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0555,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.055,
+      "units": 1432,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0545,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.054,
+      "units": 1056,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0535,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.053,
+      "units": 692,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.052,
+      "units": 1020,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.051,
+      "units": 640,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.05,
+      "units": 28282,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.049,
+      "units": 568,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0485,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.048,
+      "units": 472,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0475,
+      "units": 20,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.047,
+      "units": 1600,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.046,
+      "units": 400,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0455,
+      "units": 8,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.045,
+      "units": 3112,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.044,
+      "units": 3668,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0435,
+      "units": 40,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.043,
+      "units": 400,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0425,
+      "units": 176,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.042,
+      "units": 1300,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0415,
+      "units": 204,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.041,
+      "units": 700,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0405,
+      "units": 8,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.04,
+      "units": 3780,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0395,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.039,
+      "units": 156,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0385,
+      "units": 184,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.038,
+      "units": 792,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0375,
+      "units": 228,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.037,
+      "units": 896,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0365,
+      "units": 28,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.036,
+      "units": 1544,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.035,
+      "units": 5812,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0345,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.034,
+      "units": 444,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0335,
+      "units": 236,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.033,
+      "units": 648,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0325,
+      "units": 68,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.032,
+      "units": 388,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0315,
+      "units": 1608,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.031,
+      "units": 784,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0305,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.03,
+      "units": 4024,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.029,
+      "units": 1528,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.028,
+      "units": 452,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.027,
+      "units": 668,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.026,
+      "units": 356,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.025,
+      "units": 3872,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0245,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.024,
+      "units": 172,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0235,
+      "units": 44,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.023,
+      "units": 468,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0225,
+      "units": 964,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.022,
+      "units": 1140,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.021,
+      "units": 500,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0205,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.02,
+      "units": 2260,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0195,
+      "units": 28,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.019,
+      "units": 1400,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0185,
+      "units": 20,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.018,
+      "units": 132,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0175,
+      "units": 2660,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.017,
+      "units": 324,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.016,
+      "units": 960,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.015,
+      "units": 1888,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.014,
+      "units": 72,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.013,
+      "units": 444,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0125,
+      "units": 38644,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.012,
+      "units": 804,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0115,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0114,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0112,
+      "units": 72,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0111,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.011,
+      "units": 700,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0109,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0108,
+      "units": 240,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0105,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0101,
+      "units": 48,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.01,
+      "units": 30168,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0099,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0098,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0096,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0095,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0094,
+      "units": 120,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0091,
+      "units": 72,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00900000000000001,
+      "units": 184,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.009,
+      "units": 128,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0089,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0088,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0087,
+      "units": 96,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0086,
+      "units": 120,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0084,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0083,
+      "units": 240,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0081,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00800000000000001,
+      "units": 348,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.008,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0078,
+      "units": 60,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0076,
+      "units": 60,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0075,
+      "units": 180,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0074,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0073,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0072,
+      "units": 220,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0071,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.007,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00699999999999999,
+      "units": 104,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0069,
+      "units": 120,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0068,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0066,
+      "units": 72,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0065,
+      "units": 164,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0063,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0062,
+      "units": 24,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0061,
+      "units": 108,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00600000000000001,
+      "units": 492,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00599999999999999,
+      "units": 88,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0056,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0053,
+      "units": 60,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0051,
+      "units": 12,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.005,
+      "units": 1720,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0049,
+      "units": 48,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0047,
+      "units": 220,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0043,
+      "units": 36,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.004,
+      "units": 228,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00300000000000002,
+      "units": 216,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.003,
+      "units": 152,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.0024,
+      "units": 48,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.002,
+      "units": 120,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.00199999999999999,
+      "units": 48,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    },
+    {
+      "delta": -0.001,
+      "units": 148,
+      "receipt_pages": [
+        641,
+        643,
+        646,
+        647,
+        650,
+        651,
+        652
+      ],
+      "arithmetic": "Axiom 0 - Yale (country ceiling - applicable concurrent/base allocation)"
+    }
+  ]
+}

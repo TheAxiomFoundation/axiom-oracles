@@ -1,98 +1,61 @@
 schema: axiom_oracles.dispositions.v1
 suite: ny-income-tax-liability
-updated: "2026-07-06"
-# New York composed liability pipeline vs PolicyEngine (2026) and TAXSIM (2024)
-# on the six-case grid. The pipeline matches PolicyEngine ny_income_tax to the
-# cent on all six cases (it shares the DTF-indexed brackets, standard deduction,
-# and the section 601(d) supplemental recapture), so the PolicyEngine leg needs
-# no disposition. Against TAXSIM's 2024 law year, the two low-income cases fall
-# within tolerance and the four higher cases carry an indexation-and-law vintage
-# residual dispositioned below: New York enacted rate reductions for 2026 under
-# Chapter 59 of the Laws of 2025, and the section 601(d) supplemental tax-table-
-# benefit recapture is applied on 2024 brackets in the TAXSIM run.
+updated: '2026-08-25'
 entries:
-  - id: ny-taxsim-2024-rate-cut-and-recapture-vintage
-    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
-    case_id: ny-married-300000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        TAXSIM runs at its latest 2024 law year and reports 19945.51 for the
-        married 300,000-dollar filer; the 2026 pipeline reports 16752.80. The
-        2026 value uses the lower Chapter-59-of-2025 rate schedule plus the 2026
-        section 601(d) supplemental recapture, while the 2024 TAXSIM value applies
-        the higher pre-2026 rates and the 2024 tax-table-benefit recapture, which
-        flat-rates a larger share of income at this level. The 3,192.71-dollar gap
-        is the 2024-to-2026 rate-cut and recapture vintage, not a pipeline defect:
-        the 2026 main bracket tax alone (15612.80) is close to the 2024 main
-        bracket tax (about 16670 on the same 283,950 taxable base), so most of the
-        gap is the differing 2024 supplemental recapture.
-      arithmetic:
-        - expression: "16752.80 - 19945.51"
-          equals: -3192.71
-          tolerance: 0.01
-    expires_on_source_change: true
-    pinned:
-      left: 16752.8
-      right: 19945.51
-  - id: ny-taxsim-2024-rate-vintage-married-60k
-    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
-    case_id: ny-married-60000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        For the married 60,000-dollar filer the 2026 pipeline reports 2040.80 and
-        TAXSIM 2024 reports 2084.75, a 43.95-dollar gap. There is no supplemental
-        recapture at this income, so the residual is purely the 2024-versus-2026
-        marginal-rate difference on the 43,950-dollar taxable base from the
-        Chapter 59 of the Laws of 2025 rate reductions.
-      arithmetic:
-        - expression: "2040.80 - 2084.75"
-          equals: -43.95
-          tolerance: 0.01
-    expires_on_source_change: true
-    pinned:
-      left: 2040.8
-      right: 2084.75
-  - id: ny-taxsim-2024-rate-vintage-single-30k
-    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
-    case_id: ny-single-30000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        For the single 30,000-dollar filer the 2026 pipeline reports 1023.00 and
-        TAXSIM 2024 reports 1045.00, a 22.00-dollar gap. There is no supplemental
-        recapture at this income, so the residual is purely the 2024-versus-2026
-        marginal-rate difference on the 22,000-dollar taxable base from the
-        Chapter 59 of the Laws of 2025 rate reductions.
-      arithmetic:
-        - expression: "1023.00 - 1045.00"
-          equals: -22.0
-          tolerance: 0.01
-    expires_on_source_change: true
-    pinned:
-      left: 1023.0
-      right: 1045.0
-  - id: ny-taxsim-2024-rate-vintage-single-150k
-    concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_income_tax_liability
-    case_id: ny-single-150000
-    kind: amount_difference
-    disposition: explained_residual
-    evidence:
-      mechanism: >-
-        For the single 150,000-dollar filer the 2026 pipeline reports 8289.9990
-        and TAXSIM 2024 reports 8723.09, a 433.09-dollar gap. Both include a
-        supplemental recapture, so the residual combines the 2024-versus-2026
-        bracket-rate reduction and the differing 2024 recapture magnitude, a
-        documented law vintage.
-      arithmetic:
-        - expression: "8289.999 - 8723.09"
-          equals: -433.091
-          tolerance: 0.01
-    expires_on_source_change: true
-    pinned:
-      left: 8289.999
-      right: 8723.09
+- id: taxsim-ny-module-divergence-axiom-pe-agree
+  concept: us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ny-married-120000
+    - ny-married-300000
+    - ny-married-60000
+    - ny-single-150000
+    - ny-single-30000
+    - ny-single-60000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence across the New York grid: on
+      every
+
+      selected row axiom and PolicyEngine agree to within 0.90 (well inside the
+
+      suite''s 2.25 absolute tolerance) and `axiom_vs_policyengine.match` is true
+
+      on all six, while TAXSIM reports a HIGHER liability at every income level
+
+      - the only lane in this grid family where TAXSIM runs high. The gap grows
+
+      monotonically with income, from 5.10 at 30k single to 1,398.85 at 300k
+
+      married, and steepens sharply above New York''s 107,650 tax-table-benefit
+
+      threshold (556.04 at 150k single, 131.53 at 120k married). The shape is
+
+      consistent with a supplemental-tax / tax-table-benefit recapture component
+
+      carried by TAXSIM''s New York module and absent from both axiom and
+
+      PolicyEngine, plus a smaller rate-schedule vintage difference below the
+
+      threshold. Per-row proof is the axiom==PolicyEngine agreement.'
+    arithmetic:
+    - expression: 1023.40 - 1028.50
+      equals: -5.1
+      tolerance: 0.05
+    - expression: 2643.40 - 2678.50
+      equals: -35.1
+      tolerance: 0.05
+    - expression: 7810.65 - 8366.69
+      equals: -556.04
+      tolerance: 0.05
+    - expression: 2040.70 - 2051.59
+      equals: -10.89
+      tolerance: 0.05
+    - expression: 5280.70 - 5412.23
+      equals: -131.53
+      tolerance: 0.05
+    - expression: 15612.60 - 17011.45
+      equals: -1398.85
+      tolerance: 0.05
+  expires_on_source_change: true

@@ -1,0 +1,65 @@
+# US tariff panel — rulespec-us duty spine vs the Yale Budget Lab
+# tariff-rate-tracker statutory panel (parity campaign P5, axiom-oracles#444).
+#
+# The reference side is the committed covered-slice extract of the Yale
+# panel (reference/us-tariff-panel/, legal-date mode, provenance-stamped;
+# reviewer-independent — never derived from artifacts shared with the
+# rulespec-us implementation). The Axiom side evaluates the composed
+# pipeline us:policies/cbp/us-tariff-duty/composition at both endpoints of
+# every covered (HTS-10 line, country, validity interval) cell, clipped to
+# the encoded temporal domain (2026-02-15..), and compares eleven
+# per-authority statutory slots plus the statutory total exactly
+# (tolerance 1e-12). Totals reconcile against the SUM of the panel's
+# statutory_* columns, never its stored effective (share-scaled) totals.
+#
+# Mismatches are expected and stay visible: uncovered authorities
+# (§301 semiconductor / §338 / §201 / other compared against implicit 0),
+# 232 metal-scope and §122×232 exclusion-basis differences, Column 2
+# origins (the panel reads only the HTS general column) and
+# FTA-preference semantics boundaries. They are grouped losslessly by
+# signature and classified in dispositions/us-tariff-panel.yaml.
+#
+# Run locally (needs a built axiom rules engine and the rulespec-us
+# checkout with the us-tariff-duty spine):
+#   uv run python scripts/run_comparison.py us-tariff-panel
+
+name: us-tariff-panel
+# Manual (supervised) lane: standard CI neither builds the Rust rules
+# engine nor exports AXIOM_RULES_ENGINE_BINARY, so a matrix run could only
+# ever take the HEAD re-emit path — appearing as coverage while never
+# executing the comparison (#448 review round 4). Refreshes run on a
+# supervised host with the engine + rulespec-us checkout (command above);
+# CI enforces the committed artifacts through the parity battery
+# (tests/test_us_tariff_panel_suite.py reconciles the committed report,
+# dashboard, signatures and case-family ledger against the committed
+# reference and reviewed pins on every push).
+ci: manual
+title: US tariff panel — Axiom vs Yale Budget Lab statutory panel
+description: >-
+  Compares the composed US tariff duty pipeline encoded in Axiom RuleSpec
+  (rulespec-us us/policies/cbp/us-tariff-duty/composition.yaml) against the
+  Yale Budget Lab tariff-rate-tracker statutory panel at per-authority
+  granularity over the covered slice: every (HTS-10 line, census country,
+  validity interval) cell of the committed panel extract, probed at both
+  interval endpoints within the encoded temporal domain. Eleven authority
+  slots (MFN base, IEEPA reciprocal+fentanyl, §122, §232, China §301,
+  Brazil §301, forced-labor §301, plus the §301-semiconductor / §338 /
+  §201 / other slots our encoding does not yet cover) and the statutory
+  total are graded exactly. The reference is reviewer-independent and
+  provenance-pinned (Yale commit, rds sha256, build flags, extract sha256);
+  the covered slice burns up from the T0 pilot lines as encoding coverage
+  grows (chapters 72 / 76 / 95 today).
+
+runner:
+  type: us-tariff-panel
+  parameters:
+    period: "2026"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-yale-us-tariff-panel
+
+dashboard:
+  filename: axiom-yale-us-tariff-panel.json
+  suite: us-tariff-panel

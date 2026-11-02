@@ -1,0 +1,17 @@
+{
+ "suite": "mn-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-mn:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "mn_income_tax_before_refundable_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-mn-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

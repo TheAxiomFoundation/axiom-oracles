@@ -28,11 +28,10 @@ engine and the rulespec-uk checkout)::
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
 from pathlib import Path
-
-from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -41,6 +40,10 @@ DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 VALIDATION_YEAR = 2026
 POLICYENGINE_UK_VERSION = "2.89.2"
 
+RULESPEC_UK = Path(
+    os.environ.get("RULESPEC_UK_CHECKOUT")
+    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
+)
 
 BR_PROGRAM = "uk/policies/govuk/business-rates.yaml"
 BR_BASE = "uk:policies/govuk/business-rates"
@@ -122,11 +125,7 @@ def _policyengine_rows(cases: list[BRCase]) -> dict[str, dict[str, float]]:
 
 
 def _axiom_amounts(
-    cases: list[BRCase],
-    pe_rows: dict[str, dict[str, float]],
-    *,
-    rulespec_root: Path,
-    axiom_binary: Path,
+    cases: list[BRCase], pe_rows: dict[str, dict[str, float]]
 ) -> dict[str, float]:
     """Rulespec business rates incidence through the axiom rules engine."""
 
@@ -136,7 +135,8 @@ def _axiom_amounts(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = rulespec_root / BR_PROGRAM
+    program = RULESPEC_UK / BR_PROGRAM
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -159,10 +159,10 @@ def _axiom_amounts(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=axiom_binary,
+        binary_path=binary,
         default_entity="Household",
         default_entity_id="household",
-        rulespec_root=rulespec_root,
+        rulespec_repo_roots=(RULESPEC_UK,),
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [BR_OUTPUT])
@@ -170,7 +170,8 @@ def _axiom_amounts(
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: {result.errors}"
+                f"axiom rules engine failed for {result.household_id}: "
+                f"{result.errors}"
             )
         amounts[str(result.household_id)] = float(result.values[BR_OUTPUT])
     return amounts
@@ -286,16 +287,10 @@ def build_report(
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
+def main() -> int:
     cases = _grid()
     pe_rows = _policyengine_rows(cases)
-    axiom = _axiom_amounts(
-        cases,
-        pe_rows,
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
-    )
+    axiom = _axiom_amounts(cases, pe_rows)
     report = build_report(cases, pe_rows, axiom)
 
     REPORTS.mkdir(exist_ok=True)

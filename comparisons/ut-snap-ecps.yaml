@@ -2,14 +2,20 @@ name: ut-snap-ecps
 title: Utah SNAP -- Axiom vs PolicyEngine
 description: >-
   Compares Utah SNAP eligibility and benefit amount produced by the
-  RuleSpec composition against PolicyEngine on the certified Populace US artifact, filtered to
+  RuleSpec composition against PolicyEngine on the Enhanced CPS, filtered to
   Utah households.
 
+# Not CI-runnable (#296): the encoder's snap-populace-compare harness has no
+# us-ut jurisdiction config (bridges/snap_populace.py JURISDICTION_CONFIGS
+# covers az/ca/co/ga/md/ny/tx) — every dispatched leg fails on
+# `--jurisdiction: invalid choice`. Manual lane only until the harness grows
+# a Utah config (#336); drop this marker when it does.
+ci: manual
+
 runner:
-  type: axiom-encode-snap-populace-compare
+  type: axiom-encode-snap-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode
-  axiom_binary: $HOME/TheAxiomFoundation/axiom-rules-engine/target/release/axiom-rules-engine
-  rulespec_root: $HOME/TheAxiomFoundation/rulespec-us
+  axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
     jurisdiction: us-ut
     sample_size: 0

@@ -61,16 +61,38 @@ _PE_ORACLE_PINS = (
 
 
 def _git_commit_date(path: Path) -> str | None:
+    """Commit date of the oldest commit that introduced the file's current bytes.
+
+    The last commit touching the file is not its age: a commit that puts back
+    an earlier report (a real run restored over later re-emissions) would
+    date a July run to the day of the restore. Content with no commit yet
+    falls back to the last commit touching the path.
+    """
     try:
+        blob = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "hash-object", str(path)],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        introduced = subprocess.run(
+            [
+                "git", "--no-replace-objects", "-C", str(REPO_ROOT), "log", "--reverse", "--format=%cI",
+                f"--find-object={blob}", "--", str(path),
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.split()
         result = subprocess.run(
-            ["git", "-C", str(REPO_ROOT), "log", "-1", "--format=%cI", "--", str(path)],
+            ["git", "--no-replace-objects", "-C", str(REPO_ROOT), "log", "-1", "--format=%cI", "--", str(path)],
             capture_output=True,
             text=True,
             check=True,
         )
     except (subprocess.CalledProcessError, FileNotFoundError, OSError):
         return None
-    iso = result.stdout.strip()
+    iso = introduced[0] if introduced else result.stdout.strip()
     if not iso:
         return None
     # Normalize `2026-06-02T00:00:40-04:00` → UTC `…Z` to match run_comparison.
@@ -117,9 +139,9 @@ def _reconstruct_oracle(config: dict) -> dict:
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
     rtype = runner.get("type")
-    if rtype == "axiom-encode-tax-populace-compare":
+    if rtype == "axiom-encode-tax-ecps-compare":
         return {"name": "policyengine", "policyengine_package": "policyengine==4.11.0"}
-    if rtype == "axiom-encode-uk-populace-compare":
+    if rtype == "axiom-encode-uk-efrs-compare":
         return {
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.88.56"),
@@ -132,7 +154,7 @@ def _reconstruct_oracle(config: dict) -> dict:
             # actually used and a future pin bump here isn't silently inert.
             "policyengine_us": _PE_ORACLE_PINS[1].split("==", 1)[-1],
         }
-    if rtype == "axiom-encode-snap-populace-compare":
+    if rtype == "axiom-encode-snap-ecps-compare":
         return {"name": "policyengine", "policyengine_us": "1.705.1"}
     # Committed EUROMOD reports have no run_comparison config; infer from suite.
     return {}
@@ -183,9 +205,7 @@ def _serialize_like(original_text: str, report: dict) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument(
-        "--check", action="store_true", help="Fail on any missing stamp."
-    )
+    parser.add_argument("--check", action="store_true", help="Fail on any missing stamp.")
     args = parser.parse_args()
 
     repos_by_suite = _affected_repos_by_suite()

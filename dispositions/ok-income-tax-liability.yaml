@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: ok-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: ok-taxsim-2024-single-30000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "804.5 - 887.37"
+          equals: -82.87
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 804.5
+      right: 887.37
+  - id: ok-taxsim-2024-single-60000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "2154.5 - 2312.37"
+          equals: -157.87
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2154.5
+      right: 2312.37
+  - id: ok-taxsim-2024-single-150000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "6204.5 - 6587.37"
+          equals: -382.87
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 6204.5
+      right: 6587.37
+  - id: ok-taxsim-2024-married-60000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "1609 - 1796.75"
+          equals: -187.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1609
+      right: 1796.75
+  - id: ok-taxsim-2024-married-120000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "4309 - 4646.75"
+          equals: -337.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4309
+      right: 4646.75
+  - id: ok-taxsim-2024-married-300000
+    concept: us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability
+    case_id: ok-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Oklahoma's 2026 rate schedule and taxable-income base, while the pinned TAXSIM leg applies 2024 law. The exact residual is the rate and law-vintage difference.
+      arithmetic:
+        - expression: "12409 - 13196.75"
+          equals: -787.75
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 12409
+      right: 13196.75

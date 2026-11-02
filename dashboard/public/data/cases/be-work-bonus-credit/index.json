@@ -1,0 +1,16 @@
+{
+ "suite": "be-work-bonus-credit",
+ "count": 2,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit"
+ ],
+ "source": "axiom-euromod-be-work-bonus-credit.json",
+ "total_cases": 4,
+ "partial": "mismatch-only"
+}

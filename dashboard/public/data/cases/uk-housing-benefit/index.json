@@ -1,0 +1,16 @@
+{
+ "suite": "uk-housing-benefit",
+ "count": 3,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "euromod",
+  "right": "axiom"
+ },
+ "mismatch_concepts": [
+  "uk:policies/housing_benefit_composed_entitlement_pipeline#hb_pilot_entitlement"
+ ],
+ "source": "axiom-euromod-uk-housing-benefit.json",
+ "total_cases": 5,
+ "partial": "mismatch-only"
+}

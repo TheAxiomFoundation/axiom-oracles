@@ -223,12 +223,12 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-09T20:16:16Z",
+    "generated_at": "2026-07-26T19:44:31Z",
     "generated_by": "scripts/run_comparison.py::oh-income-tax-liability",
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "44aeb361553ab0cf25d1de2a759acc759707c3ce"
       }
     ],
     "run_kind": "affected-rerun",
@@ -239,7 +239,7 @@
   "summary": {
     "axiom_vs_policyengine_match_rate": 100.0,
     "axiom_vs_taxsim_2024_match_rate": 0.0,
-    "comparison_count": 6,
+    "comparison_count": 12,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -252,11 +252,11 @@
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 0,
+      "raw_match_rate": 50,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
-    "match_count": 0,
+    "match_count": 6,
     "mismatch_count": 6,
     "policyengine_matches": 6,
     "taxsim_2024_matches": 0

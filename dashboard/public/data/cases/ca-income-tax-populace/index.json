@@ -1,0 +1,15 @@
+{
+ "suite": "ca-income-tax-populace",
+ "count": 8883,
+ "total_cases": 8883,
+ "chunks": 18,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax"
+ ],
+ "source": "state-tax-populace-campaign"
+}

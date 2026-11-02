@@ -54,11 +54,10 @@ run_comparison.py reuses it), exactly like the Council Tax Reduction grid.
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-
-from canonical_rulespec_runtime import parse_canonical_runtime_args
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REPORTS = REPO_ROOT / "reports"
@@ -69,6 +68,10 @@ POLICYENGINE_UK_VERSION = "2.89.2"
 
 #: rulespec-uk checkout (the encoded Winter Fuel pipeline + companion tests).
 #: Resolves from the environment, then the org-mirror default.
+RULESPEC_UK = Path(
+    os.environ.get("RULESPEC_UK_CHECKOUT")
+    or os.path.expanduser("~/TheAxiomFoundation/rulespec-uk")
+)
 
 #: Encoded program under comparison and its final award output.
 WFP_PROGRAM = "uk/policies/winter_fuel_payment_composed_award_pipeline.yaml"
@@ -128,49 +131,22 @@ def _grid() -> list[WFPCase]:
     """
 
     return [
-        WFPCase(
-            "uk-wfp-single-under80",
-            _AGE_REACHED_PENSION,
-            None,
-            0.0,
-            "under-80-single-200",
-        ),
-        WFPCase("uk-wfp-single-age80", _AGE_80, None, 0.0, "age-80-single-300"),
-        WFPCase(
-            "uk-wfp-couple-under80",
-            _AGE_REACHED_PENSION,
-            _AGE_PARTNER_REACHED_PENSION,
-            0.0,
-            "under-80-couple-200",
-        ),
-        WFPCase(
-            "uk-wfp-couple-one-age80",
-            _AGE_80,
-            _AGE_PARTNER_REACHED_PENSION,
-            0.0,
-            "age-80-couple-300",
-        ),
-        WFPCase(
-            "uk-wfp-single-income30000-below-threshold",
-            _AGE_REACHED_PENSION,
-            None,
-            30_000.0,
-            "income-below-recovery-threshold-pays",
-        ),
-        WFPCase(
-            "uk-wfp-single-income42000-above-threshold",
-            _AGE_REACHED_PENSION,
-            None,
-            42_000.0,
-            "income-above-recovery-threshold-withdrawn",
-        ),
-        WFPCase(
-            "uk-wfp-single-below-pension-age",
-            _AGE_BELOW_PENSION,
-            None,
-            0.0,
-            "below-state-pension-age-nil",
-        ),
+        WFPCase("uk-wfp-single-under80", _AGE_REACHED_PENSION, None, 0.0,
+                "under-80-single-200"),
+        WFPCase("uk-wfp-single-age80", _AGE_80, None, 0.0,
+                "age-80-single-300"),
+        WFPCase("uk-wfp-couple-under80", _AGE_REACHED_PENSION,
+                _AGE_PARTNER_REACHED_PENSION, 0.0, "under-80-couple-200"),
+        WFPCase("uk-wfp-couple-one-age80", _AGE_80,
+                _AGE_PARTNER_REACHED_PENSION, 0.0, "age-80-couple-300"),
+        WFPCase("uk-wfp-single-income30000-below-threshold",
+                _AGE_REACHED_PENSION, None, 30_000.0,
+                "income-below-recovery-threshold-pays"),
+        WFPCase("uk-wfp-single-income42000-above-threshold",
+                _AGE_REACHED_PENSION, None, 42_000.0,
+                "income-above-recovery-threshold-withdrawn"),
+        WFPCase("uk-wfp-single-below-pension-age", _AGE_BELOW_PENSION, None,
+                0.0, "below-state-pension-age-nil"),
     ]
 
 
@@ -237,12 +213,7 @@ def _policyengine_awards(cases: list[WFPCase]) -> dict[str, float]:
     return awards
 
 
-def _axiom_awards(
-    cases: list[WFPCase],
-    *,
-    rulespec_root: Path,
-    axiom_binary: Path,
-) -> dict[str, float]:
+def _axiom_awards(cases: list[WFPCase]) -> dict[str, float]:
     """Rulespec Winter Fuel award through the axiom rules engine.
 
     Each case supplies the three benefit-unit judgments (derived from the same
@@ -256,7 +227,8 @@ def _axiom_awards(
     from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
     from axiom_oracles.core.case import Case
 
-    program = rulespec_root / WFP_PROGRAM
+    program = RULESPEC_UK / WFP_PROGRAM
+    binary = os.environ.get("AXIOM_RULES_ENGINE_BINARY")
 
     axiom_cases: list[Case] = []
     for case in cases:
@@ -277,10 +249,10 @@ def _axiom_awards(
 
     runner = AxiomRulesRunner(
         program_path=program,
-        binary_path=axiom_binary,
+        binary_path=binary,
         default_entity="Family",
         default_entity_id="benefit_unit",
-        rulespec_root=rulespec_root,
+        rulespec_repo_roots=(RULESPEC_UK,),
         mode="explain",
     )
     results = runner.run_cases(axiom_cases, [WFP_OUTPUT])
@@ -288,7 +260,8 @@ def _axiom_awards(
     for result in results:
         if result.errors:
             raise RuntimeError(
-                f"axiom rules engine failed for {result.household_id}: {result.errors}"
+                f"axiom rules engine failed for {result.household_id}: "
+                f"{result.errors}"
             )
         # The engine returns the award under either the full ref or the bare
         # rule name depending on the compiled artifact's aliasing.
@@ -409,7 +382,8 @@ def build_report(
         "provenance": {
             "generated": datetime.now(timezone.utc).date().isoformat(),
             "generator": "scripts/generate_uk_winter_fuel_payment_pe.py",
-            "axiom_engine": f"axiom rules engine over rulespec-uk {WFP_PROGRAM}",
+            "axiom_engine": "axiom rules engine over "
+            f"rulespec-uk {WFP_PROGRAM}",
             "policyengine_uk": POLICYENGINE_UK_VERSION,
             "commensurability": (
                 "PolicyEngine-UK Winter Fuel Payment (gov.dwp.winter_fuel_payment: "
@@ -426,15 +400,10 @@ def build_report(
     }
 
 
-def main(argv: list[str] | None = None) -> int:
-    rulespec_root, axiom_binary = parse_canonical_runtime_args(argv, country="uk")
+def main() -> int:
     cases = _grid()
     pe_awards = _policyengine_awards(cases)
-    axiom = _axiom_awards(
-        cases,
-        rulespec_root=rulespec_root,
-        axiom_binary=axiom_binary,
-    )
+    axiom = _axiom_awards(cases)
     report = build_report(cases, pe_awards, axiom)
 
     REPORTS.mkdir(exist_ok=True)

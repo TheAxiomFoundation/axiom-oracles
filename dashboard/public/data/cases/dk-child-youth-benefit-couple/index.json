@@ -1,0 +1,40 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json",
+  "report_sha256": "72cd4704a53d6486a4dadfdf3eb362009affa060acde0ea205ef66135666235a",
+  "case_verdicts_sha256": "4831a12b838034f5d1ded0d5a403732740d849126637bc0b01f6f8ade14e58c6",
+  "suite": "dk-child-youth-benefit-couple",
+  "count": 1,
+  "input_slots": [
+    "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#input.current_year_income_reduction_allowance",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.child_age_years",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.payment_year_has_additional_statutory_increase",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input.percentage_change_rounded_to_one_decimal_place",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.pension_contribution_limit_under_pensionsbeskatningsloven_section_16",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.person_only_taxable_part_of_year",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.personskatteloven_section_7_income_basis_after_section_14_recalculation",
+    "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+  ],
+  "chunk_size": 500,
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.0"
+    }
+  },
+  "mismatch_concepts": [
+    "dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit"
+  ],
+  "source": "axiom-euromod-dk-child-youth-benefit-couple-0-2026-08-19.json",
+  "total_cases": 1,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "5570decac864607e8db3c5d5fd893b1cac07505606715df7be1b7039e1d5f1d4",
+      "cases": 1
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+schema: axiom_oracles.rulespec_overlay.v1
+name: us-ga-snap-fy2024
+program: us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.yaml
+notes: >-
+  Compile-time overlay replaying the Georgia SNAP benefit composition
+  against fiscal year 2024 federal parameters: the three USDA cola module
+  ids rewrite to fy-2024-cola (including Georgia's pre-existing 3613
+  standard-deductions module, which also imports them) and the three
+  section 3617 utility allowance amounts patch to the FY 2024 values in QC
+  technical documentation Table F.7 (415/349/42). Same materialized-root
+  mechanics and #759 retirement path as the us-co spec.
+module_id_rewrites:
+  # Full module ids (not a bare substring): every occurrence across the
+  # rewrite files is a canonical id in an import or proof target.
+  us:policies/usda/snap/fy-2026-cola/maximum-allotments: us:policies/usda/snap/fy-2024-cola/maximum-allotments
+  us:policies/usda/snap/fy-2026-cola/deductions: us:policies/usda/snap/fy-2024-cola/deductions
+  us:policies/usda/snap/fy-2026-cola/income-eligibility-standards: us:policies/usda/snap/fy-2024-cola/income-eligibility-standards
+rewrite_files:
+  - us/policies/usda/snap/state-plan-composition.yaml
+  - us/statutes/7/2017/a.yaml
+  - us/regulations/7-cfr/273/8.yaml
+  - us/regulations/7-cfr/273/9.yaml
+  - us/regulations/7-cfr/273/10.yaml
+  - us-ga/policies/dfcs/snap/3613.yaml
+parameter_patches:
+  - file: us-ga/policies/dfcs/snap/standard-utility-allowances.yaml
+    rule: ga_heating_cooling_standard_utility_allowance_amount
+    from: "405"
+    to: "415"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ga/policies/dfcs/snap/standard-utility-allowances.yaml
+    rule: ga_limited_standard_utility_allowance_amount
+    from: "358"
+    to: "349"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183
+  - file: us-ga/policies/dfcs/snap/standard-utility-allowances.yaml
+    rule: ga_telephone_standard_amount
+    from: "47"
+    to: "42"
+    source: us/guidance/usda/fns/snap-qc-fy2024-technical-documentation/page-183

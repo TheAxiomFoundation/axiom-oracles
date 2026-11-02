@@ -1,0 +1,15 @@
+{
+ "suite": "ar-income-tax-populace",
+ "count": 1475,
+ "total_cases": 1475,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
+ ],
+ "source": "state-tax-populace-campaign"
+}

@@ -1,0 +1,39 @@
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
+
+name: ga-income-tax-liability
+title: Georgia section 48-7-20 tax before nonrefundable credits — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the canonical Georgia 2026 annual section 48-7-20
+  tax-before-nonrefundable-credits surface, using explicitly supplied completed
+  Georgia taxable net income, against PolicyEngine
+  (ga_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at
+  2026 on the historical modest grid. RuleSpec itself does not construct the
+  grid's filing status, standard deduction, or taxable-income boundary.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: GA
+    period: "2026"
+    taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ga-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ga-income-tax-liability.json
+  suite: ga-income-tax-liability

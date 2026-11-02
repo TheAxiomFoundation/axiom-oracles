@@ -1,0 +1,56 @@
+# Colorado section 39-22-104 base tax — Axiom vs PolicyEngine and TAXSIM
+# on the standard modest case grid (single and married filers). The Axiom side is
+# the composed rulespec-us pipeline us-co/policies/income_tax/pilot_liability_pipeline,
+# evaluated through the axiom rules engine (its liabilities are the engine-verified
+# companion-test fixtures). Colorado applies the section 39-22-104(1.7)(c) flat
+# four and forty one-hundredths per cent to completed-return Colorado taxable
+# income, with the rate imported hash-pinned from the encoded statute module.
+# The Axiom scope stops before section 39-22-627 temporary rate adjustments and
+# all credits.
+#
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA). TAXSIM's
+# siitax nets its modeled TABOR sales-tax refund, so TAXSIM residuals
+# decompose into that netted refund — pinned per case in
+# dispositions/co-income-tax-liability.yaml rather than absorbed by
+# tolerance.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py co-income-tax-liability
+
+name: co-income-tax-liability
+title: Colorado section 39-22-104 base tax — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the narrow Colorado section 39-22-104(1.7)(c) base-tax pipeline in Axiom
+  RuleSpec (us-co/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (co_income_tax_before_non_refundable_credits) at 2026 and TAXSIM
+  (siitax) at 2026 on the standard modest grid of single and married filers.
+  Section 39-22-627 temporary rate adjustments and credits are outside the
+  encoded Axiom scope.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: CO
+    period: "2026"
+    taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-co-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-co-income-tax-liability.json
+  suite: co-income-tax-liability

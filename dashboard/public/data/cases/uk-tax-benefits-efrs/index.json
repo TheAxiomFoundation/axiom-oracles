@@ -1,0 +1,19 @@
+{
+ "suite": "uk-tax-benefits-efrs",
+ "count": 166,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "uk:policies/govuk/carer-support-payment#carer_support_payment_annual_amount",
+  "uk:policies/govuk/carers-allowance#carers_allowance_annual_amount",
+  "uk:policies/govuk/disability-living-allowance#disability_living_allowance_annual_amount",
+  "uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount"
+ ],
+ "source": "axiom-policyengine-uk-tax-benefits-efrs.json",
+ "total_cases": 177608,
+ "partial": "mismatch-only"
+}

@@ -1,0 +1,17 @@
+{
+ "suite": "co-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-co:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "co_income_tax_before_non_refundable_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-co-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

@@ -1,0 +1,17 @@
+{
+ "suite": "la-income-tax-liability",
+ "count": 6,
+ "chunks": 1,
+ "chunk_size": 500,
+ "engines": {
+  "axiom": "us-la:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "la_income_tax_before_non_refundable_credits",
+  "taxsim": "siitax"
+ },
+ "mismatch_concepts": [
+  "us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability"
+ ],
+ "source": "axiom-policyengine-taxsim-la-income-tax-liability.json",
+ "total_cases": 6,
+ "partial": "mismatch-only"
+}

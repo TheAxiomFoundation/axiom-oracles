@@ -1,0 +1,36 @@
+{
+ "suite": "be-employer-ssc",
+ "updated": "2026-07-05",
+ "entries": [
+  {
+   "id": "stale-company-closing-fund-rates",
+   "concept": "be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "EUROMOD BE_2025 tscer_be returns exactly 26.75 percent of its post-uprating gross for ordinary commercial employers with fewer than 20 workers, using stale Fonds de fermeture des entreprises rates (0.06/0.12 percent). The official ONSS 2025 DmfA instructions and FFE workbook give 0.18 percent including wage moderation for this class, so the source-backed RuleSpec rate is 26.868876 percent of the same bridged gross.",
+   "cases": [
+    "be-employer-ssc-30k",
+    "be-employer-ssc-60k"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.1988 + 0.05118876 + 0.0169 + 0.0018",
+     "equals": 0.26868876
+    },
+    {
+     "expression": "31650.67178502879 * 0.26868876",
+     "equals": 8504.179755
+    },
+    {
+     "expression": "31650.67178502879 * 0.2675",
+     "equals": 8466.554702
+    },
+    {
+     "expression": "63301.34357005758 * 0.26868876",
+     "equals": 17008.35951
+    }
+   ],
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/11"
+  }
+ ]
+}

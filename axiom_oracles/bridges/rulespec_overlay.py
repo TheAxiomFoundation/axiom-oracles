@@ -9,7 +9,7 @@ and the listed parameter rules get structural patches to their
 The overlay is *materialized* into a single self-contained rulespec root: it
 copies the referenced top-level prefix trees (``us/``, ``us-co/``) as real
 files, applies the rewrites and patches in place, and is compiled with that
-root as the sole explicit ``--rulespec-root`` argument — no fallback root. This
+root as the sole ``AXIOM_RULESPEC_REPO_ROOTS`` entry — no fallback root. This
 is a deliberate departure from a sparse overlay fronting the real monorepo,
 which the axiom-rules-engine does not support: given two roots the engine
 loads *every* root's copy of a shared module id rather than shadowing, so a
@@ -35,6 +35,15 @@ rewrite that matches nothing, or a patch whose from-value has drifted, both
 mean the base repo moved and the overlay is stale. The build records
 provenance (rewrite counts, applied patches, and a sha256 of every changed
 file) so a report can prove exactly which vintage it ran against.
+
+The converse drift — the base repo gains a module that imports a rewritten id
+but is not listed in ``rewrite_files`` — is caught after rewriting: the build
+walks the program's import closure inside the overlay root and raises
+:class:`OverlayDriftError` naming every module that still imports an id the
+overlay rewrites. Without that check the engine sees both parameter vintages
+and fails with a duplicate-rule error that names a rule, not the file
+(rulespec-us#1176 added such an importer to California in 2026-07), or, when
+nothing else imports the rewritten vintage, silently evaluates the old one.
 """
 
 from __future__ import annotations
@@ -49,16 +58,19 @@ from typing import Any
 
 import yaml
 
-from .repo_routing import (
-    RULESPEC_ATOMIC_ROOTS,
-    canonical_rulespec_checkout_name,
-    canonical_rulespec_module_path,
-    canonical_rulespec_root_identity,
-)
-
 OVERLAY_SPEC_SCHEMA_VERSION = "axiom_oracles.rulespec_overlay.v1"
 
 _OVERLAYS_DIR = Path(__file__).with_name("overlays")
+
+#: A canonical RuleSpec import prefix (``us``, ``us-ca``), mirroring the
+#: engine's ``is_canonical_repo_prefix``: lowercase ASCII, digits, ``-``, ``_``.
+_CANONICAL_PREFIX = re.compile(r"[a-z0-9_-]+")
+
+
+class OverlayDriftError(ValueError):
+    """A module in the overlaid program's import closure still imports a
+    module id the overlay rewrites: the base repo gained an importer that the
+    spec's ``rewrite_files`` does not list, so the overlay is stale."""
 
 
 @dataclass(frozen=True)
@@ -170,47 +182,16 @@ def build_overlay(
     sole repo root the engine should be given. Returns the overlay root, the
     path to the overlaid program composition, and a provenance dict.
     """
-    rulespec_root = Path(rulespec_root).expanduser()
-    checkout_name = canonical_rulespec_checkout_name(rulespec_root)
-    if checkout_name is None:
-        raise ValueError(
-            "overlay base must be an exact canonical rulespec-<country> checkout"
-        )
-    _validate_overlay_spec_paths(spec, checkout_name)
-    for label, text in _overlay_spec_paths(spec).items():
-        relative = Path(text)
-        content_root = rulespec_root / relative.parts[0]
-        if (
-            canonical_rulespec_module_path(
-                rulespec_root / relative,
-                content_root=content_root,
-            )
-            is None
-        ):
-            raise ValueError(
-                f"overlay {spec.name}: {label} is not an existing canonical "
-                f"RuleSpec module: {text}"
-            )
+    rulespec_root = Path(rulespec_root)
     overlay_root = Path(dest_dir) / rulespec_root.name
 
     for prefix in _prefix_dirs(spec):
         source = rulespec_root / prefix
-        if canonical_rulespec_root_identity(source) != f"{checkout_name}/{prefix}":
+        if not source.exists():
             raise ValueError(
-                f"overlay {spec.name}: {prefix} is not a canonical direct "
-                f"jurisdiction root under {rulespec_root}"
+                f"overlay {spec.name}: prefix directory {prefix} not found under "
+                f"{rulespec_root}; the base repo moved and the overlay is stale"
             )
-        for candidate in source.rglob("*"):
-            if candidate.is_symlink():
-                raise ValueError(
-                    f"overlay {spec.name}: symlinked RuleSpec content is not "
-                    f"supported: {candidate}"
-                )
-            if candidate.is_file() and candidate.suffix == ".yml":
-                raise ValueError(
-                    f"overlay {spec.name}: legacy .yml RuleSpec module is not "
-                    f"supported: {candidate}"
-                )
         # Hardlink where possible (the trees run to thousands of files while
         # the overlay modifies ~17); modified files are re-written through
         # _write_text_unlinked, which replaces the link with a fresh inode so
@@ -270,13 +251,33 @@ def build_overlay(
             }
         )
 
+    unrewritten = find_unrewritten_importers(
+        overlay_root, spec.program, spec.module_id_rewrites
+    )
+    if unrewritten:
+        listing = "; ".join(
+            f"{relative} imports {', '.join(imports)}"
+            for relative, imports in unrewritten.items()
+        )
+        raise OverlayDriftError(
+            f"overlay {spec.name}: {len(unrewritten)} module(s) in the import "
+            f"closure of {spec.program} still import module ids this overlay "
+            f"rewrites ({listing}). The compiled program would mix parameter "
+            f"vintages (the engine reports that as a duplicate-rule error, or "
+            f"silently evaluates the unrewritten vintage). Add each file to the "
+            f"spec's rewrite_files; the base repo moved and the overlay is stale"
+        )
+
     file_sha256 = {relative: _sha256(overlay_root / relative) for relative in changed}
+    # overlay_root (the per-run materialization tempdir) is deliberately NOT
+    # recorded: it is nondeterministic machine-local state that would make
+    # committed reports differ run-to-run; file_sha256 already pins the
+    # materialized content and rulespec_root pins the checkout replayed.
     provenance = {
         "overlay": spec.name,
         "schema": OVERLAY_SPEC_SCHEMA_VERSION,
         "program": spec.program,
         "rulespec_root": str(rulespec_root),
-        "overlay_root": str(overlay_root),
         "module_id_rewrites": dict(spec.module_id_rewrites),
         "rewrite_counts": rewrite_counts,
         "patches": patch_records,
@@ -289,6 +290,104 @@ def build_overlay(
     )
 
 
+def find_unrewritten_importers(
+    overlay_root: str | Path,
+    program: str,
+    module_id_rewrites: dict[str, str],
+) -> dict[str, list[str]]:
+    """Map each closure module that still imports a rewritten id to those imports.
+
+    Walks the import closure of ``program`` (a path relative to
+    ``overlay_root``) through every module's ``imports`` list and ``extends``
+    base, resolving them the way the axiom-rules-engine loader does for a
+    single country-monorepo root: a canonical ``prefix:path`` import is the
+    file ``<overlay_root>/<prefix>/<path>.yaml``, and a relative import
+    resolves against the importing file's directory; a ``#fragment`` and
+    surrounding quotes are ignored. An import is flagged when the overlay's
+    own rewrite pattern would still change its resolved module id, i.e. the
+    id is one the overlay was meant to rewrite. Imports that do not resolve to
+    a file inside the overlay root are not followed (the engine reports those
+    itself). Returns ``{relative file: [offending imports]}`` in walk order;
+    empty when the closure is clean.
+    """
+    root = Path(overlay_root)
+    root_resolved = root.resolve()
+    queue: list[Path] = [root / program]
+    seen: set[Path] = set()
+    offenders: dict[str, list[str]] = {}
+    while queue:
+        path = queue.pop(0)
+        resolved = path.resolve()
+        if resolved in seen or not resolved.is_file():
+            continue
+        seen.add(resolved)
+        try:
+            resolved.relative_to(root_resolved)
+        except ValueError:
+            continue
+        try:
+            data = yaml.safe_load(resolved.read_text(encoding="utf-8"))
+        except yaml.YAMLError:
+            continue  # not ours to diagnose; the engine rejects it by name
+        if not isinstance(data, dict):
+            continue
+        relative = resolved.relative_to(root_resolved).as_posix()
+        references: list[tuple[str, Path]] = []
+        imports = data.get("imports") or []
+        if isinstance(imports, list):
+            for entry in imports:
+                if isinstance(entry, str):
+                    target = _resolve_import_path(root, resolved, entry)
+                    if target is not None:
+                        references.append((entry, target))
+        extends = data.get("extends")
+        if isinstance(extends, str) and extends.strip():
+            references.append((extends, resolved.parent / extends.strip()))
+        for raw, target in references:
+            module_id = _module_id_for_path(root_resolved, target) or raw
+            if _rewrite_module_ids(module_id, module_id_rewrites)[1]:
+                offenders.setdefault(relative, []).append(raw.strip())
+            queue.append(target)
+    return offenders
+
+
+def _resolve_import_path(root: Path, importer: Path, entry: str) -> Path | None:
+    """Resolve one ``imports`` entry to its file, mirroring the engine loader."""
+    target = entry.strip().strip("\"'")
+    target = target.split("#", 1)[0].strip()
+    if not target:
+        return None
+    prefix, sep, rest = target.partition(":")
+    if sep and _CANONICAL_PREFIX.fullmatch(prefix):
+        rest = rest.strip().strip("/")
+        if not rest or ".." in Path(rest).parts:
+            return None
+        return root / prefix / _with_yaml_suffix(rest)
+    if target.startswith("/"):
+        return None
+    return importer.parent / _with_yaml_suffix(target)
+
+
+def _with_yaml_suffix(target: str) -> str:
+    return target if target.endswith((".yaml", ".yml")) else f"{target}.yaml"
+
+
+def _module_id_for_path(root: Path, path: Path) -> str | None:
+    """``<root>/us-ca/policies/x.yaml`` -> ``us-ca:policies/x`` (None if outside)."""
+    try:
+        parts = path.resolve().relative_to(root).parts
+    except ValueError:
+        return None
+    if len(parts) < 2:
+        return None
+    rest = "/".join(parts[1:])
+    for suffix in (".yaml", ".yml"):
+        if rest.endswith(suffix):
+            rest = rest[: -len(suffix)]
+            break
+    return f"{parts[0]}:{rest}"
+
+
 def _prefix_dirs(spec: OverlaySpec) -> list[str]:
     """Top-level prefix directories the spec's files live under (for example
     ``us`` and ``us-co``). These are the trees materialized into the overlay."""
@@ -296,41 +395,6 @@ def _prefix_dirs(spec: OverlaySpec) -> list[str]:
     prefixes.update(Path(relative).parts[0] for relative in spec.rewrite_files)
     prefixes.update(Path(patch.file).parts[0] for patch in spec.parameter_patches)
     return sorted(prefixes)
-
-
-def _validate_overlay_spec_paths(spec: OverlaySpec, checkout_name: str) -> None:
-    """Require every overlay path to name one canonical ``.yaml`` module."""
-
-    country = checkout_name.removeprefix("rulespec-")
-    for label, text in _overlay_spec_paths(spec).items():
-        relative = Path(text)
-        parts = relative.parts
-        if (
-            relative.is_absolute()
-            or ".." in parts
-            or len(parts) < 3
-            or re.fullmatch(rf"{re.escape(country)}(?:-[a-z]{{2}})?", parts[0]) is None
-            or parts[1] not in RULESPEC_ATOMIC_ROOTS
-            or relative.suffix != ".yaml"
-        ):
-            raise ValueError(
-                f"overlay {spec.name}: {label} must be a canonical "
-                f"<jurisdiction>/<content-root>/... .yaml path, got {text!r}"
-            )
-
-
-def _overlay_spec_paths(spec: OverlaySpec) -> dict[str, str]:
-    return {
-        "program": spec.program,
-        **{
-            f"rewrite_files[{index}]": path
-            for index, path in enumerate(spec.rewrite_files)
-        },
-        **{
-            f"parameter_patches[{index}].file": patch.file
-            for index, patch in enumerate(spec.parameter_patches)
-        },
-    }
 
 
 def rewrite_output_ids(
@@ -381,7 +445,9 @@ def _rewrite_module_ids(text: str, rewrites: dict[str, str]) -> tuple[str, int]:
     if not rewrites:
         return text, 0
     pattern = re.compile(
-        "|".join(re.escape(old) for old in sorted(rewrites, key=len, reverse=True))
+        "|".join(
+            re.escape(old) for old in sorted(rewrites, key=len, reverse=True)
+        )
     )
     count = 0
 

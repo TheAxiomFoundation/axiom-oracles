@@ -1,0 +1,15 @@
+{
+ "suite": "ga-income-tax-populace",
+ "count": 2187,
+ "total_cases": 2187,
+ "chunks": 5,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

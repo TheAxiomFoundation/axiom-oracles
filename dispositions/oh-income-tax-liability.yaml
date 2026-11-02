@@ -3,9 +3,9 @@ suite: oh-income-tax-liability
 updated: "2026-07-08"
 # Ohio composed liability pipeline vs PolicyEngine (2026) and TAXSIM (2024) on
 # the six-case grid. The pipeline matches PolicyEngine
-# oh_income_tax_before_refundable_credits to the cent on all six cases (the exact
-# section 5747.02 graduated tax on Ohio taxable income less the section 5747.98
-# nonrefundable exemption credit), so the PolicyEngine leg needs no disposition.
+# oh_income_tax_before_non_refundable_credits to the cent on all six cases (the
+# exact section 5747.02 graduated schedule tax before credits), so the
+# PolicyEngine leg needs no disposition.
 # Against TAXSIM's 2024 law year every case diverges by the Ohio 2024-to-2026
 # rate-schedule vintage: House Bill 33 (2023) indexes the section 5747.02(A)(3)
 # base amount down each year (from $360.69 at the 2024 first-bracket effective

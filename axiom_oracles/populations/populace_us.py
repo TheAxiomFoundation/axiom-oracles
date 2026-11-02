@@ -88,6 +88,7 @@ POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
 
 MicrosimulationFactory = Callable[[str], Any]
 CaseUnit = Literal["household", "tax_unit"]
+CaseUnitSelector = Callable[[set[str]], CaseUnit]
 
 
 def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
@@ -166,6 +167,7 @@ def load_populace_us_cases(
     sample_size: int | None = None,
     dataset: str | None = None,
     case_unit: CaseUnit = "household",
+    case_unit_selector: CaseUnitSelector | None = None,
     microsimulation_factory: MicrosimulationFactory | None = None,
 ) -> list[Case]:
     return PopulaceUsCaseLoader(
@@ -176,6 +178,7 @@ def load_populace_us_cases(
         period=period,
         sample_size=sample_size,
         case_unit=case_unit,
+        case_unit_selector=case_unit_selector,
     )
 
 
@@ -191,6 +194,7 @@ class PopulaceUsCaseLoader:
         period: str = "2026",
         sample_size: int | None = None,
         case_unit: CaseUnit = "household",
+        case_unit_selector: CaseUnitSelector | None = None,
     ) -> list[Case]:
         if case_unit not in {"household", "tax_unit"}:
             raise ValueError("case_unit must be 'household' or 'tax_unit'.")
@@ -202,7 +206,37 @@ class PopulaceUsCaseLoader:
 
         calculation_period = _year(period)
         households = self._households(sim, calculation_period)
-        people_by_household = self._people_by_household(sim, calculation_period)
+        household_ids = _values(
+            sim.calculate("household_id", period=calculation_period, map_to="person")
+        )
+        if case_unit_selector is not None:
+            # Resolve grain from the same sampled, populated and scoped
+            # households that will produce Cases, before loading tax-only facts.
+            populated_ids = {_clean_id(value) for value in household_ids}
+            locales = {
+                locale
+                for household in households
+                if household.household_id in populated_ids
+                and (
+                    normalized_scope is None
+                    or (
+                        household.scope is not None
+                        and scope_contains(normalized_scope, household.scope)
+                    )
+                )
+                if (locale := _locale_metadata(household.scope).get("locale"))
+            }
+            del populated_ids
+            case_unit = case_unit_selector(locales)
+            if case_unit not in {"household", "tax_unit"}:
+                raise ValueError("case_unit must be 'household' or 'tax_unit'.")
+        people_by_household = self._people_by_household(
+            sim,
+            calculation_period,
+            case_unit=case_unit,
+            household_ids=household_ids,
+        )
+        del household_ids
         cases = []
         for household in households:
             household_scope = household.scope
@@ -234,6 +268,7 @@ class PopulaceUsCaseLoader:
                         facts={
                             Concepts.CASH_ON_HAND: 0,
                             Concepts.RENT_PAID: household.housing_cost,
+                            Concepts.CHILDCARE_EXPENSES: household.childcare_expenses,
                         },
                         entities=tuple(entities),
                         metadata=metadata,
@@ -295,19 +330,27 @@ class PopulaceUsCaseLoader:
     def _households(self, sim, period: int) -> list["_HouseholdRow"]:
         household_ids = _values(sim.calculate("household_id", period=period))
         size = len(household_ids)
-        weights = _calculate_values(
-            sim, "household_weight", period, default=1, size=size
-        )
+        weights = _calculate_values(sim, "household_weight", period, default=1, size=size)
         state_fips = _calculate_values(sim, "state_fips", period, default="", size=size)
-        county_fips = _calculate_values(
-            sim, "county_fips", period, default="", size=size
-        )
+        county_fips = _calculate_values(sim, "county_fips", period, default="", size=size)
         place_fips = _calculate_values(sim, "place_fips", period, default="", size=size)
         # housing_cost is an SPMUnit variable; map_to="household" sums across
         # SPM units per household so the result is one value per household.
         housing_costs = _calculate_values(
             sim,
             "housing_cost",
+            period,
+            map_to="household",
+            default=0,
+            size=size,
+        )
+        # childcare_expenses is an SPMUnit variable (annual USD); same
+        # household roll-up as housing_cost. Feeds programs whose earned-income
+        # computation deducts observed child care (e.g. AL TANF Appendix N §2
+        # step 2), matching the value PolicyEngine's own formulas read.
+        childcare_expenses = _calculate_values(
+            sim,
+            "childcare_expenses",
             period,
             map_to="household",
             default=0,
@@ -320,14 +363,16 @@ class PopulaceUsCaseLoader:
                 weight=float(_clean_number(weight)),
                 scope=_scope_from_geography(state, county, place),
                 housing_cost=float(_clean_number(housing_cost)),
+                childcare_expenses=float(_clean_number(childcare)),
             )
-            for household_id, weight, state, county, place, housing_cost in zip(
+            for household_id, weight, state, county, place, housing_cost, childcare in zip(
                 household_ids,
                 weights,
                 state_fips,
                 county_fips,
                 place_fips,
                 housing_costs,
+                childcare_expenses,
                 strict=True,
             )
         ]
@@ -336,10 +381,14 @@ class PopulaceUsCaseLoader:
         self,
         sim,
         period: int,
+        *,
+        case_unit: CaseUnit = "household",
+        household_ids: list[Any] | None = None,
     ) -> dict[int | str, list["_PersonRow"]]:
-        household_ids = _values(
-            sim.calculate("household_id", period=period, map_to="person")
-        )
+        if household_ids is None:
+            household_ids = _values(
+                sim.calculate("household_id", period=period, map_to="person")
+            )
         size = len(household_ids)
         person_ids = _calculate_values(
             sim,
@@ -381,9 +430,7 @@ class PopulaceUsCaseLoader:
             default=False,
             size=size,
         )
-        ages = _calculate_values(
-            sim, "age", period, map_to="person", default=0, size=size
-        )
+        ages = _calculate_values(sim, "age", period, map_to="person", default=0, size=size)
         employment_income = _calculate_values(
             sim,
             "employment_income",
@@ -444,6 +491,25 @@ class PopulaceUsCaseLoader:
             )
             for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
         }
+        if case_unit == "tax_unit":
+            # Tax-unit-only sources fail closed: a renamed or missing
+            # variable must stop the load, not zero the concept.
+            non_wage_income.update(
+                {
+                    concept: _calculate_values(
+                        sim,
+                        pe_variable,
+                        period,
+                        map_to="person",
+                        default=0,
+                        size=size,
+                        strict=True,
+                    )
+                    for concept, pe_variable in (
+                        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES.items()
+                    )
+                }
+            )
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
         for index, household_id in enumerate(household_ids):
@@ -486,6 +552,7 @@ class _HouseholdRow:
     weight: float
     scope: GeographyScope | None
     housing_cost: float = 0.0
+    childcare_expenses: float = 0.0
 
 
 _PERSON_NON_WAGE_VARIABLES = {
@@ -506,6 +573,19 @@ _PERSON_NON_WAGE_VARIABLES = {
     # lives in the axiom:resources/person namespace, so it never mixes with the
     # income concepts downstream — only the SSI resource input slot reads it.
     Concepts.SSI_COUNTABLE_RESOURCES: "ssi_countable_resources",
+    # The Case deliberately carries no farm-rent concept: the Axiom federal
+    # oracle bridge has no gross-income slot for it (axiom-oracles issue
+    # #566), so loading it would hand the other engines income
+    # Axiom never sees.
+}
+
+# Loaded only for case_unit == "tax_unit" Cases. Household Cases feed the
+# benefit lanes (SNAP/TANF/SSI/Medicaid), where PolicyEngine counts tax-exempt
+# interest (through interest_income and MAGI) but the Axiom benefit encodings
+# do not read it yet, so carrying it on household Cases would hand
+# PolicyEngine income Axiom never sees (axiom-oracles#567).
+_TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
+    Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
 }
 
 
@@ -585,6 +665,7 @@ def _calculate_values(
     map_to: str | None = None,
     default: Any,
     size: int,
+    strict: bool = False,
 ) -> list[Any]:
     try:
         kwargs = {"period": period}
@@ -596,7 +677,11 @@ def _calculate_values(
             value = sim.calculate(variable, period=period)
         else:
             raise
-    except Exception:
+    except Exception as exc:
+        if strict:
+            raise RuntimeError(
+                f"PolicyEngine could not calculate {variable!r} for {period}: {exc}"
+            ) from exc
         return [default] * size
     return _values(value)
 

@@ -1,0 +1,22 @@
+{
+  "byte_stable": true,
+  "conformant": true,
+  "detail_sha256": "cfa6fd6f2abd8af3b15e8f423c87ba44336dc725cfb5c2d9948a2f698dbff5a5",
+  "schema": "axiom_oracles.us_tariff_schedule.witness_replay.v1",
+  "surface": {
+    "comparison_count": 39600,
+    "error_count": 0,
+    "internal_component_sum_inconsistencies": 0,
+    "match_count": 24400,
+    "mismatch_count": 15200,
+    "mismatches_by_concept": {
+      "us:policies/cbp/us-tariff-duty/composition#ieepa_component_rate": 476,
+      "us:policies/cbp/us-tariff-duty/composition#mfn_ad_valorem_rate": 594,
+      "us:policies/cbp/us-tariff-duty/composition#section_122_component_rate": 4560,
+      "us:policies/cbp/us-tariff-duty/composition#section_201_component_rate": 7887,
+      "us:policies/cbp/us-tariff-duty/composition#section_232_aluminum_component_rate": 1920,
+      "us:policies/cbp/us-tariff-duty/composition#us_tariff_total_ad_valorem_rate": 15200
+    }
+  },
+  "surface_reproduced": true
+}

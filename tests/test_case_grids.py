@@ -58,13 +58,20 @@ def test_every_grid_file_parses_and_validates() -> None:
 def test_expected_jurisdictions_present() -> None:
     jurisdictions = {grid.jurisdiction for grid in load_grids()}
     # us and be are extracted from suites on main; uk ships ahead of the UKMOD
-    # suites landing (its equivalence check is guarded below).
-    assert {"us", "be"} <= jurisdictions
+    # suites landing (its equivalence check is guarded below). de and dk pin the
+    # German dual-oracle and Denmark EUROMOD grids respectively.
+    assert {"us", "be", "de", "dk"} <= jurisdictions
 
 
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
-    [("us", 2, 44), ("be", 30, 128), ("uk", 25, 135)],
+    [
+        ("us", 3, 84),
+        ("be", 33, 142),
+        ("de", 2, 21),
+        ("uk", 26, 143),
+        ("dk", 3, 10),
+    ],
 )
 def test_grid_case_counts(jurisdiction, expected_sets, expected_cases) -> None:
     grid = load_grid(jurisdiction)
@@ -107,8 +114,24 @@ def _suite_jurisdiction(suite_name: str) -> str:
     locales = {case.locale for case in cases}
     if locales == {"BE"}:
         return "be"
+    if locales == {"GH"}:
+        return "gh"
+    if locales == {"UG"}:
+        return "ug"
+    if locales == {"CA-ON"}:
+        return "ca"
+    if locales == {"DK"}:
+        return "dk"
+    if locales == {"DE"}:
+        return "de"
     if locales == {"UK"}:
         return "uk"
+    if locales == {"ZM"}:
+        return "zm"
+    if locales == {"ET"}:
+        return "et"
+    if locales == {"RW"}:
+        return "rw"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:
         return "us"
     raise AssertionError(f"unmapped locales for {suite_name}: {locales}")
@@ -234,6 +257,29 @@ def test_shared_outputs_are_lifted_to_set_level() -> None:
     case_set = _case_set_from_payload("shared", body, source_file=Path("x.yaml"))
     for spec, live in zip(case_set.cases, cases, strict=True):
         assert grid_case_from_spec(spec, case_set) == case_skeleton(live)
+
+
+def test_axiom_relation_records_do_not_leak_into_neutral_grid_parameters() -> None:
+    from axiom_oracles.core.case import Case
+
+    case = Case(
+        case_id="related-records",
+        period="2025",
+        metadata={
+            "scenario": "related-person-records",
+            "yearly_earned_income": 30_000,
+            "axiom_relations": {
+                "be:example#relation.person_of_tax_unit": [
+                    ["head", "taxunit"],
+                    ["spouse", "taxunit"],
+                ]
+            },
+        },
+    )
+
+    skeleton = case_skeleton(case)
+
+    assert skeleton["parameters"] == {"yearly_earned_income": 30_000}
 
 
 def test_mixed_locale_case_set_is_rejected() -> None:
@@ -551,3 +597,118 @@ def test_suggested_case_ids_are_below_above_pairs() -> None:
         for case_set in payload["case_sets"].values():
             sides = [case["probe"]["side"] for case in case_set["cases"]]
             assert sides.count("below") == sides.count("above")
+
+
+# ---------------------------------------------------------------------------
+# Denmark suite/mapping pins (Sol pre-merge audit): the dk suite, its case
+# count, and its Axiom<->EUROMOD concept mapping must not silently disappear.
+# ---------------------------------------------------------------------------
+
+
+def test_dk_child_youth_benefit_suite_pinned() -> None:
+    assert "dk-child-youth-benefit" in available_suites()
+    cases = load_suite("dk-child-youth-benefit")
+    assert len(cases) == 8
+    assert {case.locale for case in cases} == {"DK"}
+
+    original_cases = cases[:7]
+    contribution_input = (
+        "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/"
+        "paragraf-1-a#input.total_contributions_to_qualifying_pension_accounts"
+    )
+    assert all(
+        case.metadata["axiom_inputs"][contribution_input] == 0
+        for case in original_cases
+    )
+
+    witness = cases[7]
+    assert witness.case_id == ("dk-child-youth-benefit-age5-yem1300000-pension60000")
+    assert witness.metadata["qualifying_pension_contributions"] == 60_000
+    assert witness.metadata["axiom_inputs"][contribution_input] == 60_000
+    assert "qualifying_pension_contributions" not in {
+        key for row in witness.metadata["euromod_inputs"] for key in row
+    }
+
+
+def test_dk_child_youth_benefit_2023_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-2023" in available_suites()
+    cases = load_suite("dk-child-youth-benefit-2023")
+    assert len(cases) == 1
+
+    case = cases[0]
+    assert case.case_id == "dk-child-youth-benefit-2023-age5-yem300000"
+    assert case.period == "2023"
+    assert case.metadata["scenario"] == (
+        "single-parent-child-youth-benefit-2023-supplement"
+    )
+    inputs = case.metadata["axiom_inputs"]
+    p1 = "dk:statutes/lbk-603-2025/boerne-og-ungeydelsesloven/paragraf-1#input."
+    cyb = "dk:statutes/composed/boerne-og-ungeydelse-pipeline#input."
+    assert inputs[p1 + "percentage_change_rounded_to_one_decimal_place"] == 0.156
+    assert inputs[p1 + "payment_year_has_additional_statutory_increase"] is True
+    assert inputs[cyb + "current_year_income_reduction_allowance"] == 852_600
+
+
+def test_dk_child_youth_benefit_couple_suite_pinned() -> None:
+    assert "dk-child-youth-benefit-couple" in available_suites()
+    [case] = load_suite("dk-child-youth-benefit-couple")
+
+    assert case.case_id == ("dk-child-youth-benefit-couple-age5-yem1500000-spouse0")
+    assert case.period == "2025"
+    assert case.metadata["comparison_level"] == "household_sum"
+    assert case.metadata["axiom_result_aggregation"] == {
+        "strategy": "sum",
+        "entity_ids": ["earner", "non_earner"],
+    }
+    records = case.metadata["axiom_input_records"]
+    assert len(records) == 18
+    assert {record["entity_id"] for record in records} == {
+        "earner",
+        "non_earner",
+    }
+    assert all(record["entity"] == "Person" for record in records)
+    assert {
+        record["name"] for record in records if record["entity_id"] == "earner"
+    } == {record["name"] for record in records if record["entity_id"] == "non_earner"}
+
+    head, spouse, child = case.metadata["euromod_inputs"]
+    assert (head["idperson"], head["idpartner"], head["dms"], head["dhr"]) == (
+        101,
+        102,
+        2,
+        1,
+    )
+    assert head["yem"] == 125_000
+    assert (
+        spouse["idperson"],
+        spouse["idpartner"],
+        spouse["dms"],
+        spouse["dhr"],
+        spouse["yem"],
+    ) == (102, 101, 2, 0, 0)
+    assert (child["idperson"], child["idmother"], child["idfather"]) == (
+        103,
+        101,
+        102,
+    )
+
+
+def test_dk_child_youth_benefit_mapping_pinned() -> None:
+    from axiom_oracles.comparison.mappings import mappings_by_concept
+    from axiom_oracles.core.case import Concepts
+
+    mapping = mappings_by_concept().get(Concepts.DK_CHILD_YOUTH_BENEFIT)
+    assert mapping is not None, "dk child/youth benefit concept mapping missing"
+    assert mapping.target_for_engine("euromod") == "bfachnm_s"
+    assert (
+        mapping.target_for_engine("axiom")
+        == "single_recipient_annual_child_youth_benefit"
+    )
+
+    couple_mapping = mappings_by_concept().get(Concepts.DK_COUPLE_CHILD_YOUTH_BENEFIT)
+    assert couple_mapping is not None, "dk couple child/youth mapping missing"
+    assert couple_mapping.target_for_engine("euromod") == "bfachnm_s"
+    assert (
+        couple_mapping.target_for_engine("axiom")
+        == "couple_recipient_annual_child_youth_benefit"
+    )

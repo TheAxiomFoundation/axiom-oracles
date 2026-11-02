@@ -1,0 +1,100 @@
+schema: axiom_oracles.dispositions.v1
+suite: la-income-tax-liability
+updated: "2026-07-15"
+entries:
+  - id: la-taxsim-2024-single-30000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "514.95 - 760.5"
+          equals: -245.55
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 514.95
+      right: 760.5
+  - id: la-taxsim-2024-single-60000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "1414.95 - 1885.5"
+          equals: -470.55
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1414.95
+      right: 1885.5
+  - id: la-taxsim-2024-single-150000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "4114.95 - 5710.5"
+          equals: -1595.55
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4114.95
+      right: 5710.5
+  - id: la-taxsim-2024-married-60000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "1029.9 - 1521"
+          equals: -491.1
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1029.9
+      right: 1521
+  - id: la-taxsim-2024-married-120000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "2829.9 - 3771"
+          equals: -941.1
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2829.9
+      right: 3771
+  - id: la-taxsim-2024-married-300000
+    concept: us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability
+    case_id: la-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The Axiom/PolicyEngine leg applies Louisiana's post-2024 flat-rate reform at 2026, while the pinned TAXSIM leg applies the 2024 progressive schedule. The exact residual is the documented reform-vintage difference.
+      arithmetic:
+        - expression: "8229.9 - 11421"
+          equals: -3191.1
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 8229.9
+      right: 11421

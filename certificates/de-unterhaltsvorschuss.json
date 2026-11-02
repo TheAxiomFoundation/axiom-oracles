@@ -1,0 +1,389 @@
+{
+  "_comment": "Generated pending DE certificate. The declaration is visible and fail-closed; no empty suite, attested signature, or absent producer can satisfy a certification premise.",
+  "blockers": [
+    "no comparison record has been declared",
+    "de/statute/uhvorschg/2: final-amount encoding remains partial",
+    "executable reproduction receipt pending",
+    "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
+    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+  ],
+  "certified": {
+    "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
+    "state": "no",
+    "value": false
+  },
+  "declared_root_set": {
+    "citation_roots": [
+      {
+        "attestation": {
+          "path": ".axiom/encoding-manifests/de/regulations/minuhv/1.json",
+          "ref": "d83ba3db30e2f63376aacf822d116687589b8564",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "cd7a6a3cd40f7098071f50e88f81eaa3072c0b6c833f99af6e88219bbac92e5f"
+        },
+        "citation_path": "de/regulation/minuhv/1",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "signed minimum-support encoding is merged on pinned main",
+        "role": "governing",
+        "signature_state": "signed"
+      },
+      {
+        "attestation": {
+          "ref": "0a5ba23",
+          "repository": "TheAxiomFoundation/rulespec-de",
+          "sha256": "d9c494557d2e439acf1270cb43e070005bf4ec91d9a0117ff076ce11818080cf"
+        },
+        "citation_path": "de/statute/uhvorschg/2",
+        "claim_mode": "attested",
+        "classification": "pending",
+        "reason": "reviewed unsigned module covers the base subtraction only; partial-month, income/maintenance offsets, and school/work income abatements in subsections 1, 3, and 4 remain open",
+        "role": "governing",
+        "signature_state": "pending"
+      },
+      {
+        "attestation": {
+          "artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
+          "encoding_manifest_payload_sha256": "9a181bf76934891d909997a6a61b0d2ee9c6a46b7710906e76b72599f48f23de",
+          "encoding_manifest_source_file_sha256": "296e0f761edd2fd70cf622890fba5f6c0147bc51233df757afcb90e1e9a53a0a",
+          "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+          "sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+          "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
+        },
+        "attestation_claim_mode": "computed",
+        "citation_path": "de/statute/estg/66",
+        "claim_mode": "attested",
+        "classification": "encoded",
+        "reason": "the executable verifier validated the exact signed 2025 module, apply manifest, corpus binding, and Ed25519 trust root",
+        "role": "dependency",
+        "signature_state": "signed",
+        "signature_state_claim_mode": "computed"
+      }
+    ],
+    "mode": "computed",
+    "root_nodes": [
+      "de:statutes/uhvorschg/2#advance_maintenance_amount"
+    ]
+  },
+  "evidence": [
+    {
+      "artifact": "conformance/de-certificate-census.json",
+      "claim": "certificate candidate census:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "6fe385cbccd7ea1c66d76490f0cb1f76972bcb44ed046d8e3a65050519c29cc3"
+    },
+    {
+      "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
+      "claim": "closed:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "efe2e289c5811b05f08b8457e6dc112aaada1161be390433a146599982fe5b2b",
+      "verification": "producer_artifact_validation"
+    },
+    {
+      "artifact": "closure/de/summary.json",
+      "claim": "closure census:de/unterhaltsvorschuss",
+      "mode": "computed",
+      "sha256": "2dfcdba2a118ed5d3bc8b4e658420c6cc68ebe9a92794ce032a1b62e30c98ac0"
+    }
+  ],
+  "period": "2025",
+  "program": "de/unterhaltsvorschuss",
+  "schema": "axiom_oracles.program_certificate.v1",
+  "verdicts": {
+    "closed": {
+      "artifact": "conformance/closure/de-unterhaltsvorschuss.yaml",
+      "blockers": [
+        "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+      ],
+      "boundaries": [],
+      "boundary_frontier": {
+        "complete": false,
+        "input_count": 9,
+        "inputs": [
+          {
+            "id": "de-uhv-leaf-b329e1f74fcb6509",
+            "input": "child_allowances_under_sections_31_and_32_6_1_are_increased",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_before_whole_euro_rounding"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.child_allowances_under_sections_31_and_32_6_1_are_increased"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-33186f8d485351af",
+            "input": "child_is_in_first_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_first_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_first_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-02d260d2633b6285",
+            "input": "child_is_in_second_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_second_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_second_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-b14840d10f0c7741",
+            "input": "child_is_in_third_age_stage_under_section_1612a",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "monthly_minimum_support_third_age_stage"
+            ],
+            "slots": [
+              "de:regulations/minuhv/1#input.child_is_in_third_age_stage_under_section_1612a"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-9795bf040172cda9",
+            "input": "correspondingly_increased_kindergeld_amount",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_before_whole_euro_rounding"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.correspondingly_increased_kindergeld_amount"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-746953df348f3e70",
+            "input": "first_child_kindergeld",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "advance_maintenance_amount"
+            ],
+            "slots": [
+              "de:statutes/uhvorschg/2#input.first_child_kindergeld"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-8c5debf5377085b9",
+            "input": "minimum_maintenance_for_age_stage",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "advance_maintenance_amount"
+            ],
+            "slots": [
+              "de:statutes/uhvorschg/2#input.minimum_maintenance_for_age_stage"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-28c8b07ec06f361f",
+            "input": "month_is_on_or_after_first_qualifying_month",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_payable_for_month"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.month_is_on_or_after_first_qualifying_month"
+            ],
+            "status": "pending"
+          },
+          {
+            "id": "de-uhv-leaf-9dcc1cbc40e7ed0b",
+            "input": "month_is_on_or_before_last_qualifying_month",
+            "leaf_kind": "unclassified",
+            "read_by": [
+              "kindergeld_payable_for_month"
+            ],
+            "slots": [
+              "de:statutes/estg/66#input.month_is_on_or_before_last_qualifying_month"
+            ],
+            "status": "pending"
+          }
+        ],
+        "law_derived_count": 0,
+        "pending": [
+          "child_allowances_under_sections_31_and_32_6_1_are_increased",
+          "child_is_in_first_age_stage_under_section_1612a",
+          "child_is_in_second_age_stage_under_section_1612a",
+          "child_is_in_third_age_stage_under_section_1612a",
+          "correspondingly_increased_kindergeld_amount",
+          "first_child_kindergeld",
+          "minimum_maintenance_for_age_stage",
+          "month_is_on_or_after_first_qualifying_month",
+          "month_is_on_or_before_last_qualifying_month"
+        ],
+        "pending_count": 9,
+        "unclassified_count": 9
+      },
+      "by_signature_state": {
+        "not_applicable": 0,
+        "pending": 1,
+        "signed": 2
+      },
+      "by_status": {
+        "encoded": 2,
+        "evidence": 0,
+        "excluded": 0,
+        "open_dependency": 0,
+        "pending": 1
+      },
+      "citation_paths": [
+        "de/regulation/minuhv/1",
+        "de/statute/estg/66",
+        "de/statute/uhvorschg/2"
+      ],
+      "citation_root_count": 3,
+      "closed_claim_mode": "computed",
+      "corpus_release": "de-rulespec-2026-09-08-kindergeld-civil",
+      "declared_sources": [
+        {
+          "citation_path": "de/regulation/minuhv/1",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed minimum-maintenance module and encoding manifest are present on the pinned RuleSpec main commit.",
+          "role": "minimum_maintenance_amount",
+          "signature_state": "signed",
+          "state": "encoded"
+        },
+        {
+          "citation_path": "de/statute/uhvorschg/2",
+          "claim_mode": "attested",
+          "classification": "pending",
+          "reason": "The reviewed unsigned module covers the base subtraction only; partial-month, income and maintenance offsets, and school or work income abatements remain open.",
+          "role": "advance_amount_and_offsets",
+          "signature_state": "pending",
+          "state": "pending"
+        },
+        {
+          "citation_path": "de/statute/estg/66",
+          "claim_mode": "attested",
+          "classification": "encoded",
+          "reason": "The signed 2025/2026 dual-version amount module and encoding manifest are present on the pinned RuleSpec main commit (PR #42, merged 2026-08-19).",
+          "role": "kindergeld_dependency",
+          "signature_state": "signed",
+          "state": "encoded"
+        }
+      ],
+      "dependency_closure": {
+        "closed": false,
+        "instruments_bearing_on_computed": [],
+        "law_derived_inputs": [],
+        "open_dependency_count": 9,
+        "unclassified_inputs": [
+          "child_allowances_under_sections_31_and_32_6_1_are_increased",
+          "child_is_in_first_age_stage_under_section_1612a",
+          "child_is_in_second_age_stage_under_section_1612a",
+          "child_is_in_third_age_stage_under_section_1612a",
+          "correspondingly_increased_kindergeld_amount",
+          "first_child_kindergeld",
+          "minimum_maintenance_for_age_stage",
+          "month_is_on_or_after_first_qualifying_month",
+          "month_is_on_or_before_last_qualifying_month"
+        ]
+      },
+      "evidence_roots": [],
+      "instrument_frontier": {
+        "complete": false,
+        "counts": {
+          "classified-with-reason": 0,
+          "encoded": 0,
+          "excluded-with-reason": 0,
+          "pending": 23,
+          "total": 23
+        },
+        "instrument_count": 23,
+        "pending": [
+          "de-uhv-instr-0d081243aac4ae0a",
+          "de-uhv-instr-11739679bb0a1df4",
+          "de-uhv-instr-1808736a82828a59",
+          "de-uhv-instr-1a53a8fa58131ff1",
+          "de-uhv-instr-2079e2162cee1404",
+          "de-uhv-instr-2a29967484296d20",
+          "de-uhv-instr-2b0a8f983f861591",
+          "de-uhv-instr-333ba26c32e038d3",
+          "de-uhv-instr-703d3b12aaab39f8",
+          "de-uhv-instr-73cb585362978769",
+          "de-uhv-instr-78841044a219e9b8",
+          "de-uhv-instr-7d7a5efb6250df56",
+          "de-uhv-instr-8939b62ab3b44a39",
+          "de-uhv-instr-906e7387d896596c",
+          "de-uhv-instr-a303758d3667d729",
+          "de-uhv-instr-a66a4cb13aaf0599",
+          "de-uhv-instr-a9efdae38748dd9f",
+          "de-uhv-instr-b96e03076e143e8e",
+          "de-uhv-instr-c29a0cb26e4cbc1d",
+          "de-uhv-instr-c795a7af57079afc",
+          "de-uhv-instr-db7693cd9f018ff4",
+          "de-uhv-instr-e5490882a4dcdc9f",
+          "de-uhv-instr-guidance"
+        ],
+        "supplemental_count": null
+      },
+      "mode": "computed",
+      "non_encoded_reasons_complete": true,
+      "pending_citations": 1,
+      "pending_money_atoms": null,
+      "provision_counts": {
+        "classified-with-reason": 0,
+        "encoded": 0,
+        "excluded-with-reason": 0,
+        "partially-encoded": 0,
+        "pending": 12,
+        "total": 12
+      },
+      "resolution_mode": "computed",
+      "root_node_count": 1,
+      "root_nodes": [
+        "de:statutes/uhvorschg/2#advance_maintenance_amount"
+      ],
+      "rulespec_commit": "d83ba3db30e2f63376aacf822d116687589b8564",
+      "signature_blockers": [
+        "de/statute/uhvorschg/2: signed RuleSpec artifact has not landed"
+      ],
+      "signature_pending_citations": [
+        "de/statute/uhvorschg/2"
+      ],
+      "spine_closed": false,
+      "spine_closed_claim_mode": "computed",
+      "status": "computed_open",
+      "subgraph_node_count": null,
+      "subgraph_sha256": "5fc329cc2a13343f26a21fd0ef1fbcf3f26182fa63fe51ae60befd349caf89d3",
+      "universe_mode": "attested",
+      "unresolved_sources": [
+        "de/statute/uhvorschg/2"
+      ],
+      "value": false
+    },
+    "conformant": {
+      "missing": "no comparison record has been declared",
+      "mode": "computed",
+      "reference_legs": [],
+      "status": "computed_open",
+      "value": false
+    },
+    "executable": {
+      "missing_inputs": [
+        "executable reproduction contract"
+      ],
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    },
+    "exercised": {
+      "missing": "no comparison corpus has been declared",
+      "mode": "computed",
+      "status": "computed_open",
+      "value": false
+    }
+  }
+}
