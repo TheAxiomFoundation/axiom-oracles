@@ -857,6 +857,10 @@ def apply_dispositions(
             f"classified_rows ({classified_rows}) exceeds mismatch_count "
             f"({mismatch_count})"
         )
+    unexplained_count = mismatch_count - classified_rows
+    # The `unexplained` bucket is the same figure as unexplained_count, so a
+    # reader of `counts` never sees a classified total that hides residue.
+    counts["unexplained"] = unexplained_count
     summary["dispositioned"] = {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
@@ -870,7 +874,7 @@ def apply_dispositions(
         "explained_rate": _percentage(
             match_count + classified_rows, comparison_count
         ),
-        "unexplained_count": mismatch_count - classified_rows,
+        "unexplained_count": unexplained_count,
         "counts": counts,
         "expired_entries": expired,
         "orphaned_entries": orphaned,

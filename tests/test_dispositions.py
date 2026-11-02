@@ -1301,3 +1301,113 @@ def test_property_finite_arithmetic_still_reconciles(left, right, op) -> None:
     result = evaluate_arithmetic(expression)
     item = {"expression": expression, "equals": result, "tolerance": 0}
     assert _validate_arithmetic([item], "entries[0]") == []
+
+
+# --- #521: re-applying on a premerged report clears stale labels ----------
+
+
+def _premerged_report() -> tuple[dict, dict]:
+    entry = _entry(pinned={"left": 100, "right": 125})
+    document = _document([entry])
+    premerged = apply_dispositions(_build_report(), document)
+    assert premerged["mismatches"][0]["disposition"]["id"] == "example-residual"
+    return premerged, document
+
+
+def test_reapply_after_pin_moves_clears_stale_row_label() -> None:
+    premerged, document = _premerged_report()
+    moved = copy.deepcopy(premerged)
+    moved["mismatches"][0]["right"] = 126
+    moved["mismatches"][0]["difference"] = 26
+    merged = apply_dispositions(moved, document)
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == ["example-residual"]
+    assert block["unexplained_count"] == 1
+    assert block["counts"]["unexplained"] == 1
+    assert "disposition" not in merged["mismatches"][0]
+
+
+def test_reapply_after_entry_deleted_clears_stale_row_label() -> None:
+    premerged, _ = _premerged_report()
+    merged = apply_dispositions(premerged, _document([]))
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == []
+    assert block["unexplained_count"] == 1
+    assert block["counts"]["unexplained"] == 1
+    assert "disposition" not in merged["mismatches"][0]
+
+
+_SUITE_ROW_KINDS = ("upstream_engine_gap", "explained_residual", "bridge_artifact")
+
+
+@settings(max_examples=150, deadline=None)
+@given(
+    rows=st.lists(
+        st.tuples(
+            st.integers(min_value=-50, max_value=50),
+            st.sampled_from(_SUITE_ROW_KINDS),
+            st.booleans(),
+        ),
+        min_size=1,
+        max_size=8,
+    ),
+    keep=st.lists(st.booleans(), min_size=8, max_size=8),
+    shift=st.lists(st.integers(min_value=-2, max_value=2), min_size=8, max_size=8),
+)
+def test_property_reapply_equals_apply_on_raw_rows(rows, keep, shift) -> None:
+    # Re-applying any (possibly edited) dispositions file to a premerged
+    # report yields exactly what applying it to the raw rows yields: no row
+    # label survives unless a current entry wins that row, and the
+    # `unexplained` bucket equals unexplained_count.
+    mismatches = [
+        {
+            "case_id": f"case-{i}",
+            "concept": "us:test#income_tax",
+            "kind": "amount",
+            "left": 100,
+            "right": 100 + delta + (0 if delta else 1),
+            "difference": delta if delta else 1,
+        }
+        for i, (delta, _, _) in enumerate(rows)
+    ]
+    raw = {
+        "suite": "example-suite",
+        "summary": {
+            "comparison_count": len(rows) + 1,
+            "match_count": 1,
+            "mismatch_count": len(rows),
+        },
+        "mismatches": mismatches,
+    }
+    entries = [
+        _entry(
+            id=f"entry-{i}",
+            case_id=f"case-{i}",
+            disposition=kind,
+            pinned={"left": row["left"], "right": row["right"]} if pinned else None,
+        )
+        for i, ((_, kind, pinned), row) in enumerate(zip(rows, mismatches))
+    ]
+    for entry in entries:
+        if entry["pinned"] is None:
+            del entry["pinned"]
+    premerged = apply_dispositions(raw, _document(entries))
+
+    edited_raw = copy.deepcopy(raw)
+    edited_premerged = copy.deepcopy(premerged)
+    for target in (edited_raw, edited_premerged):
+        for row, step in zip(target["mismatches"], shift):
+            row["right"] += step
+    survivors = [entry for entry, kept in zip(entries, keep) if kept]
+
+    from_premerged = apply_dispositions(edited_premerged, _document(survivors))
+    from_raw = apply_dispositions(edited_raw, _document(survivors))
+    assert from_premerged["mismatches"] == from_raw["mismatches"]
+    assert from_premerged["summary"]["dispositioned"] == (
+        from_raw["summary"]["dispositioned"]
+    )
+    block = from_premerged["summary"]["dispositioned"]
+    assert block["counts"]["unexplained"] == block["unexplained_count"]
+    assert sum(block["counts"].values()) == len(rows)
+    labelled = sum("disposition" in row for row in from_premerged["mismatches"])
+    assert labelled == len(rows) - block["unexplained_count"]
