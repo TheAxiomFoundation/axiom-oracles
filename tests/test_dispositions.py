@@ -1198,3 +1198,366 @@ def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> N
     assert module._serialize_like(path, text, merged) == (
         json.dumps(merged, indent=1, sort_keys=True) + "\n"
     )
+
+
+# --- #526: non-finite arithmetic never validates -------------------------
+
+from hypothesis import given, settings, strategies as st  # noqa: E402
+
+from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    ArithmeticEvaluationError,
+    _validate_arithmetic,
+)
+
+_NON_FINITE_LITERALS = ("1e309", "-1e309", "1.5e400", "9" * 400 + ".0")
+_NON_FINITE_FLOATS = (float("inf"), float("-inf"), float("nan"))
+
+
+@pytest.mark.parametrize(
+    "item",
+    [
+        # inf - inf is NaN, and every comparison with NaN is false.
+        {"expression": "1e309 - 1e309", "equals": 123, "tolerance": 0},
+        {"expression": "1e309", "equals": 1},
+        {"expression": "1e309 * 0", "equals": 0},
+        {"expression": "1", "equals": float("inf")},
+        {"expression": "1", "equals": float("nan")},
+        {"expression": "1", "equals": 5, "tolerance": float("inf")},
+        {"expression": "1", "equals": 1, "tolerance": float("nan")},
+        {"expression": "1 / 0", "equals": 0},
+        {"expression": "1" + "0" * 400, "equals": 1},
+        {"expression": "1", "equals": 10**400},
+        # An intermediate overflows and a later step makes it finite again:
+        # only a per-step finiteness check refuses these.
+        {"expression": "1/(1e200*1e200)", "equals": 0},
+        {"expression": "1/1e309", "equals": 0},
+    ],
+)
+def test_non_finite_arithmetic_is_invalid(item) -> None:
+    errors = _validate_arithmetic([item], "entries[0]")
+    assert errors, item
+    entry = _entry(evidence={"mechanism": "m", "arithmetic": [item]})
+    assert validate_dispositions(_document([entry]))
+
+
+_finite = st.floats(
+    min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False
+)
+
+
+@st.composite
+def _expression_with_non_finite_literal(draw) -> str:
+    literal = draw(st.sampled_from(_NON_FINITE_LITERALS))
+    others = draw(st.lists(_finite.map(repr), min_size=0, max_size=3))
+    operators = draw(
+        st.lists(
+            st.sampled_from(["+", "-", "*"]),
+            min_size=len(others),
+            max_size=len(others),
+        )
+    )
+    position = draw(st.integers(min_value=0, max_value=len(others)))
+    operands = [*others[:position], literal, *others[position:]]
+    expression = operands[0]
+    for operator, operand in zip(operators, operands[1:]):
+        expression = f"({expression}) {operator} ({operand})"
+    return expression
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    expression=_expression_with_non_finite_literal(),
+    equals=st.one_of(_finite, st.sampled_from(_NON_FINITE_FLOATS)),
+    tolerance=st.one_of(
+        st.floats(min_value=0, max_value=1e300),
+        st.sampled_from(_NON_FINITE_FLOATS),
+    ),
+)
+def test_property_non_finite_literal_never_validates(
+    expression, equals, tolerance
+) -> None:
+    # Any expression that carries a non-finite literal (1e309-style) is
+    # refused, whatever it evaluates to and whatever target and tolerance
+    # the entry states.
+    item = {"expression": expression, "equals": equals, "tolerance": tolerance}
+    assert _validate_arithmetic([item], "entries[0]")
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    value=_finite,
+    bad=st.sampled_from(["equals", "tolerance"]),
+    non_finite=st.sampled_from(_NON_FINITE_FLOATS),
+)
+def test_property_non_finite_target_or_tolerance_never_validates(
+    value, bad, non_finite
+) -> None:
+    item = {"expression": repr(value), "equals": value, "tolerance": 0.01}
+    assert _validate_arithmetic([item], "entries[0]") == []
+    item[bad] = non_finite
+    assert _validate_arithmetic([item], "entries[0]")
+
+
+@settings(max_examples=200, deadline=None)
+@given(left=_finite, right=_finite, op=st.sampled_from(["+", "-", "*"]))
+def test_property_finite_arithmetic_still_reconciles(left, right, op) -> None:
+    # Control: the hardening does not reject honest finite evidence.
+    expression = f"({left!r}) {op} ({right!r})"
+    result = evaluate_arithmetic(expression)
+    item = {"expression": expression, "equals": result, "tolerance": 0}
+    assert _validate_arithmetic([item], "entries[0]") == []
+
+
+# --- #521: re-applying on a premerged report clears stale labels ----------
+
+
+def _premerged_report() -> tuple[dict, dict]:
+    entry = _entry(pinned={"left": 100, "right": 125})
+    document = _document([entry])
+    premerged = apply_dispositions(_build_report(), document)
+    assert premerged["mismatches"][0]["disposition"]["id"] == "example-residual"
+    return premerged, document
+
+
+def test_reapply_after_pin_moves_clears_stale_row_label() -> None:
+    premerged, document = _premerged_report()
+    moved = copy.deepcopy(premerged)
+    moved["mismatches"][0]["right"] = 126
+    moved["mismatches"][0]["difference"] = 26
+    merged = apply_dispositions(moved, document)
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == ["example-residual"]
+    assert block["unexplained_count"] == 1
+    assert block["counts"]["unexplained"] == 1
+    assert "disposition" not in merged["mismatches"][0]
+
+
+def test_reapply_after_entry_deleted_clears_stale_row_label() -> None:
+    premerged, _ = _premerged_report()
+    merged = apply_dispositions(premerged, _document([]))
+    block = merged["summary"]["dispositioned"]
+    assert block["expired_entries"] == []
+    assert block["unexplained_count"] == 1
+    assert block["counts"]["unexplained"] == 1
+    assert "disposition" not in merged["mismatches"][0]
+
+
+_SUITE_ROW_KINDS = ("upstream_engine_gap", "explained_residual", "bridge_artifact")
+
+
+@settings(max_examples=150, deadline=None)
+@given(
+    rows=st.lists(
+        st.tuples(
+            st.integers(min_value=-50, max_value=50),
+            st.sampled_from(_SUITE_ROW_KINDS),
+            st.booleans(),
+        ),
+        min_size=1,
+        max_size=8,
+    ),
+    keep=st.lists(st.booleans(), min_size=8, max_size=8),
+    shift=st.lists(st.integers(min_value=-2, max_value=2), min_size=8, max_size=8),
+)
+def test_property_reapply_equals_apply_on_raw_rows(rows, keep, shift) -> None:
+    # Re-applying any (possibly edited) dispositions file to a premerged
+    # report yields exactly what applying it to the raw rows yields: no row
+    # label survives unless a current entry wins that row, and the
+    # `unexplained` bucket equals unexplained_count.
+    mismatches = [
+        {
+            "case_id": f"case-{i}",
+            "concept": "us:test#income_tax",
+            "kind": "amount",
+            "left": 100,
+            "right": 100 + delta + (0 if delta else 1),
+            "difference": delta if delta else 1,
+        }
+        for i, (delta, _, _) in enumerate(rows)
+    ]
+    raw = {
+        "suite": "example-suite",
+        "summary": {
+            "comparison_count": len(rows) + 1,
+            "match_count": 1,
+            "mismatch_count": len(rows),
+        },
+        "mismatches": mismatches,
+    }
+    entries = [
+        _entry(
+            id=f"entry-{i}",
+            case_id=f"case-{i}",
+            disposition=kind,
+            pinned={"left": row["left"], "right": row["right"]} if pinned else None,
+        )
+        for i, ((_, kind, pinned), row) in enumerate(zip(rows, mismatches))
+    ]
+    for entry in entries:
+        if entry["pinned"] is None:
+            del entry["pinned"]
+    premerged = apply_dispositions(raw, _document(entries))
+
+    edited_raw = copy.deepcopy(raw)
+    edited_premerged = copy.deepcopy(premerged)
+    for target in (edited_raw, edited_premerged):
+        for row, step in zip(target["mismatches"], shift):
+            row["right"] += step
+    survivors = [entry for entry, kept in zip(entries, keep) if kept]
+
+    from_premerged = apply_dispositions(edited_premerged, _document(survivors))
+    from_raw = apply_dispositions(edited_raw, _document(survivors))
+    assert from_premerged["mismatches"] == from_raw["mismatches"]
+    assert from_premerged["summary"]["dispositioned"] == (
+        from_raw["summary"]["dispositioned"]
+    )
+    block = from_premerged["summary"]["dispositioned"]
+    assert block["counts"]["unexplained"] == block["unexplained_count"]
+    assert sum(block["counts"].values()) == len(rows)
+    labelled = sum("disposition" in row for row in from_premerged["mismatches"])
+    assert labelled == len(rows) - block["unexplained_count"]
+
+
+# --- #522: policyengine-us citations must be commit-pinned ----------------
+
+_PE_SHA = "49d19b239a593dbac8920ac6fd80cfe33372343a"
+_PE_PATH = "policyengine_us/parameters/gov/usda/snap/income/deductions/rate.yaml"
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/tree/1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/master/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/main/{_PE_PATH}",
+        f"https://github.com/policyengine/POLICYENGINE-US/blob/1.767.3/{_PE_PATH}",
+        f"https://www.github.com/PolicyEngine/policyengine-us/blob/1.767.3/{_PE_PATH}",
+        f"http://github.com/PolicyEngine/policyengine-us/blob/v1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA[:7]}/{_PE_PATH}",
+        f"https://raw.githubusercontent.com/PolicyEngine/policyengine-us/1.767.3/{_PE_PATH}",
+    ],
+)
+@pytest.mark.parametrize("field", ["sources", "upstream_url", "linked_issue"])
+def test_policyengine_us_citation_by_moving_ref_is_invalid(url, field) -> None:
+    evidence = {"mechanism": "m", "arithmetic": [{"expression": "1", "equals": 1}]}
+    entry = _entry(evidence=evidence)
+    if field == "sources":
+        evidence["sources"] = [url]
+    elif field == "upstream_url":
+        evidence["upstream_url"] = url
+    else:
+        entry["linked_issue"] = url
+    errors = validate_dispositions(_document([entry]))
+    assert any("40-hex commit" in error for error in errors), errors
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA}/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA}/{_PE_PATH}#L3",
+        f"https://raw.githubusercontent.com/PolicyEngine/policyengine-us/{_PE_SHA}/{_PE_PATH}",
+        "https://github.com/PolicyEngine/policyengine-us/issues/8614",
+        "https://github.com/PolicyEngine/policyengine-us/pull/8614",
+    ],
+)
+def test_commit_pinned_or_non_code_policyengine_us_urls_pass(url) -> None:
+    evidence = {
+        "mechanism": "m",
+        "arithmetic": [{"expression": "1", "equals": 1}],
+        "sources": [url],
+        "upstream_url": url,
+    }
+    entry = _entry(evidence=evidence, linked_issue=url)
+    assert validate_dispositions(_document([entry])) == []
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    ref=st.text(
+        alphabet="0123456789abcdefABCDEF.v-_mainster",
+        min_size=1,
+        max_size=45,
+    ).filter(lambda ref: ref not in {".", ".."}),
+    kind=st.sampled_from(["blob", "tree"]),
+)
+def test_property_policyengine_us_ref_must_be_full_commit(ref, kind) -> None:
+    url = f"https://github.com/PolicyEngine/policyengine-us/{kind}/{ref}/{_PE_PATH}"
+    evidence = {"mechanism": "m", "sources": [url]}
+    errors = validate_dispositions(_document([_entry(evidence=evidence)]))
+    pinned = len(ref) == 40 and all(c in "0123456789abcdef" for c in ref)
+    assert (errors == []) is pinned, (ref, errors)
+
+
+@pytest.mark.parametrize("expression", ["1/(1e200*1e200)", "1/1e309", "1e309 - 1e309"])
+def test_evaluator_refuses_any_non_finite_intermediate(expression) -> None:
+    with pytest.raises(ArithmeticEvaluationError, match="non-finite"):
+        evaluate_arithmetic(expression)
+
+
+@pytest.mark.parametrize("terms", [600, 5000, 200_000])
+def test_deep_expression_fails_closed_instead_of_crashing(terms) -> None:
+    expression = "+".join(["1"] * terms)
+    with pytest.raises(ArithmeticEvaluationError):
+        evaluate_arithmetic(expression)
+    errors = _validate_arithmetic(
+        [{"expression": expression, "equals": terms}], "entries[0]"
+    )
+    assert errors and "entries[0]" in errors[0]
+
+
+def test_negative_tolerance_is_named_in_the_error() -> None:
+    errors = _validate_arithmetic(
+        [{"expression": "1", "equals": 1, "tolerance": -0.01}], "entries[0]"
+    )
+    assert errors == [
+        "entries[0]: evidence.arithmetic[0] tolerance must be finite and >= 0"
+    ]
+
+
+# --- every GitHub code link must be commit-pinned (#522, hub review) ---------
+
+_SHA = "c4307e514196618afcbf88cf7fd33746417eeabf"
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        # Any repository, not only policyengine-us.
+        "https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blob/main/R/rates.R",
+        "https://github.com/TheAxiomFoundation/rulespec-us/tree/v1.0/us/statutes",
+        "https://raw.githubusercontent.com/PSLmodels/Tax-Calculator/master/x.py",
+        # blame and commits views name a ref the same way.
+        "https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blame/main/R/rates.R",
+        "https://github.com/PolicyEngine/policyengine-us/commits/master/policyengine_us",
+        "https://github.com/PolicyEngine/policyengine-us/blame/1.767.3/x.py",
+        # The singular commit view resolves a branch name too.
+        "https://github.com/a/b/commit/main",
+        "https://github.com/PolicyEngine/policyengine-us/commit/1.767.3",
+        # Mixed-case host and path segments are still GitHub code links.
+        "https://GitHub.COM/PolicyEngine/policyengine-us/BLOB/1.767.3/x.py",
+        "https://RAW.GithubUserContent.com/PolicyEngine/policyengine-us/1.767.3/x.py",
+    ],
+)
+def test_any_github_code_link_by_moving_ref_is_invalid(url) -> None:
+    evidence = {"mechanism": "m", "sources": [url]}
+    errors = validate_dispositions(_document([_entry(evidence=evidence)]))
+    assert any("40-hex commit" in error for error in errors), errors
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blob/{_SHA}/R/rates.R",
+        f"https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blame/{_SHA}/R/rates.R",
+        f"https://github.com/PolicyEngine/policyengine-us/commits/{_SHA}/x",
+        f"https://GitHub.com/PolicyEngine/policyengine-us/Blob/{_SHA}/x.py",
+        "https://github.com/TheAxiomFoundation/rulespec-us/issues/1416",
+        f"https://github.com/PolicyEngine/policyengine-us/commit/{_SHA}",
+    ],
+)
+def test_commit_pinned_github_code_links_in_any_repository_pass(url) -> None:
+    evidence = {"mechanism": "m", "sources": [url], "upstream_url": url}
+    entry = _entry(evidence=evidence, linked_issue=url)
+    assert validate_dispositions(_document([entry])) == []

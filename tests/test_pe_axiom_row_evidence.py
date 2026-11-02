@@ -13,6 +13,7 @@ import yaml
 from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles.comparison.dispositions import apply_dispositions
+from axiom_oracles.conformance.unexplained import CLASSIFIED_DISPOSITION_KINDS
 from axiom_oracles.comparison.pe_axiom_standard import (
     CompanionResolver,
     collect_records,
@@ -140,7 +141,11 @@ def test_reapplying_a_changed_kind_clears_stale_annotation():
     document = {"suite": report["suite"], "entries": [entry]}
     reapplied = apply_dispositions(report, document)
     assert "disposition" not in reapplied["mismatches"][0]
-    assert sum(reapplied["summary"]["dispositioned"]["counts"].values()) == 0
+    block = reapplied["summary"]["dispositioned"]
+    # No row is classified. Since #521 the `unexplained` bucket counts every
+    # row left unexplained, so it equals unexplained_count rather than 0.
+    assert sum(block["counts"][kind] for kind in CLASSIFIED_DISPOSITION_KINDS) == 0
+    assert block["counts"]["unexplained"] == block["unexplained_count"] == 1
 
 
 @pytest.mark.parametrize("filtered", [False, True])
