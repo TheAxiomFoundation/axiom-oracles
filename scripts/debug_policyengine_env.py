@@ -9,6 +9,10 @@ PE_ORACLE_PINS = (
     "policyengine==4.11.0",
     "policyengine-us==1.700.0",
     "policyengine-core==3.26.11",
+    # Unpinned, spm-calculator resolves 1.0.x, which removed the
+    # spm_calculator.geoadj module PolicyEngine-US imports (see
+    # _PE_US_COMPANION_PINS in scripts/run_comparison.py).
+    "spm-calculator==0.3.1",
 )
 
 

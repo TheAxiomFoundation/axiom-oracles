@@ -1,0 +1,511 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: gh
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  gh-capital-income:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding
+    cases:
+    - id: gh-rent-12k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 12000.0
+    - id: gh-rent-24k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 24000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 24000.0
+    - id: gh-rent-60k
+      period: '2026'
+      scenario: single-individual-residential-rent-withholding
+      parameters:
+        annual_residential_rent: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 45
+        relation: HeadOfHousehold
+        rental_income: 60000.0
+  gh-dispy:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: gh-dispy-5000-nil-zone
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 5000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5000.0
+    - id: gh-dispy-5880-nil-band-bound
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 5880.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5880.0
+  gh-excise:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount
+    cases:
+    - id: gh-excise-beer-1200
+      period: '2026'
+      scenario: single-consumer-beer-excise
+      parameters:
+        annual_beer_spend: 1200.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: gh-excise-beer-6000
+      period: '2026'
+      scenario: single-consumer-beer-excise
+      parameters:
+        annual_beer_spend: 6000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+  gh-income-tax-rate-schedule:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax
+    cases:
+    - id: gh-rate-5k-below-threshold
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 5000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5000.0
+    - id: gh-rate-5880-nil-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 5880.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5880.0
+    - id: gh-rate-7200-5pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 7200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 7200.0
+    - id: gh-rate-8760-10pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 8760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 8760.0
+    - id: gh-rate-10k-17p5-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+    - id: gh-rate-46760-17p5-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 46760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 46760.0
+    - id: gh-rate-50k-25pct-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 50000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 50000.0
+    - id: gh-rate-238760-25pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 238760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 238760.0
+    - id: gh-rate-250k-30pct-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 250000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 250000.0
+    - id: gh-rate-605000-30pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 605000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 605000.0
+    - id: gh-rate-700k-35pct-band
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 700000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 700000.0
+  gh-personal-reliefs:
+    locale: GH
+    entity: Person
+    entity_id: head
+    cases:
+    - id: gh-relief-old-age
+      period: '2026'
+      scenario: working-elderly-old-age-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-disability
+      period: '2026'
+      scenario: disabled-worker-disability-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-child-education-2
+      period: '2026'
+      scenario: sponsored-children-education-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-child-education-4-cap
+      period: '2026'
+      scenario: sponsored-children-education-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-aged-dependant-1
+      period: '2026'
+      scenario: aged-dependant-relative-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-aged-dependant-3-cap
+      period: '2026'
+      scenario: aged-dependant-relative-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-dependant-spouse
+      period: '2026'
+      scenario: married-worker-dependent-spouse-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-combined
+      period: '2026'
+      scenario: combined-multi-relief-household
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+  gh-presumptive-turnover:
+    locale: GH
+    entity: Person
+    entity_id: head
+    cases:
+    - id: gh-presumptive-30k
+      period: '2025'
+      scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+      parameters:
+        annual_turnover: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 30000.0
+    - id: gh-presumptive-60k
+      period: '2025'
+      scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+      parameters:
+        annual_turnover: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 60000.0
+    - id: gh-presumptive-119999-shared-band-top
+      period: '2025'
+      scenario: single-small-business-presumptive-turnover
+      outputs:
+      - gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+      parameters:
+        annual_turnover: 119999.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 119999.0
+    - id: gh-chrl-30k
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+      parameters:
+        annual_turnover: 30000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 30000.0
+    - id: gh-chrl-60k
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+      parameters:
+        annual_turnover: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 60000.0
+    - id: gh-chrl-119999-shared-band-top
+      period: '2025'
+      scenario: single-small-business-chrl-2025
+      outputs:
+      - gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+      parameters:
+        annual_turnover: 119999.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        self_employment_income: 119999.0
+  gh-ssnit-contributions:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution
+    - gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution
+    cases:
+    - id: gh-ssnit-10k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+    - id: gh-ssnit-60k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: gh-ssnit-120k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: gh-ssnit-500k
+      period: '2026'
+      scenario: single-formal-employee-ssnit-contributions
+      parameters:
+        yearly_earned_income: 500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 500000.0
+  gh-transfers:
+    locale: GH
+    entity: Person
+    entity_id: pupil
+    outputs:
+    - gh:policies/gsfp/feeding-grant#school_feeding_value_per_year
+    cases:
+    - id: gh-feeding-pupil
+      period: '2026'
+      scenario: public-basic-pupil-school-feeding
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+      - id: pupil
+        kind: person
+        age: 8
+  gh-vat-levies:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount
+    - gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount
+    cases:
+    - id: gh-levies-12k
+      period: '2026'
+      scenario: single-consumer-standard-rated-levies
+      parameters:
+        annual_standard_rated_consumption: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: gh-levies-60k
+      period: '2026'
+      scenario: single-consumer-standard-rated-levies
+      parameters:
+        annual_standard_rated_consumption: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold

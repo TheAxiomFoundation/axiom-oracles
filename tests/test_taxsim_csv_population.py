@@ -832,6 +832,30 @@ def test_cli_keeps_row_years_without_an_explicit_period(cli_module, tmp_path):
         assert set(frame["year"].tolist()) == {2021}
 
 
+def test_cli_without_a_period_skips_the_default_year_preflight(
+    cli_module, monkeypatch
+):
+    """Row years run as written, so the 2026 default year is not checked."""
+    checked = []
+    monkeypatch.setattr(
+        cli_module, "_require_taxsim_law_year", lambda *args: checked.append(args)
+    )
+    run = _compare(cli_module, "--taxsim-csv", str(FIXTURE))
+    assert run.exit_code == 0, run.output
+    assert checked == []
+
+
+def test_cli_checks_an_explicit_period_before_loading(cli_module, monkeypatch):
+    def refuse(period, *rest):
+        raise cli_module.click.ClickException(f"refused law year {period}")
+
+    monkeypatch.setattr(cli_module, "_require_taxsim_law_year", refuse)
+    run = _compare(cli_module, "--taxsim-csv", str(FIXTURE), "--period", "2026")
+    assert run.exit_code != 0
+    assert "refused law year 2026" in run.output
+    assert _EchoRunner.frames == []
+
+
 def test_cli_reads_the_path_from_the_environment(cli_module):
     run = _compare(cli_module, "--json", env={"AXIOM_TAXSIM_CSV": str(FIXTURE)})
     assert run.exit_code == 0, run.output
@@ -1010,6 +1034,22 @@ def test_run_comparison_omits_period_to_keep_row_years(monkeypatch, tmp_path):
     cmd = _captured_compare_cmd(run_comparison, monkeypatch, tmp_path, params)
 
     assert "--period" not in cmd
+
+
+def test_run_comparison_checks_the_law_year_only_when_a_period_is_set(
+    monkeypatch, tmp_path
+):
+    run_comparison = _load_run_comparison()
+    checked = []
+    monkeypatch.setattr(
+        run_comparison, "_require_taxsim_law_year", lambda *args: checked.append(args)
+    )
+    params = _taxsim_csv_params()
+    _captured_compare_cmd(run_comparison, monkeypatch, tmp_path, params)
+    assert [args[0] for args in checked] == ["2024"]
+    del params["period"]
+    _captured_compare_cmd(run_comparison, monkeypatch, tmp_path, params)
+    assert [args[0] for args in checked] == ["2024"]
 
 
 @pytest.mark.parametrize(

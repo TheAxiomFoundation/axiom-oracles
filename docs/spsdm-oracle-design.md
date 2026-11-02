@@ -5,6 +5,10 @@ the Canadian oracle: the reference tax–transfer microsimulation maintained
 by the national statistical agency, driven over its own synthetic
 household database.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 ## The licensed package (v34.0, February 2026)
 
 - **Model**: SPSM, a Windows console batch model (32-bit x86). Glass-box
@@ -46,9 +50,9 @@ agreement:
    > these data is entirely that of the author(s)."
 
 4. **No derived software product for distribution** (§3.1). The adapter
-   drives the licensed model as an external engine — the same
-   arm's-length relationship the TAXSIM/EUROMOD/PRD adapters have to
-   their oracles — and embeds nothing from the Package.
+   runs the licensed model as a separate program under Wine (a
+   subprocess call in `axiom_oracles/adapters/spsm/runner.py`) and
+   embeds nothing from the Package.
 
 ## Lane design
 

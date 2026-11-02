@@ -5,6 +5,8 @@ current `rulespec-ca` source-law surface. This matrix records why Canada outputs
 remain on source-grounded oracle lanes until PolicyEngine exposes matching
 current-law calculation boundaries.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Provenance
 
 - `rulespec-ca` snapshot: `8d8d2d8`

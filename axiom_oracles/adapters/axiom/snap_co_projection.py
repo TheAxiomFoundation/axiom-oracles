@@ -11,6 +11,7 @@ Use ``attach_axiom_snap_co_inputs(cases)`` from the CLI when a SNAP comparison
 is requested and the cases scope to Colorado. The runner picks the input
 records up via ``case.metadata[AXIOM_INPUT_RECORDS_METADATA_KEY]``.
 """
+
 from __future__ import annotations
 
 import json
@@ -19,6 +20,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
+from ...bridges.relation_binding import RelationBinder
 from ...core.case import Case, Concepts, Entity
 from ._snap_co_base_inputs import BASE_INPUTS, BASE_MEMBER
 from .runner import (
@@ -32,9 +34,7 @@ _SNAP_HOUSEHOLD_ENTITY = "Household"
 _MEMBER_RELATION = "us:statutes/7/2012/j#relation.member_of_household"
 _MEMBER_RELATION_RUNTIME = "member_of_household"
 _WAGES_INPUT = "us-co:regulations/10-ccr-2506-1/4.403#input.employee_wages_received"
-_HOUSEHOLD_SIZE_INPUT = (
-    "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
-)
+_HOUSEHOLD_SIZE_INPUT = "us-co:regulations/10-ccr-2506-1/4.207.3#input.household_size"
 _FEDERAL_NET_INCOME_DEFAULTS = {
     "us:policies/usda/snap/fy-2026-cola/deductions#input.household_size": None,
     "us:regulations/7-cfr/273/10#input.household_size": None,
@@ -84,9 +84,7 @@ _FEDERAL_MEMBER_DEFAULTS = {
     "us:regulations/7-cfr/273/24#input.member_has_additional_three_month_abawd_eligibility": False,
 }
 
-US_SNAP_CO_PROGRAM_PATH = (
-    "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
-)
+US_SNAP_CO_PROGRAM_PATH = "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
 
 # Precompiled artifact shipped alongside this projection. Bundling the
 # artifact lets axiom-oracles use `axiom-rules-engine run-compiled` and
@@ -131,12 +129,17 @@ def _supported_input_records(records: list[dict[str, Any]]) -> list[dict[str, An
 
 def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
     """Attach Axiom CO SNAP input records to cases that lack them."""
+    artifact = None
+    relation_binder = None
     projected = []
     for case in cases:
         metadata = dict(case.metadata)
         if metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY):
             projected.append(case)
             continue
+        if artifact is None:
+            artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
+            relation_binder = RelationBinder(artifact)
 
         people = _people(case)
         household_size = max(len(people), 1)
@@ -162,10 +165,23 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         # Member relation: one entry per person, with age and citizenship
         # carried from the Case.
         member_records = []
-        relation_tuples = []
+        relation_records = []
         for index, person in enumerate(people):
             person_id = f"snap-member-{index}"
-            relation_tuples.append([person_id, _SNAP_HOUSEHOLD_ID])
+            roles = {
+                "owner_id": _SNAP_HOUSEHOLD_ID,
+                "owner_kind": _SNAP_HOUSEHOLD_ENTITY,
+                "related_id": person_id,
+                "related_kind": "Person",
+            }
+            for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME):
+                relation_records.append(
+                    {
+                        "name": relation_name,
+                        "tuple": relation_binder.tuple(relation_name, **roles),
+                        "roles": roles,
+                    }
+                )
             for input_name, default in BASE_MEMBER.items():
                 value = _member_value(input_name, person, default)
                 member_records.append(
@@ -186,11 +202,7 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         )
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
             *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
-            *[
-                {"name": relation_name, "tuple": tup}
-                for tup in relation_tuples
-                for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME)
-            ],
+            *relation_records,
         ]
         # Output entity for SNAP outputs is the Household, not the default
         # TaxUnit used by the federal-income-tax projection.
