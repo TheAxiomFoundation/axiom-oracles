@@ -282,15 +282,12 @@ def test_property_disagreeing_retained_verdict_always_fails(
         _forge_match(report, case_id, recount=recount)
     else:
         _forge_mismatch(report, case_id, recount=recount)
-    if drop_concepts:
-        left, right = pairs[case_id]
-        if case["mismatches"] or left == right:
-            # Without an authority a mismatch verdict or an exactly equal
-            # match proves nothing either way; only the count can refuse it.
-            if recount:
-                report.pop("concepts")
-        else:
-            report.pop("concepts")
+    left, right = pairs[case_id]
+    forged_mismatch = bool(case["mismatches"])
+    if drop_concepts and not (forged_mismatch and recount and left != right):
+        # Without an authority, values that differ within the tolerance can
+        # carry either verdict; only the counts can refuse that forgery.
+        report.pop("concepts")
     assert not _observed(report, case_id)
 
 
@@ -304,7 +301,7 @@ def _committed_reports():
         cwd=ROOT, check=True, capture_output=True,
     ).stdout.decode().split("\0")
     for name in names:
-        if not name or (ROOT / name).stat().st_size > 20_000_000:
+        if not name:
             continue
         try:
             report = json.loads((ROOT / name).read_text())
