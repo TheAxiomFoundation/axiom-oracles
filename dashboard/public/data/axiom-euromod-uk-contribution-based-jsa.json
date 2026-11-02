@@ -222,10 +222,7 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom",
-    "versions": {
-      "axiom_rules_engine": "0.2.2"
-    }
+    "right": "axiom"
   },
   "errors": [],
   "locales": [
@@ -280,10 +277,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
-      "axiom_rules_engine_version": "0.2.2"
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-09-24T05:05:50Z",
+    "generated_at": "2026-07-07T23:51:52Z",
     "generated_by": "scripts/run_comparison.py::uk-contribution-based-jsa-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -292,14 +289,13 @@
       "euromod_system": "UK_2026",
       "name": "euromod"
     },
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": null
+        "sha": "9be8d6fea64806fca7802be4cdc3a66617363ae9"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

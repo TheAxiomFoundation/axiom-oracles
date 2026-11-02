@@ -376,10 +376,7 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom",
-    "versions": {
-      "axiom_rules_engine": "0.2.2"
-    }
+    "right": "axiom"
   },
   "errors": [],
   "locales": [
@@ -393,10 +390,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
-      "axiom_rules_engine_version": "0.2.2"
+      "axiom_rules_engine_sha": "c6cc389a8f5e7238019e4fa06849325fad9acd46",
+      "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-09-23T11:57:17Z",
+    "generated_at": "2026-07-06T01:25:49Z",
     "generated_by": "scripts/run_comparison.py::be-pensioner-contributions",
     "oracle": {
       "euromod_country": "BE",
@@ -405,14 +402,13 @@
       "euromod_system": "BE_2025",
       "name": "euromod"
     },
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": null
+        "sha": "f4c580557e3f4f7f273042906ab12f94313fd247"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -428,8 +424,14 @@
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
-      "expired_entries": [],
+      "dispositions_file": "dispositions/be-pensioner-contributions.yaml",
+      "expired_entries": [
+        "health-floor-missing-below-euromod-floor",
+        "health-floor-and-solidarity-base-phase-in",
+        "solidarity-base-table-above-health-30k",
+        "solidarity-base-table-phase-in-39k",
+        "solidarity-base-table-mid-41k"
+      ],
       "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 100,

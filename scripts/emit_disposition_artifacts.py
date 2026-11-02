@@ -32,8 +32,13 @@ SUITE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
 def compact_entry(entry: dict) -> dict:
     evidence = entry.get("evidence") or {}
     selector = entry.get("case_selector") or {}
+    by_output = selector.get("case_ids_by_output") or {}
     cases = selector.get("case_ids") or (
-        [entry["case_id"]] if entry.get("case_id") else []
+        list(dict.fromkeys(
+            str(value) for ids in by_output.values() for value in ids
+        ))
+        if by_output
+        else [entry["case_id"]] if entry.get("case_id") else []
     )
     arithmetic = [
         {"expression": a.get("expression"), "equals": a.get("equals")}

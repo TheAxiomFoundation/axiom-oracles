@@ -9,11 +9,14 @@ overlay builder, ``map_qc_unit``, and run path.
 from __future__ import annotations
 
 import os
+import hashlib
+import json
 import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.bridges import snap_populace, snap_qc_compare as sc
 from axiom_oracles.bridges.rulespec_overlay import (
@@ -22,6 +25,7 @@ from axiom_oracles.bridges.rulespec_overlay import (
     rewrite_output_ids,
 )
 from axiom_oracles.comparison.report import COMPARISON_REPORT_SCHEMA_VERSION
+from axiom_oracles.engine_identity import engine_binding_receipt_path
 
 # --------------------------------------------------------------------------- #
 # Legal-reference input keys the projection writes (subset of the CO template).
@@ -331,10 +335,11 @@ def test_map_qc_unit_missing_certified_size_raises() -> None:
 
 
 def test_map_qc_unit_medical_feeds_applied_deduction() -> None:
-    # The engine input reconstructs the deduction FNS applied (FSMEDDED plus
-    # the $35 threshold): in standard-medical-deduction demonstration states
-    # FSMEDDED is a flat standard that differs from the excess FSMEDEXP, so
-    # FSMEDDED is the operative amount (10 such rows in FY2024, none in CO).
+    # The engine input reconstructs the file's calculated medical deduction
+    # (FSMEDDED plus the $35 threshold): in standard-medical-deduction
+    # demonstration states FSMEDDED is a flat standard that differs from the
+    # excess FSMEDEXP, so FSMEDDED is the operative amount (10 such rows in
+    # FY2024, none in CO).
     unit = _unit(
         medical_expenses=130.0,
         expected=SimpleNamespace(benefit=291, medical_deduction=135.0),
@@ -389,9 +394,10 @@ def test_map_qc_unit_elderly_or_disabled_flag(age, elderly_flag, expected) -> No
 
 
 def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> None:
-    # The child-support feed is the deduction FNS applied (FSCSDED), not the
-    # reported payment: the file carries rows whose reported FSCSEXP was not
-    # allowed as a deduction, and the applied amount is what enters FSTOTDED.
+    # The child-support feed is the file's constructed deduction (FSCSDED) in
+    # place of the reported payment: the file carries rows whose reported
+    # FSCSEXP was not allowed as a deduction, and the applied amount is what
+    # enters FSTOTDED.
     inputs = _map(
         _unit(
             dependent_care_expense=120.0,
@@ -410,7 +416,7 @@ def test_map_qc_unit_projects_dependent_care_and_child_support_deduction() -> No
 
 def test_map_qc_unit_disallowed_child_support_payment_feeds_zero() -> None:
     # A reported payment with FSCSDED = 0 must not produce an engine-side
-    # deduction (two real FY2024 New York rows).
+    # deduction (one in-scope FY2024 New York row: FSCSEXP 139, FSCSDED 0).
     inputs = _map(
         _unit(
             child_support_expense=139.0,
@@ -497,6 +503,11 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
         total_loaded=5, total_excluded=1, counts={"mfip_unit": 1}
     )
     overlay_build = SimpleNamespace(provenance={"overlay": "us-co-snap-fy2024"})
+    engine = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "a" * 40,
+        "binary_sha256": "b" * 64,
+    }
     report = sc._build_report(
         units=units,
         results=results,
@@ -511,6 +522,7 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
         rulespec_root=Path("/rulespec-us"),
         axiom_binary=Path("/engine"),
         pins=None,
+        engine=engine,
     )
 
     assert set(report) == {
@@ -523,6 +535,7 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     assert report["engines"] == {"left": "snap-qc", "right": "axiom"}
     assert report["locales"] == ["US-CO"]
     assert report["case_count"] == 2
+    assert report["provenance"]["engine"] == engine
 
     summary = report["summary"]
     assert summary["match_count"] == 1
@@ -566,31 +579,153 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
     assert len(report["cases"]) == 2
 
 
+def _stub_snap_runtime(monkeypatch, tmp_path):
+    from axiom_oracles.populations import snap_qc
+
+    monkeypatch.setattr(sc, "resolve_workspace_root", lambda _: tmp_path)
+    monkeypatch.setattr(sc, "resolve_axiom_binary", lambda _root, binary: binary)
+    monkeypatch.setattr(sc, "load_overlay_spec", lambda _: SimpleNamespace(module_id_rewrites={}))
+    monkeypatch.setattr(snap_qc, "load_qc_units", lambda *a, **k: ([], None))
+    monkeypatch.setattr(sc, "load_base_inputs", lambda _: {})
+    monkeypatch.setattr(sc, "_load_base_member", lambda *a: {})
+    monkeypatch.setattr(sc, "sua_amounts_from_overlay", lambda *a: {})
+    monkeypatch.setattr(sc, "axiom_rules_env", lambda *a: {})
+    monkeypatch.setattr(sc, "build_overlay", lambda *a: SimpleNamespace(
+        program_path=tmp_path / "program.yaml", overlay_root=tmp_path,
+        provenance={"fixture": "cached executable"},
+    ))
+
+
+@settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(payload=st.binary(max_size=4096))
+def test_snap_cache_hit_receipt_hashes_executed_bytes_without_checkout(
+    monkeypatch, tmp_path, payload
+):
+    _stub_snap_runtime(monkeypatch, tmp_path)
+    binary = tmp_path / "engine/target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True, exist_ok=True)
+    binary.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "a" * 40,
+        "binary_sha256": digest,
+    }))
+    executed = []
+
+    def execute(**kwargs):
+        executed.append(hashlib.sha256(kwargs["binary"].read_bytes()).hexdigest())
+        return []
+
+    monkeypatch.setattr(sc, "_run_cases", execute)
+    report = sc.run_snap_qc_comparison(
+        fiscal_year=2024, jurisdiction="us-co", axiom_binary=binary,
+        rulespec_root=tmp_path / "rulespec-us",
+    )
+
+    assert executed == [digest]
+    assert report["provenance"]["engine"]["binary_sha256"] == digest
+    assert report["provenance"]["engine"]["commit"] == "a" * 40
+    assert not (binary.parents[2] / ".git").exists()
+
+
+def test_snap_rejects_engine_bytes_changed_during_execution(monkeypatch, tmp_path):
+    _stub_snap_runtime(monkeypatch, tmp_path)
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"before")
+
+    def execute(**kwargs):
+        kwargs["binary"].write_bytes(b"after")
+        return []
+
+    monkeypatch.setattr(sc, "_run_cases", execute)
+    with pytest.raises(RuntimeError, match="changed during SNAP QC execution"):
+        sc.run_snap_qc_comparison(
+            fiscal_year=2024, jurisdiction="us-co", axiom_binary=binary,
+            rulespec_root=tmp_path / "rulespec-us",
+        )
+
+
+@pytest.mark.parametrize("change_phase", ["compile", "during_chunk", "between_chunks"])
+def test_snap_checks_same_engine_bytes_at_compile_and_each_chunk(
+    monkeypatch, tmp_path, change_phase
+):
+    binary = tmp_path / "engine"
+    original_bytes = b"original engine"
+    binary.write_bytes(original_bytes)
+    expected_receipt = sc.engine_receipt(binary)
+    monkeypatch.setattr(sc, "CHUNK_SIZE", 1)
+    executed = []
+
+    def compile_program(*args, **kwargs):
+        if change_phase == "compile":
+            binary.write_bytes(b"replacement engine")
+
+    class Cases(list):
+        def __getitem__(self, selection):
+            chunk = super().__getitem__(selection)
+            if change_phase == "between_chunks" and selection.start == 1:
+                binary.write_bytes(b"replacement engine")
+            return chunk
+
+    def execute(**kwargs):
+        executed.append(binary.read_bytes())
+        if change_phase == "during_chunk":
+            binary.write_bytes(b"replacement engine")
+        elif change_phase == "between_chunks" and len(executed) == 2:
+            # A whole-run before/after check would miss the A -> B -> A swap.
+            binary.write_bytes(original_bytes)
+        return []
+
+    monkeypatch.setattr(sc, "compile_program", compile_program)
+    monkeypatch.setattr(sc, "run_axiom_cases", execute)
+    with pytest.raises(RuntimeError, match="identity changed during SNAP QC execution"):
+        sc._run_cases(
+            binary=binary, program_path=tmp_path / "program.yaml",
+            cases=Cases([object(), object()]),
+            period=snap_populace.month_period(2026, 1), output_ids=[],
+            config=sc.QC_JURISDICTIONS["us-co"], env={},
+            expected_engine_receipt=expected_receipt,
+        )
+
+    assert executed == ([] if change_phase == "compile" else [original_bytes])
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(sc.QC_JURISDICTIONS))
+def test_stage_concepts_are_the_ids_a_replay_report_lists(jurisdiction) -> None:
+    config = sc.QC_JURISDICTIONS[jurisdiction]
+    output_id_by_label = sc._output_id_by_label(
+        config, load_overlay_spec(config.overlay).module_id_rewrites
+    )
+    stages = sc.stage_concepts(jurisdiction)
+    assert list(stages) == [label.stage for label in sc._LABELS]
+    assert sc._benefit_stage() in stages
+    assert len(set(stages.values())) == len(stages)
+    assert list(stages.values()) == [
+        row["id"] for row in sc._concept_rows(output_id_by_label, 0.0, 1.0)
+    ]
+
+
 # --------------------------------------------------------------------------- #
 # Engine-gated live test: reproduce the proven worked example end to end
 # --------------------------------------------------------------------------- #
 
-_ENGINE = Path(
-    os.environ.get(
-        "AXIOM_RULES_ENGINE_BIN",
-        "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/release/"
-        "axiom-rules-engine",
-    )
+# Both come from the environment (the snap-qc-replay workflow sets them); with
+# either unset the live test skips.
+_ENGINE = Path(os.environ.get("AXIOM_RULES_ENGINE_BIN", ""))
+_RULESPEC_FY2024 = Path(os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT", ""))
+_LIVE = (
+    _ENGINE.is_file()
+    and _RULESPEC_FY2024 != Path()
+    and (_RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola").exists()
 )
-_RULESPEC_FY2024 = Path(
-    os.environ.get(
-        "RULESPEC_US_SNAP_FY2024_ROOT",
-        "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-snap-fy2024",
-    )
-)
-_LIVE = _ENGINE.exists() and (
-    _RULESPEC_FY2024 / "us/policies/usda/snap/fy-2024-cola"
-).exists()
 
 
 @pytest.mark.skipif(
     not _LIVE,
-    reason="axiom-rules-engine binary and rulespec-us fy-2024-cola worktree required",
+    reason=(
+        "set AXIOM_RULES_ENGINE_BIN to an axiom-rules-engine binary and "
+        "RULESPEC_US_SNAP_FY2024_ROOT to a rulespec-us fy-2024-cola checkout"
+    ),
 )
 def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     config = sc.QC_JURISDICTIONS["us-co"]

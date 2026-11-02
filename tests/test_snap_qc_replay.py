@@ -10,6 +10,7 @@ and the workflow invariants the replay depends on.
 from __future__ import annotations
 
 import importlib.util
+import itertools
 import json
 from pathlib import Path
 
@@ -32,12 +33,17 @@ def _load_script():
 
 replay = _load_script()
 
-_CONCEPTS = [
-    "us:regulations/7-cfr/273/10#snap_total_gross_income",
-    "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
-    "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-    "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-]
+#: Colorado's six compared stages and their concept ids, as the committed
+#: co-snap-qc report lists them.
+_CO_STAGE_CONCEPTS = {
+    "gross_income": "us:regulations/7-cfr/273/10#snap_total_gross_income",
+    "standard_deduction": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+    "shelter_deduction": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
+    "net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+    "maximum_allotment": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
+    "benefit": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+}
+_CONCEPTS = list(_CO_STAGE_CONCEPTS.values())
 
 
 def _exact_report(case_count: int = 3, *, binary: str = "/engine/bin") -> dict:
@@ -184,6 +190,7 @@ def test_puf_cache_key_changes_with_the_pin(monkeypatch):
 
 
 def _check(report: dict, **kwargs) -> list[str]:
+    kwargs.setdefault("expect_concepts", _CO_STAGE_CONCEPTS)
     kwargs.setdefault("expect_rulespec_sha", SHA)
     kwargs.setdefault("expect_axiom_binary", Path("/engine/bin"))
     return replay.check_report(report, suite="co-snap-qc", **kwargs)
@@ -235,6 +242,74 @@ def test_uncompared_or_partially_compared_stage_fails():
 def test_empty_report_fails():
     failures = _check(_exact_report(case_count=0))
     assert "no cases were compared" in failures
+
+
+def test_report_without_concepts_or_aggregates_fails():
+    # Every case counted and none mismatched, but no stage was ever compared:
+    # "every stage compared on every case" must not pass vacuously.
+    report = _exact_report(case_count=856)
+    report["concepts"] = []
+    report["aggregates"] = []
+    failures = _check(report)
+    assert failures[0] == "the report lists no stage concepts, so no stage was compared"
+    assert failures[1:] == [
+        f"stage {stage} ({concept}) is not among the report's concepts"
+        for stage, concept in _CO_STAGE_CONCEPTS.items()
+    ]
+
+
+def test_report_without_concepts_fails_even_with_no_expectations():
+    report = _exact_report()
+    report["concepts"] = []
+    report["aggregates"] = []
+    failures = _check(report, expect_concepts={})
+    assert "the report lists no stage concepts, so no stage was compared" in failures
+    assert any("no expected benefit concept to require" in f for f in failures)
+
+
+def test_a_repeated_concept_cannot_shadow_a_divergent_stage():
+    report = _exact_report()
+    shelter = dict(report["aggregates"][2], mismatch_count=40)
+    report["aggregates"].insert(2, shelter)  # the clean row now comes last
+    report["concepts"].append({"id": _CONCEPTS[2]})
+    failures = _check(report)
+    assert f"concepts repeats {_CONCEPTS[2]}" in failures
+    assert f"aggregates repeats {_CONCEPTS[2]}" in failures
+
+
+def test_report_missing_the_benefit_concept_fails():
+    report = _exact_report()
+    benefit = _CO_STAGE_CONCEPTS["benefit"]
+    report["concepts"] = [row for row in report["concepts"] if row["id"] != benefit]
+    report["aggregates"] = [row for row in report["aggregates"] if row["concept"] != benefit]
+    assert _check(report) == [f"stage benefit ({benefit}) is not among the report's concepts"]
+
+
+def test_a_report_passes_only_when_it_compares_every_expected_stage():
+    # Exhaustive over all 64 subsets of Colorado's six stages: a report that
+    # lists and exactly compares only some of them never passes.
+    stages = list(_CO_STAGE_CONCEPTS)
+    for size in range(len(stages) + 1):
+        for kept in itertools.combinations(stages, size):
+            ids = {_CO_STAGE_CONCEPTS[stage] for stage in kept}
+            report = _exact_report()
+            report["concepts"] = [row for row in report["concepts"] if row["id"] in ids]
+            report["aggregates"] = [row for row in report["aggregates"] if row["concept"] in ids]
+            failures = _check(report)
+            assert (failures == []) == (len(kept) == len(stages)), (kept, failures)
+            assert len(failures) == (len(stages) - len(kept)) + (not kept), (kept, failures)
+
+
+def test_expected_stage_concepts_match_every_committed_report():
+    # Differential: the ids check requires, computed without running the
+    # replay, against the ids real replays wrote into the committed reports.
+    for name, config in replay.registered_suites().items():
+        expected = replay.expected_stage_concepts(config)
+        assert replay.BENEFIT_STAGE in expected, name
+        committed = json.loads(
+            (replay.DASHBOARD_DATA_DIR / config["dashboard"]["filename"]).read_text()
+        )
+        assert [row["id"] for row in committed["concepts"]] == list(expected.values()), name
 
 
 def test_wrong_rulespec_sha_or_engine_fails():
@@ -417,6 +492,31 @@ def test_check_fails_a_report_the_log_does_not_record_writing(tmp_path, capsys):
     assert "does not record writing axiom-snapqc-co-snap-0-2026-09-22.json" in out
 
 
+def test_check_command_fails_a_report_that_compared_no_stage(tmp_path, capsys):
+    report_dir = tmp_path / "reports"
+    report = _exact_report(case_count=856)
+    report["concepts"] = []
+    report["aggregates"] = []
+    _write_report(report_dir, report)
+    code = replay.main(
+        [
+            "check",
+            "co-snap-qc",
+            "--report-dir",
+            str(report_dir),
+            "--expect-rulespec-sha",
+            SHA,
+            "--expect-axiom-binary",
+            "/engine/bin",
+        ]
+    )
+    out = capsys.readouterr().out
+    assert code == 1
+    assert "co-snap-qc: FAIL" in out
+    assert "the report lists no stage concepts" in out
+    assert f"stage benefit ({_CO_STAGE_CONCEPTS['benefit']}) is not among" in out
+
+
 def test_check_refuses_a_missing_log(tmp_path):
     report_dir = tmp_path / "reports"
     _write_report(report_dir, _exact_report())
@@ -454,52 +554,12 @@ def _steps(job: str) -> list[dict]:
     return _workflow()["jobs"][job]["steps"]
 
 
-def test_workflow_runs_weekly_on_demand_and_when_called():
+def test_workflow_runs_weekly_and_on_demand_only():
     workflow = _workflow()
     triggers = workflow.get("on", workflow.get(True))  # YAML 1.1 reads `on` as True
-    assert set(triggers) == {"schedule", "workflow_dispatch", "workflow_call"}
+    assert set(triggers) == {"schedule", "workflow_dispatch"}
     assert triggers["schedule"][0]["cron"].split()[-1] == "1"  # weekly (Mondays)
     assert workflow["permissions"] == {"contents": "read"}
-    called = triggers["workflow_call"]["inputs"]
-    # Only a caller that commits (the affected rerun) asks for publish bundles.
-    assert called["publish"] == {
-        **called["publish"], "type": "boolean", "default": False
-    }
-    assert called["run_kind"]["type"] == "string"
-    assert set(called) >= set(triggers["workflow_dispatch"]["inputs"])
-
-
-def test_required_suites_run_in_the_live_lane_and_pending_ones_stay_manual():
-    """The replay lane can run exactly REQUIRED_SUITES, so exactly those route
-    the affected rerun to it (ci: snap-qc-replay); a pending suite has no
-    composition on rulespec-us main and stays ci: manual until promoted."""
-    registered = replay.registered_suites()
-    for name in replay.REQUIRED_SUITES:
-        assert registered[name].get("ci") == "snap-qc-replay", name
-    for name in replay.PENDING_SUITES:
-        assert registered[name].get("ci") == "manual", name
-
-
-def test_publish_bundles_only_a_live_exact_report():
-    steps = _steps("replay")
-    names = [step.get("name", "") for step in steps]
-    check = next(i for i, step in enumerate(steps) if "snap_qc_replay.py check" in step.get("run", ""))
-    bundle = next(i for i, name in enumerate(names) if name.startswith("Bundle"))
-    upload = next(i for i, name in enumerate(names) if name.startswith("Upload ${{ matrix.suite }}'s live report"))
-    assert check < bundle < upload
-    for index in (bundle, upload):
-        condition = steps[index]["if"]
-        assert "inputs.publish" in condition and "success()" in condition
-    assert "dashboard/public/data" in steps[bundle]["run"]
-    assert steps[upload]["with"]["name"] == "snap-qc-publish-${{ matrix.suite }}"
-    assert steps[upload]["with"]["if-no-files-found"] == "error"
-    # A publishing call only needs the replays.
-    assert "!inputs.publish" in _workflow()["jobs"]["live-tests"]["if"]
-
-
-def test_run_kind_input_overrides_the_trigger_default():
-    env = next(step for step in _steps("replay") if step.get("id") == "replay")["env"]
-    assert env["AXIOM_ORACLES_RUN_KIND"].startswith("${{ inputs.run_kind ||")
 
 
 def test_every_job_checks_rulespec_us_out_under_its_repo_basename():
@@ -521,7 +581,7 @@ def test_engine_is_built_at_the_artifact_pin_and_shared_by_one_key():
         job: [
             step["with"]["key"]
             for step in _steps(job)
-            if (step.get("with") or {}).get("path") == engine
+            if engine in (step.get("with") or {}).get("path", "").splitlines()
         ]
         for job in ("prepare", "replay", "live-tests")
     }
@@ -533,6 +593,31 @@ def test_engine_is_built_at_the_artifact_pin_and_shared_by_one_key():
     assert _workflow()["jobs"]["prepare"]["outputs"]["engine_cache_key"] == (
         keys["prepare"][0]
     )
+
+
+def test_cached_engine_retains_build_receipt_and_every_job_verifies_its_own_bytes():
+    binary = "engine/target/release/axiom-rules-engine"
+    for job in ("prepare", "replay", "live-tests"):
+        steps = _steps(job)
+        cache = next(
+            step for step in steps
+            if binary in (step.get("with") or {}).get("path", "").splitlines()
+        )
+        assert cache["with"]["path"].splitlines() == [
+            binary, binary + ".provenance.json"
+        ]
+        verify = next(
+            step for step in steps
+            if "axiom_oracles.engine_identity inspect" in step.get("run", "")
+        )
+        assert "--expect-commit" in verify["run"]
+        assert "if" not in verify  # Includes cache-hit executions without a checkout.
+        assert binary in verify["run"]
+    build = next(step for step in _steps("prepare") if step.get("name") == "Build axiom-rules-engine")
+    assert "axiom_oracles.engine_identity build" in build["run"]
+    assert "--repo ../engine" in build["run"]
+    assert "-j 4" in build["run"]
+    assert "receipt-v1" in "\n".join(step.get("run", "") for step in _steps("prepare"))
 
 
 def test_every_job_runs_on_one_pinned_image():
@@ -572,4 +657,3 @@ def test_workflow_never_commits():
     text = WORKFLOW.read_text()
     assert "git push" not in text
     assert "contents: write" not in text
-

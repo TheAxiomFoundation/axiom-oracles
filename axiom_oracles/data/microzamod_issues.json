@@ -1,0 +1,172 @@
+{
+ "schema": "axiom_oracles.microzamod_issues.v1",
+ "updated_at": "2026-10-04",
+ "purpose": "Track MicroZAMOD (SOUTHMOD Zambia) model findings observed in household-level Axiom oracle comparisons, mirroring ghamod_issues.json. Statutory encoding gaps belong in coverage inventories and comparison reports, not in this ledger. Canonical narrative ledger: rulespec-zm#1 closing comment.",
+ "entries": [
+  {
+   "id": "microzamod-ttb-deducts-employee-contributions-not-in-cy2025-statute",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "CANDIDATE (rulespec-zm#1 finding 1). MicroZAMOD ZM_2025 computes the income-tax base net of the employee NAPSA and NHIMA contributions (probed: ttb_s = yem - tsceepi_s - tsceehl_s at every tested income). The captured CY2025 law points the other way but does not settle it: the Income Tax (Amendment) Act, 2024 (Act No. 22 of 2024) s.4 replaces s.37(1) of the Income Tax Act with a deduction for contributions an employer pays to an approved fund; s.2(a) deletes the definitions of 'approved annuity contract' and 'approved pension fund' and redefines 'approved fund' as a pension scheme registered under the Pension Scheme Regulation Act; and the captured National Health Insurance Act, 2018 and S.I. No. 63 of 2019 contain no deductibility provision. The rest of s.37 and the principal Act (Cap. 323) are not captured, so 'no employee deduction in CY2025' is an inference until they are. Magnitude if it holds (probed 2026-10-04): at 240,000 kwacha gross the model returns tin_s 54,984 where the Charging Schedule on gross gives 60,312 (5,328/yr); at 409,968 gross 114,098.87 vs 123,200.16 (9,101.29/yr). rulespec-zm applies the schedule to gross; the zm-paye suite bridges the engine's own ttb_s, so it verifies the schedule arithmetic only and does not exercise this divergence, and zm-dispy keeps its live cases in the shared-nil zone.",
+   "affected_comparisons": [
+    "zm-paye-rate-schedule",
+    "zm-dispy"
+   ],
+   "affected_concepts": [
+    "zm:statutes/act-2023-22/income-tax-amendment-2023#individual_income_tax",
+    "zm:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income"
+   ],
+   "statutory_evidence_gap": "Cap. 323 s.37 other than subsection (1), and any other Income Tax Act provision on employee pension or NAPSA contributions, are not in the captured corpus."
+  },
+  {
+   "id": "microzamod-ttn-missing-zero-band-at-or-below-12000",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "Ninth Schedule Part II as substituted by the Income Tax (Amendment) Act, 2024 s.14(b) prescribes 0 percent on turnover of K12,000 or less and 5 percent above K12,000 up to K5,000,000; MicroZAMOD ZM_2025 charges 5% from the first kwacha (probed 2026-10-04: ttn_s 500.00 a year at turnover 10,000 and 600.00 at exactly 12,000, where the statutory row is nil). ZM_2024 shows the same pattern at 4% (probed 2026-10-04: 400.00 at 10,000 and 480.00 at 12,000; ZRA Practice Note 1 of 2024 gives 0% on K12,000 or less for 2024). Outside the zm-turnover grid, which keeps its live cases above 12,000.",
+   "affected_comparisons": [
+    "zm-turnover"
+   ],
+   "affected_concepts": [
+    "zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax"
+   ]
+  },
+  {
+   "id": "microzamod-ttn-strict-bound-at-five-million-ceiling",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "At turnover of exactly 5,000,000 MicroZAMOD ZM_2025 returns ttn_s 0 (probed 2026-10-04; 4,999,999 returns 249,999.95), where the encoded rulespec-zm module, reading the ceiling as inclusive, returns 250,000. The inclusive reading rests on the Ninth Schedule Part II row 'Above K12,000 up to K5,000,000' (Act No. 22 of 2024 s.14(b)) and on ZRA Practice Note 1 of 2024 describing the predecessor threshold as 'K800,000 and below'. Act No. 22 of 2024 s.8 only substitutes 'five million kwacha' for 'eight hundred thousand kwacha' in s.64A(2); the rest of s.64A(2) is not captured, so the July quotation of it ('five million kwacha or less') is unverified and is withdrawn. Candidate finding 2b; outside the zm-turnover grid.",
+   "affected_comparisons": [
+    "zm-turnover"
+   ],
+   "affected_concepts": [
+    "zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax"
+   ]
+  },
+  {
+   "id": "microzamod-cigarette-duty-cy2024-rate-in-zm-2025",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "MicroZAMOD ZM_2025 prices cigarettes at K0.400 per piece, the CY2024 K400 per mille (Act No. 25 of 2023); the Customs and Excise (Amendment) Act, 2024 (Act No. 24 of 2024) substitutes K452 per mille for headings 24.01/24.02 and the 2403.x subheadings from 1 January 2025. Probed 2026-10-04: tex03_s 40.00 per month on 100 sticks per month (q02301), i.e. 480.00 a year on 1,200 sticks, where the CY2025 statutory duty is 542.40. No live comparison: the rulespec-zm cigarette_duty concept has no concept mapping, so no suite compares it.",
+   "affected_comparisons": [],
+   "affected_concepts": [
+    "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#cigarette_duty"
+   ]
+  },
+  {
+   "id": "microzamod-transport-fuels-single-stale-rate-and-diesel-conflation",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "MicroZAMOD ZM_2025 applies a single K2.07 per litre to one transport-fuel quantity that does not separate petrol from diesel. K2.07 is the pre-2025 petrol (motor spirit, 2710.12.10) row in Act No. 19 of 2018 and Act No. 45 of 2021; the Customs and Excise (Amendment) Act, 2024 (Act No. 24 of 2024) sets petrol at K2.34 and automotive diesel (2710.19.10) at K0.75 per litre from 1 January 2025. Probed 2026-10-04: tex05_s 207.00 per month on 100 litres per month (q07222), i.e. 2,484.00 a year on 1,200 litres, where the CY2025 statutory duty is 2,808.00 for petrol (the model about 11.5% low) or 900.00 for diesel (the model about 2.76 times higher). No live comparison: the rulespec-zm petrol_duty and diesel_duty concepts have no concept mapping.",
+   "affected_comparisons": [],
+   "affected_concepts": [
+    "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#petrol_duty",
+    "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#diesel_duty"
+   ]
+  },
+  {
+   "id": "microzamod-clear-beer-flat-20pct-vs-statutory-60-and-suspension-layers",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "MicroZAMOD ZM_2025 taxes clear-beer expenditure at a flat 20% (probed 2026-10-04: tex02_s 26.06 per month on 100.00 raw x021302, 20% of the 130.29 uprated value). The statutory Second Schedule rate is 60% (Act No. 19 of 2018). Per ZRA Practice Note 1 of 2024, malt clear beer is suspended to 40% (S.I. No. 81 of 2015), sorghum is at 20% and cassava at 10%; S.I. No. 66 of 2023 (in operation 1 January 2024, revoked 31 December 2026) cuts malt to 20% and cassava to 5% for small and medium manufacturers and excess quantities, and S.I. No. 71 of 2023 excludes sorghum beer from those producers from the suspension. A flat 20% matches the sorghum rate and the reduced malt rate only. No live comparison: the rulespec-zm clear_beer_statutory_duty concept has no concept mapping.",
+   "affected_comparisons": [],
+   "affected_concepts": [
+    "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#clear_beer_statutory_duty"
+   ]
+  },
+  {
+   "id": "microzamod-opaque-beer-ad-valorem-on-expenditure-vs-specific-per-litre",
+   "classification": "no_engine_issue",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0",
+    "reproduction_note": "2026-10-04 single-household probes on ZM_2025 (zm_2022_a2), monthly values: x021303 100.00 -> tex02_s 0.00, tva_s 20.85; q021303 100 litres -> tex02_s 25.00, tva_s 4.00; x02110 or x02121 100.00 -> tex02_s 78.17 (60% of the 130.29 uprated value)."
+   },
+   "oracle_scope": "household_level",
+   "status": "not_reproduced_live",
+   "summary": "RETRACTED 2026-10-04. The July 2026 entry said MicroZAMOD taxes opaque-beer expenditure at the 60% ad-valorem rate (tex02_s 938.07 on 1,563.48 uprated). Re-probed on ZM_2025: opaque-beer expenditure (x021303) carries no excise (VAT only), and the opaque-beer quantity (q021303) is taxed at the statutory K0.25 per litre (Act No. 45 of 2021, 2203.00.10): tex02_s 25.00 per month on 100 litres. The July value equals what the model charges on 1,200 a year of the spirits or wine items (938.07, observed in zm-excise-ad-valorem), so it was not an opaque-beer observation. Opaque beer is an agreement zone between the model and the statute; no live case exercises it, because the rulespec-zm opaque_beer_duty concept has no concept mapping.",
+   "affected_comparisons": [],
+   "affected_concepts": [
+    "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#opaque_beer_duty"
+   ]
+  },
+  {
+   "id": "microzamod-sct-annualizes-drought-window-amounts-in-zm-2025",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "ZM",
+   "observed_with": {
+    "country": "ZM",
+    "system": "ZM_2025",
+    "dataset": "zm_2022_a2",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "summary": "MicroZAMOD ZM_2025 pays the Social Cash Transfer at 400 per month base and 600 per month for a severe-disability household (probed 2026-10-04 on the zm-sct households; 4,800 and 7,200 a year). The captured MCDSS Ministerial Statement gives K200 per month, K400 with a severely disabled member, and ZM_2024 matches it in the zm-sct live run. The July explanation, that ZM_2025 annualizes time-bounded 2025 drought measures (a K200 top-up and a Drought Emergency Cash Transfer described in the 2025 Budget Address as ending in June 2025) or anticipates a later permanent structure, is not backed by a captured source and is unverified; the July sub-claim about the drought-window severe-disability amount is withdrawn for the same reason. Outside the zm-sct grid, which runs on ZM_2024.",
+   "affected_comparisons": [
+    "zm-sct"
+   ],
+   "affected_concepts": [
+    "zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer"
+   ]
+  }
+ ]
+}

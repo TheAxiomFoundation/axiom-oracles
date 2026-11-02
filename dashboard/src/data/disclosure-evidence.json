@@ -1,0 +1,71 @@
+{
+  "recorded_on": "2026-10-06",
+  "provenance": "Public-page quotes were supplied by the Axiom engineering hub's reviewer; no network retrieval was performed in this workspace. Local excerpts are separately attributed and their limits are recorded.",
+  "disclosures": [
+    {
+      "claim_id": "policyengine-leadership",
+      "claim": "Max Ghenis co-founded PolicyEngine and is its CEO.",
+      "source_kind": "reviewer-verified public page",
+      "source_url": "https://axiom.org/team",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "the Axiom eng hub's reviewer",
+      "retrieval_note": "retrieved 2026-10-06 by the Axiom eng hub's reviewer",
+      "quote": "co-founder and CEO of PolicyEngine",
+      "coverage": "The reviewer identifies Max as the subject. This excerpt supports his PolicyEngine roles; it does not independently establish his Axiom role."
+    },
+    {
+      "claim_id": "axiom-leadership",
+      "claim": "Max Ghenis is Axiom's CEO.",
+      "source_kind": "approved PR declaration",
+      "source_url": "https://github.com/TheAxiomFoundation/axiom-oracles/blob/879bce60c9684c63470727f36dc2abf62711f1da/dashboard/src/components/OraclesV2.jsx#L49",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "Codex from the local committed PR source",
+      "retrieval_note": "read locally 2026-10-06 from approved PR commit 879bce60c9684c63470727f36dc2abf62711f1da",
+      "quote": "Max Ghenis is CEO of both Axiom and PolicyEngine",
+      "limitation": "This records the approved PR's declaration. An independent quote establishing the Axiom CEO role was not supplied; the axiom.org/team excerpt above establishes only the PolicyEngine roles."
+    },
+    {
+      "claim_id": "policyengine-fiscal-sponsorship",
+      "claim": "PSL Foundation fiscally sponsors PolicyEngine.",
+      "source_kind": "reviewer-verified public page",
+      "source_url": "https://policyengine.org/us/donate",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "the Axiom eng hub's reviewer",
+      "retrieval_note": "retrieved 2026-10-06 by the Axiom eng hub's reviewer",
+      "quote": "our fiscal sponsor, the PSL Foundation",
+      "coverage": "This PolicyEngine donation-page excerpt supports PolicyEngine's fiscal sponsorship; it does not independently establish Axiom's fiscal sponsorship."
+    },
+    {
+      "claim_id": "axiom-fiscal-sponsorship",
+      "claim": "PSL Foundation fiscally sponsors Axiom.",
+      "source_kind": "approved PR declaration",
+      "source_url": "https://github.com/TheAxiomFoundation/axiom-oracles/blob/879bce60c9684c63470727f36dc2abf62711f1da/dashboard/src/components/OraclesV2.jsx#L49",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "Codex from the local committed PR source",
+      "retrieval_note": "read locally 2026-10-06 from approved PR commit 879bce60c9684c63470727f36dc2abf62711f1da",
+      "quote": "PSL Foundation fiscally sponsors both organizations.",
+      "limitation": "This records the approved PR's declaration, whose organizations are Axiom and PolicyEngine. An independent quote establishing Axiom's fiscal sponsorship was not supplied; the PolicyEngine donation-page excerpt above establishes only PolicyEngine's sponsorship."
+    },
+    {
+      "claim_id": "taxsim-successor",
+      "claim": "PolicyEngine is building TAXSIM's successor with its author's cooperation.",
+      "source_kind": "reviewer-verified public page",
+      "source_url": "https://taxsim.nber.org/",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "the Axiom eng hub's reviewer",
+      "retrieval_note": "retrieved 2026-10-06 by the Axiom eng hub's reviewer",
+      "quote": "A successor to Taxsim is being built by PolicyEngine with my cooperation"
+    },
+    {
+      "claim_id": "taxsim-executable",
+      "claim": "Axiom's TAXSIM adapter uses the executable bundled in policyengine-taxsim.",
+      "source_kind": "committed adapter documentation",
+      "source_url": "https://github.com/TheAxiomFoundation/axiom-oracles/blob/ad256f528d8a95140b2fce37ae90251198066639/axiom_oracles/adapters/taxsim/pins.py#L3",
+      "source_path": "axiom_oracles/adapters/taxsim/pins.py",
+      "retrieved_on": "2026-10-06",
+      "retrieved_by": "Codex from the local committed adapter source",
+      "retrieval_note": "read locally 2026-10-06 from origin/main commit ad256f528d8a95140b2fce37ae90251198066639",
+      "quote": "The axiom-oracles TAXSIM adapter shells out to a TAXSIM executable bundled\ninside the ``policyengine-taxsim`` distribution"
+    }
+  ]
+}

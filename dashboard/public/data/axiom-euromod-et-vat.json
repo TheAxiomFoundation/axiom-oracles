@@ -1,0 +1,537 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat",
+      "description": "Ethiopia VAT on domestic electricity above 200 kWh per month (15%)",
+      "left_weighted_sum": 538.521385,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 538.521385,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 3,
+      "comparison_weight": 3,
+      "components": [],
+      "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat",
+      "description": "Ethiopia VAT on domestic water above 15 cubic meters per month (15%)",
+      "left_weighted_sum": 519.3737,
+      "match_rate": 100,
+      "match_weight": 3,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 519.3737,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 6,
+  "cases": [
+    {
+      "case_id": "et-vat-electricity-above-threshold",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat",
+          "left": 269.26069246435844,
+          "right": 269.26069246435844
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 300.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q0451": 300.0,
+            "x0451": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x0451": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-vat-electricity-at-threshold-200kwh",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 200.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q0451": 200.0,
+            "x0451": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x0451": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-vat-electricity-just-above-201kwh",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat",
+          "left": 269.26069246435844,
+          "right": 269.26069246435844
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 201.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q0451": 201.0,
+            "x0451": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x0451": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 1795.071283095723
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-vat-water-above-threshold",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat",
+          "left": 259.68684982662046,
+          "right": 259.68684982662046
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 20.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q044": 20.0,
+            "x044": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x044": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-vat-water-at-threshold-15m3",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 15.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q044": 15.0,
+            "x044": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x044": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-vat-water-just-above-16m3",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat",
+          "left": 259.68684982662046,
+          "right": 259.68684982662046
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.electricity_expenditure": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_electricity_kwh": 0.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.monthly_water_cubic_meters": 16.0,
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "q044": 16.0,
+            "x044": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "x044": [
+            "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1341-2024/value-added-tax-proclamation#input.water_expenditure": 1731.245665510803
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ET",
+        "scenario": "household-vat-utility-thresholds",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ethiopia VAT on domestic electricity above 200 kWh per month (15%)",
+      "id": "et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ethiopia VAT on domestic water above 15 cubic meters per month (15%)",
+      "id": "et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "ET"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:29:49Z",
+    "generated_by": "scripts/run_comparison.py::et-vat",
+    "oracle": {
+      "euromod_country": "ET",
+      "euromod_dataset": "et_2022_a2",
+      "euromod_system": "ET_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-et",
+        "sha": "98dfbac2eeba864ee6b881a0319065a50027562e"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "et-vat",
+  "summary": {
+    "comparison_count": 6,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 6,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 6,
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_weight": 0
+    }
+  }
+}

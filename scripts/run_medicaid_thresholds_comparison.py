@@ -70,7 +70,7 @@ _ALLOWED_FORMULA = re.compile(r"^[a-z0-9_+\-*/(),.\s]+$")
 
 def _git_show(path: str) -> str | None:
     proc = subprocess.run(
-        ["git", "-C", str(RULESPEC_ROOT), "show", f"origin/main:{path}"],
+        ["git", "--no-replace-objects", "-C", str(RULESPEC_ROOT), "show", f"origin/main:{path}"],
         capture_output=True,
         text=True,
     )
@@ -80,7 +80,7 @@ def _git_show(path: str) -> str | None:
 def _state_files() -> list[tuple[str, str, str]]:
     """(state_code, state_slug, repo_path) for every encoded CMS file."""
     proc = subprocess.run(
-        ["git", "-C", str(RULESPEC_ROOT), "ls-tree", "-r", "--name-only", "origin/main"],
+        ["git", "--no-replace-objects", "-C", str(RULESPEC_ROOT), "ls-tree", "-r", "--name-only", "origin/main"],
         capture_output=True,
         text=True,
         check=True,

@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 
 import pytest
+from hypothesis import given, settings, strategies as st
+
+from axiom_oracles.provenance import US_STATE_CODES
 
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
@@ -25,10 +28,10 @@ def _load(name: str):
 
 def test_repo_from_path_and_prefix():
     gam = _load("generate_affected_map.py")
-    assert gam._repo_from_path("$HOME/roots/rulespec-us-co") == (
-        "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_path("$HOME/roots/rulespec-uk") == (
+        "TheAxiomFoundation/rulespec-uk"
     )
-    assert gam._repo_from_prefix("us-co") == "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_prefix("us") == "TheAxiomFoundation/rulespec-us"
     assert gam._repo_from_prefix("uk") == "TheAxiomFoundation/rulespec-uk"
     # NEGATIVE: a non-rulespec directory contributes no repo.
     assert gam._repo_from_path("$HOME/some/other/dir") is None
@@ -83,7 +86,8 @@ def test_concept_prefix_maps_to_repo():
             },
         }
     )
-    assert "TheAxiomFoundation/rulespec-us-co" in repos
+    # The state layer is rulespec-us/us-co; rulespec-us-co is archived.
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
 
 
 def test_direct_oracle_baseline_has_no_rulespec_dependency():
@@ -107,7 +111,10 @@ def test_direct_oracle_baseline_has_no_rulespec_dependency():
     assert repos == set()
 
 
-def test_snap_encoder_lane_adds_state_and_federal():
+def test_snap_encoder_lane_maps_state_and_federal_to_the_monorepo():
+    """The bridge reads the state program from rulespec-us/us-<st> and the
+    federal chain from rulespec-us/us, so the lane depends on rulespec-us
+    alone (bridges/snap_populace.resolve_program_path)."""
     gam = _load("generate_affected_map.py")
     repos = gam.repos_for_registry_config(
         {
@@ -118,10 +125,7 @@ def test_snap_encoder_lane_adds_state_and_federal():
             },
         }
     )
-    assert repos == {
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca",
-    }
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
 
 
 def test_build_map_is_deterministic_and_check_passes():
@@ -208,8 +212,164 @@ def test_parameter_suite_entries_use_file_prefix():
             ]
         }
     )
-    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us-ga"]
+    # run_parameter_comparisons.py reads `git show origin/main:us-ga/...` from
+    # the ~/rulespec-us checkout: the file prefix is a monorepo directory.
+    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us"]
     assert entries[0]["report"] == "axiom-policyengine-ga-health-thresholds.json"
+
+
+# --- absorbed state repos: nothing mapped may be archived --------------------
+#
+# Regression fixtures from the author's reported 2026-09-24 GitHub query
+# (`gh repo list TheAxiomFoundation --json name,isArchived`) and 404 responses.
+# The source captures are not retained here, so these tests do not establish
+# current API status or archive dates. A 404 does not prove a repository never
+# existed. Frozen standalone SHAs and unreadable dependencies cannot establish
+# freshness against the country rules the harness reads.
+ARCHIVED_RULESPEC_REPOS = frozenset(
+    {f"rulespec-us-{st}" for st in (
+        "al ar az ca co de fl ga id ma md nc nh ny ok sc tn tx".split()
+    )}
+    | {
+        "rulespec-uk-kingston-upon-thames",
+        "rulespec-tz-znz",
+        "rulespec-compile",
+        "rulespec-syntax",
+        "rulespec-validators",
+    }
+)
+UNREADABLE_STATE_RULESPEC_REPOS = frozenset(
+    f"rulespec-us-{st}" for st in "ak hi ia ks me mi mn or ut wa".split()
+)
+COUNTRY_MONOREPO = r"TheAxiomFoundation/rulespec-[a-z]{2}"
+
+
+def _all_mapped_repos() -> dict[str, set[str]]:
+    """Every repo each committed map/freshness entry names, by source."""
+    root = Path(__file__).parents[1]
+    affected_map = json.loads((root / "comparisons" / "affected_map.json").read_text())
+    freshness = json.loads(
+        (root / "dashboard" / "public" / "data" / "freshness.json").read_text()
+    )
+    gam = _load("generate_affected_map.py")
+    return {
+        "comparisons/affected_map.json": {
+            repo for entry in affected_map["suites"] for repo in entry["repos"]
+        },
+        "build_map()": {
+            repo for entry in gam.build_map()["suites"] for repo in entry["repos"]
+        },
+        "freshness.json affected_repos": {
+            repo
+            for suite in freshness["suites"]
+            for repo in suite.get("affected_repos") or []
+        },
+    }
+
+
+def test_no_mapped_repo_is_archived_or_missing():
+    """NEGATIVE: reject the archived/unreadable regression names."""
+    import re
+
+    for source, repos in _all_mapped_repos().items():
+        assert repos, f"{source} names no repos at all"
+        names = {repo.split("/", 1)[1] for repo in repos}
+        assert not names & ARCHIVED_RULESPEC_REPOS, (
+            f"{source} maps suites to archived repos "
+            f"{sorted(names & ARCHIVED_RULESPEC_REPOS)}"
+        )
+        assert not names & UNREADABLE_STATE_RULESPEC_REPOS, (
+            f"{source} maps suites to unreadable repository names "
+            f"{sorted(names & UNREADABLE_STATE_RULESPEC_REPOS)}"
+        )
+        # Positive form: every mapped repo is a country monorepo, so a new
+        # sub-jurisdiction name (the shape absorption retired) fails here
+        # before anyone lists it. A country repo archived later is
+        # flagged live by the affected-rerun workflow's GitHub API check.
+        offenders = sorted(r for r in repos if not re.fullmatch(COUNTRY_MONOREPO, r))
+        assert not offenders, f"{source}: {offenders} are not country monorepos"
+
+
+def test_every_archived_state_repo_folds_into_the_monorepo():
+    """Cover the absorbed/unreadable fixtures; leave other archived fixtures
+    alone, so a suite naming one still trips the guard above."""
+    gam = _load("generate_affected_map.py")
+    from axiom_oracles.provenance import ABSORBED_RULESPEC_REPOS, US_STATE_CODES
+
+    absorbed = {
+        name for name in ARCHIVED_RULESPEC_REPOS if name.startswith("rulespec-us-")
+    } | {"rulespec-uk-kingston-upon-thames"}
+    for name in absorbed | UNREADABLE_STATE_RULESPEC_REPOS:
+        assert name in ABSORBED_RULESPEC_REPOS, name
+    for name in ARCHIVED_RULESPEC_REPOS - absorbed:
+        assert name not in ABSORBED_RULESPEC_REPOS, name
+        assert gam._slug(name) == f"TheAxiomFoundation/{name}"
+    # All 50 states and DC, through the prefix and path signals.
+    assert len(US_STATE_CODES) == 51
+    for code in US_STATE_CODES:
+        assert gam._repo_from_prefix(f"us-{code}") == "TheAxiomFoundation/rulespec-us"
+        assert gam._repo_from_path(f"$HOME/.axiom-oracles/roots/rulespec-us-{code}") == (
+            "TheAxiomFoundation/rulespec-us"
+        )
+    assert gam._repo_from_prefix("uk-kingston-upon-thames") == (
+        "TheAxiomFoundation/rulespec-uk"
+    )
+    # A declared remote is kept as-is, like the stamper keeps a git remote: a
+    # harness cloning it reads the archived repo, so the map says so and
+    # test_no_mapped_repo_is_archived_or_missing fails the commit.
+    assert gam._repo_from_remote(
+        "https://github.com/TheAxiomFoundation/rulespec-us-co.git"
+    ) == "TheAxiomFoundation/rulespec-us-co"
+
+
+@pytest.mark.parametrize(
+    "suite",
+    [
+        # parameter suites: `git show origin/main:us-<st>/...` from ~/rulespec-us
+        "ga-health-thresholds",
+        "hi-income-tax-parameters",  # an unreadable standalone-name fixture
+        # composed TANF programs over $HOME/rulespec-us
+        "al-tanf-ecps",
+        "ca-tanf-ecps",
+        "co-tanf-ecps",
+        "de-tanf-ecps",
+        "ga-tanf-ecps",
+        "az-tanf-ecps",
+        "ks-tanf-ecps",
+        "mn-tanf-ecps",
+        "ny-tanf-ecps",
+        "wa-tanf-ecps",
+        # encoder SNAP lane: program read from rulespec-us/us-<st>
+        "co-snap-ecps",
+        "or-snap-ecps",
+        "ut-snap-ecps",
+        # SNAP QC: one overlay built from a rulespec-us root
+        "co-snap-qc",
+        "tx-snap-qc",
+    ],
+)
+def test_state_suites_depend_on_the_monorepo_alone(suite):
+    gam = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gam.build_map()["suites"]}
+    assert entries[suite]["repos"] == ["TheAxiomFoundation/rulespec-us"]
+
+
+def test_roots_based_tanf_suites_read_the_monorepo_checkout():
+    """The five TANF suites that composed from rsync'd
+    ~/.axiom-oracles/roots/rulespec-us-<st> copies read ~/rulespec-us like the
+    rest of the state TANF lane, so their report provenance records the
+    monorepo checkout that ran (with its SHA), not a no-.git copy."""
+    import yaml
+
+    root = Path(__file__).parents[1]
+    for state in ("al", "ca", "co", "de", "ga", "az", "ks", "mn", "ny", "wa"):
+        config = yaml.safe_load(
+            (root / "comparisons" / f"{state}-tanf-ecps.yaml").read_text()
+        )
+        params = config["runner"]["parameters"]
+        assert params["rulespec_roots"] == ["$HOME/rulespec-us"], state
+        assert params["axiom_rulespec_repo_roots"] == "$HOME/rulespec-us", state
+        assert "rulespec-us-" not in config["description"], state
 
 
 # --- select_affected_suites -------------------------------------------------
@@ -285,12 +445,25 @@ def test_selector_unknown_head_does_not_force_rerun():
 # (null = not CI-runnable) and the selector dispatches exactly those.
 
 
-def test_map_registry_entries_carry_their_registry_name():
+def test_map_registry_entries_carry_their_registry_name(tmp_path, monkeypatch):
+    import yaml
+
     gen = _load("generate_affected_map.py")
-    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     # Dashboard suite key and registry name differ for the ukmod suites —
     # dispatching the suite key is exactly the "unknown comparison" crash.
-    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # Those suites declare ci: manual (the bare CI legs cannot run UKMOD), so
+    # the property is pinned on a dispatchable copy of one.
+    config = yaml.safe_load(
+        (REPO / "comparisons/uk-benefit-cap-ukmod.yaml").read_text()
+    )
+    config.pop("ci")
+    (tmp_path / "uk-benefit-cap-ukmod.yaml").write_text(yaml.safe_dump(config))
+    monkeypatch.setattr(gen, "COMPARISONS_DIR", tmp_path)
+    (entry,) = gen.build_map()["suites"]
+    assert (entry["suite"], entry["name"]) == ("uk-benefit-cap", "uk-benefit-cap-ukmod")
+
+    monkeypatch.setattr(gen, "COMPARISONS_DIR", REPO / "comparisons")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     # Parameter suites have no registry runner: run_parameter_comparisons.py
     # (manual lane) owns them, so the map must mark them non-dispatchable.
     assert entries["ssi-parameters"]["name"] is None
@@ -549,8 +722,11 @@ def test_ci_manual_registry_suite_emits_null_name():
     # upstream chain lands.
     assert entries["az-snap-ecps"]["name"] is None
     assert entries["co-snap-ecps"]["name"] is None
-    # A dispatchable registry suite keeps its name (UK lane, unaffected).
-    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # The EUROMOD-platform suites are manual: the bare CI legs cannot run
+    # the model, so their legs could only re-emit.
+    assert entries["uk-benefit-cap"]["name"] is None
+    # A dispatchable registry suite keeps its name.
+    assert entries["us-snap-abawd-grid"]["name"] == "us-snap-abawd-grid"
 
 
 def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
@@ -592,6 +768,89 @@ def test_pinned_repos_for_registry_config():
     }
     config["runner"]["parameters"].pop("rulespec_upstream_sha")
     assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+def test_roots_revision_pins_every_exercised_repo():
+    """An axiom-oracles-compare suite pinned through axiom_rulespec_repo_roots
+    (run_comparison._verify_declared_pins makes every checkout under the roots
+    hold the revision) is judged against that revision, not main's HEAD."""
+    gen = _load("generate_affected_map.py")
+    config = {
+        "name": "co-x-taxsim",
+        "runner": {
+            "type": "axiom-oracles-compare",
+            "parameters": {
+                "concepts": ["us:tax/federal-income-tax#eitc"],
+                "axiom_rulespec_repo_roots": "$HOME/oracle-pins",
+                "axiom_rulespec_repo_roots_revision": "ca2d424f",
+            },
+        },
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+    }
+    for bad in ("ca2", "CA2D424F", "not-a-sha"):
+        config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = bad
+        with pytest.raises(SystemExit, match="7-40 lowercase hex"):
+            gen.pinned_repos_for_registry_config(config)
+    config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = "ca2d424f"
+    config["runner"]["parameters"]["concepts"].append("us-co:tax/income#liability")
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+    }
+    config["runner"]["parameters"]["concepts"].append("uk:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
+    config["runner"]["parameters"].pop("axiom_rulespec_repo_roots_revision")
+    assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+@settings(max_examples=50, database=None, deadline=None)
+@given(
+    prefixes=st.lists(
+        st.sampled_from(["us", *(f"us-{code}" for code in sorted(US_STATE_CODES))]),
+        min_size=1,
+        max_size=6,
+    ),
+    revision=st.text(alphabet="0123456789abcdef", min_size=7, max_size=40),
+    other_country=st.sampled_from(["uk", "be"]),
+)
+def test_roots_revision_pin_depends_on_canonical_repo_set(
+    prefixes, revision, other_country
+):
+    """US jurisdictions share a pin; a second country requires its own pin."""
+    gen = _load("generate_affected_map.py")
+    parameters = {
+        "concepts": [f"{prefix}:tax/income#liability" for prefix in prefixes],
+        "axiom_rulespec_repo_roots": "$HOME/oracle-pins",
+        "axiom_rulespec_repo_roots_revision": revision,
+    }
+    config = {
+        "name": "roots-pin-property",
+        "runner": {"type": "axiom-oracles-compare", "parameters": parameters},
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": revision
+    }
+    parameters["concepts"].append(f"{other_country}:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
+
+
+def test_committed_roots_pinned_suites_carry_their_pin():
+    affected = json.loads(
+        (Path(__file__).resolve().parents[1] / "comparisons" / "affected_map.json")
+        .read_text()
+    )
+    pins = {
+        entry["suite"]: entry.get("pinned")
+        for entry in affected["suites"]
+        if entry["suite"] in {"fiit-taxsim-ecps", "co-tax-intersection-taxsim"}
+    }
+    assert pins == {
+        "fiit-taxsim-ecps": {"TheAxiomFoundation/rulespec-us": "ca2d424f"},
+        "co-tax-intersection-taxsim": {"TheAxiomFoundation/rulespec-us": "ca2d424f"},
+    }
 
 
 def test_pinned_repos_ambiguity_fails_loudly():
@@ -645,6 +904,26 @@ def test_selector_pinned_repo_stale_when_pin_changes():
     selected = sel.select(aff, heads, reports)
     assert [s["suite"] for s in selected] == ["s1"]
     assert "pin" in selected[0]["reason"]
+
+
+def test_selector_matches_a_short_pin_by_prefix():
+    """Roots-revision pins may be SHA prefixes; reports record full SHAs."""
+    sel = _load("select_affected_suites.py")
+    aff = {
+        "suites": [
+            {
+                "suite": "s1",
+                "name": "s1",
+                "repos": ["owner/rulespec-us"],
+                "pinned": {"owner/rulespec-us": "ca2d424f"},
+            }
+        ]
+    }
+    heads = {"owner/rulespec-us": "9" * 40}
+    fresh = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "ca2d424f" + "0" * 32}])}
+    assert sel.select(aff, heads, fresh) == []
+    stale = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "9" * 40}])}
+    assert [s["suite"] for s in sel.select(aff, heads, stale)] == ["s1"]
 
 
 def test_selector_pinned_repo_unknown_sha_still_selected():
@@ -714,26 +993,18 @@ def test_snap_qc_lane_maps_only_the_root_its_overlay_is_built_from():
     ) == {RULESPEC_US}
 
 
-def test_every_snap_qc_suite_routes_away_from_the_bare_matrix():
-    """Bare CI runners can only re-emit a SNAP QC report, so every snap-qc
-    suite either runs in the live replay lane (keeping its registry name for
-    that lane's workflow) or is manual; none reaches the bare rerun matrix."""
+def test_every_snap_qc_suite_is_manual_and_maps_only_rulespec_us():
+    """Bare CI runners can only re-emit a SNAP QC report, so no snap-qc suite
+    may be dispatched by the affected rerun or the weekly matrix."""
     gam = _load("generate_affected_map.py")
     entries = {e["suite"]: e for e in gam.build_map()["suites"]}
     configs = _snap_qc_configs()
     assert len(configs) >= 7
-    lane_suites = 0
     for config in configs:
         entry = entries[config["dashboard"]["suite"]]
+        assert config.get("ci") == "manual", config["name"]
+        assert entry["name"] is None, config["name"]
         assert entry["repos"] == [RULESPEC_US], config["name"]
-        if config.get("ci") == "snap-qc-replay":
-            lane_suites += 1
-            assert entry["name"] == config["name"]
-            assert entry["lane"] == "snap-qc-replay"
-        else:
-            assert config.get("ci") == "manual", config["name"]
-            assert entry["name"] is None and "lane" not in entry
-    assert lane_suites >= 6
 
 
 def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
@@ -765,7 +1036,15 @@ def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
 
     provenance = rc._build_run_provenance(config, "snap-qc-compare", output)
 
-    assert provenance["rulespecs"] == [{"repo": RULESPEC_US, "sha": sha}]
+    assert provenance["rulespecs"] == [
+        {
+            "repo": RULESPEC_US,
+            "sha": sha,
+            "dirty": False,
+            "sha_toplevel": str(checkout.resolve()),
+            "worktree_toplevel": str(checkout.resolve()),
+        }
+    ]
     entry = next(
         e for e in gam.build_map()["suites"] if e["suite"] == "ny-snap-qc"
     )
@@ -806,73 +1085,133 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
         # rulespec-us unmoved: fresh, whatever the archived state repos say.
         fresh = sel.select(affected, {**archived, RULESPEC_US: ran_against}, reports)
         assert suite not in {d["suite"] for d in fresh}
-        # rulespec-us moved: stale, and routed to the live replay lane (or
-        # the manual lane), never the bare matrix.
+        # rulespec-us moved: stale, but routed to the manual lane.
         moved = sel.select(affected, {**archived, RULESPEC_US: "b" * 40}, reports)
         decision = next(d for d in moved if d["suite"] == suite)
+        assert decision["name"] is None
         assert config["name"] not in sel.runnable_names(moved)
-        if config.get("ci") == "snap-qc-replay":
-            assert decision["lane"] == "snap-qc-replay"
-            assert config["name"] in sel.lane_names(moved, "snap-qc-replay")
-            assert suite not in sel.manual_suites(moved)
-        else:
-            assert decision["name"] is None
-            assert suite in sel.manual_suites(moved)
+        assert suite in sel.manual_suites(moved)
 
 
-# --- CI lanes (ci: <lane>) ------------------------------------------------------
+#: Runner types the bare CI legs (affected-rerun.yml's rerun matrix and the
+#: weekly comparisons.yml matrix) can never execute, so they could only
+#: re-emit or copy the committed report, or fail:
+#:
+#: * euromod-synthetic-compare needs the x64 EUROMOD/UKMOD engine, the
+#:   euromod connector under EUROMOD_PYTHON, a .NET runtime and the model
+#:   checkout, none of which either workflow provides.
+#: * the UK PolicyEngine case grids and the us-tariff grid evaluate the rules
+#:   through an engine binary (AXIOM_RULES_ENGINE_BINARY, an
+#:   axiom-rules-engine build, or axiom-rules on PATH) that neither workflow
+#:   exports or builds; their legs fail with "No such file or directory:
+#:   'axiom-rules'" and fall back to the committed report.
+#: * spsm-ca-compare needs a licensed SPSD/M install (SPSM_HOME), which is
+#:   never vendored and which no runner can hold. Its generator hard-fails
+#:   instead of re-emitting ("No SPSD/M installation found"), so its weekly
+#:   leg was red every week (run 36426573617 on 2026-09-28).
+#:
+#: The affected rerun committed the re-emitting lanes' outputs over real runs
+#: and then over each other every six hours. A workflow that starts
+#: provisioning one of these lanes should drop the type from this set and the
+#: markers with it.
+BARE_CI_UNRUNNABLE_RUNNER_TYPES = frozenset(
+    {
+        "euromod-synthetic-compare",
+        "spsm-ca-compare",
+        "uk-attendance-allowance-pe-grid",
+        "uk-business-rates-grid",
+        "uk-capital-gains-tax-grid",
+        "uk-council-tax-reduction-grid",
+        "uk-fuel-duty-grid",
+        "uk-lbtt-ltt-grid",
+        "uk-tax-free-childcare-pe-grid",
+        "uk-tv-licence-grid",
+        "uk-vat-grid",
+        "uk-winter-fuel-payment-pe-grid",
+        "us-tariff-grid",
+    }
+)
 
 
-def test_ci_routing_names_lanes_and_rejects_anything_else():
+def _bare_ci_unrunnable_configs() -> list[dict]:
+    import yaml
+
+    configs = []
+    for path in sorted((REPO / "comparisons").glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if (
+            isinstance(config, dict)
+            and (config.get("runner") or {}).get("type")
+            in BARE_CI_UNRUNNABLE_RUNNER_TYPES
+        ):
+            configs.append(config)
+    return configs
+
+
+def test_every_suite_the_bare_ci_legs_cannot_run_is_manual():
+    """A suite of a runner type the bare CI legs cannot execute must declare
+    ``ci: manual``, so the affected rerun never dispatches it and the weekly
+    matrix skips it. Without the marker its leg can only re-emit or copy the
+    committed report, which is how 35 suites churned a generated_at-only
+    commit every sweep and ten UK grids were stamped fresh on July numbers,
+    or fail outright, as the SPSD/M leg did every week."""
     gam = _load("generate_affected_map.py")
-
-    def config(**extra):
-        return {"name": "ny-snap-qc", "runner": {"type": "snap-qc-compare"}, **extra}
-
-    assert gam.ci_routing(config()) == ("ny-snap-qc", None)
-    assert gam.ci_routing(config(ci="manual")) == (None, None)
-    assert gam.ci_routing(config(ci="snap-qc-replay")) == (
-        "ny-snap-qc",
-        "snap-qc-replay",
-    )
-    # NEGATIVE: an unknown lane, or a lane for another runner type, fails
-    # loudly rather than silently dropping the suite from every matrix.
-    with pytest.raises(SystemExit, match="unknown ci"):
-        gam.ci_routing(config(ci="snap-qc-live"))
-    with pytest.raises(SystemExit, match="runner type"):
-        gam.ci_routing(
-            {"name": "fiit", "runner": {"type": "axiom-oracles-compare"},
-             "ci": "snap-qc-replay"}
-        )
+    entries = {e["name"]: e for e in gam.build_map()["suites"] if e.get("name")}
+    configs = _bare_ci_unrunnable_configs()
+    # Guards the guard: the registry holds 40 EUROMOD-platform suites, ten UK
+    # PolicyEngine grids, the us-tariff grid and the SPSD/M suite.
+    assert len(configs) >= 52
+    for config in configs:
+        assert config.get("ci") == "manual", config["name"]
+        assert config["name"] not in entries, config["name"]
 
 
-def test_selector_rejects_a_malformed_lane():
+def test_selector_never_dispatches_a_bare_ci_unrunnable_suite():
+    """Even with every rulespec repo moved past every report, none of these
+    suites reaches the rerun matrix; the stale ones are listed for the manual
+    lane instead. A suite that maps to no rulespec repo (the SPSD/M suite runs
+    no RuleSpec checkout) is never selected at all, so it is never listed."""
     sel = _load("select_affected_suites.py")
-    for entry in (
-        {"suite": "s", "name": "s", "repos": ["r"], "lane": ""},
-        {"suite": "s", "name": None, "repos": ["r"], "lane": "snap-qc-replay"},
+    affected = json.loads(sel.AFFECTED_MAP.read_text())
+    repos = {entry["suite"]: entry.get("repos") for entry in affected["suites"]}
+    reports = sel.load_reports(affected)
+    heads = {
+        repo: "b" * 40
+        for entry in affected["suites"]
+        for repo in entry.get("repos", [])
+    }
+    for selected in (
+        sel.select(affected, heads, reports),
+        sel.force_all_selection(affected),
     ):
-        with pytest.raises(SystemExit, match="malformed lane"):
-            sel.select({"suites": [entry]}, {"r": "x"}, {})
+        dispatched = set(sel.runnable_names(selected))
+        manual = set(sel.manual_suites(selected))
+        for config in _bare_ci_unrunnable_configs():
+            assert config["name"] not in dispatched, config["name"]
+            suite = (config.get("dashboard") or {}).get("suite", config["name"])
+            if repos[suite]:
+                assert suite in manual, suite
+            else:
+                assert suite not in {d["suite"] for d in selected}, suite
 
 
-def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys):
-    """force_all (and a normal sweep) put lane suites in lane_<lane>, never in
-    the bare matrix the rerun job dispatches, and never in the manual list."""
-    sel = _load("select_affected_suites.py")
-    monkeypatch.setattr(
-        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
-    )
-    assert sel.main() == 0
-    out = dict(
-        line.split("=", 1) for line in capsys.readouterr().out.splitlines() if "=" in line
-    )
-    lane = json.loads(out["lane_snap_qc_replay"])
-    assert int(out["lane_snap_qc_replay_count"]) == len(lane) >= 6
-    matrix = {row["name"] for row in json.loads(out["matrix"])["include"]}
-    assert not matrix & set(lane)
-    assert not set(out["manual"].split()) & set(lane)
-    for config in _snap_qc_configs():
-        if config.get("ci") == "snap-qc-replay":
-            assert config["name"] in lane
+def test_committed_reports_of_lanes_the_bot_cannot_run_are_real_runs():
+    """No committed report of a suite the bare CI legs cannot run is a
+    re-emission. The bot never dispatches these suites, so their reports
+    change only through a supervised run or a PR, and a re-emission here means
+    one replaced a real run: until 2026-09-24, 35 of them (34 EUROMOD and
+    UKMOD suites and us-tariff) were re-emissions hiding the real run each had
+    replaced. Scoped to these lanes because the publisher still lets a
+    dispatchable suite's first copy be a re-emission."""
+    from axiom_oracles.provenance import is_real_run_report
 
+    reemitted = []
+    for config in _bare_ci_unrunnable_configs():
+        filename = (config.get("dashboard") or {}).get("filename")
+        path = REPO / "dashboard/public/data" / str(filename)
+        if filename and path.exists():
+            if not is_real_run_report(json.loads(path.read_text())):
+                reemitted.append(path.name)
+    assert reemitted == []

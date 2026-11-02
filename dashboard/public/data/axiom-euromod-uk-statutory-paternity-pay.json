@@ -575,10 +575,7 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom",
-    "versions": {
-      "axiom_rules_engine": "0.2.2"
-    }
+    "right": "axiom"
   },
   "errors": [],
   "locales": [
@@ -592,10 +589,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
-      "axiom_rules_engine_version": "0.2.2"
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
+      "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-09-24T05:05:53Z",
+    "generated_at": "2026-07-06T20:10:06Z",
     "generated_by": "scripts/run_comparison.py::uk-statutory-paternity-pay-ukmod",
     "oracle": {
       "euromod_country": "UK",
@@ -604,14 +601,13 @@
       "euromod_system": "UK_2026",
       "name": "euromod"
     },
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": null
+        "sha": "0b93d81852f5395e53ca0a6841604f29678d86ef"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
