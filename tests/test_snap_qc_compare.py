@@ -590,7 +590,7 @@ def _stub_snap_runtime(monkeypatch, tmp_path):
     monkeypatch.setattr(sc, "_load_base_member", lambda *a: {})
     monkeypatch.setattr(sc, "sua_amounts_from_overlay", lambda *a: {})
     monkeypatch.setattr(sc, "axiom_rules_env", lambda *a: {})
-    monkeypatch.setattr(sc, "build_overlay", lambda *a: SimpleNamespace(
+    monkeypatch.setattr(sc, "build_overlay", lambda *a, nominal_month: SimpleNamespace(
         program_path=tmp_path / "program.yaml", overlay_root=tmp_path,
         provenance={"fixture": "cached executable"},
     ))
@@ -787,6 +787,23 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     assert value("snap_standard_deduction") == 198
     assert value("snap_maximum_allotment") == 291
     assert value("snap_standard_utility_allowance") == 560
+
+
+def test_nominal_month_sits_in_the_fiscal_year_the_overlay_maps_onto() -> None:
+    from datetime import date
+
+    from axiom_oracles.bridges.rulespec_overlay import (
+        fiscal_year_containing,
+        fiscal_year_window,
+    )
+
+    assert sc.nominal_month() == date(*sc.NOMINAL_PERIOD, 1) == date(2026, 1, 1)
+    # The shared SNAP chain starts 2025-10-01; the mapped COLA window must
+    # start there too, so the nominal month selects one version of each.
+    assert fiscal_year_window(fiscal_year_containing(sc.nominal_month())) == (
+        date(2025, 10, 1),
+        date(2026, 9, 30),
+    )
 
 
 def test_unit_level_elderly_or_disabled_overrides_member_flags() -> None:
