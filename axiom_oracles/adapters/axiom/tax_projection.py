@@ -5,6 +5,12 @@ from typing import Any
 
 from ...bridges.relation_binding import relation_tuple
 from ...core.case import Case, Concepts, Entity
+from ...core.us_tax_parameters import (
+    EXCESS_BUSINESS_LOSS_THRESHOLD_2026,
+    EXCESS_BUSINESS_LOSS_THRESHOLD_JOINT_2026,
+    OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026,
+    QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026,
+)
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
     AXIOM_INPUT_RECORDS_METADATA_KEY,
@@ -153,19 +159,29 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="26 USC 24(d)(2)(A)(ii)-(iii)",
         formula="0.50",
     ),
+    # Both OASDI-base names read one published amount
+    # (axiom_oracles/core/us_tax_parameters.py). The bridge's own employee
+    # and self-employment OASDI rules below cap at social_security_wage_base;
+    # the section 230 name is the one RuleSpec modules ask for.
     _generated_parameter_rule(
         "social_security_wage_base",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine's 2026 SSA contribution and benefit base",
-        formula="186000",
+        source=(
+            "SSA 2026 OASDI contribution and benefit base, "
+            "90 FR 49047 (Nov. 3, 2025)"
+        ),
+        formula=str(OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026),
     ),
     _generated_parameter_rule(
         "contribution_and_benefit_base_under_section_230_of_social_security_act",
         dtype="Money",
         unit="USD",
-        source="Social Security Administration 2026 contribution and benefit base",
-        formula="186000",
+        source=(
+            "SSA 2026 OASDI contribution and benefit base, "
+            "90 FR 49047 (Nov. 3, 2025)"
+        ),
+        formula=str(OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026),
     ),
     _generated_parameter_rule(
         "alaska_permanent_fund_dividend_amount",
@@ -274,15 +290,15 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "business_loss_limit_joint_2026",
         dtype="Money",
         unit="USD",
-        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
-        formula="610000",
+        source="26 USC 461(l)(3)(A)(ii)(II); Rev. Proc. 2025-32 section 4.31",
+        formula=str(EXCESS_BUSINESS_LOSS_THRESHOLD_JOINT_2026),
     ),
     _generated_parameter_rule(
         "business_loss_limit_other_2026",
         dtype="Money",
         unit="USD",
-        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
-        formula="305000",
+        source="26 USC 461(l)(3)(A)(ii)(II); Rev. Proc. 2025-32 section 4.31",
+        formula=str(EXCESS_BUSINESS_LOSS_THRESHOLD_2026),
     ),
     _generated_parameter_rule(
         "co_income_tax_rate",
@@ -2786,7 +2802,11 @@ US_TAX_ORACLE_PROGRAM_RULES = (
 
 _TAX_UNIT_ID = "tax_unit"
 _HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT = 24
-_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = 5_500
+# 26 USC 152(d)(1)(B) gross income "less than the exemption amount"; the
+# Tax-Calculator projection reads the same constant.
+_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = (
+    QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026
+)
 _AXIOM_TAX_REF_PREFIX = "us:tax/federal-income-tax"
 _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100

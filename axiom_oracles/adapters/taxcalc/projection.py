@@ -5,6 +5,7 @@ from dataclasses import replace
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
+from ...core.us_tax_parameters import QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026
 
 
 _SPOUSE_RELATIONS = {
@@ -27,7 +28,11 @@ _HEAD_RELATIONS = {
 }
 
 _HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT = 24
-_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = 5_200
+# 26 USC 152(d)(1)(B) gross income "less than the exemption amount"; the
+# Axiom projection reads the same constant.
+_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = (
+    QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026
+)
 
 
 def attach_taxcalc_inputs(cases: list[Case]) -> list[Case]:

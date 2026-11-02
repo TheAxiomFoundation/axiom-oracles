@@ -125,9 +125,10 @@ do not chase the Axiom encoding):
   additional Medicare tax in its self-employment-tax ALD, which §164(f)(1)
   excludes (isolated probe: w=0, se=810,431 → ALD 24,759.23 = 22,291.28
   statutory + 0.5 × 0.009 × (748,433 − 200,000)). Its OASDI base is the
-  official 184,500; the oracle bridge deliberately pins 186,000 to match
-  PolicyEngine, so wage-straddling rows differ by exactly 0.5 × 0.124 ×
-  1,500 = 93.00. Axiom's ALD is statutory at the bridge base.
+  official 184,500, which the oracle bridge also reads since #611 (SSA,
+  90 FR 49047). Until then the bridge pinned 186,000, so wage-straddling
+  rows differed by exactly 0.5 × 0.124 × 1,500 = 93.00. Axiom's ALD is
+  statutory at the bridge base.
 - **QBID**: plain 20% of (psemp + ssemp − its SE ALD) — no §199A(b)(3)
   wage/UBIA limitation, no H.R.1 §70105 $400 minimum, no rental in the
   QBI base. Rows above the phase-in ceiling collapse to axiom's $400
@@ -136,8 +137,10 @@ do not chase the Axiom encoding):
   projected 332,389.95 single / 664,779.90 joint, and it treats net
   positive capital gain as business gross income (the allowance grows
   dollar-for-dollar). The axiom leg's cap arrives through the projection
-  surface at the 2024-vintage 305,000/610,000 with no gain offset, so
-  these rows are two-sided (`explained_residual`), favoring neither.
+  surface at Rev. Proc. 2025-32 section 4.31's 256,000/512,000 with no
+  gain offset (#611; the 2024-vintage 305,000/610,000 before that), so
+  these rows are two-sided (`explained_residual`). Re-check the class
+  against a fresh run, since the axiom cap moved.
 - **AMT at extreme incomes**: AMTI agrees to the cent (`v26`); `v27`
   departs per the pre-OBBBA AMT parameter vintage compounded with the
   capital-gains bracket vintage, while the bridge's Part III grants the

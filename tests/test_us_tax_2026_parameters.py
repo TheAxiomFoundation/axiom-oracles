@@ -23,7 +23,6 @@ and the Tax-Calculator leg of the same Case alike.
 
 from __future__ import annotations
 
-import pytest
 from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
@@ -93,7 +92,6 @@ def _single_parent_with_young_adult(dependent_gross_income):
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#611: the bridge pins 186,000")
 def test_bridge_oasdi_base_is_the_ssa_2026_amount() -> None:
     assert _rule_formula("social_security_wage_base") == "184500"
     assert (
@@ -104,13 +102,11 @@ def test_bridge_oasdi_base_is_the_ssa_2026_amount() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#611: the bridge pins 305,000/610,000")
 def test_bridge_excess_business_loss_threshold_is_rev_proc_2025_32() -> None:
     assert _rule_formula("business_loss_limit_other_2026") == "256000"
     assert _rule_formula("business_loss_limit_joint_2026") == "512000"
 
 
-@pytest.mark.xfail(strict=True, reason="#611: the projections pin 5,500 and 5,200")
 def test_both_projections_read_one_qualifying_relative_limit() -> None:
     assert QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026 == 5_300
     assert (
@@ -123,7 +119,6 @@ def test_both_projections_read_one_qualifying_relative_limit() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#611: the Axiom projection pins 5,500")
 def test_axiom_projection_applies_the_152_d_1_b_limit() -> None:
     # "less than the exemption amount": 5,299.99 qualifies, 5,300 does not.
     assert _axiom_filing_status(_single_parent_with_young_adult(5_299.99)) == (
@@ -133,7 +128,6 @@ def test_axiom_projection_applies_the_152_d_1_b_limit() -> None:
     assert _axiom_filing_status(_single_parent_with_young_adult(5_450)) == SINGLE
 
 
-@pytest.mark.xfail(strict=True, reason="#611: the Tax-Calculator projection pins 5,200")
 def test_taxcalc_projection_applies_the_152_d_1_b_limit() -> None:
     assert _taxcalc_mars(_single_parent_with_young_adult(5_250)) == 4
     assert _taxcalc_mars(_single_parent_with_young_adult(5_299.99)) == 4
@@ -153,7 +147,6 @@ _DEPENDENT = st.tuples(
 )
 
 
-@pytest.mark.xfail(strict=True, reason="#611: 5,500 and 5,200 disagree")
 @PROPERTY_SETTINGS
 @given(
     has_spouse=st.booleans(),
