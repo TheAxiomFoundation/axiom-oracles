@@ -1411,3 +1411,77 @@ def test_property_reapply_equals_apply_on_raw_rows(rows, keep, shift) -> None:
     assert sum(block["counts"].values()) == len(rows)
     labelled = sum("disposition" in row for row in from_premerged["mismatches"])
     assert labelled == len(rows) - block["unexplained_count"]
+
+
+# --- #522: policyengine-us citations must be commit-pinned ----------------
+
+_PE_SHA = "49d19b239a593dbac8920ac6fd80cfe33372343a"
+_PE_PATH = "policyengine_us/parameters/gov/usda/snap/income/deductions/rate.yaml"
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/PolicyEngine/policyengine-us/blob/1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/tree/1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/master/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/main/{_PE_PATH}",
+        f"https://github.com/policyengine/POLICYENGINE-US/blob/1.767.3/{_PE_PATH}",
+        f"https://www.github.com/PolicyEngine/policyengine-us/blob/1.767.3/{_PE_PATH}",
+        f"http://github.com/PolicyEngine/policyengine-us/blob/v1.767.3/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA[:7]}/{_PE_PATH}",
+        f"https://raw.githubusercontent.com/PolicyEngine/policyengine-us/1.767.3/{_PE_PATH}",
+    ],
+)
+@pytest.mark.parametrize("field", ["sources", "upstream_url", "linked_issue"])
+def test_policyengine_us_citation_by_moving_ref_is_invalid(url, field) -> None:
+    evidence = {"mechanism": "m", "arithmetic": [{"expression": "1", "equals": 1}]}
+    entry = _entry(evidence=evidence)
+    if field == "sources":
+        evidence["sources"] = [url]
+    elif field == "upstream_url":
+        evidence["upstream_url"] = url
+    else:
+        entry["linked_issue"] = url
+    errors = validate_dispositions(_document([entry]))
+    assert any("40-hex commit" in error for error in errors), errors
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA}/{_PE_PATH}",
+        f"https://github.com/PolicyEngine/policyengine-us/blob/{_PE_SHA}/{_PE_PATH}#L3",
+        f"https://raw.githubusercontent.com/PolicyEngine/policyengine-us/{_PE_SHA}/{_PE_PATH}",
+        "https://github.com/PolicyEngine/policyengine-us/issues/8614",
+        "https://github.com/PolicyEngine/policyengine-us/pull/8614",
+        # Other repositories are out of this check's scope.
+        "https://github.com/TheAxiomFoundation/rulespec-us/blob/main/x.yaml",
+    ],
+)
+def test_commit_pinned_or_non_code_policyengine_us_urls_pass(url) -> None:
+    evidence = {
+        "mechanism": "m",
+        "arithmetic": [{"expression": "1", "equals": 1}],
+        "sources": [url],
+        "upstream_url": url,
+    }
+    entry = _entry(evidence=evidence, linked_issue=url)
+    assert validate_dispositions(_document([entry])) == []
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    ref=st.text(
+        alphabet="0123456789abcdefABCDEF.v-_mainster",
+        min_size=1,
+        max_size=45,
+    ).filter(lambda ref: ref not in {".", ".."}),
+    kind=st.sampled_from(["blob", "tree"]),
+)
+def test_property_policyengine_us_ref_must_be_full_commit(ref, kind) -> None:
+    url = f"https://github.com/PolicyEngine/policyengine-us/{kind}/{ref}/{_PE_PATH}"
+    evidence = {"mechanism": "m", "sources": [url]}
+    errors = validate_dispositions(_document([_entry(evidence=evidence)]))
+    pinned = len(ref) == 40 and all(c in "0123456789abcdef" for c in ref)
+    assert (errors == []) is pinned, (ref, errors)

@@ -52,6 +52,11 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   validation — the Wallonia lesson. Every literal, intermediate and final
   value, ``equals`` and ``tolerance`` must be finite, so a NaN or infinity
   can never make the reconciliation check vacuous.
+* A GitHub code link (``/blob/``, ``/tree/``, ``/raw/`` or
+  ``raw.githubusercontent.com``) into ``PolicyEngine/policyengine-us``, in
+  ``evidence.sources``, ``evidence.upstream_url`` or ``linked_issue``, must
+  name a full 40-hex commit. That repository publishes no version tags, so
+  a ``/blob/<version>/`` link is dead and a branch link moves.
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
@@ -96,6 +101,7 @@ import ast
 import hashlib
 import json
 import math
+import re
 from pathlib import Path
 
 import yaml
@@ -239,6 +245,44 @@ def _is_url(value: object) -> bool:
     return isinstance(value, str) and value.startswith(("http://", "https://"))
 
 
+# Repositories that publish no version tags: a /blob/<version>/ link 404s and
+# a branch link moves, so a citation must name the full commit. The check is
+# offline (it never resolves the URL); it checks only the ref's form.
+_COMMIT_PINNED_REPOSITORIES = frozenset({("policyengine", "policyengine-us")})
+_GITHUB_CODE_URL_RE = re.compile(
+    r"^https?://(?:www\.)?github\.com/(?P<owner>[^/?#]+)/(?P<repo>[^/?#]+)/"
+    r"(?:blob|tree|raw)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    re.IGNORECASE,
+)
+_RAW_GITHUB_URL_RE = re.compile(
+    r"^https?://raw\.githubusercontent\.com/(?P<owner>[^/?#]+)/"
+    r"(?P<repo>[^/?#]+)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    re.IGNORECASE,
+)
+_FULL_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+
+
+def _unpinned_code_url_error(value: object, field_label: str) -> str | None:
+    """Name a code link into a commit-pinned repository by a moving ref."""
+
+    if not isinstance(value, str):
+        return None
+    match = _GITHUB_CODE_URL_RE.match(value) or _RAW_GITHUB_URL_RE.match(value)
+    if match is None:
+        return None
+    repository = (match["owner"].lower(), match["repo"].lower())
+    if repository not in _COMMIT_PINNED_REPOSITORIES:
+        return None
+    if _FULL_COMMIT_RE.fullmatch(match["ref"]):
+        return None
+    return (
+        f"{field_label} cites {match['owner']}/{match['repo']} at ref "
+        f"{match['ref']!r}; that repository publishes no version tags, so "
+        "cite a 40-hex commit (a permalink), not a version or branch: "
+        f"{value}"
+    )
+
+
 def _is_finite_number(value: object) -> bool:
     """True for an int or float (not bool) that converts to a finite float."""
 
@@ -305,6 +349,9 @@ def _validate_sources(
             errors.append(f"{source_label} must be a non-empty string")
             continue
         if _is_url(source):
+            pin_error = _unpinned_code_url_error(source, source_label)
+            if pin_error:
+                errors.append(pin_error)
             continue
         relative = source.split("#", 1)[0]
         if Path(relative).is_absolute():
@@ -491,6 +538,9 @@ def _validate_entry(
     linked_issue = entry.get("linked_issue")
     if linked_issue is not None and not _is_url(linked_issue):
         errors.append(f"{label} linked_issue must be an http(s) URL")
+    pin_error = _unpinned_code_url_error(linked_issue, f"{label} linked_issue")
+    if pin_error:
+        errors.append(pin_error)
 
     errors.extend(
         validate_axiom_side_fields(
@@ -526,6 +576,9 @@ def _validate_entry(
     upstream_url = evidence.get("upstream_url")
     if upstream_url is not None and not _is_url(upstream_url):
         errors.append(f"{label} evidence.upstream_url must be an http(s) URL")
+    pin_error = _unpinned_code_url_error(upstream_url, f"{label} evidence.upstream_url")
+    if pin_error:
+        errors.append(pin_error)
     sources = evidence.get("sources")
     if sources is not None:
         errors.extend(_validate_sources(sources, label, repo_root))
