@@ -1198,3 +1198,106 @@ def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> N
     assert module._serialize_like(path, text, merged) == (
         json.dumps(merged, indent=1, sort_keys=True) + "\n"
     )
+
+
+# --- #526: non-finite arithmetic never validates -------------------------
+
+from hypothesis import given, settings, strategies as st  # noqa: E402
+
+from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    _validate_arithmetic,
+)
+
+_NON_FINITE_LITERALS = ("1e309", "-1e309", "1.5e400", "9" * 400 + ".0")
+_NON_FINITE_FLOATS = (float("inf"), float("-inf"), float("nan"))
+
+
+@pytest.mark.parametrize(
+    "item",
+    [
+        # inf - inf is NaN, and every comparison with NaN is false.
+        {"expression": "1e309 - 1e309", "equals": 123, "tolerance": 0},
+        {"expression": "1e309", "equals": 1},
+        {"expression": "1e309 * 0", "equals": 0},
+        {"expression": "1", "equals": float("inf")},
+        {"expression": "1", "equals": float("nan")},
+        {"expression": "1", "equals": 5, "tolerance": float("inf")},
+        {"expression": "1", "equals": 1, "tolerance": float("nan")},
+        {"expression": "1 / 0", "equals": 0},
+        {"expression": "1" + "0" * 400, "equals": 1},
+        {"expression": "1", "equals": 10**400},
+    ],
+)
+def test_non_finite_arithmetic_is_invalid(item) -> None:
+    errors = _validate_arithmetic([item], "entries[0]")
+    assert errors, item
+    entry = _entry(evidence={"mechanism": "m", "arithmetic": [item]})
+    assert validate_dispositions(_document([entry]))
+
+
+_finite = st.floats(
+    min_value=-1e6, max_value=1e6, allow_nan=False, allow_infinity=False
+)
+
+
+@st.composite
+def _expression_with_non_finite_literal(draw) -> str:
+    literal = draw(st.sampled_from(_NON_FINITE_LITERALS))
+    others = draw(st.lists(_finite.map(repr), min_size=0, max_size=3))
+    operators = draw(
+        st.lists(
+            st.sampled_from(["+", "-", "*"]),
+            min_size=len(others),
+            max_size=len(others),
+        )
+    )
+    position = draw(st.integers(min_value=0, max_value=len(others)))
+    operands = [*others[:position], literal, *others[position:]]
+    expression = operands[0]
+    for operator, operand in zip(operators, operands[1:]):
+        expression = f"({expression}) {operator} ({operand})"
+    return expression
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    expression=_expression_with_non_finite_literal(),
+    equals=st.one_of(_finite, st.sampled_from(_NON_FINITE_FLOATS)),
+    tolerance=st.one_of(
+        st.floats(min_value=0, max_value=1e300),
+        st.sampled_from(_NON_FINITE_FLOATS),
+    ),
+)
+def test_property_non_finite_literal_never_validates(
+    expression, equals, tolerance
+) -> None:
+    # Any expression that carries a non-finite literal (1e309-style) is
+    # refused, whatever it evaluates to and whatever target and tolerance
+    # the entry states.
+    item = {"expression": expression, "equals": equals, "tolerance": tolerance}
+    assert _validate_arithmetic([item], "entries[0]")
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    value=_finite,
+    bad=st.sampled_from(["equals", "tolerance"]),
+    non_finite=st.sampled_from(_NON_FINITE_FLOATS),
+)
+def test_property_non_finite_target_or_tolerance_never_validates(
+    value, bad, non_finite
+) -> None:
+    item = {"expression": repr(value), "equals": value, "tolerance": 0.01}
+    assert _validate_arithmetic([item], "entries[0]") == []
+    item[bad] = non_finite
+    assert _validate_arithmetic([item], "entries[0]")
+
+
+@settings(max_examples=200, deadline=None)
+@given(left=_finite, right=_finite, op=st.sampled_from(["+", "-", "*"]))
+def test_property_finite_arithmetic_still_reconciles(left, right, op) -> None:
+    # Control: the hardening does not reject honest finite evidence.
+    expression = f"({left!r}) {op} ({right!r})"
+    result = evaluate_arithmetic(expression)
+    item = {"expression": expression, "equals": result, "tolerance": 0}
+    assert _validate_arithmetic([item], "entries[0]") == []

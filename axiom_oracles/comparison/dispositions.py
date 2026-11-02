@@ -49,7 +49,9 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   expression is evaluated with a restricted arithmetic evaluator (numbers,
   ``+ - * /``, parentheses) and must equal ``equals`` within ``tolerance``
   (default ``0.005``). An arithmetic claim that does not reconcile fails
-  validation — the Wallonia lesson.
+  validation — the Wallonia lesson. Every literal, intermediate and final
+  value, ``equals`` and ``tolerance`` must be finite, so a NaN or infinity
+  can never make the reconciliation check vacuous.
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
@@ -93,6 +95,7 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import yaml
@@ -164,6 +167,11 @@ def evaluate_arithmetic(expression: str) -> float:
     Anything else — names, calls, comparisons — raises
     :class:`ArithmeticEvaluationError`. Evidence must be checkable without
     executing code.
+
+    Every literal, intermediate, and final value must be finite: a literal
+    such as ``1e309`` (infinity), an overflowing integer, a division by zero,
+    or ``inf - inf`` (NaN) raises :class:`ArithmeticEvaluationError`, because
+    a NaN comparison is always false and would let any stated target pass.
     """
 
     try:
@@ -173,7 +181,18 @@ def evaluate_arithmetic(expression: str) -> float:
             f"invalid arithmetic expression {expression!r}: {exc.msg}"
         ) from exc
 
+    def _finite(value: float) -> float:
+        if not math.isfinite(value):
+            raise ArithmeticEvaluationError(
+                f"arithmetic expression {expression!r} produces a non-finite "
+                f"value ({value!r})"
+            )
+        return value
+
     def _eval(node: ast.AST) -> float:
+        return _finite(_eval_node(node))
+
+    def _eval_node(node: ast.AST) -> float:
         if isinstance(node, ast.Expression):
             return _eval(node.body)
         if isinstance(node, ast.BinOp):
@@ -186,6 +205,10 @@ def evaluate_arithmetic(expression: str) -> float:
             if isinstance(node.op, ast.Mult):
                 return left * right
             if isinstance(node.op, ast.Div):
+                if right == 0:
+                    raise ArithmeticEvaluationError(
+                        f"arithmetic expression {expression!r} divides by zero"
+                    )
                 return left / right
         if isinstance(node, ast.UnaryOp) and isinstance(
             node.op, ast.USub | ast.UAdd
@@ -197,7 +220,13 @@ def evaluate_arithmetic(expression: str) -> float:
             and isinstance(node.value, int | float)
             and not isinstance(node.value, bool)
         ):
-            return float(node.value)
+            try:
+                return float(node.value)
+            except OverflowError as exc:
+                raise ArithmeticEvaluationError(
+                    f"arithmetic expression {expression!r} has a literal "
+                    "too large for a finite float"
+                ) from exc
         raise ArithmeticEvaluationError(
             f"unsupported syntax in arithmetic expression {expression!r}; "
             "only numbers, + - * /, and parentheses are allowed"
@@ -208,6 +237,17 @@ def evaluate_arithmetic(expression: str) -> float:
 
 def _is_url(value: object) -> bool:
     return isinstance(value, str) and value.startswith(("http://", "https://"))
+
+
+def _is_finite_number(value: object) -> bool:
+    """True for an int or float (not bool) that converts to a finite float."""
+
+    if not isinstance(value, int | float) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(float(value))
+    except OverflowError:
+        return False
 
 
 def _validate_arithmetic(items: object, label: str) -> list[str]:
@@ -230,22 +270,19 @@ def _validate_arithmetic(items: object, label: str) -> list[str]:
         if not isinstance(expression, str) or not expression.strip():
             errors.append(f"{item_label} needs a non-empty expression")
             continue
-        if not isinstance(equals, int | float) or isinstance(equals, bool):
-            errors.append(f"{item_label} needs a numeric `equals` value")
+        if not _is_finite_number(equals):
+            errors.append(f"{item_label} needs a finite numeric `equals` value")
             continue
-        if (
-            not isinstance(tolerance, int | float)
-            or isinstance(tolerance, bool)
-            or tolerance < 0
-        ):
-            errors.append(f"{item_label} tolerance must be >= 0")
+        if not _is_finite_number(tolerance) or tolerance < 0:
+            errors.append(f"{item_label} tolerance must be finite and >= 0")
             continue
         try:
             result = evaluate_arithmetic(expression)
         except ArithmeticEvaluationError as exc:
             errors.append(f"{item_label}: {exc}")
             continue
-        if abs(result - float(equals)) > float(tolerance):
+        # Written as "not within" so that a NaN anywhere fails closed.
+        if not abs(result - float(equals)) <= float(tolerance):
             errors.append(
                 f"{item_label} does not reconcile: {expression} = "
                 f"{result:.6f}, expected {equals} "
