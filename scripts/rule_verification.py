@@ -125,7 +125,27 @@ def git(repo: Path, *args: str) -> str:
 
 
 def list_tree(repo: Path, ref: str) -> list[str]:
-    return git(repo, "ls-tree", "-r", "--name-only", ref).splitlines()
+    """List every path at ``ref``, NUL-separated so git never quotes one.
+
+    Without ``-z`` git C-quotes paths with non-ASCII bytes (an en dash
+    becomes ``"1437c\\342\\200\\2231.yaml"``), and those quoted names
+    match no blob, so the file would drop out of the counts silently.
+    """
+    raw = subprocess.run(
+        [
+            "git",
+            "--no-replace-objects",
+            "-C",
+            str(repo),
+            "ls-tree",
+            "-rz",
+            "--name-only",
+            ref,
+        ],
+        capture_output=True,
+        check=True,
+    ).stdout
+    return [path.decode("utf-8") for path in raw.split(b"\0") if path]
 
 
 def batch_blobs(repo: Path, ref: str, paths: list[str]) -> dict[str, bytes]:

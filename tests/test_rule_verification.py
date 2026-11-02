@@ -216,3 +216,60 @@ def test_committed_summary_recomputes_from_full():
     # invariant: executable ⊆ any_oracle ⊆ total surfaces
     surf = summary["surfaces"]
     assert surf["executable"] <= surf["any_oracle"] <= surf["total"]
+
+
+# ── #644: non-ASCII paths survive git listing ─────────────────────────────
+import subprocess  # noqa: E402
+
+from hypothesis import HealthCheck, given, settings, strategies as st  # noqa: E402
+
+
+def _commit_tree(repo: Path, files: dict[str, bytes]) -> None:
+    def run(*args: str) -> None:
+        subprocess.run(["git", "-C", str(repo), *args], check=True, capture_output=True)
+
+    run("init", "-q")
+    for name, body in files.items():
+        path = repo / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(body)
+    run("add", "-A")
+    run(
+        "-c", "user.name=t", "-c", "user.email=t@example.org", "commit", "-q", "-m", "x"
+    )
+
+
+def test_list_tree_keeps_non_ascii_paths(tmp_path: Path) -> None:
+    # git quotes "1437c–1.yaml" as "1437c\342\200\2231.yaml" without -z.
+    en_dash = "us/statutes/42/1437c–1.yaml"
+    files = {en_dash: b"rules: []\n", "us/statutes/42/1437c.yaml": b"rules: []\n"}
+    _commit_tree(tmp_path, files)
+    tree = rv.list_tree(tmp_path, "HEAD")
+    assert sorted(tree) == sorted(files)
+    assert rv.batch_blobs(tmp_path, "HEAD", tree) == files
+
+
+_NAME_CHARS = st.characters(
+    codec="utf-8",
+    categories=("L", "N", "Pd", "Zs"),
+    exclude_characters="\n\r\t",
+)
+
+
+@settings(
+    max_examples=25,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(
+    names=st.sets(
+        st.text(_NAME_CHARS, min_size=1, max_size=12).map(str.strip).filter(bool),
+        min_size=1,
+        max_size=5,
+    )
+)
+def test_property_list_tree_round_trips_any_utf8_name(tmp_path_factory, names) -> None:
+    repo = tmp_path_factory.mktemp("repo")
+    files = {f"mod/{name}.yaml": name.encode() for name in names}
+    _commit_tree(repo, files)
+    assert sorted(rv.list_tree(repo, "HEAD")) == sorted(files)
