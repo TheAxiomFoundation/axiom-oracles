@@ -15,6 +15,7 @@ import fnmatch
 import hashlib
 import importlib.util
 import json
+import math
 import os
 import re
 import shutil
@@ -5908,125 +5909,209 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
 
 def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
-    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2."""
+    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2.
+
+    A pair whose return is missing, unparseable or nonfinite on either side
+    (or that the producer's ledger marks uncompared) is an engine error, not
+    a comparison (#604, as #368 did for native FIIT). It stays visible as a
+    diagnostic mismatch marked ``uncompared`` and as an entry in ``errors``,
+    the summary's error counts and the case's ``left_errors``/``right_errors``,
+    but it adds nothing to ``comparison_count``, matches or mismatch weight.
+    Genuine zero amounts and False verdicts compare as usual.
+    """
     params = runner.get("parameters", {})
     jurisdiction = str(params.get("jurisdiction", "us-co"))
     state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
     tolerance = float(params.get("tolerance", 1.5))
     amount_concept_id = "us:statutes/7/2014/u#snap_benefit"
     eligibility_concept_id = "us:statutes/7/2014/o#snap_eligible"
-    compared = len(rows)
-    amount_mismatching_rows = [row for row in rows if not _csv_bool(row.get("match"))]
-    eligibility_mismatching_rows = [
-        row
-        for row in rows
-        if _csv_bool(row.get("axiom_snap_eligible"))
-        != _csv_bool(row.get("pe_snap_eligible"))
-    ]
-    amount_matched = compared - len(amount_mismatching_rows)
-    eligibility_matched = compared - len(eligibility_mismatching_rows)
-    amount_match_rate = (amount_matched / compared * 100) if compared else 100.0
-    eligibility_match_rate = (
-        eligibility_matched / compared * 100
-    ) if compared else 100.0
-    left_sum = sum(_csv_float(row.get("axiom_snap_allotment")) for row in rows)
-    right_sum = sum(_csv_float(row.get("pe_snap")) for row in rows)
-    left_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("axiom_snap_eligible"))
-    )
-    right_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("pe_snap_eligible"))
-    )
 
+    errors: list[dict] = []
+    cases: list[dict] = []
+    flat_mismatches: list[dict] = []
+    counts = {
+        concept: {"compared": 0, "matched": 0, "mismatched": 0, "uncompared": 0}
+        for concept in (amount_concept_id, eligibility_concept_id)
+    }
+    left_sum = right_sum = 0.0
+    left_eligible_count = right_eligible_count = 0
     # Every row becomes a case — matches carry both engines' values just
     # like mismatches, so the report alone lets the dashboard show the
     # evidence behind the agreement, not only the disagreements.
-    cases: list[dict] = []
-    flat_mismatches: list[dict] = []
     for row in rows:
         spm_unit_id = str(row.get("spm_unit_id") or "unknown")
         case_id = f"ecps-spm-{spm_unit_id}"
         case_mismatches = []
         case_matches = []
-        axiom_value = _csv_float(row.get("axiom_snap_allotment"))
-        pe_value = _csv_float(row.get("pe_snap"))
-        if not _csv_bool(row.get("match")):
-            difference = _csv_float(row.get("difference"), axiom_value - pe_value)
+        case_errors = {"axiom": [], "policyengine": []}
+        ledger = _csv_error_ledger(row.get("errors"))
+
+        def record(engine: str, column: str, concept: str) -> None:
+            error = {
+                "engine": engine,
+                "case_id": case_id,
+                "concept": concept,
+                "output": column,
+                "error": "missing_or_nonfinite_output",
+            }
+            errors.append(error)
+            case_errors[engine].append(error)
+
+        def failed(engine: str, column: str, value: object) -> bool:
+            return value is None or (engine, column) in ledger
+
+        axiom_value = _csv_finite_float(row.get("axiom_snap_allotment"))
+        pe_value = _csv_finite_float(row.get("pe_snap"))
+        amount_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_allotment", axiom_value),
+                ("policyengine", "pe_snap", pe_value),
+            )
+            if failed(engine, column, value)
+        ]
+        if not amount_failures and _csv_verdict(row.get("amount_compared")) is False:
+            amount_failures = [("axiom", "axiom_snap_allotment")]
+        amount = counts[amount_concept_id]
+        if amount_failures:
+            for engine, column in amount_failures:
+                record(engine, column, amount_concept_id)
+            amount["uncompared"] += 1
             mismatch = {
                 "case_id": case_id,
                 "concept": amount_concept_id,
                 "description": "SNAP benefit amount",
-                "difference": difference,
+                "difference": None,
                 "kind": "amount_difference",
                 "left": axiom_value,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_value,
                 "tolerance": tolerance,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            amount["compared"] += 1
+            left_sum += axiom_value
+            right_sum += pe_value
+            if not _csv_bool(row.get("match")):
+                amount["mismatched"] += 1
+                difference = _csv_finite_float(row.get("difference"))
+                mismatch = {
+                    "case_id": case_id,
                     "concept": amount_concept_id,
+                    "description": "SNAP benefit amount",
+                    "difference": axiom_value - pe_value
+                    if difference is None
+                    else difference,
+                    "kind": "amount_difference",
                     "left": axiom_value,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_value,
+                    "tolerance": tolerance,
                 }
-            )
-        axiom_eligible = _csv_bool(row.get("axiom_snap_eligible"))
-        pe_eligible = _csv_bool(row.get("pe_snap_eligible"))
-        if axiom_eligible != pe_eligible:
-            if axiom_eligible and not pe_eligible:
-                kind = "eligibility_left_only"
-            elif pe_eligible and not axiom_eligible:
-                kind = "eligibility_right_only"
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
             else:
-                kind = "eligibility_mismatch"
+                amount["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": amount_concept_id,
+                        "left": axiom_value,
+                        "right": pe_value,
+                    }
+                )
+
+        axiom_eligible = _csv_verdict(row.get("axiom_snap_eligible"))
+        pe_eligible = _csv_verdict(row.get("pe_snap_eligible"))
+        eligibility_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_eligible", axiom_eligible),
+                ("policyengine", "pe_snap_eligible", pe_eligible),
+            )
+            if failed(engine, column, value)
+        ]
+        eligibility = counts[eligibility_concept_id]
+        if eligibility_failures:
+            for engine, column in eligibility_failures:
+                record(engine, column, eligibility_concept_id)
+            eligibility["uncompared"] += 1
             mismatch = {
                 "case_id": case_id,
                 "concept": eligibility_concept_id,
                 "description": "SNAP eligibility",
                 "difference": None,
-                "kind": kind,
+                "kind": "eligibility_mismatch",
                 "left": axiom_eligible,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_eligible,
                 "tolerance": 0,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            eligibility["compared"] += 1
+            left_eligible_count += int(axiom_eligible)
+            right_eligible_count += int(pe_eligible)
+            if axiom_eligible != pe_eligible:
+                eligibility["mismatched"] += 1
+                kind = (
+                    "eligibility_left_only"
+                    if axiom_eligible
+                    else "eligibility_right_only"
+                )
+                mismatch = {
+                    "case_id": case_id,
                     "concept": eligibility_concept_id,
+                    "description": "SNAP eligibility",
+                    "difference": None,
+                    "kind": kind,
                     "left": axiom_eligible,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_eligible,
+                    "tolerance": 0,
                 }
-            )
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
+            else:
+                eligibility["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": eligibility_concept_id,
+                        "left": axiom_eligible,
+                        "right": pe_eligible,
+                    }
+                )
+        case_compared = 2 - bool(amount_failures) - bool(eligibility_failures)
         case_match_rate = (
-            (2 - len(case_mismatches)) / 2 * 100 if case_mismatches else 100.0
+            len(case_matches) / case_compared * 100 if case_compared else 0.0
         )
         metadata = {
-            "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
-            "axiom_net_income": _csv_float(row.get("axiom_net_income")),
-            "axiom_shelter_deduction": _csv_float(
+            "axiom_gross_income": _csv_finite_float(row.get("axiom_gross_income")),
+            "axiom_net_income": _csv_finite_float(row.get("axiom_net_income")),
+            "axiom_shelter_deduction": _csv_finite_float(
                 row.get("axiom_shelter_deduction")
             ),
-            "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
-            "axiom_utility_allowance": _csv_float(
+            "axiom_snap_eligible": axiom_eligible,
+            "axiom_utility_allowance": _csv_finite_float(
                 row.get("axiom_utility_allowance")
             ),
             "case_unit": "spm_unit",
             "dataset": "enhanced_cps",
             "household_id": row.get("household_id"),
             "population": "enhanced-cps",
-            "pe_gross_income": _csv_float(row.get("pe_gross_income")),
-            "pe_net_income": _csv_float(row.get("pe_net_income")),
-            "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
-            "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
-            "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
+            "pe_gross_income": _csv_finite_float(row.get("pe_gross_income")),
+            "pe_net_income": _csv_finite_float(row.get("pe_net_income")),
+            "pe_shelter_deduction": _csv_finite_float(row.get("pe_shelter_deduction")),
+            "pe_snap_eligible": pe_eligible,
+            "pe_utility_allowance": _csv_finite_float(row.get("pe_utility_allowance")),
             "spm_unit_id": spm_unit_id,
             "state": state_code,
             "suite": f"{jurisdiction}-snap-ecps",
@@ -6037,74 +6122,78 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         case = {
             "case_id": case_id,
             "left_engine": "axiom",
-            "left_errors": [],
+            "left_errors": case_errors["axiom"],
             "match_rate": case_match_rate,
             "metadata": metadata,
             "mismatches": case_mismatches,
             "right_engine": "policyengine",
-            "right_errors": [],
+            "right_errors": case_errors["policyengine"],
         }
         if case_matches:
             case["matches"] = case_matches
         cases.append(case)
 
+    def rate(numerator: int, denominator: int, empty: float) -> float:
+        return numerator / denominator * 100 if denominator else empty
+
+    amount = counts[amount_concept_id]
+    eligibility = counts[eligibility_concept_id]
+    amount_match_rate = rate(amount["matched"], amount["compared"], 100.0)
+    eligibility_match_rate = rate(eligibility["matched"], eligibility["compared"], 100.0)
     amount_aggregate = {
         "category": "food",
         "comparison": "amount",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": amount["compared"],
+        "comparison_weight": amount["compared"],
+        "compared": amount["compared"],
         "components": [],
         "concept": amount_concept_id,
         "description": "SNAP benefit amount",
         "left_weighted_sum": left_sum,
-        "match_count": amount_matched,
+        "match_count": amount["matched"],
         "match_rate": amount_match_rate,
-        "match_weight": amount_matched,
-        "matched": amount_matched,
-        "mismatch_count": len(amount_mismatching_rows),
-        "mismatch_weight": len(amount_mismatching_rows),
+        "match_weight": amount["matched"],
+        "matched": amount["matched"],
+        "mismatch_count": amount["mismatched"] + amount["uncompared"],
+        "mismatch_weight": amount["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
         "right_weighted_sum": right_sum,
+        "uncompared_mismatches": amount["uncompared"],
         "weighted_difference": left_sum - right_sum,
         "weighted_match_rate": amount_match_rate,
     }
+    eligibility_compared = eligibility["compared"]
     eligibility_aggregate = {
         "category": "food",
         "comparison": "eligibility",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": eligibility_compared,
+        "comparison_weight": eligibility_compared,
+        "compared": eligibility_compared,
         "components": [],
         "concept": eligibility_concept_id,
         "description": "SNAP eligibility",
-        "left_positive_rate": (left_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "left_positive_rate": rate(left_eligible_count, eligibility_compared, 0.0),
         "left_positive_weight": left_eligible_count,
-        "match_count": eligibility_matched,
+        "match_count": eligibility["matched"],
         "match_rate": eligibility_match_rate,
-        "match_weight": eligibility_matched,
-        "matched": eligibility_matched,
-        "mismatch_count": len(eligibility_mismatching_rows),
-        "mismatch_weight": len(eligibility_mismatching_rows),
+        "match_weight": eligibility["matched"],
+        "matched": eligibility["matched"],
+        "mismatch_count": eligibility["mismatched"] + eligibility["uncompared"],
+        "mismatch_weight": eligibility["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
-        "positive_rate_difference": (
-            (left_eligible_count - right_eligible_count) / compared * 100
-        )
-        if compared
-        else 0.0,
+        "positive_rate_difference": rate(
+            left_eligible_count - right_eligible_count, eligibility_compared, 0.0
+        ),
         "quality_flags": [],
-        "right_positive_rate": (right_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "right_positive_rate": rate(right_eligible_count, eligibility_compared, 0.0),
         "right_positive_weight": right_eligible_count,
+        "uncompared_mismatches": eligibility["uncompared"],
         "weighted_match_rate": eligibility_match_rate,
     }
     mismatches_by_concept = [
@@ -6121,11 +6210,11 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             key=lambda item: (-item[1], item[0]),
         )
     ]
-    summary_comparison_count = compared * 2
-    summary_match_count = amount_matched + eligibility_matched
-    summary_mismatch_count = len(amount_mismatching_rows) + len(
-        eligibility_mismatching_rows
-    )
+    summary_comparison_count = amount["compared"] + eligibility["compared"]
+    summary_match_count = amount["matched"] + eligibility["matched"]
+    summary_uncompared = amount["uncompared"] + eligibility["uncompared"]
+    summary_mismatch_weight = amount["mismatched"] + eligibility["mismatched"]
+    summary_mismatch_count = summary_mismatch_weight + summary_uncompared
     summary_match_rate = (
         summary_match_count / summary_comparison_count * 100
         if summary_comparison_count
@@ -6134,7 +6223,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
 
     return {
         "aggregates": [amount_aggregate, eligibility_aggregate],
-        "case_count": compared,
+        "case_count": len(rows),
         "cases": cases,
         "concepts": [
             {
@@ -6161,7 +6250,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             },
         ],
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": errors,
         "locales": [state_code],
         "mismatches": flat_mismatches,
         "population": "enhanced-cps",
@@ -6170,18 +6259,21 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         "suite": f"{jurisdiction}-snap-ecps",
         "summary": {
             "comparison_count": summary_comparison_count,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(errors),
+            "errors_by_engine": dict(
+                sorted(Counter(error["engine"] for error in errors).items())
+            ),
             "match_count": summary_match_count,
             "mismatch_count": summary_mismatch_count,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": mismatches_by_kind,
             "mismatches_by_scenario": {},
+            "uncompared_mismatches": summary_uncompared,
             "weighted": {
                 "comparison_weight": summary_comparison_count,
                 "match_rate": summary_match_rate,
                 "match_weight": summary_match_count,
-                "mismatch_weight": summary_mismatch_count,
+                "mismatch_weight": summary_mismatch_weight,
             },
         },
     }
@@ -6191,13 +6283,42 @@ def _csv_bool(value: object) -> bool:
     return str(value).strip().lower() in {"1", "true", "t", "yes", "y", "holds"}
 
 
-def _csv_float(value: object, default: float = 0.0) -> float:
-    if value in (None, ""):
-        return default
+def _csv_finite_float(value: object) -> float | None:
+    """A CSV cell as a finite float, or None when blank, unparseable or nonfinite."""
+    if value is None:
+        return None
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
+        number = float(str(value).strip())
+    except ValueError:
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _csv_verdict(value: object) -> bool | None:
+    """A CSV cell as a verdict, or None when it is not one (never False)."""
+    text = str(value).strip().lower() if value is not None else ""
+    if text in {"1", "true", "t", "yes", "y", "holds"}:
+        return True
+    if text in {"0", "false", "f", "no", "n", "not_holds"}:
+        return False
+    return None
+
+
+def _csv_error_ledger(value: object) -> set[tuple[str, str]]:
+    """(engine, column) pairs a producer's JSON error ledger marks invalid."""
+    if value in (None, ""):
+        return set()
+    try:
+        ledger = json.loads(str(value))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"unreadable SNAP error ledger {value!r}") from exc
+    if not isinstance(ledger, list):
+        raise ValueError(f"SNAP error ledger must be a list: {value!r}")
+    return {
+        (str(entry.get("engine")), str(entry.get("output")))
+        for entry in ledger
+        if isinstance(entry, dict)
+    }
 
 
 def _csv_scalar(value: object) -> object:
@@ -6209,9 +6330,11 @@ def _csv_scalar(value: object) -> object:
     if text == "":
         return None
     try:
-        return float(text)
+        number = float(text)
     except ValueError:
         return value
+    # Strict JSON has no NaN or infinity; keep the returned text instead.
+    return number if math.isfinite(number) else text
 
 
 # The dashboard fetches every report on page load, so population-scale runs
