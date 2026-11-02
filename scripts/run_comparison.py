@@ -1676,33 +1676,82 @@ def _stamp_report_provenance(
     insertion order, with/without trailing newline). Re-detect the original
     formatting and re-emit in the same shape so adding provenance produces a
     one-key diff rather than reordering every key.
+
+    A full-evidence report can be gigabytes, so this holds one parse of it
+    and no whole-report string: the file is parsed once, each candidate
+    format is compared by streaming its encoding against the file
+    (:func:`_report_matches_format`), and the stamped report is streamed
+    back. The bytes written are what ``json.dumps`` of the stamped report in
+    the detected format, plus the original trailing newline, would give.
     """
     try:
-        original_text = output.read_text()
-        data = json.loads(original_text)
+        with open(output) as handle:  # read_text()'s defaults
+            data = json.load(handle)
     except (OSError, json.JSONDecodeError):
         return
     if not isinstance(data, dict):
         return
+    # Detect the format on the unedited parse, as the comparison against a
+    # fresh parse of the original text did, before the edits below.
+    sort_keys, indent = next(
+        (
+            (sort_keys, indent)
+            for sort_keys, indent in _STAMP_FORMATS
+            if _report_matches_format(output, data, indent=indent, sort_keys=sort_keys)
+        ),
+        # Unknown formatting (hand-edited): default to indent=2 sorted.
+        (True, 2),
+    )
+    trailing = "\n" if _file_ends_with_newline(output) else ""
     _apply_report_provenance(
         data,
         provenance,
         require_engine_versions=require_engine_versions,
         preserve_runner_provenance=preserve_runner_provenance,
     )
-    trailing = "\n" if original_text.endswith("\n") else ""
-    for sort_keys in (True, False):
-        for indent in (2, 1):
-            reserialized = json.dumps(
-                json.loads(original_text), indent=indent, sort_keys=sort_keys
-            )
-            if original_text in (reserialized, reserialized + "\n"):
-                output.write_text(
-                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
-                )
-                return
-    # Unknown formatting (hand-edited): default to indent=2 sorted.
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
+    with open(output, "w") as handle:  # write_text()'s defaults
+        json.dump(data, handle, indent=indent, sort_keys=sort_keys)
+        handle.write(trailing)
+
+
+#: Candidate (sort_keys, indent) formats, in detection order.
+_STAMP_FORMATS = ((True, 2), (True, 1), (False, 2), (False, 1))
+_STAMP_READ_CHARS = 1 << 16
+
+
+def _report_matches_format(
+    path: Path, data: object, *, indent: int, sort_keys: bool
+) -> bool:
+    """Whether ``path`` holds ``json.dumps(data, indent=, sort_keys=)``, optionally
+    followed by one newline, compared chunk by chunk without building either
+    whole string."""
+    encoder = json.JSONEncoder(indent=indent, sort_keys=sort_keys)
+    with open(path) as handle:  # read_text()'s defaults
+        buffer, position = "", 0
+        for chunk in encoder.iterencode(data):
+            while position + len(chunk) > len(buffer):
+                more = handle.read(_STAMP_READ_CHARS)
+                if not more:
+                    return False
+                buffer = buffer[position:] + more
+                position = 0
+            if not buffer.startswith(chunk, position):
+                return False
+            position += len(chunk)
+        tail = buffer[position:position + 2]
+        if len(tail) < 2:
+            tail += handle.read(2 - len(tail))
+        return tail in ("", "\n")
+
+
+def _file_ends_with_newline(path: Path) -> bool:
+    """``path.read_text().endswith("\n")`` without reading the whole file."""
+    with open(path, "rb") as handle:
+        handle.seek(0, os.SEEK_END)
+        size = handle.tell()
+        # Universal newlines read a final "\r" or "\r\n" as "\n" too.
+        handle.seek(max(size - 1, 0))
+        return handle.read(1) in (b"\n", b"\r")
 
 
 def _apply_report_provenance(

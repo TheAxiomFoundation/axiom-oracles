@@ -238,6 +238,7 @@ def test_stamp_peak_memory_is_one_parse(tmp_path, indent, sort_keys):
     object. The text implementation peaked at more than twice that, holding
     the text, two parses and a whole re-serialized string at once.
     """
+    stamp = _run_comparison()._stamp_report_provenance  # load outside the measurement
     path = tmp_path / "report.json"
     _big_report(path, indent=indent, sort_keys=sort_keys)
     original = path.read_bytes()
@@ -249,10 +250,8 @@ def test_stamp_peak_memory_is_one_parse(tmp_path, indent, sort_keys):
     baseline = _peak(load)
     provenance = {"schema": "axiom_oracles.provenance.v1", "oracle": PIN,
                   "engine": {"version": "0.4.0"}}
-    stamped = _peak(lambda: _run_comparison()._stamp_report_provenance(
-        path, provenance, require_engine_versions=True,
-    ))
-    assert stamped <= 1.2 * baseline, (
+    stamped = _peak(lambda: stamp(path, provenance, require_engine_versions=True))
+    assert stamped <= 1.1 * baseline, (
         f"stamping peaked at {stamped / baseline:.2f}x one parse"
     )
     # The stamp still kept the format: only the provenance and versions moved.
