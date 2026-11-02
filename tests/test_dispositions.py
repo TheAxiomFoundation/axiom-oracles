@@ -1205,6 +1205,7 @@ def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> N
 from hypothesis import given, settings, strategies as st  # noqa: E402
 
 from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    ArithmeticEvaluationError,
     _validate_arithmetic,
 )
 
@@ -1226,6 +1227,10 @@ _NON_FINITE_FLOATS = (float("inf"), float("-inf"), float("nan"))
         {"expression": "1 / 0", "equals": 0},
         {"expression": "1" + "0" * 400, "equals": 1},
         {"expression": "1", "equals": 10**400},
+        # An intermediate overflows and a later step makes it finite again:
+        # only a per-step finiteness check refuses these.
+        {"expression": "1/(1e200*1e200)", "equals": 0},
+        {"expression": "1/1e309", "equals": 0},
     ],
 )
 def test_non_finite_arithmetic_is_invalid(item) -> None:
@@ -1455,8 +1460,6 @@ def test_policyengine_us_citation_by_moving_ref_is_invalid(url, field) -> None:
         f"https://raw.githubusercontent.com/PolicyEngine/policyengine-us/{_PE_SHA}/{_PE_PATH}",
         "https://github.com/PolicyEngine/policyengine-us/issues/8614",
         "https://github.com/PolicyEngine/policyengine-us/pull/8614",
-        # Other repositories are out of this check's scope.
-        "https://github.com/TheAxiomFoundation/rulespec-us/blob/main/x.yaml",
     ],
 )
 def test_commit_pinned_or_non_code_policyengine_us_urls_pass(url) -> None:
@@ -1485,3 +1488,73 @@ def test_property_policyengine_us_ref_must_be_full_commit(ref, kind) -> None:
     errors = validate_dispositions(_document([_entry(evidence=evidence)]))
     pinned = len(ref) == 40 and all(c in "0123456789abcdef" for c in ref)
     assert (errors == []) is pinned, (ref, errors)
+
+
+@pytest.mark.parametrize("expression", ["1/(1e200*1e200)", "1/1e309", "1e309 - 1e309"])
+def test_evaluator_refuses_any_non_finite_intermediate(expression) -> None:
+    with pytest.raises(ArithmeticEvaluationError, match="non-finite"):
+        evaluate_arithmetic(expression)
+
+
+@pytest.mark.parametrize("terms", [600, 5000, 200_000])
+def test_deep_expression_fails_closed_instead_of_crashing(terms) -> None:
+    expression = "+".join(["1"] * terms)
+    with pytest.raises(ArithmeticEvaluationError):
+        evaluate_arithmetic(expression)
+    errors = _validate_arithmetic(
+        [{"expression": expression, "equals": terms}], "entries[0]"
+    )
+    assert errors and "entries[0]" in errors[0]
+
+
+def test_negative_tolerance_is_named_in_the_error() -> None:
+    errors = _validate_arithmetic(
+        [{"expression": "1", "equals": 1, "tolerance": -0.01}], "entries[0]"
+    )
+    assert errors == [
+        "entries[0]: evidence.arithmetic[0] tolerance must be finite and >= 0"
+    ]
+
+
+# --- every GitHub code link must be commit-pinned (#522, hub review) ---------
+
+_SHA = "c4307e514196618afcbf88cf7fd33746417eeabf"
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        # Any repository, not only policyengine-us.
+        "https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blob/main/R/rates.R",
+        "https://github.com/TheAxiomFoundation/rulespec-us/tree/v1.0/us/statutes",
+        "https://raw.githubusercontent.com/PSLmodels/Tax-Calculator/master/x.py",
+        # blame and commits views name a ref the same way.
+        "https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blame/main/R/rates.R",
+        "https://github.com/PolicyEngine/policyengine-us/commits/master/policyengine_us",
+        "https://github.com/PolicyEngine/policyengine-us/blame/1.767.3/x.py",
+        # Mixed-case host and path segments are still GitHub code links.
+        "https://GitHub.COM/PolicyEngine/policyengine-us/BLOB/1.767.3/x.py",
+        "https://RAW.GithubUserContent.com/PolicyEngine/policyengine-us/1.767.3/x.py",
+    ],
+)
+def test_any_github_code_link_by_moving_ref_is_invalid(url) -> None:
+    evidence = {"mechanism": "m", "sources": [url]}
+    errors = validate_dispositions(_document([_entry(evidence=evidence)]))
+    assert any("40-hex commit" in error for error in errors), errors
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        f"https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blob/{_SHA}/R/rates.R",
+        f"https://github.com/Budget-Lab-Yale/tariff-rate-tracker/blame/{_SHA}/R/rates.R",
+        f"https://github.com/PolicyEngine/policyengine-us/commits/{_SHA}/x",
+        f"https://GitHub.com/PolicyEngine/policyengine-us/Blob/{_SHA}/x.py",
+        "https://github.com/TheAxiomFoundation/rulespec-us/issues/1416",
+        f"https://github.com/PolicyEngine/policyengine-us/commit/{_SHA}",
+    ],
+)
+def test_commit_pinned_github_code_links_in_any_repository_pass(url) -> None:
+    evidence = {"mechanism": "m", "sources": [url], "upstream_url": url}
+    entry = _entry(evidence=evidence, linked_issue=url)
+    assert validate_dispositions(_document([entry])) == []

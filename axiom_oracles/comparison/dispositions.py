@@ -52,11 +52,11 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   validation — the Wallonia lesson. Every literal, intermediate and final
   value, ``equals`` and ``tolerance`` must be finite, so a NaN or infinity
   can never make the reconciliation check vacuous.
-* A GitHub code link (``/blob/``, ``/tree/``, ``/raw/`` or
-  ``raw.githubusercontent.com``) into ``PolicyEngine/policyengine-us``, in
+* A GitHub code link (``/blob/``, ``/tree/``, ``/raw/``, ``/blame/``,
+  ``/commits/`` or ``raw.githubusercontent.com``) into any repository, in
   ``evidence.sources``, ``evidence.upstream_url`` or ``linked_issue``, must
-  name a full 40-hex commit. That repository publishes no version tags, so
-  a ``/blob/<version>/`` link is dead and a branch link moves.
+  name a full 40-hex commit. A branch link moves, and a version link can be
+  dead (``PolicyEngine/policyengine-us`` publishes no version tags).
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
@@ -186,6 +186,10 @@ def evaluate_arithmetic(expression: str) -> float:
         raise ArithmeticEvaluationError(
             f"invalid arithmetic expression {expression!r}: {exc.msg}"
         ) from exc
+    except (RecursionError, MemoryError) as exc:
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to parse"
+        ) from exc
 
     def _finite(value: float) -> float:
         if not math.isfinite(value):
@@ -238,20 +242,26 @@ def evaluate_arithmetic(expression: str) -> float:
             "only numbers, + - * /, and parentheses are allowed"
         )
 
-    return _eval(tree)
+    try:
+        return _eval(tree)
+    except (RecursionError, MemoryError) as exc:
+        # A deeply nested expression must fail closed, not crash validation.
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to check"
+        ) from exc
 
 
 def _is_url(value: object) -> bool:
     return isinstance(value, str) and value.startswith(("http://", "https://"))
 
 
-# Repositories that publish no version tags: a /blob/<version>/ link 404s and
-# a branch link moves, so a citation must name the full commit. The check is
-# offline (it never resolves the URL); it checks only the ref's form.
-_COMMIT_PINNED_REPOSITORIES = frozenset({("policyengine", "policyengine-us")})
+# A GitHub code link must name a full commit, in any repository. A branch
+# link moves, and a version link can 404 (policyengine-us publishes no
+# version tags) or be re-pointed. The check is offline (it never resolves the
+# URL); it checks only the ref's form.
 _GITHUB_CODE_URL_RE = re.compile(
     r"^https?://(?:www\.)?github\.com/(?P<owner>[^/?#]+)/(?P<repo>[^/?#]+)/"
-    r"(?:blob|tree|raw)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    r"(?:blob|tree|raw|blame|commits)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
     re.IGNORECASE,
 )
 _RAW_GITHUB_URL_RE = re.compile(
@@ -263,23 +273,19 @@ _FULL_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 def _unpinned_code_url_error(value: object, field_label: str) -> str | None:
-    """Name a code link into a commit-pinned repository by a moving ref."""
+    """Name a GitHub code link that cites a ref other than a full commit."""
 
     if not isinstance(value, str):
         return None
     match = _GITHUB_CODE_URL_RE.match(value) or _RAW_GITHUB_URL_RE.match(value)
     if match is None:
         return None
-    repository = (match["owner"].lower(), match["repo"].lower())
-    if repository not in _COMMIT_PINNED_REPOSITORIES:
-        return None
     if _FULL_COMMIT_RE.fullmatch(match["ref"]):
         return None
     return (
         f"{field_label} cites {match['owner']}/{match['repo']} at ref "
-        f"{match['ref']!r}; that repository publishes no version tags, so "
-        "cite a 40-hex commit (a permalink), not a version or branch: "
-        f"{value}"
+        f"{match['ref']!r}; cite a 40-hex commit (a permalink), not a "
+        f"version, tag or branch: {value}"
     )
 
 
