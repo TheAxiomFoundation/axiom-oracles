@@ -1684,6 +1684,35 @@ def _stamp_report_provenance(
         return
     if not isinstance(data, dict):
         return
+    _apply_report_provenance(
+        data,
+        provenance,
+        require_engine_versions=require_engine_versions,
+        preserve_runner_provenance=preserve_runner_provenance,
+    )
+    trailing = "\n" if original_text.endswith("\n") else ""
+    for sort_keys in (True, False):
+        for indent in (2, 1):
+            reserialized = json.dumps(
+                json.loads(original_text), indent=indent, sort_keys=sort_keys
+            )
+            if original_text in (reserialized, reserialized + "\n"):
+                output.write_text(
+                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
+                )
+                return
+    # Unknown formatting (hand-edited): default to indent=2 sorted.
+    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
+
+
+def _apply_report_provenance(
+    data: dict,
+    provenance: dict,
+    *,
+    require_engine_versions: bool,
+    preserve_runner_provenance: bool,
+) -> None:
+    """Stamp ``provenance`` and the resolved engine versions onto a parsed report."""
     existing_provenance = data.get("provenance")
     if preserve_runner_provenance and isinstance(existing_provenance, dict):
         # DE's unified pair record carries the evidence-producing execution
@@ -1760,19 +1789,6 @@ def _stamp_report_provenance(
             versions["axiom_rules_engine"] = str(axiom_version)
         if versions:
             engines["versions"] = versions
-    trailing = "\n" if original_text.endswith("\n") else ""
-    for sort_keys in (True, False):
-        for indent in (2, 1):
-            reserialized = json.dumps(
-                json.loads(original_text), indent=indent, sort_keys=sort_keys
-            )
-            if original_text in (reserialized, reserialized + "\n"):
-                output.write_text(
-                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
-                )
-                return
-    # Unknown formatting (hand-edited): default to indent=2 sorted.
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
 
 
 def _print_coverage_warnings(config: dict) -> None:
