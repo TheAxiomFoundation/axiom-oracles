@@ -790,6 +790,44 @@ def compare_outputs(
     compared_values = 0
     compared_spm_units: set[int] = set()
     compared_person_ids: set[int] = set()
+
+    def record_invalid(
+        case: USVariableCase,
+        mapping: PolicyEngineMapping,
+        axiom_value: float,
+        reason: str,
+    ) -> None:
+        # As for native FIIT (#368) and SNAP (#604): a missing or invalid
+        # return, on either side, is an engine error and an uncompared
+        # diagnostic mismatch, never a comparison, a match or a 0.0 stand-in.
+        pe_value = returned_number(case.pe_outputs[case.variable])
+        entity_id = person_entity_id(case.person_id)
+        for engine, value in (("axiom", axiom_value), ("policyengine", pe_value)):
+            if not math.isfinite(value):
+                errors.append(
+                    {
+                        "engine": engine,
+                        "case_id": entity_id,
+                        "variable": case.variable,
+                        "output": mapping.legal_id,
+                        "error": "missing_or_nonfinite_output",
+                    }
+                )
+        item = summary[mapping.legal_id]
+        item["mismatches"] += 1
+        item["uncompared_mismatches"] += 1
+        mismatches.append(
+            USVariableComparisonRow(
+                variable=case.variable,
+                entity_id=entity_id,
+                output=mapping.legal_id,
+                axiom=axiom_value,
+                policyengine=pe_value,
+                diff=math.nan,
+                reason=reason,
+            )
+        )
+
     for variable in variables:
         cases = cases_by_variable.get(variable, [])
         axiom_outputs = axiom_outputs_by_variable.get(variable, [])
@@ -808,19 +846,7 @@ def compare_outputs(
         for index, case in enumerate(cases):
             if index >= len(axiom_outputs):
                 for mapping in mappings:
-                    item = summary[mapping.legal_id]
-                    item["mismatches"] += 1
-                    mismatches.append(
-                        USVariableComparisonRow(
-                            variable=variable,
-                            entity_id=person_entity_id(case.person_id),
-                            output=mapping.legal_id,
-                            axiom=0.0,
-                            policyengine=money(case.pe_outputs[variable]),
-                            diff=-money(case.pe_outputs[variable]),
-                            reason="missing_axiom_row",
-                        )
-                    )
+                    record_invalid(case, mapping, math.nan, "missing_axiom_row")
                 continue
             compared_person_ids.add(case.person_id)
             if case.spm_unit_id is not None:
@@ -829,59 +855,12 @@ def compare_outputs(
             outputs = result.get("outputs") or {}
             for mapping in mappings:
                 if mapping.legal_id not in outputs:
-                    item = summary[mapping.legal_id]
-                    item["mismatches"] += 1
-                    mismatches.append(
-                        USVariableComparisonRow(
-                            variable=variable,
-                            entity_id=person_entity_id(case.person_id),
-                            output=mapping.legal_id,
-                            axiom=0.0,
-                            policyengine=money(case.pe_outputs[variable]),
-                            diff=-money(case.pe_outputs[variable]),
-                            reason="missing_axiom_output",
-                        )
-                    )
+                    record_invalid(case, mapping, math.nan, "missing_axiom_output")
                     continue
                 axiom_value = output_number(outputs.get(mapping.legal_id))
                 pe_value = returned_number(case.pe_outputs[variable])
-                invalid_engines = [
-                    engine
-                    for engine, value in (
-                        ("axiom", axiom_value),
-                        ("policyengine", pe_value),
-                    )
-                    if not math.isfinite(value)
-                ]
-                if invalid_engines:
-                    # As for native FIIT (#368) and SNAP (#604): an invalid
-                    # return is an engine error and a diagnostic mismatch,
-                    # never a comparison or a match.
-                    entity_id = person_entity_id(case.person_id)
-                    for engine in invalid_engines:
-                        errors.append(
-                            {
-                                "engine": engine,
-                                "case_id": entity_id,
-                                "variable": variable,
-                                "output": mapping.legal_id,
-                                "error": "missing_or_nonfinite_output",
-                            }
-                        )
-                    item = summary[mapping.legal_id]
-                    item["mismatches"] += 1
-                    item["uncompared_mismatches"] += 1
-                    mismatches.append(
-                        USVariableComparisonRow(
-                            variable=variable,
-                            entity_id=entity_id,
-                            output=mapping.legal_id,
-                            axiom=axiom_value,
-                            policyengine=pe_value,
-                            diff=math.nan,
-                            reason="invalid_output",
-                        )
-                    )
+                if not (math.isfinite(axiom_value) and math.isfinite(pe_value)):
+                    record_invalid(case, mapping, axiom_value, "invalid_output")
                     continue
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)

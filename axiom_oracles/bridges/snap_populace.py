@@ -1296,7 +1296,10 @@ def load_policyengine_cases(
     skipped_empty_units = int(np.count_nonzero(state_mask & ~valid_size_mask))
     mask = state_mask & valid_size_mask
     if positive_snap_only:
-        mask &= pe_snap > 0
+        # Keep an invalid (missing or nonfinite) allotment: compare() records
+        # it as an engine error instead of the unit vanishing from the run.
+        returned = [finite_number(value) for value in pe_snap]
+        mask &= np.array([value is None or value > 0 for value in returned], dtype=bool)
 
     indices = np.flatnonzero(mask)
     if sample_size is not None:
@@ -1321,7 +1324,7 @@ def load_policyengine_cases(
     }
     selected_spm_ids = {int(spm_ids[idx]) for idx in indices}
     for name in _PERSON_SUPPORT_VARIABLES:
-        for person_spm_id, value in zip(person_spm, person_values[name], strict=False):
+        for person_spm_id, value in zip(person_spm, person_values[name], strict=True):
             if int(person_spm_id) in selected_spm_ids:
                 require_support_value(value, name, int(person_spm_id))
     student_ok_by_spm = any_by_id(
@@ -1642,9 +1645,19 @@ def project_raw_utility_inputs(
     }
 
 
+# PolicyEngine-US's SNAPUtilityAllowanceType values (SUA, LUA, IUA, NONE),
+# plus BUA and TUA, which the state projections below also handle.
+KNOWN_UTILITY_ALLOWANCE_TYPES = frozenset({"SUA", "LUA", "IUA", "NONE", "BUA", "TUA"})
+
+
 def project_utility_allowance_type(
     config: JurisdictionConfig, utility_type: str, utility_region: str
 ) -> dict[str, bool | int]:
+    if utility_type not in KNOWN_UTILITY_ALLOWANCE_TYPES:
+        # An unknown value would otherwise project as "no utility" silently.
+        raise ValueError(
+            f"unrecognized PolicyEngine snap_utility_allowance_type {utility_type!r}"
+        )
     if config.jurisdiction == "us-az":
         return arizona_utility_inputs(
             heating=utility_type == "SUA",

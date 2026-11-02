@@ -378,19 +378,30 @@ def test_only_valid_pairs_enter_snap_denominators(pairs):
 
 
 # ── loader: invalid support values never become zero inputs ─────────────────
-def load_stub(monkeypatch, variable, value):
+def load_stub(
+    monkeypatch,
+    variable,
+    value,
+    *,
+    config=CONFIG,
+    positive_snap_only=False,
+    utility_projection="raw",
+    overrides=None,
+):
     np = pytest.importorskip("numpy")
+    state = config.jurisdiction.rsplit("-", 1)[-1].upper()
     arrays = {
         "spm_unit_id": [1],
         "person_spm_unit_id": [1],
         "person_household_id": [1],
         "household_id": [1],
-        "state_code_str": ["CO"],
+        "state_code_str": [state],
         "snap_unit_size": [1],
         "spm_unit_size": [1],
         PE_COMPARED_OUTPUT: [10.0],
         "snap_utility_allowance_type": ["SUA"],
         "snap_utility_region_str": [""],
+        **(overrides or {}),
     }
 
     def calculate(name, period=None):
@@ -409,13 +420,13 @@ def load_stub(monkeypatch, variable, value):
     )
     monkeypatch.setattr(snap_populace, "legalize_inputs", lambda inputs, _index: inputs)
     return snap_populace.load_policyengine_cases(
-        config=CONFIG,
+        config=config,
         base_inputs={},
         period=snap_populace.month_period(2026, 1),
-        state="CO",
+        state=state,
         sample_size=None,
-        positive_snap_only=False,
-        utility_projection="raw",
+        positive_snap_only=positive_snap_only,
+        utility_projection=utility_projection,
         populace_year=2024,
     )
 
@@ -450,26 +461,54 @@ def test_loader_keeps_finite_zero_and_false(monkeypatch, value):
     assert case.pe_outputs["snap_assets"] == value
 
 
-def test_every_support_variable_read_for_inputs_is_validated():
-    # Guard drift: any PolicyEngine value the projections read must be either
-    # validated support or a compared/diagnostic output.
-    import re
+def _values_reads() -> set[str]:
+    """Every name read as ``values[<name>]`` in the SNAP bridge, by AST.
 
-    source = (ROOT / "axiom_oracles/bridges/snap_populace.py").read_text()
-    read = set(re.findall(r'values\["([a-z_]+)"\]', source))
-    read |= {
-        "pre_subsidy_electricity_expense",
-        "water_expense",
-        "sewage_expense",
-        "trash_expense",
-        "gas_expense",
-        "phone_expense",
-    }
-    allowed = snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES | {
-        "snap_utility_allowance_type",
-        "is_snap_eligible",
-    }
-    assert read <= allowed, read - allowed
+    A literal subscript gives its string; ``values[name]`` inside a loop over
+    a literal tuple gives each tuple element.
+    """
+    import ast
+
+    tree = ast.parse((ROOT / "axiom_oracles/bridges/snap_populace.py").read_text())
+    reads: set[str] = set()
+    loop_names: dict[str, set[str]] = {}
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, ast.For | ast.comprehension)
+            and isinstance(node.target, ast.Name)
+            and isinstance(node.iter, ast.Tuple)
+        ):
+            loop_names.setdefault(node.target.id, set()).update(
+                element.value
+                for element in node.iter.elts
+                if isinstance(element, ast.Constant) and isinstance(element.value, str)
+            )
+    for node in ast.walk(tree):
+        if not (
+            isinstance(node, ast.Subscript)
+            and isinstance(node.value, ast.Name)
+            and node.value.id == "values"
+        ):
+            continue
+        key = node.slice
+        if isinstance(key, ast.Constant) and isinstance(key.value, str):
+            reads.add(key.value)
+        elif isinstance(key, ast.Name) and key.id in loop_names:
+            reads |= loop_names[key.id]
+    return reads
+
+
+def test_every_support_variable_read_for_inputs_is_validated():
+    # Guard drift: every PolicyEngine value the projections read is validated
+    # support, except is_snap_eligible (support only under the eligibility
+    # bridge, tested below) and the enum snap_utility_allowance_type (refused
+    # when unrecognized, tested below).
+    reads = _values_reads()
+    assert {"water_expense", "is_snap_eligible", "snap_assets"} <= reads
+    exempt = {"snap_utility_allowance_type", "is_snap_eligible"}
+    assert reads - exempt <= snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES, (
+        reads - exempt - snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES
+    )
 
 
 # ── generic US variable comparison (us_populace) ─────────────────────────────
@@ -544,3 +583,197 @@ def test_us_variable_comparison_keeps_genuine_zero(value):
     assert raw["compared_values"] == 2
     assert raw["mismatch_count"] == raw["uncompared_mismatches"] == 0
     assert raw["errors"] == []
+
+
+# ── review follow-ups: checks the first round left untested ───────────────────
+def test_adapter_honours_a_ledger_only_verdict():
+    # "yes" is a verdict for the adapter's CSV parser but not for the
+    # producer, which records an Axiom error. Only the ledger carries that.
+    rows = produce([(100.0, True, 100.0, "yes"), (100.0, True, 100.0, "holds")])
+    assert rows[0]["eligibility_compared"] is False
+    report = publish(rows)
+    eligibility = aggregate(report, ELIGIBILITY)
+    assert eligibility["comparison_count"] == eligibility["match_count"] == 1
+    assert eligibility["uncompared_mismatches"] == 1
+    assert report["errors"] == [
+        {
+            "engine": "axiom",
+            "case_id": "ecps-spm-1",
+            "concept": ELIGIBILITY,
+            "output": "axiom_snap_eligible",
+            "error": "missing_or_nonfinite_output",
+        }
+    ]
+
+
+def test_adapter_honours_amount_compared_false_with_parseable_cells():
+    rows = through_csv(
+        produce([(100.0, True, 100.0, "holds"), (0.0, True, 0.0, "holds")])
+    )
+    rows[1]["amount_compared"] = "False"
+    rows[1]["errors"] = "[]"
+    report = runner()._adapt_snap_ecps_csv_to_v2(
+        rows, {"parameters": {"jurisdiction": "us-co"}}
+    )
+    amount = aggregate(report, AMOUNT)
+    assert amount["comparison_count"] == amount["match_count"] == 1
+    assert amount["uncompared_mismatches"] == 1
+    assert report["summary"]["error_count"] == 1
+
+
+@pytest.mark.parametrize("cell", ["not json", "{}", '"x"', "[", "42"])
+def test_adapter_refuses_an_unreadable_error_ledger(cell):
+    rows = through_csv(produce([(100.0, True, 100.0, "holds")]))
+    rows[0]["errors"] = cell
+    with pytest.raises(ValueError, match="SNAP error ledger"):
+        runner()._adapt_snap_ecps_csv_to_v2(
+            rows, {"parameters": {"jurisdiction": "us-co"}}
+        )
+
+
+@pytest.mark.parametrize("invalid", INVALID)
+def test_eligibility_bridge_refuses_invalid_is_snap_eligible(monkeypatch, invalid):
+    # us-az projects is_snap_eligible as the input na_budgetary_unit_is_eligible,
+    # where a NaN would become bool(nan) == True.
+    config = JURISDICTION_CONFIGS["us-az"]
+    assert config.eligibility_oracle_bridge
+    with pytest.raises(ValueError, match="spm_unit_1 is_snap_eligible: missing"):
+        load_stub(monkeypatch, "is_snap_eligible", invalid, config=config)
+
+
+def test_eligibility_bridge_keeps_a_valid_verdict(monkeypatch):
+    config = JURISDICTION_CONFIGS["us-az"]
+    [case] = load_stub(monkeypatch, "is_snap_eligible", True, config=config)
+    assert case.pe_outputs["is_snap_eligible"] is True
+
+
+@pytest.mark.parametrize("invalid", INVALID)
+def test_positive_snap_only_keeps_an_invalid_allotment_for_the_ledger(
+    monkeypatch, invalid
+):
+    # A NaN allotment fails `> 0`; it must reach compare() as an engine error,
+    # not drop out of the population unseen.
+    [case] = load_stub(
+        monkeypatch, PE_COMPARED_OUTPUT, invalid, positive_snap_only=True
+    )
+    row = produce_case(case)
+    assert row["amount_compared"] is False
+    assert {
+        "engine": "policyengine",
+        "output": "pe_snap",
+        "error": "missing_or_nonfinite_output",
+    } in row["errors"]
+
+
+@pytest.mark.parametrize("value", [0.0, -5.0])
+def test_positive_snap_only_still_drops_a_finite_non_positive_allotment(
+    monkeypatch, value
+):
+    assert (
+        load_stub(monkeypatch, PE_COMPARED_OUTPUT, value, positive_snap_only=True) == []
+    )
+
+
+def produce_case(case):
+    case = ProjectedCase(
+        spm_unit_id=case.spm_unit_id,
+        household_id=case.household_id,
+        inputs={},
+        member_inputs=[],
+        pe_outputs={
+            **pe_outputs(),
+            PE_COMPARED_OUTPUT: case.pe_outputs[PE_COMPARED_OUTPUT],
+        },
+    )
+    [row] = snap_populace.compare([case], [axiom_outputs()], 1.5, config=CONFIG)
+    return row
+
+
+@pytest.mark.parametrize("utility_type", ["", "XYZ", "sua", "nan"])
+def test_unrecognized_utility_allowance_type_is_refused(monkeypatch, utility_type):
+    with pytest.raises(ValueError, match="snap_utility_allowance_type"):
+        load_stub(
+            monkeypatch,
+            "snap_utility_allowance_type",
+            utility_type,
+            utility_projection="policyengine-type",
+        )
+
+
+@pytest.mark.parametrize("utility_type", ["SUA", "LUA", "IUA", "NONE", "BUA", "TUA"])
+def test_recognized_utility_allowance_types_project(monkeypatch, utility_type):
+    [case] = load_stub(
+        monkeypatch,
+        "snap_utility_allowance_type",
+        utility_type,
+        utility_projection="policyengine-type",
+    )
+    assert case.pe_outputs["snap_utility_allowance_type"] == utility_type
+
+
+def test_person_support_check_refuses_misaligned_person_arrays(monkeypatch):
+    # zip(..., strict=True): a person array shorter than person_spm_unit_id
+    # must fail, not silently skip the trailing persons' checks.
+    with pytest.raises(ValueError):
+        load_stub(
+            monkeypatch,
+            "ssi",
+            0.0,
+            overrides={"person_spm_unit_id": [1, 1], "person_household_id": [1, 1]},
+        )
+
+
+@pytest.mark.parametrize("pe_value", [math.nan, None, 0.0, 600.0])
+@pytest.mark.parametrize("path", ["missing_axiom_row", "missing_axiom_output"])
+def test_us_variable_missing_axiom_return_is_an_uncompared_error(path, pe_value):
+    # A missing Axiom row or output is an invalid return: an engine error and
+    # an uncompared diagnostic mismatch, with no 0.0 stand-in on either side.
+    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges.registry import PolicyEngineMapping
+
+    mapping = PolicyEngineMapping(
+        legal_id="us-ca:regulations/cdss/eas/49/49-055#ca_capi",
+        country="us",
+        mapping_type="direct_variable",
+        policyengine_variable="ca_capi",
+    )
+    cases = [
+        us_populace.USVariableCase(
+            variable="ca_capi",
+            person_id=person,
+            spm_unit_id=person,
+            state="CA",
+            inputs={},
+            pe_outputs={"ca_capi": value},
+        )
+        for person, value in ((1, 600.0), (2, pe_value))
+    ]
+    outputs = [{"outputs": {mapping.legal_id: {"value": {"value": 600.0}}}}]
+    if path == "missing_axiom_output":
+        outputs.append({"outputs": {}})
+    raw = us_populace.compare_outputs(
+        variables=("ca_capi",),
+        cases_by_variable={"ca_capi": cases},
+        mappings_by_variable={"ca_capi": (mapping,)},
+        axiom_outputs_by_variable={"ca_capi": outputs},
+        skipped_reasons={},
+        tolerance=0.01,
+        relative_tolerance=1e-9,
+    ).to_json()
+    raw = json.loads(json.dumps(raw, allow_nan=False))
+    assert raw["compared_values"] == 1
+    assert raw["mismatch_count"] == raw["uncompared_mismatches"] == 1
+    [summary] = raw["output_summary"]
+    assert summary["compared"] == summary["mismatches"] == 1
+    assert summary["uncompared_mismatches"] == 1
+    engines = ["axiom"] + (
+        ["policyengine"] if pe_value is None or math.isnan(pe_value) else []
+    )
+    assert [error["engine"] for error in raw["errors"]] == engines
+    assert {error["case_id"] for error in raw["errors"]} == {"person_2"}
+    [row] = raw["mismatches"]
+    assert row["reason"] == path
+    assert row["axiom"] is None and row["diff"] is None
+    assert row["policyengine"] == (
+        None if pe_value is None or math.isnan(pe_value) else pe_value
+    )
