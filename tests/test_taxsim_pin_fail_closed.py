@@ -131,8 +131,20 @@ def stand_ins(tmp_path, monkeypatch):
             else original(name)
         ),
     )
+    def set_law_years(name: str, first: int, last: int) -> None:
+        """Record a pinned law-year range on one stand-in and reinstall."""
+        doc["binaries"][shas[name]]["law_years"] = {"first": first, "last": last}
+        reparsed = pins.parse_pin_document(doc)
+        monkeypatch.setattr(pins, "pin_document", lambda: reparsed)
+
     return SimpleNamespace(
-        main=main, old=old, decoy=decoy, markers=markers, shas=shas, system=system
+        main=main,
+        old=old,
+        decoy=decoy,
+        markers=markers,
+        shas=shas,
+        system=system,
+        set_law_years=set_law_years,
     )
 
 
@@ -299,3 +311,66 @@ def test_profile_resolution_matches_a_reference_reading_of_the_pin_file(
     resolution = pins.get_profile(profile_name).resolve(state, year, system)
     assert resolution.sha256 == _naive_resolve(raw, state, year, system)
     assert pins.load_pins()["binaries"][resolution.sha256]["platform"] == system
+
+
+# --- taxsim-csv rows -----------------------------------------------------------
+#
+# A taxsim-csv run without --period skips the CLI's law-year preflight (each
+# row keeps its own year), so the runner's per-batch check against each
+# profile binary is the only one those rows get.
+
+CSV_FIXTURE = Path(__file__).parent / "fixtures" / "taxsim_csv" / "cps_households_sample.csv"
+
+
+def _csv_cases(period: str | None = None) -> list[Case]:
+    from axiom_oracles.populations.taxsim_csv import read_taxsim_csv
+
+    data = read_taxsim_csv(CSV_FIXTURE, period=period)
+    return data.select(scope=None, sample_size=None).cases
+
+
+def test_taxsim_csv_row_years_are_checked_per_batch_against_the_profile_binary(
+    stand_ins,
+) -> None:
+    cases = _csv_cases()
+    assert {case.metadata["taxsim_input"]["year"] for case in cases} == {2021}
+    stand_ins.set_law_years("main", 1960, 2020)
+    with pytest.raises(pins.TaxsimLawYearError, match="law year 2021"):
+        TaxsimPackageRunner().run_cases(cases, variables=["fiitax"])
+    _assert_nothing_ran(stand_ins)
+    stand_ins.set_law_years("main", 1960, 2021)
+    results = TaxsimPackageRunner().run_cases(cases, variables=["fiitax"])
+    assert [r.household_id for r in results] == [c.case_id for c in cases]
+    assert {r.raw["taxsim_binary_sha256"] for r in results} == {stand_ins.shas["main"]}
+
+
+def test_taxsim_csv_period_override_routes_ga_md_to_the_override_binary(
+    stand_ins,
+) -> None:
+    cases = _csv_cases(period="2024")
+    states = {c.case_id: c.metadata["taxsim_input"]["state"] for c in cases}
+    stand_ins.set_law_years("old", 1960, 2023)
+    with pytest.raises(pins.TaxsimLawYearError, match="law year 2024"):
+        TaxsimPackageRunner().run_cases(cases, variables=["fiitax"])
+    # The refusal comes before any partition runs, the default one included.
+    _assert_nothing_ran(stand_ins)
+    stand_ins.set_law_years("old", 1960, 2024)
+    runner = TaxsimPackageRunner()
+    results = runner.run_cases(cases, variables=["fiitax"])
+    for result in results:
+        override = states[result.household_id] in (GEORGIA, MARYLAND)
+        assert result.raw["taxsim_binary_sha256"] == (
+            stand_ins.shas["old" if override else "main"]
+        )
+        assert result.raw["taxsim_pin_scope"] == (
+            "override:ga-md" if override else "default"
+        )
+        assert result.values == {"fiitax": 22.0 if override else 11.0}
+    scopes = {
+        binary["sha256"]: binary["scopes"]
+        for binary in runner.taxsim_identity()["binaries"]
+    }
+    assert scopes == {
+        stand_ins.shas["main"]: {"default": 4},
+        stand_ins.shas["old"]: {"override:ga-md": 2},
+    }
