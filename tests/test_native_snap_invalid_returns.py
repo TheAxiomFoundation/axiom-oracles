@@ -1123,3 +1123,37 @@ def test_validator_refuses_a_non_true_uncompared_flag():
     defects: list[str] = []
     evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
     assert any(".u must be true" in defect for defect in defects), defects
+
+
+@pytest.mark.parametrize(
+    "pe_amount,ax_amount,kind",
+    [
+        (math.nan, 100.0, "missing_right"),
+        (None, 100.0, "missing_right"),
+        (100.0, math.inf, "missing_left"),
+        (100.0, None, "missing_left"),
+        (math.nan, None, "missing_both"),
+    ],
+)
+def test_uncompared_amount_with_a_missing_side_uses_the_missing_kind(
+    pe_amount, ax_amount, kind
+):
+    # A missing side is labelled as such (as the generic Comparator does), so
+    # a case_id-only amount_difference disposition cannot "explain" it.
+    report = publish(produce([(pe_amount, True, ax_amount, "holds")]))
+    [row] = [m for m in report["mismatches"] if m["concept"] == AMOUNT]
+    assert row["uncompared"] is True and row["kind"] == kind
+    assert {"value": kind, "count": 1} in report["summary"]["mismatches_by_kind"]
+
+
+def test_ledger_only_amount_failure_keeps_amount_difference():
+    # Both values present but the producer marked the pair uncompared.
+    rows = through_csv(produce([(100.0, True, 100.0, "holds")]))
+    rows[0]["amount_compared"] = "False"
+    rows[0]["errors"] = "[]"
+    report = runner()._adapt_snap_ecps_csv_to_v2(
+        rows, {"parameters": {"jurisdiction": "us-co"}}
+    )
+    [row] = [m for m in report["mismatches"] if m["concept"] == AMOUNT]
+    assert row["uncompared"] is True and row["kind"] == "amount_difference"
+    assert row["left"] == row["right"] == 100.0

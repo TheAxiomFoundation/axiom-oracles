@@ -5977,12 +5977,23 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             for engine, column in amount_failures:
                 record(engine, column, amount_concept_id)
             amount["uncompared"] += 1
+            # Name a missing side as the generic Comparator does, so the row
+            # reads as "no value" and an amount_difference disposition cannot
+            # select it. A ledger-only failure has both values present.
+            if axiom_value is None and pe_value is None:
+                uncompared_kind = "missing_both"
+            elif axiom_value is None:
+                uncompared_kind = "missing_left"
+            elif pe_value is None:
+                uncompared_kind = "missing_right"
+            else:
+                uncompared_kind = "amount_difference"
             mismatch = {
                 "case_id": case_id,
                 "concept": amount_concept_id,
                 "description": "SNAP benefit amount",
                 "difference": None,
-                "kind": "amount_difference",
+                "kind": uncompared_kind,
                 "left": axiom_value,
                 "parent": None,
                 "relative_tolerance": 0,
