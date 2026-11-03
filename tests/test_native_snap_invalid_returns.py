@@ -1157,3 +1157,56 @@ def test_ledger_only_amount_failure_keeps_amount_difference():
     [row] = [m for m in report["mismatches"] if m["concept"] == AMOUNT]
     assert row["uncompared"] is True and row["kind"] == "amount_difference"
     assert row["left"] == row["right"] == 100.0
+
+
+def _all_uncompared_case() -> dict:
+    # The SNAP adapter omits `matches` when a case has none, so build the
+    # other shape by hand: an explicit empty `matches` list and only
+    # uncompared mismatches.
+    return {
+        "case_id": "ecps-spm-1",
+        "matches": [],
+        "match_rate": None,
+        "metadata": {},
+        "mismatches": [
+            {
+                "concept": AMOUNT,
+                "kind": "missing_right",
+                "left": 100.0,
+                "right": None,
+                "uncompared": True,
+            },
+            {
+                "concept": ELIGIBILITY,
+                "kind": "eligibility_mismatch",
+                "left": True,
+                "right": None,
+                "uncompared": True,
+            },
+        ],
+    }
+
+
+def test_empty_matches_with_only_uncompared_rows_serve_null():
+    from axiom_oracles import evidence
+
+    emitter = _load("snap_604_emit_cases", "scripts/emit_case_artifacts.py")
+    served = emitter.compact_case(_all_uncompared_case(), {})
+    assert served["r"] is None
+    assert served["v"] == []
+    assert [row.get("u") for row in served["m"]] == [True, True]
+    defects: list[str] = []
+    evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
+    assert defects == []
+
+
+@pytest.mark.parametrize("rate", [100.0, 0.0, 50.0])
+def test_validator_refuses_a_rate_where_nothing_was_compared(rate):
+    from axiom_oracles import evidence
+
+    emitter = _load("snap_604_emit_cases", "scripts/emit_case_artifacts.py")
+    served = emitter.compact_case(_all_uncompared_case(), {})
+    served["r"] = rate
+    defects: list[str] = []
+    evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
+    assert any("must be null when no stored pair was compared" in d for d in defects)
