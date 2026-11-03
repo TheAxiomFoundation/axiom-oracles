@@ -74,9 +74,12 @@ def _observed(report, case_id, engine="policyengine", output="pe_benefit"):
         and row["variable"] == output
     ]
     assert rows, "the producer returned this output"
+    value = rows[0]["value"]
+    # A string is an observation only for an output registered as one.
     return observed_output_value(
         report, case_id=case_id, engine=engine, concept=CONCEPT, output=output,
-        value=rows[0]["value"], targets=(output,),
+        value=value, targets=(output,),
+        declared_type=str if isinstance(value, str) else None,
     )
 
 
@@ -166,6 +169,70 @@ def test_forged_mismatch_of_agreeing_values_is_refused():
     assert not _observed(_forge_mismatch(report, "c1"), "c1")
 
 
+def test_one_comparison_retained_with_both_verdicts_is_refused():
+    """A case match and a top-level mismatch for one comparison contradict.
+
+    Each row is consistent with its own values and the counts cover both,
+    so only the shared identity reveals the contradiction.
+    """
+    report = _report(_mapping(), {"c1": (5, 5), "c2": (1, 1)})
+    assert _observed(report, "c1")
+    report["mismatches"].append({
+        "case_id": "c1", "concept": CONCEPT, "kind": "amount_difference",
+        "left": 5, "right": 9, "difference": -4, "tolerance": 0,
+    })
+    report["summary"]["mismatch_count"] += 1
+    assert not _observed(report, "c1")
+    assert _observed(report, "c2")
+
+
+def _fiit_marked(report, marker):
+    if marker == "suite":
+        report["suite"] = "fiit-ecps"
+    elif marker == "output-summary":
+        report["output_summary"] = [{"surface": "employee-medicare", "output": "x"}]
+    else:
+        report["provenance"] = {"generated_by": "scripts/run_comparison.py::fiit-ecps"}
+    return report
+
+
+@pytest.mark.parametrize("marker", ["suite", "output-summary", "provenance"])
+def test_fiit_marker_does_not_exempt_a_forged_match(marker):
+    """Marking a report as FIIT exempts nothing but FIIT's own mismatch rows."""
+    forged = _forge_match(_report(_mapping(), {"c1": (100, 0)}), "c1")
+    _fiit_marked(forged, marker)
+    assert not _observed(forged, "c1")
+
+
+@pytest.mark.parametrize("marker", ["suite", "output-summary", "provenance"])
+def test_fiit_marker_does_not_exempt_an_uncounted_mismatch(marker):
+    report = _fiit_marked(_report(_mapping(), {"c1": (100, 0), "c2": (5, 5)}), marker)
+    report["summary"]["mismatch_count"] = 0
+    assert not _observed(report, "c2")
+
+
+@pytest.mark.parametrize("left, right, matches", [
+    ("12.5", 12.5, True), ("12.5", "13", False), (True, 1, True), ("0.5", 0, False),
+])
+def test_amount_values_are_compared_as_the_comparator_converts_them(left, right, matches):
+    report = _report(_mapping(), {"c1": (left, right)})
+    retained = report["cases"][0]["matches" if matches else "mismatches"]
+    assert retained and retained[0]["left"] == left
+    assert _observed(report, "c1")
+    assert not _observed(
+        _forge_mismatch(report, "c1") if matches else _forge_match(report, "c1"), "c1"
+    )
+
+
+@pytest.mark.parametrize("comparison", ["coverage", "value", "judgment"])
+def test_other_comparison_kinds_compare_truthiness_as_the_comparator_does(comparison):
+    report = _report(_mapping(comparison), {"same": (2, 1), "differ": ("yes", "")})
+    assert report["cases"][0]["matches"] and report["cases"][1]["mismatches"]
+    assert _observed(report, "same")
+    assert _observed(report, "differ")
+    assert not _observed(_forge_mismatch(report, "same"), "same")
+
+
 # --- valid controls ---------------------------------------------------------
 
 
@@ -215,14 +282,23 @@ AMOUNTS = st.one_of(
     st.integers(-1_000, 1_000),
     st.floats(-1_000, 1_000, allow_nan=False, allow_infinity=False),
 )
+# The Comparator converts amount values with float(), so numeric strings and
+# bools compare as numbers.
+AMOUNT_VALUES = st.one_of(AMOUNTS, AMOUNTS.map(repr), st.booleans())
+# Every other kind compares truthiness of whatever the engines returned.
+OTHER_VALUES = st.one_of(
+    st.booleans(), st.integers(-2, 2), st.sampled_from(("", "yes", "0", "no")),
+    st.floats(-2, 2, allow_nan=False, allow_infinity=False),
+)
+KINDS = st.sampled_from(("amount", "eligibility", "coverage", "value", "judgment"))
 TOLERANCES = st.sampled_from((0, 0.5, 1, 5))
 RELATIVE = st.sampled_from((0, 0.001, 0.01))
 
 
 @st.composite
 def _comparator_reports(draw):
-    comparison = draw(st.sampled_from(("amount", "eligibility")))
-    values = AMOUNTS if comparison == "amount" else st.one_of(st.booleans(), st.integers(0, 2))
+    comparison = draw(KINDS)
+    values = AMOUNT_VALUES if comparison == "amount" else OTHER_VALUES
     mapping = _mapping(comparison, draw(TOLERANCES), draw(RELATIVE))
     count = draw(st.integers(1, 5))
     pairs = {}
