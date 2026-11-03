@@ -487,6 +487,19 @@ _REVIEWED_DYNAMIC_STATEMENTS = frozenset(
         ),
     }
 )
+# pe_outputs, made by the reviewed copy above, holds every returned value, so
+# its loads in load_policyengine_cases are checked like loads of values,
+# except in the two statements that set its extra keys and when handed to
+# ProjectedCase(pe_outputs=...), which carries it to compare().
+_TRACKED_COPIES = {"load_policyengine_cases": "pe_outputs"}
+_PE_OUTPUTS_WRITES = frozenset(
+    {
+        # As ast.unparse renders them (single-quoted string literals).
+        "pe_outputs['snap_utility_region_str'] = utility_region",
+        "pe_outputs['all_members_receive_ssi'] = "
+        "bool(all_members_receive_ssi_by_spm.get(spm_id, False))",
+    }
+)
 _COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 
 
@@ -499,6 +512,26 @@ def _string_items(node: ast.AST) -> set[str] | None:
     return None
 
 
+def _rebinds(scope: ast.AST, loop: ast.AST, name: str) -> bool:
+    """True when the loop's body (or comprehension) stores to ``name``."""
+    if isinstance(scope, ast.For):
+        bodies = [*scope.body, *scope.orelse]
+    else:
+        bodies = [scope]
+    for body in bodies:
+        for node in ast.walk(body):
+            if (
+                isinstance(node, ast.Name)
+                and node.id == name
+                and isinstance(node.ctx, ast.Store)
+            ):
+                if node is not loop.target:
+                    return True
+            if isinstance(node, ast.NamedExpr) and node.target.id == name:
+                return True
+    return False
+
+
 def _support_reads(source: str) -> tuple[set[str], list[str]]:
     """Every key read from the PolicyEngine ``values`` mapping, by AST.
 
@@ -508,9 +541,15 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
       variable over a literal tuple, list or set;
     - the receiver of ``.get`` with such a key;
     - passed to a function in this module whose matching parameter is named
-      ``values``, or the sole argument of ``set()``;
+      ``values`` (never one of the skip-listed functions, whose bodies the
+      scan does not read), or the sole argument of ``set()``;
     - read inside one of the two reviewed statements, keyed to their exact
       source.
+
+    Loads of ``pe_outputs`` in ``load_policyengine_cases`` (the reviewed full
+    copy of the mapping) are checked the same way, except in the two
+    statements that set its extra keys and in ``ProjectedCase(pe_outputs=...)``.
+    A loop variable that the loop body reassigns counts as unresolved.
 
     Every other use (an unresolved key, any other method or attribute, an
     alias, unpacking, an operator, a conditional, a container, a call to
@@ -559,6 +598,8 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                     continue
                 for loop in loops:
                     if isinstance(loop.target, ast.Name) and loop.target.id == key.id:
+                        if _rebinds(node, loop, key.id):
+                            return None
                         return _string_items(loop.iter)
             return None
 
@@ -568,15 +609,32 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
             elif not reviewed(node):
                 problems.append(f"{where} unresolved read {ast.unparse(node)}")
 
+        tracked = {"values", _TRACKED_COPIES.get(name, "values")}
         for node in ast.walk(function):
             if not (
                 isinstance(node, ast.Name)
-                and node.id == "values"
+                and node.id in tracked
                 and isinstance(node.ctx, ast.Load)
             ):
                 continue
             parent = parents.get(node)
             where = f"{name}:{node.lineno}"
+            if node.id != "values":
+                if any(
+                    isinstance(ancestor, ast.stmt)
+                    and ast.unparse(ancestor) in _PE_OUTPUTS_WRITES
+                    for ancestor in ancestors(node)
+                ):
+                    continue
+                call = parents.get(parent)
+                if (
+                    isinstance(parent, ast.keyword)
+                    and parent.arg == node.id
+                    and isinstance(call, ast.Call)
+                    and isinstance(call.func, ast.Name)
+                    and call.func.id == "ProjectedCase"
+                ):
+                    continue
             if isinstance(parent, ast.Subscript) and parent.value is node:
                 accept_read(resolve(parent.slice, parent), parent, where)
             elif isinstance(parent, ast.Attribute) and parent.value is node:
@@ -597,6 +655,9 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                 params = [a.arg for a in target.args.args] if target else []
                 if callee == "set" and parent.args == [node] and not parent.keywords:
                     continue
+                if callee in _NOT_THE_POLICYENGINE_MAPPING:
+                    problems.append(f"{where} values handed to skip-listed {callee}")
+                    continue
                 if position < len(params) and params[position] == "values":
                     continue
                 problems.append(f"{where} values handed to {ast.unparse(parent.func)}")
@@ -605,6 +666,9 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                 callee = call.func.id if isinstance(call.func, ast.Name) else None
                 target = functions.get(callee)
                 params = [a.arg for a in target.args.args] if target else []
+                if callee in _NOT_THE_POLICYENGINE_MAPPING:
+                    problems.append(f"{where} values handed to skip-listed {callee}")
+                    continue
                 if parent.arg == "values" and "values" in params:
                     continue
                 problems.append(f"{where} values handed to {ast.unparse(call.func)}")
@@ -643,6 +707,8 @@ _US_CA_ANCHOR = (
     '            "snap_gross_monthly_earned_income"'
 )
 _LOADER_ANCHOR = "    household_input_ref_by_name = legal_input_index(base_inputs)\n"
+_PROJECTED_CASE_ANCHOR = "        cases.append(\n            ProjectedCase(\n"
+_MODULE_ANCHOR = "def project_deduction_inputs(\n"
 _NEW = '"snap_new_unlisted_input"'
 # Each shape routes an unlisted PolicyEngine variable (or every variable)
 # toward an input; the guard must reject each, as an unlisted read or as a
@@ -678,6 +744,59 @@ _UNLISTED_READS = {
     "unreviewed-loop-in-loader": (
         _LOADER_ANCHOR,
         "    _all = {name: money(values[name][idx]) for name in values}\n",
+    ),
+    # The second review's sixteen shapes (those not already above).
+    "attribute": (_US_CA_ANCHOR, "    _x = values.snap_new_unlisted_input\n"),
+    "getattr-get": (_US_CA_ANCHOR, f"    _x = getattr(values, 'get')({_NEW})\n"),
+    "vars": (_US_CA_ANCHOR, "    _x = vars(values)\n"),
+    "dunder-getitem": (_US_CA_ANCHOR, f"    _x = values.__getitem__({_NEW})\n"),
+    "comprehension-over-literal": (
+        _US_CA_ANCHOR,
+        f"    _x = [values[k][idx] for k in [{_NEW}]]\n",
+    ),
+    "match-pattern": (
+        _US_CA_ANCHOR,
+        f"    match values:\n        case {{{_NEW}: _v}}:\n            _x = _v\n",
+    ),
+    "nested-function": (
+        _US_CA_ANCHOR,
+        f"    def _inner():\n        return values[{_NEW}][idx]\n\n    _x = _inner()\n",
+    ),
+    "dict-kwargs": (_US_CA_ANCHOR, "    _x = dict(**values)\n"),
+    "lambda": (_US_CA_ANCHOR, f"    _f = lambda values: values[{_NEW}]\n"),
+    "new-module-function": (
+        _MODULE_ANCHOR,
+        f"def _project_new(values, idx):\n    return values[{_NEW}][idx]\n\n\n",
+    ),
+    "pe-outputs-line-elsewhere": (
+        _US_CA_ANCHOR,
+        "    pe_outputs = {name: returned_value(values[name][idx]) for name in values}\n",
+    ),
+    # Paths the first allowlist missed (third review).
+    "pe-outputs-read-in-loader": (
+        _PROJECTED_CASE_ANCHOR,
+        "        set_input_value(\n"
+        f'            inputs, "snap_new_input", pe_outputs[{_NEW}]\n'
+        "        )\n",
+    ),
+    "pe-outputs-items-in-loader": (
+        _PROJECTED_CASE_ANCHOR,
+        "        inputs.update({k: v for k, v in pe_outputs.items()})\n",
+    ),
+    "skip-listed-hand-off": (_US_CA_ANCHOR, "    _x = any_by_id(idx, values)\n"),
+    "skip-listed-hand-off-keyword": (
+        _US_CA_ANCHOR,
+        "    _x = any_by_id(ids=idx, values=values)\n",
+    ),
+    "skip-listed-hand-off-pe-outputs": (
+        _PROJECTED_CASE_ANCHOR,
+        "        _x = all_by_id(spm_ids, pe_outputs)\n",
+    ),
+    "reassigned-loop-target": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        f"        _n = {_NEW}\n"
+        "        _x = values[_n][idx]\n",
     ),
 }
 
