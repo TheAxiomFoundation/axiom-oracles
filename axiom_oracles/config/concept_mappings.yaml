@@ -2147,6 +2147,7 @@ concepts:
     category: tax
     comparison: amount
     tolerance: 5
+    case_unit: tax_unit
     parent: us:tax/federal-income-tax#liability
     # Comparable only on WAGE-ONLY units. The three targets differ in scope:
     # - axiom: the section 3101(b)(2) wage leg alone. Pinned rulespec-us
