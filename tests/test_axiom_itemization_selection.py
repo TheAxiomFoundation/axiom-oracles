@@ -90,7 +90,6 @@ def _prepared(concepts, engines=frozenset({"policyengine", "axiom"})) -> Case:
     return case
 
 
-@pytest.mark.xfail(strict=True, reason="#624: state-only lanes minimize state tax")
 @pytest.mark.parametrize("oracle", ["policyengine", "taxsim"])
 def test_state_only_lane_selects_by_the_federal_election(oracle) -> None:
     prepared = _prepared((Concepts.STATE_INCOME_TAX,), {oracle, "axiom"})
@@ -98,7 +97,6 @@ def test_state_only_lane_selects_by_the_federal_election(oracle) -> None:
     assert prepared.metadata["axiom_result_selection"] == FEDERAL_SELECTION
 
 
-@pytest.mark.xfail(strict=True, reason="#624: state-only lanes minimize state tax")
 @PROPERTY_SETTINGS
 @given(
     concepts=st.sets(
@@ -152,7 +150,6 @@ def _fake_engine(calls):
     return fake_run
 
 
-@pytest.mark.xfail(strict=True, reason="#624: state-only lanes minimize state tax")
 def test_state_value_comes_from_the_federal_candidate_on_every_lane(
     tmp_path: Path,
 ) -> None:
