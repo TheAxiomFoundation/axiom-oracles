@@ -148,3 +148,87 @@ def test_empty_report_streams_identically(tmp_path):
     actual = _write(_accumulator(tmp_path / "rows" / "cases.jsonl"), tmp_path / "streamed.json", [])
     assert actual == expected
     assert json.loads(actual)["observed_outputs"] == []
+
+
+def _cli_peak(monkeypatch, tmp_path, case_count, batch_size=25):
+    """Peak bytes allocated by ``compare --output``, end to end, with stub engines."""
+    import importlib
+
+    from click.testing import CliRunner
+
+    cli_module = importlib.import_module("axiom_oracles.cli")
+    cases = [Case(case_id=index, period="2026") for index in range(case_count)]
+    monkeypatch.setattr(cli_module, "_load_population_cases", lambda **kwargs: cases)
+    monkeypatch.setattr(cli_module, "_echo_resolved_axiom_composition", lambda *args: None)
+    monkeypatch.setattr(cli_module, "comparable_mappings", lambda *args, **kwargs: MAPPINGS)
+    monkeypatch.setattr(
+        cli_module, "_prepare_cases_for_engines", lambda batch, *args, **kwargs: batch
+    )
+
+    class Runner:
+        def __init__(self, engine):
+            self.engine = engine
+            self.flag = "eligible" if engine == "axiom" else "is_eligible"
+
+        def run_cases(self, batch, variables):
+            return [
+                EngineResult(self.engine, case.case_id, {
+                    **{name: float(case.case_id % 97) + 0.25 for name in TARGETS},
+                    self.flag: True,
+                })
+                for case in batch
+            ]
+
+    monkeypatch.setattr(
+        cli_module, "_build_runner", lambda engine, *args, **kwargs: Runner(engine)
+    )
+    output = tmp_path / f"report-{case_count}.json"
+    runner = CliRunner()
+    gc.collect()
+    tracemalloc.start()
+    try:
+        tracemalloc.reset_peak()
+        run = runner.invoke(cli_module.cli, [
+            "compare", "axiom", "policyengine", "--output", str(output),
+            "--comparison-batch-size", str(batch_size),
+        ])
+        peak = tracemalloc.get_traced_memory()[1]
+    finally:
+        tracemalloc.stop()
+    assert run.exit_code == 0, run.output
+    assert json.loads(output.read_text())["case_count"] == case_count
+    return peak
+
+
+def test_cli_compare_output_peak_does_not_scale_with_returned_values(monkeypatch, tmp_path):
+    """The whole ``compare --output`` run, not only add_batch, stays bounded.
+
+    The population's Case objects are inherently held for the run; the bound
+    allows them and nothing per returned value. Reading the spool back for
+    the summary echo cost roughly 11 KB per case.
+    """
+    _cli_peak(monkeypatch, tmp_path, 10)  # imports and first-run caches
+    small = _cli_peak(monkeypatch, tmp_path, 100)
+    large = _cli_peak(monkeypatch, tmp_path, 400)
+    per_case = (large - small) / 300
+    assert per_case < 1_500, f"{per_case:.0f} peak bytes per extra case"
+
+
+def test_observed_outputs_bytes_match_the_whole_list_encoding(tmp_path):
+    """The streamed entry is exactly ``_top_level_json_entry`` of the whole list.
+
+    This pins the writer against the encoder it replaces, rather than
+    against itself.
+    """
+    from axiom_oracles.comparison.report import _top_level_json_entry
+
+    for count, name in ((3, "some"), (0, "none")):
+        accumulator = _accumulator(tmp_path / name / "cases.jsonl")
+        if count:
+            accumulator.add_batch(*_batch(0, count))
+        path = tmp_path / f"{name}.json"
+        accumulator.write_json(path)
+        text = path.read_text()
+        rows = accumulator.to_dict()["observed_outputs"]
+        assert len(rows) == count * (2 * len(TARGETS) + 2)
+        assert _top_level_json_entry("observed_outputs", rows) + ",\n" in text
