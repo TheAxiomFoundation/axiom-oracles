@@ -1686,7 +1686,14 @@ def _stamp_report_provenance(
     write leaves the report as it was. The bytes written are what
     ``json.dumps`` of the stamped report in the detected format, plus the
     original trailing newline, would give, and the file keeps its mode.
+
+    ``output`` must be this user's regular file, as the publisher requires
+    of its staging path; anything else (a symlink, say) is refused with
+    ``SystemExit`` before anything is read or written. A missing file is
+    left alone, as before.
     """
+    if _own_regular_report(output) is None:
+        return
     try:
         with open(output) as handle:  # read_text()'s defaults
             data = json.load(handle)
@@ -1721,22 +1728,34 @@ def _stamp_report_provenance(
     )
 
 
-def _replace_report(output: Path, write) -> None:
-    """Write ``output`` through ``write(handle)``, all or nothing.
+def _own_regular_report(output: Path) -> os.stat_result | None:
+    """``lstat`` of a report this user owns as a regular file; None if absent.
 
-    A regular file is replaced atomically by a sibling temporary file with
-    its mode. Anything else (a symlink) is written through in place, as
-    ``write_text`` did, so the publisher's later check that its staging path
-    is still a regular file is not defeated by the replacement.
+    Mirrors the publisher's check on its staging path: anything else is
+    refused with ``SystemExit``, so a swapped-in symlink is never followed.
     """
     try:
         info = os.lstat(output)
     except FileNotFoundError:
-        info = None
-    if info is None or not stat.S_ISREG(info.st_mode):
-        with open(output, "w") as handle:  # write_text()'s defaults
-            write(handle)
-        return
+        return None
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+        raise SystemExit(
+            f"staging report {output} is not this user's regular file — "
+            "refusing to stamp it"
+        )
+    return info
+
+
+def _replace_report(output: Path, write) -> None:
+    """Write ``output`` through ``write(handle)``, all or nothing.
+
+    The report, which must still be this user's regular file, is replaced
+    atomically by a sibling temporary file with its mode. If the write
+    fails, the temporary file is removed and the report is unchanged.
+    """
+    info = _own_regular_report(output)
+    if info is None:
+        raise SystemExit(f"staging report {output} disappeared while stamping it")
     descriptor, temporary = tempfile.mkstemp(
         prefix=f".{output.name}.", suffix=".stamp", dir=output.parent
     )

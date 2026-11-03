@@ -317,3 +317,38 @@ def test_symlinked_staging_path_is_refused_and_nothing_written(tmp_path, provena
 def test_missing_staging_path_is_still_left_alone(tmp_path):
     _run_comparison()._stamp_report_provenance(tmp_path / "absent.json", {"schema": "v1"})
     assert list(tmp_path.iterdir()) == []
+
+
+def test_symlink_is_refused_before_it_is_read(tmp_path):
+    """A link to something that is not a JSON object is refused, not skipped."""
+    target = tmp_path / "target.txt"
+    target.write_text("not json")
+    link = tmp_path / "staging.json"
+    link.symlink_to(target)
+    with pytest.raises(SystemExit, match="staging.json"):
+        _run_comparison()._stamp_report_provenance(link, {"schema": "v1"})
+    assert target.read_text() == "not json"
+
+
+def test_staging_swapped_for_a_symlink_mid_stamp_is_refused_before_writing(
+    tmp_path, monkeypatch
+):
+    """The write re-checks the path, so a swap after the read writes nothing."""
+    rc = _run_comparison()
+    staging = tmp_path / "staging.json"
+    staging.write_text(json.dumps({"suite": "x"}, indent=2))
+    elsewhere = tmp_path / "elsewhere.json"
+    elsewhere.write_text(json.dumps({"suite": "other"}, indent=2))
+    original = elsewhere.read_bytes()
+    apply = rc._apply_report_provenance
+
+    def swap_then_apply(*args, **kwargs):
+        staging.unlink()
+        staging.symlink_to(elsewhere)
+        return apply(*args, **kwargs)
+
+    monkeypatch.setattr(rc, "_apply_report_provenance", swap_then_apply)
+    with pytest.raises(SystemExit, match="staging.json"):
+        rc._stamp_report_provenance(staging, {"schema": "v1"})
+    assert elsewhere.read_bytes() == original
+    assert sorted(item.name for item in tmp_path.iterdir()) == ["elsewhere.json", "staging.json"]
