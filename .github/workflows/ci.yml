@@ -362,9 +362,11 @@ jobs:
 
   # The SNAP child support adapter tests replay PolicyEngine-US and skip when
   # it is absent. The policyengine extra pins policyengine[us]==5.0.0, whose
-  # policyengine-us 1.764.6 predates PolicyEngine/policyengine-us#9586 and
-  # gives the state child support election the opposite sense. This job
-  # installs a policyengine-us with the fix and turns any skip into a failure.
+  # policyengine-us 1.764.6 (version bump 92e6052d3e05) is an ancestor of
+  # PolicyEngine/policyengine-us#9586 (merge d9e801df4173, first released in
+  # 2.11.4 by bump 60a4805573a6) and gives the state child support election
+  # the opposite sense. This job installs a policyengine-us with the fix and
+  # turns any skip into a failure.
   policyengine-live:
     runs-on: ubuntu-latest
     steps:

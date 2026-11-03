@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import re
 from calendar import monthrange
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
@@ -131,21 +132,30 @@ class USVariableComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
-        return {
-            "variables": list(self.variables),
-            "compared_persons": self.compared_persons,
-            "compared_spm_units": self.compared_spm_units,
-            "compared_values": self.compared_values,
-            "skipped_cases": self.skipped_cases,
-            "skipped_reasons": self.skipped_reasons,
-            "mismatch_count": len(self.mismatches),
-            "mismatches": [row.__dict__ for row in self.mismatches],
-            "output_summary": self.output_summary,
-            "projection_notes": self.projection_notes,
-            "dataset_identity": self.dataset_identity,
-        }
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values(
+            {
+                "variables": list(self.variables),
+                "compared_persons": self.compared_persons,
+                "compared_spm_units": self.compared_spm_units,
+                "compared_values": self.compared_values,
+                "skipped_cases": self.skipped_cases,
+                "skipped_reasons": self.skipped_reasons,
+                "mismatch_count": len(self.mismatches),
+                "uncompared_mismatches": sum(
+                    row.get("uncompared_mismatches", 0) for row in self.output_summary
+                ),
+                "mismatches": [row.__dict__ for row in self.mismatches],
+                "output_summary": self.output_summary,
+                "projection_notes": self.projection_notes,
+                "dataset_identity": self.dataset_identity,
+                "errors": self.errors,
+            }
+        )
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser:
@@ -750,6 +760,19 @@ def project_ca_capi_inputs(
     )
 
 
+def returned_number(value: Any) -> float:
+    """A returned PolicyEngine output as a float; NaN when missing or invalid.
+
+    Unlike ``money``, this never turns a missing or NaN return into zero.
+    """
+    if value is None or isinstance(value, str):
+        return math.nan
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return math.nan
+
+
 def compare_outputs(
     *,
     variables: tuple[str, ...],
@@ -762,10 +785,49 @@ def compare_outputs(
     dataset_identity: dict[str, Any] | None = None,
 ) -> USVariableComparisonReport:
     mismatches: list[USVariableComparisonRow] = []
+    errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {}
     compared_values = 0
     compared_spm_units: set[int] = set()
     compared_person_ids: set[int] = set()
+
+    def record_invalid(
+        case: USVariableCase,
+        mapping: PolicyEngineMapping,
+        axiom_value: float,
+        reason: str,
+    ) -> None:
+        # As for native FIIT (#368) and SNAP (#604): a missing or invalid
+        # return, on either side, is an engine error and an uncompared
+        # diagnostic mismatch, never a comparison, a match or a 0.0 stand-in.
+        pe_value = returned_number(case.pe_outputs[case.variable])
+        entity_id = person_entity_id(case.person_id)
+        for engine, value in (("axiom", axiom_value), ("policyengine", pe_value)):
+            if not math.isfinite(value):
+                errors.append(
+                    {
+                        "engine": engine,
+                        "case_id": entity_id,
+                        "variable": case.variable,
+                        "output": mapping.legal_id,
+                        "error": "missing_or_nonfinite_output",
+                    }
+                )
+        item = summary[mapping.legal_id]
+        item["mismatches"] += 1
+        item["uncompared_mismatches"] += 1
+        mismatches.append(
+            USVariableComparisonRow(
+                variable=case.variable,
+                entity_id=entity_id,
+                output=mapping.legal_id,
+                axiom=axiom_value,
+                policyengine=pe_value,
+                diff=math.nan,
+                reason=reason,
+            )
+        )
+
     for variable in variables:
         cases = cases_by_variable.get(variable, [])
         axiom_outputs = axiom_outputs_by_variable.get(variable, [])
@@ -777,25 +839,14 @@ def compare_outputs(
                     "output": mapping.legal_id,
                     "compared": 0,
                     "mismatches": 0,
+                    "uncompared_mismatches": 0,
                     "max_abs_diff": 0.0,
                     "max_relative_diff": 0.0,
                 }
         for index, case in enumerate(cases):
             if index >= len(axiom_outputs):
                 for mapping in mappings:
-                    item = summary[mapping.legal_id]
-                    item["mismatches"] += 1
-                    mismatches.append(
-                        USVariableComparisonRow(
-                            variable=variable,
-                            entity_id=person_entity_id(case.person_id),
-                            output=mapping.legal_id,
-                            axiom=0.0,
-                            policyengine=money(case.pe_outputs[variable]),
-                            diff=-money(case.pe_outputs[variable]),
-                            reason="missing_axiom_row",
-                        )
-                    )
+                    record_invalid(case, mapping, math.nan, "missing_axiom_row")
                 continue
             compared_person_ids.add(case.person_id)
             if case.spm_unit_id is not None:
@@ -804,22 +855,13 @@ def compare_outputs(
             outputs = result.get("outputs") or {}
             for mapping in mappings:
                 if mapping.legal_id not in outputs:
-                    item = summary[mapping.legal_id]
-                    item["mismatches"] += 1
-                    mismatches.append(
-                        USVariableComparisonRow(
-                            variable=variable,
-                            entity_id=person_entity_id(case.person_id),
-                            output=mapping.legal_id,
-                            axiom=0.0,
-                            policyengine=money(case.pe_outputs[variable]),
-                            diff=-money(case.pe_outputs[variable]),
-                            reason="missing_axiom_output",
-                        )
-                    )
+                    record_invalid(case, mapping, math.nan, "missing_axiom_output")
                     continue
                 axiom_value = output_number(outputs.get(mapping.legal_id))
-                pe_value = money(case.pe_outputs[variable])
+                pe_value = returned_number(case.pe_outputs[variable])
+                if not (math.isfinite(axiom_value) and math.isfinite(pe_value)):
+                    record_invalid(case, mapping, axiom_value, "invalid_output")
+                    continue
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)
                 compared_values += 1
@@ -856,6 +898,7 @@ def compare_outputs(
         skipped_reasons=dict(sorted(skipped_reasons.items())),
         mismatches=mismatches,
         output_summary=list(summary.values()),
+        errors=errors,
         projection_notes=[
             "US variable Populace comparison projects existing PolicyEngine component "
             "values into RuleSpec legal inputs and then executes the real Axiom "
@@ -868,6 +911,12 @@ def compare_outputs(
             "Minnesota MFIP is compared only on PE-eligible SPM units because the "
             "encoded RuleSpec module covers the post-eligibility grant and cash "
             "issuance calculation.",
+            "SNAP child support (7 CFR 273.9(c)(17) and (d)(5)) projects PE's "
+            "monthly snap_countable_child_support_expense as the payment input. PE "
+            "has already counted and prorated that amount (each member's "
+            "child_support_expense times snap_income_counted_share), so these "
+            "comparisons check the exclusion or deduction treatment after counting "
+            "and proration, not the treatment of raw household payments.",
         ],
         dataset_identity=dataset_identity or None,
     )

@@ -578,6 +578,7 @@ def _validate_compact_case(
         suite=suite,
     )
     raw_mismatches = row.get("m")
+    uncompared = 0
     if isinstance(raw_mismatches, list):
         for index, mismatch in enumerate(raw_mismatches):
             if isinstance(mismatch, dict):
@@ -587,6 +588,13 @@ def _validate_compact_case(
                     defects=defects,
                     suite=suite,
                 )
+                if "u" in mismatch:
+                    if mismatch["u"] is not True:
+                        defects.append(
+                            _defect(suite, f"{location}.m[{index}].u must be true")
+                        )
+                    else:
+                        uncompared += 1
     # ``v`` explicitly stores matched comparisons; a non-empty ``m`` stores
     # explicit mismatch evidence. An absent ``v`` cannot mean zero matches
     # generally (SNAP-QC omits all verdict values), so that row supports full
@@ -600,8 +608,23 @@ def _validate_compact_case(
     )
     if outcomes is not None:
         matches, mismatch_count = outcomes
-        expected_rate = dashboard_match_rate(matches, mismatch_count)
-        if raw_rate is None:
+        # An uncompared row ("u": true) was never measured, so the served
+        # rate leaves it out, as emit_case_artifacts.compact_case does.
+        compared_mismatches = mismatch_count - uncompared
+        expected_rate = (
+            None
+            if not matches and not compared_mismatches and uncompared
+            else dashboard_match_rate(matches, compared_mismatches)
+        )
+        if expected_rate is None:
+            if raw_rate is not None:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.r must be null when no stored pair was compared",
+                    )
+                )
+        elif raw_rate is None:
             defects.append(
                 _defect(
                     suite,
