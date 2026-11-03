@@ -491,7 +491,7 @@
       "overrides": []
     },
     "dashboard-2026-09": {
-      "description": "The Linux build the PolicyEngine TAXSIM emulator dashboard ran for its September 2026 refresh (metadata.taxsimBinarySha256 in dashboard/public/data/<year>/summary_<year>.json, 2021-2025, in PolicyEngine/policyengine-taxsim: the September 9 Linux build), and the macOS and Windows builds of the same commit (the September 9 macOS build and the September 1 Windows build, cd2026090110); the metadata records no macOS or Windows binary. Georgia and Maryland in 2024 and 2025 run the previous (August) builds instead, as metadata.taxsimFallback records: the September Linux build crashes there.",
+      "description": "The Linux build the PolicyEngine TAXSIM emulator dashboard ran for its September 2026 refresh (metadata.taxsimBinarySha256 in dashboard/public/data/<year>/summary_<year>.json, 2021-2025, in PolicyEngine/policyengine-taxsim: the September 9 Linux build), and the macOS and Windows builds that pe-taxsim commit c245a3eb bundles with it (the September 9 macOS build and the September 1 Windows build, cd2026090110); the metadata records no macOS or Windows binary. Georgia and Maryland in 2024 and 2025 run the August builds instead: metadata.taxsimFallback records the August Linux build (00a321d2...) for them, because the September Linux build crashes there, and the override's reason pairs it with the matching August macOS and Windows builds.",
       "binaries": {
         "linux": "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059",
         "darwin": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",

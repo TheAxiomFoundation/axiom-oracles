@@ -371,6 +371,13 @@ def test_dashboard_profile_matches_dashboard_metadata() -> None:
     assert override.states == frozenset({11, 21})
     assert override.years == frozenset({2024, 2025})
     assert override.binaries["linux"] == DASHBOARD_FALLBACK_LINUX_SHA
+    description = pins.load_pins()["profiles"]["dashboard-2026-09"]["description"]
+    # The description names the commit whose macOS and Windows builds it
+    # pairs with the dashboard's Linux build, and says the fallback metadata
+    # records only the Linux build.
+    assert "commit c245a3eb bundles" in description
+    assert "records the August Linux build (00a321d2" in description
+    assert "the same commit" not in description
     raw_override = pins.load_pins()["profiles"]["dashboard-2026-09"]["overrides"][0]
     assert raw_override["linked_issue"].endswith("/issues/1214")
     # The dashboard's own metadata, pinned to a commit (#1215 closed unmerged).
