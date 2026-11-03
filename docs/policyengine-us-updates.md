@@ -23,6 +23,12 @@ The orchestrator's optional `policyengine` extra remains a separate environment.
 The default manifest initially preserves all existing versions. This workflow
 does not migrate historical suites or remove their wrapper dependency.
 
+The pinned-artifact checker inventories the default manifest alongside explicit
+suite pins. Its dynamic-version exceptions are restricted to the updater's
+validated PyPI selection and the runner's manifest-derived SPM pin; an
+unregistered expression elsewhere still fails the check. Both the PR and weekly
+artifact-check jobs install the manifest validator's `packaging` dependency.
+
 The probe resolves a compatible candidate, records its package versions and
 hashed requirements, and runs the reviewed default and candidate against the
 same bounded cases. It retains `proposal.json`, `report.md`, and
