@@ -51,25 +51,48 @@ def test_set_input_value_updates_every_matching_legal_input():
     assert set(inputs.values()) == {4}
 
 
-def test_axiom_rules_env_prioritizes_active_rulespec_worktree(monkeypatch, tmp_path):
+def test_axiom_rules_env_forwards_only_canonical_checkouts(monkeypatch, tmp_path):
+    """Worktree aliases, program directories and inherited roots stay out.
+
+    Before the hard cut this env led with the renamed worktree, then the
+    inherited ``AXIOM_RULESPEC_REPO_ROOTS`` and the program's parent
+    directories.
+    """
     workspace = tmp_path / "workspace"
-    stale_repo = workspace / "rulespec-us"
+    canonical = workspace / "rulespec-us"
+    renamed = workspace / "rulespec-us-co"
     active_repo = tmp_path / "worktrees" / "rulespec-us-medicaid-primary-categories"
+    inherited = tmp_path / "elsewhere" / "rulespec-us"
     program = active_repo / "us" / "statutes" / "42" / "1396a" / "a" / "10.yaml"
-    stale_repo.mkdir(parents=True)
+    for path in (canonical, renamed, inherited):
+        path.mkdir(parents=True)
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
-    monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(stale_repo))
+    monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(inherited))
+    monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE", "1")
 
     env = snap_populace.axiom_rules_env(program, workspace)
 
-    roots = [
-        Path(root)
-        for root in env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep)
+    roots = env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep)
+    assert roots == [str(canonical.resolve())]
+    assert "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE" not in env
+
+
+def test_axiom_rules_env_leads_with_the_program_checkout(tmp_path):
+    """Control: a program inside a canonical checkout puts that checkout first."""
+    workspace = tmp_path / "workspace"
+    (workspace / "rulespec-us").mkdir(parents=True)
+    active = tmp_path / "active" / "rulespec-us"
+    program = active / "us" / "statutes" / "p.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
+
+    env = snap_populace.axiom_rules_env(program, workspace)
+
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+        str(active.resolve()),
+        str((workspace / "rulespec-us").resolve()),
     ]
-    assert roots[0] == active_repo.resolve()
-    assert stale_repo.resolve() in roots
-    assert roots.index(active_repo.resolve()) < roots.index(stale_repo.resolve())
 
 
 def test_set_input_value_can_skip_optional_unknown_inputs():

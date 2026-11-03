@@ -26,6 +26,7 @@ from .relation_binding import (
     merge_relation_binding_diagnostics,
     public_relation_binding_diagnostics,
 )
+from .rulespec_paths import _canonical_checkout_for
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -3996,6 +3997,9 @@ def run_axiom_parameter_outputs(
 def rulespec_scalar_parameter_values(
     program: Path, *, rulespec_root: Path, period_start: str
 ) -> dict[str, float]:
+    # Read imports only from a canonical checkout (or one of its direct
+    # jurisdiction directories), the same rule run_axiom_program applies.
+    _canonical_checkout_for(rulespec_root)
     return _rulespec_scalar_parameter_values(
         program.resolve(),
         rulespec_root=rulespec_root.resolve(),

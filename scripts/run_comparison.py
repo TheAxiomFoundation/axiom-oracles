@@ -1016,7 +1016,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
-    from axiom_oracles.engine_compat import explicit_engine_roots
+    from axiom_oracles.engine_compat import declared_engine_roots
 
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
@@ -1032,7 +1032,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    return [str(path) for path in explicit_engine_roots(roots)]
+    return [str(path) for path in declared_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
@@ -1067,7 +1067,7 @@ def _complete_rulespecs_from_affected_map(
     suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.engine_compat import declared_engine_roots
         from axiom_oracles.provenance import (
             canonical_rulespec_slug,
             checkout_remote_matches_slug,
@@ -1090,7 +1090,7 @@ def _complete_rulespecs_from_affected_map(
         }
         declared_roots = [Path(path) for path in declared_paths or []]
         declared_roots.extend(
-            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+            path for path in declared_engine_roots(declared_roots) if path not in declared_roots
         )
         observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
@@ -1272,10 +1272,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Workspace containers may contribute country children even when another
     # composition path already supplied a SHA. Stamp the compiler's normalized
     # children as well, retaining their raw origins and unknown SHA observations.
-    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, declared_engine_roots
 
     rulespec_paths = list(dict.fromkeys([
-        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+        *rulespec_paths, *(str(path) for path in declared_engine_roots(rulespec_paths)),
     ]))
     rulespecs = []
     for raw in rulespec_paths:
@@ -2280,16 +2280,31 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
         params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
     )
     composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
     compose_cmd.extend(["-o", str(composed_path)])
     subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
     return composed_path.resolve()
+
+
+def _checked_compose_roots(params: dict) -> list[Path]:
+    """The suite's ``rulespec_roots`` for axiom-compose, each checked first.
+
+    Each must be a canonical ``rulespec-<country>`` checkout or one of its
+    jurisdiction directories (``axiom_oracles.rulespec_roots``); anything else
+    raises before axiom-compose reads it. The paths are passed on as given.
+    """
+    from axiom_oracles.rulespec_roots import require_canonical_content_root
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    for root in roots:
+        require_canonical_content_root(root)
+    return roots
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
@@ -2942,10 +2957,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
@@ -2980,7 +2992,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     root_candidates: list[Path] = list(roots)
     if roots_env:
         root_candidates.append(_expand_path(roots_env))
-    engine_roots = explicit_engine_roots(root_candidates)
+    engine_roots = explicit_engine_roots(root_candidates, strict=True)
     composed_doc: dict = {}
     try:
         composed_doc = yaml.safe_load(composed_path.read_text()) or {}

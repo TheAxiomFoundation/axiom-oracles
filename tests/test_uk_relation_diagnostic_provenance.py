@@ -127,8 +127,6 @@ def test_uk_native_ambiguity_reaches_source_report_without_private_endpoints(
             } for query in wire_request["queries"]],
         }), "")
 
-    monkeypatch.setattr(tax_populace, "_rulespec_repo_alias_parent", lambda _: None)
-    monkeypatch.setattr(tax_populace, "_canonical_rulespec_compile_path", lambda p, _: p)
     monkeypatch.setattr(tax_populace.subprocess, "run", run)
     monkeypatch.setattr(tax_populace.tempfile, "tempdir", str(tmp_path))
     with warnings.catch_warnings(record=True) as emitted:
