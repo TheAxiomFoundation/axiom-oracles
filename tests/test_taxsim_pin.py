@@ -373,7 +373,11 @@ def test_dashboard_profile_matches_dashboard_metadata() -> None:
     assert override.binaries["linux"] == DASHBOARD_FALLBACK_LINUX_SHA
     raw_override = pins.load_pins()["profiles"]["dashboard-2026-09"]["overrides"][0]
     assert raw_override["linked_issue"].endswith("/issues/1214")
-    assert raw_override["source"].endswith("/pull/1215")
+    # The dashboard's own metadata, pinned to a commit (#1215 closed unmerged).
+    assert raw_override["source"].endswith(
+        "/blob/9c987d8f23955dd1564af43dee3fac4054c0dbf2/"
+        "dashboard/public/data/2024/summary_2024.json"
+    )
 
 
 def test_default_profile_is_the_policyengine_taxsim_2_30_0_binaries() -> None:
