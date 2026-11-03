@@ -1070,3 +1070,56 @@ def test_loader_refuses_bua_tua_in_the_generic_branch(monkeypatch, utility_type)
             utility_type,
             utility_projection="policyengine-type",
         )
+
+
+def _served_case(pair):
+    from axiom_oracles import evidence
+
+    report = publish(produce([pair]))
+    [case] = report["cases"]
+    emitter = _load("snap_604_emit_cases", "scripts/emit_case_artifacts.py")
+    served = emitter.compact_case(case, {})
+    defects: list[str] = []
+    evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
+    return case, served, defects
+
+
+def test_served_rate_leaves_an_uncompared_pair_out_and_flags_it():
+    # Amount uncompared (PolicyEngine NaN) beside a matched eligibility pair:
+    # the one compared pair agrees, so the served rate is 100.0, and the
+    # uncompared row stays visible with "u": true.
+    case, served, defects = _served_case((math.nan, True, 100.0, "holds"))
+    assert case["match_rate"] == 100.0
+    assert served["r"] == 100.0
+    [row] = served["m"]
+    assert row["u"] is True and row["c"] == AMOUNT
+    assert defects == []
+
+
+def test_served_rate_still_counts_a_real_disagreement():
+    case, served, defects = _served_case((100.0, True, 50.0, "holds"))
+    assert case["match_rate"] == served["r"] == 50.0
+    [row] = served["m"]
+    assert "u" not in row
+    assert defects == []
+
+
+@pytest.mark.parametrize("rate", [50.0, 0.0])
+def test_validator_refuses_a_rate_that_counts_an_uncompared_row(rate):
+    from axiom_oracles import evidence
+
+    _, served, _ = _served_case((math.nan, True, 100.0, "holds"))
+    served["r"] = rate
+    defects: list[str] = []
+    evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
+    assert any("match rate" in defect for defect in defects), defects
+
+
+def test_validator_refuses_a_non_true_uncompared_flag():
+    from axiom_oracles import evidence
+
+    _, served, _ = _served_case((math.nan, True, 100.0, "holds"))
+    served["m"][0]["u"] = "yes"
+    defects: list[str] = []
+    evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
+    assert any(".u must be true" in defect for defect in defects), defects
