@@ -419,7 +419,7 @@
           },
           "evidence": {
             "kind": "computed",
-            "ref": "Executed 2026-09-25 on macOS arm64 (Rosetta 2) by the axiom-oracles taxsim-ledger PR 1 session; not asserted in CI (CI runs Linux)."
+            "ref": "Executed 2026-09-25 on macOS arm64 (Rosetta 2) ; not asserted in CI (CI runs Linux)."
           }
         }
       ]

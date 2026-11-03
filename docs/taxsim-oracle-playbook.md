@@ -79,7 +79,7 @@ tries the local clone's pinned blobs, then
 pinned wheels, and writes to the cache only bytes whose SHA-256 and size
 match (atomically, mode 0755). The August and September 2026 Linux builds
 link dynamically against `libgfortran.so.5` and `libquadmath.so.0` (the
-2.30.0 Linux build needs only `libc`), so a bare Linux image needs
+2.30.0 Linux build is statically linked and needs no shared libraries), so a bare Linux image needs
 `libgfortran5`.
 
 **Execution.** Rows are partitioned by resolved binary. Every partition's
@@ -113,9 +113,13 @@ record at most the `policyengine_taxsim` package version.
 **Scope.** The state income-tax liability grids
 (`scripts/generate_state_income_tax_liability.py`) and the Populace
 state-tax leg (`bridges/state_tax_populace_runner.py`) still run the
-executable bundled in the installed `policyengine-taxsim` wheel; their
-provenance records the package version, which identifies those executables
-through `distribution.bundled_binaries`.
+executable bundled in the installed `policyengine-taxsim` wheel and ignore
+`--taxsim-pin-profile` and `$AXIOM_TAXSIM_PIN_PROFILE`. Their provenance
+records the package version and, in `engine_identity.taxsim`, the hash of
+the binary that ran. `pinned_entry_for_sha` also finds every v2 profile
+binary, so if such a caller runs a wheel other than the pinned 2.30.0 one
+whose binary is a profile binary, its identity reads `pinned: true` with key
+`binaries/<sha256>` while `distribution` still names 2.30.0.
 
 **CI.** The `taxsim-pin` job in `.github/workflows/ci.yml` syncs the locked
 `taxsim` extra, fetches every profile's Linux binaries, downloads the pinned

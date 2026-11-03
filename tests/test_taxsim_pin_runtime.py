@@ -7,6 +7,7 @@ resolution tests over the committed pin document.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import importlib.util
 import io
@@ -85,6 +86,7 @@ def fake_doc(binaries: dict[str, dict[str, bytes]], *, git_commit: str = "a" * 4
         "default_profile": "new",
         "distribution": real["distribution"],
         "bundled_binaries": real["bundled_binaries"],
+        "runtime_binary": real["runtime_binary"],
         "probes": {},
         "binaries": doc_binaries,
         "profiles": {
@@ -677,3 +679,38 @@ def test_runner_refuses_a_non_absolute_located_binary() -> None:
     )
     with pytest.raises(pins.TaxsimPinError, match="non-absolute"):
         runner.run_cases([case])
+
+
+def test_profile_preflight_checks_an_override_binary_on_its_years_only(
+    monkeypatch,
+) -> None:
+    """The override's binary must accept the years its override covers."""
+    doc, shas = fake_doc(fake_binaries())
+    for sha in shas["old"].values():
+        doc["binaries"][sha]["law_years"] = {"first": 1960, "last": 2024}
+    install_doc(monkeypatch, doc)
+    # 2023 is outside the override's years, so only the default (no recorded
+    # range) applies.
+    pins.require_profile_law_years([2023], profile="new", system="linux")
+    with pytest.raises(pins.TaxsimLawYearError, match="override:ga-md"):
+        pins.require_profile_law_years([2025], profile="new", system="linux")
+    # The "old" profile runs that binary everywhere, so 2023 passes and 2025
+    # fails there too.
+    pins.require_profile_law_years([2023], profile="old", system="linux")
+    with pytest.raises(pins.TaxsimLawYearError, match="default"):
+        pins.require_profile_law_years([2025], profile="old", system="linux")
+
+
+@pytest.mark.parametrize(
+    ("field", "change", "message"),
+    [
+        ("bytes", lambda value: value + 1, "bytes disagrees with bundled_binaries"),
+        ("build", lambda value: "cd2099010100", "build disagrees with bundled_binaries"),
+    ],
+)
+def test_validator_requires_profile_and_bundled_entries_to_agree(
+    field, change, message
+) -> None:
+    doc = copy.deepcopy(pins.load_pins())
+    doc["binaries"][V1_LINUX][field] = change(doc["binaries"][V1_LINUX][field])
+    assert any(message in error for error in pins.validate_pin_document(doc))
