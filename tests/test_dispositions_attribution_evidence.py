@@ -1,8 +1,9 @@
 """The TAXSIM-lane attribution calls follow from the committed evidence.
 
-Each test re-derives one call in docs/taxsim-disposition-migration-audit.md
+Three tests re-derive a call in docs/taxsim-disposition-migration-audit.md
 from the receipt or report the entry cites, so a changed receipt or a changed
-call fails here instead of drifting apart.
+call fails here instead of drifting apart. The open-rows test is not a
+re-derivation; see its docstring.
 """
 
 from __future__ import annotations
@@ -64,16 +65,24 @@ def test_blindness_and_qbid_composite_is_led_by_the_qbid_convention() -> None:
         "co-tax-intersection-taxsim",
         "taxsim-blindness-63f-and-qbid-composite-taxable-income",
     )
-    members = json.loads(RECEIPT.read_text())["taxable_income_members"]
     [case_id] = entry["case_selector"]["case_ids"]
-    # 6,731.31 (QBID rental convention) + 1,650.00 (63(f) blindness).
-    assert entry["evidence"]["arithmetic"][0]["expression"] == "6731.31 + 1650.0"
-    assert 6731.31 > 1650.0
+    row = json.loads(RECEIPT.read_text())["taxable_income_members"][case_id]
+    qbid, blindness = row["members"]["qbid"], row["members"]["std"]
+    # The receipt's members reconcile to its residual, and the QBID rental
+    # convention member outweighs the 63(f) blindness member.
+    assert abs(qbid + blindness + row["members"].get("seca_ald", 0) - row["resid"]) < 0.02
+    assert abs(qbid) > abs(blindness)
     assert entry["attribution"] == "convention"
-    assert case_id in members
+    # The entry's arithmetic states the same two members.
+    assert abs(abs(qbid) - 6731.31) < 0.005 and abs(abs(blindness) - 1650.0) < 0.005
 
 
 def test_open_rows_name_the_two_convention_rows() -> None:
+    """Not a re-derivation: no committed file decomposes these residuals.
+
+    Checks only that both entries record the two exceptions and that the
+    mechanism text names both cases.
+    """
     for suite, entry_id in (
         ("co-state-income-tax-taxsim", "co-state-open-rows-axiom-pe-divergent"),
         (

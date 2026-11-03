@@ -93,12 +93,12 @@ rows without a bounded field never match it.
   else only `identity_unrecorded: true` matches. Re-pinning TAXSIM
   therefore expires every classification made against the old binary.
 - `identity_unrecorded: true` is an explicit legacy exception, not a verified
-  oracle identity. The three migrated TAXSIM reports record neither C1 binary
+  oracle identity. The three migrated TAXSIM reports record neither TAXSIM binary
   digests nor the package version. Their entries bind the exact observed row
   populations without inventing a historical version; they expire when a
   refreshed report records an identity. An unrecorded binary change with
-  identical rows cannot be detected. New reports should always record C1
-  identity and use a binary binding.
+  identical rows cannot be detected. New reports should always record the
+  TAXSIM binary identity (`engine_identity.taxsim`) and use a binary binding.
 - `uv run scripts/bind_dispositions.py <suite>` computes all bindings (and
   `pinned` values for `case_id` entries) from the suite's committed FULL
   report and stamps them textually; `--check` reports drift without
@@ -112,6 +112,23 @@ suite's two sides (`runner.parameters.left`/`right` in
 declares none) or `convention`, `input`, `two_sided`. Unknown values are
 invalid. For the PE-vs-TAXSIM emulator lane the vocabulary is
 `taxsim | policyengine | convention | input | two_sided`.
+
+A composite residual takes the attribution of its largest member. When some
+rows of a multi-row entry are owned differently from the rest, keep one entry
+and list the exceptions in `attribution_by_case`:
+
+```yaml
+attribution: taxsim
+attribution_by_case:
+  ecps-tax-unit-136208: convention   # led by TAXSIM's auto-HoH deduction
+```
+
+Each key must be a case the entry lists (`case_id`, `case_selector.case_ids`
+or `case_selector.case_ids_by_output`; not a prefix or a `match`), each value
+must be in the vocabulary above, and a value may not repeat the entry's own
+`attribution`. The field needs an entry-level `attribution`. Neither field
+reaches a report row or a dashboard render, so adding an exception changes no
+published bytes, where splitting the entry would change the row annotations.
 
 ### Row arithmetic
 

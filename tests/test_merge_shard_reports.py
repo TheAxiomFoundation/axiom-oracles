@@ -469,3 +469,15 @@ def test_merge_accepts_one_shards_copies_listed_in_different_orders() -> None:
     merged = _load_merge_shard_reports().merge([first, second])
     rows = {b["sha256"]: b["rows"] for b in merged["engine_identity"]["taxsim"]["binaries"]}
     assert rows == {"a" * 64: 2, "b" * 64: 1}
+
+
+def test_merged_copies_check_catches_a_shard_without_an_identity_list() -> None:
+    """A shard whose engine_identity omits `binaries` skips the per-shard
+    check; the merged comparison still refuses the mismatch."""
+    first = _lane_shard("case-a", [_binary("a")], "both")
+    second = _lane_shard("case-b", [_binary("b")], "both")
+    del second["engine_identity"]["taxsim"]["binaries"]
+    with pytest.raises(
+        SystemExit, match="TAXSIM identity disagrees between engine_identity and provenance$"
+    ):
+        _load_merge_shard_reports().merge([first, second])

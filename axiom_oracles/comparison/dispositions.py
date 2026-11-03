@@ -1187,7 +1187,7 @@ def _population_binding_holds(binding: Mapping[str, Any], rows: list[dict]) -> b
 
 
 def report_oracle_identity(report: Mapping[str, Any]) -> dict[str, Any]:
-    """The TAXSIM identity a report records (interface contract C1).
+    """The TAXSIM identity a report records.
 
     Read in order: ``provenance.oracle.taxsim_binaries[*].sha256``, else
     ``engine_identity.taxsim.binaries[*].sha256`` (the CLI report shape),

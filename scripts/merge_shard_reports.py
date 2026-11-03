@@ -165,6 +165,10 @@ def merge(shards: list[dict]) -> dict:
                     f"TAXSIM identity disagrees between engine_identity and "
                     f"provenance in shard {index}"
                 )
+    # The per-shard check above implies this one whenever every shard
+    # carries both lists. It stays for a shard whose engine_identity.taxsim
+    # block omits `binaries` while its provenance lists them: that shard skips
+    # the per-shard comparison, and only the merged lists show the gap.
     if (
         taxsim
         and provenance_binaries is not None
