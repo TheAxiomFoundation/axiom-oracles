@@ -165,23 +165,21 @@ def _git_read_env(**overrides: str) -> dict[str, str]:
     In a partial (promisor) clone Git fetches a missing promised object on
     demand and stores it in the checkout's object store, even from a private
     git directory, because objects live in the common directory. A read must
-    not change the repository it describes, so it disables lazy fetching:
-    ``GIT_NO_LAZY_FETCH`` where Git honours it, and ``protocol.allow=never``
-    for every Git, so a fetch that still starts cannot reach any remote. A
-    read that needs a missing object then fails, and the caller records the
-    tree as unverifiable. The setting is appended after any inherited
-    ``GIT_CONFIG_COUNT`` entries, so it wins over them.
+    not change the repository it describes, so it sets two guards:
+
+    - ``GIT_NO_LAZY_FETCH=1`` stops the fetch on Git 2.45 and later, and on
+      older Git that carries the backport;
+    - ``GIT_ALLOW_PROTOCOL=none`` allows no transport, so a fetch that a Git
+      without that switch still starts cannot reach any remote. It replaces
+      ``protocol.allow`` and every ``protocol.<name>.allow`` setting, and any
+      inherited ``GIT_ALLOW_PROTOCOL``.
+
+    A read that needs a missing object then fails, and the caller records
+    the tree as unverifiable.
     """
     env = _git_env(**overrides)
     env["GIT_NO_LAZY_FETCH"] = "1"
-    try:
-        count = int(env.get("GIT_CONFIG_COUNT") or 0)
-    except ValueError:
-        count = 0
-    count = max(count, 0)
-    env[f"GIT_CONFIG_KEY_{count}"] = "protocol.allow"
-    env[f"GIT_CONFIG_VALUE_{count}"] = "never"
-    env["GIT_CONFIG_COUNT"] = str(count + 1)
+    env["GIT_ALLOW_PROTOCOL"] = "none"
     return env
 
 
