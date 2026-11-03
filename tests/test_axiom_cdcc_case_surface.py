@@ -112,7 +112,6 @@ def _records(case: Case) -> dict[tuple[str, str], object]:
     }
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 def test_family_gets_every_section_21_input() -> None:
     records = _records(_family())
 
@@ -144,7 +143,6 @@ def test_family_gets_every_section_21_input() -> None:
         ] is False
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 def test_the_liability_limit_is_computed_not_projected() -> None:
     records = _records(_family())
     assert not any(name.endswith(f"#input.{LIMIT}") for _, name in records)
@@ -153,7 +151,6 @@ def test_the_liability_limit_is_computed_not_projected() -> None:
     assert rule["kind"] == "derived" and rule["entity"] == "TaxUnit"
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 @pytest.mark.parametrize(
     ("tax_before_credits", "foreign_tax_credit", "limit"),
     [
@@ -176,7 +173,6 @@ def test_section_26_a_limit_on_the_cdcc(
     assert reader.value(LIMIT) == pytest.approx(limit)
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 def test_single_parents_limit_is_their_own_earned_income() -> None:
     """21(d)(1)(A): an unmarried individual's own earned income. The spouse
     slot carries the same amount, as the Populace bridge passes it, so the
@@ -201,7 +197,6 @@ def test_single_parents_limit_is_their_own_earned_income() -> None:
     ] is True
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 @PROPERTY_SETTINGS
 @given(
     head_wages=st.floats(min_value=0, max_value=150_000, allow_nan=False),
@@ -256,7 +251,6 @@ def test_section_21_inputs_for_any_household(
     assert not any(name.endswith(f"#input.{LIMIT}") for _, name in records)
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 def test_case_supplied_cdcc_limit_is_rejected() -> None:
     case = Case(
         case_id="cdcc-limit-input",
@@ -297,7 +291,6 @@ def test_engine_allows_the_family_a_nonzero_credit() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the CDCC gates zero the credit")
 def test_reader_reads_the_limit_from_the_projected_case() -> None:
     """On a projected Case the limit is the imported tax before credits less
     the projected foreign tax credit (0), not a projected 0."""

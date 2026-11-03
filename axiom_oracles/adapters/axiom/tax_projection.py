@@ -666,6 +666,18 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="26 USC 24(d)(1)(B)",
         formula="max(ctc_phase_in_relevant_earnings, ctc_social_security_excess)",
     ),
+    # 26 USC 21(a)(1) allows the credit "against the tax imposed by this
+    # chapter", and 26(a) caps subpart A credits at regular tax less the
+    # section 27 foreign tax credit plus the 55(a) tax. The CDCC is the first
+    # subpart A credit after the foreign tax credit (Schedule 3, lines 1-2),
+    # so its limit is the tax before credits less that credit.
+    _generated_tax_unit_rule(
+        "tax_imposed_by_chapter_before_cdcc",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 21(a)(1), limited by 26 USC 26(a)",
+        formula="max(0, income_tax_before_credits - foreign_tax_credit)",
+    ),
     _generated_tax_unit_rule(
         "aggregate_subpart_c_credits_without_subsection",
         dtype="Money",
@@ -2938,7 +2950,6 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "nonresident_alien_individual",
     "payee_statement_received",
     "provider_identification_requirements_met",
-    "qualifying_individual_tin_included_on_return",
     "qualifying_individual_identification_requirements_met",
     "prior_deficiency_denial_without_required_eligibility_information",
     "retired_on_disability_before_year_end",
@@ -2949,7 +2960,6 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "section_152_e_non_custodial_parent",
     "section_6013_g_or_h_election_in_effect_for_taxable_year",
     "section_6013_resident_alien_election",
-    "service_provider_identifying_information_requirement_satisfied",
     "self_employment_income_is_subject_exclusively_to_foreign_social_security_laws_under_agreement",
     "social_security_agreement_under_section_233_applies_to_nonresident_alien",
     "spouses_lived_apart_all_year",
@@ -3104,7 +3114,6 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
     "taxable_net_gain_from_dispositions",
     "taxable_pension_annuity_disability_benefits_included",
-    "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
     "state_sales_tax",
     "subsidized_state_work_activity_service_compensation",
@@ -3264,9 +3273,22 @@ _INPUT_REF_OVERRIDES.update(
             "service_provider_identifying_information_requirement_satisfied",
             "spouse_earned_income_for_cdcc",
             "spouse_not_member_of_household_during_last_six_months",
-            "tax_imposed_by_chapter_before_cdcc",
             "taxpayer_earned_income_for_cdcc",
             "taxpayer_or_spouse_has_us_principal_abode_more_than_half_year",
+            # Tax-unit claim facts (_cdcc_tax_unit_claim_facts).
+            "cdcc_temporary_expansion_applies",
+            "employment_related_expense_requirements_satisfied",
+            "furnishes_over_half_cost_of_household",
+            "legally_separated_under_decree",
+            "maintains_household_principal_abode_of_qualifying_individual_more_than_half_year",
+            "paid_to_disallowed_related_individual",
+            "possession_credit_or_payment_bars_united_states_credit",
+            # Person facts (_cdcc_person_inputs).
+            "is_cdcc_child_dependent",
+            "is_cdcc_dependent_disregarding_listed_subsections",
+            "noncustodial_parent_exception_applies",
+            "physically_or_mentally_incapable_of_self_care",
+            "same_principal_place_of_abode_more_than_half_year",
         )
     }
 )
@@ -3801,11 +3823,18 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         0,
     )
     inputs["taxpayer_earned_income_for_cdcc"] = _earned_income(head)
-    inputs["spouse_earned_income_for_cdcc"] = _earned_income(spouse) if spouse else 0
+    # 26 USC 21(d)(1)(A): an unmarried individual's limit is their own
+    # earned income. The spouse slot carries that amount, as the Populace
+    # bridge passes it, so the lesser of the two slots is the taxpayer's.
+    inputs["spouse_earned_income_for_cdcc"] = _earned_income(
+        spouse if spouse is not None else head
+    )
     inputs["employment_related_expenses_paid"] = inputs.get(
         "tax_unit_childcare_expenses",
         0,
     )
+    for name, value in _cdcc_tax_unit_claim_facts(inputs).items():
+        inputs.setdefault(name, value)
     inputs["qualifying_children_count"] = sum(
         1 for dependent in dependents if _age(dependent) < 17
     )
@@ -3969,6 +3998,7 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "taxpayer_entitled_to_section_151_deduction_for_child_or_would_be_but_for_section_152_e": is_dependent,
             "taxpayer_or_spouse_ssn_included_on_return": True,
             "taxpayer_or_spouse_ssn_is_valid_for_subsection_h": True,
+            **_cdcc_person_inputs(is_dependent=is_dependent),
         }
         for name in _BOOLEAN_DEFAULTS_FALSE:
             inputs.setdefault(name, False)
@@ -4077,6 +4107,55 @@ def _section_152c_person_inputs(
         "child_resided_with_both_parents_same_amount_of_time_and_taxpayer_parent_has_highest_adjusted_gross_income": False,
         "no_parent_of_individual_is_a_claiming_taxpayer": False,
         "taxpayer_has_highest_adjusted_gross_income_among_claiming_taxpayers": True,
+    }
+
+
+def _cdcc_tax_unit_claim_facts(inputs: dict[str, Any]) -> dict[str, Any]:
+    """26 USC 21 tax-unit facts the Case does not record, for a compliant filer.
+
+    The Populace bridge makes the same assumptions
+    (project_cdcc_tax_unit_inputs).
+    """
+    expenses = _number(inputs.get("employment_related_expenses_paid", 0))
+    earned_income_limit = min(
+        _number(inputs.get("taxpayer_earned_income_for_cdcc", 0)),
+        _number(inputs.get("spouse_earned_income_for_cdcc", 0)),
+    )
+    return {
+        # 21(b)(2)(A): expenses incurred to enable gainful employment, which
+        # 21(d)(1) caps at the earned income.
+        "employment_related_expense_requirements_satisfied": (
+            expenses > 0 and earned_income_limit > 0
+        ),
+        # 21(e)(9)-(10): the provider's and each qualifying individual's
+        # identifying information are on the return.
+        "service_provider_identifying_information_requirement_satisfied": True,
+        "qualifying_individual_tin_included_on_return": True,
+        # 21(e)(6): nothing paid to a dependent or a child under 19.
+        "paid_to_disallowed_related_individual": False,
+        # 21(e)(3)-(4): no decree of separation, and the married-living-apart
+        # test (separate return, household, cost) does not arise.
+        "legally_separated_under_decree": False,
+        "furnishes_over_half_cost_of_household": False,
+        "maintains_household_principal_abode_of_qualifying_individual_more_than_half_year": False,
+        # 21(g) and 21(h)(3) apply only to taxable years beginning in 2021.
+        "cdcc_temporary_expansion_applies": False,
+        "possession_credit_or_payment_bars_united_states_credit": False,
+    }
+
+
+def _cdcc_person_inputs(*, is_dependent: bool) -> dict[str, Any]:
+    """26 USC 21(b)(1) and 21(e)(5) person facts on the Case surface."""
+    return {
+        # 21(b)(1)(A)-(B): the dependent tests, read with the Case's dependent
+        # flag; the module applies the age-13 limit.
+        "is_cdcc_child_dependent": is_dependent,
+        "is_cdcc_dependent_disregarding_listed_subsections": is_dependent,
+        "same_principal_place_of_abode_more_than_half_year": is_dependent,
+        # 21(b)(1)(B)-(C): the Case records no self-care fact.
+        "physically_or_mentally_incapable_of_self_care": False,
+        # 21(e)(5): no divorced-parent custody split.
+        "noncustodial_parent_exception_applies": False,
     }
 
 
@@ -4211,6 +4290,7 @@ def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
         "state_withheld_income_tax",
         "taxable_earned_income_under_section_32",
         "taxable_social_security_benefits_included",
+        "tax_imposed_by_chapter_before_cdcc",
     }
     supplied_aggregate_inputs = sorted(aggregate_inputs.intersection(raw_inputs))
     if supplied_aggregate_inputs:
