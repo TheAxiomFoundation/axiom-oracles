@@ -3626,10 +3626,12 @@ entries:
   disposition: upstream_engine_gap
   attribution: taxsim
   attribution_by_case:
-    # Row 136208 is led by TAXSIM's auto head-of-household standard deduction:
-    # the ledger's taxsim-auto-hoh-and-qbid-composite-taxable-income splits
-    # this unit's federal taxable-income residual (7,575.34) into that member
-    # (+8,050) and TAXSIM's missing QBID floor (-474.66). Row 59285 is called
+    # Row 136208 is called for TAXSIM's auto head-of-household standard
+    # deduction from the unit's federal decomposition: the ledger's
+    # taxsim-auto-hoh-and-qbid-composite-taxable-income splits its federal
+    # taxable-income residual (7,575.34) into that member (+8,050) and
+    # TAXSIM's missing QBID floor (-474.66). No committed file decomposes the
+    # 503.90 state residual itself. Row 59285 is called
     # for TAXSIM's automatic itemization from the mechanism alone; no
     # committed file reconciles its residual to it. The ledger attributes both
     # ingredients to convention (taxsim-auto-hoh-*,

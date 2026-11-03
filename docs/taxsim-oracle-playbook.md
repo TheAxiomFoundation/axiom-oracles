@@ -293,8 +293,9 @@ Consequences for a re-pin or a refresh:
   provenance contains neither binary digests nor a TAXSIM package version.
   This explicit legacy exception preserves the existing assignments without
   asserting an unrecorded identity. It expires the first time a report records
-  any TAXSIM identity (binary digests or a package version). An unrecorded binary change with identical rows remains
-  undetectable; refreshed reports must record their actual binary identity.
+  any TAXSIM identity (binary digests or a package version). An unrecorded
+  binary change with identical rows remains undetectable; refreshed reports
+  must record their actual binary identity.
 - **Re-verify, then re-bind.** After re-checking a class against the
   refreshed report, stamp its bindings from the committed FULL report with
   `uv run scripts/bind_dispositions.py <suite>` (`--check` reports drift
