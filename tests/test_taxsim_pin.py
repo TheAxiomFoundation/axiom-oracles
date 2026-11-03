@@ -567,3 +567,43 @@ def test_golden_probe_executes_pinned_binary(sha: str, tmp_path: Path) -> None:
                 f"{result['evidence']['ref']}"
             )
 
+
+
+SEPTEMBER_COMMIT = "c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18"
+EARLIER_PR_1206_HEAD = "997311aad2ee883d5ebf0d10c9082a902ab17e03"
+
+
+def _september_builds() -> dict[str, dict]:
+    return {
+        sha: meta
+        for sha, meta in pins.load_pins()["binaries"].items()
+        if meta["build"] in {"cd2026090910", "cd2026090110"}
+    }
+
+
+def test_september_builds_name_the_branch_commit_first() -> None:
+    """The September builds no longer live on #1206's head; the branch that
+    bundles them is tried first, the earlier #1206 head second."""
+    builds = _september_builds()
+    assert len(builds) == 3
+    for sha, meta in builds.items():
+        commits = [s["commit"] for s in meta["sources"] if s["kind"] == "git"]
+        assert commits == [SEPTEMBER_COMMIT, EARLIER_PR_1206_HEAD], sha
+        first = next(s for s in meta["sources"] if s["kind"] == "git")
+        assert "codex/refresh-new-taxsim-september" in first["ref"]
+
+
+@pytest.mark.parametrize("sha", sorted(_september_builds()), ids=lambda sha: sha[:12])
+def test_every_september_git_source_serves_the_pinned_bytes(sha: str) -> None:
+    """Each pinned git blob of a September build hashes to its pin (network)."""
+    if not REQUIRE_BINARIES:
+        pytest.skip("downloads pinned blobs; set AXIOM_TAXSIM_REQUIRE_BINARIES=1")
+    binary = pins.pinned_binary(sha)
+    for source in binary.sources:
+        if source["kind"] != "git":
+            continue
+        url = (
+            f"https://raw.githubusercontent.com/{source['repo']}/"
+            f"{source['commit']}/{source['path']}"
+        )
+        assert pins.verify_bytes(binary, pins._http_download(url)) is None, url

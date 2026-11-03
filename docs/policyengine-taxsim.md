@@ -316,9 +316,13 @@ loads the population, `scripts/run_comparison.py` before it builds the
 environment, `scripts/generate_state_income_tax_liability.py` and
 `scripts/run_state_tax_populace.py` before any engine runs,
 `calculate_taxsim_targets` before it builds the Microsimulation, and
-`TaxsimPackageRunner` before each batch. The error names the binary, its range,
+`TaxsimPackageRunner` before each batch. One exception: a `--population
+taxsim-csv` run without `--period` keeps each row's own law year, so `compare`
+and `scripts/run_comparison.py` skip their up-front check and the runner's
+per-batch check against each profile binary is the only one those rows get.
+The error names the binary, its range,
 the years it was run on and the line it printed, and the pinned binary that
-does accept the year. Three things are not range-checked: a binary the pin
+does accept the year. Four things are not range-checked: a binary the pin
 does not record (other SHA-256; the default `TaxsimPackageRunner` refuses to
 run one at all), a pinned binary that has not been run (Windows), a profile
 binary outside the 2.30.0 wheel (the August and September builds; the pin

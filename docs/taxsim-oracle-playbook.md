@@ -43,9 +43,11 @@ SHA-256, not implied by the package version.
 
 | Profile | Linux build (sha256) | What it reproduces |
 | --- | --- | --- |
-| `dashboard-2026-09` | `cd2026090910` (`8aa880ae…`); GA/MD × 2024–2025: `cd2026081819` (`00a321d2…`) | The September 2026 pe-taxsim dashboard, whose metadata records the GA/MD 2024–2025 fallback (the September Linux build raises SIGFPE there; pe-taxsim #1214, #1215) |
-| `pe-taxsim-main-2026-08` | `cd2026081819` (`00a321d2…`) everywhere | The binaries on pe-taxsim `main` and in the `policyengine-taxsim` 2.31.7 wheel |
+| `dashboard-2026-09` | `cd2026090910` (`8aa880ae…`); GA/MD × 2024–2025: `cd2026081819` (`00a321d2…`) | The September 2026 pe-taxsim dashboard: `summary_<year>.json` records `taxsimBinarySha256` `8aa880ae…` for 2021–2025 and, for 2024 and 2025, a `taxsimFallback` sending GA and MD to `00a321d2…` (the September Linux build raises SIGFPE there; pe-taxsim #1214) |
+| `pe-taxsim-main-2026-08` | `cd2026081819` (`00a321d2…`) everywhere | The August builds pe-taxsim `main` bundled from #1150 until #1206 merged (2026-11-02), and the `policyengine-taxsim` 2.31.7 wheel's |
 | `policyengine-taxsim-2.30.0` (default) | `cdate-compdate` (`0d934f20…`) everywhere | The v1 pin: the executables bundled in `policyengine-taxsim` 2.30.0, which the `taxsim` extra installs |
+
+No profile pins the November 1 builds (`cd2026110117`: Linux `beb897fd…`, macOS `21d36bac…`) that pe-taxsim `main` has bundled since #1206 merged; pe-taxsim's Windows build stayed at `a8207e7c…`. A profile for them is a follow-up.
 
 `axiom-oracles taxsim pin-status [--profile P | --all-profiles] [--platform
 linux|darwin|windows|current|all] [--json]` prints the active profile, where

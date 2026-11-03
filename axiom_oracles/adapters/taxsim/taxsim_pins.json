@@ -132,7 +132,7 @@
         30,
         1
       ],
-      "source": "https://github.com/PolicyEngine/policyengine-taxsim/blob/997311aad2ee883d5ebf0d10c9082a902ab17e03/resources/taxsimtest/README.md"
+      "source": "https://github.com/PolicyEngine/policyengine-taxsim/blob/c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18/resources/taxsimtest/README.md"
     }
   },
   "binaries": {
@@ -145,9 +145,16 @@
         {
           "kind": "git",
           "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18",
+          "path": "resources/taxsimtest/taxsimtest-linux.exe",
+          "ref": "refs/heads/codex/refresh-new-taxsim-september (\"Update bundled TAXSIM test binaries to September 2026 builds\"; its manifest.json records this sha256)"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
           "path": "resources/taxsimtest/taxsimtest-linux.exe",
-          "ref": "refs/pull/1206/head"
+          "ref": "an earlier head of PolicyEngine/policyengine-taxsim#1206; on no branch since that PR merged with the November 1 builds"
         },
         {
           "kind": "url",
@@ -165,7 +172,7 @@
           },
           "evidence": {
             "kind": "documented",
-            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/997311aad2ee883d5ebf0d10c9082a902ab17e03/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit); https://github.com/PolicyEngine/policyengine-taxsim/pull/1206"
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit, which include this binary; the same README is at 997311aad2ee). PolicyEngine/policyengine-taxsim#1206's body as first written also reported the probe; it now describes the November 1 build that PR merged."
           }
         }
       ]
@@ -179,9 +186,16 @@
         {
           "kind": "git",
           "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18",
+          "path": "resources/taxsimtest/taxsimtest-osx.exe",
+          "ref": "refs/heads/codex/refresh-new-taxsim-september (\"Update bundled TAXSIM test binaries to September 2026 builds\"; its manifest.json records this sha256)"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
           "path": "resources/taxsimtest/taxsimtest-osx.exe",
-          "ref": "refs/pull/1206/head"
+          "ref": "an earlier head of PolicyEngine/policyengine-taxsim#1206; on no branch since that PR merged with the November 1 builds"
         },
         {
           "kind": "url",
@@ -199,7 +213,7 @@
           },
           "evidence": {
             "kind": "documented",
-            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1206 (native macOS validation: the Virginia 2021 opt(30) probe remains siitax=2,068.05 and srebate=500)"
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit, which include this binary; the same README is at 997311aad2ee). PolicyEngine/policyengine-taxsim#1206's body as first written also reported the probe; it now describes the November 1 build that PR merged."
           }
         }
       ]
@@ -213,9 +227,16 @@
         {
           "kind": "git",
           "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "c245a3eb92e412bc2beb5b0ffaf909ecc36d7a18",
+          "path": "resources/taxsimtest/taxsimtest-windows.exe",
+          "ref": "refs/heads/codex/refresh-new-taxsim-september (\"Update bundled TAXSIM test binaries to September 2026 builds\"; its manifest.json records this sha256)"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
           "path": "resources/taxsimtest/taxsimtest-windows.exe",
-          "ref": "refs/pull/1206/head"
+          "ref": "an earlier head of PolicyEngine/policyengine-taxsim#1206; on no branch since that PR merged with the November 1 builds"
         },
         {
           "kind": "url",
@@ -236,7 +257,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
           "path": "resources/taxsimtest/taxsimtest-linux.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "git",
@@ -281,7 +302,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
           "path": "resources/taxsimtest/taxsimtest-osx.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "git",
@@ -326,7 +347,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
           "path": "resources/taxsimtest/taxsimtest-windows.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "git",
@@ -359,7 +380,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
           "path": "resources/taxsimtest/taxsimtest-linux.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "wheel",
@@ -397,7 +418,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
           "path": "resources/taxsimtest/taxsimtest-osx.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "wheel",
@@ -419,7 +440,7 @@
           },
           "evidence": {
             "kind": "computed",
-            "ref": "Executed 2026-09-25 on macOS arm64 (Rosetta 2) ; not asserted in CI (CI runs Linux)."
+            "ref": "Executed 2026-09-25 on macOS arm64 (Rosetta 2); not asserted in CI (CI runs Linux)."
           }
         }
       ]
@@ -435,7 +456,7 @@
           "repo": "PolicyEngine/policyengine-taxsim",
           "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
           "path": "resources/taxsimtest/taxsimtest-windows.exe",
-          "ref": "refs/heads/main"
+          "ref": "recorded as on pe-taxsim main when pinned; main has since moved"
         },
         {
           "kind": "wheel",
@@ -461,7 +482,7 @@
       "overrides": []
     },
     "pe-taxsim-main-2026-08": {
-      "description": "The August 18 builds bundled on policyengine-taxsim main (resources/taxsimtest, introduced by PR #1150) and in the policyengine-taxsim 2.31.7 wheel, for every state and year.",
+      "description": "The August 18 builds that policyengine-taxsim main bundled (resources/taxsimtest) from PR #1150 until PR #1206 merged on 2026-11-02 and replaced the macOS and Linux builds with the November 1 builds; the policyengine-taxsim 2.31.7 wheel bundles them. Every state and year.",
       "binaries": {
         "linux": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
         "darwin": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
@@ -470,7 +491,7 @@
       "overrides": []
     },
     "dashboard-2026-09": {
-      "description": "The binaries the PolicyEngine TAXSIM emulator dashboard ran for its September 2026 refresh (dashboard/public/data/<year>/summary_<year>.json metadata in PolicyEngine/policyengine-taxsim): the September 9 builds everywhere, except Georgia and Maryland in 2024 and 2025, where the September Linux build crashes and the dashboard used the previous (August) binary.",
+      "description": "The binaries the PolicyEngine TAXSIM emulator dashboard ran for its September 2026 refresh (metadata.taxsimBinarySha256 and metadata.taxsimFallback in dashboard/public/data/<year>/summary_<year>.json, 2021-2025, in PolicyEngine/policyengine-taxsim): the September 9 builds everywhere, except Georgia and Maryland in 2024 and 2025, where the September Linux build crashes and the dashboard used the previous (August) binary.",
       "binaries": {
         "linux": "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059",
         "darwin": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",
@@ -496,9 +517,9 @@
             "darwin": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
             "windows": "a8207e7cf207ee9ce066eedc51cc5dd531c956de0a8b567fca1933ca0fa0e9c3"
           },
-          "reason": "The dashboard metadata records taxsimFallback {states: [GA, MD], years: [2024, 2025], sha256: 00a321d2..., sourceCommit: 2b69146b...}: the September Linux build raises SIGFPE in gatax24 and mdtax22, so those cells ran the previous Linux binary. The crash was observed on Linux; the override names the matching August build on every platform so a profile resolves the same vintage per (state, year) on any host.",
+          "reason": "metadata.taxsimFallback in the dashboard's summary_2024.json and summary_2025.json records {states: [GA, MD], years: [2024, 2025], sha256: 00a321d2..., sourceCommit: 2b69146b..., reason: 'September Linux TAXSIM SIGFPE in gatax24 and mdtax22; previous binary for complete GA/MD outputs'}; summary_2021.json through summary_2023.json record no fallback. The crash was observed on Linux; the override names the matching August build on every platform so a profile resolves the same vintage per (state, year) on any host.",
           "linked_issue": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1214",
-          "source": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1215"
+          "source": "https://github.com/PolicyEngine/policyengine-taxsim/blob/9c987d8f23955dd1564af43dee3fac4054c0dbf2/dashboard/public/data/2024/summary_2024.json"
         }
       ]
     }
