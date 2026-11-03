@@ -678,14 +678,21 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="26 USC 21(a)(1), limited by 26 USC 26(a)",
         formula="max(0, income_tax_before_credits - foreign_tax_credit)",
     ),
+    # 26 USC 24(d)(1)(B) compares "the aggregate amount of credits allowed by
+    # this subpart" under the 26(a) limit and under a raised one. Subpart A
+    # holds the CDCC as well as the CTC, so a CDCC that absorbs the tax
+    # leaves more of the CTC to refund.
     _generated_tax_unit_rule(
         "aggregate_subpart_c_credits_without_subsection",
         dtype="Money",
         unit="USD",
-        source="Oracle composition bridge resolving the section 26(a) CTC limit",
+        source=(
+            "Oracle composition bridge resolving the section 26(a) limit on "
+            "the CTC and CDCC"
+        ),
         formula=(
             "min("
-            "ctc_credit_without_subsection_and_26a_limit, "
+            "ctc_credit_without_subsection_and_26a_limit + cdcc, "
             "income_tax_before_credits"
             ")"
         ),
@@ -694,10 +701,13 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "aggregate_subpart_c_credits_with_increased_26a_limit",
         dtype="Money",
         unit="USD",
-        source="Oracle composition bridge resolving the section 24(d) refundability limit",
+        source=(
+            "Oracle composition bridge resolving the section 24(d) "
+            "refundability limit on the CTC and CDCC"
+        ),
         formula=(
             "min("
-            "ctc_credit_without_subsection_and_26a_limit, "
+            "ctc_credit_without_subsection_and_26a_limit + cdcc, "
             "income_tax_before_credits + ctc_refundable_limitation_increase_amount"
             ")"
         ),

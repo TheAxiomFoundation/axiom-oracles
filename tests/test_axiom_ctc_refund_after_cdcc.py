@@ -67,7 +67,6 @@ def _section_24_d_1_b(*, ctc, cdcc, tax, increase) -> float:
     return min(credits, tax + increase) - min(credits, tax)
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the 24(d) aggregate omits the CDCC")
 def test_a_cdcc_that_absorbs_the_tax_leaves_more_ctc_to_refund() -> None:
     assert _tax_increase(ctc=2_200, cdcc=1_000, tax=1_000, increase=1_500) == (
         pytest.approx(1_500)
@@ -77,7 +76,6 @@ def test_a_cdcc_that_absorbs_the_tax_leaves_more_ctc_to_refund() -> None:
 _MONEY = st.floats(min_value=0, max_value=20_000, allow_nan=False, allow_infinity=False)
 
 
-@pytest.mark.xfail(strict=True, reason="#609: the 24(d) aggregate omits the CDCC")
 @PROPERTY_SETTINGS
 @given(
     ctc=st.floats(min_value=0, max_value=6_600, allow_nan=False),
