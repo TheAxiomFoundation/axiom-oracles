@@ -6090,8 +6090,11 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
                     }
                 )
         case_compared = 2 - bool(amount_failures) - bool(eligibility_failures)
+        # A case with no compared pair was never measured: None, which the
+        # dashboard's tri-state case agreement reads as unmeasured. 0.0 would
+        # read as measured disagreement.
         case_match_rate = (
-            len(case_matches) / case_compared * 100 if case_compared else 0.0
+            len(case_matches) / case_compared * 100 if case_compared else None
         )
         metadata = {
             "axiom_gross_income": _csv_finite_float(row.get("axiom_gross_income")),

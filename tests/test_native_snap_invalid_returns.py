@@ -15,6 +15,8 @@ import importlib.util
 import io
 import json
 import math
+import subprocess
+import shutil
 from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
@@ -777,3 +779,40 @@ def test_us_variable_missing_axiom_return_is_an_uncompared_error(path, pe_value)
     assert row["policyengine"] == (
         None if pe_value is None or math.isnan(pe_value) else pe_value
     )
+
+
+def test_a_case_with_nothing_compared_is_unmeasured():
+    # Both the amount pair and the eligibility pair failed, so the case was
+    # never measured: its rate is None, not 0.0 (measured disagreement).
+    rows = produce(
+        [(math.nan, math.nan, 100.0, "holds"), (100.0, True, 100.0, "holds")]
+    )
+    report = publish(rows)
+    summary = report["summary"]
+    assert summary["comparison_count"] == summary["match_count"] == 2
+    assert summary["uncompared_mismatches"] == 2
+    rates = {case["case_id"]: case["match_rate"] for case in report["cases"]}
+    assert rates == {"ecps-spm-1": None, "ecps-spm-2": 100.0}
+
+    # The served case row carries the same None, and the dashboard's
+    # tri-state contract reads it as unmeasured (null), not as disagreement.
+    emitter = _load("snap_604_emit_cases", "scripts/emit_case_artifacts.py")
+    served = [emitter.compact_case(case, {})["r"] for case in report["cases"]]
+    assert served == [None, 100.0]
+    bun = shutil.which("bun")
+    if bun is None:
+        pytest.skip("dashboard helpers require Bun")
+    script = (
+        'import { caseAgreement } from "./dashboard/src/utils/caseAgreement.mjs";'
+        "const rates = JSON.parse(await Bun.stdin.text());"
+        "console.log(JSON.stringify(rates.map(caseAgreement)));"
+    )
+    result = subprocess.run(
+        [bun, "-e", script],
+        cwd=ROOT,
+        input=json.dumps(served),
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    assert json.loads(result.stdout) == [None, True]
