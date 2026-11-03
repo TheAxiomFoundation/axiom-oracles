@@ -562,16 +562,30 @@ def _scalar_row_valid(row, matched, concept):
             left is not None and right is not None
             and _valid_value(left, None) and _valid_value(right, None)
         )
-        residual = _amount(left) - _amount(right) if numeric else None
+        residual = _residual(left, right) if numeric else None
+        if numeric and residual is None:
+            return False  # e.g. an integer too large for float
         return difference is None or _residual_matches(difference, residual)
     # The row's own tolerance fields are ignored: a forged row cannot widen
     # the declared tolerance to turn a residual into a match.
     if scalar_verdict(concept, left, right) is not matched:
         return False
     if _authority(concept)[0] == "amount" and left is not None and right is not None:
-        residual = _amount(left) - _amount(right)
+        residual = _residual(left, right)
         return "difference" not in row or _residual_matches(difference, residual)
     return difference is None
+
+
+def _residual(left, right):
+    """``float(left) - float(right)``, or None when either has no float.
+
+    An integer too large for ``float`` has none, and its row is refused
+    rather than raising.
+    """
+    left_number, right_number = _amount(left), _amount(right)
+    if left_number is None or right_number is None:
+        return None
+    return left_number - right_number
 
 
 def _residual_matches(difference, residual):

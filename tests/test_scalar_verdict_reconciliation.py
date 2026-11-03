@@ -204,7 +204,7 @@ def test_integer_too_large_for_float_is_refused_not_raised(verdict, left, right)
     report.pop("concepts")
     case = report["cases"][0]
     case["matches"], case["mismatches"] = [], []
-    case[verdict] = [{"concept": CONCEPT, "left": left, "right": right, "difference": 0}]
+    case[verdict] = [{"concept": CONCEPT, "left": left, "right": right}]
     report["mismatches"] = []
     report["summary"]["match_count"] = int(verdict == "matches")
     report["summary"]["mismatch_count"] = int(verdict == "mismatches")
