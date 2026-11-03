@@ -3577,20 +3577,24 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
+    # The 1(h), Schedule D worksheet and 1411 inputs read the filers, as the
+    # AGI leaves do: absent a 1(g)(7) election, which no compared engine
+    # models, a dependent's dividends, gains and interest are on the
+    # dependent's own return.
     capital_gains_tax_qualified_dividends = _sum_concept(
-        people,
+        earners,
         Concepts.QUALIFIED_DIVIDEND_INCOME,
     )
     capital_gains_tax_short_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
     )
     capital_gains_tax_long_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    tax_unit_dividends = _sum_dividends(people)
-    tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
+    tax_unit_dividends = _sum_dividends(earners)
+    tax_unit_interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
     filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
     # 26 USC 86(d)(1): benefits "received by the taxpayer by reason of
     # entitlement"; a dependent's benefits are the dependent's.

@@ -87,7 +87,6 @@ def _investment(dividends, qualified, short_term, long_term, interest):
     }
 
 
-@pytest.mark.xfail(strict=True, reason="#619: the 1(h) inputs sum every member")
 def test_dependent_investment_income_stays_off_the_filers_inputs() -> None:
     case = Case(
         case_id="1h-dependent",
@@ -164,7 +163,6 @@ _DEPENDENTS = st.lists(
 ).filter(lambda deps: any(_has_investment_income(facts) for _, facts in deps))
 
 
-@pytest.mark.xfail(strict=True, reason="#619: the 1(h) inputs sum every member")
 @PROPERTY_SETTINGS
 @given(
     head=_investment_facts(),
@@ -182,7 +180,6 @@ def test_a_dependents_investment_income_never_moves_a_tax_unit_input(
     assert _tax_unit_inputs(with_income) == _tax_unit_inputs(without)
 
 
-@pytest.mark.xfail(strict=True, reason="#619: the 1(h) inputs sum every member")
 @PROPERTY_SETTINGS
 @given(
     head=_investment_facts(),

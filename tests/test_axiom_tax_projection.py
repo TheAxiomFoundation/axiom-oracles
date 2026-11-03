@@ -1122,6 +1122,7 @@ def test_axiom_tax_projection_uses_qualified_dividend_leaf_input() -> None:
 
 
 def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi() -> None:
+    """The child's dividends and gains reach neither AGI nor the 1(h) base."""
     case = Case(
         case_id="dependent-preferential-income",
         period="2026",
@@ -1160,16 +1161,16 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
         for record in projected.metadata["axiom_input_records"]
     }
 
-    assert by_key[("tax_unit", "us:statutes/26/1411#input.dividend_income")] == 1_500
+    assert by_key[("tax_unit", "us:statutes/26/1411#input.dividend_income")] == 1_000
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.qualified_dividend_income")
-    ] == 900
+    ] == 600
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.short_term_capital_gains")
-    ] == 140
+    ] == 100
     assert by_key[
         ("tax_unit", "us:tax/federal-income-tax#input.long_term_capital_gains")
-    ] == 250
+    ] == 200
     assert by_key[
         (
             "tax_unit",
@@ -1196,21 +1197,21 @@ def test_axiom_tax_projection_separates_dependent_preferential_income_from_agi()
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_qualified_dividend_income",
         )
-    ] == 900
+    ] == 600
     assert by_key[
         (
             "tax_unit",
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_short_term_capital_gains",
         )
-    ] == 140
+    ] == 100
     assert by_key[
         (
             "tax_unit",
             "us:tax/oracle-bridge#input."
             "capital_gains_tax_long_term_capital_gains",
         )
-    ] == 250
+    ] == 200
 
 
 def test_axiom_tax_projection_uses_oldest_adults_as_filers() -> None:
