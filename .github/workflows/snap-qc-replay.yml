@@ -99,8 +99,12 @@ on:
 permissions:
   contents: read
 
+# Keyed on github.workflow as well as the ref. In a called workflow the
+# github context is the caller's, so a call from the affected rerun lands in
+# its own group (and the caller's own concurrency already serializes it),
+# never queued behind or replacing the weekly or dispatched run on main.
 concurrency:
-  group: snap-qc-replay-${{ github.ref }}
+  group: snap-qc-replay-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -119,6 +123,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
+          # A publishing call selects suites from the same source as its
+          # replay legs, which check out main.
+          ref: ${{ inputs.publish && 'main' || '' }}
 
       - name: Checkout rulespec-us
         uses: actions/checkout@v4

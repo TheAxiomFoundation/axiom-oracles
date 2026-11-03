@@ -1258,6 +1258,20 @@ def test_ci_routing_names_lanes_and_rejects_anything_else():
         )
 
 
+def test_selector_rejects_a_lane_it_has_no_job_for():
+    """A lane the rerun has no job for would emit an output nothing reads and
+    drop its suites from every route, so the selector refuses it, and its
+    known lanes are exactly the generator's CI_LANES."""
+    sel = _load("select_affected_suites.py")
+    gam = _load("generate_affected_map.py")
+    assert set(sel.KNOWN_LANES) == set(gam.CI_LANES)
+    entry = {"suite": "s", "name": "s", "repos": ["r"], "lane": "snap-qc-live"}
+    with pytest.raises(SystemExit, match="unknown lane"):
+        sel.select({"suites": [entry]}, {"r": "x"}, {})
+    with pytest.raises(SystemExit, match="unknown lane"):
+        sel.force_all_selection({"suites": [entry]})
+
+
 def test_selector_rejects_a_malformed_lane():
     sel = _load("select_affected_suites.py")
     for entry in (
@@ -1372,6 +1386,7 @@ def test_every_selected_suite_has_exactly_one_route(raw, force_all):
     decisions the selector returns, and the routes the selector emits must
     equal them and be pairwise disjoint."""
     sel = _load("select_affected_suites.py")
+    sel.KNOWN_LANES = ("snap-qc-replay", "other-lane")
     affected, reports = _lane_map(raw)
     selected = (
         sel.force_all_selection(affected)
@@ -1401,6 +1416,7 @@ def test_force_all_routes_a_superset_of_any_sweep(raw):
     """force_all and a normal sweep share one routing: whatever a sweep sends
     to the matrix, a lane or the manual list, force_all sends there too."""
     sel = _load("select_affected_suites.py")
+    sel.KNOWN_LANES = ("snap-qc-replay", "other-lane")
     affected, reports = _lane_map(raw)
     sweep = sel.select(affected, _HEADS, reports)
     forced = sel.force_all_selection(affected)

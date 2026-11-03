@@ -113,6 +113,14 @@ def _registry_name(entry: dict) -> str | None:
     return name
 
 
+#: The CI lanes the affected rerun has a job for. Mirrors ``CI_LANES`` in
+#: generate_affected_map.py (this script runs with only PyYAML, so it cannot
+#: import that module; tests/test_affected_map.py couples the two). A lane
+#: outside this set would emit an output no job reads, and its suites would
+#: silently leave every route.
+KNOWN_LANES: tuple[str, ...] = ("snap-qc-replay",)
+
+
 def _lane(entry: dict, name: str | None) -> str | None:
     """The CI lane that runs this entry instead of the bare matrix, if any.
 
@@ -127,6 +135,11 @@ def _lane(entry: dict, name: str | None) -> str | None:
         raise SystemExit(
             f"affected map entry {suite!r} has a malformed lane {lane!r}; "
             "regenerate with `uv run scripts/generate_affected_map.py`"
+        )
+    if lane not in KNOWN_LANES:
+        raise SystemExit(
+            f"affected map entry {suite!r} names unknown lane {lane!r}; "
+            f"expected one of {list(KNOWN_LANES)}"
         )
     return lane
 

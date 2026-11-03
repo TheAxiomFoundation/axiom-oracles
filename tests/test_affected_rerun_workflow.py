@@ -54,8 +54,11 @@ def test_lane_suites_are_replayed_live_with_publish_and_never_committed_there():
     job = _jobs()["snap-qc-replay"]
     assert job["uses"] == "./.github/workflows/snap-qc-replay.yml"
     assert job["needs"] == "select"
-    assert "needs.select.outputs.snap_qc_count" in job["if"]
+    # An absent count reads as zero, so fromJson never sees an empty list.
+    assert job["if"] == "(needs.select.outputs.snap_qc_count || '0') != '0'"
     assert job["permissions"] == {"contents": "read"}
+    # The lane runs on the default token alone: no repository secrets.
+    assert "secrets" not in job
     assert job["with"] == {
         "suites": "${{ join(fromJson(needs.select.outputs.snap_qc), ' ') }}",
         "run_kind": "affected-rerun",

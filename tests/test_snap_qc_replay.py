@@ -615,6 +615,21 @@ def test_publish_packs_only_a_live_exact_report_over_the_published_baseline():
     assert "!inputs.publish" in _workflow()["jobs"]["live-tests"]["if"]
 
 
+def test_a_call_never_shares_the_weekly_runs_concurrency_group():
+    """In a called workflow the github context is the caller's, so keying the
+    group on github.workflow puts the affected rerun's call in its own group,
+    never queued behind (or queued in place of) the weekly run on main."""
+    group = _workflow()["concurrency"]["group"]
+    assert "${{ github.workflow }}" in group and "${{ github.ref }}" in group
+    assert _workflow()["concurrency"]["cancel-in-progress"] is False
+
+
+def test_a_publishing_call_selects_suites_from_main_like_its_legs():
+    checkout = _steps("prepare")[0]
+    assert checkout["with"]["path"] == "axiom-oracles"
+    assert checkout["with"]["ref"] == "${{ inputs.publish && 'main' || '' }}"
+
+
 def test_run_kind_input_overrides_the_trigger_default():
     env = next(step for step in _steps("replay") if step.get("id") == "replay")["env"]
     assert env["AXIOM_ORACLES_RUN_KIND"].startswith("${{ inputs.run_kind ||")

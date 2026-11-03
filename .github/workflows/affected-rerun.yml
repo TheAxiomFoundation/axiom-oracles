@@ -327,7 +327,9 @@ jobs:
   # for a report its `check` accepts as live and exact. It never publishes.
   snap-qc-replay:
     needs: select
-    if: needs.select.outputs.snap_qc_count != '0'
+    # An absent count (a selector that emits no lane output) reads as zero,
+    # so fromJson never sees an empty suite list.
+    if: (needs.select.outputs.snap_qc_count || '0') != '0'
     permissions:
       contents: read
     uses: ./.github/workflows/snap-qc-replay.yml
