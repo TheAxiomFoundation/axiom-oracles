@@ -6,6 +6,10 @@ comparison suites. This gates the Belgium encoding wave: a row's status tells a
 worker whether the instrument is unencoded, encoded-but-unvalidated, or already
 oracle-compared.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 - **EUROMOD facts** are parsed from the model itself:
   `EUROMOD_RELEASES_J2.0+/XMLParam/Countries/BE/BE.xml`, system `BE_2025`
   (SystemID `98820bac-c53d-4fac-8abf-96e0b43d29eb`), sha256
@@ -84,7 +88,7 @@ weight of the instrument class), explicitly **not** cited to a country report.
 |---|---|---|---|---|---|
 | `bun_be` | off → **switched on per run** | `bun_s` | "PART SIMULATED" and shipped **off** (unemployment income carried from input data); **activated per run** via `euromod_policy_switch_overrides` for hypothetical cases — see verdict below | **compared (dispositioned)** — `be-unemployment` (0/4 exact, **4/4 dispositioned** `upstream_engine_gap`); composed pilot `be/regulations/unemployment/pilot_oracle_pipeline.yaml` | — (broaden: household-status partner-income branches, Article 114 degressivity phases 2/3, temporary unemployment) |
 | `bsaoa_be` | off (case switch → on) | `bsaoa_s` | "TO BE SWITCHED ON MANUALLY, otherwise from data" | encoded (`be/statutes/income_guarantee_for_elderly/*`) | **compared** (published `axiom-euromod-be-elderly-income-support`, 1/1 exact) via per-case XML switch overlay (`bsaoa_be`→on): isolated no-resources senior, EUROMOD `bsaoa_s` = Axiom GRAPA = 18,964.44 → Law 22.03.2001 (GRAPA/IGO). Broaden: cohabiting, delegated resource exclusions, property/capital resources |
-| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. The rulespec-be pension encodings (RD No. 50; RD 23.12.1996) validate via other oracles, not EUROMOD |
+| `byr_be` | n/a | `byr_s` (never emitted) | early-retirement / old-age pension income is a **pure input** to BE_2025. `byr_be` (12 functions, 106 params) carries policy switch **n/a**, not `off`; a live probe forcing it on (same XML overlay as GRAPA) returns **no `byr_s` column** while the run succeeds, so `n/a` is structural — the functions never register in the spine. `poa` (old-age pension) has no computing policy at all | **encoded, not compared** (`be/regulations/pensions/workers/retirement_and_survivor.yaml`) | conformance exclusion `input_carrying` (`conformance/be.yaml` `be:byr_be`): nothing to compare — unlike `bsaoa_be` (`off`, activatable), no override resurrects `byr_be`. No comparison in this repo covers the rulespec-be pension encodings (RD No. 50; RD 23.12.1996): every Belgium comparison, both the `comparisons/be-*.yaml` configs and the suites in `axiom_oracles/suites/be_*.py`, runs EUROMOD (published as `axiom-euromod-be-*.json`) |
 | `tco_be` | off | (commodities) | indirect consumption tax; body is `DefConst`/`DefIl` only (no `OutputVar`); **not oracle-comparable** — see verdict below | **encoded** (`be/regulations/vat/rates.yaml`, `be/statutes/excise/rates.yaml`) | conformance exclusion `extension_not_available` (RD No. 20 VAT + excise codes) |
 | `yem_be` | off | `yem` | minimum-wage definition (not a benefit) | n/a (definitional) | — |
 

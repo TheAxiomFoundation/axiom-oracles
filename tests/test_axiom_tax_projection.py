@@ -900,7 +900,16 @@ def test_axiom_tax_projection_routes_qbi_through_person_relation_rows() -> None:
     ) not in by_key
 
 
-def test_axiom_tax_projection_matches_pe_childless_eitc_age_proxy() -> None:
+def test_axiom_tax_projection_childless_eitc_age_test_counts_filers_only() -> None:
+    """26 USC 32(c)(1)(A)(ii)(II): "such individual (or, if the individual is
+    married, either the individual or the individual's spouse) has attained age
+    25 but not attained age 65 before the close of the taxable year".
+
+    The Case surface files the 71-year-old head jointly with the 69-year-old
+    "Other" member and treats the 45-year-old as a dependent. Neither filer is
+    25 to 64, so the test fails. PolicyEngine-US 1.764.6 counted the
+    45-year-old; PolicyEngine-US #9132 (first released in 1.779.8) does not.
+    """
     case = Case(
         case_id="pe-childless-eitc-age-proxy",
         period="2026",
@@ -946,7 +955,8 @@ def test_axiom_tax_projection_matches_pe_childless_eitc_age_proxy() -> None:
             "us:statutes/26/32#input."
             "childless_taxpayer_or_spouse_age_eligible_for_eitc",
         )
-    ] is True
+    ] is False
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 1
 
 
 def test_axiom_tax_projection_limits_head_of_household_to_qualifying_dependents() -> None:
@@ -2106,17 +2116,19 @@ def _non_separate_regression_cases() -> list[Case]:
 
 
 # SHA-256 of the canonical JSON of {"records": axiom_input_records,
-# "relations": axiom_relations} that the projection at base commit 5420b1923
-# (before married-filing-separately support) produced for each case above.
+# "relations": axiom_relations} that the projection on main at 358f433b9
+# (without married-filing-separately support) produced for each case above.
+# Main changed these records between the branch's original base (5420b1923)
+# and 358f433b9; the digests track main, so a difference is this change's.
 _NON_SEPARATE_PRE_MFS_DIGESTS = {
     "regression-single": (
-        "443d48ca7997c8111be54512fe92980263e918c183d3c80bd1fa71c77c924a54"
+        "d00d2e894aff55c8ff82a64111fd584a4aae4ae4ae2f2ec591c9de6343f3ce66"
     ),
     "regression-joint": (
-        "c4f2d5af028510a44fec65fbf69d6439d5231c7a56ced6fb464a87b8956da80d"
+        "f243adf3e20fadb600e1dca6f7dd94b9f355797af72c03a39d1fbfffc8b46483"
     ),
     "regression-head-of-household": (
-        "799028b3bfd3ba4cf31de20d6caf2234750c99ee88abc77b7a8b03269ef9cfd8"
+        "7fb233601604ebfd64fbd0c0c0aa0466c42ab0f21cb9c5e4b8c53df1a2824bc6"
     ),
 }
 

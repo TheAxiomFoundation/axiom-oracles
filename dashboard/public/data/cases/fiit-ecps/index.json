@@ -1,19 +1,19 @@
 {
  "suite": "fiit-ecps",
- "count": 12691,
- "chunks": 26,
+ "count": 13136,
+ "chunks": 27,
  "chunk_size": 500,
  "engines": {
   "left": "axiom",
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "capital-gain-definitions",
-  "ctc",
-  "eitc",
-  "tax-before-credits"
+  "us:tax/federal-income-tax#capital_gain",
+  "us:tax/federal-income-tax#ctc",
+  "us:tax/federal-income-tax#eitc",
+  "us:tax/federal-income-tax#tax_before_credits"
  ],
- "source": "axiom-policyengine-fiit-ecps-0-2026-07-07.json",
+ "source": "axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json",
  "total_cases": 87519,
  "partial": "mismatch-only"
 }

@@ -1,0 +1,161 @@
+{
+  "schema": "axiom_oracles.rwamod_issues.v1",
+  "updated_at": "2026-10-04",
+  "purpose": "Track RWAMOD (SOUTHMOD Rwanda) model findings and grounding gaps observed in household-level Axiom oracle comparisons, mirroring ghamod_issues.json, microzamod_issues.json and etmod_issues.json. Canonical narrative ledger: rulespec-rw#1 closing comment.",
+  "entries": [
+    {
+      "id": "rwamod-cbhi-tier-premiums-gazetting-timing",
+      "classification": "validation_year_grounding_gap",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows - the bundle ships no Rwandan microdata)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD RW_2025 applies the informal-sector CBHI member premiums by monthly-earnings tier (probed 2026-10-04: 250 FRW per month up to 30,000 FRW of monthly earnings, 416.67 to 60,000, 666.67 to 120,000 and 1,666.67 above, i.e. 3,000/5,000/8,000/20,000 FRW per year; zero with no earnings) for CY2025, where the first gazetted carrier of the schedule is Ministerial Order No 002/26/10/TC of 16/02/2026 (Official Gazette no Special of 23/02/2026, in force on publication; expressed by IMIBEREHO Dynamic Social Registry level). The prior gazetted instrument (PM Order No 105/03 of 30/09/2020) carries the funding schedule and the 0.5% employee levy but no income-tier member premiums; the income-tier practice ran administratively from 2024 under RSSB publication (the RWAMOD report's own citation). The amounts agree; the validation-year grounding does not. The rulespec-rw module starts 2026-02-23, so the rw-cbhi-tiers suite is a period-shifted schedule check (Axiom at 2027 against RWAMOD RW_2025; 4/4 live on 2026-10-04), and the pairing of each earnings point with a registry level is a suite assumption, not a sourced mapping.",
+      "affected_comparisons": [
+        "rw-cbhi-tiers"
+      ],
+      "affected_concepts": [
+        "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution"
+      ]
+    },
+    {
+      "id": "rwamod-occupational-hazards-rate-not-digitized",
+      "classification": "primary_instrument_not_publicly_digitized",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD applies a 2% employer occupational-hazards contribution (tscerac_s, probed 2026-10-04: 2,000.00 at uprated monthly employment income 100,000). Law No 06/2003 (modifying the Decree-Law of 22 August 1974) Article 10 makes the branch exclusively employer-paid and Article 9 delegates the percentage rates to a Presidential Decree that is not publicly digitized (the RSSB scheme page documents benefits, not the rate; the RWAMOD report itself cites the RSSB webpage). No encodable primary carrier exists, so the 2% stays a documented grounding gap - the framework law is captured and the rate is not encoded.",
+      "affected_comparisons": [
+        "rw-contributions"
+      ],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-water-excise-row-repealed",
+      "classification": "southmod_model_stale_parameter",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD taxes bottled-water expenditure at 10% (tex11_s; probed 2026-10-04: 10% of the item's post-uprating value) for the whole of RW_2025, where Law No 011/2025 of 27/05/2025 (in force on publication, 29/05/2025) carries NO water row in its Annex - the row existed in the repealed Law No 050/2023, in force through 28 May 2025. The model otherwise applies the 2025 schedule (cigarettes 36% plus FRW 230 per pack, wine 40%; both probed 2026-10-04), so the year mixes the new rates with a dropped row. The rulespec-rw excise module encodes the 2025 Annex only.",
+      "affected_comparisons": [
+        "rw-excise"
+      ],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-juice-basket-local-rate",
+      "classification": "southmod_model_simplification",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD prices every item in its juice expenditure basket at 10% (tex09_s; probed 2026-10-04: 10% of each item's post-uprating value), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the probed 10% applies to every juice item whatever its local content.",
+      "affected_comparisons": [
+        "rw-excise"
+      ],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-beer-fermented-basket-rates",
+      "classification": "southmod_model_simplification",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD prices its local-beer expenditure basket at the 40% local-beer rate (tex06_s) and one other-beer item at 65% (tex07_s) (probed 2026-10-04: 40% and 65% of the post-uprating values), where the Law 011/2025 Annex separately prices other fermented beverages at 65% (item 11) and other alcoholic beverages with local raw material content at 30% (item 12) - traditional or fermented drinks inside the 40% basket are not distinguished. Basket-level simplification recorded for the excise dispositions.",
+      "affected_comparisons": [
+        "rw-excise"
+      ],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-rama-pensioner-contribution-arm-uncarried",
+      "classification": "carrier_not_in_captured_print",
+      "counts_as_axiom_gap": null,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD charges a RAMA medical contribution on old-age pension income for persons flagged as pensioners (tscpehl_s): probed live on 2026-10-03 and again on 2026-10-04, at uprated monthly pension income (poa) of 100,000 and 400,000 with the pensioner flag poayn=1 it returns tscpehl_s 7,500 and 30,000 (7.5%) and reduces ils_dispy by the same amount; with poayn=0 it returns 0. The rulespec-rw RAMA module (rw/statutes/law-2001-24/rama-contributions) encodes the Article 44 contribution on the employee's basic salary only and records that its captured print (the RSSB library English consolidated print of Law No 24/2001 incorporating Law No 29/2002) carries no provision extending contributions to retired members, leaving the pensioner arm to a parity disposition. Unadjudicated: no gazetted carrier for a pensioner contribution has been identified or ruled out, so this is not yet classified as a model or encoding gap. No rw suite runs a pensioner case.",
+      "affected_comparisons": [],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-bottled-water-vat-charged-twice",
+      "classification": "southmod_model_defect_candidate",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD charges VAT twice on the bottled-water item. Probed 2026-10-04 on a row with 10,000 FRW per month of bottled-water spend and nothing else: the echoed VAT base il_exp_vat01 holds the post-uprating 10,977.19, the water excise tex11_s is 1,097.72 (10%), and tva_s is 4,149.38 = 18% of 10,977.19 (1,975.89, the standard-rated VAT base) plus 18% of 10,977.19 + 1,097.72 (2,173.48, the VAT the model adds on an excisable item's value plus excise, as on the juice and cigarette probes). A juice item at the same spend, whose spend does not show up in il_exp_vat01 (observed), carries only the second amount. Law No 049/2023 Article 4 charges VAT once on the taxable value, so the water item's effective VAT (37.8% of the post-uprating value) has no statutory basis whichever of the two bases is right. No rw suite compares VAT on an excisable good, so nothing mismatches today.",
+      "affected_comparisons": [],
+      "affected_concepts": []
+    },
+    {
+      "id": "rwamod-expenditure-read-tax-inclusive-for-excise-pre-tax-for-vat",
+      "classification": "convention_difference",
+      "counts_as_axiom_gap": false,
+      "jurisdiction": "RW",
+      "observed_with": {
+        "country": "RW",
+        "system": "RW_2025",
+        "dataset": "rw_2024_a1 (registered name; synthetic rows)",
+        "model_root": "SOUTHMOD_A4.0"
+      },
+      "oracle_scope": "household_level",
+      "status": "observed_local",
+      "summary": "RWAMOD reads the same expenditure value two incompatible ways. Probed 2026-10-04 on a row with 20,000 FRW per month of cigarette spend and 10 packs and nothing else: tex01_s is 10,295.12 = 36% of the post-uprating spend (22,208.67) plus 230 x 10, which reads the spend as the tax-inclusive retail price the Law 011/2025 Annex names; tva_s is 5,850.68 = 18% of the spend plus that excise, which reads the same spend as a value before excise and VAT. On a single food item tva_s is 18% of the post-uprating spend (2,048.77 on 11,382.06), again reading spend as VAT-exclusive. At most one reading can match how a household's recorded spending relates to Law No 049/2023's taxable value and the Annex's tax-inclusive retail price. The rw-* suites adopt the model's reading per tax for parity and test rates, not base definitions: rw-vat feeds the post-uprating spend as the module's taxable_value, and rw-excise feeds it as the module's cigarette_retail_value (the tax-inclusive retail price). Unadjudicated.",
+      "affected_comparisons": [
+        "rw-vat",
+        "rw-excise"
+      ],
+      "affected_concepts": [
+        "rw:statutes/law-2023-049/value-added-tax#vat_amount",
+        "rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty"
+      ]
+    }
+  ]
+}

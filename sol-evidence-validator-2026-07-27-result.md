@@ -413,7 +413,7 @@ This file is therefore the exact fallback copy inside the authorized worktree.
 The placement was attempted and failed exactly as follows:
 
 ```text
-cp: /Users/maxghenis/TheAxiomFoundation/ops/reviews/sol-evidence-validator-2026-07-27/result.md: Operation not permitted
+cp: <workspace>/ops/reviews/sol-evidence-validator-2026-07-27/result.md: Operation not permitted
 ```
 
 No permission boundary was bypassed. The existing external `result.md` remains

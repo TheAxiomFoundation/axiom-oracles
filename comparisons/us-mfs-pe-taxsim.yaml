@@ -21,8 +21,7 @@
 # the remaining rows reach the emulator, so this suite (all mstat 6)
 # yields thirteen errors and no numbers. The marker (`MSTAT_MARRIED_SEPARATE
 # = 6` in core/input_mapper.py) is on policyengine-taxsim branch
-# fix/mstat6-married-filing-separately (the sad-rubin-abba44 worktree;
-# pushed, no PR as of 2026-09-25).
+# fix/mstat6-married-filing-separately (pushed, no PR as of 2026-09-25).
 #
 # To enable: once a policyengine-taxsim release carrying the marker ships,
 # re-pin axiom_oracles/adapters/taxsim/taxsim_pins.json to it (the single
