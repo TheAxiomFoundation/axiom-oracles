@@ -593,8 +593,13 @@ def test_september_builds_name_the_branch_commit_first() -> None:
     for sha, meta in builds.items():
         commits = [s["commit"] for s in meta["sources"] if s["kind"] == "git"]
         assert commits == [SEPTEMBER_COMMIT, EARLIER_PR_1206_HEAD], sha
-        first = next(s for s in meta["sources"] if s["kind"] == "git")
+        first, second = [s for s in meta["sources"] if s["kind"] == "git"]
         assert "codex/refresh-new-taxsim-september" in first["ref"]
+        # 997311a is an ancestor of several pe-taxsim branches; it is only
+        # off main, because #1206 was squash-merged.
+        assert "not on pe-taxsim main" in second["ref"]
+        assert "squash-merged" in second["ref"]
+        assert "no branch" not in second["ref"]
 
 
 @pytest.mark.parametrize("sha", sorted(_september_builds()), ids=lambda sha: sha[:12])
