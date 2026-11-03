@@ -190,6 +190,29 @@ def test_one_comparison_retained_with_both_verdicts_is_refused():
     assert _observed(report, "c2", **axiom)
 
 
+@pytest.mark.parametrize("verdict, left, right", [
+    ("matches", 10**400, 10**400),
+    ("mismatches", 10**400, 1),
+], ids=["equal-match", "unequal-mismatch"])
+def test_integer_too_large_for_float_is_refused_not_raised(verdict, left, right):
+    """Without a declaration, a residual that float() cannot form is refused.
+
+    The Comparator raises on such a value, so only a hand-built report
+    carries one; the consumer must refuse it, not crash.
+    """
+    report = _report(_mapping(), {"c1": (5, 5)})
+    report.pop("concepts")
+    case = report["cases"][0]
+    case["matches"], case["mismatches"] = [], []
+    case[verdict] = [{"concept": CONCEPT, "left": left, "right": right, "difference": 0}]
+    report["mismatches"] = []
+    report["summary"]["match_count"] = int(verdict == "matches")
+    report["summary"]["mismatch_count"] = int(verdict == "mismatches")
+    evidence = OutputEvidence(report)
+    assert (case["case_id"], CONCEPT) in evidence.contradicted_scalar_comparisons
+    assert not _observed(report, "c1")
+
+
 def _fiit_marked(report, marker):
     if marker == "suite":
         report["suite"] = "fiit-ecps"
