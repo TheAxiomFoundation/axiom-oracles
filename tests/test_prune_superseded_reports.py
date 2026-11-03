@@ -78,3 +78,29 @@ def test_tracked_reports_raises_when_git_cannot_list(tmp_path):
     # open into an empty set and let a tracked report be deleted.
     with pytest.raises(RuntimeError, match="git ls-files"):
         prune.tracked_reports(tmp_path)
+
+
+def test_a_fresh_tracked_checkout_does_not_outrank_a_newer_dated_report(tmp_path):
+    # The review's reproduction: a tracked report with a fresh checkout mtime
+    # plus newer-dated untracked reports with older mtimes. The date in the
+    # name decides, and tracked files stay out of the newest election.
+    tracked = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json", 9)
+    newer_v2 = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-11-02-v2.json", 1)
+    newer_raw = _write(tmp_path, "axiom-policyengine-fiit-ecps-0-2026-11-02.json", 1)
+    removed, _ = prune.prune(tmp_path, tracked={tracked.resolve()})
+    assert removed == []
+    assert tracked.exists() and newer_v2.exists() and newer_raw.exists()
+
+
+def test_the_date_in_the_name_outranks_a_later_mtime(tmp_path):
+    older_touched = _write(tmp_path, "suite-0-2026-10-14.json", 9)
+    newer = _write(tmp_path, "suite-0-2026-11-02.json", 1)
+    removed, _ = prune.prune(tmp_path, tracked=set())
+    assert removed == [older_touched] and newer.exists()
+
+
+def test_mtime_breaks_a_tie_on_the_same_date(tmp_path):
+    # Within one group two names cannot share a date, so check the ordering
+    # key directly: the date in the name first, then the mtime.
+    first = _write(tmp_path, "suite-0-2026-11-02.json", 1)
+    assert prune.generation_key(first) == ("2026-11-02", 1.0)

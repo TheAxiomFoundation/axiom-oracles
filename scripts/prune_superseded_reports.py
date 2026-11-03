@@ -5,15 +5,19 @@ Full-evidence reports (raw input records per household) run to gigabytes
 for the larger generic-projector suites; without retention the weekly
 regeneration accumulates tens of GB of dead generations locally.
 
-A run writes its raw report ``<suite>-0-YYYY-MM-DD.json`` and then its FULL
-v2 sibling ``<suite>-0-YYYY-MM-DD-v2.json`` (``run_comparison.py``'s
+A run writes its raw report ``<suite>-0-YYYY-MM-DD.json``; some runs then
+write its FULL v2 sibling ``<suite>-0-YYYY-MM-DD-v2.json`` (``run_comparison.py``'s
 ``_write_full_v2_report``). Raw reports and each ``-vN`` kind are pruned as
 separate groups per suite, so the newest raw report and the newest v2
 report each survive: a v2 never deletes its own run's raw report, and a run
-that fails before writing its v2 leaves the previous v2 in place. reports/ is
-gitignored, but a few reports are committed on purpose (a dashboard copy
-binds the fiit-ecps FULL report by digest), so a file Git tracks is never
-deleted.
+that fails before writing its v2 leaves the previous v2 in place.
+
+"Newest" is decided by the date in the name, with the modification time only
+breaking a tie, so a freshly checked-out or touched older report cannot
+outrank a newer-dated one. reports/ is gitignored, but a few reports are
+committed on purpose (a dashboard copy binds the fiit-ecps FULL report by
+digest). A file Git tracks is never deleted and takes no part in electing
+the newest generation.
 """
 
 from __future__ import annotations
@@ -25,7 +29,7 @@ from collections import defaultdict
 from pathlib import Path
 
 REPORTS = Path(__file__).resolve().parents[1] / "reports"
-GENERATION = re.compile(r"-0-\d{4}-\d{2}-\d{2}(?P<suffix>-v\d+)?\.json$")
+GENERATION = re.compile(r"-0-(?P<date>\d{4}-\d{2}-\d{2})(?P<suffix>-v\d+)?\.json$")
 
 
 def tracked_reports(reports: Path) -> set[Path]:
@@ -48,6 +52,14 @@ def tracked_reports(reports: Path) -> set[Path]:
     }
 
 
+def generation_key(path: Path) -> tuple[str, float]:
+    """Order generations by the date in the name, then by modification time."""
+    match = GENERATION.search(path.name)
+    if match is None:
+        raise ValueError(f"not a report generation: {path.name}")
+    return match["date"], os.path.getmtime(path)
+
+
 def prune(reports: Path, *, tracked: set[Path]) -> tuple[list[Path], int]:
     """Remove every generation but each suite's newest; return what went."""
     groups: dict[tuple[str, str], list[Path]] = defaultdict(list)
@@ -59,10 +71,12 @@ def prune(reports: Path, *, tracked: set[Path]) -> tuple[list[Path], int]:
     removed: list[Path] = []
     freed = 0
     for paths in groups.values():
-        paths.sort(key=os.path.getmtime)
-        for old in paths[:-1]:
-            if old.resolve() in tracked:
-                continue
+        # Tracked reports are never deleted and do not compete for newest.
+        candidates = sorted(
+            (path for path in paths if path.resolve() not in tracked),
+            key=generation_key,
+        )
+        for old in candidates[:-1]:
             freed += old.stat().st_size
             old.unlink()
             removed.append(old)
