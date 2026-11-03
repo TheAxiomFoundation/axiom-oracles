@@ -1,114 +1,78 @@
 """RuleSpec checkout-path and item-id helpers for the oracle bridge layer.
 
-These helpers were extracted verbatim from
+These helpers were extracted from
 ``axiom_encode.harness.validator_pipeline`` (TheAxiomFoundation/axiom-encode @
-a314fc624967b4e990beb7d9ffc429dae6e26642) so that :mod:`.ecps_tax` can resolve
-canonical ``rulespec-*`` compile paths and public item-id aliases without
-depending on the encoder harness. They keep their original (underscored) names
-because :mod:`.ecps_tax` is a verbatim copy that imports them by those names;
-the encoder's own ``validator_pipeline`` retains its originals for its other
-call sites.
+a314fc624967b4e990beb7d9ffc429dae6e26642) so that :mod:`.tax_populace` can
+resolve compile paths and public item-id aliases without depending on the
+encoder harness. They keep their original (underscored) names because the
+encoder's shims import them by those names.
+
+Compile paths follow the canonical RuleSpec hard cut
+(:mod:`axiom_oracles.rulespec_roots`): a checkout is used only when it is a
+canonical ``rulespec-<country>`` checkout or a direct jurisdiction directory
+of one. Nothing here creates an alias of a checkout under another name; a
+non-canonical checkout raises ``NonCanonicalRuleSpecRoot``.
 """
 
 from __future__ import annotations
 
-import contextlib
-import hashlib
-import shutil
-import tempfile
 from pathlib import Path
 from typing import Any
 
+from ..rulespec_roots import (
+    NonCanonicalRuleSpecRoot,
+    canonical_rulespec_root,
+    require_canonical_rulespec_root,
+)
 from .jurisdiction import jurisdiction_prefix
-from .repo_routing import canonical_rulespec_repo_name, jurisdiction_subdir_names
+from .repo_routing import canonical_rulespec_repo_name
+
+
+def _canonical_checkout_for(policy_repo_path: Path) -> Path:
+    """Return the canonical checkout ``policy_repo_path`` names or sits in.
+
+    ``policy_repo_path`` is either the checkout itself or one of its direct
+    jurisdiction directories (``rulespec-us/us-co``).
+    """
+    path = Path(policy_repo_path)
+    checkout = canonical_rulespec_root(path)
+    if checkout is not None:
+        return checkout
+    parent = canonical_rulespec_root(path.resolve().parent)
+    if parent is not None and path.resolve().parent == parent:
+        return parent
+    return require_canonical_rulespec_root(path)
 
 
 def _rulespec_repo_alias_parent(policy_repo_path: Path) -> Path | None:
-    """Expose a temp checkout under its canonical `rulespec-*` repo name."""
-    canonical_name = canonical_rulespec_repo_name(policy_repo_path)
-    return _rulespec_repo_alias_parent_for_root(policy_repo_path, canonical_name)
+    """Return ``None`` for a canonical checkout; refuse anything else.
 
-
-def _monorepo_rulespec_repo_alias(
-    policy_repo_path: Path,
-) -> tuple[Path, str] | None:
-    """Expose a country monorepo root when validating one jurisdiction subdir."""
-    policy_root = Path(policy_repo_path).resolve()
-    monorepo_root = policy_root.parent
-    if not monorepo_root.name.startswith("rulespec-"):
-        return None
-    if policy_root.name not in jurisdiction_subdir_names(monorepo_root):
-        return None
-    canonical_name = canonical_rulespec_repo_name(monorepo_root)
-    alias_parent = _rulespec_repo_alias_parent_for_root(monorepo_root, canonical_name)
-    if alias_parent is None or canonical_name is None:
-        return None
-    return alias_parent, canonical_name
-
-
-def _is_canonical_monorepo_content_root(policy_repo_path: Path) -> bool:
-    """Return true for a country content root inside its canonical checkout."""
-    policy_root = Path(policy_repo_path).resolve()
-    monorepo_root = policy_root.parent
-    if not monorepo_root.name.startswith("rulespec-"):
-        return False
-    if policy_root.name not in jurisdiction_subdir_names(monorepo_root):
-        return False
-    return canonical_rulespec_repo_name(monorepo_root) == monorepo_root.name
-
-
-def _rulespec_repo_alias_parent_for_root(
-    rulespec_root: Path,
-    canonical_name: str | None,
-) -> Path | None:
-    """Expose a checkout root under a canonical `rulespec-*` repo name."""
-    if not canonical_name or Path(rulespec_root).name == canonical_name:
-        return None
-
-    resolved_repo = Path(rulespec_root).resolve()
-    digest = hashlib.sha256(str(resolved_repo).encode()).hexdigest()[:16]
-    alias_parent = Path(tempfile.gettempdir()) / "axiom-rulespec-repo-aliases" / digest
-    alias_parent.mkdir(parents=True, exist_ok=True)
-    alias = alias_parent / canonical_name
-    if alias.exists() or alias.is_symlink():
-        with contextlib.suppress(OSError, RuntimeError):
-            if alias.resolve() == resolved_repo:
-                return alias_parent
-        if alias.is_symlink() or alias.is_file():
-            alias.unlink()
-        else:
-            shutil.rmtree(alias)
-    alias.symlink_to(resolved_repo, target_is_directory=True)
-    return alias_parent
+    Before the hard cut this exposed a renamed checkout through a temporary
+    symlink carrying its canonical name. Renamed checkouts are now refused
+    with ``NonCanonicalRuleSpecRoot`` instead of aliased.
+    """
+    _canonical_checkout_for(policy_repo_path)
+    return None
 
 
 def _canonical_rulespec_compile_path(
     rules_file: Path,
     policy_repo_path: Path,
 ) -> Path:
-    """Return a compile path under the canonical repo alias when needed."""
-    monorepo_alias = _monorepo_rulespec_repo_alias(policy_repo_path)
-    if monorepo_alias is not None:
-        monorepo_alias_parent, monorepo_canonical_name = monorepo_alias
-        try:
-            relative = rules_file.resolve().relative_to(
-                Path(policy_repo_path).resolve().parent
-            )
-        except ValueError:
-            return rules_file
-        return monorepo_alias_parent / monorepo_canonical_name / relative
-    if _is_canonical_monorepo_content_root(policy_repo_path):
-        return rules_file
+    """Return ``rules_file`` once its checkout is shown to be canonical.
 
-    alias_parent = _rulespec_repo_alias_parent(policy_repo_path)
-    canonical_name = canonical_rulespec_repo_name(policy_repo_path)
-    if alias_parent is None or canonical_name is None:
-        return rules_file
+    Raises ``NonCanonicalRuleSpecRoot`` when ``policy_repo_path`` is not a
+    canonical checkout or a direct jurisdiction directory of one, or when
+    ``rules_file`` lies outside that checkout.
+    """
+    checkout = _canonical_checkout_for(policy_repo_path)
     try:
-        relative = rules_file.resolve().relative_to(policy_repo_path.resolve())
+        Path(rules_file).resolve().relative_to(checkout)
     except ValueError:
-        return rules_file
-    return alias_parent / canonical_name / relative
+        raise NonCanonicalRuleSpecRoot(
+            f"RuleSpec file {rules_file} is outside the canonical checkout {checkout}"
+        ) from None
+    return Path(rules_file)
 
 
 def _rulespec_public_item_key(item: Any) -> str:

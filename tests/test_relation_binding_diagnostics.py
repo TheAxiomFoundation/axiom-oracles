@@ -184,8 +184,6 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
     binary = engine_root / "target/release/axiom-rules-engine"
     binary.parent.mkdir(parents=True)
     binary.touch()
-    monkeypatch.setattr(tax_populace, "_rulespec_repo_alias_parent", lambda _: None)
-    monkeypatch.setattr(tax_populace, "_canonical_rulespec_compile_path", lambda path, _: path)
     monkeypatch.setattr(tax_populace.tempfile, "tempdir", str(tmp_path))
     def run(cmd, **kwargs):
         if "compile" in cmd:

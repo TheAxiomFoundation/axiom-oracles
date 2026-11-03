@@ -2764,13 +2764,21 @@ def test_mixed_foreign_roots_never_prove_country_freshness(
     country_path = legitimate if country_path_kind == "checkout" else legitimate / "us-co"
     paths = [foreign, country_path] if foreign_first else [country_path, foreign]
     roots = explicit_engine_roots(paths)
+    # The runtime stages only canonical checkouts: a rulespec-us directory whose
+    # origin is a different repository is never an engine root.
+    foreign_canonical = foreign_slug.rsplit("/", 1)[-1] == "rulespec-us"
+    assert (foreign.resolve() in roots) == foreign_canonical
     staged = [stage_pure_root(root, {"us-co"}, tmp_path / "stage") for root in roots]
-    expected_content = (
-        "foreign rules actually staged\n"
-        if foreign_first or country_path_kind == "jurisdiction"
-        else "legitimate country rules\n"
-    )
-    assert (staged[0] / "us-co" / "fixture.yaml").read_text() == expected_content
+    if foreign_canonical and (foreign_first or country_path_kind == "jurisdiction"):
+        expected_content = "foreign rules actually staged\n"
+    elif country_path_kind == "checkout":
+        expected_content = "legitimate country rules\n"
+    else:
+        expected_content = None
+    if expected_content is None:
+        assert staged == []
+    else:
+        assert (staged[0] / "us-co" / "fixture.yaml").read_text() == expected_content
     config["runner"] = {"parameters": {"rulespec_roots": [str(path) for path in paths]}}
     output = tmp_path / "output.json"
     output.write_text("{}")
@@ -2942,16 +2950,20 @@ def test_composed_program_provenance_includes_separate_compiler_roots(
         if cmd[0].endswith("/axiom-rules-engine"):
             roots = [Path(cmd[i + 1]) for i, arg in enumerate(cmd) if arg == "--rulespec-root"]
             captured["verb"] = cmd[1]
-            captured["input"] = (roots[0] / "us-co" / "fixture.yaml").read_text()
+            captured["input"] = (
+                (roots[0] / "us-co" / "fixture.yaml").read_text() if roots else None
+            )
             return subprocess.CompletedProcess(cmd, 0, "", "")
         return real_run(cmd, **kwargs)
 
     monkeypatch.setattr(rc.subprocess, "run", fake_run)
     monkeypatch.setattr(rc.tempfile, "tempdir", str(tmp_path))
     rc._ensure_composed_axiom_program(params, tmp_path / "engine")
+    # A checkout whose origin is another repository is never handed to the
+    # engine; provenance below still records it, so freshness stays unknown.
     assert captured == {
         "verb": "compile-composed",
-        "input": "FOREIGN jurisdiction\n" if compiler_kind == "foreign" else "legitimate jurisdiction\n",
+        "input": None if compiler_kind == "foreign" else "legitimate jurisdiction\n",
     }
 
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)

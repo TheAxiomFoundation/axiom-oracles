@@ -258,6 +258,7 @@ class AxiomRulesRunner(EngineAdapter):
         roots = explicit_engine_roots(
             list(self.rulespec_repo_roots) or list(_default_rulespec_repo_roots()),
             program=None if composed else compile_program_path,
+            strict=True,
         )
         # The engine requires a root's top level to hold only jurisdiction
         # dirs; upstream rulespec-us also carries programs/ and repo plumbing,
@@ -886,14 +887,10 @@ class AxiomRulesRunner(EngineAdapter):
         return records
 
     def _compile_env(self) -> dict[str, str]:
-        env = dict(os.environ)
-        if AXIOM_RULESPEC_REPO_ROOTS_ENV not in env:
-            roots = self.rulespec_repo_roots or _default_rulespec_repo_roots()
-            if roots:
-                env[AXIOM_RULESPEC_REPO_ROOTS_ENV] = os.pathsep.join(
-                    str(root) for root in roots
-                )
-        return env
+        # compile_with_engine removes any inherited root list and hands an
+        # engine that predates --rulespec-root exactly the checked roots, so
+        # the compile environment carries no roots of its own.
+        return dict(os.environ)
 
     def _relation_records(
         self,

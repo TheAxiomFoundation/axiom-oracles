@@ -37,11 +37,8 @@ from .relation_binding import (
     public_relation_binding_diagnostics,
     relation_tuple,
 )
-from .rulespec_paths import (
-    _canonical_rulespec_compile_path,
-    _rulespec_public_item_keys,
-    _rulespec_repo_alias_parent,
-)
+from ..rulespec_roots import engine_env, require_canonical_rulespec_root
+from .rulespec_paths import _rulespec_public_item_keys
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
     format_dataset_identity,
@@ -2931,32 +2928,20 @@ def run_axiom_program(
         record_engine_receipt(receipt)
         return process
 
-    env = os.environ.copy()
-    roots = [rulespec_root, rulespec_root.parent]
-    alias_parent = _rulespec_repo_alias_parent(rulespec_root)
-    if alias_parent is not None:
-        roots.insert(0, alias_parent)
-    existing_roots = env.get("AXIOM_RULESPEC_REPO_ROOTS", "")
-    if existing_roots:
-        roots.extend(Path(root) for root in existing_roots.split(os.pathsep) if root)
-    deduped_roots: list[str] = []
-    seen: set[str] = set()
-    for root in roots:
-        raw = str(root)
-        if raw and raw not in seen:
-            seen.add(raw)
-            deduped_roots.append(raw)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(deduped_roots)
-    compile_program = _canonical_rulespec_compile_path(program, rulespec_root)
+    # The engine reaches exactly one canonical country checkout (or the
+    # staged copy below, derived from it). No inherited root list, workspace
+    # parent or renamed alias is forwarded (axiom_oracles.rulespec_roots).
+    checkout = require_canonical_rulespec_root(rulespec_root)
+    env = engine_env(None)
+    compile_program = program
     with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
         # The engine CLI requires an explicit --rulespec-root naming a
         # canonical rulespec-<country> checkout whose top level holds ONLY
-        # jurisdiction directories (the env var above is read by the Python
-        # adapter layer, never by the binary). Upstream rulespec-us also
+        # jurisdiction directories. Upstream rulespec-us also
         # carries root-level programs/ (compositions), which the engine
         # forbids — so stage a filtered copy of just the jurisdiction
         # directories and compile against that.
-        engine_root = Path(rulespec_root)
+        engine_root = checkout
         country = engine_root.name.removeprefix("rulespec-").split("-")[0]
         forbidden = ("legislation", "policies", "programs", "regulations", "statutes")
         try:
@@ -2999,13 +2984,8 @@ def run_axiom_program(
         artifact = Path(tmpdir) / f"{program.stem}.json"
         # Newer engines take explicit, repeatable --rulespec-root flags and
         # ignore AXIOM_RULESPEC_REPO_ROOTS; older engines only read the env
-        # var and reject the flag. When a staged root exists, point the env
-        # at it first so old engines resolve through it too; otherwise keep
-        # the alias-first ordering established above.
-        if engine_root != Path(rulespec_root):
-            env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-                [str(engine_root), *deduped_roots]
-            )
+        # var and reject the flag. Both receive the same single root.
+        env = engine_env(env, [engine_root])
         base_cmd = [
             str(binary),
             "compile",
