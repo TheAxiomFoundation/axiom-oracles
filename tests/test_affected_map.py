@@ -1294,20 +1294,31 @@ def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys)
 
 _ENTRY = st.fixed_dictionaries(
     {
-        "name": st.one_of(st.none(), st.sampled_from(["a", "b", "c", "d"])),
+        "named": st.booleans(),
         "lane": st.sampled_from([None, "snap-qc-replay", "other-lane"]),
         "repos": st.lists(st.sampled_from(["o/r1", "o/r2"]), max_size=2, unique=True),
         "recorded": st.one_of(st.none(), st.sampled_from(["x" * 40, "y" * 40])),
     }
 )
 
+#: The HEADs every property test sweeps against.
+_HEADS = {"o/r1": "x" * 40, "o/r2": "z" * 40}
+
 
 def _lane_map(raw: list[dict]) -> tuple[dict, dict]:
-    """A schema-valid affected map (a lane only on a named entry) and its reports."""
+    """A schema-valid affected map (a lane only on a named entry) and its reports.
+
+    Entry ``i`` is suite ``s<i>`` with registry name ``n<i>`` (or null), so
+    every route can be stated in suite terms and compared exactly.
+    """
     suites, reports = [], {}
     for index, item in enumerate(raw):
-        entry = {"suite": f"s{index}", "name": item["name"], "repos": item["repos"]}
-        if item["lane"] and item["name"] is not None:
+        entry = {
+            "suite": f"s{index}",
+            "name": f"n{index}" if item["named"] else None,
+            "repos": item["repos"],
+        }
+        if item["lane"] and item["named"]:
             entry["lane"] = item["lane"]
         suites.append(entry)
         if item["recorded"]:
@@ -1320,40 +1331,68 @@ def _lane_map(raw: list[dict]) -> tuple[dict, dict]:
     return {"suites": suites}, reports
 
 
-@settings(max_examples=200, deadline=None)
+def _expected_routes(raw: list[dict], force_all: bool) -> dict[str, set[str]]:
+    """The route of every suite, worked out from the generated input alone.
+
+    Independent of the selector: a suite is selected when it maps to a repo
+    and either force_all is set, it has no report, or the SHA its report
+    recorded differs from some mapped repo's HEAD. A selected suite then goes
+    to exactly one route: ``manual`` with no name, ``lane:<lane>`` with a
+    name and a lane, else ``matrix``.
+    """
+    routes: dict[str, set[str]] = {"matrix": set(), "manual": set()}
+    for index, item in enumerate(raw):
+        lane = item["lane"] if item["named"] else None
+        if lane:
+            routes.setdefault(f"lane:{lane}", set())
+        if not item["repos"]:
+            continue
+        stale = (
+            force_all
+            or item["recorded"] is None
+            or any(item["recorded"] != _HEADS[r] for r in item["repos"])
+        )
+        if not stale:
+            continue
+        if not item["named"]:
+            routes["manual"].add(f"s{index}")
+        elif lane:
+            routes[f"lane:{lane}"].add(f"s{index}")
+        else:
+            routes["matrix"].add(f"s{index}")
+    return routes
+
+
+@settings(max_examples=300, deadline=None)
 @given(st.lists(_ENTRY, max_size=8), st.booleans())
 def test_every_selected_suite_has_exactly_one_route(raw, force_all):
-    """Each selected decision goes to exactly one place: the bare matrix (a
-    name and no lane), its lane's workflow (a name and a lane), or the manual
-    list (no name). A lane suite never reaches the bare matrix or the manual
-    list, and every route is deduplicated."""
+    """Each stale suite goes to exactly one place: the bare matrix (a name and
+    no lane), its lane's workflow (a name and a lane), or the manual list (no
+    name). The expected routes come from the generated input, never from the
+    decisions the selector returns, and the routes the selector emits must
+    equal them and be pairwise disjoint."""
     sel = _load("select_affected_suites.py")
     affected, reports = _lane_map(raw)
-    heads = {"o/r1": "x" * 40, "o/r2": "z" * 40}
     selected = (
         sel.force_all_selection(affected)
         if force_all
-        else sel.select(affected, heads, reports)
+        else sel.select(affected, _HEADS, reports)
     )
-    matrix = sel.runnable_names(selected)
-    manual = sel.manual_suites(selected)
-    by_lane = {lane: sel.lane_names(selected, lane) for lane in sel.lanes(affected)}
-    assert len(matrix) == len(set(matrix))
-    for names in by_lane.values():
-        assert len(names) == len(set(names))
-    for decision in selected:
-        name, lane = decision["name"], decision.get("lane")
-        if name is None:
-            assert lane is None
-            assert decision["suite"] in manual
-        elif lane:
-            assert name in by_lane[lane]
-        else:
-            assert name in matrix
-    # Nothing is routed that was not selected.
-    assert set(matrix) <= {d["name"] for d in selected if d["name"] and not d.get("lane")}
-    for lane, names in by_lane.items():
-        assert set(names) <= {d["name"] for d in selected if d.get("lane") == lane}
+    expected = _expected_routes(raw, force_all)
+
+    def suites(names: list[str]) -> set[str]:
+        assert len(names) == len(set(names)), names  # deduplicated
+        return {"s" + name[1:] for name in names}
+
+    actual = {
+        "matrix": suites(sel.runnable_names(selected)),
+        "manual": set(sel.manual_suites(selected)),
+    }
+    for lane in sel.lanes(affected):
+        actual[f"lane:{lane}"] = suites(sel.lane_names(selected, lane))
+    assert actual == expected
+    routed = [suite for route in actual.values() for suite in route]
+    assert len(routed) == len(set(routed)), "a suite has more than one route"
 
 
 @settings(max_examples=100, deadline=None)
@@ -1363,8 +1402,7 @@ def test_force_all_routes_a_superset_of_any_sweep(raw):
     to the matrix, a lane or the manual list, force_all sends there too."""
     sel = _load("select_affected_suites.py")
     affected, reports = _lane_map(raw)
-    heads = {"o/r1": "x" * 40, "o/r2": "z" * 40}
-    sweep = sel.select(affected, heads, reports)
+    sweep = sel.select(affected, _HEADS, reports)
     forced = sel.force_all_selection(affected)
     assert set(sel.runnable_names(sweep)) <= set(sel.runnable_names(forced))
     assert set(sel.manual_suites(sweep)) <= set(sel.manual_suites(forced))
