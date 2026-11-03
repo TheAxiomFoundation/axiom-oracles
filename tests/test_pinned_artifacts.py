@@ -61,7 +61,7 @@ def test_table_entries_are_unique_hashed_wheels():
         wheel = artifact.name.replace("-", "_")
         assert match["filename"] == f"{wheel}-{artifact.version}-py3-none-any.whl"
         assert re.fullmatch(r"[0-9a-f]{64}", artifact.sha256)
-        assert artifact.recorded_in
+        assert artifact.found_in
 
 
 # Each pruned release a comparison pins, with the SHA-256 checked against the
@@ -191,7 +191,7 @@ def _artifact(body: bytes) -> pinned_artifacts.PinnedArtifact:
         + "c" * 60
         + "/policyengine_us-0.0.1-py3-none-any.whl",
         sha256=hashlib.sha256(body).hexdigest(),
-        recorded_in="test",
+        found_in="test",
     )
 
 
@@ -239,13 +239,19 @@ def test_fetch_names_the_file_when_it_stops_downloading(monkeypatch, tmp_path):
 
 def test_inventory_finds_the_runtime_pins():
     check = _load_check_module()
-    pins, sources = check.inventory()
+    pins, sources, problems = check.scan()
+    assert problems == []
     uses = {key: {str(use) for use in value} for key, value in pins.items()}
     assert any(
         use.startswith("scripts/run_comparison.py:")
         for use in uses[("policyengine-us", "1.752.2")]
     )
     assert "comparisons/us-snap-abawd-grid.yaml" in uses[("policyengine-us", "1.767.3")]
+    # The probe recipes install 1.767.3 through --oracle-with-args.
+    assert any(
+        use.startswith("scripts/probe_us_sc_income_tax_2026.py:")
+        for use in uses[("policyengine-us", "1.767.3")]
+    )
     assert any(
         use.startswith("scripts/debug_policyengine_env.py:")
         for use in uses[("policyengine-us", "1.700.0")]
@@ -254,10 +260,16 @@ def test_inventory_finds_the_runtime_pins():
         ("policyengine-taxsim", "2.30.0")
     ]
     assert ("spm-calculator", "0.3.1") in uses
+    # The tax-ecps runner's install default counts; its provenance label in
+    # _build_run_provenance does not.
+    tax_ecps = uses[("policyengine-us", "1.729.0")]
+    assert tax_ecps and all(use.startswith("scripts/run_comparison.py:") for use in tax_ecps)
+    source = (REPO_ROOT / "scripts" / "run_comparison.py").read_text().splitlines()
+    for use in tax_ecps:
+        line = source[int(use.rsplit(":", 1)[1]) - 1]
+        assert "policyengine_us_version" in line and "oracle" not in line, line
     # A source-pinned suite's version is a label, not an index pin.
-    assert "comparisons/fiit-ecps.yaml" not in uses.get(
-        ("policyengine-us", "1.729.0"), set()
-    )
+    assert "comparisons/fiit-ecps.yaml" not in tax_ecps
     assert any(
         "comparisons/fiit-ecps.yaml" == str(use)
         for value in sources.values()
@@ -265,66 +277,453 @@ def test_inventory_finds_the_runtime_pins():
     )
 
 
+# ---------------------------------------------------------------------------
+# The scan reads every shape a pin can take. Each test writes one shape into a
+# throwaway repository root and reads scan().
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def fake_root(tmp_path, monkeypatch):
+    check = _load_check_module()
+    (tmp_path / "scripts").mkdir()
+    (tmp_path / "comparisons").mkdir()
+    taxsim = tmp_path / "axiom_oracles" / "adapters" / "taxsim"
+    taxsim.mkdir(parents=True)
+    (taxsim / "taxsim_pins.json").write_text(
+        '{"distribution": {"package": "policyengine-taxsim", "version": "2.30.0"}}'
+    )
+    monkeypatch.setattr(check, "REPO_ROOT", tmp_path)
+    return check, tmp_path
+
+
+def _uses(check):
+    pins, sources, problems = check.scan()
+    return (
+        {key: sorted(map(str, value)) for key, value in pins.items()},
+        {key: sorted(map(str, value)) for key, value in sources.items()},
+        problems,
+    )
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        'PIN = "policyengine-us==9.9.9"',
+        'PIN = "policyengine_us==9.9.9"',
+        'PIN = "policyengine-us == 9.9.9"',
+        'PIN = ("policyengine-us", "9.9.9")',
+        "PIN = params.get('policyengine_us_version', '9.9.9')",
+        "# uv run --with policyengine-us==9.9.9 python x.py",
+    ],
+    ids=["literal", "underscore", "spaced", "tuple", "param-default", "comment"],
+)
+def test_scan_reads_each_code_spelling(fake_root, line):
+    check, root = fake_root
+    (root / "scripts" / "anything.py").write_text(line + "\n")
+    pins, _sources, problems = _uses(check)
+    assert pins[("policyengine-us", "9.9.9")] == ["scripts/anything.py:1"]
+    assert problems == []
+
+
+def test_scan_reads_every_script_under_scripts(fake_root):
+    check, root = fake_root
+    nested = root / "scripts" / "lane" / "deep"
+    nested.mkdir(parents=True)
+    (nested / "run.sh").write_text("uv run --with policyengine-uk==9.9.9 x\n")
+    (root / "scripts" / "probe_new.py").write_text("--with policyengine-us==8.8.8\n")
+    (root / "scripts" / "recipe.py").write_text(
+        "pinned_artifacts \\\n    --oracle-with-args 7.7.7) \\\n"
+    )
+    pins, _sources, _problems = _uses(check)
+    assert pins[("policyengine-uk", "9.9.9")] == ["scripts/lane/deep/run.sh:1"]
+    assert pins[("policyengine-us", "8.8.8")] == ["scripts/probe_new.py:1"]
+    assert pins[("policyengine-us", "7.7.7")] == ["scripts/recipe.py:2"]
+
+
+def test_scan_does_not_read_remediation_hints_outside_scripts(fake_root):
+    check, root = fake_root
+    bridges = root / "axiom_oracles" / "bridges"
+    bridges.mkdir(parents=True)
+    (bridges / "hint.py").write_text('"Run with: uv run --with policyengine-core==9.9.9"\n')
+    pins, _sources, _problems = _uses(check)
+    assert ("policyengine-core", "9.9.9") not in pins
+
+
+def test_scan_resolves_or_refuses_fstring_versions(fake_root):
+    check, root = fake_root
+    (root / "scripts" / "f.py").write_text(
+        "a = f\"policyengine-us=={params.get('policyengine_us_version', '9.9.9')}\"\n"
+        'b = f"policyengine-core=={mystery}"\n'
+    )
+    pins, _sources, problems = _uses(check)
+    assert pins[("policyengine-us", "9.9.9")] == ["scripts/f.py:1"]
+    assert len(problems) == 1
+    assert problems[0].startswith("scripts/f.py:2: policyengine-core=={mystery}")
+
+
+def test_scan_skips_provenance_label_scopes(fake_root, monkeypatch):
+    check, root = fake_root
+    monkeypatch.setitem(
+        check.LABEL_SCOPES, ("scripts/labels.py", "_build_run_provenance"), "labels"
+    )
+    (root / "scripts" / "labels.py").write_text(
+        "def _build_run_provenance(params):\n"
+        "    return params.get('policyengine_us_version', '1.1.1')\n"
+        "\n"
+        "def run(params):\n"
+        "    return params.get('policyengine_us_version', '2.2.2')\n"
+    )
+    pins, _sources, _problems = _uses(check)
+    assert ("policyengine-us", "1.1.1") not in pins
+    assert pins[("policyengine-us", "2.2.2")] == ["scripts/labels.py:5"]
+
+
+def test_scan_reads_yaml_keys_at_any_depth(fake_root):
+    check, root = fake_root
+    (root / "comparisons" / "nested.yaml").write_text(
+        "runner:\n"
+        "  parameters:\n"
+        "    stack:\n"
+        "      policyengine_core_version: '1.0.1'\n"
+        "runners:\n"
+        "  - parameters:\n"
+        "      policyengine_us_version: '1.0.2'\n"
+        "  - oracle:\n"
+        "      policyengine_us: '1.0.3'\n"
+        "notes:\n"
+        "  - install with policyengine-uk==1.0.4\n"
+    )
+    sub = root / "comparisons" / "fixtures"
+    sub.mkdir()
+    (sub / "deep.yaml").write_text("a: {b: {policyengine_version: '1.0.5'}}\n")
+    pins, _sources, problems = _uses(check)
+    assert problems == []
+    assert pins[("policyengine-core", "1.0.1")] == ["comparisons/nested.yaml"]
+    assert pins[("policyengine-us", "1.0.2")] == ["comparisons/nested.yaml"]
+    assert pins[("policyengine-us", "1.0.3")] == ["comparisons/nested.yaml"]
+    assert pins[("policyengine-uk", "1.0.4")] == ["comparisons/nested.yaml"]
+    assert pins[("policyengine", "1.0.5")] == ["comparisons/fixtures/deep.yaml"]
+
+
+def test_scan_treats_a_source_pinned_version_as_a_label(fake_root):
+    check, root = fake_root
+    archive = (
+        "https://github.com/PolicyEngine/policyengine-us/archive/" + "a" * 40 + ".tar.gz"
+    )
+    (root / "comparisons" / "s.yaml").write_text(
+        "runner:\n  parameters:\n"
+        "    policyengine_us_version: '1.0.6'\n"
+        f"    policyengine_us_source: {archive}\n"
+    )
+    pins, sources, _problems = _uses(check)
+    assert ("policyengine-us", "1.0.6") not in pins
+    assert sources[archive] == ["comparisons/s.yaml"]
+
+
+def test_scan_fails_closed_on_unparseable_yaml(fake_root):
+    check, root = fake_root
+    (root / "comparisons" / "broken.yaml").write_text("runner: [unclosed\n")
+    _pins, _sources, problems = _uses(check)
+    assert len(problems) == 1
+    assert problems[0].startswith("comparisons/broken.yaml: cannot parse")
+
+
+# ---------------------------------------------------------------------------
+# Network behavior: retries, transient versus gone, and known-open breaks.
+# ---------------------------------------------------------------------------
+
+
+class _Reply:
+    def __init__(self, status: int, versions=()):
+        self.status_code = status
+        self._versions = list(versions)
+
+    def json(self):
+        return {"versions": self._versions}
+
+
 class _Session:
-    def __init__(self, listed: dict[str, list[str]], head_status: int = 200):
-        self.listed = listed
-        self.head_status = head_status
+    """Scripted replies: ``index[package]`` and ``head[url]`` are lists of a
+    status or an exception, consumed one per request; the last one repeats."""
+
+    def __init__(self, index=None, head=None, listed=None):
+        self.index = index or {}
+        self.head_script = head or {}
+        self.listed = listed or {}
+        self.calls: list[str] = []
+
+    @staticmethod
+    def _next(script):
+        item = script.pop(0) if len(script) > 1 else script[0]
+        if isinstance(item, Exception):
+            raise item
+        return item
 
     def get(self, url, **_kwargs):
         package = url.rstrip("/").rsplit("/", 1)[-1]
-        versions = self.listed.get(package, [])
-
-        class R:
-            status_code = 200
-
-            def raise_for_status(self):
-                return None
-
-            def json(self):
-                return {"versions": versions}
-
-        return R()
+        self.calls.append(f"get {package}")
+        status = self._next(self.index.get(package, [200]))
+        return _Reply(status, self.listed.get(package, []))
 
     def head(self, url, **_kwargs):
-        return type("R", (), {"status_code": self.head_status})()
+        self.calls.append(f"head {url}")
+        return _Reply(self._next(self.head_script.get(url, [200])))
 
 
-def test_check_names_the_file_for_each_unrecoverable_pin(monkeypatch):
+@pytest.fixture
+def no_sleep(monkeypatch):
+    waits: list[float] = []
+    monkeypatch.setattr(pinned_artifacts, "_sleep", waits.append)
+    return waits
+
+
+def _run_check(monkeypatch, session, pins, sources=None):
     check = _load_check_module()
     monkeypatch.setattr(check.pinned_artifacts, "fetch", lambda artifact: None)
+    monkeypatch.setattr(check, "scan", lambda: (pins, sources or {}, []))
+    monkeypatch.setattr(requests, "Session", lambda: session)
+    return check, check.check()
+
+
+def test_check_names_the_file_for_each_unrecoverable_pin(monkeypatch, no_sleep):
+    check = _load_check_module()
     pins = {
         ("policyengine-us", "1.752.2"): {check.Use("scripts/run_comparison.py", 7)},
-        ("policyengine-us", "1.784.4"): {check.Use("comparisons/x.yaml")},
+        ("policyengine-us", "9.9.9"): {check.Use("comparisons/x.yaml")},
         ("policyengine-uk", "2.89.2"): {check.Use("scripts/run_comparison.py", 9)},
     }
     sources = {"https://github.com/a.tar.gz": {check.Use("comparisons/y.yaml")}}
-    monkeypatch.setattr(check, "inventory", lambda: (pins, sources))
-    monkeypatch.setattr(
-        requests,
-        "Session",
-        lambda: _Session({"policyengine-uk": ["2.89.2"]}, head_status=404),
+    session = _Session(
+        listed={"policyengine-uk": ["2.89.2"]},
+        head={"https://github.com/a.tar.gz": [404]},
     )
-    failures = check.check()
+    _check, (failures, warnings) = _run_check(monkeypatch, session, pins, sources)
     assert failures == [
-        "comparisons/x.yaml: policyengine-us==1.784.4: PyPI's index no longer "
+        "comparisons/x.yaml: policyengine-us==9.9.9: PyPI's index no longer "
         "lists it and axiom_oracles/pinned_artifacts.py has no hashed URL for it",
-        "comparisons/y.yaml: policyengine_us_source https://github.com/a.tar.gz: "
+        "comparisons/y.yaml: policyengine-us archive https://github.com/a.tar.gz: "
         "HTTP 404",
     ]
+    assert warnings == []
+    # A 404 is a removal: never retried.
+    assert session.calls.count("head https://github.com/a.tar.gz") == 1
+    assert no_sleep == []
+
+
+def test_known_open_breaks_warn_and_only_new_ones_fail(monkeypatch, no_sleep):
+    check = _load_check_module()
+    assert check.KNOWN_OPEN[("policyengine-us", "1.784.4")] == "#659"
+    pins = {
+        ("policyengine-us", "1.784.4"): {check.Use("comparisons/ri.yaml")},
+        ("policyengine-us", "9.9.9"): {check.Use("comparisons/new.yaml")},
+    }
+    _check, (failures, warnings) = _run_check(monkeypatch, _Session(), pins)
+    assert [w.split(":")[0] for w in warnings] == ["comparisons/ri.yaml"]
+    assert warnings[0].endswith("(known open: #659)")
+    assert [f.split(":")[0] for f in failures] == ["comparisons/new.yaml"]
+
+
+def test_check_reports_an_unreadable_index(monkeypatch, no_sleep):
+    check = _load_check_module()
+    pins = {("policyengine-uk", "2.89.2"): {check.Use("scripts/x.py", 1)}}
+    session = _Session(index={"policyengine-uk": [404]})
+    _check, (failures, _warnings) = _run_check(monkeypatch, session, pins)
+    assert failures == ["policyengine-uk: cannot read PyPI's index: HTTP 404"]
+
+
+def test_check_retries_a_server_error_then_succeeds(monkeypatch, no_sleep):
+    check = _load_check_module()
+    pins = {("policyengine-uk", "2.89.2"): {check.Use("scripts/x.py", 1)}}
+    session = _Session(
+        index={"policyengine-uk": [503, 200]}, listed={"policyengine-uk": ["2.89.2"]}
+    )
+    _check, (failures, _warnings) = _run_check(monkeypatch, session, pins)
+    assert failures == []
+    assert session.calls == ["get policyengine-uk", "get policyengine-uk"]
+    assert no_sleep == [pinned_artifacts.RETRY_DELAYS[0]]
+
+
+def test_check_calls_a_persistent_server_error_transient(monkeypatch, no_sleep):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    pins = {}
+    sources = {url: {check.Use("comparisons/y.yaml")}}
+    session = _Session(head={url: [502]})
+    _check, (failures, _warnings) = _run_check(monkeypatch, session, pins, sources)
+    attempts = len(pinned_artifacts.RETRY_DELAYS) + 1
+    assert session.calls == [f"head {url}"] * attempts
+    assert failures == [
+        f"comparisons/y.yaml: policyengine-us archive {url}: transient: HTTP 502 "
+        f"on all {attempts} attempts, not a removal"
+    ]
+    assert no_sleep == list(pinned_artifacts.RETRY_DELAYS)
+
+
+def test_check_calls_a_persistent_connection_error_transient(monkeypatch, no_sleep):
+    check = _load_check_module()
+    pins = {("policyengine-uk", "2.89.2"): {check.Use("scripts/x.py", 1)}}
+    session = _Session(index={"policyengine-uk": [requests.ConnectionError("reset")]})
+    _check, (failures, _warnings) = _run_check(monkeypatch, session, pins)
+    assert len(failures) == 1
+    assert failures[0].startswith(
+        "policyengine-uk: cannot read PyPI's index: transient: connection failed"
+    )
 
 
 def test_check_fails_when_a_recorded_file_stops_downloading(monkeypatch):
     check = _load_check_module()
 
     def gone(artifact):
-        raise pinned_artifacts.PinnedArtifactError(f"{artifact.filename}: HTTP 404")
+        raise pinned_artifacts.PinnedArtifactError(
+            f"{artifact.filename}: HTTP 404", kind="gone"
+        )
 
     monkeypatch.setattr(check.pinned_artifacts, "fetch", gone)
-    monkeypatch.setattr(check, "inventory", lambda: ({}, {}))
-    monkeypatch.setattr(requests, "Session", lambda: _Session({}))
-    failures = check.check()
+    monkeypatch.setattr(check, "scan", lambda: ({}, {}, []))
+    monkeypatch.setattr(requests, "Session", lambda: _Session())
+    failures, _warnings = check.check()
     assert len(failures) == len(pinned_artifacts.PRUNED_ARTIFACTS)
     assert all(
         failure.startswith("axiom_oracles/pinned_artifacts.py: policyengine-us==")
+        and "[gone]" in failure
         for failure in failures
     )
+
+
+def test_check_fails_on_scan_problems(monkeypatch):
+    check = _load_check_module()
+    monkeypatch.setattr(check.pinned_artifacts, "fetch", lambda artifact: None)
+    monkeypatch.setattr(check, "scan", lambda: ({}, {}, ["comparisons/b.yaml: cannot parse"]))
+    monkeypatch.setattr(requests, "Session", lambda: _Session())
+    failures, _warnings = check.check()
+    assert failures == ["comparisons/b.yaml: cannot parse"]
+
+
+def test_fetch_retries_a_server_error_then_verifies(monkeypatch, tmp_path, no_sleep):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    body = b"wheel"
+    artifact = _artifact(body)
+    replies = [_Response(503), _Response(200, body)]
+    monkeypatch.setattr(requests, "get", lambda *_a, **_k: replies.pop(0))
+    assert REAL_FETCH(artifact).read_bytes() == body
+    assert no_sleep == [pinned_artifacts.RETRY_DELAYS[0]]
+
+
+def test_fetch_calls_a_persistent_server_error_transient(monkeypatch, tmp_path, no_sleep):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    artifact = _artifact(b"x")
+    calls = []
+
+    def always_503(*_a, **_k):
+        calls.append(1)
+        return _Response(503)
+
+    monkeypatch.setattr(requests, "get", always_503)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(artifact)
+    assert exc.value.kind == "transient"
+    assert len(calls) == len(pinned_artifacts.RETRY_DELAYS) + 1
+    assert list(pinned_artifacts.cache_path(artifact).parent.iterdir()) == []
+
+
+def test_fetch_retries_a_connection_error(monkeypatch, tmp_path, no_sleep):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    artifact = _artifact(b"x")
+
+    def refused(*_a, **_k):
+        raise requests.ConnectionError("refused")
+
+    monkeypatch.setattr(requests, "get", refused)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(artifact)
+    assert exc.value.kind == "transient"
+    assert no_sleep == list(pinned_artifacts.RETRY_DELAYS)
+
+
+def test_fetch_does_not_retry_a_removal(monkeypatch, tmp_path, no_sleep):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    artifact = _artifact(b"x")
+    calls = []
+
+    def gone(*_a, **_k):
+        calls.append(1)
+        return _Response(404)
+
+    monkeypatch.setattr(requests, "get", gone)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(artifact)
+    assert exc.value.kind == "gone"
+    assert calls == [1] and no_sleep == []
+
+
+# ---------------------------------------------------------------------------
+# The probe recipe, the lock's source, and isolated overlays.
+# ---------------------------------------------------------------------------
+
+
+def test_oracle_with_args_uses_the_suites_stack_and_companions():
+    args = pinned_artifacts.oracle_with_args("1.767.3")
+    wheel = pinned_artifacts.cache_path(pinned_artifacts.lookup("policyengine-us", "1.767.3"))
+    assert args == [
+        "--with",
+        "policyengine==4.18.9",
+        "--with",
+        f"policyengine-us@{wheel.resolve().as_uri()}",
+        "--with",
+        "policyengine-core==3.30.3",
+        "--with",
+        "spm-calculator==0.3.1",
+    ]
+    assert not any(ch.isspace() for arg in args for ch in arg)
+
+
+def test_oracle_stack_params_refuses_disagreeing_suites(tmp_path):
+    for name, core in (("a", "3.30.3"), ("b", "3.28.0")):
+        (tmp_path / f"{name}.yaml").write_text(
+            "runner:\n  parameters:\n"
+            "    policyengine_version: '4.18.9'\n"
+            "    policyengine_us_version: '9.9.9'\n"
+            f"    policyengine_core_version: '{core}'\n"
+        )
+    with pytest.raises(SystemExit, match="different stacks"):
+        pinned_artifacts.oracle_stack_params("9.9.9", tmp_path)
+    assert pinned_artifacts.oracle_stack_params("8.8.8", tmp_path) == {
+        "policyengine_us_version": "8.8.8"
+    }
+
+
+def test_main_prints_the_oracle_with_args(capsys):
+    assert pinned_artifacts.main(["--oracle-with-args", "1.767.3"]) == 0
+    printed = capsys.readouterr().out.split()
+    assert printed == pinned_artifacts.oracle_with_args("1.767.3")
+
+
+def test_pyproject_source_is_the_table_row_uv_lock_installs():
+    import tomllib
+
+    pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text())
+    source = pyproject["tool"]["uv"]["sources"]["policyengine-us"]
+    artifact = pinned_artifacts.lookup("policyengine-us", "1.764.6")
+    assert source == {"url": artifact.url}
+    extras = pyproject["project"]["optional-dependencies"]
+    for extra in ("policyengine", "taxsim"):
+        assert "policyengine-us==1.764.6" in extras[extra], extra
+
+
+def test_every_policyengine_overlay_is_isolated():
+    """A `uv run` that installs PolicyEngine pins must not layer on .venv."""
+    text = (REPO_ROOT / "scripts" / "run_comparison.py").read_text()
+    blocks = re.findall(r'\[\s*"uv",\s*"run",(.*?)\]', text, flags=re.S)
+    overlays = [
+        block
+        for block in blocks
+        if "_pe_oracle_with_args(" in block
+        or "pinned_artifacts.with_args(" in block
+        or "*pe_pins" in block
+    ]
+    assert len(overlays) >= 15
+    for block in overlays:
+        if '"--directory"' in block:
+            continue  # runs inside axiom-encode's own project environment
+        assert '"--isolated"' in block, block[:200]

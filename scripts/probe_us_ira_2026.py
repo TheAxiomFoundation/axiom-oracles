@@ -12,12 +12,13 @@ and forces its three immediate operands. This isolates the outer SPM
 resource-accounting cap from the underlying statutory HUD payment surface.
 
 Run against the exact oracle release.
-PyPI's index no longer lists policyengine-us 1.767.3; from the repository
-root, install its verified wheel (axiom_oracles/pinned_artifacts.py):
+From the repository root, install the comparisons' 1.767.3 stack (the
+suites' policyengine and policyengine-core pins, the verified wheel of the
+pruned release, and the companion pins), printed by one command:
 
-    uv run --python 3.13 --no-project \
-      --with "$(python3 -m axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" \
-      --with spm-calculator==0.3.1 \
+    uv run --python 3.13 --no-project --isolated \
+      $(uv run -q python -m axiom_oracles.pinned_artifacts \
+          --oracle-with-args 1.767.3) \
       python scripts/probe_us_ira_2026.py
 """
 

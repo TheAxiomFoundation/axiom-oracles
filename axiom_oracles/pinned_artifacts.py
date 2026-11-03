@@ -17,12 +17,13 @@ from the index. The CI install of the ``policyengine`` extra reads the same
 files from ``uv.lock``; ``tests/test_pinned_artifacts.py`` keeps the two in
 agreement.
 
-Each row's ``recorded_in`` names where its URL and SHA-256 were recorded
-while the release was still on the index: a ``uv.lock`` this repository
-committed, a ``uv.lock`` in PolicyEngine's own policyengine-us-data
-repository, or PyPI's JSON API as an archived snapshot kept it. The path of a
-files.pythonhosted.org URL encodes the file's blake2b-256 digest; ``fetch``
-checks the SHA-256.
+Each row's ``found_in`` says where its URL and SHA-256 were found: a
+``uv.lock`` this repository committed, a ``uv.lock`` in PolicyEngine's
+policyengine-us-data repository, or an archived snapshot of PyPI's JSON API.
+Integrity does not rest on that field. A files.pythonhosted.org URL's path is
+the file's blake2b-256 digest, each row's digests were checked against the
+downloaded bytes when it was added (``tests/test_pinned_artifacts.py`` pins
+them), and ``fetch`` checks the SHA-256 on every download.
 ``scripts/check_pinned_artifacts.py`` fails, naming the file that pins it,
 when a recorded file stops downloading or when a runtime pin is neither on
 the index nor in this table.
@@ -33,6 +34,7 @@ from __future__ import annotations
 import hashlib
 import os
 import tempfile
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -45,8 +47,9 @@ class PinnedArtifact:
     version: str
     url: str
     sha256: str
-    #: Where the URL and hash were recorded while the release was listed.
-    recorded_in: str
+    #: Where this URL and SHA-256 were found. Provenance of the lookup only:
+    #: the digests, not this field, establish the file's integrity.
+    found_in: str
 
     @property
     def filename(self) -> str:
@@ -65,7 +68,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
             "policyengine_us-1.700.0-py3-none-any.whl"
         ),
         sha256="7633d8aefcaf02d7628f841bc56750606f1d7fe409ff3ae7b0ef7e364a88e945",
-        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at 0eac8dc990",
+        found_in="uv.lock in PolicyEngine/policyengine-us-data at 0eac8dc990",
     ),
     PinnedArtifact(
         name="policyengine-us",
@@ -76,7 +79,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
             "policyengine_us-1.705.1-py3-none-any.whl"
         ),
         sha256="9db5121748d62961cb4867f18dab03da1be9abc986676e12e147e19afc6fd6aa",
-        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at b58cf3b38d",
+        found_in="uv.lock in PolicyEngine/policyengine-us-data at b58cf3b38d",
     ),
     PinnedArtifact(
         name="policyengine-us",
@@ -87,7 +90,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
             "policyengine_us-1.729.0-py3-none-any.whl"
         ),
         sha256="8d21d3f7c0e82a9415edffe8ea53939330a63d9c8f6bd334299bddb697cf2c00",
-        recorded_in="uv.lock in PolicyEngine/policyengine-us-data at 17e87f1026",
+        found_in="uv.lock in PolicyEngine/policyengine-us-data at 17e87f1026",
     ),
     PinnedArtifact(
         name="policyengine-us",
@@ -99,7 +102,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
         ),
         sha256="7e30468ae369ddd14e5d834c12cacbc5b5159c809b0990caf204c0747ef4c096",
         # d9ada03d72 added it; 29cb47dad4 replaced it with 1.764.6.
-        recorded_in="uv.lock at 678dd840b4",
+        found_in="uv.lock at 678dd840b4",
     ),
     PinnedArtifact(
         name="policyengine-us",
@@ -110,7 +113,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
             "policyengine_us-1.764.6-py3-none-any.whl"
         ),
         sha256="2b2c5c02c26ab212270948db1f30129728b625fc6109fc9ca0c604b714546909",
-        recorded_in="uv.lock (the policyengine extra, since 29cb47dad4)",
+        found_in="uv.lock (the policyengine extra, since 29cb47dad4)",
     ),
     PinnedArtifact(
         name="policyengine-us",
@@ -121,7 +124,7 @@ PRUNED_ARTIFACTS: tuple[PinnedArtifact, ...] = (
             "policyengine_us-1.767.3-py3-none-any.whl"
         ),
         sha256="777be3f3a66cbd266959791b007571a8fce94b1d0c2d13f40f8e991ca106fa6f",
-        recorded_in="PyPI JSON API via Wayback snapshot 20260715063216",
+        found_in="PyPI JSON API via Wayback snapshot 20260715063216",
     ),
 )
 
@@ -129,7 +132,27 @@ CACHE_ENV = "AXIOM_ORACLES_ARTIFACT_CACHE"
 
 
 class PinnedArtifactError(RuntimeError):
-    """A pinned file could not be downloaded or did not match its SHA-256."""
+    """A pinned file could not be downloaded or did not match its SHA-256.
+
+    ``kind`` tells the cases apart: ``"gone"`` (the host answered with a 4xx
+    such as 404: the file was removed), ``"transient"`` (a 5xx or a connection
+    error that persisted through every retry) or ``"mismatch"`` (the bytes do
+    not hash to the recorded SHA-256).
+    """
+
+    def __init__(self, message: str, *, kind: str):
+        super().__init__(message)
+        self.kind = kind
+
+
+#: Retries after the first attempt for a 5xx or a connection error, and the
+#: wait before each one. A 4xx is never retried: it means the file is gone.
+RETRY_DELAYS = (2.0, 4.0)
+_sleep = time.sleep
+
+
+def is_transient_status(status: int) -> bool:
+    return 500 <= status < 600
 
 
 def _normalize(name: str) -> str:
@@ -169,9 +192,11 @@ def _sha256(path: Path) -> str:
 def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
     """Download ``artifact`` once, verify its SHA-256, and return its path.
 
-    A cached file is re-hashed before reuse. Raises PinnedArtifactError,
-    naming the file and the table, when the download fails or the bytes do
-    not match the recorded hash.
+    A cached file is re-hashed before reuse. A 5xx or a connection error is
+    retried ``len(RETRY_DELAYS)`` times with backoff. Raises
+    PinnedArtifactError, naming the file and the table, when the download
+    fails (``kind`` ``"gone"`` or ``"transient"``) or the bytes do not match
+    the recorded hash (``"mismatch"``).
     """
     import requests
 
@@ -180,39 +205,59 @@ def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
         return target
     target.parent.mkdir(parents=True, exist_ok=True)
     where = (
-        f"{artifact.name}=={artifact.version} ({artifact.filename}, recorded in "
-        f"{artifact.recorded_in}; table: axiom_oracles/pinned_artifacts.py)"
+        f"{artifact.name}=={artifact.version} ({artifact.filename}, found in "
+        f"{artifact.found_in}; table: axiom_oracles/pinned_artifacts.py)"
     )
-    fd, tmp_name = tempfile.mkstemp(dir=target.parent, prefix=".download-")
-    tmp = Path(tmp_name)
-    try:
-        digest = hashlib.sha256()
+    attempts = len(RETRY_DELAYS) + 1
+    for attempt in range(attempts):
+        fd, tmp_name = tempfile.mkstemp(dir=target.parent, prefix=".download-")
+        tmp = Path(tmp_name)
         try:
-            with os.fdopen(fd, "wb") as out, requests.get(
-                artifact.url, stream=True, timeout=timeout
-            ) as response:
-                if response.status_code != 200:
-                    raise PinnedArtifactError(
-                        f"pinned artifact {where} no longer downloads: HTTP "
-                        f"{response.status_code} from {artifact.url}"
-                    )
-                for chunk in response.iter_content(1 << 20):
-                    digest.update(chunk)
-                    out.write(chunk)
-        except requests.RequestException as exc:
-            raise PinnedArtifactError(
-                f"pinned artifact {where} could not be downloaded from "
-                f"{artifact.url}: {exc}"
-            ) from exc
-        if digest.hexdigest() != artifact.sha256:
-            raise PinnedArtifactError(
-                f"pinned artifact {where} has SHA-256 {digest.hexdigest()}, "
-                f"expected {artifact.sha256}"
-            )
-        os.replace(tmp, target)
-    finally:
-        tmp.unlink(missing_ok=True)
-    return target
+            digest = hashlib.sha256()
+            try:
+                with os.fdopen(fd, "wb") as out, requests.get(
+                    artifact.url, stream=True, timeout=timeout
+                ) as response:
+                    status = response.status_code
+                    if status != 200:
+                        if is_transient_status(status) and attempt + 1 < attempts:
+                            _sleep(RETRY_DELAYS[attempt])
+                            continue
+                        if is_transient_status(status):
+                            raise PinnedArtifactError(
+                                f"pinned artifact {where}: HTTP {status} from "
+                                f"{artifact.url} on all {attempts} attempts "
+                                "(server error, not a removal)",
+                                kind="transient",
+                            )
+                        raise PinnedArtifactError(
+                            f"pinned artifact {where} no longer downloads: HTTP "
+                            f"{status} from {artifact.url}",
+                            kind="gone",
+                        )
+                    for chunk in response.iter_content(1 << 20):
+                        digest.update(chunk)
+                        out.write(chunk)
+            except requests.RequestException as exc:
+                if attempt + 1 < attempts:
+                    _sleep(RETRY_DELAYS[attempt])
+                    continue
+                raise PinnedArtifactError(
+                    f"pinned artifact {where} could not be downloaded from "
+                    f"{artifact.url} on all {attempts} attempts: {exc}",
+                    kind="transient",
+                ) from exc
+            if digest.hexdigest() != artifact.sha256:
+                raise PinnedArtifactError(
+                    f"pinned artifact {where} has SHA-256 {digest.hexdigest()}, "
+                    f"expected {artifact.sha256}",
+                    kind="mismatch",
+                )
+            os.replace(tmp, target)
+            return target
+        finally:
+            tmp.unlink(missing_ok=True)
+    raise AssertionError("unreachable")  # pragma: no cover
 
 
 def requirement(pin: str) -> str:
@@ -237,21 +282,117 @@ def with_args(pins) -> list[str]:
     return [arg for pin in pins for arg in ("--with", requirement(pin))]
 
 
+def _load_run_comparison():
+    """``scripts/run_comparison.py`` of this checkout, loaded by path."""
+    import importlib.util
+    import sys
+
+    path = Path(__file__).resolve().parents[1] / "scripts" / "run_comparison.py"
+    if not path.exists():
+        raise SystemExit(
+            f"--oracle-with-args needs a source checkout; {path} does not exist"
+        )
+    spec = importlib.util.spec_from_file_location("_run_comparison_for_recipe", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+#: The stack keys a suite pins beside ``policyengine_us_version``.
+_STACK_KEYS = ("policyengine_version", "policyengine_core_version")
+
+
+def oracle_stack_params(us_version: str, comparisons_dir: Path | None = None) -> dict:
+    """The runner parameters of the PolicyEngine stack that pins ``us_version``.
+
+    Comparison suites pin policyengine-us together with the ``policyengine``
+    and ``policyengine-core`` releases it was reviewed with. Return those
+    parameters when every suite that pins ``us_version`` (and installs it by
+    version, not from a ``policyengine_us_source``) agrees on them; return
+    just the version when no suite pins it, so ``_resolve_pe_oracle_pins``
+    fills in the in-repo defaults. Refuse when suites disagree.
+    """
+    import yaml
+
+    root = comparisons_dir or Path(__file__).resolve().parents[1] / "comparisons"
+    stacks: dict[tuple, list[str]] = {}
+    for path in sorted(root.glob("*.yaml")):
+        config = yaml.safe_load(path.read_text())
+        params = (
+            ((config or {}).get("runner") or {}).get("parameters")
+            if isinstance(config, dict)
+            else None
+        ) or {}
+        if str(params.get("policyengine_us_version")) != us_version:
+            continue
+        if params.get("policyengine_us_source"):
+            continue
+        key = tuple(params.get(name) for name in _STACK_KEYS)
+        stacks.setdefault(key, []).append(path.name)
+    if len(stacks) > 1:
+        detail = "; ".join(
+            f"{dict(zip(_STACK_KEYS, key))}: {', '.join(names)}"
+            for key, names in sorted(stacks.items(), key=str)
+        )
+        raise SystemExit(
+            f"suites pin policyengine-us {us_version} with different stacks: {detail}"
+        )
+    params = {"policyengine_us_version": us_version}
+    if stacks:
+        (key,) = stacks
+        params.update({k: v for k, v in zip(_STACK_KEYS, key) if v is not None})
+    return params
+
+
+def oracle_with_args(us_version: str) -> list[str]:
+    """The comparisons' full ``uv run --with`` list for a policyengine-us version.
+
+    Built by ``scripts/run_comparison.py``'s own ``_resolve_pe_oracle_pins``
+    and ``_pe_oracle_with_args``: the suite's ``policyengine`` and
+    ``policyengine-core`` pins, the verified wheel of a pruned release, and the
+    companion pins. A direct reference is written ``name@file:///...`` (valid
+    PEP 508, no whitespace), so the list survives shell word splitting.
+    """
+    run_comparison = _load_run_comparison()
+    pins = run_comparison._resolve_pe_oracle_pins(oracle_stack_params(us_version))
+    args = [arg.replace(" @ ", "@", 1) for arg in run_comparison._pe_oracle_with_args(pins)]
+    for arg in args:
+        if any(ch.isspace() for ch in arg):
+            raise SystemExit(f"cannot print {arg!r} for shell use: it contains whitespace")
+    return args
+
+
 def main(argv: list[str] | None = None) -> int:
     """Print the requirement uv should install for each ``name==version``.
 
-    For manual runs: ``uv run --with "$(python3 -m
-    axiom_oracles.pinned_artifacts policyengine-us==1.767.3)" ...`` installs
-    the verified wheel of a pruned release.
-    """
-    import sys
+    ``--oracle-with-args VERSION`` instead prints the comparisons' full
+    ``--with`` list for that policyengine-us release, for manual runs::
 
-    pins = sys.argv[1:] if argv is None else argv
-    if not pins:
-        print("usage: python3 -m axiom_oracles.pinned_artifacts NAME==VERSION ...",
-              file=sys.stderr)
-        return 2
-    for pin in pins:
+        uv run --python 3.13 --no-project --isolated \\
+          $(uv run -q python -m axiom_oracles.pinned_artifacts \\
+              --oracle-with-args 1.767.3) \\
+          python scripts/probe_us_sc_income_tax_2026.py
+    """
+    import argparse
+
+    parser = argparse.ArgumentParser(prog="python -m axiom_oracles.pinned_artifacts")
+    parser.add_argument("pins", nargs="*", metavar="NAME==VERSION")
+    parser.add_argument(
+        "--oracle-with-args",
+        metavar="VERSION",
+        help="print the full uv --with list for this policyengine-us version",
+    )
+    args = parser.parse_args(argv)
+    if args.oracle_with_args:
+        if args.pins:
+            parser.error("--oracle-with-args takes no NAME==VERSION arguments")
+        print(" ".join(oracle_with_args(args.oracle_with_args)))
+        return 0
+    if not args.pins:
+        parser.error("give NAME==VERSION pins or --oracle-with-args VERSION")
+    for pin in args.pins:
         print(requirement(pin))
     return 0
 

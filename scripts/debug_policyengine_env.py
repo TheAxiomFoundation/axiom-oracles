@@ -32,6 +32,7 @@ def ensure_pinned_policyengine_env(script_path: Path, repo_root: Path) -> None:
         "--python",
         "3.14",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(repo_root),
     ]
