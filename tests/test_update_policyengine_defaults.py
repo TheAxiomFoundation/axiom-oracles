@@ -54,6 +54,7 @@ def result(packages):
         "case_count": len(fixtures["cases"]),
         "comparison_count": len(fixtures["cases"]) * len(fixtures["variables"]),
         "batch_count": (len(fixtures["cases"]) + 1) // 2,
+        "batch_differences": [],
         "cases": [
             {
                 "case_id": case["id"],
@@ -329,3 +330,23 @@ def test_a_broken_real_batch_cannot_pass_by_falling_back_to_singletons(monkeypat
     )
     with pytest.raises(ValueError, match="batch API is broken"):
         worker.run_probe(json.loads(updater.FIXTURES.read_text()), BASELINE)
+
+
+def test_finite_baseline_disagreement_is_visible_but_candidate_disagreement_fails():
+    payload = proposal()
+    payload["status"] = "needs-review"
+    payload["baseline_result"]["batch_differences"] = [
+        {
+            "case_id": payload["baseline_result"]["cases"][0]["case_id"],
+            "variable": "snap",
+            "singleton": 10,
+            "batch": 12,
+            "difference": 2,
+        }
+    ]
+    updater.validate_proposal(payload)
+    payload["candidate_result"]["batch_differences"] = payload["baseline_result"][
+        "batch_differences"
+    ]
+    with pytest.raises(ValueError, match="candidate batch"):
+        updater.validate_proposal(payload)

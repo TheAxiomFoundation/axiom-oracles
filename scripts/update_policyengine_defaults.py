@@ -219,7 +219,7 @@ def validate_candidate_lock(text: str, packages: dict[str, str]) -> None:
 
 
 def validate_probe_result(
-    result: dict, packages: dict[str, str], fixtures: dict
+    result: dict, packages: dict[str, str], fixtures: dict, *, baseline: bool = False
 ) -> None:
     """Counts alone are not evidence; require every declared case/output pair."""
     expected_cases = {case["id"] for case in fixtures["cases"]}
@@ -233,6 +233,7 @@ def validate_probe_result(
         or result["comparison_count"] != len(expected_cases) * len(expected_variables)
         or not result["comparison_count"]
         or result.get("batch_count") != (len(expected_cases) + 1) // 2
+        or type(result.get("batch_count")) is not int
         or not isinstance(result.get("cases"), list)
     ):
         raise ValueError("proposal lacks successful nonempty version-asserted evidence")
@@ -260,6 +261,36 @@ def validate_probe_result(
             raise ValueError("missing or invalid required probe output")
     if seen != expected_cases:
         raise ValueError("missing required probe case")
+    differences = result.get("batch_differences")
+    if not isinstance(differences, list) or len(differences) > len(
+        expected_cases
+    ) * len(expected_variables):
+        raise ValueError("invalid batch difference evidence")
+    for row in differences:
+        if not isinstance(row, dict) or set(row) != {
+            "case_id",
+            "variable",
+            "singleton",
+            "batch",
+            "difference",
+        }:
+            raise ValueError("invalid batch difference row")
+        if (
+            row["case_id"] not in expected_cases
+            or row["variable"] not in expected_variables
+        ):
+            raise ValueError("invalid batch comparison identity")
+        if any(
+            type(row[key]) not in (int, float, bool) or not math.isfinite(row[key])
+            for key in ("singleton", "batch", "difference")
+        ):
+            raise ValueError("nonfinite batch difference")
+        if not math.isclose(
+            row["batch"] - row["singleton"], row["difference"], abs_tol=1e-9
+        ):
+            raise ValueError("batch difference arithmetic does not reconcile")
+    if differences and not baseline:
+        raise ValueError("candidate batch results disagree with singleton calculations")
 
 
 def validate_proposal(payload: object) -> dict:
@@ -341,14 +372,18 @@ def validate_proposal(payload: object) -> dict:
             ("baseline_result", baseline),
             ("candidate_result", candidate),
         ):
-            validate_probe_result(payload[key], packages, fixtures)
+            validate_probe_result(
+                payload[key], packages, fixtures, baseline=key == "baseline_result"
+            )
         if payload["changes"] != numerical_changes(
             payload["baseline_result"], payload["candidate_result"]
         ):
             raise ValueError(
                 "reported numerical changes differ from the returned values"
             )
-        if (status == "needs-review") != bool(payload["changes"]):
+        if (status == "needs-review") != bool(
+            payload["changes"] or payload["baseline_result"].get("batch_differences")
+        ):
             raise ValueError(
                 "proposal status does not match its measured numerical changes"
             )
@@ -384,6 +419,14 @@ def render_report(payload: dict) -> str:
         lines.append(
             f"- {key}: {result.get('case_count', 0)} cases, {result.get('comparison_count', 0)} returned outputs."
         )
+        if result.get("batch_differences"):
+            lines.append(
+                f"  - Existing singleton/batch differences: {len(result['batch_differences'])}; requires review."
+            )
+            lines.extend(
+                f"  - {row['case_id']} {row['variable']}: singleton={row['singleton']}, batch={row['batch']}"
+                for row in result["batch_differences"]
+            )
         lines.extend(
             f"  - Error: {str(error)[:1500]}" for error in result.get("errors", [])[:10]
         )
@@ -475,7 +518,13 @@ def baseline_lock(
 
 
 def execute_probe(
-    uv: str, lock: Path, packages: dict[str, str], directory: Path, env: dict[str, str]
+    uv: str,
+    lock: Path,
+    packages: dict[str, str],
+    directory: Path,
+    env: dict[str, str],
+    *,
+    baseline: bool = False,
 ) -> dict:
     directory.mkdir()
     profile = directory / "packages.json"
@@ -499,18 +548,21 @@ def execute_probe(
         env=env,
     )
     output = directory / "result.json"
+    command = [
+        str(python),
+        "-I",
+        str(ROOT / "scripts/probe_policyengine_update.py"),
+        "--fixtures",
+        str(FIXTURES),
+        "--packages",
+        str(profile),
+        "--output",
+        str(output),
+    ]
+    if baseline:
+        command.append("--baseline")
     result = subprocess.run(
-        [
-            str(python),
-            "-I",
-            str(ROOT / "scripts/probe_policyengine_update.py"),
-            "--fixtures",
-            str(FIXTURES),
-            "--packages",
-            str(profile),
-            "--output",
-            str(output),
-        ],
+        command,
         env=env,
         capture_output=True,
         text=True,
@@ -613,7 +665,7 @@ def probe(output: Path) -> dict:
                 payload["candidate_lock_sha256"] = digest(candidate_lock.read_bytes())
                 reviewed_lock = baseline_lock(uv, baseline, work, env)
                 payload["baseline_result"] = execute_probe(
-                    uv, reviewed_lock, baseline, work / "baseline", env
+                    uv, reviewed_lock, baseline, work / "baseline", env, baseline=True
                 )
                 payload["candidate_result"] = execute_probe(
                     uv, candidate_lock, candidate, work / "candidate", env
@@ -630,6 +682,7 @@ def probe(output: Path) -> dict:
                     )
                     else "needs-review"
                     if payload["changes"]
+                    or payload["baseline_result"].get("batch_differences")
                     else "passed"
                 )
     except Exception as exc:

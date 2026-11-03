@@ -96,6 +96,7 @@ def run_probe(fixtures: dict, expected: dict[str, str]) -> dict:
     singles = [runner.run_case(case, variables) for case in cases]
     batches = []
     batch_count = 0
+    batch_differences = []
     for start in range(0, len(cases), 2):
         # The public runner intentionally falls back to singleton calls after
         # some batch errors. An update probe must expose those regressions.
@@ -115,10 +116,19 @@ def run_probe(fixtures: dict, expected: dict[str, str]) -> dict:
                 or type(right) not in (int, float, bool)
                 or not math.isfinite(left)
                 or not math.isfinite(right)
-                or not math.isclose(left, right, rel_tol=1e-6, abs_tol=0.01)
             ):
                 errors.append(
-                    f"{case.case_id}: singleton/batch disagree or miss {variable}"
+                    f"{case.case_id}: singleton/batch missing or invalid {variable}"
+                )
+            elif not math.isclose(left, right, rel_tol=1e-6, abs_tol=0.01):
+                batch_differences.append(
+                    {
+                        "case_id": case.case_id,
+                        "variable": variable,
+                        "singleton": left,
+                        "batch": right,
+                        "difference": right - left,
+                    }
                 )
     count = sum(len(row["outputs"]) for row in observed)
     if count != len(cases) * len(variables) or not count:
@@ -128,6 +138,7 @@ def run_probe(fixtures: dict, expected: dict[str, str]) -> dict:
         "case_count": len(cases),
         "comparison_count": count,
         "batch_count": batch_count,
+        "batch_differences": batch_differences,
         "cases": observed,
         "errors": [str(e)[:1500] for e in errors[:50]],
     }
@@ -138,6 +149,11 @@ def main() -> int:
     parser.add_argument("--fixtures", type=Path, required=True)
     parser.add_argument("--packages", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--baseline",
+        action="store_true",
+        help="Retain finite historical batch differences as review evidence",
+    )
     args = parser.parse_args()
     try:
         result = run_probe(
@@ -151,7 +167,11 @@ def main() -> int:
             "errors": [f"{type(exc).__name__}: {exc}"[:1500]],
         }
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-    return 1 if result["errors"] else 0
+    return (
+        1
+        if result["errors"] or (result.get("batch_differences") and not args.baseline)
+        else 0
+    )
 
 
 if __name__ == "__main__":

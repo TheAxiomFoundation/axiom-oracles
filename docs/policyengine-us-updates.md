@@ -29,6 +29,11 @@ same bounded cases. It retains `proposal.json`, `report.md`, and
 `candidate-requirements.txt` as a run artifact. A failed resolution or execution
 produces diagnostic evidence and opens no update PR. No available update also
 opens no PR.
+Finite singleton/batch differences already present in the baseline are retained
+as explicit review evidence; they force `needs-review`. Missing outputs, failed
+batch execution, ordering errors, and candidate singleton/batch disagreement
+still prevent publication. This lets an update propose a working candidate even
+when the historical baseline has a documented numerical inconsistency.
 
 A completed probe can create a **draft** PR, including when its measured
 amounts change and need review. The PR changes only the default manifest,
