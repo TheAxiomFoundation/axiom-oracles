@@ -152,10 +152,24 @@ def merge(shards: list[dict]) -> dict:
     )
     provenance_binaries = _merge_provenance_taxsim(shards)
     taxsim = (engine_identity or {}).get("taxsim")
+    # Each shard's two copies must describe the same binaries and rows; a
+    # merged comparison alone lets two shards' opposite disagreements cancel.
+    for index, shard in enumerate(shards):
+        shard_taxsim = (shard.get("engine_identity") or {}).get("taxsim") or {}
+        shard_oracle = (shard.get("provenance") or {}).get("oracle") or {}
+        if "binaries" in shard_taxsim and "taxsim_binaries" in shard_oracle:
+            if _canonical_binaries(shard_taxsim["binaries"]) != _canonical_binaries(
+                shard_oracle["taxsim_binaries"]
+            ):
+                raise SystemExit(
+                    f"TAXSIM identity disagrees between engine_identity and "
+                    f"provenance in shard {index}"
+                )
     if (
         taxsim
         and provenance_binaries is not None
-        and provenance_binaries != taxsim.get("binaries")
+        and _canonical_binaries(provenance_binaries)
+        != _canonical_binaries(taxsim.get("binaries") or [])
     ):
         raise SystemExit(
             "TAXSIM identity disagrees between engine_identity and provenance"
@@ -257,6 +271,14 @@ def _merge_engine_identity(shards: list[dict]) -> dict | None:
                 [part.get("binaries") or [] for part in parts], engine
             )
     return merged
+
+
+def _canonical_binaries(records: list[dict]) -> list[str]:
+    """Order-free form of one binary list, equivalent stamps merged."""
+    return sorted(
+        json.dumps(record, sort_keys=True)
+        for record in _merge_binaries([records], "taxsim")
+    )
 
 
 def _merge_binaries(lists: list[list[dict]], engine: str) -> list[dict]:

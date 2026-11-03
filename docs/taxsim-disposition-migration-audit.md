@@ -1,14 +1,14 @@
 # TAXSIM disposition migration audit
 
-Baseline: `origin/main` resolved to `358f433b9b5511e097f0375cec7e33c815b36a3e`. Its unmodified `axiom_oracles/comparison/dispositions.py` bytes hash to `ba8b75b0200fd57282934cb3e91caab71a71fc3f74f95a0e34b3f7bd1aac8100`. The proof loads that module inside the `axiom_oracles.comparison` package, because it imports `pe_axiom_standard` relatively, and first checks that this checkout's `pe_axiom_standard.py` and `conformance/unexplained.py` are byte-identical to the baseline's.
+Baseline: `358f433b9b5511e097f0375cec7e33c815b36a3e`, this change's merge base with `main`. Its unmodified `axiom_oracles/comparison/dispositions.py` bytes hash to `ba8b75b0200fd57282934cb3e91caab71a71fc3f74f95a0e34b3f7bd1aac8100`. The proof loads that module inside the `axiom_oracles.comparison` package, because it imports `pe_axiom_standard` relatively, and first checks that this checkout's `pe_axiom_standard.py` and `conformance/unexplained.py` are byte-identical to the baseline's.
 
-The inherited work was **partial** on requirement 6: it migrated all 75 entries and hard-coded three expected digests in `tests/test_dispositions_hardened.py`, but did not supply an independently reconstructed origin/main baseline or cover the slim national report, other TAXSIM reports, and case chunks. The completed proof below reconstructs the old merge from old code **and** old data, removes stored row annotations before merging, and compares complete assignment digests.
+The inherited work was **partial** on the independent-baseline requirement: it migrated all 75 entries and hard-coded three expected digests in `tests/test_dispositions_hardened.py`, but did not supply an independently reconstructed origin/main baseline or cover the slim national report, other TAXSIM reports, and case chunks. The completed proof below reconstructs the old merge from old code **and** old data, removes stored row annotations before merging, and compares complete assignment digests.
 
 ## Reproduction and scope
 
-The audit ran `uv run python scripts/prove_disposition_migration.py`. The script uses the following procedure:
+The audit ran `uv run python scripts/prove_disposition_migration.py --write 358f433b9b5511e097f0375cec7e33c815b36a3e`. The script uses the following procedure:
 
-1. Resolve `git rev-parse origin/main`; enumerate paths with `git ls-tree -r --name-only <resolved commit>`. Inspect every tracked report JSON under `reports/` and `dashboard/public/data/`, requiring `suite` and `summary` and TAXSIM in the report engine keys or values. This detects both two-engine comparison reports and the older Axiom/PolicyEngine/TAXSIM grid schema. The scan found 45 reports.
+1. Resolve the baseline ref with `git rev-parse`; enumerate paths with `git ls-tree -r --name-only <resolved commit>`. Inspect every tracked report JSON under `reports/` and `dashboard/public/data/`, requiring `suite` and `summary` and TAXSIM in the report engine keys or values. This detects both two-engine comparison reports and the older Axiom/PolicyEngine/TAXSIM grid schema. The scan found 45 reports.
 2. Extract the original merge module, all 45 report files, and each applicable original disposition YAML with `git show <resolved commit>:<path>` into a fresh temporary directory. Load the original module with `importlib.util.spec_from_file_location`; no checkout, worktree creation, history rewrite, external engine run, or modified baseline implementation is involved. Original `load_dispositions` validates the original YAML. Its optional source-existence checks use the repository; they validate only that the pre-existing citation paths exist.
 3. For each full report, remove each stored `disposition` annotation, then call the original `apply_dispositions` with the original YAML (or `None` for reports without a ledger). Separately remove annotations from the working-tree report and merge current validated YAML with the current module. Compute each side with its own `assignment_digest` implementation. Assert equal digests.
 4. The national FIIT dashboard report retains only 1,000 of 26,229 mismatch rows. Verify the `source_report` file SHA, freshly merge the complete source on each side, verify the embedded full `assignment_sha256`, and reconstruct/check every retained row annotation against the fresh full merge. Population bindings must never be rederived from the 1,000-row sample. Compute its retained-row digest separately from the complete-population digest.
@@ -85,22 +85,22 @@ The FIIT dashboard embeds full-population assignment SHA-256 `2a144e710e3875c3e2
 
 ## Identity and evidence findings
 
-All three migrated suite reports, including the full FIIT source, record `provenance.oracle.name: taxsim` and PolicyEngine package versions, but **none records any C1 TAXSIM binary SHA, `engine_identity.taxsim.binaries`, or `provenance.oracle.policyengine_taxsim` version**. The origin/main dependency pin and mechanism prose mention 2.30.0; they do not prove which package generated a historical report. The migration therefore uses the explicit additive `oracle_binding: {identity_unrecorded: true}` on all 75 entries, with no invented historical package version. A future recorded version or binary expires these bindings. Historical reports lacking identity cannot detect an unrecorded repin; the exact population bindings still detect changed selected rows. PR1 must record identity on regenerated reports.
+All three migrated suite reports, including the full FIIT source, record `provenance.oracle.name: taxsim` and PolicyEngine package versions, but **none records any TAXSIM binary SHA-256, `engine_identity.taxsim.binaries`, or `provenance.oracle.policyengine_taxsim` version**. The origin/main dependency pin and mechanism prose mention 2.30.0; they do not prove which package generated a historical report. The migration therefore uses the explicit additive `oracle_binding: {identity_unrecorded: true}` on all 75 entries, with no invented historical package version. A future recorded version or binary expires these bindings. Historical reports lacking identity cannot detect an unrecorded repin; the exact population bindings still detect changed selected rows. PR1 must record identity on regenerated reports.
 
-The original schema ID stays `axiom_oracles.dispositions.v1`; the additions preserve existing non-TAXSIM ledgers. The 75 migrated entries comprise 71 `case_selector` entries carrying count/value population hashes and four `case_id` entries carrying both exact side values. Current attribution counts are 29 taxsim, 10 axiom, 17 convention, 11 input, and 8 two_sided.
+The original schema ID stays `axiom_oracles.dispositions.v1`; the additions preserve existing non-TAXSIM ledgers. The 75 migrated entries comprise 71 `case_selector` entries carrying count/value population hashes and four `case_id` entries carrying both exact side values. Current entry-level attribution counts are 31 taxsim, 10 axiom, 18 convention, 10 input, 6 two_sided; three entries also carry per-case exceptions (`attribution_by_case`).
 
 Twenty-three entries carry 25 row-arithmetic checks, all inspecting an actual side value or signed difference. None uses a tautology such as `left - right - difference = 0`. The checks cover zero-output classes, fixed/list-valued deduction fingerprints, flat Colorado offsets, and fixed composite deltas. The remaining entries retain citations where the historical mechanism needs household facts or intermediate outputs that mismatch rows do not store. Constant arithmetic is retained as historical explanatory context, never as the sole TAXSIM reconciliation. This audit validates stored arithmetic and attribution against inherited descriptions; it does not rerun engines or establish tax law from engine outputs.
 
 ## Attribution review
 
-Each row records the reviewed migration choice and its YAML entry line. Unmarked entries follow the explicit side, input limitation, or convention described in their inherited mechanism. The review notes below identify every judgment or uncertainty found in this audit; the original mechanism/evidence text and disposition kinds are preserved.
+origin/main carries no `attribution` on any of the 75 entries, so every value below is new in this change. Each row records the reviewed choice and its YAML entry line. The leading-ingredient rule applies throughout: a composite takes the attribution of its largest member. Unmarked entries follow the explicit side, input limitation, or convention described in their inherited mechanism. The review notes below identify every judgment or uncertainty found in this audit; the original mechanism/evidence text and disposition kinds are preserved.
 
 | Ledger and entry line | Entry | Attribution | Review note |
 | --- | --- | --- | --- |
 | `co-state-income-tax-taxsim.yaml:5` | `taxsim-co-flat-30-8-filing-status-offset` | `taxsim` | Follows the inherited mechanism. |
 | `co-state-income-tax-taxsim.yaml:174` | `taxsim-co-flat-20-7-filing-status-offset` | `taxsim` | Follows the inherited mechanism. |
 | `co-state-income-tax-taxsim.yaml:245` | `taxsim-co-refundable-credit-vintage` | `taxsim` | Follows the inherited mechanism. |
-| `co-state-income-tax-taxsim.yaml:648` | `co-state-open-rows-axiom-pe-divergent` | `taxsim` | TAXSIM attribution uses an accepted Axiom reference after PE projection dispositions, plus credit/convention decomposition; not independent statutory verification. |
+| `co-state-income-tax-taxsim.yaml:648` | `co-state-open-rows-axiom-pe-divergent` | `taxsim`; `convention` for 136208 and 59285 | Five rows decompose to the TAXSIM-attributed EITC-coupling and credit-vintage classes. Rows 136208 (auto head-of-household standard deduction) and 59285 (automatic itemization) decompose to ingredients the ledger attributes to `convention`, recorded in `attribution_by_case`. The Axiom reference rests on the PE-divergence dispositions, not statute. See [Evidence for the contested calls](#evidence-for-the-contested-calls). |
 | `co-tax-intersection-taxsim.yaml:5` | `taxsim-2026-ctc-child-credit-machinery-absent` | `taxsim` | Follows the inherited mechanism. |
 | `co-tax-intersection-taxsim.yaml:249` | `taxsim-2026-eitc-with-children-absent` | `taxsim` | Follows the inherited mechanism. |
 | `co-tax-intersection-taxsim.yaml:326` | `taxsim-input-lacks-blindness-column-63f-increments` | `input` | Follows the inherited mechanism. |
@@ -137,46 +137,99 @@ Each row records the reviewed migration choice and its YAML entry line. Unmarked
 | `co-tax-intersection-taxsim.yaml:3201` | `taxsim-2026-capgains-zero-threshold-vintage` | `taxsim` | Follows the inherited mechanism. |
 | `co-tax-intersection-taxsim.yaml:3267` | `liability-composite-of-member-classes-and-niit-scope-r2` | `two_sided` | Follows the inherited mechanism. |
 | `co-tax-intersection-taxsim.yaml:3486` | `taxsim-co-credit-stack-vintage-intersection-lane` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3614` | `co-intersection-state-open-rows-axiom-pe-divergent` | `taxsim` | Same accepted-reference judgment as co-state-open-rows-axiom-pe-divergent, explicitly qualified in inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3699` | `taxsim-2026-amt-parameter-vintage` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3781` | `taxsim-qbid-wage-limit-and-floor-vintage-taxable-income` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3837` | `taxsim-2026-capgains-bracket-set-vintage` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3950` | `se-loss-461l-cap-vintage-two-sided` | `two_sided` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:3995` | `taxsim-qbid-seca-member-composite-taxable-income` | `two_sided` | Retain two_sided for TAXSIM QBID/ALD behavior plus deliberate Axiom/PE bridge OASDI-base convention. |
-| `co-tax-intersection-taxsim.yaml:4093` | `taxsim-input-gssi-earners-scope-taxable-income` | `input` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4150` | `se-loss-461l-cap-vintage-two-sided-extension` | `two_sided` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4213` | `taxsim-blindness-63f-and-qbid-composite-taxable-income` | `input` | Retain input for blindness-led composite, although it also contains the documented rental/QBID convention. |
-| `co-tax-intersection-taxsim.yaml:4253` | `taxsim-auto-hoh-and-qbid-composite-taxable-income` | `convention` | Retain convention for auto-HoH-led composite, although it also names a TAXSIM QBID floor machinery gap. |
-| `co-tax-intersection-taxsim.yaml:4293` | `taxsim-auto-itemized-salt-contents-taxable-income` | `convention` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4330` | `amt-partiii-routing-vs-taxsim-amt-vintage` | `two_sided` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4400` | `taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4461` | `taxsim-2026-ctc-machinery-absent-extension` | `taxsim` | Follows the inherited mechanism. |
-| `co-tax-intersection-taxsim.yaml:4502` | `axiom-eitc-phaseout-income-se-loss-not-netted` | `axiom` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:3614` | `co-intersection-state-open-rows-axiom-pe-divergent` | `taxsim`; `convention` for 136208 and 59285 | Same split as co-state-open-rows-axiom-pe-divergent. |
+| `co-tax-intersection-taxsim.yaml:3707` | `taxsim-2026-amt-parameter-vintage` | `taxsim` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:3789` | `taxsim-qbid-wage-limit-and-floor-vintage-taxable-income` | `taxsim` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:3845` | `taxsim-2026-capgains-bracket-set-vintage` | `taxsim` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:3958` | `se-loss-461l-cap-vintage-two-sided` | `two_sided` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4003` | `taxsim-qbid-seca-member-composite-taxable-income` | `taxsim`; `convention` for 7 rows | Per-row leading member from the decomposition receipt: 18 rows lead with a TAXSIM QBID member, 7 with a bridge convention. See [Evidence for the contested calls](#evidence-for-the-contested-calls). |
+| `co-tax-intersection-taxsim.yaml:4115` | `taxsim-input-gssi-earners-scope-taxable-income` | `input` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4172` | `se-loss-461l-cap-vintage-two-sided-extension` | `two_sided` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4235` | `taxsim-blindness-63f-and-qbid-composite-taxable-income` | `convention` | Led by the QBID rental convention (6,731.31) over the 63(f) blindness increment (1,650.00). |
+| `co-tax-intersection-taxsim.yaml:4275` | `taxsim-auto-hoh-and-qbid-composite-taxable-income` | `convention` | Retain convention for auto-HoH-led composite, although it also names a TAXSIM QBID floor machinery gap. |
+| `co-tax-intersection-taxsim.yaml:4315` | `taxsim-auto-itemized-salt-contents-taxable-income` | `convention` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4352` | `amt-partiii-routing-vs-taxsim-amt-vintage` | `two_sided` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4422` | `taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc` | `taxsim` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4483` | `taxsim-2026-ctc-machinery-absent-extension` | `taxsim` | Follows the inherited mechanism. |
+| `co-tax-intersection-taxsim.yaml:4524` | `axiom-eitc-phaseout-income-se-loss-not-netted` | `axiom` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:5` | `taxsim-2026-eitc-child-machinery-absent` | `taxsim` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:4120` | `taxsim-input-lacks-blindness-column-63f-increments` | `input` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:6200` | `axiom-uncapped-oasdi-flat-765-wage-only` | `axiom` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:17378` | `axiom-uncapped-oasdi-flat-765-with-uncapped-seca` | `axiom` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:18258` | `taxsim-2026-eitc-childless-schedule-applied-to-units-with-children` | `taxsim` | Follows the inherited mechanism. |
 | `fiit-taxsim-ecps.yaml:19669` | `axiom-seca-medicare-rate-only` | `axiom` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:25947` | `axiom-seca-medicare-rate-only-1402b2-gate` | `two_sided` | Changed axiom to two_sided: parent Axiom Medicare-only omission and TAXSIM below-threshold inclusion both appear in the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26194` | `taxsim-auto-itemized-standard-deduction-zeroed` | `convention` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26476` | `taxsim-auto-hoh-standard-deduction` | `convention` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26546` | `taxsim-childless-eitc-parameter-vintage` | `taxsim` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26622` | `taxsim-input-format-lacks-alaska-pfd-eitc` | `input` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26671` | `taxsim-binary-2025-parameter-fallback` | `taxsim` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26711` | `ecps-projection-dependent-se-income-fica` | `input` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26754` | `axiom-seca-medicare-rate-only-r2-leftovers` | `axiom` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26794` | `taxsim-binary-2025-parameter-fallback-r2-standard-deduction` | `taxsim` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26827` | `taxsim-auto-itemized-standard-deduction-zeroed-r2` | `convention` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26857` | `taxsim-childless-eitc-parameter-vintage-r2` | `taxsim` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26884` | `taxsim-2026-eitc-investment-limit-vintage` | `taxsim` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26913` | `taxsim-childless-schedule-and-axiom-earned-netting-composite-eitc` | `two_sided` | Follows the inherited mechanism. |
-| `fiit-taxsim-ecps.yaml:26975` | `axiom-eitc-earned-income-se-loss-not-netted` | `axiom` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:25947` | `axiom-seca-medicare-rate-only-1402b2-gate` | `taxsim` (provisional) | The mechanism (the binary includes SE below the 1402(b)(2) threshold) explains 169 of 217 rows. 48 rows and the `axiom_encoding_gap` kind are open questions for the lane owner. See [Evidence for the contested calls](#evidence-for-the-contested-calls). |
+| `fiit-taxsim-ecps.yaml:26202` | `taxsim-auto-itemized-standard-deduction-zeroed` | `convention` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26484` | `taxsim-auto-hoh-standard-deduction` | `convention` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26554` | `taxsim-childless-eitc-parameter-vintage` | `taxsim` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26630` | `taxsim-input-format-lacks-alaska-pfd-eitc` | `input` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26679` | `taxsim-binary-2025-parameter-fallback` | `taxsim` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26719` | `ecps-projection-dependent-se-income-fica` | `input` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26762` | `axiom-seca-medicare-rate-only-r2-leftovers` | `axiom` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26802` | `taxsim-binary-2025-parameter-fallback-r2-standard-deduction` | `taxsim` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26835` | `taxsim-auto-itemized-standard-deduction-zeroed-r2` | `convention` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26865` | `taxsim-childless-eitc-parameter-vintage-r2` | `taxsim` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26892` | `taxsim-2026-eitc-investment-limit-vintage` | `taxsim` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26921` | `taxsim-childless-schedule-and-axiom-earned-netting-composite-eitc` | `two_sided` | Follows the inherited mechanism. |
+| `fiit-taxsim-ecps.yaml:26983` | `axiom-eitc-earned-income-se-loss-not-netted` | `axiom` | Follows the inherited mechanism. |
 
-The three SECA-chain pending-triage mechanisms are pre-existing attribution limitations, not new independent causal proofs. The two previously open Colorado classes also explicitly rely on an accepted reference after bridge dispositions. Those classifications remain review questions for the ledger owner; changing their row assignments is outside this compatibility migration.
+The three SECA-chain pending-triage mechanisms are pre-existing attribution limitations, not new independent causal proofs. The two previously open Colorado classes also explicitly rely on an accepted reference after bridge dispositions, and the 1402(b)(2) gate entry is provisional (above). Those classifications remain review questions for the ledger owner; changing their row assignments is outside this compatibility migration.
+
+## Evidence for the contested calls
+
+`tests/test_dispositions_attribution_evidence.py` re-derives each call below from the committed receipt or report the entry cites.
+
+### `taxsim-blindness-63f-and-qbid-composite-taxable-income`: `convention`
+
+The entry's own arithmetic is 6,731.31 (TAXSIM QBID 0 against Axiom's 0.2 x 33,656.56 on the rental QBI base, the dispositioned rental-in-QBI convention) + 1,650.00 (the 63(f) blindness increment TAXSIM's input cannot carry) = 8,381.31. The convention member leads, so the composite is `convention`. By the same rule `taxsim-blindness-63f-plus-qbid-floor-taxable-income` (2,050 + 400) stays `input` and `taxsim-auto-hoh-and-qbid-composite-taxable-income` (8,050 - 474.66) stays `convention`.
+
+### `co-state-open-rows-axiom-pe-divergent` and `co-intersection-state-open-rows-axiom-pe-divergent`: `taxsim`, with two `convention` rows
+
+The mechanism decomposes each row as siitax = staxbc - sctc - sptcr - 0.5 x v25. Rows 135552, 135799, 135880, 136404 and 58696 decompose to the Colorado EITC coupling of the 2026 childless federal schedule and the CO child-credit and family-affordability vintage. The ledger attributes both classes to `taxsim` (`taxsim-2026-eitc-childless-schedule-applied`, `taxsim-co-refundable-credit-vintage`). Row 136208 decomposes only to TAXSIM's auto head-of-household standard deduction (10,317.46 - 37.82), and row 59285 only to its automatic itemization of its own state tax. The ledger attributes both to `convention` (`taxsim-auto-hoh-*`, `taxsim-auto-itemized-state-tax-*`), so `attribution_by_case` records them. The entries are not split: a split would change the entry id on two annotated rows of each committed report, and so those reports' bytes, which the published-report gates hold fixed. The Axiom value is the reference only because the Axiom-vs-PE divergence on these units is dispositioned as `bridge_artifact`; it was not verified independently against statute.
+
+### `taxsim-qbid-seca-member-composite-taxable-income`: `taxsim`, with seven `convention` rows
+
+Each row's residual is the sum of a QBID member and an SE-ALD member in `reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json`. The leading member decides the row:
+
+- A positive QBID member is TAXSIM's QBID exceeding Axiom's: TAXSIM applies no 199A(b)(3) phase-in (`taxsim`).
+- A negative member under $400 is Axiom's statutory $400 minimum, which TAXSIM lacks (`taxsim`).
+- A larger negative member can come only from the QBI-base difference, the rental-in-QBI bridge convention (`convention`, as `taxsim-qbid-rental-convention-taxable-income`).
+- The -93.00 SE-ALD member is the bridge's PolicyEngine-matching OASDI base (186,000 against 184,500), a bridge convention (`convention`).
+
+| Unit | Residual | QBID member | SE-ALD member | Leading member | Attribution |
+| ---: | ---: | ---: | ---: | --- | --- |
+| 135586 | -1,271.63 | -1,271.62 |  | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 58620 | 1,314.68 | 1,286.11 | 28.58 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 58643 | -2,479.65 | -2,480.11 | 0.46 | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 58645 | -2,867.54 | -2,867.54 |  | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 58942 | 1,711.24 | 1,804.25 | -93.00 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 59264 | -4,819.53 | -4,819.53 |  | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 136114 | -1,298.78 | -1,298.78 |  | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 136327 | -180.73 | -180.73 |  | QBID: TAXSIM lacks the $400 minimum | `taxsim` |
+| 136399 | -74.40 | 18.60 | -93.00 | SE-ALD: bridge OASDI base (-93.00) | `convention` |
+| 136429 | -1,371.54 | -1,371.53 |  | QBID: QBI-base difference (rental-in-QBI convention) | `convention` |
+| 154724 | 139,270.87 | 134,531.46 | 4,739.42 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 155406 | 2,248.63 | 2,167.83 | 80.79 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 156147 | 45,137.07 | 45,230.07 | -93.00 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 156467 | 28.51 | 26.69 | 1.82 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 156651 | 54,781.87 | 54,266.59 | 515.28 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 157013 | 95,158.92 | 94,225.25 | 933.66 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 157251 | 98.85 | 80.47 | 18.38 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 157317 | 288,676.39 | 283,076.17 | 5,600.22 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 157868 | 41,546.31 | 41,639.32 | -93.00 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 161870 | 73,939.11 | 71,269.82 | 2,669.29 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 161979 | 44,397.67 | 42,788.74 | 1,608.92 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 163020 | 37,893.91 | 36,515.96 | 1,377.94 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 164227 | 34.92 | 32.42 | 2.49 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 164548 | 159,377.94 | 157,227.99 | 2,149.95 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+| 164633 | 4,193,224.92 | 4,107,604.76 | 85,620.15 | QBID: TAXSIM lacks the 199A(b)(3) phase-in | `taxsim` |
+
+### `axiom-seca-medicare-rate-only-1402b2-gate`: `taxsim`, provisional
+
+The mechanism says the binary's SECA base includes net earnings below the 1402(b)(2) $400 threshold, which the Axiom side excludes. That can make TAXSIM higher by at most 0.153 x 400 = 61.20. In the full report (`reports/axiom-taxsim-fiit-ecps-verify-2026-08-28.json`), 169 of the 217 selected rows fit (difference in [-61.20, 0)). The mechanism does not explain the other 48: 47 rows where Axiom is higher (240.99 to 3,227,627.85) and ecps-tax-unit-1907 (-367.37). The report stores no inputs, so they could not be decomposed here. `taxsim` attributes what the mechanism shows. The 48 rows, and a kind (`axiom_encoding_gap`) that a mechanism describing Axiom as correct does not support, are open for the lane owner. The entry's `notes` say so. Changing the kind would change the committed reports' counts, so it is left as it was.
 
 ## Non-TAXSIM worker SSC change
 
 `dashboard/public/data/axiom-euromod-be-worker-ssc.json` is byte-identical to origin/main. It is the one non-TAXSIM report with an expired entry (`dataset-uprating-bridge-artifact-resolved`, already listed in origin/main's `expired_entries`). Outside TAXSIM lanes the merge writes `expired_reasons` only when a reason is new to this schema, and this entry's reason is the older `no_live_rows`, so a fresh merge of the report adds no reasons block. The proof checks both the bytes and that fresh merge.
 
-Rerun `uv run python scripts/prove_disposition_migration.py` and `uv run pytest -q tests/test_dispositions_migration.py` to reproduce the proof.
+Rerun `uv run python scripts/prove_disposition_migration.py` (it checks against the recorded baseline, and exits 1 if this checkout no longer reproduces it) and `uv run pytest -q tests/test_dispositions_migration.py` to reproduce the proof.

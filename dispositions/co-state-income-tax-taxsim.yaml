@@ -659,6 +659,14 @@ entries:
     - ecps-tax-unit-59285
   disposition: upstream_engine_gap
   attribution: taxsim
+  attribution_by_case:
+    # Row 136208 decomposes only to TAXSIM's auto head-of-household standard
+    # deduction and row 59285 only to its automatic itemization; the ledger
+    # attributes both ingredients to convention (taxsim-auto-hoh-*,
+    # taxsim-auto-itemized-state-tax-*). The other five rows decompose to
+    # the TAXSIM-attributed EITC-coupling and credit-vintage classes.
+    ecps-tax-unit-136208: convention
+    ecps-tax-unit-59285: convention
   evidence:
     mechanism: 'Formerly the open-investigation rows blocked on triangulation; both
       blockers are now closed. (1) The axiom-vs-PE divergence on all seven

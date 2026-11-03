@@ -437,3 +437,35 @@ def test_merge_taxsim_stamp_partitions_conserve_rows(partition) -> None:
             and same_build(binary["build_observed"], expected["build_observed"])
         ]
         assert matches == [expected]
+
+
+@pytest.mark.parametrize("missing_first", [False, True])
+def test_merge_requires_every_shard_or_none_to_record_provenance_binaries(
+    missing_first: bool,
+) -> None:
+    """Same version and profile, but one shard's oracle lacks the binary list."""
+    first = _lane_shard("case-a", [_binary("a")], "provenance")
+    second = _lane_shard("case-b", [_binary("b")], "provenance")
+    del (first if missing_first else second)["provenance"]["oracle"]["taxsim_binaries"]
+    with pytest.raises(SystemExit, match="incomplete TAXSIM identity coverage"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_checks_each_shards_copies_not_only_the_merged_ones() -> None:
+    """Two shards' opposite disagreements must not cancel in the merge."""
+    first = _lane_shard("case-a", [_binary("a", rows=2)], "both")
+    second = _lane_shard("case-b", [_binary("a", rows=1)], "both")
+    first["provenance"]["oracle"]["taxsim_binaries"] = [_binary("a", rows=1)]
+    second["provenance"]["oracle"]["taxsim_binaries"] = [_binary("a", rows=2)]
+    with pytest.raises(SystemExit, match="in shard 0"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_accepts_one_shards_copies_listed_in_different_orders() -> None:
+    binaries = [_binary("a"), _binary("b")]
+    first = _lane_shard("case-a", binaries, "both")
+    first["provenance"]["oracle"]["taxsim_binaries"] = list(reversed(binaries))
+    second = _lane_shard("case-b", [_binary("a")], "both")
+    merged = _load_merge_shard_reports().merge([first, second])
+    rows = {b["sha256"]: b["rows"] for b in merged["engine_identity"]["taxsim"]["binaries"]}
+    assert rows == {"a" * 64: 2, "b" * 64: 1}

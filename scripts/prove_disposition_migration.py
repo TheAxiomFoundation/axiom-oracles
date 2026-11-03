@@ -1,11 +1,17 @@
 """Prove the TAXSIM disposition migration left every row assignment unchanged.
 
 Loads the pre-migration merge module, dispositions and reports from a baseline
-commit (default: the audited origin/main, 358f433b), merges both versions from
-annotation-free reports, and compares assignment digests (no engine runs). See
+commit, merges both versions from annotation-free reports, and compares
+assignment digests (no engine runs). See
 docs/taxsim-disposition-migration-audit.md.
 
-Usage: uv run python scripts/prove_disposition_migration.py [BASELINE_REF]
+Usage: uv run python scripts/prove_disposition_migration.py [--write] [BASELINE_REF]
+
+Without BASELINE_REF the baseline is the commit recorded in
+docs/taxsim-disposition-migration-baseline.json. Without --write the script
+checks that the result equals that file and exits 1 if it does not; with
+--write it rewrites the file (for example, after merging a newer main, with
+BASELINE_REF set to it).
 """
 
 import hashlib
@@ -20,9 +26,14 @@ ROOT = Path.cwd()
 sys.path.insert(0, str(ROOT))
 from axiom_oracles.comparison import dispositions as current  # noqa: E402
 
-BASELINE = (
-    sys.argv[1] if len(sys.argv) > 1 else "358f433b9"
-)
+OUT = ROOT / "docs/taxsim-disposition-migration-baseline.json"
+ARGS = [arg for arg in sys.argv[1:] if arg != "--write"]
+WRITE = "--write" in sys.argv[1:]
+if ARGS:
+    BASELINE_REF = BASELINE = ARGS[0]
+else:
+    _recorded = json.loads(OUT.read_text())
+    BASELINE_REF, BASELINE = _recorded["baseline_ref"], _recorded["baseline_commit"]
 REF = subprocess.check_output(["git", "rev-parse", BASELINE], text=True).strip()
 TRACKED = subprocess.check_output(
     ["git", "ls-tree", "-r", "--name-only", REF], text=True
@@ -226,7 +237,7 @@ with tempfile.TemporaryDirectory(prefix="disposition-migration-baseline-") as di
         "expired_entries"
     ]
     result = {
-        "baseline_ref": "origin/main",
+        "baseline_ref": BASELINE_REF,
         "baseline_commit": REF,
         "baseline_module_sha256": digest(source.read_bytes()),
         "reports": rows,
@@ -236,13 +247,21 @@ with tempfile.TemporaryDirectory(prefix="disposition-migration-baseline-") as di
             "sha256": digest((ROOT / non_taxsim_path).read_bytes()),
         },
     }
-    out = ROOT / "docs/taxsim-disposition-migration-baseline.json"
-    out.write_text(json.dumps(result, indent=2) + "\n")
+    text = json.dumps(result, indent=2) + "\n"
+    if WRITE:
+        OUT.write_text(text)
+    elif OUT.read_text() != text:
+        print(
+            f"FAIL: {OUT.relative_to(ROOT)} differs from this run; rerun with "
+            "--write if the baseline should move",
+            file=sys.stderr,
+        )
+        sys.exit(1)
     print(
         f"PASS: {len(rows)} TAXSIM reports preserve independently re-merged assignment digests; {len(chunks)} case artifacts byte-identical."
     )
     print(
-        f"Baseline origin/main {REF}; module SHA256 {result['baseline_module_sha256']}"
+        f"Baseline {BASELINE_REF} = {REF}; module SHA256 {result['baseline_module_sha256']}"
     )
     for row in rows:
         print(

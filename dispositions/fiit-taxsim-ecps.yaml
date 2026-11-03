@@ -26167,7 +26167,15 @@ entries:
     - ecps-tax-unit-98919
     - ecps-tax-unit-99538
   disposition: axiom_encoding_gap
-  attribution: two_sided
+  attribution: taxsim
+  notes: >-
+    Attribution provisional. The mechanism (the binary's SECA base includes
+    net earnings below the 1402(b)(2) $400 threshold, which the axiom side
+    excludes) can make TAXSIM higher by at most 0.153 x 400 = 61.20. 169 of
+    the 217 rows fit that (difference in [-61.20, 0)). It does not explain
+    the other 48: 47 positive rows (240.99 to 3,227,627.85, axiom higher) and
+    ecps-tax-unit-1907 (-367.37). Those rows, and a kind (axiom_encoding_gap)
+    that the mechanism does not support, are open for the lane owner.
   evidence:
     mechanism: 'Variant of axiom-seca-medicare-rate-only for filers whose 92.35
 

@@ -116,6 +116,13 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   ``comparisons/<suite>.yaml``; the repo's engine adapter names when the
   suite declares no sides) plus ``convention``, ``input`` and
   ``two_sided``. An unknown value is invalid wherever it appears.
+* ``attribution_by_case`` (optional, with ``attribution``) maps a selected
+  case id to the attribution of that case's row where it differs from the
+  entry's: the entry value covers every other row. Keys must be case ids the
+  entry's ``case_id`` or ``case_selector.case_ids`` (or
+  ``case_ids_by_output``) lists, and values use the attribution vocabulary
+  and differ from ``attribution``. Neither field reaches a report row or a
+  dashboard render.
 * ``oracle_binding`` records the oracle identity a classification was made
   against: ``taxsim_binary_sha256`` (non-empty list of 64-hex digests),
   ``policyengine_taxsim`` (package version string), and/or
@@ -161,7 +168,8 @@ disposition and adds ``summary.dispositioned``::
                       four explanatory kinds
     expired_entries   entries that stopped applying; when non-empty on
                       a TAXSIM lane, or when any reason is not one of
-                      ``no_live_rows``/``pinned_values_changed``,
+                      ``no_live_rows``/``pinned_values_changed``/
+                      ``selector_binding_violated``,
                       ``expired_reasons`` maps each to a reason code
                       (:data:`EXPIRY_REASONS`)
 
@@ -246,8 +254,14 @@ EXPIRY_REASONS = (
     "row_arithmetic_failed",
 )
 
-#: The expiry reasons that existed before reasons were recorded.
-_LEGACY_EXPIRY_REASONS = ("no_live_rows", "pinned_values_changed")
+#: The ways an entry outside a TAXSIM lane could already expire before
+#: reasons were recorded: its rows cleared, its pins moved, or its
+#: selector_binding no longer held.
+_LEGACY_EXPIRY_REASONS = (
+    "no_live_rows",
+    "pinned_values_changed",
+    "selector_binding_violated",
+)
 
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
 DEFAULT_PIN_TOLERANCE = 0.005
@@ -269,6 +283,7 @@ _ENTRY_KEYS = {
     "oracle_binding",
     "notes",
     "attribution",
+    "attribution_by_case",
     "receipt",
     "reason",
     "comment",
@@ -624,6 +639,55 @@ def _validate_sources(
     return errors
 
 
+def _listed_case_ids(entry: Mapping[str, Any]) -> set[str]:
+    """Case ids an entry names explicitly (not a prefix or a match)."""
+
+    listed: set[str] = set()
+    if entry.get("case_id") is not None:
+        listed.add(str(entry["case_id"]))
+    selector = entry.get("case_selector")
+    if isinstance(selector, Mapping):
+        for value in selector.get("case_ids") or []:
+            listed.add(str(value))
+        by_output = selector.get("case_ids_by_output")
+        if isinstance(by_output, Mapping):
+            for ids in by_output.values():
+                listed.update(str(value) for value in ids or [])
+    return listed
+
+
+def _validate_attribution_by_case(
+    by_case: object,
+    entry: Mapping[str, Any],
+    attribution: object,
+    allowed: frozenset[str],
+    label: str,
+) -> list[str]:
+    if not isinstance(by_case, dict) or not by_case:
+        return [f"{label} attribution_by_case must be a non-empty mapping"]
+    if attribution is None:
+        return [f"{label} attribution_by_case needs an entry-level `attribution`"]
+    errors: list[str] = []
+    listed = _listed_case_ids(entry)
+    for case_id, value in by_case.items():
+        if str(case_id) not in listed:
+            errors.append(
+                f"{label} attribution_by_case names {case_id!r}, which the "
+                "entry does not list"
+            )
+        if not isinstance(value, str) or value not in allowed:
+            errors.append(
+                f"{label} attribution_by_case.{case_id} must be one of "
+                f"{', '.join(sorted(allowed))}; got {value!r}"
+            )
+        elif value == attribution:
+            errors.append(
+                f"{label} attribution_by_case.{case_id} repeats the entry's "
+                f"attribution {attribution!r}; list only the exceptions"
+            )
+    return errors
+
+
 def _validate_selector_binding(binding: object, label: str) -> list[str]:
     if not isinstance(binding, dict) or frozenset(binding) not in _BINDING_KEY_SETS:
         return [
@@ -872,6 +936,14 @@ def _validate_entry(
             f"{label} needs `attribution`: both sides of this suite are "
             "external engines, so upstream_engine_gap must name which one "
             f"({', '.join(sorted(allowed_attribution))})"
+        )
+
+    by_case = entry.get("attribution_by_case")
+    if by_case is not None:
+        errors.extend(
+            _validate_attribution_by_case(
+                by_case, entry, attribution, allowed_attribution, label
+            )
         )
 
     oracle_binding = entry.get("oracle_binding")
@@ -1624,9 +1696,11 @@ def apply_dispositions(
         "orphaned_entries": orphaned,
     }
     # Outside TAXSIM lanes, a report records reasons only when one of them is
-    # new to this schema. The two older reasons were already the only ways an
-    # entry could expire there, so every report merged before reasons existed
-    # keeps its bytes (and with them its published engine identity).
+    # new to this schema. Before reasons were recorded, an entry there could
+    # expire only because its rows cleared, its pins moved or its
+    # selector_binding broke (_LEGACY_EXPIRY_REASONS), so a report whose every
+    # expiry is one of those keeps the bytes it had before (and with them its
+    # published engine identity).
     if expired_reasons and (
         lane or set(expired_reasons.values()) - set(_LEGACY_EXPIRY_REASONS)
     ):

@@ -19,6 +19,7 @@ from axiom_oracles.comparison.dispositions import (
     adapter_engine_names,
     apply_dispositions,
     assignment_digest,
+    evaluate_arithmetic,
     load_dispositions,
     oracle_binding_mismatch,
     row_binary_sha256,
@@ -649,14 +650,27 @@ def test_first_entry_still_wins_outside_taxsim_lanes() -> None:
     assert "expired_reasons" not in _block(merged)
 
 
-def test_a_new_expiry_reason_is_recorded_outside_taxsim_lanes() -> None:
+def test_a_selector_binding_expiry_outside_taxsim_lanes_keeps_main_bytes() -> None:
+    """main already expired a non-TAXSIM entry whose binding broke, with no
+    reasons block; that report's bytes must not change."""
     rows = [_row("case-1", 10, 0)]
     entry = _bound(_entry(), rows)
     entry["selector_binding"]["units"] += 1
     merged = apply_dispositions(
         _report(rows, engines=("axiom", "policyengine")), _doc([entry])
     )
-    assert _block(merged)["expired_reasons"] == {"example": "selector_binding_violated"}
+    assert _block(merged)["expired_entries"] == ["example"]
+    assert "expired_reasons" not in _block(merged)
+
+
+def test_a_new_expiry_reason_is_recorded_outside_taxsim_lanes() -> None:
+    rows = [_row("case-1", 10, 0)]
+    entry = _bound(_entry(), rows)
+    entry["evidence"]["row_arithmetic"] = [{"expression": "right", "equals": 5}]
+    merged = apply_dispositions(
+        _report(rows, engines=("axiom", "policyengine")), _doc([entry])
+    )
+    assert _block(merged)["expired_reasons"] == {"example": "row_arithmetic_failed"}
 
 
 def test_select_rows_reports_every_claimant_only_under_conservation() -> None:
@@ -1252,3 +1266,65 @@ def test_shard_merge_sums_engine_error_counts() -> None:
 
     assert module.merge([shard(0), shard(3), shard(2)])["summary"]["engine_error_count"] == 5
     assert "engine_error_count" not in module.merge([shard(0), shard(0)])["summary"]
+
+
+# ---------------------------------------------------------------------------
+# Per-case attribution exceptions
+# ---------------------------------------------------------------------------
+
+
+def _listed(**overrides) -> dict:
+    rows = [_row("case-1", 10, 0), _row("case-2", 20, 0)]
+    entry = _bound(
+        _entry(case_selector={"case_ids": ["case-1", "case-2"]}, **overrides), rows
+    )
+    return entry
+
+
+def test_attribution_by_case_accepts_listed_exceptions() -> None:
+    entry = _listed(attribution_by_case={"case-2": "convention"})
+    assert validate_dispositions(_doc([entry]), suite_engines=TAXSIM) == []
+
+
+@pytest.mark.parametrize(
+    ("overrides", "message"),
+    [
+        ({"attribution_by_case": {"case-9": "convention"}}, "does not list"),
+        ({"attribution_by_case": {"case-2": "nobody"}}, "must be one of"),
+        ({"attribution_by_case": {"case-2": "taxsim"}}, "repeats the entry"),
+        ({"attribution_by_case": {}}, "non-empty mapping"),
+        ({"attribution_by_case": ["case-2"]}, "non-empty mapping"),
+    ],
+)
+def test_attribution_by_case_is_validated(overrides, message) -> None:
+    errors = validate_dispositions(_doc([_listed(**overrides)]), suite_engines=TAXSIM)
+    assert any(message in error for error in errors), errors
+
+
+def test_attribution_by_case_needs_an_entry_attribution() -> None:
+    entry = _listed(attribution_by_case={"case-2": "convention"})
+    del entry["attribution"]
+    errors = validate_dispositions(
+        _doc([entry]), suite_engines=("axiom", "policyengine")
+    )
+    assert any("needs an entry-level `attribution`" in e for e in errors), errors
+
+
+def test_attribution_by_case_does_not_reach_report_rows() -> None:
+    rows = [_row("case-1", 10, 0), _row("case-2", 20, 0)]
+    plain = apply_dispositions(_report(copy.deepcopy(rows)), _doc([_listed()]))
+    split = apply_dispositions(
+        _report(copy.deepcopy(rows)),
+        _doc([_listed(attribution_by_case={"case-2": "convention"})]),
+    )
+    assert plain == split
+
+
+@pytest.mark.parametrize(
+    "expression", ["1/(1e308+1e308)", "1/(1e308-(-1e308))", "1/-(1e308+1e308)"]
+)
+def test_an_overflowing_sum_is_refused_even_when_a_later_step_is_finite(
+    expression,
+) -> None:
+    with pytest.raises(ArithmeticEvaluationError, match="non-finite"):
+        evaluate_arithmetic(expression)
