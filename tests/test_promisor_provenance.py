@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -52,6 +53,7 @@ def _hermetic_git(monkeypatch):
         "GIT_NO_LAZY_FETCH",
         "GIT_CONFIG_COUNT",
         "GIT_CONFIG_PARAMETERS",
+        "GIT_ALLOW_PROTOCOL",
     ):
         monkeypatch.delenv(key, raising=False)
 
@@ -175,21 +177,6 @@ def test_complete_promisor_clone_still_measures_clean_and_dirty(tmp_path):
     assert _snapshot(clone / ".git" / "objects") == before
 
 
-def test_inherited_git_config_survives_the_read_guard(tmp_path, monkeypatch):
-    """The guard appends to inherited ``GIT_CONFIG_COUNT`` entries."""
-    from axiom_oracles.provenance import _git_read_env
-
-    monkeypatch.setenv("GIT_CONFIG_COUNT", "1")
-    monkeypatch.setenv("GIT_CONFIG_KEY_0", "core.quotePath")
-    monkeypatch.setenv("GIT_CONFIG_VALUE_0", "false")
-    env = _git_read_env()
-    assert env["GIT_CONFIG_COUNT"] == "2"
-    assert env["GIT_CONFIG_KEY_0"] == "core.quotePath"
-    assert env["GIT_CONFIG_KEY_1"] == "protocol.allow"
-    assert env["GIT_CONFIG_VALUE_1"] == "never"
-    assert env["GIT_NO_LAZY_FETCH"] == "1"
-
-
 _TREE_PATHS = ("", "a", "a/b", "c")
 
 
@@ -252,4 +239,92 @@ def test_property_missing_tree_never_attests_clean_or_fetches(
     before = _snapshot(objects)
     assert worktree_state(clone) == {"dirty": None}
     assert worktree_attestation(clone)["dirty"] is None
+    assert _snapshot(objects) == before
+
+
+# --- each guard on its own ---------------------------------------------------
+#
+# Git 2.45 added GIT_NO_LAZY_FETCH, and some distributions backport it (this
+# repository's CI images do). A Git without it would still lazily fetch, so
+# reads also set GIT_ALLOW_PROTOCOL, which replaces every protocol.allow and
+# protocol.<name>.allow setting. A ``git`` wrapper that drops one variable
+# before running the real Git leaves the other as the only guard.
+
+
+def _wrap_git(directory: Path, monkeypatch, *, drop: str) -> None:
+    real = shutil.which("git")
+    directory.mkdir(parents=True, exist_ok=True)
+    wrapper = directory / "git"
+    wrapper.write_text(f'#!/bin/sh\nunset {drop}\nexec "{real}" "$@"\n')
+    wrapper.chmod(0o755)
+    monkeypatch.setenv("PATH", f"{directory}{os.pathsep}{os.environ['PATH']}")
+
+
+def _allow_file_protocol(directory: Path, monkeypatch) -> None:
+    """A user setting common in CI (submodule tests) that re-allows file://."""
+    config = directory / "gitconfig"
+    config.write_text('[protocol "file"]\n\tallow = always\n')
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(config))
+
+
+def _native_lazy_fetch_switch(tmp_path: Path) -> bool:
+    """Whether this Git honours GIT_NO_LAZY_FETCH on its own."""
+    (tmp_path / "probe").mkdir()
+    clone, missing = _promisor_clone(tmp_path / "probe", drop="subtree")
+    before = _snapshot(clone / ".git" / "objects")
+    subprocess.run(
+        ["git", "-C", str(clone), "cat-file", "-e", missing],
+        capture_output=True,
+        env={**os.environ, **_GIT_ENV, "GIT_NO_LAZY_FETCH": "1"},
+    )
+    return _snapshot(clone / ".git" / "objects") == before
+
+
+@pytest.mark.parametrize("override", ["protocol-config", "inherited-allow-protocol"])
+@pytest.mark.parametrize("drop", ["subtree", "root"])
+def test_protocol_guard_alone_blocks_fetch_despite_inherited_allows(
+    tmp_path, monkeypatch, drop, override
+):
+    """Without GIT_NO_LAZY_FETCH, user or inherited allows still cannot fetch."""
+    clone, _ = _promisor_clone(tmp_path, drop=drop)
+    _allow_file_protocol(tmp_path, monkeypatch)
+    if override == "inherited-allow-protocol":
+        monkeypatch.setenv("GIT_ALLOW_PROTOCOL", "file")
+    _wrap_git(tmp_path / "bin", monkeypatch, drop="GIT_NO_LAZY_FETCH")
+    objects = clone / ".git" / "objects"
+    before = _snapshot(objects)
+    assert worktree_state(clone) == {"dirty": None}
+    assert worktree_attestation(clone)["dirty"] is None
+    assert _snapshot(objects) == before
+
+
+@pytest.mark.parametrize("drop", ["subtree", "root"])
+def test_lazy_fetch_switch_alone_blocks_fetch(tmp_path, monkeypatch, drop):
+    """Without GIT_ALLOW_PROTOCOL, GIT_NO_LAZY_FETCH still stops the fetch."""
+    if not _native_lazy_fetch_switch(tmp_path):
+        pytest.skip("this Git ignores GIT_NO_LAZY_FETCH")
+    (tmp_path / "case").mkdir()
+    clone, _ = _promisor_clone(tmp_path / "case", drop=drop)
+    _allow_file_protocol(tmp_path, monkeypatch)
+    _wrap_git(tmp_path / "bin", monkeypatch, drop="GIT_ALLOW_PROTOCOL")
+    objects = clone / ".git" / "objects"
+    before = _snapshot(objects)
+    assert worktree_state(clone) == {"dirty": None}
+    assert _snapshot(objects) == before
+
+
+def test_engine_source_status_never_fetches_a_missing_root_tree(tmp_path):
+    """A build cannot be receipted clean by fetching its own missing tree.
+
+    ``git status`` compares the index with HEAD's tree, so in a promisor
+    clone missing that tree it would fetch it, after which the attestation
+    sees a complete store and the source reads clean.
+    """
+    from axiom_oracles.engine_identity import EngineIdentityError, _clean_source_commit
+
+    clone, _ = _promisor_clone(tmp_path, drop="root")
+    objects = clone / ".git" / "objects"
+    before = _snapshot(objects)
+    with pytest.raises(EngineIdentityError):
+        _clean_source_commit(clone.resolve())
     assert _snapshot(objects) == before
