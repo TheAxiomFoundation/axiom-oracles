@@ -87,7 +87,9 @@ axiom-oracles = "axiom_oracles.cli:cli"
 # cannot find it by version. files.pythonhosted.org still serves the wheel at
 # the hashed URL axiom_oracles/pinned_artifacts.py records
 # (tests/test_pinned_artifacts.py keeps the two equal); uv.lock records its
-# SHA-256 and `uv sync --locked` verifies it.
+# SHA-256 and `uv sync --locked` verifies it. uv installs the version this URL
+# names and ignores the `==1.764.6` specifier in the extras; the specifier is
+# kept true by test_pyproject_source_is_the_table_row_uv_lock_installs.
 policyengine-us = { url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl" }
 
 [tool.uv]

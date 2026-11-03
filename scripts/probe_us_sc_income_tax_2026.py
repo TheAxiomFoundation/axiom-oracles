@@ -9,12 +9,14 @@ the net-capital-gain deduction, and the new 200-dollar EITC cap.
 Run against the conformance release.
 From the repository root, install the comparisons' 1.767.3 stack (the
 suites' policyengine and policyengine-core pins, the verified wheel of the
-pruned release, and the companion pins), printed by one command:
+pruned release, and the companion pins), printed by one command. If that
+command fails (say, outside a checkout), ``&&`` keeps the probe from starting
+without its pins:
 
-    uv run --python 3.13 --no-project --isolated \
-      $(uv run -q python -m axiom_oracles.pinned_artifacts \
-          --oracle-with-args 1.767.3) \
-      python scripts/probe_us_sc_income_tax_2026.py
+    pins=$(uv run -q python -m axiom_oracles.pinned_artifacts \
+        --oracle-with-args 1.767.3) &&
+      uv run --python 3.13 --no-project --isolated $pins \
+        python scripts/probe_us_sc_income_tax_2026.py
 """
 
 from __future__ import annotations

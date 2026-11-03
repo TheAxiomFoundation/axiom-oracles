@@ -134,10 +134,14 @@ CACHE_ENV = "AXIOM_ORACLES_ARTIFACT_CACHE"
 class PinnedArtifactError(RuntimeError):
     """A pinned file could not be downloaded or did not match its SHA-256.
 
-    ``kind`` tells the cases apart: ``"gone"`` (the host answered with a 4xx
-    such as 404: the file was removed), ``"transient"`` (a 5xx or a connection
-    error that persisted through every retry) or ``"mismatch"`` (the bytes do
-    not hash to the recorded SHA-256).
+    ``kind`` tells the cases apart:
+
+    - ``"gone"``: HTTP 404 or 410, the file was removed;
+    - ``"transient"``: a 5xx, 408 or 429, or a connection error, that
+      persisted through every retry;
+    - ``"refused"``: any other 4xx (403, 401, ...), which a retry would not
+      change and which does not by itself mean the file is gone;
+    - ``"mismatch"``: the bytes do not hash to the recorded SHA-256.
     """
 
     def __init__(self, message: str, *, kind: str):
@@ -145,14 +149,30 @@ class PinnedArtifactError(RuntimeError):
         self.kind = kind
 
 
-#: Retries after the first attempt for a 5xx or a connection error, and the
-#: wait before each one. A 4xx is never retried: it means the file is gone.
+#: Retries after the first attempt for a transient status or a connection
+#: error, and the wait before each one.
 RETRY_DELAYS = (2.0, 4.0)
 _sleep = time.sleep
 
+#: Statuses that mean the file was removed.
+GONE_STATUSES = frozenset({404, 410})
+#: 4xx statuses worth a retry: request timeout and rate limiting.
+TRANSIENT_CLIENT_STATUSES = frozenset({408, 429})
+
+
+def classify_status(status: int) -> str:
+    """``"ok"``, ``"transient"`` (retry), ``"gone"`` or ``"refused"``."""
+    if status == 200:
+        return "ok"
+    if 500 <= status < 600 or status in TRANSIENT_CLIENT_STATUSES:
+        return "transient"
+    if status in GONE_STATUSES:
+        return "gone"
+    return "refused"
+
 
 def is_transient_status(status: int) -> bool:
-    return 500 <= status < 600
+    return classify_status(status) == "transient"
 
 
 def _normalize(name: str) -> str:
@@ -192,11 +212,12 @@ def _sha256(path: Path) -> str:
 def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
     """Download ``artifact`` once, verify its SHA-256, and return its path.
 
-    A cached file is re-hashed before reuse. A 5xx or a connection error is
-    retried ``len(RETRY_DELAYS)`` times with backoff. Raises
-    PinnedArtifactError, naming the file and the table, when the download
-    fails (``kind`` ``"gone"`` or ``"transient"``) or the bytes do not match
-    the recorded hash (``"mismatch"``).
+    A cached file is re-hashed before reuse. A transient status (5xx, 408,
+    429) or a connection error is retried ``len(RETRY_DELAYS)`` times with
+    backoff. Raises PinnedArtifactError, naming the file and the table, when
+    the download fails (``kind`` ``"gone"``, ``"refused"`` or
+    ``"transient"``) or the bytes do not match the recorded hash
+    (``"mismatch"``).
     """
     import requests
 
@@ -219,21 +240,29 @@ def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
                     artifact.url, stream=True, timeout=timeout
                 ) as response:
                     status = response.status_code
-                    if status != 200:
-                        if is_transient_status(status) and attempt + 1 < attempts:
-                            _sleep(RETRY_DELAYS[attempt])
-                            continue
-                        if is_transient_status(status):
-                            raise PinnedArtifactError(
-                                f"pinned artifact {where}: HTTP {status} from "
-                                f"{artifact.url} on all {attempts} attempts "
-                                "(server error, not a removal)",
-                                kind="transient",
-                            )
+                    kind = classify_status(status)
+                    if kind == "transient" and attempt + 1 < attempts:
+                        _sleep(RETRY_DELAYS[attempt])
+                        continue
+                    if kind == "transient":
+                        raise PinnedArtifactError(
+                            f"pinned artifact {where}: HTTP {status} from "
+                            f"{artifact.url} on all {attempts} attempts "
+                            "(transient, not a removal)",
+                            kind="transient",
+                        )
+                    if kind == "gone":
                         raise PinnedArtifactError(
                             f"pinned artifact {where} no longer downloads: HTTP "
                             f"{status} from {artifact.url}",
                             kind="gone",
+                        )
+                    if kind == "refused":
+                        raise PinnedArtifactError(
+                            f"pinned artifact {where}: HTTP {status} from "
+                            f"{artifact.url} (refused; not retried, and not "
+                            "by itself a removal)",
+                            kind="refused",
                         )
                     for chunk in response.iter_content(1 << 20):
                         digest.update(chunk)
@@ -310,15 +339,16 @@ def oracle_stack_params(us_version: str, comparisons_dir: Path | None = None) ->
     Comparison suites pin policyengine-us together with the ``policyengine``
     and ``policyengine-core`` releases it was reviewed with. Return those
     parameters when every suite that pins ``us_version`` (and installs it by
-    version, not from a ``policyengine_us_source``) agrees on them; return
-    just the version when no suite pins it, so ``_resolve_pe_oracle_pins``
-    fills in the in-repo defaults. Refuse when suites disagree.
+    version, not from a ``policyengine_us_source``) agrees on them. Refuse,
+    naming the version, when no suite pins it (the in-repo defaults are not
+    the stack any comparison runs that release with) or when suites disagree.
     """
     import yaml
 
     root = comparisons_dir or Path(__file__).resolve().parents[1] / "comparisons"
     stacks: dict[tuple, list[str]] = {}
-    for path in sorted(root.glob("*.yaml")):
+    # The same files scripts/check_pinned_artifacts.py scans.
+    for path in sorted(root.rglob("*.y*ml")):
         config = yaml.safe_load(path.read_text())
         params = (
             ((config or {}).get("runner") or {}).get("parameters")
@@ -330,7 +360,7 @@ def oracle_stack_params(us_version: str, comparisons_dir: Path | None = None) ->
         if params.get("policyengine_us_source"):
             continue
         key = tuple(params.get(name) for name in _STACK_KEYS)
-        stacks.setdefault(key, []).append(path.name)
+        stacks.setdefault(key, []).append(path.relative_to(root).as_posix())
     if len(stacks) > 1:
         detail = "; ".join(
             f"{dict(zip(_STACK_KEYS, key))}: {', '.join(names)}"
@@ -339,10 +369,16 @@ def oracle_stack_params(us_version: str, comparisons_dir: Path | None = None) ->
         raise SystemExit(
             f"suites pin policyengine-us {us_version} with different stacks: {detail}"
         )
+    if not stacks:
+        raise SystemExit(
+            f"no comparisons suite pins policyengine-us {us_version} (by version, "
+            "without a policyengine_us_source), so there is no suite stack to "
+            "print; see where that release is pinned with "
+            "scripts/check_pinned_artifacts.py --list"
+        )
     params = {"policyengine_us_version": us_version}
-    if stacks:
-        (key,) = stacks
-        params.update({k: v for k, v in zip(_STACK_KEYS, key) if v is not None})
+    (key,) = stacks
+    params.update({k: v for k, v in zip(_STACK_KEYS, key) if v is not None})
     return params
 
 
@@ -350,8 +386,9 @@ def oracle_with_args(us_version: str) -> list[str]:
     """The comparisons' full ``uv run --with`` list for a policyengine-us version.
 
     Built by ``scripts/run_comparison.py``'s own ``_resolve_pe_oracle_pins``
-    and ``_pe_oracle_with_args``: the suite's ``policyengine`` and
-    ``policyengine-core`` pins, the verified wheel of a pruned release, and the
+    and ``_pe_oracle_with_args``: the ``policyengine`` and
+    ``policyengine-core`` pins of the suites that pin this version (refused
+    when none does), the verified wheel of a pruned release, and the
     companion pins. A direct reference is written ``name@file:///...`` (valid
     PEP 508, no whitespace), so the list survives shell word splitting.
     """
@@ -368,12 +405,14 @@ def main(argv: list[str] | None = None) -> int:
     """Print the requirement uv should install for each ``name==version``.
 
     ``--oracle-with-args VERSION`` instead prints the comparisons' full
-    ``--with`` list for that policyengine-us release, for manual runs::
+    ``--with`` list for that policyengine-us release, for manual runs from
+    the repository root. ``&&`` keeps the run from starting without its pins
+    when the inner command fails::
 
-        uv run --python 3.13 --no-project --isolated \\
-          $(uv run -q python -m axiom_oracles.pinned_artifacts \\
-              --oracle-with-args 1.767.3) \\
-          python scripts/probe_us_sc_income_tax_2026.py
+        pins=$(uv run -q python -m axiom_oracles.pinned_artifacts \\
+            --oracle-with-args 1.767.3) &&
+          uv run --python 3.13 --no-project --isolated $pins \\
+            python scripts/probe_us_sc_income_tax_2026.py
     """
     import argparse
 

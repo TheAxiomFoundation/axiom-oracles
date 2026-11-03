@@ -2598,10 +2598,14 @@ def _pe_oracle_with_args(pins) -> list[str]:
     file recorded in axiom_oracles/pinned_artifacts.py, so the run keeps the
     exact release it pins (or fails naming the file that stopped downloading).
 
-    Every ``uv run`` that installs these passes ``--isolated``. Without it,
-    uv satisfies the overlay's unpinned transitive dependencies from this
-    checkout's ``.venv`` when one exists (CI's legs have one), so numpy,
-    pandas and the like differed by working directory.
+    Every ``--no-project`` overlay that installs these passes ``--isolated``.
+    Without it, uv satisfies the overlay's unpinned transitive dependencies
+    from this checkout's ``.venv`` when one exists (CI's legs have one), so
+    numpy, pandas and the like differed by working directory. The snap-ecps
+    run (``_run_axiom_encode_snap_ecps_compare``) is the exception: it runs in
+    axiom-encode's project environment (``uv run --directory``), so what this
+    list leaves unpinned, policyengine-core included, comes from that
+    project's own dependencies and lock.
     """
     return pinned_artifacts.with_args((*pins, *_PE_US_COMPANION_PINS))
 

@@ -9,19 +9,23 @@ so the break shows up here first, with the file to fix:
 1. Every file in ``axiom_oracles/pinned_artifacts.py`` downloads from its
    hashed URL and matches its recorded SHA-256.
 2. Every exact PolicyEngine-family pin is either listed on PyPI's index or
-   recoverable from that table. The pins come from every script under
-   ``scripts/`` (literal, spaced, underscore and tuple spellings, parameter
-   defaults, ``--oracle-with-args`` recipes, and f-string versions, which
-   must resolve), every
+   recoverable from that table. The pins come from every file under
+   ``scripts/``, ``ops/`` and ``.github/workflows/``, every
    ``comparisons/**/*.yaml`` (version keys at any depth), and the TAXSIM pin
-   file.
+   file. Names compare as PEP 503 does; ``==`` and ``===``, spaced and tuple
+   spellings, parameter defaults and ``--oracle-with-args`` recipes are read.
+   The scan fails closed on what it cannot read: an f-string version not in
+   RESOLVED_ELSEWHERE, a non-literal policyengine-us version (concatenation,
+   ``%``, ``$VER``), a policyengine-us wheel URL the table does not list, a
+   label scope that runs a command, and an unparseable file.
 3. Every ``policyengine-us`` commit archive a suite or script installs
    downloads.
 
-A 5xx or a connection error is retried twice with backoff and reported as
-transient, apart from a 4xx such as 404, which means the file or release is
-gone. Breaks already tracked in an issue (``KNOWN_OPEN``) print as warnings,
-so only a new break fails the run.
+A 5xx, 408 or 429, or a connection error, is retried twice with backoff and
+reported as transient. A 404 or 410 means the file or release is gone; any
+other 4xx (403, 401, ...) is reported as refused, at once. Breaks already
+tracked in an issue (``KNOWN_OPEN``, keyed by the file that pins them) print
+as warnings, so only a new break fails the run.
 
 Exit status 1 lists each failure as ``<file>[:line]: <pin>: <reason>``.
 
@@ -48,18 +52,33 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles import pinned_artifacts  # noqa: E402
 
-#: Unrecoverable pins and archives already tracked in an issue. They print as
-#: warnings; anything else that will not install fails the run.
-KNOWN_OPEN: dict[tuple[str, str], str] = {
-    ("policyengine-us", "1.784.4"): "#659",
+#: Unrecoverable pins and archives already tracked in an issue, keyed by the
+#: file that pins them. They print as warnings; anything else that will not
+#: install fails the run, including a new file adopting a known-open pin.
+KNOWN_OPEN: dict[tuple[str, str, str], str] = {
+    ("policyengine-us", "1.784.4", "comparisons/ri-income-tax-liability.yaml"): "#659",
 }
-KNOWN_OPEN_SOURCES: dict[str, str] = {}
+KNOWN_OPEN_SOURCES: dict[tuple[str, str], str] = {}
 
-_NAMES = r"policyengine(?:[-_](?:us|core|uk|taxsim))?|spm[-_]calculator"
+# Package names as PEP 503 compares them: any case, and any run of "-", "_"
+# or "." between the parts.
+_NAMES = (
+    r"(?i:policyengine(?:[-_.]+(?:us|core|uk|taxsim))?|spm[-_.]+calculator)"
+)
+_US = r"(?i:policyengine[-_.]+us)"
 _VERSION = r"[0-9]+(?:\.[0-9]+)*"
-_PIN = re.compile(rf"(?<![\w-])({_NAMES})\s*==\s*({_VERSION})(?!\w|\.[0-9])")
+_EQ = r"\s*={2,3}\s*"  # == and ===
+_PIN = re.compile(rf"(?<![\w.-])({_NAMES}){_EQ}({_VERSION})(?!\w|\.[0-9])")
 _TUPLE_PIN = re.compile(rf"""\(\s*["']({_NAMES})["']\s*,\s*["']({_VERSION})["']\s*\)""")
-_FSTRING_PIN = re.compile(rf"(?<![\w-])({_NAMES})\s*==\s*\{{([^}}]*)\}}")
+_FSTRING_PIN = re.compile(rf"(?<![\w.-])({_NAMES}){_EQ}\{{([^}}]*)\}}")
+# A policyengine-us install whose version is not a literal the scan can read:
+# string concatenation ("policyengine-us==" + v), % formatting, or a shell
+# variable ($VER, ${VER}).
+_UNREADABLE_US = re.compile(rf"(?<![\w.-])({_US}){_EQ}(?=[\"'%$])")
+# A direct reference to a policyengine-us wheel; it must be a table row.
+_US_WHEEL_URL = re.compile(
+    rf"(?<![\w.-]){_US}\s*@\s*((?:https?|file)://[^\s\"'\]]+?\.whl)"
+)
 _PARAM_DEFAULT = re.compile(
     rf"""params\.get\(\s*["'](policyengine(?:_us|_core|_uk)?_version)["']\s*,"""
     rf"""\s*["']({_VERSION})["']\s*\)"""
@@ -86,30 +105,45 @@ _YAML_VERSION_KEYS = {
 }
 _VERSION_VALUE = re.compile(rf"{_VERSION}")
 
-#: f-string versions this check resolves elsewhere, by file and expression.
-#: Any other ``name=={expr}`` fails closed: the check cannot know its version.
-RESOLVED_ELSEWHERE: dict[tuple[str, str], str] = {
-    ("scripts/run_comparison.py", "pe_meta"): "params.get default, scanned",
-    ("scripts/run_comparison.py", "pe_us"): "params.get default, scanned",
-    ("scripts/run_comparison.py", "pe_core"): "params.get default, scanned",
-    ("scripts/run_comparison.py", "meta"): "_resolve_pe_oracle_pins: YAML or _PE_ORACLE_PINS",
-    ("scripts/run_comparison.py", "us"): "_resolve_pe_oracle_pins: YAML or _PE_ORACLE_PINS",
-    ("scripts/run_comparison.py", "core"): "_resolve_pe_oracle_pins: YAML or _PE_ORACLE_PINS",
-    ("scripts/run_comparison.py", "_taxsim_pin_version()"): "taxsim_pins.json",
+#: f-string versions this check resolves elsewhere, by file, enclosing
+#: function and expression. Any other ``name=={expr}`` fails closed, in any
+#: function of any file: the check cannot know its version.
+RESOLVED_ELSEWHERE: dict[tuple[str, str, str], str] = {
+    ("scripts/run_comparison.py", "_run_axiom_encode_tax_ecps_compare", "pe_meta"):
+        "params.get default, scanned",
+    ("scripts/run_comparison.py", "_run_axiom_encode_tax_ecps_compare", "pe_us"):
+        "params.get default, scanned",
+    ("scripts/run_comparison.py", "_run_axiom_encode_tax_ecps_compare", "pe_core"):
+        "params.get default, scanned",
+    ("scripts/run_comparison.py", "_resolve_pe_oracle_pins", "meta"):
+        "comparison YAML parameters or _PE_ORACLE_PINS, both scanned",
+    ("scripts/run_comparison.py", "_resolve_pe_oracle_pins", "us"):
+        "comparison YAML parameters or _PE_ORACLE_PINS, both scanned",
+    ("scripts/run_comparison.py", "_resolve_pe_oracle_pins", "core"):
+        "comparison YAML parameters or _PE_ORACLE_PINS, both scanned",
+    ("scripts/run_comparison.py", "_run_axiom_oracles_compare", "_taxsim_pin_version()"):
+        "taxsim_pins.json, scanned",
+    (
+        "scripts/run_comparison.py",
+        "_run_state_income_tax_liability_grid",
+        "_taxsim_pin_version()",
+    ): "taxsim_pins.json, scanned",
 }
 #: Top-level functions and assignments that only build report provenance
 #: labels. They name versions but install nothing, so pins inside them are
 #: not counted; the installs they describe are counted where they happen.
+#: The scan fails if one of them gains a ``uv`` or ``subprocess`` call.
 LABEL_SCOPES: dict[tuple[str, str], str] = {
     ("scripts/run_comparison.py", "_build_run_provenance"): "provenance.oracle labels",
     ("scripts/backfill_report_provenance.py", "_PE_ORACLE_PINS"): "backfilled labels",
     ("scripts/backfill_report_provenance.py", "_reconstruct_oracle"): "backfilled labels",
 }
-#: Files under scripts/ that are not scanned. This checker names example pins
-#: in its own KNOWN_OPEN map. axiom_oracles/ is not scanned at all: its
+#: Trees whose every text file is scanned. axiom_oracles/ is not scanned: its
 #: PolicyEngine pins (e.g. the bridges' "Run with: uv run --with
 #: policyengine-core==..." hints) are remediation messages for a human, not
-#: installs; the runtime installs live under scripts/ and comparisons/.
+#: installs; the installs live in these trees and in comparisons/.
+CODE_TREES = ("scripts", "ops", ".github/workflows")
+#: This checker names example pins in its own KNOWN_OPEN map.
 SKIP_FILES = {"scripts/check_pinned_artifacts.py"}
 TAXSIM_PINS = "axiom_oracles/adapters/taxsim/taxsim_pins.json"
 
@@ -124,32 +158,81 @@ class Use:
 
 
 def _normalize(name: str) -> str:
-    return name.lower().replace("_", "-")
+    """PEP 503: lower case, and each run of ``-``, ``_`` or ``.`` becomes ``-``."""
+    return re.sub(r"[-_.]+", "-", name).lower()
 
 
 def _line_of(text: str, offset: int) -> int:
     return text.count("\n", 0, offset) + 1
 
 
-def _label_lines(rel: str, text: str) -> set[int]:
-    """Line numbers inside this file's LABEL_SCOPES."""
-    names = {name for (path, name) in LABEL_SCOPES if path == rel}
-    if not names or not rel.endswith(".py"):
-        return set()
-    lines: set[int] = set()
-    for node in ast.parse(text).body:
-        targets = []
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            targets = [node.name]
-        elif isinstance(node, ast.Assign):
-            targets = [t.id for t in node.targets if isinstance(t, ast.Name)]
-        if names.intersection(targets):
-            lines.update(range(node.lineno, node.end_lineno + 1))
-    return lines
+def _is_install_call(node: ast.AST) -> bool:
+    """A call that runs a command, or a string that starts a uv command."""
+    if isinstance(node, ast.Call):
+        func = node.func
+        if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
+            if func.value.id == "subprocess":
+                return True
+            if func.value.id == "os" and (
+                func.attr == "system" or func.attr.startswith(("exec", "spawn"))
+            ):
+                return True
+    if isinstance(node, ast.Constant) and isinstance(node.value, str):
+        value = node.value.strip()
+        return value == "uv" or value.startswith(("uv run", "uv pip", "uv sync"))
+    return False
+
+
+class _PythonLayout:
+    """Label-scope lines and the enclosing function of each line of a file."""
+
+    def __init__(self, rel: str, text: str, problems: list):
+        self.label_lines: set[int] = set()
+        self._functions: list[tuple[int, int, str]] = []
+        if not rel.endswith(".py"):
+            return
+        try:
+            tree = ast.parse(text)
+        except SyntaxError as exc:
+            problems.append(
+                f"{rel}:{exc.lineno}: cannot parse, so label scopes and "
+                f"f-string pins in it could not be checked: {exc.msg}"
+            )
+            return
+        for node in ast.walk(tree):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                self._functions.append((node.lineno, node.end_lineno, node.name))
+        names = {name for (path, name) in LABEL_SCOPES if path == rel}
+        for node in tree.body:
+            targets = []
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                targets = [node.name]
+            elif isinstance(node, ast.Assign):
+                targets = [t.id for t in node.targets if isinstance(t, ast.Name)]
+            scope = names.intersection(targets)
+            if not scope:
+                continue
+            calls = [n for n in ast.walk(node) if _is_install_call(n)]
+            if calls:
+                problems.append(
+                    f"{rel}:{calls[0].lineno}: label scope {sorted(scope)[0]} runs a "
+                    "uv or subprocess command; pins in a label scope are not "
+                    "counted, so it must install nothing (move the call out, or "
+                    "drop the scope from LABEL_SCOPES)"
+                )
+                continue
+            self.label_lines.update(range(node.lineno, node.end_lineno + 1))
+
+    def function_at(self, line: int) -> str:
+        enclosing = [f for f in self._functions if f[0] <= line <= f[1]]
+        if not enclosing:
+            return "<module>"
+        return min(enclosing, key=lambda f: f[1] - f[0])[2]
 
 
 def _scan_text(rel: str, text: str, pins: dict, sources: dict, problems: list) -> None:
-    skip = _label_lines(rel, text)
+    layout = _PythonLayout(rel, text, problems)
+    skip = layout.label_lines
 
     def add(package: str, version: str, offset: int) -> None:
         line = _line_of(text, offset)
@@ -169,15 +252,36 @@ def _scan_text(rel: str, text: str, pins: dict, sources: dict, problems: list) -
         if line in skip:
             continue
         expr = match.group(2).strip()
-        default = _PARAM_DEFAULT.fullmatch(expr)
-        if default:
+        if _PARAM_DEFAULT.fullmatch(expr):
             continue  # the parameter-default pattern above counted it
-        if (rel, expr) in RESOLVED_ELSEWHERE:
+        if (rel, layout.function_at(line), expr) in RESOLVED_ELSEWHERE:
             continue
         problems.append(
-            f"{rel}:{line}: {match.group(1)}=={{{expr}}}: cannot resolve the "
-            "version of this f-string pin; give it a literal or add it to "
-            "RESOLVED_ELSEWHERE in scripts/check_pinned_artifacts.py"
+            f"{rel}:{line}: {match.group(1)}=={{{expr}}} in "
+            f"{layout.function_at(line)}: cannot resolve the version of this "
+            "f-string pin; give it a literal or add it to RESOLVED_ELSEWHERE "
+            "in scripts/check_pinned_artifacts.py"
+        )
+    for match in _UNREADABLE_US.finditer(text):
+        line = _line_of(text, match.start())
+        if line in skip:
+            continue
+        snippet = text[match.start() : match.end() + 12].splitlines()[0]
+        problems.append(
+            f"{rel}:{line}: {snippet!r}: a policyengine-us install whose version "
+            "is not a literal (concatenation, % formatting or a shell variable); "
+            "the scan cannot check it, so write the version literally"
+        )
+    table_urls = {artifact.url for artifact in pinned_artifacts.PRUNED_ARTIFACTS}
+    for match in _US_WHEEL_URL.finditer(text):
+        line = _line_of(text, match.start())
+        url = match.group(1)
+        if line in skip or url in table_urls:
+            continue
+        problems.append(
+            f"{rel}:{line}: policyengine-us @ {url}: a direct URL to a wheel "
+            "axiom_oracles/pinned_artifacts.py does not list, so nothing checks "
+            "its SHA-256; add a table row and install it by version"
         )
     for match in _ARCHIVE.finditer(text):
         line = _line_of(text, match.start())
@@ -185,18 +289,19 @@ def _scan_text(rel: str, text: str, pins: dict, sources: dict, problems: list) -
             sources[match.group(0)].add(Use(rel, line))
 
 
-def _scan_scripts(pins: dict, sources: dict, problems: list) -> None:
-    for path in sorted((REPO_ROOT / "scripts").rglob("*")):
-        if not path.is_file() or "__pycache__" in path.parts:
-            continue
-        rel = path.relative_to(REPO_ROOT).as_posix()
-        if rel in SKIP_FILES:
-            continue
-        try:
-            text = path.read_text()
-        except UnicodeDecodeError:
-            continue  # binary, not a script
-        _scan_text(rel, text, pins, sources, problems)
+def _scan_code_trees(pins: dict, sources: dict, problems: list) -> None:
+    for tree in CODE_TREES:
+        for path in sorted((REPO_ROOT / tree).rglob("*")):
+            if not path.is_file() or "__pycache__" in path.parts:
+                continue
+            rel = path.relative_to(REPO_ROOT).as_posix()
+            if rel in SKIP_FILES:
+                continue
+            try:
+                text = path.read_text()
+            except UnicodeDecodeError:
+                continue  # binary, not a script
+            _scan_text(rel, text, pins, sources, problems)
 
 
 def _walk_yaml(node, rel: str, pins: dict, sources: dict) -> None:
@@ -246,7 +351,7 @@ def scan() -> tuple[dict, dict, list[str]]:
     pins: dict = defaultdict(set)
     sources: dict = defaultdict(set)
     problems: list[str] = []
-    _scan_scripts(pins, sources, problems)
+    _scan_code_trees(pins, sources, problems)
     _scan_comparisons(pins, sources, problems)
     taxsim = json.loads((REPO_ROOT / TAXSIM_PINS).read_text())
     distribution = taxsim.get("distribution") or {}
@@ -290,8 +395,11 @@ def _describe(status, error) -> str:
     attempts = len(pinned_artifacts.RETRY_DELAYS) + 1
     if status is None:
         return f"transient: connection failed on all {attempts} attempts ({error})"
-    if pinned_artifacts.is_transient_status(status):
+    kind = pinned_artifacts.classify_status(status)
+    if kind == "transient":
         return f"transient: HTTP {status} on all {attempts} attempts, not a removal"
+    if kind == "refused":
+        return f"refused: HTTP {status}, not retried and not by itself a removal"
     return f"HTTP {status}"
 
 
@@ -352,8 +460,8 @@ def check(*, verbose: bool = False) -> tuple[list[str], list[str]]:
             if verbose:
                 print(f"ok   {package}=={version} (PyPI index)")
             continue
-        issue = KNOWN_OPEN.get((package, version))
         for use in sorted(uses, key=str):
+            issue = KNOWN_OPEN.get((package, version, use.path))
             message = (
                 f"{use}: {package}=={version}: PyPI's index no longer lists "
                 "it and axiom_oracles/pinned_artifacts.py has no hashed URL "
@@ -371,8 +479,8 @@ def check(*, verbose: bool = False) -> tuple[list[str], list[str]]:
             if verbose:
                 print(f"ok   {url}")
             continue
-        issue = KNOWN_OPEN_SOURCES.get(url)
         for use in sorted(uses, key=str):
+            issue = KNOWN_OPEN_SOURCES.get((url, use.path))
             message = f"{use}: policyengine-us archive {url}: {_describe(status, error)}"
             if issue:
                 warnings.append(f"{message} (known open: {issue})")

@@ -109,18 +109,26 @@ def test_each_row_installs_as_its_verified_wheel(version):
 
 
 def test_every_runtime_policyengine_us_pin_is_listed_or_recorded():
-    """Only versions PyPI's index lists may stay out of the table."""
+    """Only versions PyPI's index lists may stay out of the table.
+
+    Offline, so this pins the expected set; scripts/check_pinned_artifacts.py
+    checks the index itself. A new policyengine-us pin with no table row
+    changes this set and fails here until someone checks the index.
+    """
     check = _load_check_module()
     pins, _sources = check.inventory()
-    pruned = {
+    unrecorded = {
         version
         for (package, version) in pins
         if package == "policyengine-us"
         and pinned_artifacts.lookup(package, version) is None
     }
-    # 1.784.4 (comparisons/ri-income-tax-liability.yaml) has no recorded
-    # wheel; its recovery is tracked in #659.
-    assert pruned == {"1.784.4"}
+    assert unrecorded == {
+        # comparisons/ri-income-tax-liability.yaml: no recorded wheel (#659).
+        "1.784.4",
+        # .github/workflows/ci.yml's live-engine job: listed on PyPI's index.
+        "2.15.13",
+    }
 
 
 def test_table_agrees_with_uv_lock():
@@ -223,6 +231,7 @@ def test_fetch_refuses_bytes_that_do_not_match(monkeypatch, tmp_path):
     monkeypatch.setattr(requests, "get", lambda *_a, **_k: _Response(200, b"other"))
     with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
         REAL_FETCH(artifact)
+    assert exc.value.kind == "mismatch"
     assert "policyengine-us==0.0.1" in str(exc.value)
     assert "axiom_oracles/pinned_artifacts.py" in str(exc.value)
     assert not pinned_artifacts.cache_path(artifact).exists()
@@ -331,7 +340,7 @@ def test_scan_reads_every_script_under_scripts(fake_root):
     nested = root / "scripts" / "lane" / "deep"
     nested.mkdir(parents=True)
     (nested / "run.sh").write_text("uv run --with policyengine-uk==9.9.9 x\n")
-    (root / "scripts" / "probe_new.py").write_text("--with policyengine-us==8.8.8\n")
+    (root / "scripts" / "probe_new.py").write_text('PIN = "--with policyengine-us==8.8.8"\n')
     (root / "scripts" / "recipe.py").write_text(
         "pinned_artifacts \\\n    --oracle-with-args 7.7.7) \\\n"
     )
@@ -513,15 +522,23 @@ def test_check_names_the_file_for_each_unrecoverable_pin(monkeypatch, no_sleep):
 
 def test_known_open_breaks_warn_and_only_new_ones_fail(monkeypatch, no_sleep):
     check = _load_check_module()
-    assert check.KNOWN_OPEN[("policyengine-us", "1.784.4")] == "#659"
+    ri = "comparisons/ri-income-tax-liability.yaml"
+    assert check.KNOWN_OPEN[("policyengine-us", "1.784.4", ri)] == "#659"
     pins = {
-        ("policyengine-us", "1.784.4"): {check.Use("comparisons/ri.yaml")},
+        # A new suite adopting the known-open pin is a new break.
+        ("policyengine-us", "1.784.4"): {
+            check.Use(ri),
+            check.Use("comparisons/new-on-1784.yaml"),
+        },
         ("policyengine-us", "9.9.9"): {check.Use("comparisons/new.yaml")},
     }
     _check, (failures, warnings) = _run_check(monkeypatch, _Session(), pins)
-    assert [w.split(":")[0] for w in warnings] == ["comparisons/ri.yaml"]
+    assert [w.split(":")[0] for w in warnings] == [ri]
     assert warnings[0].endswith("(known open: #659)")
-    assert [f.split(":")[0] for f in failures] == ["comparisons/new.yaml"]
+    assert sorted(f.split(":")[0] for f in failures) == [
+        "comparisons/new-on-1784.yaml",
+        "comparisons/new.yaml",
+    ]
 
 
 def test_check_reports_an_unreadable_index(monkeypatch, no_sleep):
@@ -688,8 +705,42 @@ def test_oracle_stack_params_refuses_disagreeing_suites(tmp_path):
         )
     with pytest.raises(SystemExit, match="different stacks"):
         pinned_artifacts.oracle_stack_params("9.9.9", tmp_path)
-    assert pinned_artifacts.oracle_stack_params("8.8.8", tmp_path) == {
-        "policyengine_us_version": "8.8.8"
+    with pytest.raises(SystemExit, match="no comparisons suite pins policyengine-us 8.8.8"):
+        pinned_artifacts.oracle_stack_params("8.8.8", tmp_path)
+
+
+def test_oracle_with_args_refuses_a_version_no_suite_pins(capsys):
+    # 1.729.0 is in the table and pinned by the tax-ecps runner default, but
+    # the one suite on it (fiit-ecps) installs it from a policyengine_us_source
+    # archive, so no suite stack exists to print.
+    with pytest.raises(SystemExit) as exc:
+        pinned_artifacts.main(["--oracle-with-args", "1.729.0"])
+    assert "no comparisons suite pins policyengine-us 1.729.0" in str(exc.value.code)
+    assert capsys.readouterr().out == ""
+
+
+def test_oracle_stack_params_ignores_source_pinned_suites(tmp_path):
+    (tmp_path / "source.yaml").write_text(
+        "runner:\n  parameters:\n"
+        "    policyengine_version: '4.11.0'\n"
+        "    policyengine_us_version: '7.7.7'\n"
+        "    policyengine_core_version: '3.26.11'\n"
+        "    policyengine_us_source: https://github.com/x/archive/y.tar.gz\n"
+    )
+    nested = tmp_path / "fixtures"
+    nested.mkdir()
+    (nested / "by-version.yaml").write_text(
+        "runner:\n  parameters:\n"
+        "    policyengine_version: '4.18.9'\n"
+        "    policyengine_us_version: '7.7.7'\n"
+        "    policyengine_core_version: '3.30.3'\n"
+    )
+    # The source-pinned suite does not install 7.7.7 by version, so it neither
+    # supplies nor contradicts the stack; the subdirectory suite is read.
+    assert pinned_artifacts.oracle_stack_params("7.7.7", tmp_path) == {
+        "policyengine_us_version": "7.7.7",
+        "policyengine_version": "4.18.9",
+        "policyengine_core_version": "3.30.3",
     }
 
 
@@ -711,19 +762,286 @@ def test_pyproject_source_is_the_table_row_uv_lock_installs():
         assert "policyengine-us==1.764.6" in extras[extra], extra
 
 
-def test_every_policyengine_overlay_is_isolated():
-    """A `uv run` that installs PolicyEngine pins must not layer on .venv."""
-    text = (REPO_ROOT / "scripts" / "run_comparison.py").read_text()
-    blocks = re.findall(r'\[\s*"uv",\s*"run",(.*?)\]', text, flags=re.S)
-    overlays = [
-        block
-        for block in blocks
-        if "_pe_oracle_with_args(" in block
-        or "pinned_artifacts.with_args(" in block
-        or "*pe_pins" in block
+_PE_MARKERS = re.compile(
+    r"_pe_oracle_with_args|with_args\(|\bpe_pins\b|PE_ORACLE_PINS"
+    r"|(?i:policyengine(?:[-_.]+(?:us|core|uk|taxsim))?)\s*(?:={2,3}|@)"
+)
+
+
+def _python_overlays(path: Path) -> list[tuple[int, bool]]:
+    """``(line, isolated)`` for each ``["uv", "run", ..., "--no-project", ...]``
+    list in a function that installs PolicyEngine pins."""
+    import ast
+
+    text = path.read_text()
+    tree = ast.parse(text)
+    functions = [
+        n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
     ]
-    assert len(overlays) >= 15
-    for block in overlays:
-        if '"--directory"' in block:
-            continue  # runs inside axiom-encode's own project environment
-        assert '"--isolated"' in block, block[:200]
+    found = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.List) or len(node.elts) < 2:
+            continue
+        head = [e.value for e in node.elts[:2] if isinstance(e, ast.Constant)]
+        if head != ["uv", "run"]:
+            continue
+        flags = {e.value for e in node.elts if isinstance(e, ast.Constant)}
+        if "--no-project" not in flags or "--directory" in flags:
+            continue  # project runs use that project's own environment
+        enclosing = [
+            f for f in functions if f.lineno <= node.lineno <= f.end_lineno
+        ]
+        scope = min(enclosing, key=lambda f: f.end_lineno - f.lineno) if enclosing else node
+        if _PE_MARKERS.search(ast.get_source_segment(text, scope) or ""):
+            found.append((node.lineno, "--isolated" in flags))
+    return found
+
+
+def _shell_overlays(path: Path) -> list[tuple[int, bool]]:
+    """``(line, isolated)`` for each ``uv run --no-project`` shell command that
+    installs a PolicyEngine pin (continuation lines joined)."""
+    found = []
+    lines = path.read_text().splitlines()
+    i = 0
+    while i < len(lines):
+        start, command = i, lines[i]
+        while command.rstrip().endswith("\\") and i + 1 < len(lines):
+            i += 1
+            command = command.rstrip()[:-1] + " " + lines[i]
+        i += 1
+        if command.lstrip().startswith("#") or "uv run" not in command:
+            continue
+        if "--no-project" in command and _PE_MARKERS.search(command):
+            found.append((start + 1, "--isolated" in command.split()))
+    return found
+
+
+def test_every_policyengine_overlay_is_isolated():
+    """A ``--no-project`` `uv run` that installs PolicyEngine pins must not
+    layer on the checkout's .venv: every script under scripts/, Python and
+    shell. (The snap-ecps run uses ``--directory``: axiom-encode's project.)"""
+    overlays = {}
+    for path in sorted((REPO_ROOT / "scripts").rglob("*")):
+        if "__pycache__" in path.parts or not path.is_file():
+            continue
+        rel = path.relative_to(REPO_ROOT).as_posix()
+        if path.suffix == ".py":
+            overlays[rel] = _python_overlays(path)
+        elif path.suffix == ".sh":
+            overlays[rel] = _shell_overlays(path)
+    sites = {(rel, line): isolated for rel, found in overlays.items() for line, isolated in found}
+    assert sum(1 for rel, _ in sites if rel == "scripts/run_comparison.py") >= 15
+    assert any(rel == "scripts/debug_policyengine_env.py" for rel, _ in sites)
+    assert any(rel == "scripts/fiit_ecps_eitc_attribution/run_stage.sh" for rel, _ in sites)
+    missing = sorted(f"{rel}:{line}" for (rel, line), isolated in sites.items() if not isolated)
+    assert missing == []
+
+
+# ---------------------------------------------------------------------------
+# Status classes: 404/410 gone; 408, 429 and 5xx retried then transient; any
+# other 4xx refused at once.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("status", "kind", "tries"),
+    [
+        (404, "gone", 1),
+        (410, "gone", 1),
+        (408, "transient", 3),
+        (429, "transient", 3),
+        (500, "transient", 3),
+        (503, "transient", 3),
+        (403, "refused", 1),
+        (401, "refused", 1),
+        (451, "refused", 1),
+    ],
+)
+def test_fetch_classifies_each_status(monkeypatch, tmp_path, no_sleep, status, kind, tries):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    artifact = _artifact(b"x")
+    calls = []
+
+    def reply(*_a, **_k):
+        calls.append(status)
+        return _Response(status)
+
+    monkeypatch.setattr(requests, "get", reply)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(artifact)
+    assert exc.value.kind == kind
+    assert len(calls) == tries
+    assert no_sleep == list(pinned_artifacts.RETRY_DELAYS[: tries - 1])
+
+
+@pytest.mark.parametrize("status", [408, 429])
+def test_fetch_recovers_after_a_retried_client_status(monkeypatch, tmp_path, no_sleep, status):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    body = b"wheel"
+    artifact = _artifact(body)
+    replies = [_Response(status), _Response(200, body)]
+    monkeypatch.setattr(requests, "get", lambda *_a, **_k: replies.pop(0))
+    assert REAL_FETCH(artifact).read_bytes() == body
+
+
+@pytest.mark.parametrize(
+    ("status", "described", "tries"),
+    [
+        (404, "HTTP 404", 1),
+        (410, "HTTP 410", 1),
+        (429, "transient: HTTP 429 on all 3 attempts, not a removal", 3),
+        (403, "refused: HTTP 403, not retried and not by itself a removal", 1),
+    ],
+)
+def test_check_classifies_each_archive_status(monkeypatch, no_sleep, status, described, tries):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    session = _Session(head={url: [status]})
+    _check, (failures, _warnings) = _run_check(
+        monkeypatch, session, {}, {url: {check.Use("comparisons/y.yaml")}}
+    )
+    assert failures == [f"comparisons/y.yaml: policyengine-us archive {url}: {described}"]
+    assert session.calls == [f"head {url}"] * tries
+
+
+# ---------------------------------------------------------------------------
+# RESOLVED_ELSEWHERE is keyed by function; label scopes must install nothing.
+# ---------------------------------------------------------------------------
+
+
+def test_scan_refuses_an_unlisted_fstring_in_a_new_function(fake_root):
+    check, root = fake_root
+    (root / "scripts" / "run_comparison.py").write_text(
+        "import subprocess\n"
+        "\n"
+        "def _resolve_pe_oracle_pins(params):\n"
+        "    us = params.get('policyengine_us_version')\n"
+        "    return f'policyengine-us=={us}'\n"
+        "\n"
+        "def _run_new_suite(runner, output):\n"
+        "    us = '1.691.3'\n"
+        "    core = '3.20.0'\n"
+        "    subprocess.run(['uv', 'run', '--with', f'policyengine-us=={us}',\n"
+        "                    '--with', f'policyengine-core=={core}'])\n"
+    )
+    _pins, _sources, problems = _uses(check)
+    # The listed (file, function, expression) passes; the same names in a new
+    # function do not.
+    assert [problem.split(":")[1] for problem in problems] == ["10", "11"]
+    assert all("_run_new_suite" in problem for problem in problems)
+
+
+def test_scan_refuses_an_install_inside_a_label_scope(fake_root):
+    check, root = fake_root
+    (root / "scripts" / "run_comparison.py").write_text(
+        "import subprocess\n"
+        "\n"
+        "def _build_run_provenance(config, runner_type, output):\n"
+        "    subprocess.run(['uv', 'run', '--with', 'policyengine-us==1.692.4', 'x'])\n"
+        "    return {'policyengine_us': '1.692.4'}\n"
+    )
+    pins, _sources, problems = _uses(check)
+    assert len(problems) == 1
+    assert problems[0].startswith("scripts/run_comparison.py:4: label scope _build_run_provenance")
+    # The scope is not skipped once it is refused, so its pin is counted too.
+    assert pins[("policyengine-us", "1.692.4")] == ["scripts/run_comparison.py:4"]
+
+
+def test_scan_reports_an_unparseable_python_file(fake_root):
+    check, root = fake_root
+    (root / "scripts" / "broken.py").write_text("def broken(:\n")
+    _pins, _sources, problems = _uses(check)
+    assert len(problems) == 1 and problems[0].startswith("scripts/broken.py:1: cannot parse")
+
+
+# ---------------------------------------------------------------------------
+# Spellings: PEP 503 names, ===, direct wheel URLs, non-literal versions, and
+# the ops/ and .github/workflows/ trees.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "line",
+    [
+        'PIN = "PolicyEngine-US==9.9.9"',
+        'PIN = "policyengine.us==9.9.9"',
+        'PIN = "policyengine__-us==9.9.9"',
+        'PIN = "policyengine-us===9.9.9"',
+    ],
+    ids=["upper-case", "dotted", "mixed-run", "triple-equals"],
+)
+def test_scan_normalizes_names_and_reads_triple_equals(fake_root, line):
+    check, root = fake_root
+    (root / "scripts" / "anything.py").write_text(line + "\n")
+    pins, _sources, problems = _uses(check)
+    assert pins[("policyengine-us", "9.9.9")] == ["scripts/anything.py:1"]
+    assert problems == []
+
+
+@pytest.mark.parametrize(
+    ("name", "line"),
+    [
+        ("concatenation", 'PIN = "policyengine-us==" + version'),
+        ("percent", 'PIN = "policyengine-us==%s" % version'),
+        ("shell-var", "uv run --with policyengine-us==$VER x"),
+        ("shell-braced", "uv run --with policyengine-us==${VER} x"),
+    ],
+)
+def test_scan_fails_closed_on_a_non_literal_version(fake_root, name, line):
+    check, root = fake_root
+    suffix = ".sh" if name.startswith("shell") else ".py"
+    (root / "scripts" / f"pin{suffix}").write_text(line + "\n")
+    _pins, _sources, problems = _uses(check)
+    assert len(problems) == 1
+    assert problems[0].startswith(f"scripts/pin{suffix}:1: ")
+    assert "not a literal" in problems[0]
+
+
+def test_scan_refuses_a_direct_url_to_an_unlisted_wheel(fake_root):
+    check, root = fake_root
+    listed = pinned_artifacts.lookup("policyengine-us", "1.767.3").url
+    unlisted = (
+        "https://files.pythonhosted.org/packages/aa/bb/" + "c" * 60
+        + "/policyengine_us-9.9.9-py3-none-any.whl"
+    )
+    (root / "scripts" / "urls.sh").write_text(
+        f'uv run --with "policyengine-us @ {listed}" a\n'
+        f'uv run --with "policyengine-us @ {unlisted}" b\n'
+    )
+    _pins, _sources, problems = _uses(check)
+    assert len(problems) == 1
+    assert problems[0].startswith(f"scripts/urls.sh:2: policyengine-us @ {unlisted}")
+
+
+@pytest.mark.parametrize("tree", ["ops", ".github/workflows"])
+def test_scan_reads_ops_and_workflows(fake_root, tree):
+    check, root = fake_root
+    directory = root / tree
+    directory.mkdir(parents=True)
+    (directory / "job.yml").write_text(
+        "steps:\n  - run: uv pip install policyengine-us==9.9.9\n"
+    )
+    pins, _sources, _problems = _uses(check)
+    assert pins[("policyengine-us", "9.9.9")] == [f"{tree}/job.yml:2"]
+
+
+def test_probe_recipes_fail_closed():
+    """Each probe recipe assigns the printed --with list, then starts the
+    probe only on ``&&``, so a failed inner command never runs it unpinned."""
+    probes = sorted((REPO_ROOT / "scripts").glob("probe_us_*.py"))
+    recipes = 0
+    for path in probes:
+        doc = path.read_text()
+        if "--oracle-with-args" not in doc:
+            continue
+        recipes += 1
+        match = re.search(
+            r"pins=\$\(uv run -q python -m axiom_oracles\.pinned_artifacts \\\n"
+            r"\s+--oracle-with-args (\S+)\) &&\n"
+            r"\s+uv run --python \S+ --no-project --isolated \$pins \\\n"
+            rf"\s+python scripts/{re.escape(path.name)}\n",
+            doc,
+        )
+        assert match, path.name
+        assert pinned_artifacts.lookup("policyengine-us", match.group(1)), path.name
+    assert recipes == 4
