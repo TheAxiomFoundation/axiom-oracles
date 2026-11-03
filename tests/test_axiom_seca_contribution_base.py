@@ -32,6 +32,13 @@ Worked example (single, age 40, wages 50,000, Schedule C 20,000):
 
 With wages 180,000 the 1401(a) cap binds: 12.4% x (184,500 - 180,000) =
 558.00 (744.00 at the old 186,000).
+
+The wages subtracted are the self-employed individual's. The module computes
+one cap per tax unit, so the projection passes the wages of the filers with
+self-employment income. A joint return where the head's Schedule C shows
+100,000 (net earnings 92,350) and only the spouse earns wages of 150,000 keeps
+the full 12.4% x 92,350 = 11,451.40; subtracting both spouses' wages would
+have cut it to 12.4% x 34,500 = 4,278.00.
 """
 
 from __future__ import annotations
@@ -92,6 +99,22 @@ def _self_employed(wages, self_employment=20_000):
     )
 
 
+def _split_couple():
+    # The head is self-employed; only the spouse earns wages.
+    return Case(
+        case_id="seca-split-couple",
+        period="2026",
+        entities=(
+            _person("person-1", "HeadOfHousehold", 45, **{
+                Concepts.SELF_EMPLOYMENT_INCOME: 100_000,
+            }),
+            _person("person-2", "Spouse", 44, **{
+                Concepts.YEARLY_EARNED_INCOME: 150_000,
+            }),
+        ),
+    )
+
+
 def _tax_unit_inputs(case: Case) -> dict[str, object]:
     projected = attach_axiom_tax_inputs_to_case(case)
     return {
@@ -121,45 +144,59 @@ def test_one_base_for_seca_and_its_deduction() -> None:
     assert float(wage_base) == inputs[BASE_INPUT]
 
 
+def test_the_cap_subtracts_the_self_employed_spouses_wages() -> None:
+    assert _tax_unit_inputs(_split_couple())[WAGES_INPUT] == 0
+
+
+_SELF_EMPLOYMENT = st.one_of(
+    st.just(0.0), st.floats(min_value=-50_000, max_value=200_000, allow_nan=False)
+)
+
+
 @PROPERTY_SETTINGS
 @given(
     head_wages=st.floats(min_value=0, max_value=400_000, allow_nan=False),
-    spouse_wages=st.one_of(
-        st.none(), st.floats(min_value=0, max_value=400_000, allow_nan=False)
+    head_se=_SELF_EMPLOYMENT,
+    spouse=st.one_of(
+        st.none(),
+        st.tuples(
+            st.floats(min_value=0, max_value=400_000, allow_nan=False),
+            _SELF_EMPLOYMENT,
+        ),
     ),
     dependent_wages=st.floats(min_value=0, max_value=100_000, allow_nan=False),
 )
-def test_1402_b_wages_are_the_filers_wages(
-    head_wages, spouse_wages, dependent_wages
+def test_1402_b_wages_are_the_self_employed_filers_wages(
+    head_wages, head_se, spouse, dependent_wages
 ) -> None:
-    """1402(b)(1)(B) subtracts the wages paid to the individual, so a
-    dependent's wages never enter the filers' cap; the input matches the
-    filer wages the projection already supplies for 1401(a)."""
+    """1402(b)(1)(B) subtracts the wages paid to the self-employed individual:
+    a wage-only spouse's or a dependent's wages never shrink the cap."""
     people = [
         _person("head", "HeadOfHousehold", 45, **{
             Concepts.YEARLY_EARNED_INCOME: head_wages,
-            Concepts.SELF_EMPLOYMENT_INCOME: 10_000,
+            Concepts.SELF_EMPLOYMENT_INCOME: head_se,
         })
     ]
-    if spouse_wages is not None:
+    filers = [(head_wages, head_se)]
+    if spouse is not None:
         people.append(
             _person("spouse", "Spouse", 44, **{
-                Concepts.YEARLY_EARNED_INCOME: spouse_wages,
+                Concepts.YEARLY_EARNED_INCOME: spouse[0],
+                Concepts.SELF_EMPLOYMENT_INCOME: spouse[1],
             })
         )
+        filers.append(spouse)
     people.append(
         _person("child", "Child", 16, **{
             Concepts.YEARLY_EARNED_INCOME: dependent_wages,
+            Concepts.SELF_EMPLOYMENT_INCOME: 5_000,
         })
     )
     inputs = _tax_unit_inputs(
         Case(case_id="seca-wages", period="2026", entities=tuple(people))
     )
 
-    assert inputs[WAGES_INPUT] == head_wages + (spouse_wages or 0)
-    assert inputs[WAGES_INPUT] == inputs[
-        "us:tax/federal-income-tax#input.wages_paid_to_individual_for_section_1401_a"
-    ]
+    assert inputs[WAGES_INPUT] == sum(wages for wages, se in filers if se > 0)
     assert inputs[BASE_INPUT] == OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026
 
 
@@ -180,8 +217,12 @@ def engine_fica() -> dict[str, dict]:
             axiom_engine_binary=binary,
         )
         cases = [
-            attach_axiom_tax_inputs_to_case(_self_employed(wages))
-            for wages in (50_000, 180_000)
+            attach_axiom_tax_inputs_to_case(case)
+            for case in (
+                _self_employed(50_000),
+                _self_employed(180_000),
+                _split_couple(),
+            )
         ]
         results = runner.run_cases(cases, list(EMPLOYEE_FICA_TARGETS))
     values = {}
@@ -199,6 +240,11 @@ def engine_fica() -> dict[str, dict]:
         ),
         pytest.param(
             "seca-180000", (11_160.00, 2_610.00, 558.00, 535.63), id="cap-binds"
+        ),
+        pytest.param(
+            "seca-split-couple",
+            (9_300.00, 2_175.00, 11_451.40, 2_678.15),
+            id="spouse-wages-do-not-cap",
         ),
     ],
 )

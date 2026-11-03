@@ -3758,15 +3758,22 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
         # 26 USC 1402(b)(1): 1401(a) reaches net earnings only up to the
-        # contribution and benefit base minus the individual's wages. The
-        # pinned us:statutes/26/1402/b reads both names; without them its
-        # self_employment_income_for_section_1401_a never evaluates. The
-        # base is the constant social_security_wage_base reads, so the SECA
-        # tax and its 164(f) deduction use one base.
+        # contribution and benefit base minus "the wages paid to such
+        # individual". The pinned us:statutes/26/1402/b reads both names;
+        # without them its self_employment_income_for_section_1401_a never
+        # evaluates. The base is the constant social_security_wage_base
+        # reads, so the SECA tax and its 164(f) deduction use one base. The
+        # module computes one cap per tax unit, so the wages are those of the
+        # filers with self-employment income: exact when one filer is
+        # self-employed, the combined amount when both are.
         "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins": (
             OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026
         ),
-        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": wages,
+        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": sum(
+            _earned_income(person)
+            for person in earners
+            if _number(person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)) > 0
+        ),
         "employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
