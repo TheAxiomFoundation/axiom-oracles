@@ -102,8 +102,10 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             }]
     elif shape == "role-scalar":
         if returned:
+            # The retained match holds equal values: a match whose values
+            # disagree is a contradicted verdict (#602), not an observation.
             report["cases"] = [{
-                "case_id": "c1", "matches": [{"concept": concept, "left": 0, "right": value}],
+                "case_id": "c1", "matches": [{"concept": concept, "left": value, "right": value}],
             }]
     elif shape == "grid-scalar":
         if returned:

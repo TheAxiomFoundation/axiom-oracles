@@ -54,9 +54,15 @@ def _report(dialect, pairs, *, stamped=True):
         if dialect in {"role", "reverse-role", "efrs"}:
             left, right = (oracle, axiom) if dialect == "reverse-role" else (axiom, oracle)
             kind = "missing_left" if left is None else "missing_right" if right is None else "amount_difference"
-            case["mismatches"] = [{"concept": concept, "left": left, "right": right, "kind": kind}]
+            # A retained verdict must agree with its values (#602): equal
+            # returned values are a match, anything else a counted mismatch.
+            matched = left is not None and right is not None and left == right
+            row = {"concept": concept, "left": left, "right": right}
+            if not matched:
+                row["kind"] = kind
+            case["matches" if matched else "mismatches"] = [row]
             if dialect == "efrs":
-                case["mismatches"][0].update(surface="carers-allowance-final", description="UK Carer's Allowance annual amount — output=carers_allowance_annual_amount")
+                row.update(surface="carers-allowance-final", description="UK Carer's Allowance annual amount — output=carers_allowance_annual_amount")
         elif dialect in {"grid", "components"}:
             case.update(concept=concept, axiom=axiom, policyengine=oracle)
             if dialect == "components":
@@ -90,7 +96,7 @@ def _report(dialect, pairs, *, stamped=True):
                 "right": oracle, "difference": difference,
             })
         report["cases"].append(case)
-    if dialect in {"components", "yale-members"}:
+    if dialect in {"components", "yale-members", "role", "reverse-role", "efrs"}:
         report["summary"]["mismatch_count"] = sum(
             len(case.get("mismatches", [])) for case in report["cases"]
         )

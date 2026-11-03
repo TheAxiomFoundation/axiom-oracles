@@ -104,15 +104,22 @@ the other adapters project from.
 ### What the loader guarantees
 
 - **Rows are verbatim.** An integer-literal cell becomes an `int`, any other
-  numeric cell a Python `float`, and a blank cell is left out of the row. For
-  every column with a non-blank cell, the rows frame to the dtypes
-  `pandas.read_csv` infers and to the values
-  `pandas.read_csv(float_precision="round_trip")` parses (tested). The
+  numeric cell a Python `float`, and a blank or whitespace-only cell is left
+  out of the row. An integer literal outside int64 fails the load: the
+  loader keeps every integer column int64, and no TAXSIM input needs a
+  larger value. For every column with a non-blank cell, the rows frame to
+  the dtypes `pandas.read_csv` infers and to the values
+  `pandas.read_csv(float_precision="round_trip")` parses (tested). One
+  exception: `pandas.read_csv` reads a numeric column that holds a
+  whitespace-only cell as text, while the loader leaves the cell out and
+  keeps the column numeric. The
   benchmark worker's plain `pd.read_csv` uses pandas' default float parser,
   which is not correctly rounded: on the September file it differs from the
   cell text in 24,611 cells, by at most 2.0e-14 relative (measured with pandas
   3.0.2), so these rows reach the engines with the file's exact values rather
   than that parser's.
+- **Selector facts are integers.** A fractional `mstat`, `page`, `sage`,
+  `depx` or `idtl` fails `read_taxsim_csv`, naming the row.
 - **Year override.** An explicit `--period YYYY` (or `period=` in Python)
   replaces every row's `year`, as pe-taxsim's `scripts/refresh_dashboard.py`
   does with `dict(row, year=args.year)` to run one file for 2021-2025. Without

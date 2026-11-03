@@ -1246,3 +1246,70 @@ def test_cli_refuses_an_invalid_taxsim_row_before_either_engine_runs(
     assert run.exit_code != 0
     assert "taxsim-101" in str(run.exception) and message in str(run.exception)
     assert _EchoRunner.frames == []
+
+
+# ---------------------------------------------------------------------------
+# Loader edge cases (whitespace, int64, selector facts)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("cell", [" ", "   ", "\t"])
+def test_whitespace_only_cell_loads_as_blank(tmp_path, cell):
+    """A whitespace-only cell is a blank cell: left out of the row, as an
+    empty cell is, so the formatter writes TAXSIM's 0 for it."""
+    header, records = _fixture_header_and_rows()
+    records[0][header.index("pwages")] = cell
+    path = _write_csv(tmp_path / "whitespace.csv", header, records)
+
+    row = read_taxsim_csv(path).select().cases[0].metadata["taxsim_input"]
+    assert "pwages" not in row
+
+
+@pytest.mark.parametrize(
+    "cell", [str(2**63), str(-(2**63) - 1), "123456789012345678901234567890"]
+)
+def test_integer_outside_int64_fails_the_load(tmp_path, cell):
+    """pandas cannot frame it as int64, and TAXSIM would receive text."""
+    header, records = _fixture_header_and_rows()
+    records[0][header.index("pwages")] = cell
+    path = _write_csv(tmp_path / "huge.csv", header, records)
+
+    with pytest.raises(
+        TaxsimCsvError, match="outside int64. The loader keeps every integer column int64"
+    ):
+        read_taxsim_csv(path)
+
+
+@pytest.mark.parametrize("cell", [str(2**63 - 1), str(-(2**63))])
+def test_int64_bounds_load_as_integers(tmp_path, cell):
+    header, records = _fixture_header_and_rows()
+    records[0][header.index("pwages")] = cell
+    path = _write_csv(tmp_path / "bounds.csv", header, records)
+
+    row = read_taxsim_csv(path).select().cases[0].metadata["taxsim_input"]
+    assert row["pwages"] == int(cell)
+
+
+@pytest.mark.parametrize("column", ["mstat", "page", "sage", "depx", "idtl"])
+def test_fractional_selector_fact_fails_in_read_taxsim_csv(tmp_path, column):
+    """The file is refused when read, not later when it is selected."""
+    header, records = _fixture_header_and_rows()
+    records[1][header.index(column)] = "1.5"
+    path = _write_csv(tmp_path / "fractional.csv", header, records)
+
+    with pytest.raises(
+        TaxsimCsvError, match=rf"data row 2 .*{column}=1\.5 is not an integer"
+    ):
+        read_taxsim_csv(path)
+
+
+def test_whitespace_only_cell_is_the_documented_dtype_exception(tmp_path):
+    """pandas.read_csv reads the column as text; the loaded rows stay numeric."""
+    pd = pytest.importorskip("pandas")
+    header, records = _fixture_header_and_rows()
+    records[0][header.index("pwages")] = "  "
+    path = _write_csv(tmp_path / "whitespace-dtype.csv", header, records)
+
+    assert not pd.api.types.is_numeric_dtype(pd.read_csv(path)["pwages"])
+    rows = [case.metadata["taxsim_input"] for case in read_taxsim_csv(path).select().cases]
+    assert pd.api.types.is_numeric_dtype(pd.DataFrame(rows)["pwages"])
