@@ -291,16 +291,29 @@ def test_stamp_keeps_the_report_file_mode(tmp_path):
     assert json.loads(path.read_text())["provenance"] == {"schema": "v1"}
 
 
-def test_symlinked_report_is_still_written_through(tmp_path):
-    """The caller refuses to publish a staging path that became a symlink.
+@pytest.mark.parametrize("provenance", [
+    {"schema": "v1"},  # a stamp that would succeed
+    {"schema": "v1", "bad": {1, 2}},  # a stamp whose dump would fail
+], ids=["would-succeed", "would-fail"])
+def test_symlinked_staging_path_is_refused_and_nothing_written(tmp_path, provenance):
+    """A staging path that is not this user's regular file is refused up front.
 
-    Replacing the link with a regular file would hide that swap, so a
-    symlinked report is written through as before.
+    The publisher refuses such a path anyway (lstat, regular file, owner).
+    Refusing before reading or writing leaves the link's target untouched,
+    whether the stamp would have succeeded or failed.
     """
     target = tmp_path / "target.json"
-    target.write_text(json.dumps({"suite": "x"}, indent=2))
+    target.write_text(json.dumps({"suite": "x", "cases": [{"id": i} for i in range(20)]}, indent=2))
+    original = target.read_bytes()
     link = tmp_path / "staging.json"
     link.symlink_to(target)
-    _run_comparison()._stamp_report_provenance(link, {"schema": "v1"})
+    with pytest.raises(SystemExit, match="staging.json"):
+        _run_comparison()._stamp_report_provenance(link, provenance)
     assert link.is_symlink()
-    assert json.loads(target.read_text())["provenance"] == {"schema": "v1"}
+    assert target.read_bytes() == original
+    assert sorted(item.name for item in tmp_path.iterdir()) == ["staging.json", "target.json"]
+
+
+def test_missing_staging_path_is_still_left_alone(tmp_path):
+    _run_comparison()._stamp_report_provenance(tmp_path / "absent.json", {"schema": "v1"})
+    assert list(tmp_path.iterdir()) == []
