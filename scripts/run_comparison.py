@@ -1677,12 +1677,15 @@ def _stamp_report_provenance(
     formatting and re-emit in the same shape so adding provenance produces a
     one-key diff rather than reordering every key.
 
-    A full-evidence report can be gigabytes, so this holds one parse of it
-    and no whole-report string: the file is parsed once, each candidate
-    format is compared by streaming its encoding against the file
-    (:func:`_report_matches_format`), and the stamped report is streamed
-    back. The bytes written are what ``json.dumps`` of the stamped report in
-    the detected format, plus the original trailing newline, would give.
+    A full-evidence report can be gigabytes, so its peak is one
+    ``json.load``: that reads the whole text and parses it, then the text is
+    freed. Nothing else builds a whole-report string: each candidate format
+    is compared by streaming its encoding against the file
+    (:func:`_report_matches_format`), and the stamped report is streamed to
+    a sibling temporary file that then replaces the report, so a failed
+    write leaves the report as it was. The bytes written are what
+    ``json.dumps`` of the stamped report in the detected format, plus the
+    original trailing newline, would give, and the file keeps its mode.
     """
     try:
         with open(output) as handle:  # read_text()'s defaults
@@ -1709,9 +1712,42 @@ def _stamp_report_provenance(
         require_engine_versions=require_engine_versions,
         preserve_runner_provenance=preserve_runner_provenance,
     )
-    with open(output, "w") as handle:  # write_text()'s defaults
-        json.dump(data, handle, indent=indent, sort_keys=sort_keys)
-        handle.write(trailing)
+    _replace_report(
+        output,
+        lambda handle: (
+            json.dump(data, handle, indent=indent, sort_keys=sort_keys),
+            handle.write(trailing),
+        ),
+    )
+
+
+def _replace_report(output: Path, write) -> None:
+    """Write ``output`` through ``write(handle)``, all or nothing.
+
+    A regular file is replaced atomically by a sibling temporary file with
+    its mode. Anything else (a symlink) is written through in place, as
+    ``write_text`` did, so the publisher's later check that its staging path
+    is still a regular file is not defeated by the replacement.
+    """
+    try:
+        info = os.lstat(output)
+    except FileNotFoundError:
+        info = None
+    if info is None or not stat.S_ISREG(info.st_mode):
+        with open(output, "w") as handle:  # write_text()'s defaults
+            write(handle)
+        return
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".stamp", dir=output.parent
+    )
+    try:
+        with open(descriptor, "w") as handle:  # write_text()'s defaults
+            write(handle)
+        os.chmod(temporary, stat.S_IMODE(info.st_mode))
+        os.replace(temporary, output)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
 
 
 #: Candidate (sort_keys, indent) formats, in detection order.
