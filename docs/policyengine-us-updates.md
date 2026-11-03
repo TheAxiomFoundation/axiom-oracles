@@ -12,6 +12,9 @@ selects a final wrapper release, and lets uv resolve compatible core/SPM and
 transitive dependencies. It then removes yanked-file hashes from the resolved
 lock for every dependency and installs the probe with `--require-hashes`.
 These metadata checks do not establish model correctness.
+The classification uses [`packaging.version.Version`](https://packaging.pypa.io/en/stable/version.html)
+and [PyPI's file metadata](https://docs.pypi.org/api/json/); a final-version
+label and an unyanked file are release-selection criteria, not test results.
 
 `data/policyengine_defaults.json` records the wrapper, US model, core, and SPM
 calculator used by generic in-repository comparisons. Suites with explicit
