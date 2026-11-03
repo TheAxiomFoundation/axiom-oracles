@@ -516,6 +516,11 @@ def _indirect_pe_outputs_reads(tree: ast.AST) -> list[str]:
     ``asdict`` (bare or as an attribute, e.g. ``dataclasses.asdict``), any
     ``.__dict__`` load, and ``getattr`` whose attribute name is not a string
     literal.
+
+    The rule matches syntax and knows no types, so it also refuses unrelated
+    lines outside those scopes, such as ``dataclasses.asdict(config)`` or
+    ``getattr(np, name)``. Expect such a failure: it names the line, and a
+    reviewer decides whether that read can reach a PolicyEngine value.
     """
     parents = {
         child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)
