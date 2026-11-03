@@ -30,6 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
 from axiom_oracles.suites.us_tariff_panel import (  # noqa: E402
     AUTHORITY_SLOTS,
@@ -50,9 +52,12 @@ PINNED_RULESPEC_SHA = "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
 PINNED_ENGINE_SHA256 = (
     "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
 )
-DEFAULT_RULESPEC_ROOT = Path("/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us")
-DEFAULT_ENGINE_BINARY = Path(
-    "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
+DEFAULT_RULESPEC_ROOT = Path.home() / "TheAxiomFoundation" / "rulespec-us"
+DEFAULT_ENGINE_BINARY = (
+    Path.home()
+    / "TheAxiomFoundation"
+    / "axiom-rules-engine-pinned"
+    / "target/release/axiom-rules-engine"
 )
 OUTPUT_PATH = REPO_ROOT / "conformance/executable/us-tariff-witness.json"
 REPORT_PATH = Path("reports/axiom-yale-us-tariff-panel-all-2026-08-03.json")
@@ -71,7 +76,6 @@ SCHEDULE_MODULE_TEMPLATE = (
 ORIGIN_CENSUS = (
     "1220"  # Canada: the sole raw-conformant cohort common to all five lines.
 )
-HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 PROGRAM_SET = {
     "id": "us-tariff-schedule-ensemble-v1",
@@ -166,7 +170,7 @@ def _git_commit(repo: Path, ref: str) -> str:
         text=True,
     )
     sha = process.stdout.strip()
-    _require(HEX_40.fullmatch(sha) is not None, f"invalid rulespec commit {sha!r}")
+    _require(GIT_SHA.fullmatch(sha) is not None, f"invalid rulespec commit {sha!r}")
     return sha
 
 

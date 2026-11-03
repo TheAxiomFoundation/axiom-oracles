@@ -979,6 +979,50 @@
       "nz/regulation/regulation/public/1998/0277/schedule/3",
       "nz/regulation/regulation/public/1998/0277/schedule/3a",
       "nz/regulation/regulation/public/1998/0277/schedule/4",
+      "nz/regulation/regulation/public/2016/0068",
+      "nz/regulation/regulation/public/2016/0068/regulation/1",
+      "nz/regulation/regulation/public/2016/0068/regulation/10",
+      "nz/regulation/regulation/public/2016/0068/regulation/11",
+      "nz/regulation/regulation/public/2016/0068/regulation/12",
+      "nz/regulation/regulation/public/2016/0068/regulation/13",
+      "nz/regulation/regulation/public/2016/0068/regulation/14",
+      "nz/regulation/regulation/public/2016/0068/regulation/14a",
+      "nz/regulation/regulation/public/2016/0068/regulation/15",
+      "nz/regulation/regulation/public/2016/0068/regulation/16",
+      "nz/regulation/regulation/public/2016/0068/regulation/17",
+      "nz/regulation/regulation/public/2016/0068/regulation/18",
+      "nz/regulation/regulation/public/2016/0068/regulation/19",
+      "nz/regulation/regulation/public/2016/0068/regulation/2",
+      "nz/regulation/regulation/public/2016/0068/regulation/3",
+      "nz/regulation/regulation/public/2016/0068/regulation/4",
+      "nz/regulation/regulation/public/2016/0068/regulation/5",
+      "nz/regulation/regulation/public/2016/0068/regulation/6",
+      "nz/regulation/regulation/public/2016/0068/regulation/7",
+      "nz/regulation/regulation/public/2016/0068/regulation/8",
+      "nz/regulation/regulation/public/2016/0068/regulation/9",
+      "nz/regulation/regulation/public/2016/0068/schedule/1",
+      "nz/regulation/regulation/public/2016/0068/schedule/1/part/1",
+      "nz/regulation/regulation/public/2016/0068/schedule/1/part/1/clause/1",
+      "nz/regulation/regulation/public/2016/0068/schedule/1/part/2",
+      "nz/regulation/regulation/public/2016/0068/schedule/1/part/2/clause/2",
+      "nz/regulation/regulation/public/2016/0068/schedule/2",
+      "nz/regulation/regulation/public/2018/0173",
+      "nz/regulation/regulation/public/2018/0173/regulation/1",
+      "nz/regulation/regulation/public/2018/0173/regulation/10",
+      "nz/regulation/regulation/public/2018/0173/regulation/11",
+      "nz/regulation/regulation/public/2018/0173/regulation/12",
+      "nz/regulation/regulation/public/2018/0173/regulation/13",
+      "nz/regulation/regulation/public/2018/0173/regulation/14",
+      "nz/regulation/regulation/public/2018/0173/regulation/15",
+      "nz/regulation/regulation/public/2018/0173/regulation/16",
+      "nz/regulation/regulation/public/2018/0173/regulation/2",
+      "nz/regulation/regulation/public/2018/0173/regulation/3",
+      "nz/regulation/regulation/public/2018/0173/regulation/4",
+      "nz/regulation/regulation/public/2018/0173/regulation/5",
+      "nz/regulation/regulation/public/2018/0173/regulation/6",
+      "nz/regulation/regulation/public/2018/0173/regulation/7",
+      "nz/regulation/regulation/public/2018/0173/regulation/8",
+      "nz/regulation/regulation/public/2018/0173/regulation/9",
       "nz/regulation/regulation/public/2018/0202",
       "nz/regulation/regulation/public/2018/0202/regulation/1",
       "nz/regulation/regulation/public/2018/0202/regulation/10",
@@ -8744,6 +8788,391 @@
       "nz/statute/act/public/2011/0062/section/87",
       "nz/statute/act/public/2011/0062/section/8a",
       "nz/statute/act/public/2011/0062/section/9",
+      "nz/statute/act/public/2014/0056",
+      "nz/statute/act/public/2014/0056/schedule/1",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/1",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/10",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/11",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/12",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/13",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/14",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/15",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/2",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/3",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/4",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/5",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/6",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/7",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/8",
+      "nz/statute/act/public/2014/0056/schedule/1/part/1/clause/9",
+      "nz/statute/act/public/2014/0056/schedule/1/part/2",
+      "nz/statute/act/public/2014/0056/schedule/1/part/2/clause/16",
+      "nz/statute/act/public/2014/0056/schedule/1/part/2/clause/17",
+      "nz/statute/act/public/2014/0056/schedule/1/part/3",
+      "nz/statute/act/public/2014/0056/schedule/1/part/3/clause/18",
+      "nz/statute/act/public/2014/0056/schedule/1/part/3/clause/19",
+      "nz/statute/act/public/2014/0056/schedule/1/part/3/clause/20",
+      "nz/statute/act/public/2014/0056/schedule/1/part/4",
+      "nz/statute/act/public/2014/0056/schedule/1/part/4/clause/21",
+      "nz/statute/act/public/2014/0056/schedule/1/part/5",
+      "nz/statute/act/public/2014/0056/schedule/1/part/5/clause/22",
+      "nz/statute/act/public/2014/0056/schedule/1/part/6",
+      "nz/statute/act/public/2014/0056/schedule/1/part/6/clause/23",
+      "nz/statute/act/public/2014/0056/schedule/2",
+      "nz/statute/act/public/2014/0056/schedule/2/clause/1",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/10",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/11",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/12",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/13",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/14",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/15",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/16",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/17",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/18",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/19",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/2",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/20",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/21",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/22",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/3",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/4",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/5",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/6",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/7",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/8",
+      "nz/statute/act/public/2014/0056/schedule/2/part/1/clause/9",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/23",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/24",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/25",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/26",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/27",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/28",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/29",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/30",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/31",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/32",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/33",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/34",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/35",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/36",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/37",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/38",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/39",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/40",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/41",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/42",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/43",
+      "nz/statute/act/public/2014/0056/schedule/2/part/2/clause/44",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/45",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/46",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/47",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/48",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/49",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/50",
+      "nz/statute/act/public/2014/0056/schedule/2/part/3/clause/51",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/52",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/53",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/54",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/55",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/58",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/59",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/60",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/62",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/63",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/64",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/65",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/66",
+      "nz/statute/act/public/2014/0056/schedule/2/part/4/clause/67",
+      "nz/statute/act/public/2014/0056/schedule/3",
+      "nz/statute/act/public/2014/0056/schedule/4",
+      "nz/statute/act/public/2014/0056/section/1",
+      "nz/statute/act/public/2014/0056/section/10",
+      "nz/statute/act/public/2014/0056/section/100",
+      "nz/statute/act/public/2014/0056/section/101",
+      "nz/statute/act/public/2014/0056/section/101a",
+      "nz/statute/act/public/2014/0056/section/102",
+      "nz/statute/act/public/2014/0056/section/103",
+      "nz/statute/act/public/2014/0056/section/104",
+      "nz/statute/act/public/2014/0056/section/105",
+      "nz/statute/act/public/2014/0056/section/106",
+      "nz/statute/act/public/2014/0056/section/107",
+      "nz/statute/act/public/2014/0056/section/108",
+      "nz/statute/act/public/2014/0056/section/108a",
+      "nz/statute/act/public/2014/0056/section/109",
+      "nz/statute/act/public/2014/0056/section/11",
+      "nz/statute/act/public/2014/0056/section/110",
+      "nz/statute/act/public/2014/0056/section/111",
+      "nz/statute/act/public/2014/0056/section/112",
+      "nz/statute/act/public/2014/0056/section/113",
+      "nz/statute/act/public/2014/0056/section/114",
+      "nz/statute/act/public/2014/0056/section/115",
+      "nz/statute/act/public/2014/0056/section/116",
+      "nz/statute/act/public/2014/0056/section/117",
+      "nz/statute/act/public/2014/0056/section/118",
+      "nz/statute/act/public/2014/0056/section/119",
+      "nz/statute/act/public/2014/0056/section/12",
+      "nz/statute/act/public/2014/0056/section/120",
+      "nz/statute/act/public/2014/0056/section/121",
+      "nz/statute/act/public/2014/0056/section/122",
+      "nz/statute/act/public/2014/0056/section/123",
+      "nz/statute/act/public/2014/0056/section/124",
+      "nz/statute/act/public/2014/0056/section/125",
+      "nz/statute/act/public/2014/0056/section/126",
+      "nz/statute/act/public/2014/0056/section/127",
+      "nz/statute/act/public/2014/0056/section/128",
+      "nz/statute/act/public/2014/0056/section/129",
+      "nz/statute/act/public/2014/0056/section/130",
+      "nz/statute/act/public/2014/0056/section/131",
+      "nz/statute/act/public/2014/0056/section/132",
+      "nz/statute/act/public/2014/0056/section/133",
+      "nz/statute/act/public/2014/0056/section/134",
+      "nz/statute/act/public/2014/0056/section/135",
+      "nz/statute/act/public/2014/0056/section/136",
+      "nz/statute/act/public/2014/0056/section/137",
+      "nz/statute/act/public/2014/0056/section/138",
+      "nz/statute/act/public/2014/0056/section/139",
+      "nz/statute/act/public/2014/0056/section/14",
+      "nz/statute/act/public/2014/0056/section/140",
+      "nz/statute/act/public/2014/0056/section/141",
+      "nz/statute/act/public/2014/0056/section/142",
+      "nz/statute/act/public/2014/0056/section/143",
+      "nz/statute/act/public/2014/0056/section/143a",
+      "nz/statute/act/public/2014/0056/section/144",
+      "nz/statute/act/public/2014/0056/section/145",
+      "nz/statute/act/public/2014/0056/section/146",
+      "nz/statute/act/public/2014/0056/section/147",
+      "nz/statute/act/public/2014/0056/section/148",
+      "nz/statute/act/public/2014/0056/section/149",
+      "nz/statute/act/public/2014/0056/section/15",
+      "nz/statute/act/public/2014/0056/section/150",
+      "nz/statute/act/public/2014/0056/section/151",
+      "nz/statute/act/public/2014/0056/section/152",
+      "nz/statute/act/public/2014/0056/section/153",
+      "nz/statute/act/public/2014/0056/section/154",
+      "nz/statute/act/public/2014/0056/section/155",
+      "nz/statute/act/public/2014/0056/section/156",
+      "nz/statute/act/public/2014/0056/section/157",
+      "nz/statute/act/public/2014/0056/section/158",
+      "nz/statute/act/public/2014/0056/section/158a",
+      "nz/statute/act/public/2014/0056/section/159",
+      "nz/statute/act/public/2014/0056/section/16",
+      "nz/statute/act/public/2014/0056/section/160",
+      "nz/statute/act/public/2014/0056/section/161",
+      "nz/statute/act/public/2014/0056/section/162",
+      "nz/statute/act/public/2014/0056/section/163",
+      "nz/statute/act/public/2014/0056/section/164",
+      "nz/statute/act/public/2014/0056/section/165",
+      "nz/statute/act/public/2014/0056/section/166",
+      "nz/statute/act/public/2014/0056/section/167",
+      "nz/statute/act/public/2014/0056/section/168",
+      "nz/statute/act/public/2014/0056/section/169",
+      "nz/statute/act/public/2014/0056/section/17",
+      "nz/statute/act/public/2014/0056/section/170",
+      "nz/statute/act/public/2014/0056/section/171",
+      "nz/statute/act/public/2014/0056/section/173",
+      "nz/statute/act/public/2014/0056/section/174",
+      "nz/statute/act/public/2014/0056/section/175",
+      "nz/statute/act/public/2014/0056/section/176",
+      "nz/statute/act/public/2014/0056/section/177",
+      "nz/statute/act/public/2014/0056/section/178",
+      "nz/statute/act/public/2014/0056/section/179",
+      "nz/statute/act/public/2014/0056/section/18",
+      "nz/statute/act/public/2014/0056/section/180",
+      "nz/statute/act/public/2014/0056/section/181",
+      "nz/statute/act/public/2014/0056/section/182",
+      "nz/statute/act/public/2014/0056/section/183",
+      "nz/statute/act/public/2014/0056/section/184",
+      "nz/statute/act/public/2014/0056/section/185",
+      "nz/statute/act/public/2014/0056/section/186",
+      "nz/statute/act/public/2014/0056/section/187",
+      "nz/statute/act/public/2014/0056/section/188",
+      "nz/statute/act/public/2014/0056/section/189",
+      "nz/statute/act/public/2014/0056/section/19",
+      "nz/statute/act/public/2014/0056/section/190",
+      "nz/statute/act/public/2014/0056/section/190a",
+      "nz/statute/act/public/2014/0056/section/191",
+      "nz/statute/act/public/2014/0056/section/192",
+      "nz/statute/act/public/2014/0056/section/193",
+      "nz/statute/act/public/2014/0056/section/194",
+      "nz/statute/act/public/2014/0056/section/195",
+      "nz/statute/act/public/2014/0056/section/196",
+      "nz/statute/act/public/2014/0056/section/197",
+      "nz/statute/act/public/2014/0056/section/198",
+      "nz/statute/act/public/2014/0056/section/199",
+      "nz/statute/act/public/2014/0056/section/2",
+      "nz/statute/act/public/2014/0056/section/20",
+      "nz/statute/act/public/2014/0056/section/200",
+      "nz/statute/act/public/2014/0056/section/201",
+      "nz/statute/act/public/2014/0056/section/202",
+      "nz/statute/act/public/2014/0056/section/203",
+      "nz/statute/act/public/2014/0056/section/204",
+      "nz/statute/act/public/2014/0056/section/205",
+      "nz/statute/act/public/2014/0056/section/206",
+      "nz/statute/act/public/2014/0056/section/207",
+      "nz/statute/act/public/2014/0056/section/208",
+      "nz/statute/act/public/2014/0056/section/209",
+      "nz/statute/act/public/2014/0056/section/21",
+      "nz/statute/act/public/2014/0056/section/210",
+      "nz/statute/act/public/2014/0056/section/211",
+      "nz/statute/act/public/2014/0056/section/212",
+      "nz/statute/act/public/2014/0056/section/213",
+      "nz/statute/act/public/2014/0056/section/214",
+      "nz/statute/act/public/2014/0056/section/215",
+      "nz/statute/act/public/2014/0056/section/216",
+      "nz/statute/act/public/2014/0056/section/217",
+      "nz/statute/act/public/2014/0056/section/218",
+      "nz/statute/act/public/2014/0056/section/219",
+      "nz/statute/act/public/2014/0056/section/22",
+      "nz/statute/act/public/2014/0056/section/220",
+      "nz/statute/act/public/2014/0056/section/221",
+      "nz/statute/act/public/2014/0056/section/222",
+      "nz/statute/act/public/2014/0056/section/223",
+      "nz/statute/act/public/2014/0056/section/224",
+      "nz/statute/act/public/2014/0056/section/225",
+      "nz/statute/act/public/2014/0056/section/226",
+      "nz/statute/act/public/2014/0056/section/227",
+      "nz/statute/act/public/2014/0056/section/228",
+      "nz/statute/act/public/2014/0056/section/229",
+      "nz/statute/act/public/2014/0056/section/23",
+      "nz/statute/act/public/2014/0056/section/230",
+      "nz/statute/act/public/2014/0056/section/231",
+      "nz/statute/act/public/2014/0056/section/232",
+      "nz/statute/act/public/2014/0056/section/233",
+      "nz/statute/act/public/2014/0056/section/234",
+      "nz/statute/act/public/2014/0056/section/235",
+      "nz/statute/act/public/2014/0056/section/236",
+      "nz/statute/act/public/2014/0056/section/237",
+      "nz/statute/act/public/2014/0056/section/238",
+      "nz/statute/act/public/2014/0056/section/239",
+      "nz/statute/act/public/2014/0056/section/24",
+      "nz/statute/act/public/2014/0056/section/240",
+      "nz/statute/act/public/2014/0056/section/241",
+      "nz/statute/act/public/2014/0056/section/242",
+      "nz/statute/act/public/2014/0056/section/243",
+      "nz/statute/act/public/2014/0056/section/244",
+      "nz/statute/act/public/2014/0056/section/245",
+      "nz/statute/act/public/2014/0056/section/246",
+      "nz/statute/act/public/2014/0056/section/247",
+      "nz/statute/act/public/2014/0056/section/248",
+      "nz/statute/act/public/2014/0056/section/249",
+      "nz/statute/act/public/2014/0056/section/25",
+      "nz/statute/act/public/2014/0056/section/250",
+      "nz/statute/act/public/2014/0056/section/251",
+      "nz/statute/act/public/2014/0056/section/252",
+      "nz/statute/act/public/2014/0056/section/253",
+      "nz/statute/act/public/2014/0056/section/254",
+      "nz/statute/act/public/2014/0056/section/255",
+      "nz/statute/act/public/2014/0056/section/256",
+      "nz/statute/act/public/2014/0056/section/257",
+      "nz/statute/act/public/2014/0056/section/258",
+      "nz/statute/act/public/2014/0056/section/259",
+      "nz/statute/act/public/2014/0056/section/26",
+      "nz/statute/act/public/2014/0056/section/260",
+      "nz/statute/act/public/2014/0056/section/261",
+      "nz/statute/act/public/2014/0056/section/262",
+      "nz/statute/act/public/2014/0056/section/263",
+      "nz/statute/act/public/2014/0056/section/264",
+      "nz/statute/act/public/2014/0056/section/265",
+      "nz/statute/act/public/2014/0056/section/266",
+      "nz/statute/act/public/2014/0056/section/267",
+      "nz/statute/act/public/2014/0056/section/268",
+      "nz/statute/act/public/2014/0056/section/269",
+      "nz/statute/act/public/2014/0056/section/27",
+      "nz/statute/act/public/2014/0056/section/270",
+      "nz/statute/act/public/2014/0056/section/271",
+      "nz/statute/act/public/2014/0056/section/272",
+      "nz/statute/act/public/2014/0056/section/273",
+      "nz/statute/act/public/2014/0056/section/274",
+      "nz/statute/act/public/2014/0056/section/275",
+      "nz/statute/act/public/2014/0056/section/276",
+      "nz/statute/act/public/2014/0056/section/278",
+      "nz/statute/act/public/2014/0056/section/279",
+      "nz/statute/act/public/2014/0056/section/28",
+      "nz/statute/act/public/2014/0056/section/280",
+      "nz/statute/act/public/2014/0056/section/281",
+      "nz/statute/act/public/2014/0056/section/282",
+      "nz/statute/act/public/2014/0056/section/29",
+      "nz/statute/act/public/2014/0056/section/3",
+      "nz/statute/act/public/2014/0056/section/30",
+      "nz/statute/act/public/2014/0056/section/31",
+      "nz/statute/act/public/2014/0056/section/32",
+      "nz/statute/act/public/2014/0056/section/33",
+      "nz/statute/act/public/2014/0056/section/34",
+      "nz/statute/act/public/2014/0056/section/35",
+      "nz/statute/act/public/2014/0056/section/37",
+      "nz/statute/act/public/2014/0056/section/38",
+      "nz/statute/act/public/2014/0056/section/39",
+      "nz/statute/act/public/2014/0056/section/4",
+      "nz/statute/act/public/2014/0056/section/40",
+      "nz/statute/act/public/2014/0056/section/41",
+      "nz/statute/act/public/2014/0056/section/42",
+      "nz/statute/act/public/2014/0056/section/43",
+      "nz/statute/act/public/2014/0056/section/44",
+      "nz/statute/act/public/2014/0056/section/45",
+      "nz/statute/act/public/2014/0056/section/46",
+      "nz/statute/act/public/2014/0056/section/47",
+      "nz/statute/act/public/2014/0056/section/48",
+      "nz/statute/act/public/2014/0056/section/49",
+      "nz/statute/act/public/2014/0056/section/4a",
+      "nz/statute/act/public/2014/0056/section/5",
+      "nz/statute/act/public/2014/0056/section/50",
+      "nz/statute/act/public/2014/0056/section/51",
+      "nz/statute/act/public/2014/0056/section/52",
+      "nz/statute/act/public/2014/0056/section/53",
+      "nz/statute/act/public/2014/0056/section/54",
+      "nz/statute/act/public/2014/0056/section/55",
+      "nz/statute/act/public/2014/0056/section/56",
+      "nz/statute/act/public/2014/0056/section/57",
+      "nz/statute/act/public/2014/0056/section/58",
+      "nz/statute/act/public/2014/0056/section/59",
+      "nz/statute/act/public/2014/0056/section/60",
+      "nz/statute/act/public/2014/0056/section/61",
+      "nz/statute/act/public/2014/0056/section/62",
+      "nz/statute/act/public/2014/0056/section/63",
+      "nz/statute/act/public/2014/0056/section/64",
+      "nz/statute/act/public/2014/0056/section/65",
+      "nz/statute/act/public/2014/0056/section/66",
+      "nz/statute/act/public/2014/0056/section/67",
+      "nz/statute/act/public/2014/0056/section/68",
+      "nz/statute/act/public/2014/0056/section/69",
+      "nz/statute/act/public/2014/0056/section/7",
+      "nz/statute/act/public/2014/0056/section/70",
+      "nz/statute/act/public/2014/0056/section/71",
+      "nz/statute/act/public/2014/0056/section/72",
+      "nz/statute/act/public/2014/0056/section/73",
+      "nz/statute/act/public/2014/0056/section/74",
+      "nz/statute/act/public/2014/0056/section/75",
+      "nz/statute/act/public/2014/0056/section/76",
+      "nz/statute/act/public/2014/0056/section/77",
+      "nz/statute/act/public/2014/0056/section/78",
+      "nz/statute/act/public/2014/0056/section/79",
+      "nz/statute/act/public/2014/0056/section/8",
+      "nz/statute/act/public/2014/0056/section/80",
+      "nz/statute/act/public/2014/0056/section/81",
+      "nz/statute/act/public/2014/0056/section/82",
+      "nz/statute/act/public/2014/0056/section/83",
+      "nz/statute/act/public/2014/0056/section/84",
+      "nz/statute/act/public/2014/0056/section/85",
+      "nz/statute/act/public/2014/0056/section/86",
+      "nz/statute/act/public/2014/0056/section/87",
+      "nz/statute/act/public/2014/0056/section/88",
+      "nz/statute/act/public/2014/0056/section/89",
+      "nz/statute/act/public/2014/0056/section/9",
+      "nz/statute/act/public/2014/0056/section/90",
+      "nz/statute/act/public/2014/0056/section/91",
+      "nz/statute/act/public/2014/0056/section/92",
+      "nz/statute/act/public/2014/0056/section/93",
+      "nz/statute/act/public/2014/0056/section/94",
+      "nz/statute/act/public/2014/0056/section/95",
+      "nz/statute/act/public/2014/0056/section/96",
+      "nz/statute/act/public/2014/0056/section/97",
+      "nz/statute/act/public/2014/0056/section/98",
+      "nz/statute/act/public/2014/0056/section/99",
       "nz/statute/act/public/2018/0004",
       "nz/statute/act/public/2018/0004/schedule/1",
       "nz/statute/act/public/2018/0004/schedule/1/part/1",
@@ -10781,6 +11210,135 @@
       "nz/statute/act/public/2022/0030/section/97",
       "nz/statute/act/public/2022/0030/section/98",
       "nz/statute/act/public/2022/0030/section/99",
+      "nz/statute/act/public/2024/0019",
+      "nz/statute/act/public/2024/0019/section/1",
+      "nz/statute/act/public/2024/0019/section/10",
+      "nz/statute/act/public/2024/0019/section/11",
+      "nz/statute/act/public/2024/0019/section/12",
+      "nz/statute/act/public/2024/0019/section/13",
+      "nz/statute/act/public/2024/0019/section/14",
+      "nz/statute/act/public/2024/0019/section/15",
+      "nz/statute/act/public/2024/0019/section/16",
+      "nz/statute/act/public/2024/0019/section/17",
+      "nz/statute/act/public/2024/0019/section/18",
+      "nz/statute/act/public/2024/0019/section/19",
+      "nz/statute/act/public/2024/0019/section/2",
+      "nz/statute/act/public/2024/0019/section/20",
+      "nz/statute/act/public/2024/0019/section/21",
+      "nz/statute/act/public/2024/0019/section/22",
+      "nz/statute/act/public/2024/0019/section/23",
+      "nz/statute/act/public/2024/0019/section/24",
+      "nz/statute/act/public/2024/0019/section/25",
+      "nz/statute/act/public/2024/0019/section/26",
+      "nz/statute/act/public/2024/0019/section/27",
+      "nz/statute/act/public/2024/0019/section/28",
+      "nz/statute/act/public/2024/0019/section/29",
+      "nz/statute/act/public/2024/0019/section/3",
+      "nz/statute/act/public/2024/0019/section/30",
+      "nz/statute/act/public/2024/0019/section/31",
+      "nz/statute/act/public/2024/0019/section/32",
+      "nz/statute/act/public/2024/0019/section/33",
+      "nz/statute/act/public/2024/0019/section/34",
+      "nz/statute/act/public/2024/0019/section/35",
+      "nz/statute/act/public/2024/0019/section/36",
+      "nz/statute/act/public/2024/0019/section/37",
+      "nz/statute/act/public/2024/0019/section/38",
+      "nz/statute/act/public/2024/0019/section/39",
+      "nz/statute/act/public/2024/0019/section/4",
+      "nz/statute/act/public/2024/0019/section/40",
+      "nz/statute/act/public/2024/0019/section/41",
+      "nz/statute/act/public/2024/0019/section/42",
+      "nz/statute/act/public/2024/0019/section/43",
+      "nz/statute/act/public/2024/0019/section/44",
+      "nz/statute/act/public/2024/0019/section/5",
+      "nz/statute/act/public/2024/0019/section/6",
+      "nz/statute/act/public/2024/0019/section/7",
+      "nz/statute/act/public/2024/0019/section/8",
+      "nz/statute/act/public/2024/0019/section/9",
+      "nz/statute/act/public/2025/0026",
+      "nz/statute/act/public/2025/0026/section/1",
+      "nz/statute/act/public/2025/0026/section/10",
+      "nz/statute/act/public/2025/0026/section/11",
+      "nz/statute/act/public/2025/0026/section/12",
+      "nz/statute/act/public/2025/0026/section/13",
+      "nz/statute/act/public/2025/0026/section/14",
+      "nz/statute/act/public/2025/0026/section/15",
+      "nz/statute/act/public/2025/0026/section/16",
+      "nz/statute/act/public/2025/0026/section/17",
+      "nz/statute/act/public/2025/0026/section/18",
+      "nz/statute/act/public/2025/0026/section/19",
+      "nz/statute/act/public/2025/0026/section/2",
+      "nz/statute/act/public/2025/0026/section/20",
+      "nz/statute/act/public/2025/0026/section/21",
+      "nz/statute/act/public/2025/0026/section/22",
+      "nz/statute/act/public/2025/0026/section/23",
+      "nz/statute/act/public/2025/0026/section/24",
+      "nz/statute/act/public/2025/0026/section/25",
+      "nz/statute/act/public/2025/0026/section/26",
+      "nz/statute/act/public/2025/0026/section/27",
+      "nz/statute/act/public/2025/0026/section/28",
+      "nz/statute/act/public/2025/0026/section/29",
+      "nz/statute/act/public/2025/0026/section/3",
+      "nz/statute/act/public/2025/0026/section/30",
+      "nz/statute/act/public/2025/0026/section/4",
+      "nz/statute/act/public/2025/0026/section/5",
+      "nz/statute/act/public/2025/0026/section/6",
+      "nz/statute/act/public/2025/0026/section/7",
+      "nz/statute/act/public/2025/0026/section/8",
+      "nz/statute/act/public/2025/0026/section/9",
+      "nz/statute/act/public/2025/0027",
+      "nz/statute/act/public/2025/0027/schedule/1",
+      "nz/statute/act/public/2025/0027/schedule/1/part/11",
+      "nz/statute/act/public/2025/0027/schedule/1/part/11/clause/104",
+      "nz/statute/act/public/2025/0027/schedule/1/part/11/clause/105",
+      "nz/statute/act/public/2025/0027/schedule/2",
+      "nz/statute/act/public/2025/0027/schedule/2/part/6",
+      "nz/statute/act/public/2025/0027/schedule/2/part/6/clause/24",
+      "nz/statute/act/public/2025/0027/schedule/2/part/6/clause/25",
+      "nz/statute/act/public/2025/0027/schedule/2/part/6/clause/26",
+      "nz/statute/act/public/2025/0027/schedule/2/part/6/clause/27",
+      "nz/statute/act/public/2025/0027/schedule/3",
+      "nz/statute/act/public/2025/0027/schedule/3/part/4",
+      "nz/statute/act/public/2025/0027/schedule/3/part/4/clause/5",
+      "nz/statute/act/public/2025/0027/schedule/3/part/4/clause/6",
+      "nz/statute/act/public/2025/0027/schedule/3/part/4/clause/7",
+      "nz/statute/act/public/2025/0027/schedule/3/part/4/clause/8",
+      "nz/statute/act/public/2025/0027/section/1",
+      "nz/statute/act/public/2025/0027/section/10",
+      "nz/statute/act/public/2025/0027/section/11",
+      "nz/statute/act/public/2025/0027/section/12",
+      "nz/statute/act/public/2025/0027/section/13",
+      "nz/statute/act/public/2025/0027/section/14",
+      "nz/statute/act/public/2025/0027/section/15",
+      "nz/statute/act/public/2025/0027/section/16",
+      "nz/statute/act/public/2025/0027/section/17",
+      "nz/statute/act/public/2025/0027/section/18",
+      "nz/statute/act/public/2025/0027/section/19",
+      "nz/statute/act/public/2025/0027/section/2",
+      "nz/statute/act/public/2025/0027/section/20",
+      "nz/statute/act/public/2025/0027/section/21",
+      "nz/statute/act/public/2025/0027/section/22",
+      "nz/statute/act/public/2025/0027/section/23",
+      "nz/statute/act/public/2025/0027/section/24",
+      "nz/statute/act/public/2025/0027/section/25",
+      "nz/statute/act/public/2025/0027/section/26",
+      "nz/statute/act/public/2025/0027/section/27",
+      "nz/statute/act/public/2025/0027/section/28",
+      "nz/statute/act/public/2025/0027/section/29",
+      "nz/statute/act/public/2025/0027/section/3",
+      "nz/statute/act/public/2025/0027/section/30",
+      "nz/statute/act/public/2025/0027/section/4",
+      "nz/statute/act/public/2025/0027/section/5",
+      "nz/statute/act/public/2025/0027/section/6",
+      "nz/statute/act/public/2025/0027/section/7",
+      "nz/statute/act/public/2025/0027/section/8",
+      "nz/statute/act/public/2025/0027/section/9",
+      "nz/statute/act/public/2025/0050",
+      "nz/statute/act/public/2025/0050/section/1",
+      "nz/statute/act/public/2025/0050/section/2",
+      "nz/statute/act/public/2025/0050/section/3",
+      "nz/statute/act/public/2025/0050/section/4",
+      "nz/statute/act/public/2025/0050/section/5",
       "nz/statute/act/public/2026/0008",
       "nz/statute/act/public/2026/0008/schedule/1",
       "nz/statute/act/public/2026/0008/schedule/2",
@@ -11036,15 +11594,75 @@
       "nz/statute/act/public/2026/0008/section/96",
       "nz/statute/act/public/2026/0008/section/97",
       "nz/statute/act/public/2026/0008/section/98",
-      "nz/statute/act/public/2026/0008/section/99"
+      "nz/statute/act/public/2026/0008/section/99",
+      "nz/statute/act/public/2026/0054",
+      "nz/statute/act/public/2026/0054/schedule/1",
+      "nz/statute/act/public/2026/0054/schedule/1/part/16",
+      "nz/statute/act/public/2026/0054/schedule/1/part/16/clause/124",
+      "nz/statute/act/public/2026/0054/schedule/1/part/16/clause/125",
+      "nz/statute/act/public/2026/0054/schedule/1/part/16/clause/126",
+      "nz/statute/act/public/2026/0054/schedule/1/part/16/clause/127",
+      "nz/statute/act/public/2026/0054/schedule/2",
+      "nz/statute/act/public/2026/0054/schedule/2/part/18",
+      "nz/statute/act/public/2026/0054/schedule/2/part/18/clause/131",
+      "nz/statute/act/public/2026/0054/schedule/2/part/18/clause/132",
+      "nz/statute/act/public/2026/0054/section/1",
+      "nz/statute/act/public/2026/0054/section/10",
+      "nz/statute/act/public/2026/0054/section/11",
+      "nz/statute/act/public/2026/0054/section/12",
+      "nz/statute/act/public/2026/0054/section/13",
+      "nz/statute/act/public/2026/0054/section/14",
+      "nz/statute/act/public/2026/0054/section/15",
+      "nz/statute/act/public/2026/0054/section/2",
+      "nz/statute/act/public/2026/0054/section/3",
+      "nz/statute/act/public/2026/0054/section/4",
+      "nz/statute/act/public/2026/0054/section/5",
+      "nz/statute/act/public/2026/0054/section/6",
+      "nz/statute/act/public/2026/0054/section/7",
+      "nz/statute/act/public/2026/0054/section/8",
+      "nz/statute/act/public/2026/0054/section/9"
     ],
-    "commit": "3f7b5d985bce759cb487f1b7fd050f5cbf007d17",
+    "commit": "4aa31fa00fec0706f00cbda3bd4fb53fb0adf3ca",
     "provision_sources": [
-      "data/corpus/provisions/nz/statute/2026-06-16-rulespec-nz-pco.jsonl",
-      "data/corpus/provisions/nz/regulation/2026-06-16-rulespec-nz-pco.jsonl",
-      "data/corpus/provisions/nz/district-plan/2026-07-18-wellington-district-plan.jsonl"
+      {
+        "path": "data/corpus/provisions/nz/district-plan/2026-07-18-wellington-district-plan.jsonl",
+        "row_count": 865,
+        "sha256": "4e34f0659f1287ef711fd81bb3dff1a81a61bb278eb6ecba0b14dd46d46929c4"
+      },
+      {
+        "path": "data/corpus/provisions/nz/regulation/2026-06-16-rulespec-nz-pco.jsonl",
+        "row_count": 652,
+        "sha256": "a9b0427491069803dce9800a0d86e4afa3dd40a8e5d4e5357d99bed135dfcb0d"
+      },
+      {
+        "path": "data/corpus/provisions/nz/regulation/2026-07-19-rulespec-nz-pco.jsonl",
+        "row_count": 44,
+        "sha256": "aeee28a95558d8b86b1dcecf4aec51c88dd33a5f17eb5a851b258279f44ac507"
+      },
+      {
+        "path": "data/corpus/provisions/nz/statute/2026-06-16-rulespec-nz-pco.jsonl",
+        "row_count": 9519,
+        "sha256": "e18cbb943d3055b93528989afaec4816fd13b4dadc1945a3fde35ffd16a3fd42"
+      },
+      {
+        "path": "data/corpus/provisions/nz/statute/2026-07-19-rulespec-nz-pco.jsonl",
+        "row_count": 463,
+        "sha256": "85782e4ed17f67fb26810af84a30eac212eae3da4327bd032df92ca989902a9e"
+      },
+      {
+        "path": "data/corpus/provisions/nz/statute/2026-07-25-rulespec-nz-pco.jsonl",
+        "row_count": 51,
+        "sha256": "3ef8ce0f70fdabd7daf17c374d44a6bd420908847b359ad365c114361a53e4c1"
+      },
+      {
+        "path": "data/corpus/provisions/nz/statute/2026-10-23-rulespec-nz-pco.jsonl",
+        "row_count": 26,
+        "sha256": "d2bfab06f4f699010567547e4b47acc3e9d6eb9f9593d33b526ec3e9b4476d9a"
+      }
     ],
-    "release": "nz-rulespec-2026-07-18",
+    "release": "nz-rulespec-2026-10-23-amendment-markers",
+    "release_content_sha256": "4b9ae58eb2fe55dd12d8ee9526c13fff0b75c122251ab4dbcaa40ff04dee7bc2",
+    "release_selector_sha256": "b9b73e48e2652bdb9bf4f0740139f6130512d8bd63d7fc9f6197b7ae4c717daf",
     "repository": "TheAxiomFoundation/axiom-corpus"
   },
   "pending_ledger": {
@@ -11090,7 +11708,7 @@
     ]
   },
   "rulespec": {
-    "commit": "89a7d25dc03a4d045348620283332de10b1047da",
+    "commit": "c8ec92e855f835e8348803449836791aa56f5d38",
     "files": [
       {
         "citations": [],
@@ -12631,15 +13249,21 @@
       },
       {
         "citations": [
-          "nz/guidance/studylink/student-allowances",
-          "nz/regulation/regulation/public/1998/0277/regulation/4"
+          "nz/guidance/studylink/student-allowance-parental-income/block-2",
+          "nz/regulation/regulation/public/1998/0277/regulation/2",
+          "nz/regulation/regulation/public/1998/0277/regulation/4",
+          "nz/regulation/regulation/public/1998/0277/regulation/43",
+          "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+          "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2",
+          "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3",
+          "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
         ],
         "nodes": [
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "7c7722db5360958ee09e2564b5584e02fb742c726c0af34d436a936f8c0753d9",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_parents_living_apart_abatement",
@@ -12647,9 +13271,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "7c7722db5360958ee09e2564b5584e02fb742c726c0af34d436a936f8c0753d9",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_other_dependent_students_abatement",
@@ -12657,19 +13281,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/guidance/studylink/student-allowance-parental-income/block-2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_lower_limit",
-            "name": "student_allowance_parental_income_lower_limit"
-          },
-          {
-            "citations": [
-              "nz/guidance/studylink/student-allowances"
-            ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "14fc67e76572cb8e5e7a11770d9c1769cb06e5d71227f4a52b0590c07c0127d3",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_upper_limit_at_home",
@@ -12677,9 +13291,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/guidance/studylink/student-allowance-parental-income/block-2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "14fc67e76572cb8e5e7a11770d9c1769cb06e5d71227f4a52b0590c07c0127d3",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_upper_limit_away",
@@ -12687,29 +13301,89 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_abatement_threshold_at_home",
-            "name": "student_allowance_parental_income_abatement_threshold_at_home"
+            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_first_band_width_at_home",
+            "name": "student_allowance_parental_income_first_band_width_at_home"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_abatement_threshold_away",
-            "name": "student_allowance_parental_income_abatement_threshold_away"
+            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_first_band_width_away",
+            "name": "student_allowance_parental_income_first_band_width_away"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_weekly_parental_income_lower_limit",
+            "name": "student_allowance_weekly_parental_income_lower_limit"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
+            ],
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_first_band_rate",
+            "name": "student_allowance_parental_income_first_band_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
+            ],
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_second_band_rate",
+            "name": "student_allowance_parental_income_second_band_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/regulation/2"
+            ],
+            "citations_sha256": "18450619f3d3736a023ee4a95e48dd395558faf5ab651dcce244458609aeb80f",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_parental_income_weeks_per_year",
+            "name": "student_allowance_parental_income_weeks_per_year"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
+            ],
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_rate_band_age_threshold",
+            "name": "student_allowance_rate_band_age_threshold"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/regulation/2"
+            ],
+            "citations_sha256": "18450619f3d3736a023ee4a95e48dd395558faf5ab651dcce244458609aeb80f",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_partner_age_threshold",
+            "name": "student_allowance_partner_age_threshold"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
+            ],
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_weekly_basic_allowance_at_home",
@@ -12717,9 +13391,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_weekly_basic_allowance_away",
@@ -12727,9 +13401,12 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "18280862c0e3dd6dbd9e210c51d5c71d86e4f85f7c0b2680ee64741dec7a326a",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_weekly_student_income_threshold",
@@ -12737,9 +13414,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_partner_income_threshold",
@@ -12747,9 +13424,19 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_partner_income_upper_limit",
+            "name": "student_allowance_partner_income_upper_limit"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
+            ],
+            "citations_sha256": "ce2d981ee5826de56866f3e5ad56a1efb1cefe1ab62ae0d3cf1ca09b1b113913",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_independent_circumstances_gross_rate",
@@ -12757,9 +13444,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_age_24_plus_home_rate",
@@ -12767,9 +13454,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_age_24_plus_away_rate",
@@ -12777,9 +13464,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_single_under_24_home_rate",
@@ -12787,9 +13474,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_single_under_24_away_rate",
@@ -12797,9 +13484,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_couple_home_earning_partner_rate",
@@ -12807,9 +13494,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_couple_away_earning_partner_rate",
@@ -12817,9 +13504,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_couple_dependent_partner_rate",
@@ -12827,9 +13514,59 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_couple_low_income_enrolled_not_eligible_childless_rate",
+            "name": "student_allowance_couple_low_income_enrolled_not_eligible_childless_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
+            ],
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_couple_low_income_enrolled_eligible_childless_rate",
+            "name": "student_allowance_couple_low_income_enrolled_eligible_childless_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
+            ],
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_couple_low_income_enrolled_not_eligible_children_rate",
+            "name": "student_allowance_couple_low_income_enrolled_not_eligible_children_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
+            ],
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_couple_low_income_enrolled_eligible_children_rate",
+            "name": "student_allowance_couple_low_income_enrolled_eligible_children_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
+            ],
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_couple_low_income_enrolled_receiving_children_rate",
+            "name": "student_allowance_couple_low_income_enrolled_receiving_children_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
+            ],
+            "citations_sha256": "000ca0a69b7ae42ba55a24d40413988533958aab70bf4aede48571d6a7072d94",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_single_with_children_rate",
@@ -12837,9 +13574,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_at_home_with_earning_partner_and_children_rate",
@@ -12847,9 +13584,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_away_with_earning_partner_and_children_rate",
@@ -12857,9 +13594,29 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_at_home_with_earning_partner_receiving_grant_and_children_rate",
+            "name": "student_allowance_at_home_with_earning_partner_receiving_grant_and_children_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
+            ],
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:regulations/student_allowances/core#student_allowance_away_with_earning_partner_receiving_grant_and_children_rate",
+            "name": "student_allowance_away_with_earning_partner_receiving_grant_and_children_rate"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
+            ],
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_with_children_dependent_partner_rate",
@@ -12867,29 +13624,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:regulations/student_allowances/core#student_allowance_tax_rate_1",
-            "name": "student_allowance_tax_rate_1"
-          },
-          {
-            "citations": [
-              "nz/guidance/studylink/student-allowances"
-            ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:regulations/student_allowances/core#student_allowance_tax_rate_2",
-            "name": "student_allowance_tax_rate_2"
-          },
-          {
-            "citations": [
-              "nz/guidance/studylink/student-allowances"
-            ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "7c7722db5360958ee09e2564b5584e02fb742c726c0af34d436a936f8c0753d9",
             "dependencies": [
               "student_allowance_other_dependent_students_abatement",
               "student_allowance_parents_living_apart_abatement"
@@ -12900,9 +13637,22 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "18450619f3d3736a023ee4a95e48dd395558faf5ab651dcce244458609aeb80f",
+            "dependencies": [
+              "student_allowance_annual_parental_income",
+              "student_allowance_parental_income_weeks_per_year"
+            ],
+            "dependencies_sha256": "99e6a4508d029396bd7771410b88fdd8a878d6589a0a0c05dacc9d9c06f7ba30",
+            "id": "nz:regulations/student_allowances/core#student_allowance_weekly_parental_income",
+            "name": "student_allowance_weekly_parental_income"
+          },
+          {
+            "citations": [
+              "nz/regulation/regulation/public/1998/0277/regulation/43"
+            ],
+            "citations_sha256": "c0c4c6dc4dff05424879e4c56d4270f4eccd09178babff36ae1e904d5d74a3d0",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:regulations/student_allowances/core#student_allowance_weekly_student_income",
@@ -12910,9 +13660,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/43"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "c0c4c6dc4dff05424879e4c56d4270f4eccd09178babff36ae1e904d5d74a3d0",
             "dependencies": [
               "student_allowance_has_recognised_partner"
             ],
@@ -12922,9 +13672,9 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "18450619f3d3736a023ee4a95e48dd395558faf5ab651dcce244458609aeb80f",
             "dependencies": [
               "student_allowance_weekly_partner_income",
               "student_allowance_weekly_student_income"
@@ -12935,19 +13685,22 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "citations_sha256": "18450619f3d3736a023ee4a95e48dd395558faf5ab651dcce244458609aeb80f",
+            "dependencies": [
+              "student_allowance_partner_age_threshold"
+            ],
+            "dependencies_sha256": "4a3ac333a065c5efa73a435f62e084acf42a8918ab8163bc108a032d1b252db4",
             "id": "nz:regulations/student_allowances/core#student_allowance_has_recognised_partner",
             "name": "student_allowance_has_recognised_partner"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "fdc77d403f3ca95252b8509b15a139eefe880de1b9b32f44c2d5b0bce9c817cb",
             "dependencies": [
               "student_allowance_has_recognised_partner"
             ],
@@ -12957,23 +13710,24 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e8239c8250b808c7a36622d21ab494564b495dbfe4bd28efdd9aafecfc086af0",
             "dependencies": [
               "student_allowance_combined_weekly_income",
               "student_allowance_has_recognised_partner",
-              "student_allowance_partner_income_threshold"
+              "student_allowance_partner_income_threshold",
+              "student_allowance_partner_income_upper_limit"
             ],
-            "dependencies_sha256": "9b41f39a3c072959c3e33ebb069c29eb82e82f61d32fe66209b5276631f36c8a",
+            "dependencies_sha256": "01b4e46086c3175e74c5b30d3cebdc873625d99145cb4b75b541b2ba447426e6",
             "id": "nz:regulations/student_allowances/core#student_allowance_has_earning_partner",
             "name": "student_allowance_has_earning_partner"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "434b8ff126e73ae92af9e4687c9ed964f98b336d760a8af4cb382a03475fb706",
             "dependencies": [
               "student_allowance_combined_weekly_income",
               "student_allowance_has_recognised_partner",
@@ -12985,46 +13739,58 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "7fe4fdb18c7577c0ca2f7efa26ed6895dcc12090a0c0957dc95d4092b097e927",
             "dependencies": [
               "student_allowance_age_24_plus_away_rate",
               "student_allowance_age_24_plus_home_rate",
               "student_allowance_independent_circumstances_gross_rate",
               "student_allowance_lives_at_home",
+              "student_allowance_rate_band_age_threshold",
               "student_allowance_single_under_24_away_rate",
               "student_allowance_single_under_24_home_rate"
             ],
-            "dependencies_sha256": "8667a96386aa28c141d5bbebe6e43d134ac48da958ef913ee933fa028df82fb5",
+            "dependencies_sha256": "3fdbf7c1f725264daf90d55e5e2cfdaa90a39fdd3da0e8f6cd763e1f4397d8fc",
             "id": "nz:regulations/student_allowances/core#student_allowance_single_student_no_children_gross",
             "name": "student_allowance_single_student_no_children_gross"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e9457eb0fc043ae81343f096ede9e2f96b7f9521237714c6fb89eaafb68870b6",
             "dependencies": [
               "student_allowance_couple_away_earning_partner_rate",
               "student_allowance_couple_dependent_partner_rate",
               "student_allowance_couple_home_earning_partner_rate",
+              "student_allowance_couple_low_income_enrolled_eligible_childless_rate",
+              "student_allowance_couple_low_income_enrolled_not_eligible_childless_rate",
               "student_allowance_has_dependent_partner",
               "student_allowance_has_earning_partner",
               "student_allowance_lives_at_home"
             ],
-            "dependencies_sha256": "0537efce7f0b8ed7b066e4546ac6ce813faae30dcf1558e7ad89380540b1a4db",
+            "dependencies_sha256": "fd8615e1792fe1b271b73cacd6c27276f28d822ef0f0a6bdf7c3ee9921bd0acc",
             "id": "nz:regulations/student_allowances/core#student_allowance_couple_no_children_gross",
             "name": "student_allowance_couple_no_children_gross"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "e06dcd583e29fb67765c6b0952690fcce4810a4e629dbbebdf1b063bceba5e75",
             "dependencies": [
               "student_allowance_at_home_with_earning_partner_and_children_rate",
+              "student_allowance_at_home_with_earning_partner_receiving_grant_and_children_rate",
               "student_allowance_away_with_earning_partner_and_children_rate",
+              "student_allowance_away_with_earning_partner_receiving_grant_and_children_rate",
+              "student_allowance_couple_low_income_enrolled_eligible_children_rate",
+              "student_allowance_couple_low_income_enrolled_not_eligible_children_rate",
+              "student_allowance_couple_low_income_enrolled_receiving_children_rate",
               "student_allowance_has_dependent_partner",
               "student_allowance_has_earning_partner",
               "student_allowance_has_recognised_partner",
@@ -13032,15 +13798,16 @@
               "student_allowance_single_with_children_rate",
               "student_allowance_with_children_dependent_partner_rate"
             ],
-            "dependencies_sha256": "3fa503123b566205a7b0e08bdca71ff9698305f479d9847dd5f3de5160c97287",
+            "dependencies_sha256": "792beaae91a247eb3ab7d3591d0d73b5645090468fdf01ed340ad46fef9321f6",
             "id": "nz:regulations/student_allowances/core#student_allowance_students_with_children_gross",
             "name": "student_allowance_students_with_children_gross"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "23c81fb4d42b661d5f8a59891ff14ba3f18a0626af617064905b6b6bff83735d",
             "dependencies": [
               "student_allowance_couple_no_children_gross",
               "student_allowance_has_recognised_partner",
@@ -13053,64 +13820,66 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "c796c994d8961283a0ddd0b5719d6ed3c6d9260e435ddd2ff3ad90c33474c18b",
             "dependencies": [
-              "student_allowance_annual_parental_income",
-              "student_allowance_parental_income_abatement_threshold_at_home",
-              "student_allowance_parental_income_lower_limit",
-              "student_allowance_weekly_basic_allowance_at_home"
+              "student_allowance_parental_income_first_band_rate",
+              "student_allowance_parental_income_first_band_width_at_home",
+              "student_allowance_parental_income_second_band_rate",
+              "student_allowance_weekly_basic_allowance_at_home",
+              "student_allowance_weekly_parental_income",
+              "student_allowance_weekly_parental_income_lower_limit"
             ],
-            "dependencies_sha256": "8d74f58650f1172c6a167f2dbbed56990c6e71f6ae256f5d70d489b5abb1422d",
+            "dependencies_sha256": "45100d3dab786cb770c0129db67fb85d1b4e5217eaf53f03624fdcfcefdb8a23",
             "id": "nz:regulations/student_allowances/core#student_allowance_abated_weekly_allowance_at_home",
             "name": "student_allowance_abated_weekly_allowance_at_home"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/regulation/regulation/public/1998/0277/regulation/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "c796c994d8961283a0ddd0b5719d6ed3c6d9260e435ddd2ff3ad90c33474c18b",
             "dependencies": [
-              "student_allowance_annual_parental_income",
-              "student_allowance_parental_income_abatement_threshold_away",
-              "student_allowance_parental_income_lower_limit",
-              "student_allowance_weekly_basic_allowance_away"
+              "student_allowance_parental_income_first_band_rate",
+              "student_allowance_parental_income_first_band_width_away",
+              "student_allowance_parental_income_second_band_rate",
+              "student_allowance_weekly_basic_allowance_away",
+              "student_allowance_weekly_parental_income",
+              "student_allowance_weekly_parental_income_lower_limit"
             ],
-            "dependencies_sha256": "361559319b34a7e8c2e9a1edc3b21cee8ac2d142089524fbf55097886a0c2fba",
+            "dependencies_sha256": "f422a1b1e0632df98cd70eeeb9b9ea9aa2bac8c5d2f9d179d86492912257d153",
             "id": "nz:regulations/student_allowances/core#student_allowance_abated_weekly_allowance_away",
             "name": "student_allowance_abated_weekly_allowance_away"
           },
           {
             "citations": [
-              "nz/guidance/studylink/student-allowances"
+              "nz/guidance/studylink/student-allowance-parental-income/block-2",
+              "nz/regulation/regulation/public/1998/0277/regulation/4",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/1",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/1/clause/2",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/1/subpart/2/clause/3",
+              "nz/regulation/regulation/public/1998/0277/schedule/2/part/2/clause/4"
             ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
+            "citations_sha256": "64b778151e5a0f05f1a806760428047d48b9dd62bc37988057872bcde595a4f2",
             "dependencies": [
               "student_allowance_abated_weekly_allowance_at_home",
               "student_allowance_abated_weekly_allowance_away",
               "student_allowance_annual_parental_income",
+              "student_allowance_has_recognised_partner",
               "student_allowance_lives_at_home",
               "student_allowance_parental_income_upper_limit_at_home",
               "student_allowance_parental_income_upper_limit_away",
+              "student_allowance_rate_band_age_threshold",
+              "student_allowance_weekly_gross_allowance",
               "student_allowance_weekly_student_income",
               "student_allowance_weekly_student_income_threshold"
             ],
-            "dependencies_sha256": "feae4ced2ccad99fad8c2b68fef081f8ca7305ee0350edff1c17798763db3ad1",
+            "dependencies_sha256": "59750db1c3849fb1c8dc30f3867a2bceb5fecb46efc4506eabb8613aaf300b98",
             "id": "nz:regulations/student_allowances/core#student_allowance_weekly_allowance",
             "name": "student_allowance_weekly_allowance"
-          },
-          {
-            "citations": [
-              "nz/guidance/studylink/student-allowances"
-            ],
-            "citations_sha256": "2590eb35572d8b0955a7a47c85df6459d0c2683ecc121093b0c66e56b0598e29",
-            "dependencies": [
-              "student_allowance_weekly_allowance"
-            ],
-            "dependencies_sha256": "90a22c20f42f45340da26642fd60494307f159a5e92098253c1f016c16abd14c",
-            "id": "nz:regulations/student_allowances/core#student_allowance_annual_allowance",
-            "name": "student_allowance_annual_allowance"
           }
         ],
         "path": "nz/regulations/student_allowances/core.yaml"
@@ -13263,41 +14032,65 @@
       {
         "citations": [],
         "nodes": [],
-        "path": "nz/statutes/child_support/core_formula.test.yaml"
+        "path": "nz/statutes/act/public/2018/0032/section/75.test.yaml"
       },
       {
         "citations": [
-          "nz/guidance/ird/child-support/overview",
-          "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
-          "nz/statute/act/public/1991/0142/schedule/1",
-          "nz/statute/act/public/1991/0142/schedule/2",
-          "nz/statute/act/public/1991/0142/section/35a",
-          "nz/statute/act/public/1991/0142/section/4",
-          "nz/statute/act/public/1991/0142/section/40",
-          "nz/statute/act/public/1991/0142/section/5",
-          "nz/statute/act/public/1991/0142/section/72",
-          "nz/statute/act/public/1991/0142/section/8"
+          "nz/statute/act/public/2018/0032/section/2",
+          "nz/statute/act/public/2018/0032/section/75"
         ],
         "nodes": [
           {
             "citations": [
-              "nz/statute/act/public/1991/0142/schedule/1"
+              "nz/statute/act/public/2018/0032/section/2",
+              "nz/statute/act/public/2018/0032/section/75"
             ],
-            "citations_sha256": "1a858c99e934c492729d80df00437f8bb562925fda65312b0f73d4f5fef00c6d",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_living_allowance_percentage",
-            "name": "cs_living_allowance_percentage"
+            "citations_sha256": "c083bc05818b5e0c430eb9c03800a3261fa24018366e5eb321b89a406ef3cbdc",
+            "dependencies": [
+              "commencement_indicator"
+            ],
+            "dependencies_sha256": "d4b413ee2a9b7b87e58b25597f2ff1da86481479dd5e3723abf76710568e5e6e",
+            "id": "nz:statutes/act/public/2018/0032/section/75#winter_energy_payment_may_be_terminated",
+            "name": "winter_energy_payment_may_be_terminated"
           },
           {
             "citations": [
-              "nz/statute/act/public/1991/0142/section/40"
+              "nz/statute/act/public/2018/0032/section/2"
             ],
-            "citations_sha256": "26e3f5024a025461d6025f52df812eafbe92fa548d62254ac4fc290df41b977b",
+            "citations_sha256": "2e0219dcdde3f5328a69ededab6081ebf9d411180a22183087a936cc8e08a7ad",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_child_support_rate_standard",
-            "name": "cs_child_support_rate_standard"
+            "id": "nz:statutes/act/public/2018/0032/section/75#commencement_indicator",
+            "name": "commencement_indicator"
+          }
+        ],
+        "path": "nz/statutes/act/public/2018/0032/section/75.yaml"
+      },
+      {
+        "citations": [],
+        "nodes": [],
+        "path": "nz/statutes/child_support/core_formula.test.yaml"
+      },
+      {
+        "citations": [
+          "nz/statute/act/public/1991/0142/schedule/2",
+          "nz/statute/act/public/1991/0142/section/16",
+          "nz/statute/act/public/1991/0142/section/30",
+          "nz/statute/act/public/1991/0142/section/31",
+          "nz/statute/act/public/1991/0142/section/32",
+          "nz/statute/act/public/1991/0142/section/33",
+          "nz/statute/act/public/1991/0142/section/34"
+        ],
+        "nodes": [
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2"
+            ],
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band2_lower_care_proportion",
+            "name": "cs_care_band2_lower_care_proportion"
           },
           {
             "citations": [
@@ -13306,8 +14099,8 @@
             "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_child_support_rate_one_child",
-            "name": "cs_child_support_rate_one_child"
+            "id": "nz:statutes/child_support/core_formula#cs_care_band2_care_cost_percentage",
+            "name": "cs_care_band2_care_cost_percentage"
           },
           {
             "citations": [
@@ -13316,8 +14109,8 @@
             "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_child_support_rate_two_children",
-            "name": "cs_child_support_rate_two_children"
+            "id": "nz:statutes/child_support/core_formula#cs_care_band3_lower_care_proportion",
+            "name": "cs_care_band3_lower_care_proportion"
           },
           {
             "citations": [
@@ -13326,124 +14119,180 @@
             "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_child_support_rate_three_or_more_children",
-            "name": "cs_child_support_rate_three_or_more_children"
-          },
-          {
-            "citations": [
-              "nz/statute/act/public/1991/0142/schedule/1"
-            ],
-            "citations_sha256": "1a858c99e934c492729d80df00437f8bb562925fda65312b0f73d4f5fef00c6d",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_maximum_child_support_annual_rate",
-            "name": "cs_maximum_child_support_annual_rate"
-          },
-          {
-            "citations": [
-              "nz/statute/act/public/1991/0142/section/72"
-            ],
-            "citations_sha256": "d9b8d156c1bdd07913d93fb0c84b4bfb9d774dfedddd22e301a681c2af2dcd12",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_minimum_child_support_annual_rate",
-            "name": "cs_minimum_child_support_annual_rate"
-          },
-          {
-            "citations": [
-              "nz/statute/act/public/1991/0142/schedule/1"
-            ],
-            "citations_sha256": "1a858c99e934c492729d80df00437f8bb562925fda65312b0f73d4f5fef00c6d",
-            "dependencies": [
-              "cs_living_allowance_percentage"
-            ],
-            "dependencies_sha256": "15fdda82e44e20fa1a3bf152b5807c2b25af4671218450f45fab8456a52ee390",
-            "id": "nz:statutes/child_support/core_formula#cs_child_support_income",
-            "name": "cs_child_support_income"
+            "id": "nz:statutes/child_support/core_formula#cs_care_band3_base_care_cost_percentage",
+            "name": "cs_care_band3_base_care_cost_percentage"
           },
           {
             "citations": [
               "nz/statute/act/public/1991/0142/schedule/2"
             ],
             "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
-            "dependencies": [
-              "cs_applicable_child_support_rate",
-              "cs_child_support_income",
-              "cs_maximum_child_support_annual_rate",
-              "cs_minimum_child_support_annual_rate"
-            ],
-            "dependencies_sha256": "346b6a6eb6ee17b96bf54eb1b7fabb6da2b0cf1a46a34589208adc7da5304bb0",
-            "id": "nz:statutes/child_support/core_formula#cs_annual_child_support_entitlement",
-            "name": "cs_annual_child_support_entitlement"
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_slope_coefficient",
+            "name": "cs_care_slope_coefficient"
           },
           {
             "citations": [
               "nz/statute/act/public/1991/0142/schedule/2"
             ],
             "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
-            "dependencies": [
-              "cs_child_support_rate_one_child",
-              "cs_child_support_rate_three_or_more_children",
-              "cs_child_support_rate_two_children"
-            ],
-            "dependencies_sha256": "a6e91d810051d06273ef835c01e589d194b59ef8855200e0eef2d298b265fb1d",
-            "id": "nz:statutes/child_support/core_formula#cs_applicable_child_support_rate",
-            "name": "cs_applicable_child_support_rate"
-          },
-          {
-            "citations": [
-              "nz/guidance/ird/child-support/types/formula-assessment/sharing-care",
-              "nz/statute/act/public/1991/0142/section/5"
-            ],
-            "citations_sha256": "b3a4813d1ffed0275f06a1c32f078190b871086ae9c59280aa771bf13c0be966",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_receiving_carer_meets_formula_care_threshold",
-            "name": "cs_receiving_carer_meets_formula_care_threshold"
+            "id": "nz:statutes/child_support/core_formula#cs_care_band4_lower_care_proportion",
+            "name": "cs_care_band4_lower_care_proportion"
           },
           {
             "citations": [
-              "nz/guidance/ird/child-support/overview",
-              "nz/statute/act/public/1991/0142/section/4",
-              "nz/statute/act/public/1991/0142/section/5",
-              "nz/statute/act/public/1991/0142/section/8"
+              "nz/statute/act/public/1991/0142/schedule/2"
             ],
-            "citations_sha256": "67fe47bd56e49d8a2c4901a1b29bb4a8da0fcd5e1d74d4d3ccaf4552c757a6df",
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/child_support/core_formula#cs_liable_parent_is_formula_assessment_liable",
-            "name": "cs_liable_parent_is_formula_assessment_liable"
+            "id": "nz:statutes/child_support/core_formula#cs_care_band4_care_cost_percentage",
+            "name": "cs_care_band4_care_cost_percentage"
           },
           {
             "citations": [
-              "nz/guidance/ird/child-support/overview",
-              "nz/statute/act/public/1991/0142/section/4",
-              "nz/statute/act/public/1991/0142/section/5",
-              "nz/statute/act/public/1991/0142/section/8"
+              "nz/statute/act/public/1991/0142/schedule/2"
             ],
-            "citations_sha256": "67fe47bd56e49d8a2c4901a1b29bb4a8da0fcd5e1d74d4d3ccaf4552c757a6df",
-            "dependencies": [
-              "cs_liable_parent_is_formula_assessment_liable",
-              "cs_receiving_carer_meets_formula_care_threshold"
-            ],
-            "dependencies_sha256": "42336358b6eb735527846da1a1580e2e04c789945d04f56f05115c2284114b43",
-            "id": "nz:statutes/child_support/core_formula#cs_formula_assessment_applies",
-            "name": "cs_formula_assessment_applies"
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band5_lower_care_proportion",
+            "name": "cs_care_band5_lower_care_proportion"
           },
           {
             "citations": [
-              "nz/statute/act/public/1991/0142/section/4",
-              "nz/statute/act/public/1991/0142/section/5",
-              "nz/statute/act/public/1991/0142/section/8"
+              "nz/statute/act/public/1991/0142/schedule/2"
             ],
-            "citations_sha256": "1b229407eee1a4c541458da1c1b0777d7082e34fe18aa3bc719ea9ecb010ad18",
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band5_base_care_cost_percentage",
+            "name": "cs_care_band5_base_care_cost_percentage"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2"
+            ],
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band6_lower_care_proportion",
+            "name": "cs_care_band6_lower_care_proportion"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2"
+            ],
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band6_care_cost_percentage",
+            "name": "cs_care_band6_care_cost_percentage"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2"
+            ],
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band7_lower_care_proportion",
+            "name": "cs_care_band7_lower_care_proportion"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2"
+            ],
+            "citations_sha256": "ef8f4a7f62857b52708d418d6cc7c03d5145b95101828764c5e953a5908ff47e",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#cs_care_band7_care_cost_percentage",
+            "name": "cs_care_band7_care_cost_percentage"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/schedule/2",
+              "nz/statute/act/public/1991/0142/section/16"
+            ],
+            "citations_sha256": "382c5ac8964cbddb9b2a7acc5b16b58a6ded354f783cfc845777afd4411080e1",
             "dependencies": [
-              "cs_annual_child_support_entitlement",
-              "cs_formula_assessment_applies"
+              "cs_care_band2_care_cost_percentage",
+              "cs_care_band2_lower_care_proportion",
+              "cs_care_band3_base_care_cost_percentage",
+              "cs_care_band3_lower_care_proportion",
+              "cs_care_band4_care_cost_percentage",
+              "cs_care_band4_lower_care_proportion",
+              "cs_care_band5_base_care_cost_percentage",
+              "cs_care_band5_lower_care_proportion",
+              "cs_care_band6_care_cost_percentage",
+              "cs_care_band6_lower_care_proportion",
+              "cs_care_band7_care_cost_percentage",
+              "cs_care_band7_lower_care_proportion",
+              "cs_care_slope_coefficient"
             ],
-            "dependencies_sha256": "b9bf7daf87a3f67fe09b80cebd68ab48dd20a186080c36489022c9653f33f15c",
-            "id": "nz:statutes/child_support/core_formula#cs_annual_child_support_payable",
-            "name": "cs_annual_child_support_payable"
+            "dependencies_sha256": "123e3c9468afb48b27a31ce9aac26ceb4a4730ce8447a869b03f879c8aec2867",
+            "id": "nz:statutes/child_support/core_formula#care_cost_percentage",
+            "name": "care_cost_percentage"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/section/34"
+            ],
+            "citations_sha256": "4cdc938f2f739f1aa7a83242e2e5bf5fdaa2c29c39dabe1b56a669d709361993",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#child_support_income_amount",
+            "name": "child_support_income_amount"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/section/33"
+            ],
+            "citations_sha256": "fd1c4f07fad3ceb6f67e74e5d9dd9b65240186571b335aade30e6793f819511f",
+            "dependencies": [
+              "child_support_income_amount"
+            ],
+            "dependencies_sha256": "e726bc310ac237fb78b85c7515e86058e4eead74a06073f3f6b6ba843a2e58b6",
+            "id": "nz:statutes/child_support/core_formula#income_percentage",
+            "name": "income_percentage"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/section/30"
+            ],
+            "citations_sha256": "7c9695e0413010c1db01ab453886ef7a563684f566823e5fc7f968fb98eebcda",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#child_expenditure_amount",
+            "name": "child_expenditure_amount"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/section/30"
+            ],
+            "citations_sha256": "7c9695e0413010c1db01ab453886ef7a563684f566823e5fc7f968fb98eebcda",
+            "dependencies": [
+              "care_cost_percentage",
+              "child_expenditure_amount",
+              "income_percentage"
+            ],
+            "dependencies_sha256": "7142574d85ec28f72d4b73f0c422c92d1fdde2cc66815d382689f7a218ad445b",
+            "id": "nz:statutes/child_support/core_formula#annual_amount_of_child_support",
+            "name": "annual_amount_of_child_support"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/1991/0142/section/31",
+              "nz/statute/act/public/1991/0142/section/32"
+            ],
+            "citations_sha256": "cb0fe3a582c89a68ce94892024eb0423db35b91af10d0ef2357d7b219b19eeb6",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/child_support/core_formula#assessed_annual_rate",
+            "name": "assessed_annual_rate"
           }
         ],
         "path": "nz/statutes/child_support/core_formula.yaml"
@@ -13582,8 +14431,8 @@
       },
       {
         "citations": [
-          "nz/guidance/studylink/ordinary-residence",
-          "nz/guidance/studylink/student-allowances",
+          "nz/guidance/studylink/ordinary-residence/block-2",
+          "nz/guidance/studylink/student-allowances/block-5",
           "nz/statute/act/public/1977/0061/section/6",
           "nz/statute/act/public/2009/0051/section/13",
           "nz/statute/act/public/2009/0051/section/70",
@@ -13635,11 +14484,11 @@
           },
           {
             "citations": [
-              "nz/guidance/studylink/ordinary-residence",
-              "nz/guidance/studylink/student-allowances",
+              "nz/guidance/studylink/ordinary-residence/block-2",
+              "nz/guidance/studylink/student-allowances/block-5",
               "nz/statute/act/public/2018/0032/schedule/2/definition/ordinarily-resident-in-new-zealand"
             ],
-            "citations_sha256": "3e9cfd02b9d62bf9d99435ba3ed1cc45fbafce8c1b926882d7b1cd1d11827aac",
+            "citations_sha256": "dedf006686c0996f4f88bcfeca3052b6abead3367f75ba72ca2b2ca43c353921",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/common/residence#common_ordinarily_resident_in_new_zealand",
@@ -13695,8 +14544,8 @@
       },
       {
         "citations": [
-          "nz/guidance/ird/gst-calculation-guidance",
-          "nz/guidance/ird/gst-low-value-imported-goods",
+          "nz/guidance/ird/gst-calculation-guidance/block-7",
+          "nz/guidance/ird/gst-low-value-imported-goods/block-1",
           "nz/statute/act/public/1985/0141/section/10",
           "nz/statute/act/public/1985/0141/section/12",
           "nz/statute/act/public/1985/0141/section/8"
@@ -13715,10 +14564,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-calculation-guidance",
+              "nz/guidance/ird/gst-calculation-guidance/block-7",
               "nz/statute/act/public/1985/0141/section/8"
             ],
-            "citations_sha256": "5777567eff712dec57ae5a2c27b0b53b12047b1869f0d49a22a4526e90673372",
+            "citations_sha256": "c076b4850670afcd9142d1ff4cb336457c77512130d2ef5bec9fc9159ecc2026",
             "dependencies": [
               "gst_standard_rate"
             ],
@@ -13728,10 +14577,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-calculation-guidance",
+              "nz/guidance/ird/gst-calculation-guidance/block-7",
               "nz/statute/act/public/1985/0141/section/8"
             ],
-            "citations_sha256": "5777567eff712dec57ae5a2c27b0b53b12047b1869f0d49a22a4526e90673372",
+            "citations_sha256": "c076b4850670afcd9142d1ff4cb336457c77512130d2ef5bec9fc9159ecc2026",
             "dependencies": [
               "gst_standard_rate"
             ],
@@ -13741,9 +14590,9 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-calculation-guidance"
+              "nz/guidance/ird/gst-calculation-guidance/block-7"
             ],
-            "citations_sha256": "04349b065afa3080f417b22358d58a4d48e2a5621694aa2e71504896ab768eb7",
+            "citations_sha256": "ce3b0c3b8a7e86c8c9b71be8fa78dc1cd070434c994336071c8bbfa27e3135f2",
             "dependencies": [
               "gst_standard_rate"
             ],
@@ -13753,10 +14602,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-calculation-guidance",
+              "nz/guidance/ird/gst-calculation-guidance/block-7",
               "nz/statute/act/public/1985/0141/section/10"
             ],
-            "citations_sha256": "a79c3bf5195d2a05007303b49a38e9e0e90a9d0f588562dd238c638cbef6ecb9",
+            "citations_sha256": "fd6b8b3c9f4046304b47abb9ad448c29c516a7a70c02aea4161b13926a4036fd",
             "dependencies": [
               "gst_standard_rate"
             ],
@@ -13766,10 +14615,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-low-value-imported-goods",
+              "nz/guidance/ird/gst-low-value-imported-goods/block-1",
               "nz/statute/act/public/1985/0141/section/12"
             ],
-            "citations_sha256": "19d33e326a6e56ce2ede0a673cd7faa66cfcbfc0f75fe2844ec6fd5c53d33156",
+            "citations_sha256": "a6b0e61c5790db64af91baa8a9c890460630f2d0706ffc689b292b8fcfef4fce",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/gst/rate#gst_low_value_imported_goods_threshold",
@@ -13777,10 +14626,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-low-value-imported-goods",
+              "nz/guidance/ird/gst-low-value-imported-goods/block-1",
               "nz/statute/act/public/1985/0141/section/12"
             ],
-            "citations_sha256": "19d33e326a6e56ce2ede0a673cd7faa66cfcbfc0f75fe2844ec6fd5c53d33156",
+            "citations_sha256": "a6b0e61c5790db64af91baa8a9c890460630f2d0706ffc689b292b8fcfef4fce",
             "dependencies": [
               "gst_low_value_imported_goods_threshold"
             ],
@@ -13790,10 +14639,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-low-value-imported-goods",
+              "nz/guidance/ird/gst-low-value-imported-goods/block-1",
               "nz/statute/act/public/1985/0141/section/12"
             ],
-            "citations_sha256": "19d33e326a6e56ce2ede0a673cd7faa66cfcbfc0f75fe2844ec6fd5c53d33156",
+            "citations_sha256": "a6b0e61c5790db64af91baa8a9c890460630f2d0706ffc689b292b8fcfef4fce",
             "dependencies": [
               "gst_low_value_imported_goods_subject_to_gst",
               "gst_standard_rate"
@@ -13804,10 +14653,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/gst-low-value-imported-goods",
+              "nz/guidance/ird/gst-low-value-imported-goods/block-1",
               "nz/statute/act/public/1985/0141/section/12"
             ],
-            "citations_sha256": "19d33e326a6e56ce2ede0a673cd7faa66cfcbfc0f75fe2844ec6fd5c53d33156",
+            "citations_sha256": "a6b0e61c5790db64af91baa8a9c890460630f2d0706ffc689b292b8fcfef4fce",
             "dependencies": [
               "gst_low_value_imported_goods_component"
             ],
@@ -16094,18 +16943,16 @@
       },
       {
         "citations": [
-          "nz/guidance/ird/pir-rates-kiwisaver-pie",
-          "nz/statute/act/public/2007/0097/schedule/1/part/b",
+          "nz/statute/act/public/2007/0097/schedule/6/clause/1",
           "nz/statute/act/public/2007/0097/section/hm-47",
-          "nz/statute/act/public/2007/0097/section/hm-6"
+          "nz/statute/act/public/2024/0019/section/39"
         ],
         "nodes": [
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/schedule/1/part/b"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1"
             ],
-            "citations_sha256": "ca79de66e8fdca515b12f20774ac4f8abf3a0fac0744070bcfb9c5417cd9e0b5",
+            "citations_sha256": "240702acf82e832ca9bb1e738b522cf79a6db35f2ea40640da48fa33b3c9c38f",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/income_tax/investment/pie#pie_rate_10_5",
@@ -16113,10 +16960,9 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/schedule/1/part/b"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1"
             ],
-            "citations_sha256": "ca79de66e8fdca515b12f20774ac4f8abf3a0fac0744070bcfb9c5417cd9e0b5",
+            "citations_sha256": "240702acf82e832ca9bb1e738b522cf79a6db35f2ea40640da48fa33b3c9c38f",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/income_tax/investment/pie#pie_rate_17_5",
@@ -16124,10 +16970,9 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/schedule/1/part/b"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1"
             ],
-            "citations_sha256": "ca79de66e8fdca515b12f20774ac4f8abf3a0fac0744070bcfb9c5417cd9e0b5",
+            "citations_sha256": "240702acf82e832ca9bb1e738b522cf79a6db35f2ea40640da48fa33b3c9c38f",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/income_tax/investment/pie#pie_rate_28",
@@ -16135,10 +16980,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/section/hm-6"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1",
+              "nz/statute/act/public/2024/0019/section/39"
             ],
-            "citations_sha256": "f38e644d7f8aadb6949b9d6140c254703dfe1fb0af3800f6bde421f505df3e8d",
+            "citations_sha256": "df5adf75266d4bf12f74e44a141a165c65edb885d9b05f40b30eb79810f456f7",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/income_tax/investment/pie#pie_two_year_lookback_taxable_income_threshold_low",
@@ -16146,10 +16991,21 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/section/hm-6"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1",
+              "nz/statute/act/public/2024/0019/section/39"
             ],
-            "citations_sha256": "f38e644d7f8aadb6949b9d6140c254703dfe1fb0af3800f6bde421f505df3e8d",
+            "citations_sha256": "df5adf75266d4bf12f74e44a141a165c65edb885d9b05f40b30eb79810f456f7",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/income_tax/investment/pie#pie_lookback_combined_income_threshold_low",
+            "name": "pie_lookback_combined_income_threshold_low"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1",
+              "nz/statute/act/public/2024/0019/section/39"
+            ],
+            "citations_sha256": "df5adf75266d4bf12f74e44a141a165c65edb885d9b05f40b30eb79810f456f7",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/income_tax/investment/pie#pie_two_year_lookback_taxable_income_threshold_high",
@@ -16157,18 +17013,30 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/pir-rates-kiwisaver-pie",
-              "nz/statute/act/public/2007/0097/section/hm-6"
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1",
+              "nz/statute/act/public/2024/0019/section/39"
             ],
-            "citations_sha256": "f38e644d7f8aadb6949b9d6140c254703dfe1fb0af3800f6bde421f505df3e8d",
+            "citations_sha256": "df5adf75266d4bf12f74e44a141a165c65edb885d9b05f40b30eb79810f456f7",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+            "id": "nz:statutes/income_tax/investment/pie#pie_lookback_combined_income_threshold_high",
+            "name": "pie_lookback_combined_income_threshold_high"
+          },
+          {
+            "citations": [
+              "nz/statute/act/public/2007/0097/schedule/6/clause/1"
+            ],
+            "citations_sha256": "240702acf82e832ca9bb1e738b522cf79a6db35f2ea40640da48fa33b3c9c38f",
             "dependencies": [
+              "pie_lookback_combined_income_threshold_high",
+              "pie_lookback_combined_income_threshold_low",
               "pie_rate_10_5",
               "pie_rate_17_5",
               "pie_rate_28",
               "pie_two_year_lookback_taxable_income_threshold_high",
               "pie_two_year_lookback_taxable_income_threshold_low"
             ],
-            "dependencies_sha256": "f18562aa0e06c5fc0cd34dd9e2e587f787d9a3ceaaa78c8fcdcf304236df3ea0",
+            "dependencies_sha256": "7df6e2d62ff666cdbe1cb88a9032f406b631ebf7d64511de54528da4e75882e5",
             "id": "nz:statutes/income_tax/investment/pie#pie_determined_pir_rate",
             "name": "pie_determined_pir_rate"
           },
@@ -16542,16 +17410,6 @@
             "citations_sha256": "a7dc30f9973e52af1cf72c3dbc2874937185d22c7cd442c7aaf0cbe6486ed791",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
-            "id": "nz:statutes/new_zealand_superannuation/core#nz_super_birth_cohort_june_cutoff_month",
-            "name": "nz_super_birth_cohort_june_cutoff_month"
-          },
-          {
-            "citations": [
-              "nz/statute/act/public/2001/0084/section/8"
-            ],
-            "citations_sha256": "a7dc30f9973e52af1cf72c3dbc2874937185d22c7cd442c7aaf0cbe6486ed791",
-            "dependencies": [],
-            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/new_zealand_superannuation/core#nz_super_birth_cohort_cutoff_year_1959",
             "name": "nz_super_birth_cohort_cutoff_year_1959"
           },
@@ -16771,7 +17629,6 @@
               "nz_super_birth_cohort_cutoff_year_1973",
               "nz_super_birth_cohort_cutoff_year_1975",
               "nz_super_birth_cohort_cutoff_year_1977",
-              "nz_super_birth_cohort_june_cutoff_month",
               "nz_super_total_time_requirement_10_years",
               "nz_super_total_time_requirement_11_years",
               "nz_super_total_time_requirement_12_years",
@@ -16784,7 +17641,7 @@
               "nz_super_total_time_requirement_19_years",
               "nz_super_total_time_requirement_20_years"
             ],
-            "dependencies_sha256": "443ce6be7c972479106f20a04b4a8576559649a945b5f28561d129e4a7d53dde",
+            "dependencies_sha256": "37ec3c91cf554aead48c03d62b2d513bc573ae9329a2f9dee403768b5b5fb3f9",
             "id": "nz:statutes/new_zealand_superannuation/core#nz_super_standard_total_time_requirement_years",
             "name": "nz_super_standard_total_time_requirement_years"
           },
@@ -17188,23 +18045,23 @@
       },
       {
         "citations": [
-          "nz/guidance/ird/kiwisaver-contribution-rates",
-          "nz/guidance/ird/paye-deduction-tables",
-          "nz/guidance/ird/student-loan-repayment-deductions",
+          "nz/guidance/ird/paye-deduction-tables/block-2",
+          "nz/guidance/ird/student-loan-repayment-deductions/block-3",
           "nz/regulation/regulation/public/2025/0018/regulation/4",
           "nz/regulation/regulation/public/2025/0018/regulation/5",
           "nz/statute/act/public/2006/0040/section/64",
+          "nz/statute/act/public/2006/0040/section/66",
+          "nz/statute/act/public/2007/0097/section/rd-10",
           "nz/statute/act/public/2007/0097/section/rd-3",
-          "nz/statute/act/public/2007/0097/subpart/rd",
           "nz/statute/act/public/2011/0062/section/22"
         ],
         "nodes": [
           {
             "citations": [
-              "nz/guidance/ird/paye-deduction-tables",
-              "nz/statute/act/public/2007/0097/subpart/rd"
+              "nz/guidance/ird/paye-deduction-tables/block-2",
+              "nz/statute/act/public/2007/0097/section/rd-10"
             ],
-            "citations_sha256": "63bcd3f5ef1f54d92a97bf7025dfa1799b7d1f684bd8da6baf55050de31ea5ea",
+            "citations_sha256": "b9c57b0e24b0517f2f54af19689184e3b7136ff2d391053c9b947750713a2c69",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/payroll/deductions#paye_income_tax_component",
@@ -17225,10 +18082,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/kiwisaver-contribution-rates",
-              "nz/statute/act/public/2006/0040/section/64"
+              "nz/statute/act/public/2006/0040/section/64",
+              "nz/statute/act/public/2006/0040/section/66"
             ],
-            "citations_sha256": "29e1ca5316129ee8f752277569adfdf6f63696e0b3a310a28bc34da8585e49f8",
+            "citations_sha256": "f1c26999c2de8a394a1713b67487b5b1d72c0cebe62281a6c79717467b3a0621",
             "dependencies": [
               "kiwisaver_employee_deduction"
             ],
@@ -17238,10 +18095,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
+              "nz/guidance/ird/student-loan-repayment-deductions/block-3",
               "nz/statute/act/public/2011/0062/section/22"
             ],
-            "citations_sha256": "5b48c35352b807a6d884995ece305ee2fdae3a9ba4608b5db6b460512bbe26a2",
+            "citations_sha256": "28941e270c9e00478fbb9b9e6163993b7934cb137810edf52380c1ce1c7af2ee",
             "dependencies": [
               "student_loan_annual_deduction"
             ],
@@ -17251,10 +18108,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/paye-deduction-tables",
-              "nz/statute/act/public/2007/0097/subpart/rd"
+              "nz/guidance/ird/paye-deduction-tables/block-2",
+              "nz/statute/act/public/2007/0097/section/rd-10"
             ],
-            "citations_sha256": "63bcd3f5ef1f54d92a97bf7025dfa1799b7d1f684bd8da6baf55050de31ea5ea",
+            "citations_sha256": "b9c57b0e24b0517f2f54af19689184e3b7136ff2d391053c9b947750713a2c69",
             "dependencies": [
               "paye_acc_levy_component",
               "paye_income_tax_component",
@@ -20613,18 +21470,19 @@
       },
       {
         "citations": [
-          "nz/guidance/ird/student-loan-repayment-deductions",
+          "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+          "nz/guidance/ird/student-loan-repayment-deductions/block-4",
           "nz/regulation/regulation/public/2023/0295/regulation/3",
-          "nz/statute/act/public/2011/0062",
-          "nz/statute/act/public/2011/0062/schedule/1",
-          "nz/statute/act/public/2011/0062/section/22"
+          "nz/statute/act/public/2011/0062/section/37",
+          "nz/statute/act/public/2011/0062/section/4",
+          "nz/statute/act/public/2011/0062/section/77"
         ],
         "nodes": [
           {
             "citations": [
-              "nz/statute/act/public/2011/0062/section/22"
+              "nz/statute/act/public/2011/0062/section/37"
             ],
-            "citations_sha256": "683c3cb8a4390c56fe1aa188b075b1e050e2c39686b32a66c3263c7f6ae0f004",
+            "citations_sha256": "6c8cf071167dd86ac645e8056d65d378d522d609e281c7d81193ea19ad5d40de",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/student_loan/repayments#student_loan_repayment_rate",
@@ -20632,11 +21490,11 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
+              "nz/guidance/ird/student-loan-repayment-deductions/block-3",
               "nz/regulation/regulation/public/2023/0295/regulation/3",
-              "nz/statute/act/public/2011/0062/schedule/1"
+              "nz/statute/act/public/2011/0062/section/4"
             ],
-            "citations_sha256": "9bb64c517dd6d8a5ef688b08c5a2c5cd5960f7a23ebe2fab6a89e8292d9801d0",
+            "citations_sha256": "5a0a187cf4026138e61190f1f1d097509903ee50374d347677cf959285188d52",
             "dependencies": [],
             "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/student_loan/repayments#student_loan_annual_repayment_threshold",
@@ -20644,48 +21502,42 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
-              "nz/statute/act/public/2011/0062"
+              "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+              "nz/statute/act/public/2011/0062/section/37"
             ],
-            "citations_sha256": "96600e4fc8fc4c77ec2a6b19ecfafe34a5aa447004216c97cb51f5e46f78e20d",
-            "dependencies": [
-              "student_loan_annual_repayment_threshold"
-            ],
-            "dependencies_sha256": "a4f6842cccf871cdd2806f31f0578b1ac25c0efe14516de5c373600fed5f2870",
+            "citations_sha256": "513cde937431ff6c025cf047d113a655c0e4cbcdb7fa379982396e434a6b76ac",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/student_loan/repayments#student_loan_weekly_repayment_threshold",
             "name": "student_loan_weekly_repayment_threshold"
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
-              "nz/statute/act/public/2011/0062"
+              "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+              "nz/statute/act/public/2011/0062/section/37"
             ],
-            "citations_sha256": "96600e4fc8fc4c77ec2a6b19ecfafe34a5aa447004216c97cb51f5e46f78e20d",
-            "dependencies": [
-              "student_loan_annual_repayment_threshold"
-            ],
-            "dependencies_sha256": "a4f6842cccf871cdd2806f31f0578b1ac25c0efe14516de5c373600fed5f2870",
+            "citations_sha256": "513cde937431ff6c025cf047d113a655c0e4cbcdb7fa379982396e434a6b76ac",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/student_loan/repayments#student_loan_fortnightly_repayment_threshold",
             "name": "student_loan_fortnightly_repayment_threshold"
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
-              "nz/statute/act/public/2011/0062"
+              "nz/guidance/ird/student-loan-repayment-deductions/block-3",
+              "nz/statute/act/public/2011/0062/section/37"
             ],
-            "citations_sha256": "96600e4fc8fc4c77ec2a6b19ecfafe34a5aa447004216c97cb51f5e46f78e20d",
-            "dependencies": [
-              "student_loan_annual_repayment_threshold"
-            ],
-            "dependencies_sha256": "a4f6842cccf871cdd2806f31f0578b1ac25c0efe14516de5c373600fed5f2870",
+            "citations_sha256": "513cde937431ff6c025cf047d113a655c0e4cbcdb7fa379982396e434a6b76ac",
+            "dependencies": [],
+            "dependencies_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
             "id": "nz:statutes/student_loan/repayments#student_loan_monthly_repayment_threshold",
             "name": "student_loan_monthly_repayment_threshold"
           },
           {
             "citations": [
-              "nz/statute/act/public/2011/0062/section/22"
+              "nz/statute/act/public/2011/0062/section/77"
             ],
-            "citations_sha256": "683c3cb8a4390c56fe1aa188b075b1e050e2c39686b32a66c3263c7f6ae0f004",
+            "citations_sha256": "b84ea259b97b36c0b22fd5021f1e70e595bc33bd444fb954f8aaf594a38574e7",
             "dependencies": [
               "student_loan_annual_repayment_threshold",
               "student_loan_repayment_rate"
@@ -20696,10 +21548,10 @@
           },
           {
             "citations": [
-              "nz/guidance/ird/student-loan-repayment-deductions",
-              "nz/statute/act/public/2011/0062"
+              "nz/guidance/ird/student-loan-repayment-deductions/block-4",
+              "nz/statute/act/public/2011/0062/section/37"
             ],
-            "citations_sha256": "96600e4fc8fc4c77ec2a6b19ecfafe34a5aa447004216c97cb51f5e46f78e20d",
+            "citations_sha256": "10ee540c4c8dc1575c3c6094840c4adeac8d4d9ca885a03ea64005b296a900c7",
             "dependencies": [
               "student_loan_repayment_rate",
               "student_loan_weekly_repayment_threshold"

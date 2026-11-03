@@ -897,7 +897,16 @@ def test_axiom_tax_projection_routes_qbi_through_person_relation_rows() -> None:
     ) not in by_key
 
 
-def test_axiom_tax_projection_matches_pe_childless_eitc_age_proxy() -> None:
+def test_axiom_tax_projection_childless_eitc_age_test_counts_filers_only() -> None:
+    """26 USC 32(c)(1)(A)(ii)(II): "such individual (or, if the individual is
+    married, either the individual or the individual's spouse) has attained age
+    25 but not attained age 65 before the close of the taxable year".
+
+    The Case surface files the 71-year-old head jointly with the 69-year-old
+    "Other" member and treats the 45-year-old as a dependent. Neither filer is
+    25 to 64, so the test fails. PolicyEngine-US 1.764.6 counted the
+    45-year-old; PolicyEngine-US #9132 (first released in 1.779.8) does not.
+    """
     case = Case(
         case_id="pe-childless-eitc-age-proxy",
         period="2026",
@@ -943,7 +952,8 @@ def test_axiom_tax_projection_matches_pe_childless_eitc_age_proxy() -> None:
             "us:statutes/26/32#input."
             "childless_taxpayer_or_spouse_age_eligible_for_eitc",
         )
-    ] is True
+    ] is False
+    assert by_key[("tax_unit", "us:tax/federal-income-tax#input.filing_status")] == 1
 
 
 def test_axiom_tax_projection_limits_head_of_household_to_qualifying_dependents() -> None:

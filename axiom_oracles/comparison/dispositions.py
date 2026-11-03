@@ -49,7 +49,14 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   expression is evaluated with a restricted arithmetic evaluator (numbers,
   ``+ - * /``, parentheses) and must equal ``equals`` within ``tolerance``
   (default ``0.005``). An arithmetic claim that does not reconcile fails
-  validation — the Wallonia lesson.
+  validation — the Wallonia lesson. Every literal, intermediate and final
+  value, ``equals`` and ``tolerance`` must be finite, so a NaN or infinity
+  can never make the reconciliation check vacuous.
+* A GitHub code link (``/blob/``, ``/tree/``, ``/raw/``, ``/blame/``,
+  ``/commit/``, ``/commits/`` or ``raw.githubusercontent.com``) into any repository, in
+  ``evidence.sources``, ``evidence.upstream_url`` or ``linked_issue``, must
+  name a full 40-hex commit. A branch link moves, and a version link can be
+  dead (``PolicyEngine/policyengine-us`` publishes no version tags).
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
@@ -93,23 +100,23 @@ from __future__ import annotations
 import ast
 import hashlib
 import json
+import math
+import re
 from pathlib import Path
 
 import yaml
+
+from axiom_oracles.conformance.unexplained import (
+    CLASSIFIED_DISPOSITION_KINDS,
+    require_count,
+)
 
 from .pe_axiom_standard import validate_axiom_side_fields
 
 DISPOSITIONS_SCHEMA_VERSION = "axiom_oracles.dispositions.v1"
 DISPOSITIONED_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2.1"
 
-EXPLAINED_DISPOSITION_KINDS = (
-    "explained_residual",
-    "upstream_engine_gap",
-    "bridge_artifact",
-)
-CLASSIFIED_DISPOSITION_KINDS = EXPLAINED_DISPOSITION_KINDS + (
-    "axiom_encoding_gap",
-)
+EXPLAINED_DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS[:3]
 DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
@@ -142,7 +149,7 @@ _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "upstream_url", "sources",
     "receipt_type", "instrument_receipt",
 }
-_SELECTOR_KEYS = {"case_ids", "case_id_prefix"}
+_SELECTOR_KEYS = {"case_ids", "case_id_prefix", "case_ids_by_output"}
 _PINNED_KEYS = {"left", "right", "difference"}
 
 
@@ -166,6 +173,11 @@ def evaluate_arithmetic(expression: str) -> float:
     Anything else — names, calls, comparisons — raises
     :class:`ArithmeticEvaluationError`. Evidence must be checkable without
     executing code.
+
+    Every literal, intermediate, and final value must be finite: a literal
+    such as ``1e309`` (infinity), an overflowing integer, a division by zero,
+    or ``inf - inf`` (NaN) raises :class:`ArithmeticEvaluationError`, because
+    a NaN comparison is always false and would let any stated target pass.
     """
 
     try:
@@ -174,8 +186,23 @@ def evaluate_arithmetic(expression: str) -> float:
         raise ArithmeticEvaluationError(
             f"invalid arithmetic expression {expression!r}: {exc.msg}"
         ) from exc
+    except (RecursionError, MemoryError) as exc:
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to parse"
+        ) from exc
+
+    def _finite(value: float) -> float:
+        if not math.isfinite(value):
+            raise ArithmeticEvaluationError(
+                f"arithmetic expression {expression!r} produces a non-finite "
+                f"value ({value!r})"
+            )
+        return value
 
     def _eval(node: ast.AST) -> float:
+        return _finite(_eval_node(node))
+
+    def _eval_node(node: ast.AST) -> float:
         if isinstance(node, ast.Expression):
             return _eval(node.body)
         if isinstance(node, ast.BinOp):
@@ -188,6 +215,10 @@ def evaluate_arithmetic(expression: str) -> float:
             if isinstance(node.op, ast.Mult):
                 return left * right
             if isinstance(node.op, ast.Div):
+                if right == 0:
+                    raise ArithmeticEvaluationError(
+                        f"arithmetic expression {expression!r} divides by zero"
+                    )
                 return left / right
         if isinstance(node, ast.UnaryOp) and isinstance(
             node.op, ast.USub | ast.UAdd
@@ -199,17 +230,74 @@ def evaluate_arithmetic(expression: str) -> float:
             and isinstance(node.value, int | float)
             and not isinstance(node.value, bool)
         ):
-            return float(node.value)
+            try:
+                return float(node.value)
+            except OverflowError as exc:
+                raise ArithmeticEvaluationError(
+                    f"arithmetic expression {expression!r} has a literal "
+                    "too large for a finite float"
+                ) from exc
         raise ArithmeticEvaluationError(
             f"unsupported syntax in arithmetic expression {expression!r}; "
             "only numbers, + - * /, and parentheses are allowed"
         )
 
-    return _eval(tree)
+    try:
+        return _eval(tree)
+    except (RecursionError, MemoryError) as exc:
+        # A deeply nested expression must fail closed, not crash validation.
+        raise ArithmeticEvaluationError(
+            f"arithmetic expression {expression!r} is too deeply nested to check"
+        ) from exc
 
 
 def _is_url(value: object) -> bool:
     return isinstance(value, str) and value.startswith(("http://", "https://"))
+
+
+# A GitHub code link must name a full commit, in any repository. A branch
+# link moves, and a version link can 404 (policyengine-us publishes no
+# version tags) or be re-pointed. The check is offline (it never resolves the
+# URL); it checks only the ref's form.
+_GITHUB_CODE_URL_RE = re.compile(
+    r"^https?://(?:www\.)?github\.com/(?P<owner>[^/?#]+)/(?P<repo>[^/?#]+)/"
+    r"(?:blob|tree|raw|blame|commits?)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    re.IGNORECASE,
+)
+_RAW_GITHUB_URL_RE = re.compile(
+    r"^https?://raw\.githubusercontent\.com/(?P<owner>[^/?#]+)/"
+    r"(?P<repo>[^/?#]+)/(?P<ref>[^/?#]+)(?:[/?#]|$)",
+    re.IGNORECASE,
+)
+_FULL_COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
+
+
+def _unpinned_code_url_error(value: object, field_label: str) -> str | None:
+    """Name a GitHub code link that cites a ref other than a full commit."""
+
+    if not isinstance(value, str):
+        return None
+    match = _GITHUB_CODE_URL_RE.match(value) or _RAW_GITHUB_URL_RE.match(value)
+    if match is None:
+        return None
+    if _FULL_COMMIT_RE.fullmatch(match["ref"]):
+        return None
+    return (
+        f"{field_label} cites {match['owner']}/{match['repo']} at ref "
+        f"{match['ref']!r}; cite a 40-hex commit (a permalink), not a "
+        f"version, tag or branch: {value}"
+    )
+
+
+def _is_finite_number(value: object) -> bool:
+    """True for an int or float (not bool) that converts to a finite float."""
+
+    if not isinstance(value, int | float) or isinstance(value, bool):
+        return False
+    try:
+        return math.isfinite(float(value))
+    except OverflowError:
+        return False
 
 
 def _validate_arithmetic(items: object, label: str) -> list[str]:
@@ -232,22 +320,19 @@ def _validate_arithmetic(items: object, label: str) -> list[str]:
         if not isinstance(expression, str) or not expression.strip():
             errors.append(f"{item_label} needs a non-empty expression")
             continue
-        if not isinstance(equals, int | float) or isinstance(equals, bool):
-            errors.append(f"{item_label} needs a numeric `equals` value")
+        if not _is_finite_number(equals):
+            errors.append(f"{item_label} needs a finite numeric `equals` value")
             continue
-        if (
-            not isinstance(tolerance, int | float)
-            or isinstance(tolerance, bool)
-            or tolerance < 0
-        ):
-            errors.append(f"{item_label} tolerance must be >= 0")
+        if not _is_finite_number(tolerance) or tolerance < 0:
+            errors.append(f"{item_label} tolerance must be finite and >= 0")
             continue
         try:
             result = evaluate_arithmetic(expression)
         except ArithmeticEvaluationError as exc:
             errors.append(f"{item_label}: {exc}")
             continue
-        if abs(result - float(equals)) > float(tolerance):
+        # Written as "not within" so that a NaN anywhere fails closed.
+        if not abs(result - float(equals)) <= float(tolerance):
             errors.append(
                 f"{item_label} does not reconcile: {expression} = "
                 f"{result:.6f}, expected {equals} "
@@ -270,6 +355,9 @@ def _validate_sources(
             errors.append(f"{source_label} must be a non-empty string")
             continue
         if _is_url(source):
+            pin_error = _unpinned_code_url_error(source, source_label)
+            if pin_error:
+                errors.append(pin_error)
             continue
         relative = source.split("#", 1)[0]
         if Path(relative).is_absolute():
@@ -357,10 +445,32 @@ def _validate_entry(
                     f"{label} case_selector.case_id_prefix must be a "
                     "non-empty string"
                 )
-            if not (case_ids or prefix):
+            by_output = case_selector.get("case_ids_by_output")
+            if by_output is not None:
+                if not isinstance(by_output, dict) or not by_output or any(
+                    not isinstance(output, str)
+                    or not output
+                    or not isinstance(ids, list)
+                    or not ids
+                    or any(
+                        not isinstance(value, str | int) or str(value) == ""
+                        for value in ids
+                    )
+                    for output, ids in by_output.items()
+                ):
+                    errors.append(
+                        f"{label} case_selector.case_ids_by_output must map "
+                        "each output name to a non-empty list of case ids"
+                    )
+                if case_ids is not None or prefix is not None:
+                    errors.append(
+                        f"{label} case_selector.case_ids_by_output cannot be "
+                        "combined with case_ids or case_id_prefix"
+                    )
+            elif not (case_ids or prefix):
                 errors.append(
-                    f"{label} case_selector needs case_ids or "
-                    "case_id_prefix"
+                    f"{label} case_selector needs case_ids, case_id_prefix "
+                    "or case_ids_by_output"
                 )
 
     kind = entry.get("kind")
@@ -434,6 +544,9 @@ def _validate_entry(
     linked_issue = entry.get("linked_issue")
     if linked_issue is not None and not _is_url(linked_issue):
         errors.append(f"{label} linked_issue must be an http(s) URL")
+    pin_error = _unpinned_code_url_error(linked_issue, f"{label} linked_issue")
+    if pin_error:
+        errors.append(pin_error)
 
     errors.extend(
         validate_axiom_side_fields(
@@ -469,6 +582,9 @@ def _validate_entry(
     upstream_url = evidence.get("upstream_url")
     if upstream_url is not None and not _is_url(upstream_url):
         errors.append(f"{label} evidence.upstream_url must be an http(s) URL")
+    pin_error = _unpinned_code_url_error(upstream_url, f"{label} evidence.upstream_url")
+    if pin_error:
+        errors.append(pin_error)
     sources = evidence.get("sources")
     if sources is not None:
         errors.extend(_validate_sources(sources, label, repo_root))
@@ -551,18 +667,32 @@ def dispositions_path_for_suite(
     return candidate if candidate.exists() else None
 
 
+def _row_identity(row: dict) -> list[str]:
+    """A mismatch row's identity: case, concept and, when it names one, output.
+
+    One case carries one row per compared output under a concept, and
+    ``case_ids_by_output`` selects by output, so two rows of a case can differ
+    only in their output. The output joins the identity only when the row
+    names it, which keeps every digest over output-less rows unchanged.
+    """
+    identity = [str(row.get("case_id")), str(row.get("concept"))]
+    if row.get("output") is not None:
+        identity.append(str(row["output"]))
+    return identity
+
+
 def selected_rows_sha256(rows: list[dict]) -> str:
     """Canonical digest of a selected mismatch population.
 
-    Sorted by case id; each row contributes its identity plus the exact
-    ``left``/``right``/signed ``difference`` values, so any value movement —
-    sign flips, balanced multi-row swaps, anything that preserves aggregates —
-    changes the digest (sol closing review r2 finding 2).
+    Sorted by case id; each row contributes its identity (``_row_identity``)
+    plus the exact ``left``/``right``/signed ``difference`` values, so any
+    value movement — sign flips, balanced multi-row swaps, anything that
+    preserves aggregates — changes the digest, and so does moving a row
+    between outputs of one case.
     """
     canonical = sorted(
         [
-            str(row.get("case_id")),
-            str(row.get("concept")),
+            *_row_identity(row),
             json.dumps(row.get("left"), sort_keys=True),
             json.dumps(row.get("right"), sort_keys=True),
             json.dumps(row.get("difference"), sort_keys=True),
@@ -592,7 +722,14 @@ def _pin_matches(pinned: dict | None, row: dict) -> bool:
     return True
 
 
-def _entry_selects_row(entry: dict, row: dict) -> bool:
+def _entry_selects_row(entry: dict, row: dict, memo: dict | None = None) -> bool:
+    """Whether ``entry`` selects mismatch ``row``.
+
+    ``memo`` holds the selectors' membership sets for one pass over a
+    report's rows (``_selector_case_sets``). Pass a fresh dict per pass and
+    do not edit the entries during it; without one, each call builds its
+    sets anew.
+    """
     if entry.get("concept") != row.get("concept"):
         return False
     kind = entry.get("kind")
@@ -606,15 +743,48 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     if signatures is not None:
         return row.get("signature") in signatures
     selector = entry.get("case_selector") or {}
+    by_output = selector.get("case_ids_by_output")
+    if by_output is not None:
+        # Row-level: a case can carry several rows under one concept (one per
+        # compared output), and each may have its own mechanism.
+        output = row.get("output")
+        if output is None:
+            return False
+        # Keys are compared as strings, as the binding digest identifies them.
+        cases = _selector_case_sets(selector, memo)["by_output"].get(str(output))
+        return cases is not None and row_case in cases
     case_ids = selector.get("case_ids")
-    if case_ids is not None and row_case not in {
-        str(value) for value in case_ids
-    }:
+    if case_ids is not None and row_case not in _selector_case_sets(selector, memo)["ids"]:
         return False
     prefix = selector.get("case_id_prefix")
     if prefix is not None and not row_case.startswith(prefix):
         return False
     return True
+
+
+def _selector_case_sets(selector: dict, memo: dict | None) -> dict:
+    """The selector's case ids as sets, built once per pass when memoized.
+
+    A selector can list tens of thousands of case ids and is tested once per
+    mismatch row, so a pass builds the sets once. The memo lives only as long
+    as the pass, never across merges, so an edit made between merges
+    (including a same-length, in-place one) is always seen. The selector is
+    kept in the value so its id cannot be reused by another object during
+    the pass.
+    """
+    cached = memo.get(id(selector)) if memo is not None else None
+    if cached is not None and cached[0] is selector:
+        return cached[1]
+    sets = {
+        "ids": {str(value) for value in selector.get("case_ids") or []},
+        "by_output": {
+            str(output): {str(value) for value in ids}
+            for output, ids in (selector.get("case_ids_by_output") or {}).items()
+        },
+    }
+    if memo is not None:
+        memo[id(selector)] = (selector, sets)
+    return sets
 
 
 def _percentage(numerator: float, denominator: float) -> float:
@@ -641,10 +811,17 @@ def apply_dispositions(
     """
 
     merged = dict(report)
-    summary = dict(report.get("summary") or {})
-    comparison_count = summary.get("comparison_count") or 0
-    match_count = summary.get("match_count") or 0
-    mismatch_count = summary.get("mismatch_count") or 0
+    raw_summary = report.get("summary", {})
+    if not isinstance(raw_summary, dict):
+        raise ValueError("summary must be an object")
+    summary = dict(raw_summary)
+    admitted = {
+        field: require_count(summary.get(field, 0), field, report.get("suite", "<unknown>"))
+        for field in ("comparison_count", "match_count", "mismatch_count")
+    }
+    comparison_count = admitted["comparison_count"]
+    match_count = admitted["match_count"]
+    mismatch_count = admitted["mismatch_count"]
 
     entries = list((dispositions or {}).get("entries") or [])
     counts = {kind: 0 for kind in DISPOSITION_KINDS}
@@ -661,10 +838,11 @@ def apply_dispositions(
     # against the FULL selected population before any annotation lands.
     row_winner: list[str | None] = []
     source_rows = list(report.get("mismatches") or [])
+    memo: dict = {}
     for row in source_rows:
         winner = None
         for entry in entries:
-            if not _entry_selects_row(entry, row):
+            if not _entry_selects_row(entry, row, memo):
                 continue
             entry_id = str(entry.get("id"))
             if not _pin_matches(entry.get("pinned"), row):
@@ -676,7 +854,7 @@ def apply_dispositions(
             break
         row_winner.append(winner)
 
-    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # Selector-binding validation:
     # the binding pins a canonical per-row digest of the selected population
     # — identity plus left/right/signed difference — so ANY value movement,
     # including sign flips and balanced multi-row changes that preserve
@@ -733,6 +911,15 @@ def apply_dispositions(
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
+    if classified_rows > mismatch_count:
+        raise ValueError(
+            f"classified_rows ({classified_rows}) exceeds mismatch_count "
+            f"({mismatch_count})"
+        )
+    unexplained_count = mismatch_count - classified_rows
+    # The `unexplained` bucket is the same figure as unexplained_count, so a
+    # reader of `counts` never sees a classified total that hides residue.
+    counts["unexplained"] = unexplained_count
     summary["dispositioned"] = {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
@@ -746,7 +933,7 @@ def apply_dispositions(
         "explained_rate": _percentage(
             match_count + classified_rows, comparison_count
         ),
-        "unexplained_count": max(mismatch_count - classified_rows, 0),
+        "unexplained_count": unexplained_count,
         "counts": counts,
         "expired_entries": expired,
         "orphaned_entries": orphaned,
@@ -767,15 +954,17 @@ def assignment_digest(report: dict) -> str:
 
     Serializes ``[case_id, concept, entry_id | None, disposition | None]``
     for EVERY mismatch row of a merged report as a canonically sorted JSON
-    list and hashes it. Aggregate counts cannot distinguish two entries of
+    list and hashes it; a row that names its ``output`` serializes
+    ``[case_id, concept, output, entry_id | None, disposition | None]``, so
+    swapping two equal-valued rows of one case between entries changes it.
+    Aggregate counts cannot distinguish two entries of
     equal cardinality swapping disposition classes; this digest can, so a
     premerged-slim dashboard block that embeds it is bound to the exact
-    row-level assignment a fresh merge over the full report produces (sol
-    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    row-level assignment a fresh merge over the full report produces.
+    A sorted LIST — never a mapping keyed
     by case_id — because a case validly carries one mismatch row per
     concept, and a map would let same-case rows overwrite each other,
-    hiding count-preserving reclassifications among them (sol stack
-    review r3).
+    hiding count-preserving reclassifications among them.
     """
 
     assignment: list[list[str | None]] = []
@@ -786,14 +975,7 @@ def assignment_digest(report: dict) -> str:
             if isinstance(annotation, dict)
             else (None, None)
         )
-        assignment.append(
-            [
-                str(row.get("case_id")),
-                str(row.get("concept")),
-                entry_id,
-                disposition,
-            ]
-        )
+        assignment.append([*_row_identity(row), entry_id, disposition])
     assignment.sort(key=lambda item: [part or "" for part in item])
     payload = json.dumps(assignment, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()

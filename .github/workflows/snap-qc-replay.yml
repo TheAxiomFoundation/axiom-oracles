@@ -18,6 +18,8 @@ name: SNAP QC live replay
 #             axiom_rules_engine_ref, cannot load the SNAP chain. Every job
 #             selects ubuntu-24.04 rather than ubuntu-latest, so a binary
 #             cached on one Ubuntu release is never restored on another.
+#             The build receipt travels with the binary; every cache consumer
+#             hashes its restored bytes and verifies the receipt's exact SHA.
 #   rulespec  rulespec-us at one commit, resolved once from main (or from the
 #             dispatch input) and shared by every leg. It is checked out into
 #             a directory named rulespec-us, because the engine serves `us:`
@@ -110,7 +112,7 @@ jobs:
                   f"axiom_artifact_rules_engine_ref is not a 40-hex SHA: {ref!r}"
               )
           image = os.environ.get("ImageOS") or os.environ["RUNNER_OS"]
-          key = f"axiom-rules-engine-release-{image}-{ref}"
+          key = f"axiom-rules-engine-receipt-v1-release-{image}-{ref}"
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"engine_ref={ref}\nengine_cache_key={key}\n")
           print(f"axiom-rules-engine: {ref}")
@@ -152,7 +154,9 @@ jobs:
         id: engine-cache
         uses: actions/cache@v4
         with:
-          path: engine/target/release/axiom-rules-engine
+          path: |
+            engine/target/release/axiom-rules-engine
+            engine/target/release/axiom-rules-engine.provenance.json
           key: ${{ steps.toolchain.outputs.engine_cache_key }}
 
       - name: Checkout axiom-rules-engine
@@ -169,11 +173,18 @@ jobs:
 
       - name: Build axiom-rules-engine
         if: steps.engine-cache.outputs.cache-hit != 'true'
-        working-directory: engine
-        run: cargo build --release --locked --bin axiom-rules-engine
+        working-directory: axiom-oracles
+        run: >-
+          uv run python -m axiom_oracles.engine_identity build
+          --repo ../engine --binary ../engine/target/release/axiom-rules-engine
+          -- cargo build --release --locked --bin axiom-rules-engine -j 4
 
-      - name: Confirm engine binary
-        run: test -x engine/target/release/axiom-rules-engine
+      - name: Verify engine receipt against cached executable bytes
+        working-directory: axiom-oracles
+        run: >-
+          uv run python -m axiom_oracles.engine_identity inspect
+          ../engine/target/release/axiom-rules-engine
+          --expect-commit '${{ steps.toolchain.outputs.engine_ref }}'
 
   replay:
     name: Replay ${{ matrix.suite }}
@@ -203,7 +214,9 @@ jobs:
       - name: Restore engine binary
         uses: actions/cache/restore@v4
         with:
-          path: engine/target/release/axiom-rules-engine
+          path: |
+            engine/target/release/axiom-rules-engine
+            engine/target/release/axiom-rules-engine.provenance.json
           key: ${{ needs.prepare.outputs.engine_cache_key }}
           fail-on-cache-miss: true
 
@@ -226,6 +239,13 @@ jobs:
       - name: Install axiom-oracles
         working-directory: axiom-oracles
         run: uv sync
+
+      - name: Verify cached engine receipt against executable bytes
+        working-directory: axiom-oracles
+        run: >-
+          uv run python -m axiom_oracles.engine_identity inspect
+          ../engine/target/release/axiom-rules-engine
+          --expect-commit '${{ needs.prepare.outputs.engine_ref }}'
 
       - name: Verify and extract pinned PUF
         working-directory: axiom-oracles
@@ -290,7 +310,9 @@ jobs:
       - name: Restore engine binary
         uses: actions/cache/restore@v4
         with:
-          path: engine/target/release/axiom-rules-engine
+          path: |
+            engine/target/release/axiom-rules-engine
+            engine/target/release/axiom-rules-engine.provenance.json
           key: ${{ needs.prepare.outputs.engine_cache_key }}
           fail-on-cache-miss: true
 
@@ -313,6 +335,13 @@ jobs:
       - name: Install axiom-oracles
         working-directory: axiom-oracles
         run: uv sync --extra dev
+
+      - name: Verify cached engine receipt against executable bytes
+        working-directory: axiom-oracles
+        run: >-
+          uv run python -m axiom_oracles.engine_identity inspect
+          ../engine/target/release/axiom-rules-engine
+          --expect-commit '${{ needs.prepare.outputs.engine_ref }}'
 
       - name: Verify and extract pinned PUF
         working-directory: axiom-oracles

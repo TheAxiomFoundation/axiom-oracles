@@ -14,6 +14,31 @@ from axiom_oracles.bridges.registry import (
 )
 
 
+@pytest.mark.parametrize(
+    "name",
+    (
+        "snap_net_income_limit_100_percent_fpl_48_states_dc_table",
+        "snap_net_income_limit_100_percent_fpl_48_states_dc",
+        "snap_gross_income_limit_130_percent_fpl_48_states_dc_table",
+        "snap_gross_income_limit_130_percent_fpl_48_states_dc",
+        "snap_gross_income_limit_165_percent_fpl_48_states_dc_table",
+        "snap_gross_income_limit_165_percent_fpl_48_states_dc",
+    ),
+)
+def test_fy2026_snap_income_limits_are_not_false_direct_fpg_matches(name):
+    legal_id = (
+        "us:policies/usda/snap/fy-2026-cola/"
+        f"income-eligibility-standards#{name}"
+    )
+    mapping = load_policyengine_registry().mapping_for_legal_id(legal_id, country="us")
+
+    assert mapping is not None
+    assert mapping.mapping_type == "not_comparable"
+    assert mapping.comparable is False
+    assert mapping.policyengine_variable is None
+    assert mapping.rationale and "round" in mapping.rationale
+
+
 class _ProgramSurfaceRegistry:
     def __init__(self, mappings_by_variable):
         self.mappings_by_variable = mappings_by_variable

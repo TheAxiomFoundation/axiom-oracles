@@ -1,0 +1,282 @@
+{
+  "baseline": {
+    "mode": "explain",
+    "program": {
+      "units": [],
+      "relations": [
+        {
+          "name": "members",
+          "arity": 2,
+          "slot_entities": [
+            "Household",
+            "Person"
+          ]
+        },
+        {
+          "name": "filtered",
+          "arity": 2,
+          "derivation": {
+            "source_relation": "members",
+            "current_slot": 0,
+            "related_slot": 1,
+            "predicate": {
+              "kind": "comparison",
+              "left": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              },
+              "op": "eq",
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              }
+            },
+            "entity": "SnapUnit"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "n",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "members",
+            "current_slot": 0,
+            "related_slot": 1
+          }
+        },
+        {
+          "name": "house_marker",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "house_marker_input"
+          }
+        },
+        {
+          "name": "person_marker",
+          "entity": "Person",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "person_marker_input"
+          }
+        }
+      ]
+    },
+    "dataset": {
+      "inputs": [
+        {
+          "name": "house_marker_input",
+          "entity": "Household",
+          "entity_id": "house",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        {
+          "name": "person_marker_input",
+          "entity": "Person",
+          "entity_id": "person",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      ],
+      "relations": [
+        {
+          "name": "members",
+          "tuple": [
+            "house",
+            "person"
+          ],
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          }
+        }
+      ]
+    },
+    "queries": [
+      {
+        "entity_id": "house",
+        "period": {
+          "period_kind": "tax_year",
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "outputs": [
+          "n"
+        ]
+      }
+    ]
+  },
+  "extended": {
+    "mode": "explain",
+    "program": {
+      "units": [],
+      "relations": [
+        {
+          "name": "members",
+          "arity": 2,
+          "slot_entities": [
+            "Household",
+            "Person"
+          ]
+        },
+        {
+          "name": "filtered",
+          "arity": 2,
+          "derivation": {
+            "source_relation": "members",
+            "current_slot": 0,
+            "related_slot": 1,
+            "predicate": {
+              "kind": "comparison",
+              "left": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              },
+              "op": "eq",
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 1
+                }
+              }
+            },
+            "entity": "SnapUnit"
+          }
+        }
+      ],
+      "derived": [
+        {
+          "name": "n",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "members",
+            "current_slot": 0,
+            "related_slot": 1
+          }
+        },
+        {
+          "name": "house_marker",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "house_marker_input"
+          }
+        },
+        {
+          "name": "person_marker",
+          "entity": "Person",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "person_marker_input"
+          }
+        },
+        {
+          "name": "unqueried",
+          "entity": "SnapUnit",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "filtered",
+            "current_slot": 0,
+            "related_slot": 1
+          }
+        }
+      ]
+    },
+    "dataset": {
+      "inputs": [
+        {
+          "name": "house_marker_input",
+          "entity": "Household",
+          "entity_id": "house",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        {
+          "name": "person_marker_input",
+          "entity": "Person",
+          "entity_id": "person",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      ],
+      "relations": [
+        {
+          "name": "members",
+          "tuple": [
+            "house",
+            "person"
+          ],
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          }
+        }
+      ]
+    },
+    "queries": [
+      {
+        "entity_id": "house",
+        "period": {
+          "period_kind": "tax_year",
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "outputs": [
+          "n"
+        ]
+      }
+    ]
+  }
+}

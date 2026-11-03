@@ -30,7 +30,7 @@ ratchets:
   bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 15
+  covered_min: 16
   unexplained_max: 0
   axiom_attributed_open_max: 0
   bridge_artifacts_max: 3210

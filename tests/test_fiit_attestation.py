@@ -72,6 +72,48 @@ def test_adapter_attests_only_positive_fiit_output_summary_rows(surface, output,
     ]
 
 
+def test_published_fiit_copy_without_observed_rows_attests_no_output(monkeypatch):
+    """The cap drops the stamp's output claims with the rows that back them."""
+    spec = importlib.util.spec_from_file_location(
+        "fiit_run_comparison_cap", ROOT / "scripts/run_comparison.py"
+    )
+    run_comparison = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(run_comparison)
+    raw = {
+        "compared_tax_units": 1,
+        "compared_values": 1,
+        "mismatch_count": 0,
+        "mismatches": [],
+        "observed_outputs": [
+            {"case_id": "tax_unit_1", "surface": "ctc",
+             "output": "ctc_before_advance_payments", "engine": engine,
+             "variable": variable, "value": 0, "counterpart_value": 0}
+            for engine, variable in (("policyengine", "ctc"), ("axiom", "ctc_value"))
+        ],
+        "output_summary": [
+            {"surface": "ctc", "output": "ctc_before_advance_payments",
+             "compared": 1, "mismatches": 0},
+        ],
+    }
+    report = run_comparison._adapt_tax_ecps_to_v2(raw, {}, suite="fiit-ecps")
+    full = attest(report, oracle="policyengine")
+    assert full.attested_outputs == frozenset({"ctc"})
+    assert full.problems == ()
+
+    # Dropping only the rows leaves a stamp the body no longer backs.
+    rows_only = {key: value for key, value in report.items() if key != "observed_outputs"}
+    assert attest(rows_only, oracle="policyengine").problems
+
+    monkeypatch.setattr(run_comparison, "_PUBLISHED_MAX_OBSERVED_OUTPUTS", 1)
+    published = run_comparison._slim_report_for_dashboard(report)
+    evidence = attest(published, oracle="policyengine")
+    assert "observed_outputs" not in published
+    assert evidence.problems == ()
+    assert evidence.eligible
+    assert evidence.attested_outputs == frozenset()
+    assert not evidence.outputs_complete
+
+
 def test_committed_legacy_fiit_uses_its_own_producer_bindings():
     report = json.loads(
         (ROOT / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()

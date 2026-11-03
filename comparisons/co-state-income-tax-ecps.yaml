@@ -16,15 +16,24 @@ ci: manual
 
 runner:
   type: axiom-oracles-compare
-  axiom_rules_repo: $HOME/axiom-rules
+  # Pinned to the stack co-tax-intersection-taxsim runs on (engine 0.1.0 @
+  # 0c39023e, rulespec-us @ ca2d424f), so the PolicyEngine and TAXSIM CO
+  # lanes grade the same Axiom program: engine main rejects the current
+  # rulespec-us tree (#1049/#1050). Re-point at $HOME/axiom-rules + $HOME
+  # when the upstream chain lands (axiom-oracles#455).
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  # run_comparison verifies the checkouts hold these revisions before running.
+  axiom_rules_repo_revision: 0c39023e
   parameters:
     left: axiom
     right: policyengine
     population: enhanced-cps
     sample_size: 0
     period: "2026"
+    suite: co-state-income-tax-ecps
     concept: us:tax/state-income-tax#liability
-    axiom_rulespec_repo_roots: $HOME
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
+    axiom_rulespec_repo_roots_revision: ca2d424f
     # The CO slice is ~1,200 tax units — well under FULL_CASE_INPUT_LIMIT —
     # but the jurisdiction filter runs inside the tax bridge, so the CLI's
     # loaded-case heuristic sees the whole national ECPS. Force evidence on.

@@ -31,6 +31,7 @@ from typing import Any
 
 import yaml
 
+from ..engine_identity import EngineIdentityError, engine_receipt, record_engine_receipt
 from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
@@ -38,6 +39,14 @@ from .population import (
     format_dataset_identity,
     load_populace_dataset,
     populace_data_requirement,
+)
+from .relation_binding import (
+    RelationBinder,
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
 )
 
 try:
@@ -78,6 +87,7 @@ class JurisdictionConfig:
     temp_prefix: str
     display_name: str
     additional_relation_ids: tuple[str, ...] = ()
+    eligibility_oracle_bridge: bool = False
 
 
 JURISDICTION_CONFIGS = {
@@ -197,6 +207,9 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
+        # The projector supplies PE eligibility and benefit inputs to this program.
+        # Remove only when compared outcomes are independent of PE-derived inputs.
+        eligibility_oracle_bridge=True,
     ),
     "us-ga": JurisdictionConfig(
         jurisdiction="us-ga",
@@ -360,8 +373,7 @@ JURISDICTION_CONFIGS = {
             "snap_individual_utility_allowance",
         ),
         relation_id=(
-            "us:policies/usda/snap/state-plan-composition"
-            "#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ny-snap-pe-populace-",
@@ -821,7 +833,10 @@ def resolve_program_path(
     ):
         return cwd_program.resolve()
     return (
-        workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
+        workspace_root
+        / "rulespec-us"
+        / config.jurisdiction
+        / config.program_relative_path
     ).resolve()
 
 
@@ -1700,6 +1715,30 @@ def decimal_literal(value: float) -> str:
     return literal or "0"
 
 
+def _run_receipted_engine(
+    command: list[str], *, expected_receipt: dict[str, Any], **kwargs: Any
+) -> subprocess.CompletedProcess[str]:
+    """Verify and journal the exact executable used by a direct bridge call."""
+    before = engine_receipt(command[0])
+    if any(
+        before.get(field) != expected_receipt.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed before SNAP execution")
+    invocation = list(command)
+    if before.get("binary_sha256") is not None:
+        invocation[0] = before["binary_path"]
+    result = subprocess.run(invocation, **kwargs)
+    after = engine_receipt(invocation[0])
+    if any(
+        after.get(field) != before.get(field)
+        for field in ("commit", "binary_sha256")
+    ):
+        raise EngineIdentityError("Axiom engine identity changed during SNAP execution")
+    record_engine_receipt(before)
+    return result
+
+
 def compile_program(
     binary: Path,
     program: Path,
@@ -1719,6 +1758,13 @@ def compile_program(
         import_prefixes,
         stage_pure_root,
     )
+
+    expected_receipt = engine_receipt(binary)
+
+    def execute_engine(command: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
+        return _run_receipted_engine(
+            command, expected_receipt=expected_receipt, **kwargs
+        )
 
     program_doc: dict = {}
     try:
@@ -1751,6 +1797,7 @@ def compile_program(
         roots=staged_roots or roots,
         composed=composed,
         env=env,
+        run=execute_engine,
     )
 
 
@@ -1766,6 +1813,7 @@ def run_axiom_cases(
     member_entity_type: str,
     env: dict[str, str],
 ) -> list[dict[str, Any]]:
+    expected_receipt = engine_receipt(binary)
     interval = {
         "start": period.start.isoformat(),
         "end": period.end.isoformat(),
@@ -1776,9 +1824,12 @@ def run_axiom_cases(
         "end": period.end.isoformat(),
         "name": period.label,
     }
+    ambiguities = []
     inputs = []
     relations = []
     queries = []
+    artifact_payload = json.loads(artifact.read_text())
+    relation_binder = RelationBinder(artifact_payload)
     for case in cases:
         entity_id = f"spm-{case.spm_unit_id}"
         for name, value in case.inputs.items():
@@ -1797,7 +1848,14 @@ def run_axiom_cases(
                 relations.append(
                     {
                         "name": current_relation_id,
-                        "tuple": [member_entity_id, entity_id],
+                        "tuple": relation_binder.tuple(
+                            current_relation_id,
+                            owner_id=entity_id,
+                            owner_kind="Household",
+                            related_id=member_entity_id,
+                            related_kind=member_entity_type,
+                            binding_ambiguities=ambiguities,
+                        ),
                         "interval": interval,
                     }
                 )
@@ -1824,8 +1882,16 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
-    result = subprocess.run(
+    request, raw_ambiguities = bind_materialized_relations(
+        request,
+        artifact_payload,
+        materialized=set(range(len(relations))),
+        binder=bind_request_relations,
+    )
+    ambiguities.extend(raw_ambiguities)
+    result = _run_receipted_engine(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
+        expected_receipt=expected_receipt,
         input=json.dumps(request),
         text=True,
         capture_output=True,
@@ -1835,6 +1901,7 @@ def run_axiom_cases(
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     payload = json.loads(result.stdout)
+    attach_relation_binding_diagnostics(payload["results"], ambiguities)
     return payload["results"]
 
 
@@ -1865,9 +1932,11 @@ def compare(
     results: list[dict[str, Any]],
     tolerance: float,
     *,
-    output_id_by_label: dict[str, str],
-    utility_allowance_labels: tuple[str, ...],
+    config: JurisdictionConfig,
 ):
+    output_id_by_label = config.output_id_by_label
+    utility_allowance_labels = config.utility_allowance_labels
+    eligibility_oracle_bridge = config.eligibility_oracle_bridge
     rows = []
     for case, result in zip(cases, results, strict=True):
         raw_outputs = result.get("outputs", {})
@@ -1893,6 +1962,7 @@ def compare(
         axiom_snap = float(outputs[COMPARED_AXIOM_OUTPUT])
         pe_snap = float(case.pe_outputs[PE_COMPARED_OUTPUT])
         diff = axiom_snap - pe_snap
+        amount_match = abs(diff) <= tolerance
         row = {
             "spm_unit_id": case.spm_unit_id,
             "household_id": case.household_id,
@@ -1900,7 +1970,16 @@ def compare(
             "axiom_snap_allotment": axiom_snap,
             "difference": diff,
             "absolute_difference": abs(diff),
-            "match": abs(diff) <= tolerance,
+            "amount_match": amount_match,
+            "comparison_status": (
+                "not_comparable" if eligibility_oracle_bridge else "comparable"
+            ),
+            "not_comparable_reason": (
+                "PolicyEngine eligibility and benefit inputs are supplied to Axiom"
+                if eligibility_oracle_bridge
+                else ""
+            ),
+            "match": amount_match and not eligibility_oracle_bridge,
             "pe_snap_eligible": bool(case.pe_outputs["is_snap_eligible"]),
             "axiom_snap_eligible": outputs["snap_eligible"],
             "pe_gross_income": case.pe_outputs["snap_gross_income"],
@@ -1972,7 +2051,12 @@ def add_snapscreener_results(
         row["snapscreener_status"] = result.get("status")
         errors = result.get("errors") or []
         row["snapscreener_error"] = "; ".join(str(error) for error in errors)
-        row["snapscreener_comparable"] = primary_oracles_find_eligible(row)
+        eligible_in_primary_oracle = primary_oracles_find_eligible(row)
+        row["snapscreener_comparable"] = (
+            eligible_in_primary_oracle
+            and row.get("comparison_status", "comparable") == "comparable"
+        )
+        row["pe_snapscreener_comparable"] = eligible_in_primary_oracle
         if result.get("status") != "OK":
             row["snapscreener_snap"] = None
             row["snapscreener_eligible"] = None
@@ -1988,8 +2072,12 @@ def add_snapscreener_results(
         row["snapscreener_eligible"] = bool(result.get("estimated_eligibility"))
         row["axiom_snapscreener_difference"] = axiom_difference
         row["pe_snapscreener_difference"] = pe_difference
-        row["axiom_snapscreener_match"] = abs(axiom_difference) <= tolerance
-        row["pe_snapscreener_match"] = abs(pe_difference) <= tolerance
+        row["axiom_snapscreener_match"] = (
+            row["snapscreener_comparable"] and abs(axiom_difference) <= tolerance
+        )
+        row["pe_snapscreener_match"] = (
+            row["pe_snapscreener_comparable"] and abs(pe_difference) <= tolerance
+        )
 
 
 def primary_oracles_find_eligible(row: dict[str, Any]) -> bool:
@@ -2000,18 +2088,25 @@ def print_summary(
     rows: list[dict[str, Any]], tolerance: float, max_differences: int
 ) -> None:
     total = len(rows)
-    matches = sum(1 for row in rows if row["match"])
+    comparable_rows = [
+        row
+        for row in rows
+        if row.get("comparison_status", "comparable") == "comparable"
+    ]
+    matches = sum(1 for row in comparable_rows if row["match"])
     diffs = sorted(rows, key=lambda row: row["absolute_difference"], reverse=True)
     mean_abs = sum(row["absolute_difference"] for row in rows) / total if total else 0.0
     print()
-    print(f"Compared {total:,} PolicyEngine Populace SPM units")
+    print(f"Evaluated {total:,} PolicyEngine Populace SPM units")
+    print(f"Comparable rows: {len(comparable_rows):,}/{total:,}")
     print(f"Tolerance: ${tolerance:,.2f}")
     print(
-        f"Matches: {matches:,}/{total:,} ({matches / total:.1%})"
-        if total
-        else "No rows"
+        f"Matches: {matches:,}/{len(comparable_rows):,} "
+        f"({matches / len(comparable_rows):.1%})"
+        if comparable_rows
+        else "No comparable rows; parity is not established"
     )
-    print(f"Mean absolute difference: ${mean_abs:,.2f}")
+    print(f"Diagnostic mean absolute difference: ${mean_abs:,.2f}")
     if diffs:
         print(f"Max absolute difference: ${diffs[0]['absolute_difference']:,.2f}")
     print()
@@ -2036,6 +2131,9 @@ def print_snapscreener_summary(
         return
     valid_rows = [row for row in rows if row["snapscreener_status"] == "OK"]
     comparable_rows = [row for row in valid_rows if row["snapscreener_comparable"]]
+    pe_comparable_rows = [
+        row for row in valid_rows if row["pe_snapscreener_comparable"]
+    ]
     noncomparable_positive = [
         row
         for row in valid_rows
@@ -2047,24 +2145,22 @@ def print_snapscreener_summary(
         if bool(row["pe_snap_eligible"]) != (row["axiom_snap_eligible"] == "holds")
     ]
     axiom_matches = sum(1 for row in comparable_rows if row["axiom_snapscreener_match"])
-    pe_matches = sum(1 for row in comparable_rows if row["pe_snapscreener_match"])
+    pe_matches = sum(1 for row in pe_comparable_rows if row["pe_snapscreener_match"])
     disagreement_axiom_matches = sum(
         1 for row in disagreement_rows if row["axiom_snapscreener_match"]
-    )
-    disagreement_pe_matches = sum(
-        1 for row in disagreement_rows if row["pe_snapscreener_match"]
     )
     print()
     print("SnapScreener diagnostic oracle")
     print(f"Rows: {len(valid_rows):,}/{len(rows):,} OK")
     print(
-        f"Comparable rows: {len(comparable_rows):,} "
-        "(PolicyEngine or Axiom marks SNAP eligible)"
+        f"Axiom-comparable rows: {len(comparable_rows):,} "
+        "(eligible in a primary oracle and no oracle-fed outcome bridge)"
     )
+    print(f"PolicyEngine-comparable rows: {len(pe_comparable_rows):,}")
     if noncomparable_positive:
         print(
-            f"Excluded {len(noncomparable_positive):,} row(s) where PE and Axiom "
-            "both mark ineligible but SnapScreener estimates a positive benefit."
+            f"Excluded {len(noncomparable_positive):,} row(s) from Axiom/SnapScreener "
+            "comparison where SnapScreener estimates a positive benefit."
         )
     print(f"Tolerance: ${tolerance:,.2f}")
     if comparable_rows:
@@ -2073,16 +2169,16 @@ def print_snapscreener_summary(
             f"{axiom_matches:,}/{len(comparable_rows):,} "
             f"({axiom_matches / len(comparable_rows):.1%})"
         )
+    if pe_comparable_rows:
         print(
             f"PolicyEngine matches SnapScreener: "
-            f"{pe_matches:,}/{len(comparable_rows):,} "
-            f"({pe_matches / len(comparable_rows):.1%})"
+            f"{pe_matches:,}/{len(pe_comparable_rows):,} "
+            f"({pe_matches / len(pe_comparable_rows):.1%})"
         )
     if disagreement_rows:
         print(
-            f"On PE/Axiom eligibility disagreements: "
-            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,}, "
-            f"PolicyEngine {disagreement_pe_matches:,}/{len(disagreement_rows):,} "
+            f"On PE/Axiom eligibility disagreements in Axiom-comparable rows: "
+            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,} "
             "match SnapScreener."
         )
     diffs = sorted(
@@ -2168,9 +2264,19 @@ def main(args: argparse.Namespace | None = None) -> int:
         cases,
         results,
         args.tolerance,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
+        config=config,
     )
+    diagnostics: dict = {}
+    for result in results:
+        merge_relation_binding_diagnostics(
+            diagnostics, result.get("relation_binding_diagnostics", {})
+        )
+    if diagnostics.get("count"):
+        dataset_identity["relation_binding_diagnostics"] = (
+            public_relation_binding_diagnostics(
+                diagnostics,
+            )
+        )
     if "snapscreener" in args.external_oracle:
         bundle = snapscreener.ensure_api_js(
             api_js=args.snapscreener_api_js,
@@ -2205,7 +2311,12 @@ def main(args: argparse.Namespace | None = None) -> int:
             )
             print(f"Wrote {identity_path}")
 
-    match_rate = sum(1 for row in rows if row["match"]) / len(rows) if rows else 0
+    comparable_rows = [row for row in rows if row["comparison_status"] == "comparable"]
+    match_rate = (
+        sum(1 for row in comparable_rows if row["match"]) / len(comparable_rows)
+        if comparable_rows
+        else 0
+    )
     if args.min_match_rate is not None and match_rate < args.min_match_rate:
         print(
             f"Match rate {match_rate:.1%} is below required {args.min_match_rate:.1%}"

@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from math import isclose, isfinite
 
 from .mappings import ProgramMapping
+from ..bridges.relation_binding import merge_relation_binding_diagnostics
 from ..core.results import EngineResult, Value
 
 
@@ -35,6 +36,8 @@ class HouseholdComparison:
     comparisons: list[VariableComparison] = field(default_factory=list)
     left_errors: tuple[str, ...] = field(default_factory=tuple)
     right_errors: tuple[str, ...] = field(default_factory=tuple)
+    relation_binding_diagnostics: dict[str, dict] = field(default_factory=dict)
+    engine_receipt: dict = field(default_factory=dict)
 
     @property
     def match_count(self) -> int:
@@ -112,6 +115,20 @@ class Comparator:
                     f"No comparable mappings for household {left.household_id!r} "
                     f"between {left.engine!r} and {right.engine!r}"
                 )
+            relation_binding_diagnostics: dict[str, dict] = {}
+            engine_receipt: dict = {}
+            for result in (left, right):
+                if isinstance(result.raw, Mapping):
+                    if result.engine == "axiom" and result.raw.get("engine_receipt"):
+                        if engine_receipt and engine_receipt != result.raw["engine_receipt"]:
+                            raise ValueError("Axiom executable identities disagree")
+                        engine_receipt = dict(result.raw["engine_receipt"])
+                    diagnostics = result.raw.get("relation_binding_diagnostics", {})
+                    if diagnostics.get("count"):
+                        merge_relation_binding_diagnostics(
+                            relation_binding_diagnostics.setdefault(result.engine, {}),
+                            diagnostics,
+                        )
             comparisons.append(
                 HouseholdComparison(
                     household_id=left.household_id,
@@ -120,6 +137,8 @@ class Comparator:
                     comparisons=variable_comparisons,
                     left_errors=left.errors,
                     right_errors=right.errors,
+                    relation_binding_diagnostics=relation_binding_diagnostics,
+                    engine_receipt=engine_receipt,
                 )
             )
 

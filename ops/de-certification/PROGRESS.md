@@ -211,7 +211,7 @@
   with the actual failure and will not infer titles, dates, page counts, or
   byte hashes.
 - The requested `-o` report target is
-  `/Users/maxghenis/TheAxiomFoundation/ops/de-lane/de-discovery-ledgers-report.md`;
+  `<workspace>/ops/de-lane/de-discovery-ledgers-report.md`;
   the Codex CLI captures the final response there.
 
 ### Completed measured-discovery artifacts
