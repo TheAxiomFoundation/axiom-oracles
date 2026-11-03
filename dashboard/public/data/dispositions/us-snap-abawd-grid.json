@@ -12,7 +12,7 @@
     "abawd_exception_applies_to_responsible_adult_with_child_under_fourteen"
    ],
    "arithmetic": [],
-   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/usda/snap/eligibility/work_requirements/meets_snap_work_requirements_person.py"
+   "linked_issue": "https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/usda/snap/eligibility/work_requirements/meets_snap_work_requirements_person.py"
   }
  ]
 }

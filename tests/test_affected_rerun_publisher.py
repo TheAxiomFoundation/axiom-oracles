@@ -98,11 +98,13 @@ def test_publish_job_downloads_every_bundle_and_publishes_once():
     assert len(publishes) == 1
     assert "--publish" in publishes[0]
     assert '"$RUNNER_TEMP/refreshed"' in publishes[0]
-    assert "${{ github.event.repository.default_branch }}" in publishes[0]
+    assert '"oracle-data"' in publishes[0]
+    assert "github.event.repository.default_branch" not in publishes[0]
     checkout = next(
         step for step in steps if step.get("uses", "").startswith("actions/checkout@")
     )
-    assert checkout["with"]["ref"] == "${{ github.event.repository.default_branch }}"
+    assert checkout["with"]["ref"] == "main"
+    assert checkout["with"]["fetch-depth"] == 0
 
 
 def test_publish_job_mirrors_the_legs_interpreter():

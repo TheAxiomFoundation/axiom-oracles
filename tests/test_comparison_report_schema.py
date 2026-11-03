@@ -207,3 +207,22 @@ def test_strip_heavy_case_metadata_keeps_counts() -> None:
     assert md["household_summary"] == {"ages": [40]}
     # original untouched
     assert "axiom_input_records" in report["cases"][0]["metadata"]
+
+
+def test_executed_axiom_receipt_survives_comparison_and_report():
+    receipt = {"repository": "TheAxiomFoundation/axiom-rules-engine",
+               "commit": "b" * 40, "binary_sha256": "e" * 64, "version": "0.2.2"}
+    mapping = ProgramMapping(
+        standard="us:test#amount", targets={"axiom": "amount", "oracle": "amount"},
+        description="Receipt propagation", category="fixture",
+    )
+    comparisons = Comparator([mapping]).compare(
+        [EngineResult("axiom", 1, {"amount": 10}, raw={"engine_receipt": receipt})],
+        [EngineResult("oracle", 1, {"amount": 10})],
+    )
+    report = build_comparison_report(
+        suite_name="receipt", population="fixture", locales=set(), scope=None,
+        cases=[Case(case_id=1, period="2026")], mappings=[mapping],
+        comparisons=comparisons,
+    )
+    assert report["provenance"]["engine"] == receipt

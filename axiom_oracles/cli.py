@@ -30,6 +30,7 @@ from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.taxsim import pins as taxsim_pins
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -67,8 +68,12 @@ DEFAULT_PERIOD = "2026-05"
 # models law year 2026 rate schedules, the OBBBA standard deduction, childless
 # EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
 # validation year as DEFAULT_PERIOD. The Linux binary in the same release
-# (taxsimtest-linux.exe) is an older build that stops at 2024 and fails on
-# 2025 and 2026 rows; on Linux, pass --period 2024. Known 2026 gap in the
+# (taxsimtest-linux.exe, build cdate-compdate) is a different NBER build that
+# accepts law years 1960-2024 only, so `compare` refuses 2025 and 2026 on Linux
+# before loading the population (_require_taxsim_law_year; each binary's range
+# is pinned in taxsim_pins.json); 2024 is the last year a Linux host can pass,
+# and the two builds differ even there (docs/policyengine-taxsim.md). Known
+# 2026 gap in the
 # macOS build, verified empirically: the qualifying-child credit machinery is
 # absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
 # zero, and the EITC ignores qualifying children, so a family with children
@@ -170,9 +175,10 @@ def _attach_axiom_outputs(
 ) -> list[Case]:
     """Stash the axiom engine's non-compared outputs into case metadata.
 
-    In full-evidence mode the runner queries every derived rule; the values
-    beyond the compared concepts' targets are the household's complete
-    computed surface (intermediates included). Ordinary results land under
+    In full-evidence mode the runner records the derived rules the engine
+    evaluated on the case's queried entity (its explain trace); the values
+    beyond the compared concepts' targets are the household's computation
+    chain (intermediates included). Ordinary results land under
     ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
     are not meaningful household sums, so they remain attached to their
     executed entity under ``axiom_result_aggregation_applied.components``.
@@ -613,6 +619,8 @@ def compare(
         gc.disable()
     try:
         period = _resolve_period(period, left, right)
+        if "taxsim" in {left, right}:
+            _require_taxsim_law_year(period)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
@@ -879,6 +887,9 @@ def compare(
                 raise click.ClickException(
                     "No cases remain after engine-specific preparation filters."
                 )
+
+            accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            _echo_engine_identity(accumulator.engine_identity)
 
             if output_path:
                 accumulator.write_json(output_path)
@@ -1392,6 +1403,51 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
         "output": "us:tax/oracle-bridge#state_income_tax",
     }
     return replace(case, metadata=metadata)
+
+
+def _require_taxsim_law_year(period: str) -> None:
+    """Fail before any work when the host's TAXSIM binary rejects the year.
+
+    The Linux and macOS executables in the pinned policyengine-taxsim release
+    are different NBER builds with different law-year ranges
+    (taxsim_pins.json); without this check a Linux run loads the whole
+    population and then dies on the binary's ``STOP 1``.
+    """
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise click.ClickException(
+            f"--period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        taxsim_pins.require_law_years([year])
+    except taxsim_pins.TaxsimLawYearError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _engine_identity(*runners: EngineAdapter) -> dict | None:
+    """The report's ``engine_identity`` block: binaries the runners executed."""
+    identity: dict = {}
+    for runner in runners:
+        if isinstance(runner, AxiomRulesRunner) and runner.engine_receipt:
+            identity["axiom"] = dict(runner.engine_receipt)
+        if isinstance(runner, TaxsimPackageRunner):
+            taxsim = runner.taxsim_identity()
+            if taxsim:
+                identity["taxsim"] = taxsim
+    return identity or None
+
+
+def _echo_engine_identity(identity: dict | None) -> None:
+    for binary in ((identity or {}).get("taxsim") or {}).get("binaries", ()):
+        click.echo(
+            f"TAXSIM binary: {binary['path']} sha256 {binary['sha256'][:12]} "
+            f"build {binary['build_observed'] or binary['build']} on "
+            f"{binary['platform']}/{binary['machine']}"
+            f"{'' if binary['pinned'] else ' (NOT the pinned binary)'}: "
+            f"{binary['rows']} row(s)",
+            err=True,
+        )
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:

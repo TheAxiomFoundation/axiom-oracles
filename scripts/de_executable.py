@@ -64,6 +64,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 from axiom_oracles.evidence import strict_json_loads  # noqa: E402
 
 MANIFEST_PATH = REPO_ROOT / "conformance" / "executable" / "de-kindergeld-manifest.json"
@@ -328,7 +330,6 @@ ENGINE_VERSION_LINE = (
 RECEIPT_PATH = "conformance/executable/de-kindergeld-replay-receipt.json"
 STATUS_PATH = "conformance/executable/de-kindergeld-status.json"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
-COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 
 
 class DEExecutableError(ValueError):
@@ -410,7 +411,7 @@ def _require_sha(value: object, label: str) -> str:
 
 
 def _require_commit(value: object, label: str) -> str:
-    if not isinstance(value, str) or not COMMIT_RE.fullmatch(value):
+    if not isinstance(value, str) or not GIT_SHA.fullmatch(value):
         raise DEExecutableError(f"{label}: must be a full lowercase commit SHA")
     return value
 
@@ -2138,8 +2139,8 @@ def _execute_release_archive_raw(
         "engine archive SHA-256",
     )
     with tempfile.TemporaryDirectory(prefix="de-kindergeld-replay-") as raw_tmp:
-        # Canonical path: macOS temp dirs live under the /var -> /private/var
-        # alias and the engine rejects aliased RuleSpec roots.
+        # Canonical path: macOS temporary directories can have aliases,
+        # and the engine rejects aliased RuleSpec roots.
         temp = Path(raw_tmp).resolve()
         archive = temp / engine["asset"]
         archive.write_bytes(archive_bytes)

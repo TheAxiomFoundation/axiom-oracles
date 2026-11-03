@@ -1,3 +1,5 @@
+import hashlib
+import json
 import shutil
 import subprocess
 from datetime import date
@@ -27,6 +29,13 @@ from axiom_oracles.bridges.snapscreener import (
     project_payload,
     run_payloads,
     snapscreener_state_key,
+)
+from axiom_oracles.engine_identity import (
+    ENGINE_RECEIPT_OUTPUT_ENV,
+    EngineIdentityError,
+    engine_binding_receipt_path,
+    engine_receipt,
+    record_engine_receipt,
 )
 
 
@@ -185,6 +194,74 @@ def test_arizona_projection_uses_composed_financial_outputs_not_pe_values():
     assert "snap_excess_shelter_deduction_for_net_income" not in projected
 
 
+def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
+    config = JURISDICTION_CONFIGS["us-az"]
+    assert config.eligibility_oracle_bridge is True
+    case = ProjectedCase(
+        spm_unit_id=1,
+        household_id=1,
+        inputs={},
+        member_inputs=[],
+        pe_outputs={
+            "snap_normal_allotment": 100,
+            "is_snap_eligible": True,
+            "snap_gross_income": 0,
+            "snap_net_income": 0,
+            "snap_excess_shelter_expense_deduction": 0,
+            "snap_standard_deduction": 0,
+            "snap_earned_income_deduction": 0,
+            "snap_dependent_care_deduction": 0,
+            "snap_child_support_deduction": 0,
+            "snap_child_support_gross_income_deduction": 0,
+            "snap_excess_medical_expense_deduction": 0,
+            "snap_max_allotment": 100,
+            "snap_utility_allowance": 0,
+            "housing_cost": 0,
+            "has_usda_elderly_disabled": False,
+            "meets_snap_categorical_eligibility": False,
+            "snap_utility_allowance_type": "",
+        },
+    )
+    outputs = {
+        output_id: (
+            {"kind": "judgment", "outcome": "holds"}
+            if label == "snap_eligible"
+            else {"value": {"kind": "decimal", "value": 100}}
+        )
+        for label, output_id in config.output_id_by_label.items()
+    }
+    rows = snap_populace.compare(
+        [case],
+        [{"outputs": outputs}],
+        1.5,
+        config=config,
+    )
+
+    assert rows[0]["amount_match"] is True
+    assert rows[0]["comparison_status"] == "not_comparable"
+    assert "PolicyEngine eligibility" in rows[0]["not_comparable_reason"]
+    assert rows[0]["match"] is False
+    with pytest.raises(TypeError, match="config"):
+        snap_populace.compare([case], [{"outputs": outputs}], 1.5)
+    snap_populace.print_summary(rows, 1.5, 1)
+    assert "No comparable rows; parity is not established" in capsys.readouterr().out
+
+    add_snapscreener_results(
+        rows,
+        [{"state_or_territory": "AZ"}],
+        [{"status": "OK", "estimated_monthly_benefit": 100}],
+        tolerance=1.5,
+    )
+    assert rows[0]["snapscreener_comparable"] is False
+    assert rows[0]["axiom_snapscreener_match"] is False
+    assert rows[0]["pe_snapscreener_comparable"] is True
+    assert rows[0]["pe_snapscreener_match"] is True
+    snap_populace.print_snapscreener_summary(rows, 1.5, 1)
+    summary = capsys.readouterr().out
+    assert "PolicyEngine matches SnapScreener: 1/1" in summary
+    assert "Axiom matches SnapScreener:" not in summary
+
+
 def test_arizona_raw_utility_projection_uses_arizona_input_surface():
     config = JURISDICTION_CONFIGS["us-az"]
     values = {
@@ -217,8 +294,9 @@ def test_arizona_raw_utility_projection_uses_arizona_input_surface():
     )
 
 
-def test_run_axiom_cases_uses_configured_california_member_entity(
-    monkeypatch, tmp_path
+@pytest.mark.parametrize("typed", [False, True])
+def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
+    monkeypatch, tmp_path, typed
 ):
     runtime_requests = []
 
@@ -241,10 +319,45 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
         end=date(2026, 1, 31),
     )
     config = JURISDICTION_CONFIGS["us-ca"]
+    relation_ids = (config.relation_id, *config.additional_relation_ids)
+    artifact = tmp_path / "program.json"
+    artifact.write_text(
+        snap_populace.json.dumps(
+            {
+                "program": {
+                    "relations": [
+                        {
+                            "name": name,
+                            "arity": 2,
+                            **(
+                                {"slot_entities": ["Household", "Person"]}
+                                if typed
+                                else {}
+                            ),
+                        }
+                        for name in relation_ids
+                    ],
+                    "derived": [
+                        {
+                            "name": f"count-{index}",
+                            "entity": "Household",
+                            "expr": {
+                                "kind": "count_related",
+                                "relation": name,
+                                "current_slot": 0 if typed else 1,
+                                "related_slot": 1 if typed else 0,
+                            },
+                        }
+                        for index, name in enumerate(relation_ids)
+                    ],
+                }
+            }
+        )
+    )
 
     run_axiom_cases(
         binary=tmp_path / "axiom-rules-engine",
-        artifact=tmp_path / "program.json",
+        artifact=artifact,
         cases=[
             ProjectedCase(
                 spm_unit_id=42,
@@ -264,15 +377,18 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
 
     assert config.member_entity_type == "Person"
     request = runtime_requests[0]
+    expected_tuple = (
+        ["spm-42", "spm-42-member-1"] if typed else ["spm-42-member-1", "spm-42"]
+    )
     assert request["dataset"]["relations"] == [
         {
             "name": config.relation_id,
-            "tuple": ["spm-42-member-1", "spm-42"],
+            "tuple": expected_tuple,
             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
         },
         {
             "name": "us:statutes/7/2012/j#relation.member_of_household",
-            "tuple": ["spm-42-member-1", "spm-42"],
+            "tuple": expected_tuple,
             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
         },
     ]
@@ -478,9 +594,7 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     the affected map does not list."""
     config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "TheAxiomFoundation"
-    standalone = (
-        workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
-    )
+    standalone = workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
     standalone.parent.mkdir(parents=True)
     standalone.write_text("archived\n")
     monkeypatch.chdir(tmp_path)
@@ -524,9 +638,7 @@ def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
     """A jurisdiction basename alone cannot establish live monorepo membership."""
     config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "workspace"
-    expected = (
-        workspace / "rulespec-us" / jurisdiction / config.program_relative_path
-    )
+    expected = workspace / "rulespec-us" / jurisdiction / config.program_relative_path
     expected.parent.mkdir(parents=True)
     expected.write_text("live monorepo\n")
 
@@ -572,7 +684,12 @@ def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     subprocess.run(["git", "init", "-q", str(checkout)], check=True)
     subprocess.run(
         [
-            "git", "-C", str(checkout), "remote", "add", "origin",
+            "git",
+            "-C",
+            str(checkout),
+            "remote",
+            "add",
+            "origin",
             "https://github.com/theaxiomfoundation/RuleSpec-US.git",
         ],
         check=True,
@@ -582,3 +699,137 @@ def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     assert snap_populace.resolve_program_path(config, tmp_path / "workspace", None) == (
         program.resolve()
     )
+
+
+def _receipted_snap_engine(tmp_path):
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"SNAP engine bytes")
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "engine_commit": "32bc1c124724ebbb2187a196a3b228cfb2a14721",
+        "binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
+        "version": "0.3.0",
+    }))
+    return binary
+
+
+def _snap_execution_arguments(tmp_path, binary):
+    artifact = tmp_path / "artifact.json"
+    artifact.write_text(json.dumps({"program": {"relations": []}}))
+    return {
+        "binary": binary,
+        "artifact": artifact,
+        "cases": [],
+        "period": Period(
+            label="2026-01", year=2026, month=1,
+            start=date(2026, 1, 1), end=date(2026, 1, 31),
+        ),
+        "output_ids": [],
+        "relation_id": "member_of_household",
+        "additional_relation_ids": (),
+        "member_entity_type": "Person",
+        "env": {},
+    }
+
+
+def test_compile_program_journals_each_fallback_invocation(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+    output = tmp_path / "compiled.json"
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    commands = []
+    receipts = []
+
+    def execute(command, **kwargs):
+        assert Path(command[0]) == binary.resolve()
+        assert hashlib.sha256(Path(command[0]).read_bytes()).hexdigest() == engine_receipt(binary)["binary_sha256"]
+        commands.append(command)
+        return subprocess.CompletedProcess(
+            command, int(len(commands) == 1), stdout="",
+            stderr="unknown command" if len(commands) == 1 else "",
+        )
+
+    def record(receipt):
+        receipts.append(dict(receipt))
+        record_engine_receipt(receipt)
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    monkeypatch.setattr(snap_populace, "record_engine_receipt", record)
+    snap_populace.compile_program(binary, program, output, env={})
+
+    assert [command[1] for command in commands] == ["compile-composed", "compile"]
+    assert receipts == [engine_receipt(binary), engine_receipt(binary)]
+    assert json.loads(journal.read_text()) == engine_receipt(binary)
+
+
+def test_compile_program_rejects_swap_between_fallbacks(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    original = engine_receipt(binary)
+    commands = []
+
+    def execute(command, **kwargs):
+        commands.append(command)
+        return subprocess.CompletedProcess(command, 1, stdout="", stderr="unknown command")
+
+    def replace_after_invocation(receipt):
+        record_engine_receipt(receipt)
+        binary.write_bytes(b"different cached executable")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    monkeypatch.setattr(snap_populace, "record_engine_receipt", replace_after_invocation)
+    with pytest.raises(EngineIdentityError, match="changed before SNAP execution"):
+        snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+    assert len(commands) == 1
+    assert json.loads(journal.read_text()) == original
+
+
+@pytest.mark.parametrize("changed", [False, True])
+def test_snap_direct_execution_verifies_own_bytes_before_journaling(
+    monkeypatch, tmp_path, changed,
+):
+    binary = _receipted_snap_engine(tmp_path)
+    original = engine_receipt(binary)
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    observed = []
+
+    def execute(command, **kwargs):
+        assert command[0] == original["binary_path"]
+        observed.append(hashlib.sha256(Path(command[0]).read_bytes()).hexdigest())
+        if changed:
+            binary.write_bytes(b"changed during execution")
+        return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    if changed:
+        with pytest.raises(EngineIdentityError, match="changed during SNAP execution"):
+            run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))
+        assert not journal.exists()
+    else:
+        assert run_axiom_cases(**_snap_execution_arguments(tmp_path, binary)) == []
+        assert json.loads(journal.read_text()) == original
+    assert observed == [original["binary_sha256"]]
+
+
+def test_snap_journal_rejects_different_compile_and_runtime_engines(monkeypatch, tmp_path):
+    binary = _receipted_snap_engine(tmp_path)
+    original = engine_receipt(binary)
+    journal = tmp_path / "execution.json"
+    monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
+    program = tmp_path / "composition.yaml"
+    program.write_text("module:\n  kind: composition\n")
+
+    def execute(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
+
+    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+    binary.write_bytes(b"replacement runtime engine")
+    with pytest.raises(EngineIdentityError, match="identities disagree"):
+        run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))
+    assert json.loads(journal.read_text()) == original

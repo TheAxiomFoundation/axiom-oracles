@@ -21,9 +21,11 @@ The block shape (``axiom_oracles.provenance.v1``)::
           sha_toplevel: /path/to/repo    # checkout used to resolve the SHA
           worktree_toplevel: /path/to/repo # checkout used to attest its state
           diff_sha256: 3f0a…            # only when dirty: identifies the change
-      engine:                          # the Axiom side under test
-        axiom_rules_engine_sha: …      # git SHA of the axiom-rules checkout
-        axiom_rules_engine_version: …  # crate version if resolvable
+      engine:                          # receipt for the executable that ran
+        repository: TheAxiomFoundation/axiom-rules-engine
+        commit: …                      # full source SHA, absent if unresolved
+        binary_sha256: …               # SHA-256 of the executed bytes
+        version: …                     # version bound by the build receipt
       oracle:                          # the oracle side it was compared to
         name: policyengine             # or euromod
         policyengine_package: policyengine==4.11.0
@@ -32,6 +34,21 @@ The block shape (``axiom_oracles.provenance.v1``)::
         euromod_release: J2.0
         euromod_system: BE_2025
         euromod_dataset: BE_2024_c1_2015_03_e2
+        # …and, when the NBER TAXSIM binary ran:
+        policyengine_taxsim: 2.30.0    # the pinned package that bundles it
+        taxsim_binaries:               # one entry per executable that ran
+          - path: …/taxsimtest/taxsimtest-osx.exe
+            sha256: 0d9e43a9…          # 64-hex of the bytes executed
+            bytes: 1961912
+            build: cdate-20260521      # NBER stamp embedded in the bytes
+            build_observed: cdate-20260521  # stamp the run printed
+            platform: darwin
+            machine: arm64
+            pinned: true               # sha256 is in taxsim_pins.json
+            pinned_key: taxsimtest/taxsimtest-osx.exe
+            law_years: {first: 1960, last: 2026}
+            policyengine_taxsim: 2.30.0  # installed package version
+            rows: 5000                 # input rows it was given
       dataset:                         # reuse the pinned-populace identity (#80/#952)
         source: populace-hf
         repo_id: policyengine/populace-us
@@ -58,6 +75,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -65,6 +83,10 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# Shared certificate commit identity. Reject the digit-only forgery shape
+# alongside non-string, abbreviated, and uppercase identities at admission.
+GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 
 PROVENANCE_SCHEMA_VERSION = "axiom_oracles.provenance.v1"
 
@@ -741,7 +763,9 @@ def build_provenance(
     if rulespecs:
         block["rulespecs"] = rulespecs
     if engine:
-        block["engine"] = {k: v for k, v in engine.items() if v is not None}
+        # A receipt explicitly records unresolved fields. Preserve the whole
+        # observation, including an unknown source commit or version.
+        block["engine"] = dict(engine)
     if oracle:
         block["oracle"] = {k: v for k, v in oracle.items() if v is not None}
     if dataset:
@@ -749,16 +773,26 @@ def build_provenance(
     return block
 
 
-def engine_provenance(axiom_rules_repo: Path | str | None) -> dict[str, Any]:
-    """Axiom-side engine identity: git SHA + crate version if resolvable."""
-    repo = (
-        Path(os.path.expandvars(os.path.expanduser(str(axiom_rules_repo))))
-        if axiom_rules_repo
-        else None
-    )
-    return {
-        "axiom_rules_engine_sha": _git_sha(repo) if repo else None,
-        "axiom_rules_engine_version": _crate_version(repo) if repo else None,
+def engine_provenance(
+    axiom_rules_repo: Path | str | None = None,
+    *,
+    binary_path: Path | str | None = None,
+) -> dict[str, Any]:
+    """Read an executable receipt; a checkout alone proves no build identity.
+
+    The positional checkout argument remains accepted for older callers. It
+    cannot establish which source produced an existing binary, or its version.
+    """
+    from .engine_identity import engine_receipt
+
+    return engine_receipt(binary_path) if binary_path is not None else {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": None,
+        "binary_sha256": None,
+        "version": None,
+        "source_status": "unresolved",
+        "axiom_rules_engine_sha": None,
+        "axiom_rules_engine_version": None,
     }
 
 

@@ -93,6 +93,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping
 
+from axiom_oracles.engine_identity import engine_receipt
+
 import yaml
 
 from ..comparison.report import COMPARISON_REPORT_SCHEMA_VERSION, MismatchKind
@@ -1129,7 +1131,9 @@ def run_snap_qc_comparison(
             )
             for unit in units
         ]
+        engine = engine_receipt(axiom_binary)
         results = _run_cases(
+            expected_engine_receipt=engine,
             binary=axiom_binary,
             program_path=build.program_path,
             cases=cases,
@@ -1138,6 +1142,8 @@ def run_snap_qc_comparison(
             config=config,
             env=env,
         )
+        if engine_receipt(axiom_binary)["binary_sha256"] != engine["binary_sha256"]:
+            raise RuntimeError("Axiom engine binary changed during SNAP QC execution")
         report = _build_report(
             units=units,
             results=results,
@@ -1152,6 +1158,7 @@ def run_snap_qc_comparison(
             rulespec_root=rulespec_root,
             axiom_binary=axiom_binary,
             pins=_pins_for(snap_qc_population, fiscal_year),
+            engine=engine,
             child_support_convention=config.child_support_convention,
         )
     finally:
@@ -1171,28 +1178,42 @@ def _run_cases(
     output_ids: list[str],
     config: QcJurisdiction,
     env: dict[str, str],
+    expected_engine_receipt: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
+    receipt = dict(expected_engine_receipt or engine_receipt(binary))
+
+    def verify_engine() -> None:
+        current = engine_receipt(binary)
+        if any(
+            current.get(field) != receipt.get(field)
+            for field in ("binary_sha256", "commit")
+        ):
+            raise RuntimeError("Axiom engine identity changed during SNAP QC execution")
+
     with tempfile.TemporaryDirectory(prefix="snap-qc-artifact-") as artifact_dir:
         artifact = Path(artifact_dir) / "program.compiled.json"
+        verify_engine()
         compile_program(binary, program_path, artifact, env=env)
+        verify_engine()
         results: list[dict[str, Any]] = []
         for start in range(0, len(cases), CHUNK_SIZE):
             chunk = cases[start : start + CHUNK_SIZE]
             if not chunk:
                 continue
-            results.extend(
-                run_axiom_cases(
-                    binary=binary,
-                    artifact=artifact,
-                    cases=chunk,
-                    period=period,
-                    output_ids=output_ids,
-                    relation_id=config.base.relation_id,
-                    additional_relation_ids=config.base.additional_relation_ids,
-                    member_entity_type=config.base.member_entity_type,
-                    env=env,
-                )
+            verify_engine()
+            chunk_results = run_axiom_cases(
+                binary=binary,
+                artifact=artifact,
+                cases=chunk,
+                period=period,
+                output_ids=output_ids,
+                relation_id=config.base.relation_id,
+                additional_relation_ids=config.base.additional_relation_ids,
+                member_entity_type=config.base.member_entity_type,
+                env=env,
             )
+            verify_engine()
+            results.extend(chunk_results)
     return results
 
 
@@ -1243,6 +1264,7 @@ def _build_report(
     rulespec_root: Path,
     axiom_binary: Path,
     pins: Any,
+    engine: dict[str, Any] | None = None,
     child_support_convention: str = "deduction",
 ) -> dict:
     suite = suite_name(jurisdiction)
@@ -1400,6 +1422,7 @@ def _build_report(
         "provenance": {
             "schema": "axiom_oracles.provenance.v1",
             "generated_by": f"axiom_oracles.bridges.snap_qc_compare::{suite}",
+            "engine": engine or {},
             "oracle": {
                 "name": "snap-qc",
                 "fiscal_year": fiscal_year,

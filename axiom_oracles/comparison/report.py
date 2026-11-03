@@ -17,6 +17,10 @@ from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
+from ..bridges.relation_binding import (
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 
 
 COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2"
@@ -124,6 +128,12 @@ class ComparisonReportAccumulator:
         self._left_engine: str | None = None
         self._right_engine: str | None = None
         self._seen_case_ids: set[int | str] = set()
+        self._relation_binding_diagnostics: dict = {}
+        self._engine_receipt: dict = {}
+        self._axiom_receipt_presence: bool | None = None
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -182,11 +192,31 @@ class ComparisonReportAccumulator:
                 f"output concepts for case {item.household_id!r}",
             )
 
+        receipt = self._engine_receipt
+        receipt_presence = self._axiom_receipt_presence
+        for item in comparisons:
+            if "axiom" in (item.left_engine, item.right_engine):
+                present = bool(item.engine_receipt)
+                if receipt_presence is not None and receipt_presence != present:
+                    raise ValueError("Axiom comparisons mix missing and present executable receipts")
+                receipt_presence = present
+            if item.engine_receipt:
+                if receipt and receipt != item.engine_receipt:
+                    raise ValueError("Axiom executable identity changed between batches")
+                receipt = dict(item.engine_receipt)
+        self._engine_receipt = receipt
+        self._axiom_receipt_presence = receipt_presence
         self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
 
         self._case_count += len(cases)
+        for item in comparisons:
+            for diagnostics in item.relation_binding_diagnostics.values():
+                merge_relation_binding_diagnostics(
+                    self._relation_binding_diagnostics,
+                    public_relation_binding_diagnostics(diagnostics),
+                )
         self._match_count += sum(item.match_count for item in comparisons)
         self._mismatch_count += sum(item.mismatch_count for item in comparisons)
 
@@ -235,7 +265,10 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
+            **({"provenance": {
+                "relation_binding_diagnostics": self._relation_binding_diagnostics,
+            }} if self._relation_binding_diagnostics.get("count") else {}),
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -282,6 +315,12 @@ class ComparisonReportAccumulator:
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
         }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
+        if receipt:
+            report.setdefault("provenance", {})["engine"] = dict(receipt)
+        return report
 
     def _attestation(self) -> dict:
         """Stamp what this run actually executed (axiom-oracles#355).
@@ -516,6 +555,15 @@ def _case_report_metadata(
         for key, value in metadata.items()
         if include_inputs or key not in stripped
     }
+    relations = compact.get("axiom_relations")
+    if isinstance(relations, (list, tuple)):
+        # Roles guide tuple construction; public evidence keeps the tuple
+        # and all other relation fields without changing producer metadata.
+        compact["axiom_relations"] = [
+            {key: value for key, value in record.items() if key != "roles"}
+            if isinstance(record, dict) else record
+            for record in relations
+        ]
     for key in stripped:
         value = metadata.get(key)
         if isinstance(value, (list, tuple, dict)):

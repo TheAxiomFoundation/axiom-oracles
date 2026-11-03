@@ -14,7 +14,7 @@ Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
 ## Provenance (facts from code/config, not memory)
 
 - **PolicyEngine-UK facts** are read from the installed model at
-  `/Users/maxghenis/PolicyEngine/policyengine-uk` (HEAD `45eb181c`), by grepping
+  `<policyengine-uk checkout>` (HEAD `45eb181c`), by grepping
   `policyengine_uk/variables/**/*.py` for `def formula` / `adds = [...]`, reading
   formula bodies, and querying the live `Microsimulation` tax-benefit system.
   The repo's self-reported `programs.yaml` registry was **not** used as ground
