@@ -489,8 +489,9 @@ _REVIEWED_DYNAMIC_STATEMENTS = frozenset(
 )
 # pe_outputs, made by the reviewed copy above, holds every returned value, so
 # its loads in load_policyengine_cases are checked like loads of values,
-# except in the two statements that set its extra keys and when handed to
-# ProjectedCase(pe_outputs=...), which carries it to compare().
+# except in the two statements that set its extra keys and as the
+# pe_outputs= keyword of ProjectedCase(...). That carries it onward as
+# case.pe_outputs, which only compare() may read (_PE_OUTPUTS_READERS).
 _TRACKED_COPIES = {"load_policyengine_cases": "pe_outputs"}
 _PE_OUTPUTS_WRITES = frozenset(
     {
@@ -501,6 +502,8 @@ _PE_OUTPUTS_WRITES = frozenset(
     }
 )
 _COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
+# The only function that may read ProjectedCase.pe_outputs.
+_PE_OUTPUTS_READERS = frozenset({"compare"})
 
 
 def _string_items(node: ast.AST) -> set[str] | None:
@@ -512,8 +515,25 @@ def _string_items(node: ast.AST) -> set[str] | None:
     return None
 
 
+def _bound_names(node: ast.AST) -> list[str]:
+    """Names a node binds without an ``ast.Name`` in ``Store`` context."""
+    if isinstance(node, ast.ExceptHandler | ast.MatchAs | ast.MatchStar):
+        return [node.name] if node.name else []
+    if isinstance(node, ast.MatchMapping):
+        return [node.rest] if node.rest else []
+    if isinstance(node, ast.alias):
+        return [node.asname or node.name.split(".")[0]]
+    return []
+
+
 def _rebinds(scope: ast.AST, loop: ast.AST, name: str) -> bool:
-    """True when the loop's body (or comprehension) stores to ``name``."""
+    """True when the loop's body (or comprehension) binds ``name`` again.
+
+    Covers assignment in every form that stores an ``ast.Name`` (including a
+    walrus, augmented assignment, ``with ... as`` and a nested loop), plus
+    ``except ... as``, match captures and the rest of a mapping pattern, and
+    import aliases.
+    """
     if isinstance(scope, ast.For):
         bodies = [*scope.body, *scope.orelse]
     else:
@@ -524,10 +544,10 @@ def _rebinds(scope: ast.AST, loop: ast.AST, name: str) -> bool:
                 isinstance(node, ast.Name)
                 and node.id == name
                 and isinstance(node.ctx, ast.Store)
+                and node is not loop.target
             ):
-                if node is not loop.target:
-                    return True
-            if isinstance(node, ast.NamedExpr) and node.target.id == name:
+                return True
+            if name in _bound_names(node):
                 return True
     return False
 
@@ -677,6 +697,20 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                     problems.append(f"{where} unreviewed loop over values")
             else:
                 problems.append(f"{where} unreviewed use {ast.unparse(parent)}")
+    # ProjectedCase carries the full copy onward as case.pe_outputs, for
+    # compare() only. A read of that attribute anywhere else escapes the guard.
+    for name, function in functions.items():
+        if name in _PE_OUTPUTS_READERS:
+            continue
+        for node in ast.walk(function):
+            if (
+                isinstance(node, ast.Attribute)
+                and node.attr == "pe_outputs"
+                and isinstance(node.ctx, ast.Load)
+            ):
+                problems.append(
+                    f"{name}:{node.lineno} .pe_outputs read outside compare()"
+                )
     return reads, problems
 
 
@@ -709,6 +743,7 @@ _US_CA_ANCHOR = (
 _LOADER_ANCHOR = "    household_input_ref_by_name = legal_input_index(base_inputs)\n"
 _PROJECTED_CASE_ANCHOR = "        cases.append(\n            ProjectedCase(\n"
 _MODULE_ANCHOR = "def project_deduction_inputs(\n"
+_RUN_AXIOM_ANCHOR = "        for name, value in case.inputs.items():\n"
 _NEW = '"snap_new_unlisted_input"'
 # Each shape routes an unlisted PolicyEngine variable (or every variable)
 # toward an input; the guard must reject each, as an unlisted read or as a
@@ -791,6 +826,59 @@ _UNLISTED_READS = {
     "skip-listed-hand-off-pe-outputs": (
         _PROJECTED_CASE_ANCHOR,
         "        _x = all_by_id(spm_ids, pe_outputs)\n",
+    ),
+    # The ProjectedCase exemption holds only for its pe_outputs= keyword.
+    "projected-case-other-keyword": (
+        _PROJECTED_CASE_ANCHOR,
+        "        _c = ProjectedCase(inputs=pe_outputs)\n",
+    ),
+    "other-callee-pe-outputs-keyword": (
+        _PROJECTED_CASE_ANCHOR,
+        "        _x = set_input_value(inputs, 'x', pe_outputs=pe_outputs)\n",
+    ),
+    # The copy escapes one hop further as ProjectedCase.pe_outputs; only
+    # compare() may read it.
+    "pe-outputs-attribute-outside-compare": (
+        _RUN_AXIOM_ANCHOR,
+        f'        case.inputs["us:x#input.snap_new_input"] = case.pe_outputs[{_NEW}]\n',
+    ),
+    # A loop target rebound by a binding that is not an ast.Name.
+    "loop-target-rebound-by-except": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        try:\n            pass\n"
+        "        except Exception as _n:\n            pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-match-as": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        match 1:\n            case _n:\n                pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-match-star": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        match []:\n            case [*_n]:\n                pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-match-mapping-rest": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        match {}:\n            case {**_n}:\n                pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-import-as": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        import os as _n\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-bare-import": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        import _n\n"
+        "        _x = values[_n][idx]\n",
     ),
     "reassigned-loop-target": (
         _US_CA_ANCHOR,
