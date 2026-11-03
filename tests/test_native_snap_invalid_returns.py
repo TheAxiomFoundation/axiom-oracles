@@ -504,6 +504,64 @@ _PE_OUTPUTS_WRITES = frozenset(
 _COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 # The only function that may read ProjectedCase.pe_outputs.
 _PE_OUTPUTS_READERS = frozenset({"compare"})
+# Where the name pe_outputs may appear in other forms: the readers, the loader
+# that builds the copy, and the ProjectedCase definition.
+_PE_OUTPUTS_SCOPES = frozenset({"compare", "load_policyengine_cases", "ProjectedCase"})
+
+
+def _indirect_pe_outputs_reads(tree: ast.AST) -> list[str]:
+    """Indirect routes to ProjectedCase.pe_outputs outside its own scopes.
+
+    Reports the string constant "pe_outputs", any call to ``vars`` or
+    ``asdict`` (bare or as an attribute, e.g. ``dataclasses.asdict``), any
+    ``.__dict__`` load, and ``getattr`` whose attribute name is not a string
+    literal.
+    """
+    parents = {
+        child: node for node in ast.walk(tree) for child in ast.iter_child_nodes(node)
+    }
+
+    def in_scope(node: ast.AST) -> bool:
+        while node in parents:
+            node = parents[node]
+            if (
+                isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef)
+                and node.name in _PE_OUTPUTS_SCOPES
+            ):
+                return True
+        return False
+
+    problems = []
+    for node in ast.walk(tree):
+        found = None
+        if isinstance(node, ast.Constant) and node.value == "pe_outputs":
+            found = 'the string "pe_outputs"'
+        elif isinstance(node, ast.Call):
+            func = node.func
+            callee = (
+                func.id
+                if isinstance(func, ast.Name)
+                else func.attr
+                if isinstance(func, ast.Attribute)
+                else None
+            )
+            if callee in {"vars", "asdict"}:
+                found = f"a call to {callee}()"
+            elif callee == "getattr" and not (
+                len(node.args) >= 2
+                and isinstance(node.args[1], ast.Constant)
+                and isinstance(node.args[1].value, str)
+            ):
+                found = "getattr with a non-literal name"
+        elif (
+            isinstance(node, ast.Attribute)
+            and node.attr == "__dict__"
+            and isinstance(node.ctx, ast.Load)
+        ):
+            found = "a .__dict__ load"
+        if found and not in_scope(node):
+            problems.append(f"{getattr(node, 'lineno', '?')}: {found}")
+    return problems
 
 
 def _string_items(node: ast.AST) -> set[str] | None:
@@ -523,6 +581,8 @@ def _bound_names(node: ast.AST) -> list[str]:
         return [node.rest] if node.rest else []
     if isinstance(node, ast.alias):
         return [node.asname or node.name.split(".")[0]]
+    if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef | ast.ClassDef):
+        return [node.name]
     return []
 
 
@@ -531,8 +591,9 @@ def _rebinds(scope: ast.AST, loop: ast.AST, name: str) -> bool:
 
     Covers assignment in every form that stores an ``ast.Name`` (including a
     walrus, augmented assignment, ``with ... as`` and a nested loop), plus
-    ``except ... as``, match captures and the rest of a mapping pattern, and
-    import aliases.
+    ``except ... as``, match captures and the rest of a mapping pattern,
+    import aliases (and the first name of a dotted import), and ``def``,
+    ``async def`` and ``class`` statements.
     """
     if isinstance(scope, ast.For):
         bodies = [*scope.body, *scope.orelse]
@@ -711,6 +772,7 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                 problems.append(
                     f"{name}:{node.lineno} .pe_outputs read outside compare()"
                 )
+    problems.extend(_indirect_pe_outputs_reads(tree))
     return reads, problems
 
 
@@ -842,6 +904,32 @@ _UNLISTED_READS = {
         _RUN_AXIOM_ANCHOR,
         f'        case.inputs["us:x#input.snap_new_input"] = case.pe_outputs[{_NEW}]\n',
     ),
+    # Other ways to read ProjectedCase.pe_outputs outside compare().
+    "pe-outputs-getattr-literal": (
+        _RUN_AXIOM_ANCHOR,
+        '        case.inputs["us:x#input.snap_new_input"] = '
+        f'getattr(case, "pe_outputs")[{_NEW}]\n',
+    ),
+    "pe-outputs-getattr-computed": (
+        _RUN_AXIOM_ANCHOR,
+        '        case.inputs["us:x#input.snap_new_input"] = '
+        f'getattr(case, "pe_" + "outputs")[{_NEW}]\n',
+    ),
+    "pe-outputs-vars": (
+        _RUN_AXIOM_ANCHOR,
+        '        case.inputs["us:x#input.snap_new_input"] = '
+        f'vars(case)["pe_" + "outputs"][{_NEW}]\n',
+    ),
+    "pe-outputs-asdict": (
+        _RUN_AXIOM_ANCHOR,
+        '        case.inputs["us:x#input.snap_new_input"] = '
+        f'dataclasses.asdict(case)["pe_" + "outputs"][{_NEW}]\n',
+    ),
+    "pe-outputs-dunder-dict": (
+        _RUN_AXIOM_ANCHOR,
+        '        case.inputs["us:x#input.snap_new_input"] = '
+        f'case.__dict__["pe_" + "outputs"][{_NEW}]\n',
+    ),
     # A loop target rebound by a binding that is not an ast.Name.
     "loop-target-rebound-by-except": (
         _US_CA_ANCHOR,
@@ -872,6 +960,30 @@ _UNLISTED_READS = {
         _US_CA_ANCHOR,
         '    for _n in ("snap_assets",):\n'
         "        import os as _n\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-dotted-import": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        import _n.sub\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-def": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        def _n():\n            pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-async-def": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        async def _n():\n            pass\n"
+        "        _x = values[_n][idx]\n",
+    ),
+    "loop-target-rebound-by-class": (
+        _US_CA_ANCHOR,
+        '    for _n in ("snap_assets",):\n'
+        "        class _n:\n            pass\n"
         "        _x = values[_n][idx]\n",
     ),
     "loop-target-rebound-by-bare-import": (
@@ -1417,3 +1529,30 @@ def test_validator_refuses_a_rate_where_nothing_was_compared(rate):
     defects: list[str] = []
     evidence._validate_compact_case(served, "cases[0]", defects, "us-co-snap-ecps")
     assert any("must be null when no stored pair was compared" in d for d in defects)
+
+
+_INDIRECT_FORMS = (
+    '_a = "pe_outputs"',
+    "_b = vars(case)",
+    "_c = dataclasses.asdict(case)",
+    "_d = case.__dict__",
+    '_e = getattr(case, "pe_" + "outputs")',
+)
+_PE_OUTPUTS_SCOPE_ANCHORS = {
+    "compare": "        returned_axiom_snap = returned_value(outputs[COMPARED_AXIOM_OUTPUT])\n",
+    "load_policyengine_cases": _LOADER_ANCHOR,
+    "ProjectedCase": "    pe_outputs: dict[str, Any]\n",
+}
+
+
+@pytest.mark.parametrize("scope", sorted(_PE_OUTPUTS_SCOPE_ANCHORS))
+def test_indirect_pe_outputs_forms_are_allowed_in_their_own_scopes(scope):
+    # The indirect-read rule applies only outside compare(), the loader that
+    # builds the copy, and the ProjectedCase definition.
+    source = _bridge_source()
+    anchor = _PE_OUTPUTS_SCOPE_ANCHORS[scope]
+    assert source.count(anchor) == 1
+    indent = anchor[: len(anchor) - len(anchor.lstrip())]
+    injected = "".join(f"{indent}{form}\n" for form in _INDIRECT_FORMS)
+    tree = ast.parse(source.replace(anchor, injected + anchor))
+    assert _indirect_pe_outputs_reads(tree) == []
