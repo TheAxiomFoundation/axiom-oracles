@@ -455,9 +455,12 @@ mismatches, and upstream triage workflow.
 `--population taxsim-csv` loads a TAXSIM-35 input CSV — for example
 policyengine-taxsim's `cps_households.csv`, the file its PolicyEngine-vs-TAXSIM
 dashboard scores — and hands each row to both engines unchanged in
-`metadata["taxsim_input"]`, so `compare policyengine taxsim` runs exactly the
-rows the benchmark ran (the only engine pair that reads TAXSIM rows; other
-pairs are refused).
+`metadata["taxsim_input"]`, so `compare policyengine taxsim` runs the rows the
+benchmark ran (the only engine pair that reads TAXSIM rows; other pairs are
+refused). The values are the file's exact cell values. The benchmark's own
+worker parses the file with pandas' default float parser, which can differ
+from the cell text in the last digits; see
+[What the loader guarantees](docs/policyengine-taxsim.md#what-the-loader-guarantees).
 
 ```bash
 git -C ~/PolicyEngine/pe-taxsim show \

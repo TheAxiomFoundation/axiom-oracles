@@ -17,8 +17,9 @@ Contract
   taxsim_runner.PolicyEngineTaxsimRunner` pass through as-is. A cell whose
   text is an integer literal becomes an ``int``, any other numeric cell a
   ``float`` (Python's correctly rounded ``float()``), and a blank cell is
-  omitted from the row. For every column with at least one non-blank cell
-  (integers within int64), a DataFrame built from the rows has the dtype
+  omitted from the row (so is a whitespace-only cell). An integer literal
+  outside int64 fails the load. For every column with at least one
+  non-blank cell, a DataFrame built from the rows has the dtype
   ``pandas.read_csv`` infers for the file and the values
   ``pandas.read_csv(float_precision="round_trip")`` parses;
   ``tests/test_taxsim_csv_population.py`` checks both. The
@@ -320,6 +321,16 @@ def read_taxsim_csv(
                     f"TAXSIM CSV {file_path} data row {row_number} has a blank "
                     "year and no period override was given."
                 )
+            for column in SELECTOR_FACT_COLUMNS:
+                value = row.get(column)
+                if value is not None and _integer(value) is None:
+                    # Refused here, not only in select(), so a direct caller
+                    # never holds a file that cannot be selected.
+                    raise TaxsimCsvError(
+                        f"TAXSIM CSV {file_path} data row {row_number} (taxsimid "
+                        f"{taxsimid}): {column}={value!r} is not an integer; "
+                        "selector facts require integer values."
+                    )
             state_counts[state] += 1
             if year_override is not None:
                 # Same result as the benchmark's dict(row, year=...): an
@@ -483,6 +494,13 @@ def _parse_row(
             continue
         try:
             row[column] = _parse_number(text)
+        except _OutsideInt64:
+            raise TaxsimCsvError(
+                f"TAXSIM CSV {source} data row {row_number} column {column!r} "
+                f"holds {cell!r}, an integer outside int64; pandas.read_csv "
+                "would not read it as an integer, and TAXSIM would receive it "
+                "as text."
+            ) from None
         except ValueError:
             raise TaxsimCsvError(
                 f"TAXSIM CSV {source} data row {row_number} column {column!r} "
@@ -491,15 +509,26 @@ def _parse_row(
     return row
 
 
+_INT64_MIN, _INT64_MAX = -(2**63), 2**63 - 1
+
+
+class _OutsideInt64(ValueError):
+    """An integer literal pandas cannot frame as int64."""
+
+
 def _parse_number(text: str) -> Number:
     # int()/float() also accept non-ASCII digits and "_" separators, which
     # neither TAXSIM nor pandas.read_csv reads as numbers.
     if not text.isascii() or "_" in text:
         raise ValueError(text)
     try:
-        return int(text)
+        integer = int(text)
     except ValueError:
         pass
+    else:
+        if not _INT64_MIN <= integer <= _INT64_MAX:
+            raise _OutsideInt64(text)
+        return integer
     value = float(text)
     if not math.isfinite(value):
         raise ValueError(text)
