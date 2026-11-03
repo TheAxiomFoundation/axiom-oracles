@@ -140,19 +140,16 @@ def _dependent_business():
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#618: QBI floors each person, sums members")
 def test_spouses_businesses_net_before_the_floor() -> None:
     assert _qbi(_offsetting_spouses()) == pytest.approx(0)
     assert _qbid(_offsetting_spouses(), 67_800) == pytest.approx(0)
 
 
-@pytest.mark.xfail(strict=True, reason="#618: QBI floors each person, sums members")
 def test_partly_offsetting_spouses_get_20_percent_of_the_net() -> None:
     assert _qbi(_partly_offsetting_spouses()) == pytest.approx(3_000)
     assert _qbid(_partly_offsetting_spouses(), 30_800) == pytest.approx(600)
 
 
-@pytest.mark.xfail(strict=True, reason="#618: QBI floors each person, sums members")
 def test_a_dependents_business_is_not_the_filers_qbi() -> None:
     assert _qbi(_dependent_business()) == pytest.approx(0)
 
@@ -174,7 +171,6 @@ _DEPENDENT = st.fixed_dictionaries(
 )
 
 
-@pytest.mark.xfail(strict=True, reason="#618: QBI floors each person, sums members")
 @PROPERTY_SETTINGS
 @given(
     head=_FILER,

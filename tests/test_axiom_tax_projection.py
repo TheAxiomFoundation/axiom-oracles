@@ -569,7 +569,8 @@ def test_axiom_tax_projection_routes_self_employment_through_sections_1402_and_1
     ) not in by_key
 
 
-def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qbi() -> None:
+def test_axiom_tax_projection_keeps_dependent_self_employment_out_of_filer_qbi() -> None:
+    """A dependent's Schedule C stays a person input; QBI nets the filers."""
     case = Case(
         case_id="dependent-self-employment",
         period="2026",
@@ -646,8 +647,14 @@ def test_axiom_tax_projection_routes_dependent_self_employment_through_member_qb
         "qualified_business_income"
     ]["versions"][0]["formula"]
     assert "person_self_employment_tax_ald_for_qbid" in (
-        generated_rules_by_name["business_income_for_qbid"]["versions"][0]["formula"]
+        generated_rules_by_name["net_business_income_for_qbid"]["versions"][0][
+            "formula"
+        ]
     )
+    assert "sum_where(filer_adjusted_earnings_of_tax_unit" in (
+        qualified_business_income_formula
+    )
+    assert "business_income_of_tax_unit" not in qualified_business_income_formula
     assert "- self_employment_tax_deduction" not in qualified_business_income_formula
 
 

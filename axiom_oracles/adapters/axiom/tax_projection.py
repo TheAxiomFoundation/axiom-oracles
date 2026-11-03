@@ -1144,38 +1144,72 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle comparison bridge identifying tax-unit members with person-level 26 USC 164(f) deductions",
         formula="person_self_employment_tax_ald_for_qbid > 0",
     ),
+    # 26 USC 199A(c)(1): QBI is the taxpayer's net amount. Each person's
+    # items stay signed here, split into income and loss parts because
+    # sum_where needs a condition, and net across the filers below.
+    _generated_person_rule(
+        "net_business_income_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source=(
+            "26 USC 199A(c)(1) qualified items of one person: Schedule C "
+            "income and Part I rents less the 164(f) deduction"
+        ),
+        formula=(
+            "person_self_employment_income_for_qbid "
+            "+ person_rental_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
+        ),
+    ),
     _generated_person_rule(
         "business_income_for_qbid",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine person-level 26 USC 199A QBI aggregation",
-        formula=(
-            "max("
-            "0, "
-            "person_self_employment_income_for_qbid "
-            "+ person_rental_income_for_qbid "
-            "- person_self_employment_tax_ald_for_qbid"
-            ")"
-        ),
+        source="Oracle comparison bridge taking the positive part of a person's net 26 USC 199A items",
+        formula="max(0, net_business_income_for_qbid)",
     ),
     _generated_person_rule(
         "business_income_counts_for_qbid",
         dtype="Judgment",
-        source="Oracle comparison bridge matching PolicyEngine positive person-level QBI aggregation",
+        source="Oracle comparison bridge identifying persons with net positive 26 USC 199A items",
         formula="business_income_for_qbid > 0",
     ),
+    _generated_person_rule(
+        "business_loss_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge taking the negative part of a person's net 26 USC 199A items",
+        formula="max(0, -net_business_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "business_loss_counts_for_qbid",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying persons with net negative 26 USC 199A items",
+        formula="business_loss_for_qbid > 0",
+    ),
+    # Filers only: a dependent's business is on the dependent's own return,
+    # outside the filers' taxable income (199A(c)(3)(A)(ii)). A net loss
+    # carries forward (199A(c)(2)), so this year's QBI floors at zero.
     _generated_tax_unit_rule(
         "qualified_business_income",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 199A(c) to ECPS self-employment and rental income leaves",
+        source=(
+            "26 USC 199A(c)(1)-(2), netting the filers' Schedule C income "
+            "and Part I rents before the zero floor"
+        ),
         formula=(
             "max("
             "0, "
             "sum_where("
-            "business_income_of_tax_unit, "
+            "filer_adjusted_earnings_of_tax_unit, "
             "business_income_for_qbid, "
             "business_income_counts_for_qbid"
+            ") "
+            "- sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "business_loss_for_qbid, "
+            "business_loss_counts_for_qbid"
             ")"
             ")"
         ),
