@@ -11,6 +11,11 @@ artifact names, and the publish job.
 from __future__ import annotations
 
 import importlib.util
+import json
+import os
+import subprocess
+import sys
+import textwrap
 from pathlib import Path
 
 import yaml
@@ -97,3 +102,64 @@ def test_publish_job_applies_the_lane_bundles_and_stays_the_only_writer():
         if (spec.get("permissions") or {}).get("contents") == "write"
     ]
     assert writers == ["publish"]
+
+
+def _bundle_guard() -> dict:
+    steps = _jobs()["publish"]["steps"]
+    guard = [s for s in steps if s.get("name") == "Every passing SNAP QC replay left a bundle"]
+    assert len(guard) == 1
+    return guard[0]
+
+
+def _run_bundle_guard(tmp_path: Path, suites: list[str], present: list[str]):
+    guard = _bundle_guard()
+    code = textwrap.dedent(guard["run"].split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0])
+    for suite in present:
+        (tmp_path / "refreshed" / f"refreshed-{suite}").mkdir(parents=True)
+    return subprocess.run(
+        [sys.executable, "-c", code],
+        env={**os.environ, "RUNNER_TEMP": str(tmp_path), "SNAP_QC": json.dumps(suites)},
+        capture_output=True,
+        text=True,
+    )
+
+
+def test_publish_fails_when_a_passing_lane_suite_left_no_bundle():
+    """If the called workflow's uploads never reach publish's download, every
+    lane leg is green and publish applies only the bare bundles. This guard
+    turns that silent partial publish red."""
+    steps = _jobs()["publish"]["steps"]
+    guard = _bundle_guard()
+    download = next(
+        i for i, s in enumerate(steps)
+        if s.get("uses", "").startswith("actions/download-artifact@")
+    )
+    assert download < steps.index(guard)
+    # Runs only when the whole lane passed (a failed leg is already red), and
+    # still after a failed publish step, never after a cancellation.
+    assert guard["if"] == (
+        "${{ !cancelled() && needs.snap-qc-replay.result == 'success' }}"
+    )
+    assert guard["env"]["SNAP_QC"] == "${{ needs.select.outputs.snap_qc }}"
+    # The directory name the download gives each bundle is the uploaded name.
+    upload = next(
+        s for s in _workflow("snap-qc-replay.yml")["jobs"]["replay"]["steps"]
+        if s.get("name") == "Upload refreshed-report bundle"
+    )
+    assert upload["with"]["name"] == "refreshed-${{ matrix.suite }}"
+    assert 'f"refreshed-{s}"' in guard["run"]
+
+
+def test_bundle_guard_names_each_missing_suite(tmp_path):
+    lane = ["az-snap-qc", "ca-snap-qc", "ny-snap-qc"]
+    result = _run_bundle_guard(tmp_path, lane, ["ca-snap-qc"])
+    assert result.returncode != 0
+    assert "az-snap-qc, ny-snap-qc" in result.stderr
+
+
+def test_bundle_guard_passes_when_every_suite_left_a_bundle(tmp_path):
+    lane = ["az-snap-qc", "ca-snap-qc"]
+    result = _run_bundle_guard(tmp_path, lane, lane)
+    assert result.returncode == 0, result.stderr
+    # A bundle for a bare suite does not stand in for a lane suite.
+    assert _run_bundle_guard(tmp_path / "x", lane, ["az-snap-qc", "co-tax"]).returncode != 0

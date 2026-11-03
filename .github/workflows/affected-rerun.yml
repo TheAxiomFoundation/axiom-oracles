@@ -414,3 +414,34 @@ jobs:
         run: |
           scripts/commit_refreshed_report.sh --publish \
             "$RUNNER_TEMP/refreshed" "oracle-data"
+
+      - name: Every passing SNAP QC replay left a bundle
+        # The lane uploads from a called workflow. If those uploads ever stop
+        # reaching this job's download, every lane leg is green, publish
+        # applies only the bare bundles, and the run would end green while
+        # the SNAP QC reports silently stay stale on every sweep. When the
+        # whole lane succeeded, each suite it replayed must have left a
+        # refreshed-<suite> bundle; otherwise this fails. It runs after the
+        # publish step, so the bare refreshes still land and the run is red.
+        # A lane with a failed leg already ends the run red, so this skips.
+        if: ${{ !cancelled() && needs.snap-qc-replay.result == 'success' }}
+        env:
+          SNAP_QC: ${{ needs.select.outputs.snap_qc }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ["RUNNER_TEMP"]) / "refreshed"
+          suites = json.loads(os.environ.get("SNAP_QC") or "[]")
+          missing = [s for s in suites if not (root / f"refreshed-{s}").is_dir()]
+          if missing:
+              raise SystemExit(
+                  "::error title=SNAP QC bundles missing::the live replay lane "
+                  "passed for " + ", ".join(suites) + " but publish found no "
+                  "bundle for " + ", ".join(missing) + "; their published "
+                  "reports were not refreshed"
+              )
+          print(f"{len(suites)} SNAP QC bundle(s) present: " + ", ".join(suites))
+          PY
