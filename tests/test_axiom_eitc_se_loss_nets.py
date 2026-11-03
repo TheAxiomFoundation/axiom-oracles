@@ -94,7 +94,6 @@ def _worker(case_id, wages, self_employment, *, child_age=None):
     return Case(case_id=case_id, period="2026", entities=tuple(people))
 
 
-@pytest.mark.xfail(strict=True, reason="#622: the projection floors SE at zero")
 def test_a_wage_earners_se_loss_reaches_section_32() -> None:
     assert _se_input(_worker("loss", 47_269.90, -973.98, child_age=5)) == (
         pytest.approx(-973.98)
@@ -104,7 +103,6 @@ def test_a_wage_earners_se_loss_reaches_section_32() -> None:
     )
 
 
-@pytest.mark.xfail(strict=True, reason="#622: the projection floors SE at zero")
 def test_each_spouse_takes_their_own_164_f_deduction() -> None:
     """Joint: head profit 10,000, spouse loss 10,000. The head's SE tax still
     yields a 706.48 deduction, so the combined amount is -706.48, not zero."""
@@ -128,7 +126,6 @@ def test_each_spouse_takes_their_own_164_f_deduction() -> None:
 _SE = st.floats(min_value=-500_000, max_value=500_000, allow_nan=False)
 
 
-@pytest.mark.xfail(strict=True, reason="#622: the projection floors SE at zero")
 @PROPERTY_SETTINGS
 @given(
     head_se=_SE,

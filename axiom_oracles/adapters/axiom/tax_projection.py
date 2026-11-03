@@ -3551,6 +3551,20 @@ def _eitc_relevant_investment_income(
     )
 
 
+def _section_32_self_employment_earned_income(self_employment: float) -> float:
+    """One filer's 32(c)(2)(A)(ii) amount from Schedule C income.
+
+    A profit nets out the 164(f) deduction, one-half of the SECA tax on
+    92.35% of it. A loss carries no SECA tax and enters unchanged, so it
+    reduces earned income, as the EIC Worksheet B line 4a total does.
+    """
+    if self_employment > 0:
+        return self_employment * (
+            1 - 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029))
+        )
+    return self_employment
+
+
 def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, Any]]:
     head, spouse = _tax_filers(people)
     dependents = _tax_dependents(people, head, spouse)
@@ -3715,14 +3729,14 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "real_estate_taxes": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
         "self_employment_trade_or_business_deductions": 0,
         "self_employment_trade_or_business_gross_income": self_employment,
-        # 26 USC 32(c)(2)(A)(ii): NESE determined with regard to the
-        # 164(f)/1402(a)(12) deduction (one-half of the combined
-        # 1401(a)+(b)(1) rates).
-        "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
-            # 32(c)(2)(A)(ii) via 164(f): earned income nets out one-half
-            # of the SECA tax imposed (rates apply to 92.35% of profits).
-            max(0.0, self_employment)
-            * (1 - 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029)))
+        # 26 USC 32(c)(2)(A)(ii): net earnings from self-employment,
+        # determined with regard to the 164(f) deduction, signed, so a loss
+        # nets against wages. Each filer takes their own deduction.
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": sum(
+            _section_32_self_employment_earned_income(
+                _number(person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0))
+            )
+            for person in earners
         ),
         "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
             case,
