@@ -157,3 +157,25 @@ def test_actual_shards_conserve_error_counts(error_first: bool) -> None:
     assert merged["summary"]["comparison_count"] == 3
     assert sum(row["kind"] == "engine_error" for row in merged["mismatches"]) == 2
     assert merged["summary"]["errors_by_engine"] == {"taxsim": 2}
+
+
+def test_written_report_keeps_the_engine_error_count(tmp_path: Path) -> None:
+    """write_json builds the same summary as to_dict, engine errors included."""
+    accumulator = ComparisonReportAccumulator(
+        suite_name="error-fixture",
+        population="synthetic",
+        locales=set(),
+        scope=None,
+        mappings=[MAPPING],
+        case_rows_path=tmp_path / "cases.jsonl",
+    )
+    comparisons = Comparator([MAPPING]).compare(
+        [EngineResult("policyengine", "case-1", {"tax": 100})],
+        [EngineResult("taxsim", "case-1", {}, errors=("taxsim-crash:rc=9",))],
+    )
+    accumulator.add_batch([Case(case_id="case-1", period="2025")], comparisons)
+    path = tmp_path / "report.json"
+    accumulator.write_json(path)
+    written = json.loads(path.read_text())
+    assert written["summary"]["engine_error_count"] == 1
+    assert written["summary"] == accumulator.to_dict()["summary"]

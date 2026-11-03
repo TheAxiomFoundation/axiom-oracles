@@ -93,7 +93,12 @@ class ComparisonReportAccumulator:
 
     When `case_rows_path` is supplied, per-case rows are written as JSONL and can
     later be streamed into the final JSON report without keeping every successful
-    case row in memory.
+    case row in memory. Returned-output observation rows are spooled the same
+    way, beside it (:func:`observed_outputs_path`), so memory does not grow
+    with the number of returned values. :meth:`write_json` writes the same
+    bytes either way. The caller owns both files: the accumulator creates
+    them and never deletes them, so pass a path in a directory the caller
+    removes (the CLI uses a temporary directory).
     """
 
     def __init__(
@@ -106,8 +111,13 @@ class ComparisonReportAccumulator:
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
         include_inputs: bool = False,
+        dataset_identity: dict[str, Any] | None = None,
     ) -> None:
         self.include_inputs = include_inputs
+        # File-level identity of the population's source dataset (e.g. the
+        # taxsim-csv loader's sha256/rows/year override), emitted as the
+        # report's top-level ``dataset_identity`` block when present.
+        self.dataset_identity = dataset_identity
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
@@ -121,9 +131,13 @@ class ComparisonReportAccumulator:
         }
         self._case_rows_path = case_rows_path
         self._case_rows: list[dict] = []
+        self._output_rows_path = (
+            observed_outputs_path(case_rows_path) if case_rows_path is not None else None
+        )
         if self._case_rows_path is not None:
             self._case_rows_path.parent.mkdir(parents=True, exist_ok=True)
             self._case_rows_path.write_text("")
+            self._output_rows_path.write_text("")
 
         self._case_count = 0
         self._match_count = 0
@@ -134,6 +148,7 @@ class ComparisonReportAccumulator:
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
         self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        # Only when no spool path was given; otherwise see _output_rows_path.
         self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
@@ -253,7 +268,7 @@ class ComparisonReportAccumulator:
                     rows = [dict(case_id=item.household_id, engine=engine,
                                  concept=comparison.variable, variable=variable, value=value)
                             for variable, value in values]
-                    self._output_rows.extend(rows)
+                    self._append_output_rows(rows)
                     evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
                                 "errors": list(item.left_errors) + list(item.right_errors)}
                     for row in rows:
@@ -276,7 +291,17 @@ class ComparisonReportAccumulator:
             )
         )
 
-    def to_dict(self, *, include_cases: bool = True) -> dict:
+    def to_dict(
+        self, *, include_cases: bool = True, include_outputs: bool = True
+    ) -> dict:
+        """The report document; a streamed one reads its spools back.
+
+        ``include_outputs=False`` leaves out ``observed_outputs``, so a
+        caller that needs only the summary does not load every returned value.
+        """
+        return self._document(include_cases=include_cases, include_outputs=include_outputs)
+
+    def _document(self, *, include_cases: bool, include_outputs: bool) -> dict:
         summary = {
             "match_count": self._match_count,
             "mismatch_count": self._mismatch_count,
@@ -331,7 +356,8 @@ class ComparisonReportAccumulator:
                 }
                 for mapping in self.mappings
             },
-            "observed_outputs": list(self._output_rows),
+            **({"observed_outputs": list(self._iter_output_rows())}
+               if include_outputs else {}),
             "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),
@@ -342,6 +368,8 @@ class ComparisonReportAccumulator:
         receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
         if receipt:
             report.setdefault("provenance", {})["engine"] = dict(receipt)
+        if self.dataset_identity is not None:
+            report["dataset_identity"] = self.dataset_identity
         return report
 
     def _attestation(self) -> dict:
@@ -368,12 +396,15 @@ class ComparisonReportAccumulator:
     def write_json(self, path: Path) -> None:
         """Write the final report JSON, streaming per-case rows when possible."""
 
-        report = self.to_dict(include_cases=False)
+        report = self._document(include_cases=False, include_outputs=False)
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as handle:
             handle.write("{\n")
-            for key in sorted(key for key in report if key != "cases"):
-                handle.write(_top_level_json_entry(key, report[key]))
+            for key in sorted({*report, "observed_outputs"} - {"cases"}):
+                if key == "observed_outputs":
+                    _write_json_list_entry(handle, key, self._iter_output_rows())
+                else:
+                    handle.write(_top_level_json_entry(key, report[key]))
                 handle.write(",\n")
             handle.write(f'  {json.dumps("cases")}: [')
             wrote_case = False
@@ -392,6 +423,25 @@ class ComparisonReportAccumulator:
         with self._case_rows_path.open("a") as handle:
             for row in rows:
                 handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+    def _append_output_rows(self, rows: list[dict]) -> None:
+        if self._output_rows_path is None:
+            self._output_rows.extend(rows)
+            return
+        with self._output_rows_path.open("a") as handle:
+            for row in rows:
+                handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+    def _iter_output_rows(self):
+        if self._output_rows_path is None:
+            yield from self._output_rows
+            return
+        if not self._output_rows_path.exists():
+            return
+        with self._output_rows_path.open() as handle:
+            for line in handle:
+                if line.strip():
+                    yield json.loads(line)
 
     def _stored_case_rows(self) -> list[dict]:
         return list(self._iter_case_rows())
@@ -1068,6 +1118,22 @@ def strip_heavy_case_metadata(report: dict) -> dict:
             case = {**case, "metadata": metadata}
         slim_cases.append(case)
     return {**report, "cases": slim_cases}
+
+
+def observed_outputs_path(case_rows_path: Path) -> Path:
+    """Where a streamed report spools its returned-output rows."""
+    return case_rows_path.with_name(case_rows_path.name + ".observed_outputs.jsonl")
+
+
+def _write_json_list_entry(handle, key: str, rows) -> None:
+    """Stream ``_top_level_json_entry(key, list(rows))``, one row at a time."""
+    handle.write(f"  {json.dumps(key)}: [")
+    wrote = False
+    for row in rows:
+        handle.write(",\n" if wrote else "\n")
+        handle.write(_indented_json(row, 4))
+        wrote = True
+    handle.write("\n  ]" if wrote else "]")
 
 
 def _top_level_json_entry(key: str, value: object) -> str:
