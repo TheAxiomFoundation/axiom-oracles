@@ -464,23 +464,29 @@ def test_loader_keeps_finite_zero_and_false(monkeypatch, value):
     assert case.pe_outputs["snap_assets"] == value
 
 
-# Functions whose ``values`` is not the PolicyEngine mapping (a numpy array).
+# Functions whose ``values`` is not the PolicyEngine mapping: a numpy array,
+# or (_diagnostic_sum) its own varargs of diagnostic amounts.
 _NOT_THE_POLICYENGINE_MAPPING = frozenset(
-    {"array", "any_by_id", "all_by_id", "build_household_value_map"}
+    {"array", "any_by_id", "all_by_id", "build_household_value_map", "_diagnostic_sum"}
 )
-# Reads keyed by a loop variable over something other than a literal, as
-# (function, loop iterable). Each is safe by construction and listed here so
-# that any new dynamic read fails the guard until someone reviews it.
-_REVIEWED_DYNAMIC_READS = frozenset(
+# The two reviewed statements that read the mapping with keys the scan cannot
+# resolve, as (function, exact statement source). Any other statement that
+# reads it that way fails the guard until someone reviews it.
+_REVIEWED_DYNAMIC_STATEMENTS = frozenset(
     {
         # The support loop reads exactly the names it validates.
-        ("load_policyengine_cases", "support_names"),
+        (
+            "load_policyengine_cases",
+            "for name in support_names:\n"
+            "    require_support_value(values[name][idx], name, spm_id)",
+        ),
         # pe_outputs copies every returned value for compare(); not inputs.
-        ("load_policyengine_cases", "values"),
+        (
+            "load_policyengine_cases",
+            "pe_outputs = {name: returned_value(values[name][idx]) for name in values}",
+        ),
     }
 )
-# Builtins that may take the mapping without reading values through it.
-_KEY_ONLY_CALLS = frozenset({"set"})
 _COMPREHENSIONS = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 
 
@@ -496,11 +502,19 @@ def _string_items(node: ast.AST) -> set[str] | None:
 def _support_reads(source: str) -> tuple[set[str], list[str]]:
     """Every key read from the PolicyEngine ``values`` mapping, by AST.
 
-    Fails closed. It reports a problem for a read whose key is neither a
-    literal nor a loop variable over a literal tuple, list or set (unless the
-    loop is a reviewed dynamic read), for any alias of the mapping, for any
-    method other than ``.get``, and for any call that hands the mapping to a
-    function under another parameter name.
+    An allowlist: every load of the name ``values`` (outside the functions
+    where it names a numpy array) is accepted only when it is
+    - subscripted with a key that resolves to a literal, or to a loop
+      variable over a literal tuple, list or set;
+    - the receiver of ``.get`` with such a key;
+    - passed to a function in this module whose matching parameter is named
+      ``values``, or the sole argument of ``set()``;
+    - read inside one of the two reviewed statements, keyed to their exact
+      source.
+
+    Every other use (an unresolved key, any other method or attribute, an
+    alias, unpacking, an operator, a conditional, a container, a call to
+    anything else) is reported as a problem.
     """
     tree = ast.parse(source)
     functions = {
@@ -511,9 +525,6 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
     reads: set[str] = set()
     problems: list[str] = []
 
-    def is_values(node: ast.AST) -> bool:
-        return isinstance(node, ast.Name) and node.id == "values"
-
     for name, function in functions.items():
         if name in _NOT_THE_POLICYENGINE_MAPPING:
             continue
@@ -522,14 +533,24 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
             for child in ast.iter_child_nodes(node):
                 parents[child] = node
 
+        def ancestors(node: ast.AST):
+            while node in parents:
+                node = parents[node]
+                yield node
+
+        def reviewed(node: ast.AST) -> bool:
+            return any(
+                isinstance(ancestor, ast.stmt)
+                and (name, ast.unparse(ancestor)) in _REVIEWED_DYNAMIC_STATEMENTS
+                for ancestor in ancestors(node)
+            )
+
         def resolve(key: ast.AST, at: ast.AST) -> set[str] | None:
             if isinstance(key, ast.Constant) and isinstance(key.value, str):
                 return {key.value}
             if not isinstance(key, ast.Name):
                 return None
-            node = at
-            while node in parents:
-                node = parents[node]
+            for node in ancestors(at):
                 if isinstance(node, ast.For):
                     loops = [node]
                 elif isinstance(node, _COMPREHENSIONS):
@@ -538,56 +559,60 @@ def _support_reads(source: str) -> tuple[set[str], list[str]]:
                     continue
                 for loop in loops:
                     if isinstance(loop.target, ast.Name) and loop.target.id == key.id:
-                        items = _string_items(loop.iter)
-                        if items is not None:
-                            return items
-                        if (name, ast.unparse(loop.iter)) in _REVIEWED_DYNAMIC_READS:
-                            return set()
-                        return None
+                        return _string_items(loop.iter)
             return None
 
+        def accept_read(keys: set[str] | None, node: ast.AST, where: str) -> None:
+            if keys is not None:
+                reads.update(keys)
+            elif not reviewed(node):
+                problems.append(f"{where} unresolved read {ast.unparse(node)}")
+
         for node in ast.walk(function):
-            where = f"{name}:{getattr(node, 'lineno', '?')}"
-            if isinstance(node, ast.Subscript) and is_values(node.value):
-                keys = resolve(node.slice, node)
-                if keys is None:
-                    problems.append(f"{where} unresolved read {ast.unparse(node)}")
+            if not (
+                isinstance(node, ast.Name)
+                and node.id == "values"
+                and isinstance(node.ctx, ast.Load)
+            ):
+                continue
+            parent = parents.get(node)
+            where = f"{name}:{node.lineno}"
+            if isinstance(parent, ast.Subscript) and parent.value is node:
+                accept_read(resolve(parent.slice, parent), parent, where)
+            elif isinstance(parent, ast.Attribute) and parent.value is node:
+                call = parents.get(parent)
+                if (
+                    parent.attr == "get"
+                    and isinstance(call, ast.Call)
+                    and call.func is parent
+                    and call.args
+                ):
+                    accept_read(resolve(call.args[0], call), call, where)
                 else:
-                    reads |= keys
-            elif isinstance(node, ast.Attribute) and is_values(node.value):
-                call = parents.get(node)
-                if node.attr == "get" and isinstance(call, ast.Call) and call.args:
-                    keys = resolve(call.args[0], call)
-                    if keys is None:
-                        problems.append(f"{where} unresolved read {ast.unparse(call)}")
-                    else:
-                        reads |= keys
-                else:
-                    problems.append(f"{where} unreviewed use values.{node.attr}")
-            elif isinstance(
-                node, ast.Assign | ast.AnnAssign | ast.NamedExpr
-            ) and is_values(node.value):
-                problems.append(f"{where} alias of values")
-            elif isinstance(node, ast.Call):
-                positional = [i for i, arg in enumerate(node.args) if is_values(arg)]
-                keywords = [k.arg for k in node.keywords if is_values(k.value)]
-                if not positional and not keywords:
-                    continue
-                callee = node.func.id if isinstance(node.func, ast.Name) else None
-                if callee in _KEY_ONLY_CALLS:
-                    continue
+                    problems.append(f"{where} unreviewed use values.{parent.attr}")
+            elif isinstance(parent, ast.Call) and node in parent.args:
+                callee = parent.func.id if isinstance(parent.func, ast.Name) else None
+                position = parent.args.index(node)
                 target = functions.get(callee)
                 params = [a.arg for a in target.args.args] if target else []
-                if (
-                    target is None
-                    or any(
-                        i >= len(params) or params[i] != "values" for i in positional
-                    )
-                    or any(keyword != "values" for keyword in keywords)
-                ):
-                    problems.append(
-                        f"{where} values handed to {ast.unparse(node.func)}"
-                    )
+                if callee == "set" and parent.args == [node] and not parent.keywords:
+                    continue
+                if position < len(params) and params[position] == "values":
+                    continue
+                problems.append(f"{where} values handed to {ast.unparse(parent.func)}")
+            elif isinstance(parent, ast.keyword) and parent.value is node:
+                call = parents.get(parent)
+                callee = call.func.id if isinstance(call.func, ast.Name) else None
+                target = functions.get(callee)
+                params = [a.arg for a in target.args.args] if target else []
+                if parent.arg == "values" and "values" in params:
+                    continue
+                problems.append(f"{where} values handed to {ast.unparse(call.func)}")
+            elif isinstance(parent, ast.comprehension) and parent.iter is node:
+                if not reviewed(parent):
+                    problems.append(f"{where} unreviewed loop over values")
+            else:
+                problems.append(f"{where} unreviewed use {ast.unparse(parent)}")
     return reads, problems
 
 
@@ -602,7 +627,7 @@ def test_every_support_variable_read_for_inputs_is_validated():
     # Guard drift: every PolicyEngine value the projections read is validated
     # support, except is_snap_eligible (support only under the eligibility
     # bridge, tested below) and the enum snap_utility_allowance_type (refused
-    # when unrecognized, tested below). The scan fails closed.
+    # when unrecognized, tested below). The scan is an allowlist.
     reads, problems = _support_reads(_bridge_source())
     assert problems == []
     assert {"water_expense", "is_snap_eligible", "snap_assets"} <= reads
@@ -617,15 +642,43 @@ _US_CA_ANCHOR = (
     "        return {\n"
     '            "snap_gross_monthly_earned_income"'
 )
+_LOADER_ANCHOR = "    household_input_ref_by_name = legal_input_index(base_inputs)\n"
+_NEW = '"snap_new_unlisted_input"'
+# Each shape routes an unlisted PolicyEngine variable (or every variable)
+# toward an input; the guard must reject each, as an unlisted read or as a
+# use it cannot vouch for.
 _UNLISTED_READS = {
-    "literal": '    _x = values["snap_new_unlisted_input"][idx]\n',
-    "get": '    _x = values.get("snap_new_unlisted_input")\n',
+    "literal": (_US_CA_ANCHOR, f"    _x = values[{_NEW}][idx]\n"),
+    "get-literal": (_US_CA_ANCHOR, f"    _x = values.get({_NEW})\n"),
+    "get-unresolved": (_US_CA_ANCHOR, f"    _k = {_NEW}\n    _x = values.get(_k)\n"),
+    "name-key": (_US_CA_ANCHOR, f"    _k = {_NEW}\n    _x = values[_k][idx]\n"),
     "list-loop": (
-        '    for _name in ["snap_new_unlisted_input"]:\n'
-        "        _x = values[_name][idx]\n"
+        _US_CA_ANCHOR,
+        f"    for _name in [{_NEW}]:\n        _x = values[_name][idx]\n",
     ),
-    "alias": '    _x = (pe := values)["snap_new_unlisted_input"][idx]\n',
-    "module-constant": "    _x = values[PE_COMPARED_OUTPUT][idx]\n",
+    "items": (
+        _US_CA_ANCHOR,
+        "    for _k, _v in values.items():\n        _x = _v[idx]\n",
+    ),
+    "keys": (_US_CA_ANCHOR, "    _x = [values[k] for k in values.keys()]\n"),
+    "walrus-alias": (_US_CA_ANCHOR, f"    _x = (pe := values)[{_NEW}][idx]\n"),
+    "module-constant": (_US_CA_ANCHOR, "    _x = values[PE_COMPARED_OUTPUT][idx]\n"),
+    "dict-unpack": (_US_CA_ANCHOR, f"    _m = {{**values}}\n    _x = _m[{_NEW}]\n"),
+    "tuple-alias": (_US_CA_ANCHOR, f"    _m, _n = values, None\n    _x = _m[{_NEW}]\n"),
+    "conditional": (
+        _US_CA_ANCHOR,
+        f"    _x = (values if idx else values)[{_NEW}][idx]\n",
+    ),
+    "operator": (_US_CA_ANCHOR, f"    _x = (values | {{}})[{_NEW}][idx]\n"),
+    "starred": (_US_CA_ANCHOR, "    _x = list(*[values])\n"),
+    "len": (_US_CA_ANCHOR, "    _x = len(values)\n"),
+    # Iterating the keys alone reads nothing, but no reviewed statement
+    # vouches for the loop, so it fails closed too.
+    "key-loop": (_US_CA_ANCHOR, "    _x = [name for name in values]\n"),
+    "unreviewed-loop-in-loader": (
+        _LOADER_ANCHOR,
+        "    _all = {name: money(values[name][idx]) for name in values}\n",
+    ),
 }
 
 
@@ -639,22 +692,21 @@ def _guard_rejects(source: str) -> bool:
 
 @pytest.mark.parametrize("shape", sorted(_UNLISTED_READS))
 def test_drift_guard_catches_every_read_shape(shape):
-    # Route an unlisted PolicyEngine variable into the us-ca projection in
-    # each shape the review found; the guard must reject every one, as an
-    # unlisted read or as a read it cannot resolve.
     source = _bridge_source()
-    assert source.count(_US_CA_ANCHOR) == 1
+    anchor, injected = _UNLISTED_READS[shape]
+    assert source.count(anchor) == 1
     assert not _guard_rejects(source)
-    assert _guard_rejects(
-        source.replace(_US_CA_ANCHOR, _UNLISTED_READS[shape] + _US_CA_ANCHOR)
-    ), shape
+    assert _guard_rejects(source.replace(anchor, injected + anchor)), shape
 
 
-def test_drift_guard_catches_handing_values_to_another_name():
-    source = _bridge_source().replace(
-        _US_CA_ANCHOR, "    _x = len(values)\n" + _US_CA_ANCHOR
-    )
-    assert _guard_rejects(source)
+def test_drift_guard_exemptions_are_keyed_to_their_exact_statements():
+    # Editing either reviewed statement (here: projecting every value
+    # through money() instead of copying it) voids its exemption.
+    source = _bridge_source()
+    old = "pe_outputs = {name: returned_value(values[name][idx]) for name in values}"
+    assert source.count(old) == 1
+    edited = source.replace(old, old.replace("returned_value", "money"))
+    assert _guard_rejects(edited)
 
 
 # ── generic US variable comparison (us_populace) ─────────────────────────────
