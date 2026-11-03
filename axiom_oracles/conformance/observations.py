@@ -339,13 +339,15 @@ class OutputEvidence:
         identity, and the summary's mismatch and match counts must account
         for every retained identity, including scored sum members; a
         compacted report that drops successful rows still reconciles.
-        Native FIIT reports compare their outputs under their own rules and
-        reconcile through ``output_summary`` instead.
+        One kind of row is exempt from the recompute, though still counted:
+        in a native FIIT report, a retained mismatch carrying the FIIT
+        harness's ``output`` field. The harness compares each output under
+        its own tolerance, which the report does not record, and the FIIT
+        adapter retains no matches. Every other row of a FIIT report,
+        including any match, is checked like any other report's.
         """
         self.contradicted_scalar_comparisons = set()
         self.scalar_verdicts_reconciled = True
-        if self.native_fiit:
-            return
         declared = defaultdict(list)
         for row in report.get("concepts") or []:
             if isinstance(row, dict) and isinstance(row.get("id"), str):
@@ -371,6 +373,8 @@ class OutputEvidence:
                 continue
             identity = (case_id, row["concept"])
             verdicts[identity].add(matched)
+            if self.native_fiit and not matched and "output" in row:
+                continue
             if not _scalar_row_valid(row, matched, authorities.get(row["concept"])):
                 self.contradicted_scalar_comparisons.add(identity)
         for identity, retained_verdicts in verdicts.items():
@@ -502,7 +506,7 @@ def _authority(concept):
     kind = concept.get("comparison")
     tolerance = concept.get("tolerance", 0)
     relative_tolerance = concept.get("relative_tolerance", 0)
-    if kind not in {"amount", "eligibility"}:
+    if not isinstance(kind, str) or not kind:
         return None
     for value in (tolerance, relative_tolerance):
         if not _valid_value(value, None, allow_bool=False) or value < 0:
@@ -510,14 +514,23 @@ def _authority(concept):
     return kind, tolerance, relative_tolerance
 
 
+def _amount(value):
+    """The Comparator's ``float()`` of an amount value, or None if it has none."""
+    try:
+        return float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
 def scalar_verdict(concept, left, right):
     """The Comparator's verdict for one scalar comparison, or None if unknown.
 
-    ``concept`` is the report's declaration for the compared concept. A
-    missing side never matches. An amount matches when both values are close
-    within the declared absolute or relative tolerance; an eligibility
-    matches when both values have the same truth. Any other kind, or an
-    amount value that is not a finite number, has no recomputable verdict.
+    Mirrors ``Comparator.compare_mapping``: ``concept`` is the report's
+    declaration for the compared concept, and a missing side never matches.
+    An ``amount`` converts both values with ``float()`` and matches when they
+    are close within the declared absolute or relative tolerance. Every other
+    declared kind matches when both values have the same truth. An amount
+    value ``float()`` cannot convert has no recomputable verdict.
     """
     authority = _authority(concept) if isinstance(concept, dict) else None
     if authority is None:
@@ -525,29 +538,19 @@ def scalar_verdict(concept, left, right):
     kind, tolerance, relative_tolerance = authority
     if left is None or right is None:
         return False
-    if kind == "eligibility":
+    if kind != "amount":
         return bool(left) == bool(right)
-    if not (_valid_value(left, None) and _valid_value(right, None)):
+    left_number, right_number = _amount(left), _amount(right)
+    if left_number is None or right_number is None:
         return None
-    try:
-        return isclose(float(left), float(right), abs_tol=tolerance,
-                       rel_tol=relative_tolerance)
-    except (TypeError, ValueError, OverflowError):
-        return None
+    return isclose(left_number, right_number, abs_tol=tolerance,
+                   rel_tol=relative_tolerance)
 
 
 def _scalar_row_valid(row, matched, concept):
     """A retained scalar row's verdict and residual describe its own values."""
     left, right = row.get("left"), row.get("right")
     difference = row.get("difference")
-    numeric = (
-        left is not None and right is not None
-        and _valid_value(left, None) and _valid_value(right, None)
-    )
-    try:
-        residual = float(left) - float(right) if numeric else None
-    except (TypeError, ValueError, OverflowError):
-        return False
     if concept is None:
         # No authority: only present, exactly equal values agree under every
         # kind and tolerance, and they never disagree under any. Other
@@ -555,13 +558,18 @@ def _scalar_row_valid(row, matched, concept):
         same = left is not None and right is not None and left == right
         if matched is not same and (matched or same):
             return False
+        numeric = (
+            left is not None and right is not None
+            and _valid_value(left, None) and _valid_value(right, None)
+        )
+        residual = _amount(left) - _amount(right) if numeric else None
         return difference is None or _residual_matches(difference, residual)
     # The row's own tolerance fields are ignored: a forged row cannot widen
     # the declared tolerance to turn a residual into a match.
-    kind = _authority(concept)[0]
     if scalar_verdict(concept, left, right) is not matched:
         return False
-    if kind == "amount" and residual is not None:
+    if _authority(concept)[0] == "amount" and left is not None and right is not None:
+        residual = _amount(left) - _amount(right)
         return "difference" not in row or _residual_matches(difference, residual)
     return difference is None
 

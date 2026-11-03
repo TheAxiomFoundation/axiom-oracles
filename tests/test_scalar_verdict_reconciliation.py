@@ -172,18 +172,22 @@ def test_forged_mismatch_of_agreeing_values_is_refused():
 def test_one_comparison_retained_with_both_verdicts_is_refused():
     """A case match and a top-level mismatch for one comparison contradict.
 
-    Each row is consistent with its own values and the counts cover both,
-    so only the shared identity reveals the contradiction.
+    Each row is consistent with its own values and the counts cover both.
+    Both rows agree on the Axiom value, so for that side only the shared
+    identity reveals the contradiction (the oracle side also disagrees on
+    its value).
     """
     report = _report(_mapping(), {"c1": (5, 5), "c2": (1, 1)})
-    assert _observed(report, "c1")
+    axiom = {"engine": "axiom", "output": "axiom_benefit"}
+    assert _observed(report, "c1", **axiom)
     report["mismatches"].append({
         "case_id": "c1", "concept": CONCEPT, "kind": "amount_difference",
         "left": 5, "right": 9, "difference": -4, "tolerance": 0,
     })
     report["summary"]["mismatch_count"] += 1
+    assert not _observed(report, "c1", **axiom)
     assert not _observed(report, "c1")
-    assert _observed(report, "c2")
+    assert _observed(report, "c2", **axiom)
 
 
 def _fiit_marked(report, marker):
@@ -226,7 +230,7 @@ def test_amount_values_are_compared_as_the_comparator_converts_them(left, right,
 
 @pytest.mark.parametrize("comparison", ["coverage", "value", "judgment"])
 def test_other_comparison_kinds_compare_truthiness_as_the_comparator_does(comparison):
-    report = _report(_mapping(comparison), {"same": (2, 1), "differ": ("yes", "")})
+    report = _report(_mapping(comparison), {"same": (2, 1), "differ": ("0", 0)})
     assert report["cases"][0]["matches"] and report["cases"][1]["mismatches"]
     assert _observed(report, "same")
     assert _observed(report, "differ")
@@ -285,9 +289,11 @@ AMOUNTS = st.one_of(
 # The Comparator converts amount values with float(), so numeric strings and
 # bools compare as numbers.
 AMOUNT_VALUES = st.one_of(AMOUNTS, AMOUNTS.map(repr), st.booleans())
-# Every other kind compares truthiness of whatever the engines returned.
+# Every other kind compares truthiness of whatever the engines returned. The
+# report's aggregates convert every value with float(), so only numeric
+# strings reach a report; "0" is truthy.
 OTHER_VALUES = st.one_of(
-    st.booleans(), st.integers(-2, 2), st.sampled_from(("", "yes", "0", "no")),
+    st.booleans(), st.integers(-2, 2), st.sampled_from(("0", "1", "2.5", "-1")),
     st.floats(-2, 2, allow_nan=False, allow_infinity=False),
 )
 KINDS = st.sampled_from(("amount", "eligibility", "coverage", "value", "judgment"))
