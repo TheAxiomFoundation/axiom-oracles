@@ -94,8 +94,13 @@ class ComparisonReportAccumulator:
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
         include_inputs: bool = False,
+        dataset_identity: dict[str, Any] | None = None,
     ) -> None:
         self.include_inputs = include_inputs
+        # File-level identity of the population's source dataset (e.g. the
+        # taxsim-csv loader's sha256/rows/year override), emitted as the
+        # report's top-level ``dataset_identity`` block when present.
+        self.dataset_identity = dataset_identity
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
@@ -320,6 +325,8 @@ class ComparisonReportAccumulator:
         receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
         if receipt:
             report.setdefault("provenance", {})["engine"] = dict(receipt)
+        if self.dataset_identity is not None:
+            report["dataset_identity"] = self.dataset_identity
         return report
 
     def _attestation(self) -> dict:
