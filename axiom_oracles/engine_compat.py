@@ -21,6 +21,12 @@ Older engine builds (pre-hard-cut, still common on supervised machines)
 accept none of the new flags and resolve roots from the environment instead,
 so every entry point here tries the new contract first and falls back to the
 legacy invocation when the binary rejects the flag.
+
+Both invocations reach only canonical checkouts
+(:mod:`axiom_oracles.rulespec_roots`): every ``--rulespec-root`` is checked
+before the engine runs, an inherited ``AXIOM_RULESPEC_REPO_ROOTS`` is never
+forwarded, and the legacy invocation receives exactly the checked roots in
+that variable.
 """
 
 from __future__ import annotations
@@ -32,8 +38,16 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from axiom_oracles.rulespec_roots import (
+    CANONICAL_ROOT_NAME,
+    canonical_rulespec_root,
+    engine_env,
+    given_path,
+    require_canonical_rulespec_root,
+)
+
 #: Valid engine root directory names — canonical country checkouts only.
-ENGINE_ROOT_NAME = re.compile(r"^rulespec-[a-z]{2}$")
+ENGINE_ROOT_NAME = CANONICAL_ROOT_NAME
 
 #: Jurisdiction directory names inside a root (``us``, ``us-co``, ``uk``…).
 JURISDICTION_DIR_NAME = re.compile(r"^[a-z]{2}(-[a-z0-9]+)?$")
@@ -51,21 +65,18 @@ def import_prefixes(imports: list) -> set[str]:
     return prefixes
 
 
-def explicit_engine_roots(
+def declared_engine_roots(
     candidates: list[Path | str],
     *,
     program: Path | None = None,
 ) -> list[Path]:
-    """Resolve candidate paths to canonical ``rulespec-<cc>`` engine roots.
+    """Every ``rulespec-<cc>``-named directory the candidates point at.
 
-    Accepts the looser inputs this repo's configs use — a rulespec checkout
-    itself, a workspace directory holding several (``$HOME``,
-    ``~/TheAxiomFoundation``), or a synced-roots dir — and normalizes to the
-    engine contract: each returned path is an existing directory whose name
-    is ``rulespec-<cc>``. The program's own enclosing root (when it lives in
-    one) leads the list. State-repo checkouts (``rulespec-us-co``) are NOT
-    valid engine roots and are dropped; their content is expected inside the
-    country monorepo's jurisdiction dirs.
+    Provenance uses this to record what a configuration names, including
+    checkouts the runtime refuses (a checkout of another repository under a
+    canonical name), so that their evidence keeps country freshness unknown.
+    Runtime callers use :func:`explicit_engine_roots`, which returns only
+    canonical checkouts. Matching is by name only; nothing is validated.
     """
     ordered: list[Path] = []
 
@@ -94,6 +105,67 @@ def explicit_engine_roots(
     return ordered
 
 
+def explicit_engine_roots(
+    candidates: list[Path | str],
+    *,
+    program: Path | None = None,
+    strict: bool = False,
+) -> list[Path]:
+    """Resolve candidate paths to canonical ``rulespec-<cc>`` engine roots.
+
+    Accepts the looser inputs this repo's configs use — a rulespec checkout
+    itself, a workspace directory holding several (``$HOME``,
+    ``~/TheAxiomFoundation``), or a synced-roots dir — and normalizes to the
+    engine contract: each returned path is a resolved canonical checkout
+    (:func:`axiom_oracles.rulespec_roots.canonical_root_problem`). The
+    program's own enclosing root (when it lives in one) leads the list.
+
+    A workspace contributes only its canonical ``rulespec-<cc>`` children;
+    other children (``rulespec-us-co``, aliases, checkouts of another
+    repository) are skipped. A non-canonical directory that is itself named
+    ``rulespec-<cc>`` — given directly, or enclosing ``program`` — is skipped
+    too, or raises :class:`~axiom_oracles.rulespec_roots.NonCanonicalRuleSpecRoot`
+    with ``strict=True``. Runtime callers pass ``strict=True``; provenance
+    callers that only describe declared paths do not.
+    """
+    ordered: list[Path] = []
+
+    def _add(path: Path, *, named: bool) -> None:
+        if named and strict:
+            resolved = require_canonical_rulespec_root(path)
+        else:
+            resolved = canonical_rulespec_root(path)
+            if resolved is None:
+                return
+        if resolved not in ordered:
+            ordered.append(resolved)
+
+    if program is not None:
+        # The innermost ``rulespec-*`` directory holding the program is the
+        # checkout it compiles from; a worktree or alias name
+        # (``rulespec-us-medicaid``) is not canonical.
+        # Walk the path as given; the validator then resolves the enclosing
+        # checkout the way the OS opens it and checks the name it was given.
+        program_path = given_path(program)
+        for parent in program_path.parents:
+            if parent.name.startswith("rulespec-"):
+                _add(parent, named=True)
+                break
+
+    for raw in candidates or []:
+        path = Path(os.path.expandvars(os.path.expanduser(str(raw))))
+        if not path.exists():
+            continue
+        if ENGINE_ROOT_NAME.match(path.name):
+            _add(path, named=True)
+            continue
+        if path.is_dir():
+            for child in sorted(path.glob("rulespec-*")):
+                if ENGINE_ROOT_NAME.match(child.name) and child.is_dir():
+                    _add(child, named=False)
+    return ordered
+
+
 def stage_pure_root(
     root: Path,
     jurisdictions: set[str],
@@ -107,8 +179,9 @@ def stage_pure_root(
     jurisdictions are omitted — a program that genuinely imports beyond its
     prefixes fails loudly on the unresolved import rather than being poisoned
     by unrelated content. Staged under the *resolved* ``stage_dir`` because
-    the engine rejects alias paths.
+    the engine rejects alias paths. ``root`` must be a canonical checkout.
     """
+    root = require_canonical_rulespec_root(root)
     staged = Path(stage_dir).resolve() / root.name
     staged.mkdir(parents=True, exist_ok=True)
     for name in sorted(jurisdictions):
@@ -149,14 +222,27 @@ def compile_with_engine(
     program file. Raises ``RuntimeError`` with the engine's stderr on real
     failures. ``run`` is an injectable ``subprocess.run``-compatible callable
     (the axiom adapter threads its own through for tests).
+
+    Every root must be a canonical checkout; a non-canonical one raises
+    :class:`~axiom_oracles.rulespec_roots.NonCanonicalRuleSpecRoot` before the
+    engine runs. ``env`` defaults to the process environment. Neither
+    invocation forwards an inherited ``AXIOM_RULESPEC_REPO_ROOTS``: the new
+    contract runs without it, and the legacy invocation receives exactly
+    ``roots``.
     """
     runner = run or _default_run
+    checked_roots = [require_canonical_rulespec_root(root) for root in roots]
     verb = "compile-composed" if composed else "compile"
     cmd = [str(binary), verb, "--program", str(Path(program).resolve())]
-    for root in roots:
-        cmd.extend(["--rulespec-root", str(Path(root).resolve())])
+    for root in checked_roots:
+        cmd.extend(["--rulespec-root", str(root)])
     cmd.extend(["--output", str(output)])
-    kwargs: dict = {"text": True, "capture_output": True, "check": False, "env": env}
+    kwargs: dict = {
+        "text": True,
+        "capture_output": True,
+        "check": False,
+        "env": engine_env(env),
+    }
     if timeout is not None:
         kwargs["timeout"] = timeout
     result = runner(cmd, **kwargs)
@@ -174,7 +260,7 @@ def compile_with_engine(
         "--output",
         str(output),
     ]
-    legacy = runner(legacy_cmd, **kwargs)
+    legacy = runner(legacy_cmd, **{**kwargs, "env": engine_env(env, checked_roots)})
     if legacy.returncode != 0:
         legacy_marker = (
             (legacy.stderr or "").strip() or (legacy.stdout or "").strip()

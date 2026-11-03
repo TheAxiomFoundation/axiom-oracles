@@ -875,38 +875,39 @@ def resolve_axiom_binary(workspace_root: Path, override: Path | None) -> Path:
 
 
 def axiom_rules_env(program: Path, workspace_root: Path) -> dict[str, str]:
-    env = os.environ.copy()
-    active_roots: list[Path] = []
-    current_repo = program.resolve()
-    for parent in current_repo.parents:
-        if parent.name.startswith("rulespec-"):
-            active_roots.append(parent)
-            break
-    roots = [
-        workspace_root / "rulespec-us",
-        workspace_root / "_axiom" / "rulespec-us",
-        program.parent,
-        program.parent.parent,
-    ]
-    roots.extend(sorted(workspace_root.glob("rulespec-*")))
-    roots.extend(sorted((workspace_root / "_axiom").glob("rulespec-*")))
-    existing = [path.resolve() for path in roots if path.exists()]
-    configured = [
-        Path(path).resolve()
-        for path in env.get("AXIOM_RULESPEC_REPO_ROOTS", "").split(os.pathsep)
-        if path
-    ]
-    unique_roots = []
-    seen: set[Path] = set()
-    for path in [*active_roots, *configured, *existing]:
-        if path in seen:
-            continue
-        seen.add(path)
-        unique_roots.append(path)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-        str(path) for path in unique_roots
+    """Return the engine environment for ``program``.
+
+    ``AXIOM_RULESPEC_REPO_ROOTS`` lists only canonical checkouts
+    (:mod:`axiom_oracles.rulespec_roots`): the checkout enclosing ``program``
+    first, then the workspace's canonical ``rulespec-*`` children. An
+    inherited value of the variable, the program's own directories and
+    non-canonical worktrees are never forwarded.
+    """
+    from axiom_oracles.rulespec_roots import (
+        canonical_rulespec_root,
+        engine_env,
+        given_path,
     )
-    return env
+
+    candidates: list[Path] = []
+    for parent in given_path(program).parents:
+        if parent.name.startswith("rulespec-"):
+            candidates.append(parent)
+            break
+    candidates.extend(
+        [
+            workspace_root / "rulespec-us",
+            workspace_root / "_axiom" / "rulespec-us",
+        ]
+    )
+    candidates.extend(sorted(workspace_root.glob("rulespec-*")))
+    candidates.extend(sorted((workspace_root / "_axiom").glob("rulespec-*")))
+    roots: list[Path] = []
+    for candidate in candidates:
+        root = canonical_rulespec_root(candidate)
+        if root is not None and root not in roots:
+            roots.append(root)
+    return engine_env(os.environ.copy(), roots)
 
 
 def month_period(year: int, month: int) -> Period:
@@ -1778,7 +1779,7 @@ def compile_program(
     candidates: list[Path | str] = []
     if workspace_root is not None:
         candidates.append(workspace_root)
-    roots = explicit_engine_roots(candidates, program=program)
+    roots = explicit_engine_roots(candidates, program=program, strict=True)
     jurisdictions = import_prefixes(
         [e for e in (program_doc.get("imports") or []) if isinstance(e, str)]
         if isinstance(program_doc, dict)

@@ -3370,7 +3370,8 @@ def test_universal_credit_child_element_request_filters_to_positive_rows():
 
 
 def test_run_axiom_parameter_outputs_reads_generated_rulespec_parameters(tmp_path):
-    program = tmp_path / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
+    rulespec_root = tmp_path / "rulespec-uk"
+    program = rulespec_root / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
     program.parent.mkdir(parents=True)
     program.write_text(
         """
@@ -3392,7 +3393,7 @@ rules:
 
     results = efrs_uk.run_axiom_parameter_outputs(
         program=program,
-        rulespec_root=tmp_path,
+        rulespec_root=rulespec_root,
         request={
             "queries": [
                 {
@@ -3414,6 +3415,19 @@ rules:
             }
         }
     ]
+
+
+def test_run_axiom_parameter_outputs_refuses_a_renamed_checkout(tmp_path):
+    rulespec_root = tmp_path / "rulespec-uk-official"
+    program = rulespec_root / "regulations" / "uksi" / "2013" / "376" / "36.yaml"
+    program.parent.mkdir(parents=True)
+    program.write_text("format: rulespec/v1\nrules: []\n")
+    with pytest.raises(ValueError, match="not a canonical rulespec-<country> checkout"):
+        efrs_uk.run_axiom_parameter_outputs(
+            program=program,
+            request={"queries": [{"period": {"start": "2026-04-06"}, "outputs": []}]},
+            rulespec_root=rulespec_root,
+        )
 
 
 def test_run_axiom_parameter_outputs_resolves_composed_program_imports(tmp_path):

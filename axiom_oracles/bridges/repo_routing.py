@@ -1,28 +1,24 @@
-"""Helpers for resolving jurisdiction RuleSpec repos versus the rules engine.
+"""Helpers for naming RuleSpec checkouts and their jurisdiction directories.
 
-Two on-disk layouts are supported for jurisdiction RuleSpec content. Wherever
-a jurisdiction's checkout is located, candidates are tried in this order:
+RuleSpec content lives in one checkout per country,
+``rulespec-<country>/<prefix>/...``: one repository per country holding a
+directory per jurisdiction (``rulespec-us/us/`` for federal content,
+``rulespec-us/us-ca/``, ``rulespec-uk/uk-kingston-upon-thames/``, ...). The
+country is the jurisdiction prefix up to the first ``-``.
 
-1. Country monorepo: ``rulespec-<country>/<prefix>/...`` — one repository per
-   country holding a directory per jurisdiction (``rulespec-us/us/`` for
-   federal content, ``rulespec-us/us-ca/``, ``rulespec-uk/uk-kingston-upon-thames/``,
-   ...), plus shared non-encoding directories such as ``programs/``. The
-   country is the jurisdiction prefix up to the first ``-``.
-2. Legacy sibling checkouts: ``rulespec-<prefix>/...`` — one repository per
-   jurisdiction with encoding buckets at the repository root.
-
-The "content root" for a jurisdiction is the directory its ``<prefix>:...``
-references resolve against: the jurisdiction directory inside a monorepo, or
-the repository root of a legacy checkout. Durable references are unchanged
-across layouts — ``us-ca:regulations/mpp/63-300/1`` resolves to
-``<rulespec-us>/us-ca/regulations/mpp/63-300/1.yaml`` in the monorepo layout
-and ``<rulespec-us-ca>/regulations/mpp/63-300/1.yaml`` in the legacy layout.
+Which checkouts the rules engine may read is decided by
+:mod:`axiom_oracles.rulespec_roots`. The helpers here only name checkouts and
+enumerate jurisdiction directories for coverage reports and output ids.
+Coverage still names a per-jurisdiction ``rulespec-<prefix>`` checkout it
+finds in a workspace, but no runtime path compiles from one. The legacy
+discovery helpers (workspace candidate lists, content-root resolution,
+legacy-to-monorepo path rewriting) were removed with the canonical RuleSpec
+hard cut; nothing called them.
 """
 
 from __future__ import annotations
 
 import subprocess
-from collections.abc import Iterable
 from functools import lru_cache
 from pathlib import Path
 
@@ -40,48 +36,6 @@ def monorepo_checkout_name(prefix: str) -> str:
 def legacy_checkout_name(prefix: str) -> str:
     """Return the legacy per-jurisdiction repository name for a prefix."""
     return f"rulespec-{prefix}"
-
-
-def is_policy_repo_root(path: Path) -> bool:
-    """Return True when a path is the root of a jurisdiction RuleSpec repo."""
-    name = Path(path).resolve().name
-    return name.startswith("rulespec-")
-
-
-def is_jurisdiction_content_root(path: Path) -> bool:
-    """Return True when ``path`` anchors a jurisdiction's RuleSpec content.
-
-    Either a ``rulespec-*`` checkout root (legacy layout) or a first-level
-    jurisdiction directory inside a country monorepo checkout
-    (``<rulespec-us>/us-ca``).
-    """
-    candidate = Path(path).resolve()
-    if candidate.name.startswith("rulespec-"):
-        return True
-    parent = candidate.parent
-    if not parent.name.startswith("rulespec-"):
-        return False
-    return _jurisdiction_subdir_under(parent, candidate) is not None
-
-
-def find_policy_repo_root(path: Path) -> Path | None:
-    """Walk upward from a file or directory to its jurisdiction content root.
-
-    Legacy checkouts resolve to the enclosing ``rulespec-*`` repository root.
-    Inside a country monorepo checkout, the jurisdiction directory is the
-    policy root: ``<rulespec-us>/us-ca/regulations/x.yaml`` resolves to
-    ``<rulespec-us>/us-ca`` so repo-relative paths and ``us-ca:`` references
-    keep their legacy shape.
-    """
-    current = Path(path).resolve()
-    if current.is_file():
-        current = current.parent
-
-    for candidate in (current, *current.parents):
-        if is_policy_repo_root(candidate):
-            subdir = _jurisdiction_subdir_under(candidate, current)
-            return candidate / subdir if subdir else candidate
-    return None
 
 
 def canonical_rulespec_repo_name(path: Path) -> str | None:
@@ -120,86 +74,6 @@ def canonical_rulespec_repo_name(path: Path) -> str | None:
         if current != root and jurisdiction_subdir_names(root):
             return None
     return checkout_name
-
-
-def jurisdiction_content_dir(checkout: Path, prefix: str) -> Path:
-    """Return the content root for ``prefix`` inside a checkout, either layout.
-
-    ``<checkout>/<prefix>`` when that directory exists (country monorepo),
-    otherwise the checkout root itself (legacy layout, including a monorepo
-    whose country content has not moved into its jurisdiction directory yet).
-    """
-    checkout = Path(checkout)
-    subdir = checkout / prefix
-    return subdir if subdir.is_dir() else checkout
-
-
-def candidate_jurisdiction_content_dirs(base: Path, prefix: str) -> list[Path]:
-    """Return ordered candidate content roots for ``prefix`` relative to ``base``.
-
-    ``base`` may be the jurisdiction's own checkout (legacy name, monorepo
-    jurisdiction directory, or a temp checkout resolved via Git origin), a
-    country monorepo checkout, or a workspace directory holding checkouts.
-    Monorepo candidates come before legacy ones. Candidates are not
-    existence-checked; callers filter with ``is_dir()`` / ``exists()``.
-    """
-    base = Path(base).expanduser()
-    legacy_name = legacy_checkout_name(prefix)
-    monorepo_name = monorepo_checkout_name(prefix)
-    names = {base.name, canonical_rulespec_repo_name(base)}
-    if legacy_name in names:
-        # The jurisdiction's own checkout: its content root in either layout.
-        return [jurisdiction_content_dir(base, prefix)]
-    if monorepo_name in names:
-        if base.name.startswith("rulespec-"):
-            # A country monorepo checkout holding this jurisdiction's directory.
-            return [base / prefix]
-        # The country's own jurisdiction directory inside a monorepo
-        # (`rulespec-us/us`): siblings live next to it, not inside it.
-        return [base.parent / prefix]
-    # A workspace directory holding checkouts: monorepo first, then legacy.
-    return [base / monorepo_name / prefix, base / legacy_name]
-
-
-def resolve_jurisdiction_content_dir(
-    bases: Iterable[Path],
-    prefix: str,
-) -> Path | None:
-    """Return the first existing content root for ``prefix`` across ``bases``."""
-    for base in bases:
-        for candidate in candidate_jurisdiction_content_dirs(base, prefix):
-            if candidate.is_dir():
-                return candidate
-    return None
-
-
-def monorepo_alternative_path(path: Path) -> Path | None:
-    """Map a legacy-layout path to its country-monorepo equivalent.
-
-    ``.../rulespec-<prefix>/<rest>`` becomes
-    ``.../rulespec-<country>/<prefix>/<rest>``; for country-level content the
-    jurisdiction directory is inserted (``rulespec-us/statutes/...`` ->
-    ``rulespec-us/us/statutes/...``). The innermost ``rulespec-*`` component
-    wins so nested checkouts (``.../_axiom/rulespec-us/...``) rewrite
-    correctly. Returns ``None`` when the path has no ``rulespec-*`` component.
-    The result is not existence-checked.
-    """
-    parts = Path(path).parts
-    for index in range(len(parts) - 1, -1, -1):
-        part = parts[index]
-        if not part.startswith("rulespec-"):
-            continue
-        prefix = part.removeprefix("rulespec-")
-        if not prefix:
-            continue
-        candidate = Path(
-            *parts[:index],
-            monorepo_checkout_name(prefix),
-            prefix,
-            *parts[index + 1 :],
-        )
-        return candidate if candidate != Path(path) else None
-    return None
 
 
 def jurisdiction_subdir_names(checkout: Path) -> set[str]:

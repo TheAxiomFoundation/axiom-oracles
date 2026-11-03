@@ -374,9 +374,9 @@ def _fake_binary(tmp_path: Path, *, stamp: str, embed: str = "") -> tuple[Path, 
 
 
 class _FakeTaxsimRunner:
-    def __init__(self, frame, binary: Path, tmp_path: Path):
+    def __init__(self, frame, binary: Path, tmp_path: Path, taxsim_path=None):
         self.input_df = frame
-        self.taxsim_path = binary
+        self.taxsim_path = taxsim_path or binary
         self._tmp_path = tmp_path
 
     def _create_taxsim_input_file(self, frame) -> str:
@@ -385,10 +385,13 @@ class _FakeTaxsimRunner:
         return str(path)
 
 
-def _runner_with(binary: Path, tmp_path: Path) -> TaxsimPackageRunner:
+def _runner_with(binary: Path, tmp_path: Path, pin) -> TaxsimPackageRunner:
+    pin(binary)
     runner = TaxsimPackageRunner()
     runner._runner_factory = lambda: (
-        lambda frame: _FakeTaxsimRunner(frame, binary, tmp_path)
+        lambda frame, taxsim_path=None: _FakeTaxsimRunner(
+            frame, binary, tmp_path, taxsim_path
+        )
     )
     return runner
 
@@ -413,14 +416,14 @@ def _case(year: int) -> Case:
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 def test_runner_refuses_2026_on_the_linux_binary_before_running_it(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, pin_taxsim_stand_in
 ) -> None:
     binary, marker = _fake_binary(tmp_path, stamp="cdate-compdate")
     linux = pins.bundled_binaries()[LINUX_KEY]
+    runner = _runner_with(binary, tmp_path, pin_taxsim_stand_in)
     monkeypatch.setattr(
         pins, "pinned_entry_for_sha", lambda sha: (LINUX_KEY, dict(linux))
     )
-    runner = _runner_with(binary, tmp_path)
 
     with pytest.raises(TaxsimLawYearError, match="law year 2026 on"):
         runner.run_cases([_case(2026)])
@@ -442,12 +445,12 @@ def test_runner_refuses_2026_on_the_linux_binary_before_running_it(
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 def test_runner_refuses_output_from_a_build_other_than_the_hashed_file(
-    tmp_path,
+    tmp_path, pin_taxsim_stand_in
 ) -> None:
     binary, _ = _fake_binary(
         tmp_path, stamp="cd2026081819", embed='"cdate-20260521"'
     )
-    runner = _runner_with(binary, tmp_path)
+    runner = _runner_with(binary, tmp_path, pin_taxsim_stand_in)
     with pytest.raises(TaxsimIdentityError):
         runner.run_cases([_case(2026)])
 

@@ -9,6 +9,7 @@ import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
+import click
 import pandas as pd
 import pytest
 from hypothesis import given, settings
@@ -19,6 +20,7 @@ from axiom_oracles.adapters.taxsim import (
     TaxsimIdentityError,
     TaxsimLawYearError,
     TaxsimPackageRunner,
+    TaxsimSelection,
     pins,
 )
 from axiom_oracles.adapters.taxsim import runner as runner_module
@@ -54,8 +56,37 @@ def _native_runner(monkeypatch, input_path):
 
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
-def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
-    tmp_path, monkeypatch
+def test_runner_refuses_an_unpinned_source_layout_binary(tmp_path, monkeypatch):
+    """A binary no pin profile names never runs, wherever it is found."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(platform, "system", lambda: "Linux")
+    monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    monkeypatch.delenv(pins.BINARY_DIR_ENV, raising=False)
+    monkeypatch.setenv(pins.CACHE_DIR_ENV, str(tmp_path / "cache"))
+    binary = Path("resources/taxsimtest/taxsimtest-linux.exe").resolve()
+    binary.parent.mkdir(parents=True)
+    marker = tmp_path / "ran"
+    binary.write_text(
+        f'#!/bin/sh\n# "cdate-20260521"\ncat >/dev/null\ntouch "{marker}"\n'
+        "printf 'taxsimid,year,fiitax,\"cdate-20260521\"\\n1,2024,42,0\\n'\n"
+    )
+    binary.chmod(0o755)
+    _native_runner(monkeypatch, tmp_path / "input.csv")
+    adapter = TaxsimPackageRunner()
+    case = Case(
+        case_id="source-case",
+        period="2024",
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024, "mstat": 1}},
+    )
+    with pytest.raises(pins.TaxsimPinError, match="does not match the pin"):
+        adapter.run_cases([case], variables=["fiitax"])
+    assert not marker.exists()
+    assert adapter.taxsim_identity() is None
+
+
+@pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
+def test_cli_preflight_and_runner_check_the_same_pinned_binary(
+    tmp_path, monkeypatch, pin_taxsim_stand_in
 ):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(platform, "system", lambda: "Linux")
@@ -67,6 +98,9 @@ def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
         "printf 'taxsimid,year,fiitax,\"cdate-20260521\"\\n1,2026,42,0\\n'\n"
     )
     binary.chmod(0o755)
+    sha = pin_taxsim_stand_in(
+        binary, law_years={"first": 1960, "last": 2026, "ran": [2026]}
+    )
     _native_runner(monkeypatch, tmp_path / "input.csv")
     adapter = TaxsimPackageRunner()
     case = Case(
@@ -77,15 +111,18 @@ def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
     [result] = adapter.run_cases([case], variables=["fiitax"])
     assert result.values == {"fiitax": 42.0}
     assert not result.errors
-    # Linux's static pin stops at 2024, but this actual binary is unpinned.
+    assert result.raw["taxsim_binary_sha256"] == sha
+    assert result.raw["taxsim_pin_scope"] == "default"
     cli._require_taxsim_law_year("2026")
-    checked = pins.require_law_years([2026])
-    assert checked["sha256"] == pins.sha256_file(binary)
-    assert checked["pinned"] is False
-    assert checked["law_years"] is None
-    [recorded] = adapter.taxsim_identity()["binaries"]
-    assert Path(recorded["path"]).resolve() == Path(checked["path"]).resolve()
-    assert recorded["sha256"] == checked["sha256"]
+    with pytest.raises(click.ClickException, match="law year 2027"):
+        cli._require_taxsim_law_year("2027")
+    identity = adapter.taxsim_identity()
+    assert identity["pin_profile"] == "stand-in"
+    [recorded] = identity["binaries"]
+    assert Path(recorded["path"]) == binary.resolve()
+    assert recorded["sha256"] == sha
+    assert recorded["pinned"] is True
+    assert recorded["scopes"] == {"default": 1}
 
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
@@ -95,7 +132,7 @@ def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
     ids=["checked-year", "no-year"],
 )
 def test_package_runner_rejects_replacement_during_the_first_batch(
-    tmp_path, monkeypatch, taxsim_input
+    tmp_path, monkeypatch, taxsim_input, pin_taxsim_stand_in
 ):
     # With nothing recorded yet, only a hash taken before the run can tell
     # that the bytes that ran are not the bytes that were checked.
@@ -111,6 +148,7 @@ def test_package_runner_rejects_replacement_during_the_first_batch(
 
     write_binary(42)
     monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    pin_taxsim_stand_in(binary)
     _native_runner(monkeypatch, tmp_path / "input.csv")
     run = subprocess.run
 
@@ -141,7 +179,7 @@ def test_package_runner_rejects_replacement_during_the_first_batch(
     ids=["checked-year", "no-year"],
 )
 def test_package_runner_rejects_later_replacement_after_pre_run_hash(
-    tmp_path, monkeypatch, taxsim_input
+    tmp_path, monkeypatch, taxsim_input, pin_taxsim_stand_in
 ):
     binary = tmp_path / "taxsim"
 
@@ -155,6 +193,7 @@ def test_package_runner_rejects_later_replacement_after_pre_run_hash(
 
     write_binary(42)
     monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    pin_taxsim_stand_in(binary)
     _native_runner(monkeypatch, tmp_path / "input.csv")
     adapter = TaxsimPackageRunner()
     cases = [
@@ -230,9 +269,7 @@ def test_preflight_uses_the_selected_files_hash_and_range(
             "pinned_entry_for_sha",
             lambda sha: ("selected", entry) if pinned and sha == digest else None,
         )
-        _native_runner(patch, root / "input.csv")
-        adapter = TaxsimPackageRunner()
-        actual = adapter._runner_factory()(pd.DataFrame()).taxsim_path
+        actual = pins.resolve_binary_path(system)
         assert Path(actual).resolve() == selected.resolve()
         if pinned and not first <= year <= last:
             with pytest.raises(TaxsimLawYearError, match=f"{first}-{last} only"):
@@ -274,7 +311,7 @@ def _run_both_modes(adapter, order):
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 @pytest.mark.parametrize("reverse", [False, True])
 def test_one_runner_accepts_csv_and_verbose_from_one_unchanged_binary(
-    tmp_path, monkeypatch, reverse
+    tmp_path, monkeypatch, reverse, pin_taxsim_stand_in
 ):
     binary = tmp_path / "taxsim"
     binary.write_text(
@@ -286,6 +323,7 @@ def test_one_runner_accepts_csv_and_verbose_from_one_unchanged_binary(
     )
     binary.chmod(0o755)
     monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    pin_taxsim_stand_in(binary)
     _native_runner(monkeypatch, tmp_path / "input.csv")
     before = pins.sha256_file(binary)
     order = ["utah_elderly_idtl2", "california_idtl5"]
@@ -339,7 +377,9 @@ def test_pinned_macos_binary_accepts_both_modes_on_one_runner():
 
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
-def test_upstream_source_layout_runner_agrees_with_preflight(tmp_path, monkeypatch):
+def test_upstream_source_layout_runner_agrees_with_preflight(
+    tmp_path, monkeypatch, pin_taxsim_stand_in
+):
     pytest.importorskip("policyengine_taxsim")
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(platform, "system", lambda: "Linux")
@@ -351,9 +391,13 @@ def test_upstream_source_layout_runner_agrees_with_preflight(tmp_path, monkeypat
         "printf 'taxsimid,year,fiitax,\"cdate-20260521\"\\n1,2026,42,0\\n'\n"
     )
     binary.chmod(0o755)
+    sha = pin_taxsim_stand_in(binary)
     adapter = TaxsimPackageRunner()
-    execution = adapter._execute_binary(pd.DataFrame([{"taxsimid": 1, "year": 2026}]))
+    selection = TaxsimSelection(sha256=sha, path=pins.locate_binary(sha))
+    execution = adapter._execute_binary(
+        pd.DataFrame([{"taxsimid": 1, "year": 2026}]), selection=selection
+    )
     assert execution.returncode == 0
     assert Path(execution.binary).resolve() == binary.resolve()
     cli._require_taxsim_law_year("2026")
-    assert pins.require_law_years([2026])["sha256"] == pins.sha256_file(binary)
+    assert pins.require_law_years([2026], binary_path=selection.path)["sha256"] == sha

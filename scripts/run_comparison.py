@@ -1016,7 +1016,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
-    from axiom_oracles.engine_compat import explicit_engine_roots
+    from axiom_oracles.engine_compat import declared_engine_roots
 
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
@@ -1032,7 +1032,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    return [str(path) for path in explicit_engine_roots(roots)]
+    return [str(path) for path in declared_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
@@ -1067,7 +1067,7 @@ def _complete_rulespecs_from_affected_map(
     suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.engine_compat import declared_engine_roots
         from axiom_oracles.provenance import (
             canonical_rulespec_slug,
             checkout_remote_matches_slug,
@@ -1090,7 +1090,7 @@ def _complete_rulespecs_from_affected_map(
         }
         declared_roots = [Path(path) for path in declared_paths or []]
         declared_roots.extend(
-            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+            path for path in declared_engine_roots(declared_roots) if path not in declared_roots
         )
         observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
@@ -1272,10 +1272,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Workspace containers may contribute country children even when another
     # composition path already supplied a SHA. Stamp the compiler's normalized
     # children as well, retaining their raw origins and unknown SHA observations.
-    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, declared_engine_roots
 
     rulespec_paths = list(dict.fromkeys([
-        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+        *rulespec_paths, *(str(path) for path in declared_engine_roots(rulespec_paths)),
     ]))
     rulespecs = []
     for raw in rulespec_paths:
@@ -1683,14 +1683,147 @@ def _stamp_report_provenance(
     insertion order, with/without trailing newline). Re-detect the original
     formatting and re-emit in the same shape so adding provenance produces a
     one-key diff rather than reordering every key.
+
+    A full-evidence report can be gigabytes, so its peak is one
+    ``json.load``: that reads the whole text and parses it, then the text is
+    freed. Nothing else builds a whole-report string: each candidate format
+    is compared by streaming its encoding against the file
+    (:func:`_report_matches_format`), and the stamped report is streamed to
+    a sibling temporary file that then replaces the report, so a failed
+    write leaves the report as it was. The bytes written are what
+    ``json.dumps`` of the stamped report in the detected format, plus the
+    original trailing newline, would give, and the file keeps its mode.
+
+    ``output`` must be this user's regular file, as the publisher requires
+    of its staging path; anything else (a symlink, say) is refused with
+    ``SystemExit`` before anything is read or written. A missing file is
+    left alone, as before.
     """
+    if _own_regular_report(output) is None:
+        return
     try:
-        original_text = output.read_text()
-        data = json.loads(original_text)
+        with open(output) as handle:  # read_text()'s defaults
+            data = json.load(handle)
     except (OSError, json.JSONDecodeError):
         return
     if not isinstance(data, dict):
         return
+    # Detect the format on the unedited parse, as the comparison against a
+    # fresh parse of the original text did, before the edits below.
+    sort_keys, indent = next(
+        (
+            (sort_keys, indent)
+            for sort_keys, indent in _STAMP_FORMATS
+            if _report_matches_format(output, data, indent=indent, sort_keys=sort_keys)
+        ),
+        # Unknown formatting (hand-edited): default to indent=2 sorted.
+        (True, 2),
+    )
+    trailing = "\n" if _file_ends_with_newline(output) else ""
+    _apply_report_provenance(
+        data,
+        provenance,
+        require_engine_versions=require_engine_versions,
+        preserve_runner_provenance=preserve_runner_provenance,
+    )
+    _replace_report(
+        output,
+        lambda handle: (
+            json.dump(data, handle, indent=indent, sort_keys=sort_keys),
+            handle.write(trailing),
+        ),
+    )
+
+
+def _own_regular_report(output: Path) -> os.stat_result | None:
+    """``lstat`` of a report this user owns as a regular file; None if absent.
+
+    Mirrors the publisher's check on its staging path: anything else is
+    refused with ``SystemExit``, so a swapped-in symlink is never followed.
+    """
+    try:
+        info = os.lstat(output)
+    except FileNotFoundError:
+        return None
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+        raise SystemExit(
+            f"staging report {output} is not this user's regular file — "
+            "refusing to stamp it"
+        )
+    return info
+
+
+def _replace_report(output: Path, write) -> None:
+    """Write ``output`` through ``write(handle)``, all or nothing.
+
+    The report, which must still be this user's regular file, is replaced
+    atomically by a sibling temporary file with its mode. If the write
+    fails, the temporary file is removed and the report is unchanged.
+    """
+    info = _own_regular_report(output)
+    if info is None:
+        raise SystemExit(f"staging report {output} disappeared while stamping it")
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".stamp", dir=output.parent
+    )
+    try:
+        with open(descriptor, "w") as handle:  # write_text()'s defaults
+            write(handle)
+        os.chmod(temporary, stat.S_IMODE(info.st_mode))
+        os.replace(temporary, output)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
+
+
+#: Candidate (sort_keys, indent) formats, in detection order.
+_STAMP_FORMATS = ((True, 2), (True, 1), (False, 2), (False, 1))
+_STAMP_READ_CHARS = 1 << 16
+
+
+def _report_matches_format(
+    path: Path, data: object, *, indent: int, sort_keys: bool
+) -> bool:
+    """Whether ``path`` holds ``json.dumps(data, indent=, sort_keys=)``, optionally
+    followed by one newline, compared chunk by chunk without building either
+    whole string."""
+    encoder = json.JSONEncoder(indent=indent, sort_keys=sort_keys)
+    with open(path) as handle:  # read_text()'s defaults
+        buffer, position = "", 0
+        for chunk in encoder.iterencode(data):
+            while position + len(chunk) > len(buffer):
+                more = handle.read(_STAMP_READ_CHARS)
+                if not more:
+                    return False
+                buffer = buffer[position:] + more
+                position = 0
+            if not buffer.startswith(chunk, position):
+                return False
+            position += len(chunk)
+        tail = buffer[position:position + 2]
+        if len(tail) < 2:
+            tail += handle.read(2 - len(tail))
+        return tail in ("", "\n")
+
+
+def _file_ends_with_newline(path: Path) -> bool:
+    """``path.read_text().endswith("\n")`` without reading the whole file."""
+    with open(path, "rb") as handle:
+        handle.seek(0, os.SEEK_END)
+        size = handle.tell()
+        # Universal newlines read a final "\r" or "\r\n" as "\n" too.
+        handle.seek(max(size - 1, 0))
+        return handle.read(1) in (b"\n", b"\r")
+
+
+def _apply_report_provenance(
+    data: dict,
+    provenance: dict,
+    *,
+    require_engine_versions: bool,
+    preserve_runner_provenance: bool,
+) -> None:
+    """Stamp ``provenance`` and the resolved engine versions onto a parsed report."""
     existing_provenance = data.get("provenance")
     if preserve_runner_provenance and isinstance(existing_provenance, dict):
         # DE's unified pair record carries the evidence-producing execution
@@ -1767,19 +1900,6 @@ def _stamp_report_provenance(
             versions["axiom_rules_engine"] = str(axiom_version)
         if versions:
             engines["versions"] = versions
-    trailing = "\n" if original_text.endswith("\n") else ""
-    for sort_keys in (True, False):
-        for indent in (2, 1):
-            reserialized = json.dumps(
-                json.loads(original_text), indent=indent, sort_keys=sort_keys
-            )
-            if original_text in (reserialized, reserialized + "\n"):
-                output.write_text(
-                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
-                )
-                return
-    # Unknown formatting (hand-edited): default to indent=2 sorted.
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
 
 
 def _print_coverage_warnings(config: dict) -> None:
@@ -2160,16 +2280,31 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
         params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
     )
     composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
     compose_cmd.extend(["-o", str(composed_path)])
     subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
     return composed_path.resolve()
+
+
+def _checked_compose_roots(params: dict) -> list[Path]:
+    """The suite's ``rulespec_roots`` for axiom-compose, each checked first.
+
+    Each must be a canonical ``rulespec-<country>`` checkout or one of its
+    jurisdiction directories (``axiom_oracles.rulespec_roots``); anything else
+    raises before axiom-compose reads it. The paths are passed on as given.
+    """
+    from axiom_oracles.rulespec_roots import require_canonical_content_root
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    for root in roots:
+        require_canonical_content_root(root)
+    return roots
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
@@ -2352,6 +2487,19 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
 def _taxsim_oracle_identity(output: Path) -> dict:
     """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
 
@@ -2359,8 +2507,10 @@ def _taxsim_oracle_identity(output: Path) -> dict:
     installs. ``taxsim_binaries`` is the report's
     ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
     (embedded and printed), platform and row count of each TAXSIM binary
-    the run executed. A report without that block (written before it
-    existed) records the version only.
+    the run executed. ``taxsim_pin_profile`` is the report's
+    ``engine_identity.taxsim.pin_profile``, the profile that selected those
+    binaries. A report without that block (written before it existed)
+    records the version only.
     """
     identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
     try:
@@ -2373,16 +2523,22 @@ def _taxsim_oracle_identity(output: Path) -> dict:
         else None
     )
     if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
         identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
     return identity
 
 
-def _require_taxsim_law_year(period: object, suite: str) -> None:
+def _require_taxsim_law_year(
+    period: object, suite: str, params: dict | None = None
+) -> None:
     """Stop before building anything when TAXSIM rejects the law year here.
 
-    Checks the pinned binary for this platform (what ``--with
-    policyengine-taxsim==<pin>`` installs into the run's environment), not
-    whatever this script's own venv holds.
+    With ``params`` (an axiom-oracles compare), checks the binaries the
+    suite's pin profile resolves on this platform, the only ones the CLI's
+    runner executes. Without it (the state generator, which runs the wheel's
+    bundled binary), checks the pinned bundled binary for this platform
+    (what ``--with policyengine-taxsim==<pin>`` installs into the run's
+    environment), not whatever this script's own venv holds.
     """
     from axiom_oracles.adapters.taxsim import pins
 
@@ -2393,8 +2549,13 @@ def _require_taxsim_law_year(period: object, suite: str) -> None:
             f"{suite}: period {period!r} does not start with a law year"
         ) from exc
     try:
-        pins.require_law_years([year], use_installed=False)
-    except pins.TaxsimLawYearError as exc:
+        if params is not None:
+            pins.require_profile_law_years(
+                [year], profile=_taxsim_pin_profile(params)
+            )
+        else:
+            pins.require_law_years([year], use_installed=False)
+    except (pins.TaxsimLawYearError, pins.TaxsimPinError) as exc:
         raise SystemExit(f"{suite}: {exc}") from exc
 
 
@@ -2606,7 +2767,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "period"
     ) in (None, "")
     if "taxsim" in engines and not keeps_row_years:
-        _require_taxsim_law_year(params["period"], params.get("suite") or "compare")
+        _require_taxsim_law_year(
+            params["period"], params.get("suite") or "compare", params
+        )
     if uses_axiom:
         runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
@@ -2669,6 +2832,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
     # Tri-state: absent keeps the CLI's case-count default; an explicit false
     # must reach the CLI, or a small synthetic suite silently gets full
     # evidence anyway.
@@ -2816,10 +2981,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
@@ -2854,7 +3016,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     root_candidates: list[Path] = list(roots)
     if roots_env:
         root_candidates.append(_expand_path(roots_env))
-    engine_roots = explicit_engine_roots(root_candidates)
+    engine_roots = explicit_engine_roots(root_candidates, strict=True)
     composed_doc: dict = {}
     try:
         composed_doc = yaml.safe_load(composed_path.read_text()) or {}
