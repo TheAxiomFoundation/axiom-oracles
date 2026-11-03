@@ -11,8 +11,8 @@ so the break shows up here first, with the file to fix:
 2. Every exact PolicyEngine-family pin is either listed on PyPI's index or
    recoverable from that table. The pins come from every file under
    ``scripts/``, ``ops/`` and ``.github/workflows/``, every
-   ``comparisons/**/*.yaml`` (version keys at any depth), and the TAXSIM pin
-   file. Names compare as PEP 503 does; ``==`` and ``===``, spaced and tuple
+   ``comparisons/**/*.yaml`` (version keys at any depth), the default-oracle
+   manifest, and the TAXSIM pin file. Names compare as PEP 503 does; ``==`` and ``===``, spaced and tuple
    spellings, parameter defaults and ``--oracle-with-args`` recipes are read.
    The scan fails closed on what it cannot read: an f-string version not in
    RESOLVED_ELSEWHERE, a non-literal policyengine-us version (concatenation,
@@ -51,6 +51,10 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from axiom_oracles import pinned_artifacts  # noqa: E402
+from axiom_oracles.policyengine_defaults import (  # noqa: E402
+    MANIFEST_RELATIVE_PATH,
+    load_defaults,
+)
 
 #: Unrecoverable pins and archives already tracked in an issue, keyed by the
 #: file that pins them. They print as warnings; anything else that will not
@@ -128,6 +132,15 @@ RESOLVED_ELSEWHERE: dict[tuple[str, str, str], str] = {
         "_run_state_income_tax_liability_grid",
         "_taxsim_pin_version()",
     ): "taxsim_pins.json, scanned",
+    (
+        "scripts/run_comparison.py",
+        "_pe_oracle_with_args",
+        "_PE_DEFAULTS['spm-calculator']",
+    ): "default-oracle manifest, validated and scanned",
+    ("scripts/update_policyengine_defaults.py", "probe", "wrapper"):
+        "validated latest non-yanked PyPI release; hash-locked before probing",
+    ("scripts/update_policyengine_defaults.py", "probe", "model"):
+        "validated latest non-yanked PyPI release; hash-locked before probing",
 }
 #: Top-level functions and assignments that only build report provenance
 #: labels. They name versions but install nothing, so pins inside them are
@@ -353,6 +366,14 @@ def scan() -> tuple[dict, dict, list[str]]:
     problems: list[str] = []
     _scan_code_trees(pins, sources, problems)
     _scan_comparisons(pins, sources, problems)
+    manifest = MANIFEST_RELATIVE_PATH.as_posix()
+    try:
+        defaults = load_defaults(REPO_ROOT / manifest)
+    except (OSError, ValueError) as exc:
+        problems.append(f"{manifest}: cannot read the default oracle pins: {exc}")
+    else:
+        for package, version in defaults.items():
+            pins[(package, version)].add(Use(manifest))
     taxsim = json.loads((REPO_ROOT / TAXSIM_PINS).read_text())
     distribution = taxsim.get("distribution") or {}
     if distribution.get("version"):

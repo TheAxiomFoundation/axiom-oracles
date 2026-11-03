@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path
@@ -12,6 +13,7 @@ import pytest
 import requests
 
 from axiom_oracles import pinned_artifacts
+from axiom_oracles.policyengine_defaults import load_defaults
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 # Captured at import, before tests/conftest.py stubs fetch for every test.
@@ -108,13 +110,8 @@ def test_each_row_installs_as_its_verified_wheel(version):
     assert path.name == f"policyengine_us-{version}-py3-none-any.whl"
 
 
-def test_every_runtime_policyengine_us_pin_is_listed_or_recorded():
-    """Only versions PyPI's index lists may stay out of the table.
-
-    Offline, so this pins the expected set; scripts/check_pinned_artifacts.py
-    checks the index itself. A new policyengine-us pin with no table row
-    changes this set and fails here until someone checks the index.
-    """
+def test_historical_runtime_policyengine_us_pins_are_recorded():
+    """The rolling default's availability is checked by the scheduled inventory."""
     check = _load_check_module()
     pins, _sources = check.inventory()
     unrecorded = {
@@ -123,6 +120,8 @@ def test_every_runtime_policyengine_us_pin_is_listed_or_recorded():
         if package == "policyengine-us"
         and pinned_artifacts.lookup(package, version) is None
     }
+    # A reviewed default update can use a current release on PyPI's index.
+    unrecorded.discard(load_defaults()["policyengine-us"])
     assert unrecorded == {
         # comparisons/ri-income-tax-liability.yaml: no recorded wheel (#659).
         "1.784.4",
@@ -144,7 +143,7 @@ def test_table_agrees_with_uv_lock():
         assert (artifact.url, artifact.sha256) == (url, sha256)
 
 
-def test_the_default_in_repo_oracle_pin_is_recoverable():
+def test_default_oracle_uses_artifact_recovery_when_recorded():
     import importlib.util as util
 
     spec = util.spec_from_file_location(
@@ -153,7 +152,12 @@ def test_the_default_in_repo_oracle_pin_is_recoverable():
     run_comparison = util.module_from_spec(spec)
     spec.loader.exec_module(run_comparison)
     name, version = run_comparison._PE_ORACLE_PINS[1].split("==")
-    assert pinned_artifacts.lookup(name, version) is not None
+    artifact = pinned_artifacts.lookup(name, version)
+    requirement = pinned_artifacts.requirement(f"{name}=={version}")
+    if artifact is not None:
+        assert requirement == f"{name} @ {pinned_artifacts.cache_path(artifact).resolve().as_uri()}"
+    else:
+        assert requirement == f"{name}=={version}"
 
 
 def test_requirement_passes_unlisted_pins_through():
@@ -251,10 +255,8 @@ def test_inventory_finds_the_runtime_pins():
     pins, sources, problems = check.scan()
     assert problems == []
     uses = {key: {str(use) for use in value} for key, value in pins.items()}
-    assert any(
-        use.startswith("scripts/run_comparison.py:")
-        for use in uses[("policyengine-us", "1.752.2")]
-    )
+    default_us = load_defaults()["policyengine-us"]
+    assert "data/policyengine_defaults.json" in uses[("policyengine-us", default_us)]
     assert "comparisons/us-snap-abawd-grid.yaml" in uses[("policyengine-us", "1.767.3")]
     # The probe recipes install 1.767.3 through --oracle-with-args.
     assert any(
@@ -297,6 +299,10 @@ def fake_root(tmp_path, monkeypatch):
     check = _load_check_module()
     (tmp_path / "scripts").mkdir()
     (tmp_path / "comparisons").mkdir()
+    (tmp_path / "data").mkdir()
+    (tmp_path / check.MANIFEST_RELATIVE_PATH).write_text(
+        (REPO_ROOT / check.MANIFEST_RELATIVE_PATH).read_text()
+    )
     taxsim = tmp_path / "axiom_oracles" / "adapters" / "taxsim"
     taxsim.mkdir(parents=True)
     (taxsim / "taxsim_pins.json").write_text(
@@ -313,6 +319,69 @@ def _uses(check):
         {key: sorted(map(str, value)) for key, value in sources.items()},
         problems,
     )
+
+
+def test_scan_inventories_a_reviewed_default_update(fake_root):
+    check, root = fake_root
+    manifest = root / check.MANIFEST_RELATIVE_PATH
+    document = json.loads(manifest.read_text())
+    document["packages"]["policyengine-us"] = "2.94.3"
+    document["packages"]["spm-calculator"] = "1.1.0"
+    manifest.write_text(json.dumps(document))
+
+    pins, _sources, problems = _uses(check)
+
+    assert problems == []
+    for package, version in document["packages"].items():
+        assert pins[(package, version)] == ["data/policyengine_defaults.json"]
+
+
+@pytest.mark.parametrize("missing", [False, True], ids=["invalid", "missing"])
+def test_scan_refuses_unreadable_default_manifest(fake_root, missing):
+    check, root = fake_root
+    manifest = root / check.MANIFEST_RELATIVE_PATH
+    if missing:
+        manifest.unlink()
+    else:
+        manifest.write_text('{"schema": 1, "packages": {"policyengine-us": "latest"}}')
+
+    _pins, _sources, problems = _uses(check)
+
+    assert len(problems) == 1
+    assert problems[0].startswith(
+        "data/policyengine_defaults.json: cannot read the default oracle pins:"
+    )
+
+
+@pytest.mark.parametrize(
+    ("path", "function", "expression", "package"),
+    [
+        ("scripts/update_policyengine_defaults.py", "probe", "wrapper", "policyengine"),
+        ("scripts/update_policyengine_defaults.py", "probe", "model", "policyengine-us"),
+        (
+            "scripts/run_comparison.py", "_pe_oracle_with_args",
+            "_PE_DEFAULTS['spm-calculator']", "spm-calculator",
+        ),
+    ],
+)
+def test_scan_limits_validated_dynamic_pins_to_the_reviewed_site(
+    fake_root, path, function, expression, package
+):
+    check, root = fake_root
+    approved = (
+        f"def {function}():\n"
+        f'    return f"{package}=={{{expression}}}"\n'
+    )
+    (root / path).write_text(
+        approved + approved.replace(f"def {function}()", "def unreviewed()")
+    )
+    (root / "scripts" / "unreviewed.py").write_text(approved)
+
+    _pins, _sources, problems = _uses(check)
+
+    assert len(problems) == 2
+    assert any(f"{path}:4:" in problem and "in unreviewed:" in problem for problem in problems)
+    assert any("scripts/unreviewed.py:2:" in problem for problem in problems)
 
 
 @pytest.mark.parametrize(

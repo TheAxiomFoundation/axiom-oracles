@@ -16,6 +16,7 @@ packages = ["axiom_oracles"]
 "grids/ca.yaml" = "grids/ca.yaml"
 "grids/uk.yaml" = "grids/uk.yaml"
 "grids/README.md" = "grids/README.md"
+"data/policyengine_defaults.json" = "data/policyengine_defaults.json"
 
 [project]
 name = "axiom-oracles"
@@ -27,6 +28,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
   "click>=8.1",
+  "packaging>=24.2",
   # The DE executable certificate verifies the RuleSpec apply signature before
   # replaying the pinned engine; keep that load-bearing verifier in the base env.
   "cryptography>=44.0",

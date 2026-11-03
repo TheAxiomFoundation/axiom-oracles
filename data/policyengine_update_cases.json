@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "year": 2026,
+  "variables": ["income_tax", "eitc", "snap", "medicaid"],
+  "cases": [
+    {"id": "ny-single-zero", "state": "NY", "county_fips": "36061", "people": [{"age": 35, "earnings": 0, "relation": "HeadOfHousehold"}]},
+    {"id": "ny-single-30000", "state": "NY", "county_fips": "36061", "people": [{"age": 35, "earnings": 30000, "relation": "HeadOfHousehold"}]},
+    {"id": "ny-parent-child", "state": "NY", "county_fips": "36061", "people": [{"age": 35, "earnings": 20000, "relation": "HeadOfHousehold"}, {"age": 7, "earnings": 0, "relation": "Child"}]},
+    {"id": "co-couple", "state": "CO", "county_fips": "08031", "people": [{"age": 45, "earnings": 60000, "relation": "HeadOfHousehold"}, {"age": 43, "earnings": 15000, "relation": "Spouse"}]}
+  ]
+}
