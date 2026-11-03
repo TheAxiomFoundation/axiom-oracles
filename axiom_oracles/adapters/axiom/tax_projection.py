@@ -3622,7 +3622,7 @@ def _section_32_self_employment_earned_income(self_employment: float) -> float:
 
     A profit nets out the 164(f) deduction, one-half of the SECA tax on
     92.35% of it. A loss carries no SECA tax and enters unchanged, so it
-    reduces earned income, as the EIC Worksheet B line 4a total does.
+    reduces earned income, as the EIC Worksheet B line 4b total does.
     """
     if self_employment > 0:
         return self_employment * (

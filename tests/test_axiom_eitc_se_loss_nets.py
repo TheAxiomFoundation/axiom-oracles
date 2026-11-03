@@ -9,9 +9,10 @@ determined with regard to the deduction allowed to the taxpayer by section
 164(f)."
 
 Net earnings under 1402(a) are gross income less deductions, so a loss is
-negative, and nothing in (ii) floors it: the Form 1040 EIC Worksheet B adds
-each spouse's Schedule SE line 3 amount, less the deductible part of their
-SE tax, to wages (line 4a), and a total at or below zero allows no credit.
+negative, and nothing in (ii) floors it. The 2025 Form 1040 EIC Worksheet B
+takes Schedule SE, Part I, line 3 less the deductible part of SE tax (line 13)
+as line 1e, including a joint filer's spouse's amounts, and line 4b combines
+it with wages: "If line 4b is zero or less, ... You can't take the credit."
 The projection floored the filers' combined self-employment at zero before
 the 164(f) adjustment, so a loss never netted against wages.
 
