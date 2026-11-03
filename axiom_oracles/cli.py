@@ -1331,11 +1331,11 @@ def _prepare_cases_for_engines(
         if engines & {"policyengine", "taxsim"} and _needs_axiom_tax_itemization_choice(
             concept_ids
         ):
+            # One election per tax unit on every lane: the candidate with the
+            # lower federal income tax (26 USC 63(e)), whatever concepts the
+            # lane compares, so a state-only lane reports the state tax of
+            # the election the federal lanes select.
             prepared = attach_axiom_tax_itemization_choice(prepared)
-            if set(concept_ids) == {Concepts.STATE_INCOME_TAX}:
-                prepared = [
-                    _select_axiom_state_income_tax_candidate(case) for case in prepared
-                ]
     if "axiom" in engines and _wants_snap(concept_ids):
         # Two paths:
         # - Generic: a compiled program + jurisdiction FIPS were provided.
@@ -1394,15 +1394,6 @@ def _household_in_jurisdiction(case: Case, fips_prefix: str) -> bool:
 def _is_co_household(case: Case) -> bool:
     """Legacy Colorado-only filter; kept for the CO-specific SNAP path."""
     return _household_in_jurisdiction(case, "08")
-
-
-def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
-    metadata = dict(case.metadata)
-    metadata["axiom_result_selection"] = {
-        "strategy": "min",
-        "output": "us:tax/oracle-bridge#state_income_tax",
-    }
-    return replace(case, metadata=metadata)
 
 
 def _require_taxsim_law_year(period: str) -> None:

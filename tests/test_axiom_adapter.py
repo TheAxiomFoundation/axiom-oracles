@@ -1142,8 +1142,9 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
             ][0]["formula"]
         )
     )
+    # 26 USC 199A(c)(1): the filers' net items, not every member's (#618).
     assert (
-        "sum_where(business_income_of_tax_unit"
+        "sum_where(filer_adjusted_earnings_of_tax_unit"
         in (
             generated_rules_by_name["qualified_business_income"]["versions"][0][
                 "formula"

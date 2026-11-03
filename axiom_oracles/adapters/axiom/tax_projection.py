@@ -5,6 +5,12 @@ from typing import Any
 
 from ...bridges.relation_binding import relation_tuple
 from ...core.case import Case, Concepts, Entity
+from ...core.us_tax_parameters import (
+    EXCESS_BUSINESS_LOSS_THRESHOLD_2026,
+    EXCESS_BUSINESS_LOSS_THRESHOLD_JOINT_2026,
+    OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026,
+    QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026,
+)
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
     AXIOM_INPUT_RECORDS_METADATA_KEY,
@@ -153,19 +159,29 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="26 USC 24(d)(2)(A)(ii)-(iii)",
         formula="0.50",
     ),
+    # Both OASDI-base names read one published amount
+    # (axiom_oracles/core/us_tax_parameters.py). The bridge's own employee
+    # and self-employment OASDI rules below cap at social_security_wage_base;
+    # the section 230 name is the one RuleSpec modules ask for.
     _generated_parameter_rule(
         "social_security_wage_base",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine's 2026 SSA contribution and benefit base",
-        formula="186000",
+        source=(
+            "SSA 2026 OASDI contribution and benefit base, "
+            "90 FR 49047 (Nov. 3, 2025)"
+        ),
+        formula=str(OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026),
     ),
     _generated_parameter_rule(
         "contribution_and_benefit_base_under_section_230_of_social_security_act",
         dtype="Money",
         unit="USD",
-        source="Social Security Administration 2026 contribution and benefit base",
-        formula="186000",
+        source=(
+            "SSA 2026 OASDI contribution and benefit base, "
+            "90 FR 49047 (Nov. 3, 2025)"
+        ),
+        formula=str(OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026),
     ),
     _generated_parameter_rule(
         "alaska_permanent_fund_dividend_amount",
@@ -274,15 +290,15 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "business_loss_limit_joint_2026",
         dtype="Money",
         unit="USD",
-        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
-        formula="610000",
+        source="26 USC 461(l)(3)(A)(ii)(II); Rev. Proc. 2025-32 section 4.31",
+        formula=str(EXCESS_BUSINESS_LOSS_THRESHOLD_JOINT_2026),
     ),
     _generated_parameter_rule(
         "business_loss_limit_other_2026",
         dtype="Money",
         unit="USD",
-        source="26 USC 461(l), PolicyEngine 2026 excess business-loss threshold",
-        formula="305000",
+        source="26 USC 461(l)(3)(A)(ii)(II); Rev. Proc. 2025-32 section 4.31",
+        formula=str(EXCESS_BUSINESS_LOSS_THRESHOLD_2026),
     ),
     _generated_parameter_rule(
         "co_income_tax_rate",
@@ -650,14 +666,33 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="26 USC 24(d)(1)(B)",
         formula="max(ctc_phase_in_relevant_earnings, ctc_social_security_excess)",
     ),
+    # 26 USC 21(a)(1) allows the credit "against the tax imposed by this
+    # chapter", and 26(a) caps subpart A credits at regular tax less the
+    # section 27 foreign tax credit plus the 55(a) tax. The CDCC is the first
+    # subpart A credit after the foreign tax credit (Schedule 3, lines 1-2),
+    # so its limit is the tax before credits less that credit.
+    _generated_tax_unit_rule(
+        "tax_imposed_by_chapter_before_cdcc",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 21(a)(1), limited by 26 USC 26(a)",
+        formula="max(0, income_tax_before_credits - foreign_tax_credit)",
+    ),
+    # 26 USC 24(d)(1)(B) compares "the aggregate amount of credits allowed by
+    # this subpart" under the 26(a) limit and under a raised one. Subpart A
+    # holds the CDCC as well as the CTC, so a CDCC that absorbs the tax
+    # leaves more of the CTC to refund.
     _generated_tax_unit_rule(
         "aggregate_subpart_c_credits_without_subsection",
         dtype="Money",
         unit="USD",
-        source="Oracle composition bridge resolving the section 26(a) CTC limit",
+        source=(
+            "Oracle composition bridge resolving the section 26(a) limit on "
+            "the CTC and CDCC"
+        ),
         formula=(
             "min("
-            "ctc_credit_without_subsection_and_26a_limit, "
+            "ctc_credit_without_subsection_and_26a_limit + cdcc, "
             "income_tax_before_credits"
             ")"
         ),
@@ -666,10 +701,13 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "aggregate_subpart_c_credits_with_increased_26a_limit",
         dtype="Money",
         unit="USD",
-        source="Oracle composition bridge resolving the section 24(d) refundability limit",
+        source=(
+            "Oracle composition bridge resolving the section 24(d) "
+            "refundability limit on the CTC and CDCC"
+        ),
         formula=(
             "min("
-            "ctc_credit_without_subsection_and_26a_limit, "
+            "ctc_credit_without_subsection_and_26a_limit + cdcc, "
             "income_tax_before_credits + ctc_refundable_limitation_increase_amount"
             ")"
         ),
@@ -1128,38 +1166,72 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle comparison bridge identifying tax-unit members with person-level 26 USC 164(f) deductions",
         formula="person_self_employment_tax_ald_for_qbid > 0",
     ),
+    # 26 USC 199A(c)(1): QBI is the taxpayer's net amount. Each person's
+    # items stay signed here, split into income and loss parts because
+    # sum_where needs a condition, and net across the filers below.
+    _generated_person_rule(
+        "net_business_income_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source=(
+            "26 USC 199A(c)(1) qualified items of one person: Schedule C "
+            "income and Part I rents less the 164(f) deduction"
+        ),
+        formula=(
+            "person_self_employment_income_for_qbid "
+            "+ person_rental_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
+        ),
+    ),
     _generated_person_rule(
         "business_income_for_qbid",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine person-level 26 USC 199A QBI aggregation",
-        formula=(
-            "max("
-            "0, "
-            "person_self_employment_income_for_qbid "
-            "+ person_rental_income_for_qbid "
-            "- person_self_employment_tax_ald_for_qbid"
-            ")"
-        ),
+        source="Oracle comparison bridge taking the positive part of a person's net 26 USC 199A items",
+        formula="max(0, net_business_income_for_qbid)",
     ),
     _generated_person_rule(
         "business_income_counts_for_qbid",
         dtype="Judgment",
-        source="Oracle comparison bridge matching PolicyEngine positive person-level QBI aggregation",
+        source="Oracle comparison bridge identifying persons with net positive 26 USC 199A items",
         formula="business_income_for_qbid > 0",
     ),
+    _generated_person_rule(
+        "business_loss_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge taking the negative part of a person's net 26 USC 199A items",
+        formula="max(0, -net_business_income_for_qbid)",
+    ),
+    _generated_person_rule(
+        "business_loss_counts_for_qbid",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying persons with net negative 26 USC 199A items",
+        formula="business_loss_for_qbid > 0",
+    ),
+    # Filers only: a dependent's business is on the dependent's own return,
+    # outside the filers' taxable income (199A(c)(3)(A)(ii)). A net loss
+    # carries forward (199A(c)(2)), so this year's QBI floors at zero.
     _generated_tax_unit_rule(
         "qualified_business_income",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge applying 26 USC 199A(c) to ECPS self-employment and rental income leaves",
+        source=(
+            "26 USC 199A(c)(1)-(2), netting the filers' Schedule C income "
+            "and Part I rents before the zero floor"
+        ),
         formula=(
             "max("
             "0, "
             "sum_where("
-            "business_income_of_tax_unit, "
+            "filer_adjusted_earnings_of_tax_unit, "
             "business_income_for_qbid, "
             "business_income_counts_for_qbid"
+            ") "
+            "- sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "business_loss_for_qbid, "
+            "business_loss_counts_for_qbid"
             ")"
             ")"
         ),
@@ -2786,7 +2858,11 @@ US_TAX_ORACLE_PROGRAM_RULES = (
 
 _TAX_UNIT_ID = "tax_unit"
 _HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT = 24
-_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = 5_500
+# 26 USC 152(d)(1)(B) gross income "less than the exemption amount"; the
+# Tax-Calculator projection reads the same constant.
+_HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = (
+    QUALIFYING_RELATIVE_GROSS_INCOME_LIMIT_2026
+)
 _AXIOM_TAX_REF_PREFIX = "us:tax/federal-income-tax"
 _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
@@ -2884,7 +2960,6 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "nonresident_alien_individual",
     "payee_statement_received",
     "provider_identification_requirements_met",
-    "qualifying_individual_tin_included_on_return",
     "qualifying_individual_identification_requirements_met",
     "prior_deficiency_denial_without_required_eligibility_information",
     "retired_on_disability_before_year_end",
@@ -2895,7 +2970,6 @@ _BOOLEAN_DEFAULTS_FALSE = (
     "section_152_e_non_custodial_parent",
     "section_6013_g_or_h_election_in_effect_for_taxable_year",
     "section_6013_resident_alien_election",
-    "service_provider_identifying_information_requirement_satisfied",
     "self_employment_income_is_subject_exclusively_to_foreign_social_security_laws_under_agreement",
     "social_security_agreement_under_section_233_applies_to_nonresident_alien",
     "spouses_lived_apart_all_year",
@@ -3050,7 +3124,6 @@ _TAX_UNIT_NUMERIC_DEFAULTS = (
     "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
     "taxable_net_gain_from_dispositions",
     "taxable_pension_annuity_disability_benefits_included",
-    "tax_imposed_by_chapter_before_cdcc",
     "taxpayer_earned_income_for_cdcc",
     "state_sales_tax",
     "subsidized_state_work_activity_service_compensation",
@@ -3210,9 +3283,22 @@ _INPUT_REF_OVERRIDES.update(
             "service_provider_identifying_information_requirement_satisfied",
             "spouse_earned_income_for_cdcc",
             "spouse_not_member_of_household_during_last_six_months",
-            "tax_imposed_by_chapter_before_cdcc",
             "taxpayer_earned_income_for_cdcc",
             "taxpayer_or_spouse_has_us_principal_abode_more_than_half_year",
+            # Tax-unit claim facts (_cdcc_tax_unit_claim_facts).
+            "cdcc_temporary_expansion_applies",
+            "employment_related_expense_requirements_satisfied",
+            "furnishes_over_half_cost_of_household",
+            "legally_separated_under_decree",
+            "maintains_household_principal_abode_of_qualifying_individual_more_than_half_year",
+            "paid_to_disallowed_related_individual",
+            "possession_credit_or_payment_bars_united_states_credit",
+            # Person facts (_cdcc_person_inputs).
+            "is_cdcc_child_dependent",
+            "is_cdcc_dependent_disregarding_listed_subsections",
+            "noncustodial_parent_exception_applies",
+            "physically_or_mentally_incapable_of_self_care",
+            "same_principal_place_of_abode_more_than_half_year",
         )
     }
 )
@@ -3289,6 +3375,15 @@ _INPUT_REF_OVERRIDES.update(
             "partnership_section_702_a_8_income_or_loss",
             "self_employment_trade_or_business_deductions",
             "self_employment_trade_or_business_gross_income",
+        )
+    }
+)
+_INPUT_REF_OVERRIDES.update(
+    {
+        name: f"us:statutes/26/1402/b#input.{name}"
+        for name in (
+            "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins",
+            "wages_paid_to_individual_during_taxable_year_for_section_1401_a",
         )
     }
 )
@@ -3522,6 +3617,20 @@ def _eitc_relevant_investment_income(
     )
 
 
+def _section_32_self_employment_earned_income(self_employment: float) -> float:
+    """One filer's 32(c)(2)(A)(ii) amount from Schedule C income.
+
+    A profit nets out the 164(f) deduction, one-half of the SECA tax on
+    92.35% of it. A loss carries no SECA tax and enters unchanged, so it
+    reduces earned income, as the EIC Worksheet B line 4b total does.
+    """
+    if self_employment > 0:
+        return self_employment * (
+            1 - 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029))
+        )
+    return self_employment
+
+
 def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, Any]]:
     head, spouse = _tax_filers(people)
     dependents = _tax_dependents(people, head, spouse)
@@ -3548,22 +3657,28 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
+    # The 1(h), Schedule D worksheet and 1411 inputs read the filers, as the
+    # AGI leaves do: absent a 1(g)(7) election, which no compared engine
+    # models, a dependent's dividends, gains and interest are on the
+    # dependent's own return.
     capital_gains_tax_qualified_dividends = _sum_concept(
-        people,
+        earners,
         Concepts.QUALIFIED_DIVIDEND_INCOME,
     )
     capital_gains_tax_short_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
     )
     capital_gains_tax_long_capital_gains = _sum_concept(
-        people,
+        earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    tax_unit_dividends = _sum_dividends(people)
-    tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
+    tax_unit_dividends = _sum_dividends(earners)
+    tax_unit_interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
     filer_pensions = _sum_concept(earners, Concepts.PENSION_INCOME)
-    social_security = _sum_concept(people, Concepts.SOCIAL_SECURITY_BENEFITS)
+    # 26 USC 86(d)(1): benefits "received by the taxpayer by reason of
+    # entitlement"; a dependent's benefits are the dependent's.
+    social_security = _sum_concept(earners, Concepts.SOCIAL_SECURITY_BENEFITS)
     filer_unemployment = _sum_concept(
         earners,
         Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
@@ -3642,6 +3757,23 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
+        # 26 USC 1402(b)(1): 1401(a) reaches net earnings only up to the
+        # contribution and benefit base minus "the wages paid to such
+        # individual". The pinned us:statutes/26/1402/b reads both names;
+        # without them its self_employment_income_for_section_1401_a never
+        # evaluates. The base is the constant social_security_wage_base
+        # reads, so the SECA tax and its 164(f) deduction use one base. The
+        # module computes one cap per tax unit, so the wages are those of the
+        # filers with self-employment income: exact when one filer is
+        # self-employed, the combined amount when both are.
+        "contribution_and_benefit_base_effective_for_calendar_year_in_which_taxable_year_begins": (
+            OASDI_CONTRIBUTION_AND_BENEFIT_BASE_2026
+        ),
+        "wages_paid_to_individual_during_taxable_year_for_section_1401_a": sum(
+            _earned_income(person)
+            for person in earners
+            if _number(person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)) > 0
+        ),
         "employee_compensation_includible_in_gross_income": wages,
         "wages_taken_into_account_for_additional_medicare_tax": wages,
         # Investment / unearned income — projected from Case concepts.
@@ -3670,14 +3802,14 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "real_estate_taxes": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
         "self_employment_trade_or_business_deductions": 0,
         "self_employment_trade_or_business_gross_income": self_employment,
-        # 26 USC 32(c)(2)(A)(ii): NESE determined with regard to the
-        # 164(f)/1402(a)(12) deduction (one-half of the combined
-        # 1401(a)+(b)(1) rates).
-        "net_earnings_from_self_employment_after_self_employment_tax_deduction": (
-            # 32(c)(2)(A)(ii) via 164(f): earned income nets out one-half
-            # of the SECA tax imposed (rates apply to 92.35% of profits).
-            max(0.0, self_employment)
-            * (1 - 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029)))
+        # 26 USC 32(c)(2)(A)(ii): net earnings from self-employment,
+        # determined with regard to the 164(f) deduction, signed, so a loss
+        # nets against wages. Each filer takes their own deduction.
+        "net_earnings_from_self_employment_after_self_employment_tax_deduction": sum(
+            _section_32_self_employment_earned_income(
+                _number(person.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0))
+            )
+            for person in earners
         ),
         "alaska_permanent_fund_dividend_eligible_person_count": _alaska_permanent_fund_dividend_eligible_person_count(
             case,
@@ -3708,11 +3840,18 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         0,
     )
     inputs["taxpayer_earned_income_for_cdcc"] = _earned_income(head)
-    inputs["spouse_earned_income_for_cdcc"] = _earned_income(spouse) if spouse else 0
+    # 26 USC 21(d)(1)(A): an unmarried individual's limit is their own
+    # earned income. The spouse slot carries that amount, as the Populace
+    # bridge passes it, so the lesser of the two slots is the taxpayer's.
+    inputs["spouse_earned_income_for_cdcc"] = _earned_income(
+        spouse if spouse is not None else head
+    )
     inputs["employment_related_expenses_paid"] = inputs.get(
         "tax_unit_childcare_expenses",
         0,
     )
+    for name, value in _cdcc_tax_unit_claim_facts(inputs).items():
+        inputs.setdefault(name, value)
     inputs["qualifying_children_count"] = sum(
         1 for dependent in dependents if _age(dependent) < 17
     )
@@ -3876,6 +4015,7 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
             "taxpayer_entitled_to_section_151_deduction_for_child_or_would_be_but_for_section_152_e": is_dependent,
             "taxpayer_or_spouse_ssn_included_on_return": True,
             "taxpayer_or_spouse_ssn_is_valid_for_subsection_h": True,
+            **_cdcc_person_inputs(is_dependent=is_dependent),
         }
         for name in _BOOLEAN_DEFAULTS_FALSE:
             inputs.setdefault(name, False)
@@ -3984,6 +4124,55 @@ def _section_152c_person_inputs(
         "child_resided_with_both_parents_same_amount_of_time_and_taxpayer_parent_has_highest_adjusted_gross_income": False,
         "no_parent_of_individual_is_a_claiming_taxpayer": False,
         "taxpayer_has_highest_adjusted_gross_income_among_claiming_taxpayers": True,
+    }
+
+
+def _cdcc_tax_unit_claim_facts(inputs: dict[str, Any]) -> dict[str, Any]:
+    """26 USC 21 tax-unit facts the Case does not record, for a compliant filer.
+
+    The Populace bridge makes the same assumptions
+    (project_cdcc_tax_unit_inputs).
+    """
+    expenses = _number(inputs.get("employment_related_expenses_paid", 0))
+    earned_income_limit = min(
+        _number(inputs.get("taxpayer_earned_income_for_cdcc", 0)),
+        _number(inputs.get("spouse_earned_income_for_cdcc", 0)),
+    )
+    return {
+        # 21(b)(2)(A): expenses incurred to enable gainful employment, which
+        # 21(d)(1) caps at the earned income.
+        "employment_related_expense_requirements_satisfied": (
+            expenses > 0 and earned_income_limit > 0
+        ),
+        # 21(e)(9)-(10): the provider's and each qualifying individual's
+        # identifying information are on the return.
+        "service_provider_identifying_information_requirement_satisfied": True,
+        "qualifying_individual_tin_included_on_return": True,
+        # 21(e)(6): nothing paid to a dependent or a child under 19.
+        "paid_to_disallowed_related_individual": False,
+        # 21(e)(3)-(4): no decree of separation, and the married-living-apart
+        # test (separate return, household, cost) does not arise.
+        "legally_separated_under_decree": False,
+        "furnishes_over_half_cost_of_household": False,
+        "maintains_household_principal_abode_of_qualifying_individual_more_than_half_year": False,
+        # 21(g) and 21(h)(3) apply only to taxable years beginning in 2021.
+        "cdcc_temporary_expansion_applies": False,
+        "possession_credit_or_payment_bars_united_states_credit": False,
+    }
+
+
+def _cdcc_person_inputs(*, is_dependent: bool) -> dict[str, Any]:
+    """26 USC 21(b)(1) and 21(e)(5) person facts on the Case surface."""
+    return {
+        # 21(b)(1)(A)-(B): the dependent tests, read with the Case's dependent
+        # flag; the module applies the age-13 limit.
+        "is_cdcc_child_dependent": is_dependent,
+        "is_cdcc_dependent_disregarding_listed_subsections": is_dependent,
+        "same_principal_place_of_abode_more_than_half_year": is_dependent,
+        # 21(b)(1)(B)-(C): the Case records no self-care fact.
+        "physically_or_mentally_incapable_of_self_care": False,
+        # 21(e)(5): no divorced-parent custody split.
+        "noncustodial_parent_exception_applies": False,
     }
 
 
@@ -4118,6 +4307,7 @@ def _case_axiom_tax_unit_inputs(case: Case) -> dict[str, Any]:
         "state_withheld_income_tax",
         "taxable_earned_income_under_section_32",
         "taxable_social_security_benefits_included",
+        "tax_imposed_by_chapter_before_cdcc",
     }
     supplied_aggregate_inputs = sorted(aggregate_inputs.intersection(raw_inputs))
     if supplied_aggregate_inputs:
@@ -4170,6 +4360,13 @@ def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
 
 
 def _hoh_qualifying_dependent(dependent: Entity) -> bool:
+    # 26 USC 152(c)(3)(B): a permanently and totally disabled individual
+    # meets the qualifying-child age test at any age, and 152(c) has no
+    # gross-income test, so 2(b)(1)(A)(i) applies. The Case's disabled fact
+    # stands for "permanently and totally disabled"; relationship, abode and
+    # support are unrecorded and assumed met, as for dependents under 19.
+    if bool(dependent.fact(Concepts.DISABLED, False)):
+        return True
     age = _age(dependent)
     if age < 19:
         return True
