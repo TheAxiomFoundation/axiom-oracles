@@ -24,6 +24,7 @@ from typing import Any, Literal
 from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
+from ..core.investment_income import fold_tax_unit_returns
 
 
 # The certified populace-us artifact is the standing US population: Enhanced
@@ -256,7 +257,31 @@ class PopulaceUsCaseLoader:
                 **({"scope": household_scope.as_dict()} if household_scope else {}),
                 **_locale_metadata(household_scope),
             }
+            people_by_tax_unit: dict[int | str, list[_PersonRow]] = defaultdict(list)
+            for person in people:
+                people_by_tax_unit[person.tax_unit_id].append(person)
+            # Form 1040 line 7 Exception 1: a return with Schedule D amounts
+            # reports its capital gain distributions there. The filers share
+            # a return; a dependent's gains are on the dependent's own.
+            folded_by_tax_unit = {
+                tax_unit_id: fold_tax_unit_returns(
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if person.is_tax_unit_head or person.is_tax_unit_spouse
+                    ],
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if not (person.is_tax_unit_head or person.is_tax_unit_spouse)
+                    ],
+                )
+                for tax_unit_id, tax_unit_people in people_by_tax_unit.items()
+            }
             if case_unit == "household":
+                folded = sum(folded_by_tax_unit.values())
+                if folded:
+                    metadata[SCHEDULE_D_FOLD_METADATA_KEY] = folded
                 entities = [
                     _person_entity(person, index, case_unit=case_unit)
                     for index, person in enumerate(people)
@@ -276,10 +301,8 @@ class PopulaceUsCaseLoader:
                 )
                 continue
 
-            people_by_tax_unit: dict[int | str, list[_PersonRow]] = defaultdict(list)
-            for person in people:
-                people_by_tax_unit[person.tax_unit_id].append(person)
             for tax_unit_id, tax_unit_people in people_by_tax_unit.items():
+                folded = folded_by_tax_unit[tax_unit_id]
                 cases.append(
                     Case(
                         case_id=f"ecps-tax-unit-{tax_unit_id}",
@@ -294,6 +317,11 @@ class PopulaceUsCaseLoader:
                             "case_unit": "tax_unit",
                             "household_id": household.household_id,
                             "tax_unit_id": tax_unit_id,
+                            **(
+                                {SCHEDULE_D_FOLD_METADATA_KEY: folded}
+                                if folded
+                                else {}
+                            ),
                         },
                     )
                 )
@@ -491,6 +519,42 @@ class PopulaceUsCaseLoader:
             )
             for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
         }
+        # Form 1040 lines 3b and 3a from the artifact's PUF dividend split;
+        # see POPULACE_DIVIDEND_VARIABLES. These fail closed: a renamed or
+        # missing variable must stop the load, not zero every dividend.
+        qualified, non_qualified = (
+            _calculate_values(
+                sim,
+                pe_variable,
+                period,
+                map_to="person",
+                default=0,
+                size=size,
+                strict=True,
+            )
+            for pe_variable in POPULACE_DIVIDEND_VARIABLES
+        )
+        non_wage_income[Concepts.QUALIFIED_DIVIDEND_INCOME] = qualified
+        non_wage_income[Concepts.DIVIDEND_INCOME] = [
+            _clean_number(qualified_value) + _clean_number(non_qualified_value)
+            for qualified_value, non_qualified_value in zip(
+                qualified, non_qualified, strict=True
+            )
+        ]
+        non_wage_income.update(
+            {
+                concept: _calculate_values(
+                    sim,
+                    pe_variable,
+                    period,
+                    map_to="person",
+                    default=0,
+                    size=size,
+                    strict=True,
+                )
+                for concept, pe_variable in _STRICT_PERSON_NON_WAGE_VARIABLES.items()
+            }
+        )
         if case_unit == "tax_unit":
             # Tax-unit-only sources fail closed: a renamed or missing
             # variable must stop the load, not zero the concept.
@@ -555,9 +619,8 @@ class _HouseholdRow:
     childcare_expenses: float = 0.0
 
 
+# Dividends are not in this table; see POPULACE_DIVIDEND_VARIABLES.
 _PERSON_NON_WAGE_VARIABLES = {
-    Concepts.DIVIDEND_INCOME: "dividend_income",
-    Concepts.QUALIFIED_DIVIDEND_INCOME: "qualified_dividend_income",
     Concepts.INTEREST_INCOME: "taxable_interest_income",
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
@@ -587,6 +650,36 @@ _PERSON_NON_WAGE_VARIABLES = {
 _TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
     Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
 }
+
+#: PolicyEngine person variables that give Form 1040 line 3a (qualified) and
+#: the non-qualified rest of line 3b. ``Concepts.DIVIDEND_INCOME`` is their sum
+#: and ``Concepts.QUALIFIED_DIVIDEND_INCOME`` the first (core/investment_income).
+#: PolicyEngine-US defines ``dividend_income`` as this same sum (an alias of
+#: ``ordinary_dividend_income``, which adds the two), but the pinned artifact
+#: also *stores* a legacy ``dividend_income`` column, and a stored value
+#: overrides the alias: that column holds survey-reported amounts on 16,090
+#: persons (unweighted sum about $86M at the 2024 base), is below the qualified
+#: amount on 2,631 of the 4,103 persons that carry both, and sits beside a PUF
+#: split worth about $35B (qualified $28.6B, non-qualified $6.4B). Reading it
+#: as line 3b dropped the non-qualified dividends from every engine.
+POPULACE_DIVIDEND_VARIABLES = (
+    "qualified_dividend_income",
+    "non_qualified_dividend_income",
+)
+
+# Loaded fail closed, on both case units like the Schedule D gains above:
+# line 7a and Schedule D are two reports of one kind of income, and the fold
+# between them must give a person the same facts on either Case. No Axiom
+# benefit income list reads capital gains of either kind yet.
+_STRICT_PERSON_NON_WAGE_VARIABLES = {
+    Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: "non_sch_d_capital_gains",
+}
+
+#: Case metadata key recording how many of the Case's people had their Form
+#: 1040 line 7a capital gain distributions moved onto Schedule D (long-term
+#: capital gains) because their return also carries Schedule D amounts.
+#: Present only when nonzero.
+SCHEDULE_D_FOLD_METADATA_KEY = "capital_gain_distributions_folded_into_schedule_d"
 
 
 @dataclass(frozen=True)
@@ -683,7 +776,13 @@ def _calculate_values(
                 f"PolicyEngine could not calculate {variable!r} for {period}: {exc}"
             ) from exc
         return [default] * size
-    return _values(value)
+    values = _values(value)
+    if strict and len(values) != size:
+        raise RuntimeError(
+            f"PolicyEngine {variable!r} returned {len(values)} values for "
+            f"{size} people"
+        )
+    return values
 
 
 def _values(value) -> list[Any]:
