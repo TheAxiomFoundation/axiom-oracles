@@ -105,11 +105,14 @@ the other adapters project from.
 
 - **Rows are verbatim.** An integer-literal cell becomes an `int`, any other
   numeric cell a Python `float`, and a blank or whitespace-only cell is left
-  out of the row. An integer literal outside int64 fails the load, since
-  `pandas.read_csv` would not read it as an integer. For
-  every column with a non-blank cell, the rows frame to the dtypes
-  `pandas.read_csv` infers and to the values
-  `pandas.read_csv(float_precision="round_trip")` parses (tested). The
+  out of the row. An integer literal outside int64 fails the load: the
+  loader keeps every integer column int64, and no TAXSIM input needs a
+  larger value. For every column with a non-blank cell, the rows frame to
+  the dtypes `pandas.read_csv` infers and to the values
+  `pandas.read_csv(float_precision="round_trip")` parses (tested). One
+  exception: `pandas.read_csv` reads a numeric column that holds a
+  whitespace-only cell as text, while the loader leaves the cell out and
+  keeps the column numeric. The
   benchmark worker's plain `pd.read_csv` uses pandas' default float parser,
   which is not correctly rounded: on the September file it differs from the
   cell text in 24,611 cells, by at most 2.0e-14 relative (measured with pandas

@@ -1235,7 +1235,9 @@ def test_integer_outside_int64_fails_the_load(tmp_path, cell):
     records[0][header.index("pwages")] = cell
     path = _write_csv(tmp_path / "huge.csv", header, records)
 
-    with pytest.raises(TaxsimCsvError, match="outside int64"):
+    with pytest.raises(
+        TaxsimCsvError, match="outside int64. The loader keeps every integer column int64"
+    ):
         read_taxsim_csv(path)
 
 
@@ -1260,3 +1262,15 @@ def test_fractional_selector_fact_fails_in_read_taxsim_csv(tmp_path, column):
         TaxsimCsvError, match=rf"data row 2 .*{column}=1\.5 is not an integer"
     ):
         read_taxsim_csv(path)
+
+
+def test_whitespace_only_cell_is_the_documented_dtype_exception(tmp_path):
+    """pandas.read_csv reads the column as text; the loaded rows stay numeric."""
+    pd = pytest.importorskip("pandas")
+    header, records = _fixture_header_and_rows()
+    records[0][header.index("pwages")] = "  "
+    path = _write_csv(tmp_path / "whitespace-dtype.csv", header, records)
+
+    assert not pd.api.types.is_numeric_dtype(pd.read_csv(path)["pwages"])
+    rows = [case.metadata["taxsim_input"] for case in read_taxsim_csv(path).select().cases]
+    assert pd.api.types.is_numeric_dtype(pd.DataFrame(rows)["pwages"])

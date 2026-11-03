@@ -18,9 +18,12 @@ Contract
   text is an integer literal becomes an ``int``, any other numeric cell a
   ``float`` (Python's correctly rounded ``float()``), and a blank cell is
   omitted from the row (so is a whitespace-only cell). An integer literal
-  outside int64 fails the load. For every column with at least one
-  non-blank cell, a DataFrame built from the rows has the dtype
-  ``pandas.read_csv`` infers for the file and the values
+  outside int64 fails the load: the loader keeps every integer column
+  int64, and no TAXSIM input needs a larger value. For every column with at
+  least one non-blank cell, a DataFrame built from the rows has the dtype
+  ``pandas.read_csv`` infers for the file (except that ``pandas.read_csv``
+  reads a numeric column holding a whitespace-only cell as text, where the
+  loader leaves that cell out) and the values
   ``pandas.read_csv(float_precision="round_trip")`` parses;
   ``tests/test_taxsim_csv_population.py`` checks both. The
   benchmark's own worker reads its batch CSV with plain ``pd.read_csv``,
@@ -497,9 +500,9 @@ def _parse_row(
         except _OutsideInt64:
             raise TaxsimCsvError(
                 f"TAXSIM CSV {source} data row {row_number} column {column!r} "
-                f"holds {cell!r}, an integer outside int64; pandas.read_csv "
-                "would not read it as an integer, and TAXSIM would receive it "
-                "as text."
+                f"holds {cell!r}, an integer outside int64. The loader keeps "
+                "every integer column int64, and no TAXSIM input needs a "
+                "larger value."
             ) from None
         except ValueError:
             raise TaxsimCsvError(
