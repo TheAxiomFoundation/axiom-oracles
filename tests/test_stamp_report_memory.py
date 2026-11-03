@@ -173,6 +173,8 @@ def test_property_stamp_bytes_equal_the_text_implementation(
 @pytest.mark.parametrize("text", [
     "", "not json", "[1, 2]", '"report"', "null", "{", '{"a": 1}{"b": 2}',
     '{"a": 1, "a": 2}', '{\n  "b": 1,\n  "a": 2\n}\r\n', '{"a": NaN}\n',
+    # A lone final carriage return reads as a newline under universal newlines.
+    '{\n  "a": 1\n}\r', '{"a": 1}\r', '{\n  "b": 1\n}\r\r',
 ])
 def test_unusual_files_match_the_text_implementation(tmp_path, text):
     expected, actual = _both(tmp_path, text, {"schema": "v1"})
@@ -264,3 +266,41 @@ def test_stamp_peak_memory_is_one_parse(tmp_path, indent, sort_keys):
     _reference_stamp(reference, provenance, require_engine_versions=True)
     _run_comparison()._stamp_report_provenance(path, provenance, require_engine_versions=True)
     assert path.read_bytes() == reference.read_bytes()
+
+
+# --- a failed write leaves the report intact ----------------------------------
+
+
+def test_unencodable_provenance_leaves_the_report_unchanged(tmp_path):
+    """A dump that fails partway must not truncate the report it replaces."""
+    path = tmp_path / "report.json"
+    path.write_text(json.dumps({"suite": "x", "cases": [{"id": i} for i in range(50)]}, indent=2))
+    original = path.read_bytes()
+    with pytest.raises(TypeError):
+        _run_comparison()._stamp_report_provenance(path, {"schema": "v1", "bad": {1, 2}})
+    assert path.read_bytes() == original
+    assert sorted(item.name for item in tmp_path.iterdir()) == ["report.json"]
+
+
+def test_stamp_keeps_the_report_file_mode(tmp_path):
+    path = tmp_path / "report.json"
+    path.write_text(json.dumps({"suite": "x"}, indent=2))
+    path.chmod(0o640)
+    _run_comparison()._stamp_report_provenance(path, {"schema": "v1"})
+    assert path.stat().st_mode & 0o777 == 0o640
+    assert json.loads(path.read_text())["provenance"] == {"schema": "v1"}
+
+
+def test_symlinked_report_is_still_written_through(tmp_path):
+    """The caller refuses to publish a staging path that became a symlink.
+
+    Replacing the link with a regular file would hide that swap, so a
+    symlinked report is written through as before.
+    """
+    target = tmp_path / "target.json"
+    target.write_text(json.dumps({"suite": "x"}, indent=2))
+    link = tmp_path / "staging.json"
+    link.symlink_to(target)
+    _run_comparison()._stamp_report_provenance(link, {"schema": "v1"})
+    assert link.is_symlink()
+    assert json.loads(target.read_text())["provenance"] == {"schema": "v1"}
