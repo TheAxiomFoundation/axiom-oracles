@@ -26,7 +26,8 @@ export PYTHONPATH="$AXIOM_ORACLES"
 cd "$AXIOM_ORACLES" || exit 1
 echo "START $(date -u +%FT%TZ) $script"
 status=0
-uv run --python 3.13 --no-project --with-editable "$AXIOM_ENCODE" \
+# --isolated: never satisfy the stack from the checkout's .venv.
+uv run --python 3.13 --no-project --isolated --with-editable "$AXIOM_ENCODE" \
   --with policyengine==4.11.0 \
   --with "policyengine-us @ https://github.com/PolicyEngine/policyengine-us/archive/180410fe35209fb8201378c1b32dadd38051c342.tar.gz" \
   --with policyengine-core==3.26.11 --with spm-calculator==0.3.1 \

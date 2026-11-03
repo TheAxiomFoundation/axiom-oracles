@@ -178,6 +178,12 @@ def assert_publish_environment(job):
                 r"\b(?:uv\s+)?pip\s+install\s+(?:--system\s+)?-e\s+['\"]?\.(?:\[[\w,]+\])?(?:['\"]|\s|$)",
                 previous.get("run", ""),
             )
+            # `uv sync` installs the project itself (editable) from uv.lock.
+            or re.search(
+                r"^\s*uv\s+sync\b(?![^\n]*--no-install-project)",
+                previous.get("run", ""),
+                re.MULTILINE,
+            )
             for previous in steps[:index]
         ), "publication gates require the installed package, not just PyYAML"
 
@@ -189,8 +195,25 @@ def test_every_workflow_publisher_installs_the_package_before_publication():
             assert_publish_environment(job)
 
 
+def test_publication_environment_accepts_a_locked_sync():
+    assert_publish_environment(
+        {
+            "steps": [
+                {"run": "uv sync --locked --python 3.14 --extra policyengine\n"},
+                {"run": "python3 scripts/oracle_data.py publish --group all"},
+            ]
+        }
+    )
+
+
 @pytest.mark.parametrize(
-    "install", ["pip install pyyaml", "", "uv pip install requests"]
+    "install",
+    [
+        "pip install pyyaml",
+        "",
+        "uv pip install requests",
+        "uv sync --locked --no-install-project",
+    ],
 )
 def test_publication_environment_rejects_incomplete_gate_dependencies(install):
     with pytest.raises(AssertionError, match="require the installed package"):

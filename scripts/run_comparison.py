@@ -51,6 +51,7 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles import pinned_artifacts  # noqa: E402
 from axiom_oracles.provenance import (  # noqa: E402
     _git_env,
     _git_sha,
@@ -2021,6 +2022,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(axiom_encode_repo),
         *pe_pins,
@@ -2097,12 +2099,12 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
     universal_credit_program = _compose_uk_universal_credit_program(params)
-    pe_pins = [
-        "--with",
-        f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
-        "--with",
-        f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
-    ]
+    pe_pins = pinned_artifacts.with_args(
+        (
+            f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
+            f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
+        )
+    )
     data_folder = (
         _resolve_path(params["data_folder"], "data_folder")
         if params.get("data_folder")
@@ -2127,6 +2129,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             "--python",
             str(params.get("python", "3.13")),
             "--no-project",
+            "--isolated",
             "--with-editable",
             str(axiom_encode_repo),
             *pe_pins,
@@ -2590,17 +2593,29 @@ _PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
 
 
 def _pe_oracle_with_args(pins) -> list[str]:
-    """``uv run --with`` arguments for PE oracle pins plus their companions."""
-    return [
-        arg
-        for pin in (*pins, *_PE_US_COMPANION_PINS)
-        for arg in ("--with", pin)
-    ]
+    """``uv run --with`` arguments for PE oracle pins plus their companions.
+
+    A pin PyPI's index no longer lists installs from the verified hashed-URL
+    file recorded in axiom_oracles/pinned_artifacts.py, so the run keeps the
+    exact release it pins (or fails naming the file that stopped downloading).
+
+    Every ``--no-project`` overlay that installs these passes ``--isolated``.
+    Without it, uv satisfies the overlay's unpinned transitive dependencies
+    from this checkout's ``.venv`` when one exists (CI's legs have one), so
+    numpy, pandas and the like differed by working directory. The snap-ecps
+    run (``_run_axiom_encode_snap_ecps_compare``) is the exception: it runs in
+    axiom-encode's project environment (``uv run --directory``), so what this
+    list leaves unpinned, policyengine-core included, comes from that
+    project's own dependencies and lock.
+    """
+    return pinned_artifacts.with_args((*pins, *_PE_US_COMPANION_PINS))
 
 
 # PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
-# 1.729.0 were gone by 2026-10-14), so a suite can pin its oracle to the
-# release commit instead. Only GitHub's archive of a full 40-hex commit is
+# 1.729.0 were gone by 2026-10-14). A pruned release with a recorded hashed
+# URL installs from axiom_oracles/pinned_artifacts.py through the version pin;
+# a suite can instead pin its oracle to the release commit. Only GitHub's
+# archive of a full 40-hex commit is
 # accepted: a branch, tag or short SHA could move under the version label.
 _PE_US_SOURCE_RE = re.compile(
     r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"
@@ -2801,11 +2816,12 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
-        *(arg for pin in taxsim_pins for arg in ("--with", pin)),
+        *pinned_artifacts.with_args(taxsim_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
@@ -3517,11 +3533,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.14",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
-        "--with",
-        f"policyengine-taxsim=={_taxsim_pin_version()}",
+        *pinned_artifacts.with_args(
+            (f"policyengine-taxsim=={_taxsim_pin_version()}",)
+        ),
         "python",
         str(generator),
         "--state",
@@ -3768,6 +3786,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3919,6 +3938,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3954,10 +3974,10 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3996,10 +4016,10 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4038,10 +4058,10 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4082,10 +4102,10 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4125,10 +4145,10 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4168,10 +4188,10 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4209,10 +4229,10 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4252,10 +4272,10 @@ def _run_uk_pe_grid(
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -5093,6 +5113,7 @@ def _run_sanity(name: str) -> int:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),

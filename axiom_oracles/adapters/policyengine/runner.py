@@ -109,11 +109,11 @@ def _policyengine():
         import policyengine as pe
     except ImportError as exc:
         raise RuntimeError(
-            "Install the PolicyEngine extra: uv pip install -e '.[policyengine]'"
+            "Install the PolicyEngine extra: uv sync --locked --extra policyengine"
         ) from exc
     if pe.us is None:
         raise RuntimeError(
-            "Install the US PolicyEngine extra: uv pip install -e '.[policyengine]'"
+            "Install the US PolicyEngine extra: uv sync --locked --extra policyengine"
         )
     return pe
 

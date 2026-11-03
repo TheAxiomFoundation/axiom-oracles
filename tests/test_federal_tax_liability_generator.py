@@ -15,6 +15,7 @@ import pytest
 import yaml
 from hypothesis import example, given, settings
 from hypothesis import strategies as st
+from axiom_oracles import pinned_artifacts
 
 
 REPO_ROOT = Path(__file__).parents[1]
@@ -1927,7 +1928,7 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     cmd = calls[0]
     assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "policyengine==4.18.9" in cmd
-    assert "policyengine-us==1.767.3" in cmd
+    assert pinned_artifacts.requirement("policyengine-us==1.767.3") in cmd
     assert "policyengine-core==3.30.3" in cmd
     # spm-calculator 1.0.0 removed spm_calculator.geoadj, which PE-US imports.
     assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"

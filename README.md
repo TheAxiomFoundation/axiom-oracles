@@ -72,11 +72,20 @@ Requires Python 3.13 or newer.
 uv pip install -e ".[dev]"
 ```
 
-Install the PolicyEngine extra only when running PE calculations:
+Install the PolicyEngine extra only when running PE calculations. Install it
+from the lock, which records the SHA-256 of every file and checks it:
 
 ```bash
-uv pip install -e ".[policyengine,dev]"
+uv sync --locked --extra policyengine --extra dev
 ```
+
+`policyengine[us]==5.0.0` requires `policyengine-us==1.764.6`, which PyPI's
+index no longer lists. `[tool.uv.sources]` in `pyproject.toml` points that
+release at its hashed URL on files.pythonhosted.org, so after a dependency
+change `uv lock` re-resolves as usual and keeps 1.764.6; CI runs
+`uv lock --check`, so a `pyproject.toml` edit without a re-lock fails on the
+pull request. A plain `uv pip install -e '.[policyengine]'` also resolves
+through that source, but without the lock's hash check.
 
 Install the TAXSIM extra only when running local TAXSIM comparisons:
 
