@@ -11,6 +11,12 @@ Build, from the outputs of the three attribution stages
         --raw-report reports/axiom-policyengine-fiit-ecps-0-2026-10-14.json
     uv run scripts/stamp_selector_bindings.py fiit-ecps
 
+Build mode re-derives every stage label from the stage's saved variant
+rows, so each stage payload must carry them. The historical stage-3 payload
+(2026-10-14) predates stage 3 saving ``variant_rows``, so rebuilding the
+committed evidence needs a stage-3 rerun. ``--check`` reads only the
+committed files and is unaffected.
+
 This writes the evidence report the dispositions cite
 (``reports/fiit-ecps-eitc-attribution-2026-10-14.json``) and
 ``dispositions/fiit-ecps.yaml``. The mismatch rows come from the FULL v2
@@ -362,8 +368,7 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
     # which would reject legitimate counterfactual-only base rows.
     base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
     if base_check in stage3:
-        # Save the verdict so the offline audit sees it for future runs. The
-        # historical payload lacks the key, so its evidence is unchanged.
+        # Save the verdict so the offline audit sees it for future runs.
         checks[base_check] = stage3[base_check]
         if stage3[base_check] is not True:
             problems.append(f"stage3 {base_check}: must be true")

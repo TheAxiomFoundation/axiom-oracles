@@ -724,7 +724,10 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         action="store_true",
         help=(
             "Only compare Populace SPM units where PolicyEngine normal allotment "
-            "is positive."
+            "is positive. A unit whose allotment is missing or nonfinite is kept, "
+            "so it reaches the error ledger: it counts toward the projected units "
+            "(and toward --sample-size, displacing a valid unit) but never toward "
+            "compared pairs."
         ),
     )
     parser.add_argument(
