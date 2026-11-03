@@ -675,7 +675,7 @@ def test_runner_refuses_a_non_absolute_located_binary() -> None:
     case = Case(
         case_id="1",
         period="2024",
-        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024, "state": 0}},
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024, "state": 0, "mstat": 1}},
     )
     with pytest.raises(pins.TaxsimPinError, match="non-absolute"):
         runner.run_cases([case])

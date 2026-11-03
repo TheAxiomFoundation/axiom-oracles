@@ -21,7 +21,7 @@ from hypothesis import strategies as st
 
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner, pins
 from axiom_oracles.adapters.taxsim import runner as runner_module
-from axiom_oracles.core.case import Case
+from axiom_oracles.core.case import Case, Concepts, Entity
 
 pytestmark = pytest.mark.skipif(os.name == "nt", reason="uses POSIX shell scripts")
 
@@ -153,7 +153,9 @@ def _case(taxsimid: int, state: int, year: int) -> Case:
         case_id=f"case-{taxsimid}",
         period=str(year),
         metadata={
-            "taxsim_input": {"taxsimid": taxsimid, "state": state, "year": year}
+            "taxsim_input": {
+                "taxsimid": taxsimid, "state": state, "year": year, "mstat": 1
+            }
         },
     )
 
@@ -227,7 +229,7 @@ def test_one_missing_partition_runs_no_partition(stand_ins) -> None:
 
 
 def test_a_row_without_a_year_refuses_under_a_year_dependent_profile(stand_ins):
-    case = Case(case_id="x", period="2024", metadata={"taxsim_input": {"taxsimid": 1}})
+    case = Case(case_id="x", period="2024", metadata={"taxsim_input": {"taxsimid": 1, "mstat": 1}})
     with pytest.raises(pins.TaxsimPinError, match="has no year"):
         TaxsimPackageRunner().run_cases([case])
     _assert_nothing_ran(stand_ins)
@@ -374,3 +376,36 @@ def test_taxsim_csv_period_override_routes_ga_md_to_the_override_binary(
         stand_ins.shas["main"]: {"default": 4},
         stand_ins.shas["old"]: {"override:ga-md": 2},
     }
+
+
+def test_projected_and_supplied_rows_both_run_on_the_pinned_binary(stand_ins) -> None:
+    """A Case the adapter projects (here a separate return, mstat 6) and a
+    Case that supplies its row run through the same pinned path."""
+    projected = Case(
+        case_id="mfs-projected",
+        period="2024",
+        facts={Concepts.STATE_CODE: "CO", Concepts.MARRIED_FILING_SEPARATELY: True},
+        entities=(
+            Entity(
+                "filer",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: 40_000,
+                },
+            ),
+        ),
+    )
+    supplied = _case(2, CALIFORNIA, 2024)
+    runner = TaxsimPackageRunner()
+    results = runner.run_cases([projected, supplied], variables=["fiitax"])
+    assert [r.household_id for r in results] == ["mfs-projected", "case-2"]
+    for result in results:
+        assert result.raw["taxsim_binary_sha256"] == stand_ins.shas["main"]
+        assert result.raw["taxsim_pin_scope"] == "default"
+        assert result.values == {"fiitax": 11.0}
+    [binary] = runner.taxsim_identity()["binaries"]
+    assert binary["rows"] == 2
+    assert stand_ins.markers["main"].exists()
+    assert not stand_ins.markers["decoy"].exists()

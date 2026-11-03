@@ -20,6 +20,7 @@ from .projection import (
     TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
     taxsim_input_for_case,
     taxsim_unprojected_inputs_for_case,
+    validate_taxsim_row,
 )
 
 log = logging.getLogger(__name__)
@@ -96,6 +97,9 @@ class TaxsimPackageRunner(EngineAdapter):
     returns records) for tests and for policyengine-taxsim's PolicyEngine
     runner; ``executor`` replaces the binary invocation (tests feed captured
     stdout through it) and, without ``binary_locator``, the binary lookup.
+
+    Every row, projected or supplied, passes :func:`validate_taxsim_row`
+    before any runner is built.
     """
 
     name = "taxsim"
@@ -138,7 +142,17 @@ class TaxsimPackageRunner(EngineAdapter):
         cases: list[Case],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
-        input_rows = self._input_rows(cases)
+        return self._run_rows(cases, self._input_rows(cases), variables)
+
+    def _run_rows(
+        self,
+        cases: list[Case],
+        input_rows: list[dict[str, Any]],
+        variables: list[str] | None,
+    ) -> list[EngineResult]:
+        # Every row, projected or supplied, reaches the pinned binaries
+        # whenever pins apply; a subclass that runs another engine over
+        # TAXSIM rows (or a test seam) takes the single-run path below.
         target_variables = self._target_variables(variables)
         if self._runs_pinned_binaries():
             return self._run_pinned(cases, input_rows, target_variables)
@@ -403,6 +417,10 @@ class TaxsimPackageRunner(EngineAdapter):
             else:
                 normalized = dict(row)
                 normalized.setdefault(self.id_column, case.case_id)
+            # Pre-supplied rows never pass through the projection's own check.
+            # One invalid row aborts the whole binary batch with its
+            # diagnostics discarded, so fail here, naming the case, first.
+            validate_taxsim_row(normalized, case_id=case.case_id)
             submitted = normalized.get(self.id_column)
             key = id_key(case.case_id if submitted is None else submitted)
             if key in cases_by_id:

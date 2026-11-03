@@ -76,7 +76,7 @@ def test_runner_refuses_an_unpinned_source_layout_binary(tmp_path, monkeypatch):
     case = Case(
         case_id="source-case",
         period="2024",
-        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024}},
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024, "mstat": 1}},
     )
     with pytest.raises(pins.TaxsimPinError, match="does not match the pin"):
         adapter.run_cases([case], variables=["fiitax"])
@@ -106,7 +106,7 @@ def test_cli_preflight_and_runner_check_the_same_pinned_binary(
     case = Case(
         case_id="source-case",
         period="2026",
-        metadata={"taxsim_input": {"taxsimid": 1, "year": 2026}},
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2026, "mstat": 1}},
     )
     [result] = adapter.run_cases([case], variables=["fiitax"])
     assert result.values == {"fiitax": 42.0}
@@ -128,7 +128,7 @@ def test_cli_preflight_and_runner_check_the_same_pinned_binary(
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 @pytest.mark.parametrize(
     "taxsim_input",
-    [{"taxsimid": 1, "year": 2026}, {"taxsimid": 1}],
+    [{"taxsimid": 1, "year": 2026, "mstat": 1}, {"taxsimid": 1, "mstat": 1}],
     ids=["checked-year", "no-year"],
 )
 def test_package_runner_rejects_replacement_during_the_first_batch(
@@ -175,7 +175,7 @@ def test_package_runner_rejects_replacement_during_the_first_batch(
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 @pytest.mark.parametrize(
     "taxsim_input",
-    [{"taxsimid": 1, "year": 2026}, {"taxsimid": 1}],
+    [{"taxsimid": 1, "year": 2026, "mstat": 1}, {"taxsimid": 1, "mstat": 1}],
     ids=["checked-year", "no-year"],
 )
 def test_package_runner_rejects_later_replacement_after_pre_run_hash(

@@ -28,6 +28,7 @@ from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
 from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.populations import taxsim_csv as taxsim_csv_module
+from axiom_oracles.adapters.taxsim.projection import validate_taxsim_row
 from axiom_oracles.populations.taxsim_csv import (
     TAXSIM_INPUT_COLUMNS,
     TaxsimCsvError,
@@ -1207,6 +1208,44 @@ def test_real_benchmark_file_loads_every_row():
 
     unmodified = read_taxsim_csv(path)
     _assert_frame_matches_read_csv(unmodified.rows, path)
+    # Every benchmark row passes the TAXSIM row validation both runners
+    # apply, so refusing undocumented rows costs the benchmark nothing.
+    for case in cases:
+        validate_taxsim_row(case.metadata["taxsim_input"], case_id=case.case_id)
+
+
+
+# ---------------------------------------------------------------------------
+# TAXSIM row validation on taxsim-csv rows (both engines)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("edit", "message"),
+    [
+        (lambda header, row: row.__setitem__(header.index("mstat"), ""), "mstat None"),
+        (lambda header, row: row.__setitem__(header.index("mstat"), "3"), "mstat 3"),
+        (
+            lambda header, row: row.__setitem__(header.index("swages"), "1000"),
+            "secondary-taxpayer columns",
+        ),
+    ],
+    ids=["missing-mstat", "mstat-3", "spouse-wages-off-joint"],
+)
+def test_cli_refuses_an_invalid_taxsim_row_before_either_engine_runs(
+    cli_module, tmp_path, edit, message
+):
+    """PolicyEngine-vs-TAXSIM over CSV rows refuses what the binary would
+    mis-read or abort on, before either engine sees the batch."""
+    header, records = _fixture_header_and_rows()
+    # Row 1 is taxsimid 101, a single return.
+    edit(header, records[0])
+    path = _write_csv(tmp_path / "invalid.csv", header, records)
+
+    run = _compare(cli_module, "--taxsim-csv", str(path))
+    assert run.exit_code != 0
+    assert "taxsim-101" in str(run.exception) and message in str(run.exception)
+    assert _EchoRunner.frames == []
 
 
 # ---------------------------------------------------------------------------
