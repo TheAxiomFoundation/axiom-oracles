@@ -702,7 +702,7 @@ def test_unrecognized_utility_allowance_type_is_refused(monkeypatch, utility_typ
         )
 
 
-@pytest.mark.parametrize("utility_type", ["SUA", "LUA", "IUA", "NONE", "BUA", "TUA"])
+@pytest.mark.parametrize("utility_type", ["SUA", "LUA", "IUA", "NONE"])
 def test_recognized_utility_allowance_types_project(monkeypatch, utility_type):
     [case] = load_stub(
         monkeypatch,
@@ -816,3 +816,61 @@ def test_a_case_with_nothing_compared_is_unmeasured():
         check=True,
     )
     assert json.loads(result.stdout) == [None, True]
+
+
+@pytest.mark.parametrize("garbage", ["abc", "", "1,0", "NaN!"])
+def test_unparseable_axiom_decimal_is_an_axiom_error_not_a_crash(garbage):
+    [row] = produce([(100.0, True, garbage, "holds")])
+    assert row["amount_compared"] is False and row["match"] is False
+    assert row["errors"] == [
+        {
+            "engine": "axiom",
+            "output": "axiom_snap_allotment",
+            "error": "missing_or_nonfinite_output",
+        }
+    ]
+    amount = aggregate(publish([row]), AMOUNT)
+    assert amount["comparison_count"] == 0 and amount["uncompared_mismatches"] == 1
+
+
+# BUA and TUA are not PolicyEngine-US values; accept them only where a branch
+# projects them by name (us-ny both, us-az TUA). Elsewhere they would project
+# as "no utility" silently, so they are refused.
+@pytest.mark.parametrize(
+    "jurisdiction,utility_type",
+    [("us-ny", "BUA"), ("us-ny", "TUA"), ("us-az", "TUA")],
+)
+def test_bua_tua_project_only_where_a_branch_names_them(jurisdiction, utility_type):
+    projected = snap_populace.project_utility_allowance_type(
+        JURISDICTION_CONFIGS[jurisdiction], utility_type, "NY_NAS"
+    )
+    assert any(value is True for value in projected.values())
+
+
+@pytest.mark.parametrize(
+    "jurisdiction,utility_type",
+    [
+        ("us-az", "BUA"),
+        ("us-co", "BUA"),
+        ("us-co", "TUA"),
+        ("us-ca", "BUA"),
+        ("us-ca", "TUA"),
+    ],
+)
+def test_bua_tua_are_refused_where_no_branch_names_them(jurisdiction, utility_type):
+    with pytest.raises(ValueError, match="snap_utility_allowance_type"):
+        snap_populace.project_utility_allowance_type(
+            JURISDICTION_CONFIGS[jurisdiction], utility_type, ""
+        )
+
+
+@pytest.mark.parametrize("utility_type", ["BUA", "TUA"])
+def test_loader_refuses_bua_tua_in_the_generic_branch(monkeypatch, utility_type):
+    # co, or and ut, the suites on this producer, take the generic branch.
+    with pytest.raises(ValueError, match="snap_utility_allowance_type"):
+        load_stub(
+            monkeypatch,
+            "snap_utility_allowance_type",
+            utility_type,
+            utility_projection="policyengine-type",
+        )

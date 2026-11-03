@@ -1645,18 +1645,28 @@ def project_raw_utility_inputs(
     }
 
 
-# PolicyEngine-US's SNAPUtilityAllowanceType values (SUA, LUA, IUA, NONE),
-# plus BUA and TUA, which the state projections below also handle.
-KNOWN_UTILITY_ALLOWANCE_TYPES = frozenset({"SUA", "LUA", "IUA", "NONE", "BUA", "TUA"})
+# PolicyEngine-US's SNAPUtilityAllowanceType values. BUA and TUA are not
+# among them; they are accepted only where a branch below projects them by
+# name (us-ny both, us-az TUA). Anywhere else they would project as "no
+# utility" silently, so they are refused there.
+KNOWN_UTILITY_ALLOWANCE_TYPES = frozenset({"SUA", "LUA", "IUA", "NONE"})
+NAMED_EXTRA_UTILITY_ALLOWANCE_TYPES = {
+    "us-ny": frozenset({"BUA", "TUA"}),
+    "us-az": frozenset({"TUA"}),
+}
 
 
 def project_utility_allowance_type(
     config: JurisdictionConfig, utility_type: str, utility_region: str
 ) -> dict[str, bool | int]:
-    if utility_type not in KNOWN_UTILITY_ALLOWANCE_TYPES:
+    allowed = KNOWN_UTILITY_ALLOWANCE_TYPES | NAMED_EXTRA_UTILITY_ALLOWANCE_TYPES.get(
+        config.jurisdiction, frozenset()
+    )
+    if utility_type not in allowed:
         # An unknown value would otherwise project as "no utility" silently.
         raise ValueError(
-            f"unrecognized PolicyEngine snap_utility_allowance_type {utility_type!r}"
+            f"unrecognized PolicyEngine snap_utility_allowance_type {utility_type!r} "
+            f"for {config.jurisdiction}"
         )
     if config.jurisdiction == "us-az":
         return arizona_utility_inputs(
