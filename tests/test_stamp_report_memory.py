@@ -386,3 +386,19 @@ def test_staging_deleted_mid_stamp_is_refused_and_not_recreated(tmp_path, monkey
     with pytest.raises(SystemExit, match="staging.json"):
         rc._stamp_report_provenance(staging, {"schema": "v1"})
     assert list(tmp_path.iterdir()) == []
+
+
+def test_report_owned_by_another_user_is_refused_before_it_is_read(tmp_path, monkeypatch):
+    """The owner is checked up front, not only at write time.
+
+    The report is not JSON, so a stamp that read it before checking its owner
+    would return silently instead of refusing.
+    """
+    rc = _run_comparison()
+    report = tmp_path / "staging.json"
+    report.write_text("not json")
+    owner = report.stat().st_uid
+    monkeypatch.setattr(rc.os, "getuid", lambda: owner + 1)
+    with pytest.raises(SystemExit, match="staging.json"):
+        rc._stamp_report_provenance(report, {"schema": "v1"})
+    assert report.read_text() == "not json"
