@@ -16,9 +16,9 @@ TAXSIM_MAX_YEAR = 2026
 # (unmarried), 2 joint (married), 6 separate (married), 8 dependent taxpayer.
 # TAXSIM itself assigns head of household from the dependent columns.
 # Those are the only codes this adapter sends or accepts. The pinned 2.30.0
-# Linux binary is looser: its own message says "Marital Status must be in
-# range [1..7]", and it ran an mstat 3 row with one child (fiitax 1341.04,
-# exit 0) while 4 and 7 stopped it. Whether TAXSIM-35's page still lists 3
+# Linux binary is looser: it embeds the message "Marital Status must be in
+# range [1..7]" (it printed "Bad mstat" and STOP 4 when run on 4 and 7), and
+# it ran an mstat 3 row with one child (fiitax 1341.04, exit 0). Whether TAXSIM-35's page still lists 3
 # as an older head-of-household code could not be checked (the page was
 # unreachable when this was written). policyengine-taxsim's emulator maps
 # only 1 and 2 (config/variable_mappings.yaml), so a row outside the codes

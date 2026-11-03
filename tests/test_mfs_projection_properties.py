@@ -75,7 +75,7 @@ def _with_blank_spouse_examples(test):
         st.sampled_from(SPOUSE_COLUMNS), st.one_of(_blank, _nonzero), max_size=6
     ),
 )
-def test_validate_taxsim_row_accepts_exactly_the_documented_shapes(
+def test_validate_taxsim_row_accepts_exactly_the_codes_this_adapter_accepts(
     mstat, spouse
 ) -> None:
     row = {"taxsimid": 1, "year": YEAR, **spouse}
