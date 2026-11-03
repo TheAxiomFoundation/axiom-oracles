@@ -2472,6 +2472,19 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
 def _taxsim_oracle_identity(output: Path) -> dict:
     """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
 
@@ -2479,8 +2492,10 @@ def _taxsim_oracle_identity(output: Path) -> dict:
     installs. ``taxsim_binaries`` is the report's
     ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
     (embedded and printed), platform and row count of each TAXSIM binary
-    the run executed. A report without that block (written before it
-    existed) records the version only.
+    the run executed. ``taxsim_pin_profile`` is the report's
+    ``engine_identity.taxsim.pin_profile``, the profile that selected those
+    binaries. A report without that block (written before it existed)
+    records the version only.
     """
     identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
     try:
@@ -2493,16 +2508,22 @@ def _taxsim_oracle_identity(output: Path) -> dict:
         else None
     )
     if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
         identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
     return identity
 
 
-def _require_taxsim_law_year(period: object, suite: str) -> None:
+def _require_taxsim_law_year(
+    period: object, suite: str, params: dict | None = None
+) -> None:
     """Stop before building anything when TAXSIM rejects the law year here.
 
-    Checks the pinned binary for this platform (what ``--with
-    policyengine-taxsim==<pin>`` installs into the run's environment), not
-    whatever this script's own venv holds.
+    With ``params`` (an axiom-oracles compare), checks the binaries the
+    suite's pin profile resolves on this platform, the only ones the CLI's
+    runner executes. Without it (the state generator, which runs the wheel's
+    bundled binary), checks the pinned bundled binary for this platform
+    (what ``--with policyengine-taxsim==<pin>`` installs into the run's
+    environment), not whatever this script's own venv holds.
     """
     from axiom_oracles.adapters.taxsim import pins
 
@@ -2513,8 +2534,13 @@ def _require_taxsim_law_year(period: object, suite: str) -> None:
             f"{suite}: period {period!r} does not start with a law year"
         ) from exc
     try:
-        pins.require_law_years([year], use_installed=False)
-    except pins.TaxsimLawYearError as exc:
+        if params is not None:
+            pins.require_profile_law_years(
+                [year], profile=_taxsim_pin_profile(params)
+            )
+        else:
+            pins.require_law_years([year], use_installed=False)
+    except (pins.TaxsimLawYearError, pins.TaxsimPinError) as exc:
         raise SystemExit(f"{suite}: {exc}") from exc
 
 
@@ -2707,7 +2733,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "period"
     ) in (None, "")
     if "taxsim" in engines and not keeps_row_years:
-        _require_taxsim_law_year(params["period"], params.get("suite") or "compare")
+        _require_taxsim_law_year(
+            params["period"], params.get("suite") or "compare", params
+        )
     if uses_axiom:
         runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
@@ -2770,6 +2798,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
     if params.get("include_case_inputs"):
         cmd.append("--include-case-inputs")
     if params.get("comparison_batch_size"):
