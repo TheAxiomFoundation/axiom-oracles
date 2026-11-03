@@ -15,6 +15,14 @@ TAXSIM_MAX_YEAR = 2026
 # https://taxsim.nber.org/taxsimtest/: 1 single or head of household
 # (unmarried), 2 joint (married), 6 separate (married), 8 dependent taxpayer.
 # TAXSIM itself assigns head of household from the dependent columns.
+# Those are the only codes this adapter sends or accepts. The pinned 2.30.0
+# Linux binary is looser: its own message says "Marital Status must be in
+# range [1..7]", and it ran an mstat 3 row with one child (fiitax 1341.04,
+# exit 0) while 4 and 7 stopped it. Whether TAXSIM-35's page still lists 3
+# as an older head-of-household code could not be checked (the page was
+# unreachable when this was written). policyengine-taxsim's emulator maps
+# only 1 and 2 (config/variable_mappings.yaml), so a row outside the codes
+# above could not reach both engines with one meaning.
 TAXSIM_MSTAT_SINGLE = 1
 TAXSIM_MSTAT_JOINT = 2
 TAXSIM_MSTAT_SEPARATE = 6
@@ -323,7 +331,9 @@ def taxsim_input_for_case(
 def validate_taxsim_row(row: Mapping[str, Any], *, case_id: int | str) -> None:
     """Reject a TAXSIM input row that would abort the binary's whole batch.
 
-    ``mstat`` must be one of TAXSIM-35's documented codes (1, 2, 6, 8). A
+    ``mstat`` must be one of the TAXSIM-35 codes this adapter accepts (1, 2,
+    6, 8; see ``_TAXSIM_MSTAT_CODES`` for why 3 is refused although the pinned
+    binary runs it). A
     missing ``mstat`` is rejected too: policyengine-taxsim's TaxsimRunner
     zero-fills absent columns while its emulator's input mapper defaults
     ``mstat`` to 1, so the two engines would read the row differently.
@@ -344,7 +354,8 @@ def validate_taxsim_row(row: Mapping[str, Any], *, case_id: int | str) -> None:
     if mstat not in _TAXSIM_MSTAT_CODES:
         raise ValueError(
             f"Case {case_id!r}: TAXSIM mstat {raw_mstat!r} is not one of "
-            f"TAXSIM-35's documented codes {sorted(_TAXSIM_MSTAT_CODES)}."
+            f"the TAXSIM-35 codes this adapter accepts "
+            f"{sorted(_TAXSIM_MSTAT_CODES)}."
         )
     if mstat == TAXSIM_MSTAT_JOINT:
         return

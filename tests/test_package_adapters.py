@@ -585,7 +585,7 @@ def test_taxsim_package_runner_rejects_pre_supplied_row_with_bad_mstat() -> None
         metadata={"taxsim_input": {"year": 2026, "state": 6, "mstat": 3}},
     )
 
-    with pytest.raises(ValueError, match="'legacy-mstat'.*documented codes"):
+    with pytest.raises(ValueError, match="'legacy-mstat'.*codes this adapter accepts"):
         TaxsimPackageRunner(runner_factory=fake).run_cases([case], ["fiitax"])
     assert fake.frames == []
 

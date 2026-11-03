@@ -1,7 +1,7 @@
 """Married-filing-separately invariants across the three tax projections.
 
 * TAXSIM row validation: a row is accepted exactly when its ``mstat`` is one
-  of TAXSIM-35's documented codes and, off a joint return, every
+  of the TAXSIM-35 codes the adapter accepts (1, 2, 6, 8) and, off a joint return, every
   secondary-taxpayer column is blank or zero (the pinned binary stops the
   whole batch with ``STOP 1`` otherwise).
 * Differential: the TAXSIM, Axiom and PolicyEngine projections read one
@@ -15,10 +15,8 @@
 
 from __future__ import annotations
 
-import math
-
 import pytest
-from hypothesis import given, settings
+from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
@@ -35,18 +33,44 @@ YEAR = 2026
 _FILING_STATUS = "us:tax/federal-income-tax#input.filing_status"
 _FILES_SEPARATE = "us:statutes/26/7703#input.taxpayer_files_separate_return"
 
-_blank = st.sampled_from([None, "", 0, 0.0, float("nan")])
+_BLANKS = (None, "", 0, 0.0, float("nan"))
+_blank = st.sampled_from(_BLANKS)
 _nonzero = st.one_of(
     st.integers(1, 200_000), st.floats(0.5, 2e5, allow_nan=False)
 )
 
+# The verdict for every sampled mstat value, written out rather than derived
+# with the validator's own numeric coercion: the integral spellings of a
+# documented code are accepted, and everything else is refused. Keyed by
+# (type, value) because 1, 1.0 and True are one dict key otherwise.
+_MSTAT_CODE = {
+    (int, 1): 1, (int, 2): 2, (int, 6): 6, (int, 8): 8,
+    (float, 1.0): 1, (float, 6.0): 6, (str, "6"): 6,
+    (int, 0): None, (int, 3): None, (int, 4): None, (int, 7): None,
+    (float, 2.5): None, (bool, True): None, (type(None), None): None,
+}
+_MSTAT_SAMPLES = [1, 2, 6, 8, 1.0, 6.0, "6", 0, 3, 4, 7, 2.5, True]
 
+
+def _is_blank(value) -> bool:
+    """A spouse cell TaxsimRunner writes as 0: missing, empty, NaN or zero."""
+    return value is None or value == "" or value != value or value == 0
+
+
+def _with_blank_spouse_examples(test):
+    # Pin NaN, "" and None on every non-joint code so a validator that counts
+    # one of them as a spouse value fails on every seed, not only when the
+    # generator happens to draw it.
+    for mstat in (1, 6, 8):
+        for blank in (float("nan"), "", None):
+            test = example(mstat=mstat, spouse={"sage": blank, "swages": blank})(test)
+    return test
+
+
+@_with_blank_spouse_examples
 @settings(max_examples=400, deadline=None)
 @given(
-    mstat=st.one_of(
-        st.sampled_from([1, 2, 6, 8, 1.0, 6.0, "6", 0, 3, 4, 7, 2.5, True]),
-        st.none(),
-    ),
+    mstat=st.one_of(st.sampled_from(_MSTAT_SAMPLES), st.none()),
     spouse=st.dictionaries(
         st.sampled_from(SPOUSE_COLUMNS), st.one_of(_blank, _nonzero), max_size=6
     ),
@@ -57,16 +81,8 @@ def test_validate_taxsim_row_accepts_exactly_the_documented_shapes(
     row = {"taxsimid": 1, "year": YEAR, **spouse}
     if mstat is not None:
         row["mstat"] = mstat
-    code = None
-    if mstat is not None and not isinstance(mstat, bool):
-        number = float(mstat)
-        code = int(number) if number.is_integer() else None
-    has_spouse_value = any(
-        value not in (None, "")
-        and not (isinstance(value, float) and math.isnan(value))
-        and float(value) != 0
-        for value in spouse.values()
-    )
+    code = _MSTAT_CODE[(type(mstat), mstat)]
+    has_spouse_value = not all(_is_blank(value) for value in spouse.values())
     accepted = code in DOCUMENTED_MSTAT and (code == 2 or not has_spouse_value)
     if accepted:
         validate_taxsim_row(row, case_id="generated")

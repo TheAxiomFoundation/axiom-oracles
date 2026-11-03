@@ -623,7 +623,7 @@ def test_validate_taxsim_row_rejects_undocumented_mstat(mstat) -> None:
     row = _row(mstat)
     if mstat is None:
         del row["mstat"]
-    with pytest.raises(ValueError, match="'case-d'.*documented codes"):
+    with pytest.raises(ValueError, match="'case-d'.*codes this adapter accepts"):
         validate_taxsim_row(row, case_id="case-d")
 
 
