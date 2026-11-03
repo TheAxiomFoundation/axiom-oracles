@@ -362,7 +362,7 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
                 "axiom_program": str(program),
                 "axiom_composed_program": str(composed),
                 "axiom_compiled_program": str(compiled),
-                "rulespec_roots": [str(rulespec_us), str(rulespec_al)],
+                "rulespec_roots": [str(rulespec_us)],
                 "axiom_rulespec_repo_roots": str(tmp_path),
                 "jurisdiction_fips": "01",
             },
@@ -375,8 +375,6 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
         str(program.resolve()),
         "--rulespec-root",
         str(rulespec_us.resolve()),
-        "--rulespec-root",
-        str(rulespec_al.resolve()),
         "-o",
         str(composed.resolve()),
     ]
@@ -399,6 +397,35 @@ def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
     assert calls[2][:4] == ["uv", "run", "--python", "3.14"]
     assert "--axiom-compiled-program" in calls[2]
     assert str(compiled.resolve()) in calls[2]
+
+
+@pytest.mark.parametrize("bad", ["rulespec-us-al", "rulespec-us/programs"])
+def test_compose_roots_are_checked_before_axiom_compose_runs(bad, monkeypatch, tmp_path):
+    """A state checkout or a non-jurisdiction child never reaches axiom-compose."""
+    from axiom_oracles.rulespec_roots import NonCanonicalRuleSpecRoot
+
+    run_comparison = load_run_comparison_module()
+    (tmp_path / "rulespec-us" / "programs").mkdir(parents=True)
+    (tmp_path / "rulespec-us-al").mkdir()
+    compose_binary = tmp_path / "axiom-compose"
+    compose_binary.write_text("#!/bin/sh\n")
+    program = tmp_path / "program.yaml"
+    program.write_text("program: us-al/snap\n")
+    calls = []
+    monkeypatch.setattr(run_comparison.subprocess, "run", lambda cmd, **_: calls.append(cmd))
+    params = {
+        "axiom_compose_binary": str(compose_binary),
+        "axiom_program": str(program),
+        "axiom_composed_program": str(tmp_path / "composed.yaml"),
+        "axiom_compiled_program": str(tmp_path / "compiled.json"),
+        "rulespec_roots": [str(tmp_path / "rulespec-us" / "us"), str(tmp_path / bad)],
+    }
+    (tmp_path / "rulespec-us" / "us").mkdir()
+    with pytest.raises(NonCanonicalRuleSpecRoot):
+        run_comparison._ensure_composed_axiom_program(params, tmp_path / "engine")
+    with pytest.raises(NonCanonicalRuleSpecRoot):
+        run_comparison._compose_uk_universal_credit_program(params)
+    assert calls == []
 
 
 def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
@@ -2765,8 +2792,9 @@ def test_mixed_foreign_roots_never_prove_country_freshness(
     paths = [foreign, country_path] if foreign_first else [country_path, foreign]
     roots = explicit_engine_roots(paths)
     # The runtime stages only canonical checkouts: a rulespec-us directory whose
-    # origin is a different repository is never an engine root.
-    foreign_canonical = foreign_slug.rsplit("/", 1)[-1] == "rulespec-us"
+    # origin is not TheAxiomFoundation/rulespec-us (a fork, another repository)
+    # is never an engine root.
+    foreign_canonical = foreign_slug.casefold() == "theaxiomfoundation/rulespec-us"
     assert (foreign.resolve() in roots) == foreign_canonical
     staged = [stage_pure_root(root, {"us-co"}, tmp_path / "stage") for root in roots]
     if foreign_canonical and (foreign_first or country_path_kind == "jurisdiction"):

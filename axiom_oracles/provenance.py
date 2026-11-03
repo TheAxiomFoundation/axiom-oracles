@@ -624,15 +624,25 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     return entries
 
 
-def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
-    """Reject a checkout whose recognized GitHub origin names another repo.
+def remote_matches_slug(url: str | None, slug: str) -> bool:
+    """Reject a remote URL whose recognized GitHub identity names another repo.
 
     GitHub identities are case-insensitive. Compare the raw origin identity:
     absorption aliases identify dependencies, not the checkout actually read.
     Without a recognized origin, callers must rely on layout conventions.
+    :mod:`axiom_oracles.rulespec_roots` uses this same comparison for engine
+    roots, and additionally requires a recognized github.com origin.
     """
-    remote_slug = repo_slug_from_remote(_remote_url(path))
+    remote_slug = repo_slug_from_remote(url)
     return remote_slug is None or remote_slug.casefold() == slug.casefold()
+
+
+def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
+    """Reject a checkout whose recognized GitHub origin names another repo.
+
+    See :func:`remote_matches_slug`; this reads the checkout's origin first.
+    """
+    return remote_matches_slug(_remote_url(path), slug)
 
 
 def resolve_rulespec_checkout(slug: str) -> Path | None:

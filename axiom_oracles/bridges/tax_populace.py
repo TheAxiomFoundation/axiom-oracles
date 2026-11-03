@@ -2932,7 +2932,6 @@ def run_axiom_program(
     # staged copy below, derived from it). No inherited root list, workspace
     # parent or renamed alias is forwarded (axiom_oracles.rulespec_roots).
     checkout = require_canonical_rulespec_root(rulespec_root)
-    env = engine_env(None)
     compile_program = program
     with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
         # The engine CLI requires an explicit --rulespec-root naming a
@@ -2985,7 +2984,7 @@ def run_axiom_program(
         # Newer engines take explicit, repeatable --rulespec-root flags and
         # ignore AXIOM_RULESPEC_REPO_ROOTS; older engines only read the env
         # var and reject the flag. Both receive the same single root.
-        env = engine_env(env, [engine_root])
+        env = engine_env(None, [engine_root])
         base_cmd = [
             str(binary),
             "compile",

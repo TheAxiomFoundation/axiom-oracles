@@ -42,6 +42,7 @@ from axiom_oracles.rulespec_roots import (
     CANONICAL_ROOT_NAME,
     canonical_rulespec_root,
     engine_env,
+    given_path,
     require_canonical_rulespec_root,
 )
 
@@ -143,7 +144,9 @@ def explicit_engine_roots(
         # The innermost ``rulespec-*`` directory holding the program is the
         # checkout it compiles from; a worktree or alias name
         # (``rulespec-us-medicaid``) is not canonical.
-        program_path = Path(os.path.abspath(Path(program).expanduser()))
+        # Walk the path as given; the validator then resolves the enclosing
+        # checkout the way the OS opens it and checks the name it was given.
+        program_path = given_path(program)
         for parent in program_path.parents:
             if parent.name.startswith("rulespec-"):
                 _add(parent, named=True)

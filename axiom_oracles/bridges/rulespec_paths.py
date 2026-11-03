@@ -19,11 +19,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from ..rulespec_roots import (
-    NonCanonicalRuleSpecRoot,
-    canonical_rulespec_root,
-    require_canonical_rulespec_root,
-)
+from ..rulespec_roots import NonCanonicalRuleSpecRoot, require_canonical_content_root
 from .jurisdiction import jurisdiction_prefix
 from .repo_routing import canonical_rulespec_repo_name
 
@@ -31,17 +27,10 @@ from .repo_routing import canonical_rulespec_repo_name
 def _canonical_checkout_for(policy_repo_path: Path) -> Path:
     """Return the canonical checkout ``policy_repo_path`` names or sits in.
 
-    ``policy_repo_path`` is either the checkout itself or one of its direct
-    jurisdiction directories (``rulespec-us/us-co``).
+    See :func:`axiom_oracles.rulespec_roots.require_canonical_content_root`:
+    the checkout itself or one of its direct jurisdiction directories.
     """
-    path = Path(policy_repo_path)
-    checkout = canonical_rulespec_root(path)
-    if checkout is not None:
-        return checkout
-    parent = canonical_rulespec_root(path.resolve().parent)
-    if parent is not None and path.resolve().parent == parent:
-        return parent
-    return require_canonical_rulespec_root(path)
+    return require_canonical_content_root(policy_repo_path)
 
 
 def _rulespec_repo_alias_parent(policy_repo_path: Path) -> Path | None:

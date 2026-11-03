@@ -2153,16 +2153,31 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
         params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
     )
     composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
     compose_cmd.extend(["-o", str(composed_path)])
     subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
     return composed_path.resolve()
+
+
+def _checked_compose_roots(params: dict) -> list[Path]:
+    """The suite's ``rulespec_roots`` for axiom-compose, each checked first.
+
+    Each must be a canonical ``rulespec-<country>`` checkout or one of its
+    jurisdiction directories (``axiom_oracles.rulespec_roots``); anything else
+    raises before axiom-compose reads it. The paths are passed on as given.
+    """
+    from axiom_oracles.rulespec_roots import require_canonical_content_root
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    for root in roots:
+        require_canonical_content_root(root)
+    return roots
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
@@ -2710,10 +2725,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])

@@ -883,10 +883,14 @@ def axiom_rules_env(program: Path, workspace_root: Path) -> dict[str, str]:
     inherited value of the variable, the program's own directories and
     non-canonical worktrees are never forwarded.
     """
-    from axiom_oracles.rulespec_roots import canonical_rulespec_root, engine_env
+    from axiom_oracles.rulespec_roots import (
+        canonical_rulespec_root,
+        engine_env,
+        given_path,
+    )
 
     candidates: list[Path] = []
-    for parent in Path(os.path.abspath(Path(program).expanduser())).parents:
+    for parent in given_path(program).parents:
         if parent.name.startswith("rulespec-"):
             candidates.append(parent)
             break
