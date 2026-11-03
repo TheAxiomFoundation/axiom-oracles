@@ -84,7 +84,9 @@ class ComparisonReportAccumulator:
     case row in memory. Returned-output observation rows are spooled the same
     way, beside it (:func:`observed_outputs_path`), so memory does not grow
     with the number of returned values. :meth:`write_json` writes the same
-    bytes either way.
+    bytes either way. The caller owns both files: the accumulator creates
+    them and never deletes them, so pass a path in a directory the caller
+    removes (the CLI uses a temporary directory).
     """
 
     def __init__(
@@ -272,8 +274,15 @@ class ComparisonReportAccumulator:
             )
         )
 
-    def to_dict(self, *, include_cases: bool = True) -> dict:
-        return self._document(include_cases=include_cases, include_outputs=True)
+    def to_dict(
+        self, *, include_cases: bool = True, include_outputs: bool = True
+    ) -> dict:
+        """The report document; a streamed one reads its spools back.
+
+        ``include_outputs=False`` leaves out ``observed_outputs``, so a
+        caller that needs only the summary does not load every returned value.
+        """
+        return self._document(include_cases=include_cases, include_outputs=include_outputs)
 
     def _document(self, *, include_cases: bool, include_outputs: bool) -> dict:
         report = {

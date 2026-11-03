@@ -899,7 +899,11 @@ def compare(
                 click.echo(json.dumps(report, indent=2, sort_keys=True))
                 return
 
-            _echo_comparison_report(accumulator.to_dict(include_cases=False))
+            # The echo reads only the summary fields; reading the observation
+            # spool back here would undo the streamed write's memory bound.
+            _echo_comparison_report(
+                accumulator.to_dict(include_cases=False, include_outputs=False)
+            )
     finally:
         if gc_was_enabled:
             gc.enable()
