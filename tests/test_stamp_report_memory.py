@@ -352,3 +352,37 @@ def test_staging_swapped_for_a_symlink_mid_stamp_is_refused_before_writing(
         rc._stamp_report_provenance(staging, {"schema": "v1"})
     assert elsewhere.read_bytes() == original
     assert sorted(item.name for item in tmp_path.iterdir()) == ["elsewhere.json", "staging.json"]
+
+
+def test_report_owned_by_another_user_is_refused_and_unchanged(tmp_path, monkeypatch):
+    """The owner half of the publisher's check: another user's file is refused.
+
+    Pretending to be another uid lets this run unprivileged.
+    """
+    rc = _run_comparison()
+    report = tmp_path / "staging.json"
+    report.write_text(json.dumps({"suite": "x"}, indent=2))
+    original = report.read_bytes()
+    owner = report.stat().st_uid
+    monkeypatch.setattr(rc.os, "getuid", lambda: owner + 1)
+    with pytest.raises(SystemExit, match="staging.json"):
+        rc._stamp_report_provenance(report, {"schema": "v1"})
+    assert report.read_bytes() == original
+    assert sorted(item.name for item in tmp_path.iterdir()) == ["staging.json"]
+
+
+def test_staging_deleted_mid_stamp_is_refused_and_not_recreated(tmp_path, monkeypatch):
+    """A staging file that disappears after the read is not written back."""
+    rc = _run_comparison()
+    staging = tmp_path / "staging.json"
+    staging.write_text(json.dumps({"suite": "x"}, indent=2))
+    apply = rc._apply_report_provenance
+
+    def delete_then_apply(*args, **kwargs):
+        staging.unlink()
+        return apply(*args, **kwargs)
+
+    monkeypatch.setattr(rc, "_apply_report_provenance", delete_then_apply)
+    with pytest.raises(SystemExit, match="staging.json"):
+        rc._stamp_report_provenance(staging, {"schema": "v1"})
+    assert list(tmp_path.iterdir()) == []
