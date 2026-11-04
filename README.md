@@ -72,11 +72,20 @@ Requires Python 3.13 or newer.
 uv pip install -e ".[dev]"
 ```
 
-Install the PolicyEngine extra only when running PE calculations:
+Install the PolicyEngine extra only when running PE calculations. Install it
+from the lock, which records the SHA-256 of every file and checks it:
 
 ```bash
-uv pip install -e ".[policyengine,dev]"
+uv sync --locked --extra policyengine --extra dev
 ```
+
+`policyengine[us]==5.0.0` requires `policyengine-us==1.764.6`, which PyPI's
+index no longer lists. `[tool.uv.sources]` in `pyproject.toml` points that
+release at its hashed URL on files.pythonhosted.org, so after a dependency
+change `uv lock` re-resolves as usual and keeps 1.764.6; CI runs
+`uv lock --check`, so a `pyproject.toml` edit without a re-lock fails on the
+pull request. A plain `uv pip install -e '.[policyengine]'` also resolves
+through that source, but without the lock's hash check.
 
 Install the TAXSIM extra only when running local TAXSIM comparisons:
 
@@ -426,7 +435,9 @@ build that accepts law years 1960-2024 only: run on 2025 or 2026 it prints
 `STOP 1`. Of the platform executables that have been run, only the macOS one
 accepts 2025 and 2026 (the Windows one has not been run); on
 Linux, `compare` stops before loading the population and names the pinned range
-(2024 is the last year that build accepts). The two builds also differ in years
+(2024 is the last year that build accepts). A `--population taxsim-csv` run
+without `--period` keeps each row's own year and skips that up-front check; the
+runner then checks each batch's years against the binary it runs. The two builds also differ in years
 both accept, so a TAXSIM number is specific to the platform that produced it.
 Each bundled executable's build stamp and law-year
 range are pinned in `taxsim_pins.json`, and a report's `engine_identity.taxsim`

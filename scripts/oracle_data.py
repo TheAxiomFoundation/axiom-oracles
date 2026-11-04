@@ -546,10 +546,12 @@ def _publication_tree(root: Path, scope: tuple[str, ...]) -> str:
 
 
 def _bind_publication(root: Path, tree: str) -> None:
-    _guard_checkout_bytes(root, [SNAPSHOT_PATH])
-    (root / SNAPSHOT_PATH).write_text(
-        json.dumps(_snapshot_document(root, tree), sort_keys=True) + "\n"
-    )
+    document = _snapshot_document(root, tree)
+    # Check every bound path, as write_snapshot does. A published attribute
+    # such as `sidecar.json text eol=crlf` would otherwise bind here and then
+    # make every later snapshot writer refuse in prepare and reconcile.
+    _guard_checkout_bytes(root, [*document["files"], SNAPSHOT_PATH])
+    (root / SNAPSHOT_PATH).write_text(json.dumps(document, sort_keys=True) + "\n")
     _git(root, "add", "--", SNAPSHOT_PATH)
 
 
@@ -813,8 +815,9 @@ def _restore_blobs(root: Path, identities: dict) -> None:
             (root / path).unlink(missing_ok=True)
 
 
-def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
-    """Refuse transformations while binding Git-staged producer bytes."""
+def _checkout_transformations(root: Path, paths: list[str]) -> list[str]:
+    """Name each Git setting that can rewrite these paths' bytes on checkout."""
+    found = []
     for name, safe in (
         ("core.autocrlf", {"false", "no", "off", "0", "input"}),
         ("core.eol", {"lf", "native"}),
@@ -822,9 +825,7 @@ def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
         configured = _git(root, "config", "--get", name, check=False)
         value = configured.stdout.decode().strip().lower()
         if configured.returncode == 0 and value not in safe:
-            raise DataError(
-                "Git checkout filters can change bound data bytes; checkout unchanged"
-            )
+            found.append(f"{name}={value}")
     attributes = _git(
         root,
         "check-attr",
@@ -834,15 +835,52 @@ def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
         input=b"".join(path.encode() + b"\0" for path in paths),
     ).stdout.split(b"\0")
     for start in range(0, len(attributes) - 1, 3):
-        _, attribute, value = attributes[start : start + 3]
+        path, attribute, value = attributes[start : start + 3]
         if (attribute == b"eol" and value.lower() == b"crlf") or attribute in (
             b"filter",
             b"working-tree-encoding",
             b"ident",
         ):
-            raise DataError(
-                "Git checkout filters can change bound data bytes; checkout unchanged"
+            found.append(
+                f"{path.decode()}: {attribute.decode()}={value.decode()} attribute"
             )
+    return list(dict.fromkeys(found))
+
+
+def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
+    """Refuse transformations while binding Git-staged producer bytes."""
+    if _checkout_transformations(root, paths):
+        raise DataError(
+            "Git checkout filters can change bound data bytes; checkout unchanged"
+        )
+
+
+def _converted_checkout_error(root: Path, path: str, allowed: list[dict]) -> str | None:
+    """Explain a refusal caused by Git's own checkout conversion of a file.
+
+    The raw bytes differ from every allowed blob, but Git's clean conversion
+    (``hash-object --path``) maps them back to one: the checkout was converted,
+    not edited. Under ``core.autocrlf=true``, the Git for Windows default, every
+    JSON file reads this way.
+    """
+    target = root / path
+    if not target.is_file() or target.is_symlink():
+        return None
+    settings = _checkout_transformations(root, [path])
+    if not settings:
+        return None
+    cleaned = _git(root, "hash-object", "--path", path, "--", str(target), check=False)
+    if cleaned.returncode or cleaned.stdout.decode().strip() not in {
+        identity["oid"] for identity in allowed if identity["oid"]
+    }:
+        return None
+    return (
+        f"Git converted the checkout bytes of {path} ({'; '.join(settings)}), so "
+        "they no longer equal the bound blobs; turn that conversion off for this "
+        "repository and check the data files out again, or set "
+        "AXIOM_ORACLES_DATA_SOURCE=checkout to read the checkout as is; "
+        "checkout unchanged"
+    )
 
 
 def _guard_worktree(
@@ -901,7 +939,8 @@ def _guard_worktree(
             allowed.append(previous[path])
         if current not in allowed:
             raise DataError(
-                f"local data edits overlap published update at {path}; checkout unchanged"
+                _converted_checkout_error(root, path, allowed)
+                or f"local data edits overlap published update at {path}; checkout unchanged"
             )
         if (
             baseline

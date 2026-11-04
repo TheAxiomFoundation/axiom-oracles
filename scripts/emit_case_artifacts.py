@@ -180,6 +180,9 @@ def compact_case(case: dict, explained: dict) -> dict:
         kind = explained.get((case.get("case_id"), m.get("concept")))
         if kind:
             row["e"] = kind
+        if m.get("uncompared") is True:
+            # An engine returned no valid value: shown, but never compared.
+            row["u"] = True
         mismatches.append(row)
     if case.get("matched") is False and not mismatches:
         # SNAP-QC case rows carry a headline boolean and first divergent stage
@@ -200,7 +203,13 @@ def compact_case(case: dict, explained: dict) -> dict:
     matches = case.get("matches")
     match_rate = case.get("match_rate")
     if isinstance(matches, list):
-        match_rate = dashboard_match_rate(len(matches), len(mismatches))
+        # Uncompared rows were never measured, so they stay out of the rate.
+        compared = [m for m in mismatches if m.get("u") is not True]
+        match_rate = (
+            None
+            if not matches and not compared and len(compared) < len(mismatches)
+            else dashboard_match_rate(len(matches), len(compared))
+        )
     row = {
         "id": case.get("case_id"),
         "r": match_rate,

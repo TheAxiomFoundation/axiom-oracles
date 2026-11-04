@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+from axiom_oracles import pinned_artifacts
 
 
 def load_debug_env_module():
@@ -38,7 +39,8 @@ def test_debug_helpers_reexec_with_comparison_policyengine_pins(monkeypatch, tmp
     assert "--with-editable" in args
     assert str(repo) in args
     assert "policyengine==4.11.0" in args
-    assert "policyengine-us==1.700.0" in args
+    # PyPI no longer lists 1.700.0; it installs from its recorded wheel.
+    assert pinned_artifacts.requirement("policyengine-us==1.700.0") in args
     assert "policyengine-core==3.26.11" in args
     assert args[-3:] == [str(script), "--case-ids", "ecps-1"]
     assert env["AXIOM_ORACLES_DEBUG_PINNED_PE"] == "1"

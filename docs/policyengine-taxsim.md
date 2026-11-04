@@ -237,7 +237,7 @@ became a phantom row with a NaN `taxsimid` and the comparator failed with
 `unexpected [nan, nan, ...]`.
 
 `TaxsimPackageRunner` therefore uses policyengine-taxsim only to format the
-input file and locate the binary, runs the binary itself, and parses stdout
+input file, runs the pinned binary itself, and parses stdout
 with `axiom_oracles.adapters.taxsim.output.parse_taxsim_stdout`:
 
 - duplicate normalized submitted ids are rejected before either runner path
@@ -323,21 +323,33 @@ loads the population, `scripts/run_comparison.py` before it builds the
 environment, `scripts/generate_state_income_tax_liability.py` and
 `scripts/run_state_tax_populace.py` before any engine runs,
 `calculate_taxsim_targets` before it builds the Microsimulation, and
-`TaxsimPackageRunner` before each batch. The error names the binary, its range,
+`TaxsimPackageRunner` before each batch. One exception: a `--population
+taxsim-csv` run without `--period` keeps each row's own law year, so `compare`
+and `scripts/run_comparison.py` skip their up-front check and the runner's
+per-batch check against each profile binary is the only one those rows get.
+The error names the binary, its range,
 the years it was run on and the line it printed, and the pinned binary that
-does accept the year. Three things are not checked: a binary the pin does not
-record (other SHA-256), a pinned binary that has not been run (Windows), and a
+does accept the year. Four things are not range-checked: a binary the pin
+does not record (other SHA-256; the default `TaxsimPackageRunner` refuses to
+run one at all), a pinned binary that has not been run (Windows), a profile
+binary outside the 2.30.0 wheel (the August and September builds; the pin
+records no law-year range for them), and a
 runner the caller injects (`TaxsimPackageRunner(runner_factory=…)` or
 `(executor=…)`, `calculate_taxsim_targets(taxsim_runner_factory=…)`; tests use
 these, no suite does).
 
-Preflight and the default runner share the executable resolver, including
-the native `resources/taxsimtest` source-layout fallback when no installed
-share-tree binary is present. Preflight hashes the resolved file and uses
-only the range belonging to that hash. An unpinned hash does not inherit the
-host platform's pinned range: its range check is skipped, its identity has
-`pinned: false` and `law_years: null`, and any year rejection from the actual
-executable surfaces when it runs.
+The default runner executes only binaries its pin profile names
+(`default_profile` in `taxsim_pins.json`, `policyengine-taxsim-2.30.0`,
+unless a run selects another). It locates each one by SHA-256 and size
+(`pins.locate_binary`) and refuses a binary that is missing or whose bytes
+differ from the pin; it never falls back to policyengine-taxsim's own
+executable search or to an unpinned file. `compare`'s preflight checks the
+law years against the binaries the profile resolves on the host
+(`pins.require_profile_law_years`). `pins.require_law_years` keeps its
+resolver for the callers that still run the installed wheel's binary
+directly (the state generator and the Populace state leg): it hashes the
+resolved file and uses only the range belonging to that hash, and an
+unpinned hash does not inherit the host platform's pinned range.
 
 Each run records the binary it executed in the report's top-level
 `engine_identity.taxsim`: path, SHA-256, size, the build stamp embedded in the
@@ -401,8 +413,15 @@ Historical Linux smoke numbers and the comparison counts below were
 recorded by the original author and were not re-run for these fixes.
 Results depend on the executable that runs; use this command for a fresh
 comparison.
+The TAXSIM side runs only a pinned, hash-verified binary from the active
+pin profile. The default profile's binary comes with the `taxsim` extra;
+another profile's binaries must be fetched first (`fetch-binaries`, shown
+here with `--profile`), and `--taxsim-pin-profile` selects it (see the
+identity section of [taxsim-oracle-playbook.md](taxsim-oracle-playbook.md)).
 
 ```bash
+# Only for a non-default profile:
+# uv run --extra taxsim axiom-oracles taxsim fetch-binaries --profile dashboard-2026-09
 uv run --extra policyengine --extra taxsim axiom-oracles compare \
   policyengine taxsim \
   --period 2024 \
@@ -482,7 +501,13 @@ PY
 - `axiom_oracles/adapters/taxsim/projection.py`
   projects thin Axiom cases into TAXSIM rows.
 - `axiom_oracles/adapters/taxsim/runner.py`
-  wraps policyengine-taxsim's TAXSIM runner.
+  runs TAXSIM rows: partitions them by the pinned binary their (state, year)
+  resolves to, runs each partition on hash-verified bytes with
+  policyengine-taxsim's input formatter, parses stdout strictly, and fails the
+  batch on a non-zero exit.
+- `axiom_oracles/adapters/taxsim/pins.py` and `taxsim_pins.json`
+  pin every TAXSIM executable by SHA-256 and resolve (state, year) to one
+  through the active pin profile.
 - `axiom_oracles/adapters/policyengine/taxsim_runner.py`
   wraps policyengine-taxsim's PolicyEngine runner so PE is driven from the same
   TAXSIM row.

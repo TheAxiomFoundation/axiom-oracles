@@ -207,6 +207,35 @@ def test_eitc_rows_need_an_attribution():
 # --- fail closed on incomplete downstream evidence ------------------------
 
 
+def _variants_for(attribution: dict, mechanisms: tuple[str, ...]) -> dict:
+    """Variant rows whose minimal clearing sets are exactly the given labels."""
+    minimal = {}
+    for key, record in attribution.items():
+        label = record["mechanism"]
+        alternatives = (
+            []
+            if label == "residual"
+            else label.removeprefix("ambiguous:").split("|")
+        )
+        minimal[key] = [frozenset(a.split("+")) for a in alternatives]
+    return {
+        frozenset(combo): {
+            key
+            for key, sets in minimal.items()
+            if not any(selected <= frozenset(combo) for selected in sets)
+        }
+        for size in range(len(mechanisms) + 1)
+        for combo in itertools.combinations(mechanisms, size)
+    }
+
+
+def _named(variants: dict, mechanisms: tuple[str, ...], empty: str) -> dict:
+    return {
+        "+".join(m for m in mechanisms if m in selected) or empty: rows
+        for selected, rows in variants.items()
+    }
+
+
 @pytest.fixture
 def build_payloads():
     """Reconstruct the stage fields used by the builder from its committed run."""
@@ -223,6 +252,19 @@ def build_payloads():
         }
         for stage in ("stage1", "stage2", "stage3")
     }
+    # Variant rows consistent with the committed labels, in each stage's
+    # saved shape, so build mode can re-derive every label from them.
+    for stage, field in (("stage1", "variants"), ("stage2", "variants"),
+                         ("stage3", "variant_rows")):
+        mechanisms, empty, _ = builder.STAGE_VARIANTS[stage]
+        named = _named(
+            _variants_for(stages[stage]["attribution"], mechanisms), mechanisms, empty
+        )
+        stages[stage][field] = {
+            name: sorted(rows) if field == "variant_rows"
+            else {"rows": {key: {} for key in sorted(rows)}}
+            for name, rows in named.items()
+        }
     stages["stage1"].update(
         baseline_reproduces_full_run=True,
         baseline_value_drift=[],
@@ -237,11 +279,11 @@ def build_payloads():
             "investment": list(evidence["investment_units"]),
         },
         base_reproduces_stage1_all_mechanisms=True,
-        variants={"se_loss+seca": {"rows": {}}},
     )
+    # The historical stage-3 run predates the base check, so its payload
+    # carries no bridge_aggregate_variant_leaves_stage1_investment_rows.
     stages["stage3"].update(
         switch_model_exact=True,
-        bridge_aggregate_variant_leaves_stage1_investment_rows=True,
         policyengine_aggregate_variant_clears_all=True,
     )
     return {"full": full, "evidence": evidence, **stages}
@@ -256,6 +298,24 @@ def _build(payloads):
         raw_report=payloads["evidence"]["run"]["report"],
         raw_sha256=payloads["evidence"]["run"]["report_sha256"],
     )
+
+
+# Labels a weakened check would accept (#643): a non-canonical set, a
+# duplicated or nested ambiguous alternative, a single-alternative ambiguity.
+MUTANT_LABELS = {
+    "stage2": [
+        "seca+se_loss",
+        "ambiguous:seca|seca",
+        "ambiguous:se_loss|se_loss+seca",
+        "ambiguous:seca",
+    ],
+    "stage3": [
+        "cg_distributions+div_aggregate",
+        "ambiguous:div_aggregate|div_aggregate",
+        "ambiguous:div_aggregate|div_aggregate+farm_rent",
+        "ambiguous:div_aggregate",
+    ],
+}
 
 
 def _downstream_key(rows, stage1):
@@ -309,9 +369,16 @@ def test_builder_and_audit_refuse_the_reviewers_corrupted_labels(build_payloads,
         )
 
 
-@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
 @pytest.mark.parametrize(
-    "label", ["residual", None, "", "unknown", "ambiguous:", "ambiguous:div_aggregate|unknown"]
+    "stage1,stage,label",
+    [
+        (stage1, stage, label)
+        for stage1, stage in (("residual", "stage2"), ("investment", "stage3"))
+        for label in [
+            "residual", None, "", "unknown", "ambiguous:",
+            "ambiguous:div_aggregate|unknown", *MUTANT_LABELS[stage],
+        ]
+    ],
 )
 def test_builder_refuses_uncleared_or_unsupported_downstream_labels(
     build_payloads, stage1, stage, label
@@ -322,8 +389,14 @@ def test_builder_refuses_uncleared_or_unsupported_downstream_labels(
         _build(build_payloads)
 
 
-@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
-@pytest.mark.parametrize("label", ["residual", None, "", "unknown"])
+@pytest.mark.parametrize(
+    "stage1,stage,label",
+    [
+        (stage1, stage, label)
+        for stage1, stage in (("residual", "stage2"), ("investment", "stage3"))
+        for label in ["residual", None, "", "unknown", *MUTANT_LABELS[stage]]
+    ],
+)
 def test_audit_refuses_uncleared_or_unsupported_downstream_labels(
     repo_copy, stage1, stage, label
 ):
@@ -355,6 +428,10 @@ def test_builder_and_audit_refuse_a_missing_stage3_label(build_payloads, repo_co
 @pytest.mark.parametrize(
     "stage,field,value",
     [
+        # A check saved as the string "true" is not a passed check (#643).
+        ("stage1", "baseline_reproduces_full_run", "true"),
+        ("stage3", "bridge_aggregate_variant_leaves_stage1_investment_rows", "true"),
+        ("stage3", "policyengine_aggregate_variant_clears_all", "true"),
         ("stage1", "baseline_reproduces_full_run", False),
         ("stage1", "baseline_value_drift", ["tax_unit_1|eitc"]),
         ("stage1", "explain_sample_matches_full_run", False),
@@ -383,6 +460,9 @@ def test_builder_refuses_failed_recorded_baseline_or_model_checks(
         ("stage3_switch_model_reproduces_both_aggregates", False),
         ("stage3_policyengine_aggregate_clears_all", False),
         ("bridge_aggregate_variant_leaves_stage1_investment_rows", False),
+        ("stage1_baseline_reproduces_full_run", "true"),
+        ("stage3_policyengine_aggregate_clears_all", "true"),
+        ("bridge_aggregate_variant_leaves_stage1_investment_rows", "true"),
     ],
 )
 def test_audit_and_disposition_builder_refuse_failed_recorded_checks(repo_copy, field, value):
@@ -691,3 +771,63 @@ def test_stage3_switches_are_the_data_edits_they_name(unit, flags):
         floored = stage3.aggregate(persons, pe_people, flags)
         unfloored = stage3.aggregate(persons, pe_people, flags | {"rental_unfloor"})
         assert unfloored <= floored + 1e-6
+
+
+def test_builder_saves_the_stage3_base_check_for_the_offline_audit(
+    build_payloads, repo_copy
+):
+    # The historical evidence lacks the key and stays byte-identical (see the
+    # rebuild test); a run that records it must save it, so the offline audit
+    # can see a later failure (#643).
+    base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
+    evidence, _ = _build(build_payloads)
+    assert base_check not in evidence["checks"]
+
+    build_payloads["stage3"][base_check] = True
+    evidence, assignment = _build(build_payloads)
+    assert evidence["checks"][base_check] is True
+    builder.build_dispositions(evidence, assignment)
+
+    evidence["checks"][base_check] = False
+    (repo_copy / builder.EVIDENCE).write_text(json.dumps(evidence))
+    assert any(base_check in problem for problem in builder.check(repo_copy))
+
+
+@pytest.mark.parametrize("stage", ["stage1", "stage2", "stage3"])
+def test_build_rederives_each_label_from_the_saved_variant_rows(build_payloads, stage):
+    # A well-formed label that the stage's own variant rows do not give is
+    # refused, as is a payload without complete variant rows (#643).
+    attribution = build_payloads[stage]["attribution"]
+    key = next(k for k, v in attribution.items() if not v["mechanism"].startswith("amb"))
+    current = attribution[key]["mechanism"]
+    mechanisms = builder.STAGE_VARIANTS[stage][0]
+    other = next(m for m in mechanisms if m != current)
+    attribution[key]["mechanism"] = other
+    with pytest.raises(ValueError, match="variant rows give"):
+        _build(build_payloads)
+
+    attribution[key]["mechanism"] = current
+    _build(build_payloads)
+    field = builder.STAGE_VARIANTS[stage][2]
+    saved = build_payloads[stage][field]
+    saved.pop(next(iter(saved)))
+    with pytest.raises(ValueError, match="variants"):
+        _build(build_payloads)
+
+
+def test_rederivation_matches_the_producers_minimal_sets():
+    # The builder's naming must agree with what each producer labels.
+    variants = {
+        frozenset(): {"a|x", "b|x"},
+        frozenset({"se_loss"}): {"b|x"},
+        frozenset({"seca"}): {"a|x", "b|x"},
+        frozenset({"se_loss", "seca"}): set(),
+    }
+    payload = {
+        "attribution": {"a|x": {"mechanism": "se_loss"}, "b|x": {"mechanism": "se_loss+seca"}},
+        "variants": {
+            ("+".join(sorted(m)) or "base"): {"rows": dict.fromkeys(rows, {})}
+            for m, rows in variants.items()
+        },
+    }
+    assert builder.rederived_label_problems("stage2", payload) == []

@@ -15,6 +15,7 @@ import fnmatch
 import hashlib
 import importlib.util
 import json
+import math
 import os
 import re
 import shutil
@@ -50,6 +51,7 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles import pinned_artifacts  # noqa: E402
 from axiom_oracles.provenance import (  # noqa: E402
     _git_env,
     _git_sha,
@@ -1016,7 +1018,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
-    from axiom_oracles.engine_compat import explicit_engine_roots
+    from axiom_oracles.engine_compat import declared_engine_roots
 
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
@@ -1032,7 +1034,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    return [str(path) for path in explicit_engine_roots(roots)]
+    return [str(path) for path in declared_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
@@ -1067,7 +1069,7 @@ def _complete_rulespecs_from_affected_map(
     suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.engine_compat import declared_engine_roots
         from axiom_oracles.provenance import (
             canonical_rulespec_slug,
             checkout_remote_matches_slug,
@@ -1090,7 +1092,7 @@ def _complete_rulespecs_from_affected_map(
         }
         declared_roots = [Path(path) for path in declared_paths or []]
         declared_roots.extend(
-            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+            path for path in declared_engine_roots(declared_roots) if path not in declared_roots
         )
         observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
@@ -1272,10 +1274,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Workspace containers may contribute country children even when another
     # composition path already supplied a SHA. Stamp the compiler's normalized
     # children as well, retaining their raw origins and unknown SHA observations.
-    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, declared_engine_roots
 
     rulespec_paths = list(dict.fromkeys([
-        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+        *rulespec_paths, *(str(path) for path in declared_engine_roots(rulespec_paths)),
     ]))
     rulespecs = []
     for raw in rulespec_paths:
@@ -1683,14 +1685,147 @@ def _stamp_report_provenance(
     insertion order, with/without trailing newline). Re-detect the original
     formatting and re-emit in the same shape so adding provenance produces a
     one-key diff rather than reordering every key.
+
+    A full-evidence report can be gigabytes, so its peak is one
+    ``json.load``: that reads the whole text and parses it, then the text is
+    freed. Nothing else builds a whole-report string: each candidate format
+    is compared by streaming its encoding against the file
+    (:func:`_report_matches_format`), and the stamped report is streamed to
+    a sibling temporary file that then replaces the report, so a failed
+    write leaves the report as it was. The bytes written are what
+    ``json.dumps`` of the stamped report in the detected format, plus the
+    original trailing newline, would give, and the file keeps its mode.
+
+    ``output`` must be this user's regular file, as the publisher requires
+    of its staging path; anything else (a symlink, say) is refused with
+    ``SystemExit`` before anything is read or written. A missing file is
+    left alone, as before.
     """
+    if _own_regular_report(output) is None:
+        return
     try:
-        original_text = output.read_text()
-        data = json.loads(original_text)
+        with open(output) as handle:  # read_text()'s defaults
+            data = json.load(handle)
     except (OSError, json.JSONDecodeError):
         return
     if not isinstance(data, dict):
         return
+    # Detect the format on the unedited parse, as the comparison against a
+    # fresh parse of the original text did, before the edits below.
+    sort_keys, indent = next(
+        (
+            (sort_keys, indent)
+            for sort_keys, indent in _STAMP_FORMATS
+            if _report_matches_format(output, data, indent=indent, sort_keys=sort_keys)
+        ),
+        # Unknown formatting (hand-edited): default to indent=2 sorted.
+        (True, 2),
+    )
+    trailing = "\n" if _file_ends_with_newline(output) else ""
+    _apply_report_provenance(
+        data,
+        provenance,
+        require_engine_versions=require_engine_versions,
+        preserve_runner_provenance=preserve_runner_provenance,
+    )
+    _replace_report(
+        output,
+        lambda handle: (
+            json.dump(data, handle, indent=indent, sort_keys=sort_keys),
+            handle.write(trailing),
+        ),
+    )
+
+
+def _own_regular_report(output: Path) -> os.stat_result | None:
+    """``lstat`` of a report this user owns as a regular file; None if absent.
+
+    Mirrors the publisher's check on its staging path: anything else is
+    refused with ``SystemExit``, so a swapped-in symlink is never followed.
+    """
+    try:
+        info = os.lstat(output)
+    except FileNotFoundError:
+        return None
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+        raise SystemExit(
+            f"staging report {output} is not this user's regular file — "
+            "refusing to stamp it"
+        )
+    return info
+
+
+def _replace_report(output: Path, write) -> None:
+    """Write ``output`` through ``write(handle)``, all or nothing.
+
+    The report, which must still be this user's regular file, is replaced
+    atomically by a sibling temporary file with its mode. If the write
+    fails, the temporary file is removed and the report is unchanged.
+    """
+    info = _own_regular_report(output)
+    if info is None:
+        raise SystemExit(f"staging report {output} disappeared while stamping it")
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".stamp", dir=output.parent
+    )
+    try:
+        with open(descriptor, "w") as handle:  # write_text()'s defaults
+            write(handle)
+        os.chmod(temporary, stat.S_IMODE(info.st_mode))
+        os.replace(temporary, output)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
+
+
+#: Candidate (sort_keys, indent) formats, in detection order.
+_STAMP_FORMATS = ((True, 2), (True, 1), (False, 2), (False, 1))
+_STAMP_READ_CHARS = 1 << 16
+
+
+def _report_matches_format(
+    path: Path, data: object, *, indent: int, sort_keys: bool
+) -> bool:
+    """Whether ``path`` holds ``json.dumps(data, indent=, sort_keys=)``, optionally
+    followed by one newline, compared chunk by chunk without building either
+    whole string."""
+    encoder = json.JSONEncoder(indent=indent, sort_keys=sort_keys)
+    with open(path) as handle:  # read_text()'s defaults
+        buffer, position = "", 0
+        for chunk in encoder.iterencode(data):
+            while position + len(chunk) > len(buffer):
+                more = handle.read(_STAMP_READ_CHARS)
+                if not more:
+                    return False
+                buffer = buffer[position:] + more
+                position = 0
+            if not buffer.startswith(chunk, position):
+                return False
+            position += len(chunk)
+        tail = buffer[position:position + 2]
+        if len(tail) < 2:
+            tail += handle.read(2 - len(tail))
+        return tail in ("", "\n")
+
+
+def _file_ends_with_newline(path: Path) -> bool:
+    """``path.read_text().endswith("\n")`` without reading the whole file."""
+    with open(path, "rb") as handle:
+        handle.seek(0, os.SEEK_END)
+        size = handle.tell()
+        # Universal newlines read a final "\r" or "\r\n" as "\n" too.
+        handle.seek(max(size - 1, 0))
+        return handle.read(1) in (b"\n", b"\r")
+
+
+def _apply_report_provenance(
+    data: dict,
+    provenance: dict,
+    *,
+    require_engine_versions: bool,
+    preserve_runner_provenance: bool,
+) -> None:
+    """Stamp ``provenance`` and the resolved engine versions onto a parsed report."""
     existing_provenance = data.get("provenance")
     if preserve_runner_provenance and isinstance(existing_provenance, dict):
         # DE's unified pair record carries the evidence-producing execution
@@ -1767,19 +1902,6 @@ def _stamp_report_provenance(
             versions["axiom_rules_engine"] = str(axiom_version)
         if versions:
             engines["versions"] = versions
-    trailing = "\n" if original_text.endswith("\n") else ""
-    for sort_keys in (True, False):
-        for indent in (2, 1):
-            reserialized = json.dumps(
-                json.loads(original_text), indent=indent, sort_keys=sort_keys
-            )
-            if original_text in (reserialized, reserialized + "\n"):
-                output.write_text(
-                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
-                )
-                return
-    # Unknown formatting (hand-edited): default to indent=2 sorted.
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
 
 
 def _print_coverage_warnings(config: dict) -> None:
@@ -1900,6 +2022,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(axiom_encode_repo),
         *pe_pins,
@@ -1976,12 +2099,12 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
     universal_credit_program = _compose_uk_universal_credit_program(params)
-    pe_pins = [
-        "--with",
-        f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
-        "--with",
-        f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
-    ]
+    pe_pins = pinned_artifacts.with_args(
+        (
+            f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
+            f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
+        )
+    )
     data_folder = (
         _resolve_path(params["data_folder"], "data_folder")
         if params.get("data_folder")
@@ -2006,6 +2129,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             "--python",
             str(params.get("python", "3.13")),
             "--no-project",
+            "--isolated",
             "--with-editable",
             str(axiom_encode_repo),
             *pe_pins,
@@ -2160,16 +2284,31 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
         params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
     )
     composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
     compose_cmd.extend(["-o", str(composed_path)])
     subprocess.run(compose_cmd, check=True, cwd=REPO_ROOT)
     return composed_path.resolve()
+
+
+def _checked_compose_roots(params: dict) -> list[Path]:
+    """The suite's ``rulespec_roots`` for axiom-compose, each checked first.
+
+    Each must be a canonical ``rulespec-<country>`` checkout or one of its
+    jurisdiction directories (``axiom_oracles.rulespec_roots``); anything else
+    raises before axiom-compose reads it. The paths are passed on as given.
+    """
+    from axiom_oracles.rulespec_roots import require_canonical_content_root
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    for root in roots:
+        require_canonical_content_root(root)
+    return roots
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
@@ -2352,6 +2491,19 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
 def _taxsim_oracle_identity(output: Path) -> dict:
     """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
 
@@ -2359,8 +2511,10 @@ def _taxsim_oracle_identity(output: Path) -> dict:
     installs. ``taxsim_binaries`` is the report's
     ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
     (embedded and printed), platform and row count of each TAXSIM binary
-    the run executed. A report without that block (written before it
-    existed) records the version only.
+    the run executed. ``taxsim_pin_profile`` is the report's
+    ``engine_identity.taxsim.pin_profile``, the profile that selected those
+    binaries. A report without that block (written before it existed)
+    records the version only.
     """
     identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
     try:
@@ -2373,16 +2527,22 @@ def _taxsim_oracle_identity(output: Path) -> dict:
         else None
     )
     if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
         identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
     return identity
 
 
-def _require_taxsim_law_year(period: object, suite: str) -> None:
+def _require_taxsim_law_year(
+    period: object, suite: str, params: dict | None = None
+) -> None:
     """Stop before building anything when TAXSIM rejects the law year here.
 
-    Checks the pinned binary for this platform (what ``--with
-    policyengine-taxsim==<pin>`` installs into the run's environment), not
-    whatever this script's own venv holds.
+    With ``params`` (an axiom-oracles compare), checks the binaries the
+    suite's pin profile resolves on this platform, the only ones the CLI's
+    runner executes. Without it (the state generator, which runs the wheel's
+    bundled binary), checks the pinned bundled binary for this platform
+    (what ``--with policyengine-taxsim==<pin>`` installs into the run's
+    environment), not whatever this script's own venv holds.
     """
     from axiom_oracles.adapters.taxsim import pins
 
@@ -2393,8 +2553,13 @@ def _require_taxsim_law_year(period: object, suite: str) -> None:
             f"{suite}: period {period!r} does not start with a law year"
         ) from exc
     try:
-        pins.require_law_years([year], use_installed=False)
-    except pins.TaxsimLawYearError as exc:
+        if params is not None:
+            pins.require_profile_law_years(
+                [year], profile=_taxsim_pin_profile(params)
+            )
+        else:
+            pins.require_law_years([year], use_installed=False)
+    except (pins.TaxsimLawYearError, pins.TaxsimPinError) as exc:
         raise SystemExit(f"{suite}: {exc}") from exc
 
 
@@ -2428,17 +2593,29 @@ _PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
 
 
 def _pe_oracle_with_args(pins) -> list[str]:
-    """``uv run --with`` arguments for PE oracle pins plus their companions."""
-    return [
-        arg
-        for pin in (*pins, *_PE_US_COMPANION_PINS)
-        for arg in ("--with", pin)
-    ]
+    """``uv run --with`` arguments for PE oracle pins plus their companions.
+
+    A pin PyPI's index no longer lists installs from the verified hashed-URL
+    file recorded in axiom_oracles/pinned_artifacts.py, so the run keeps the
+    exact release it pins (or fails naming the file that stopped downloading).
+
+    Every ``--no-project`` overlay that installs these passes ``--isolated``.
+    Without it, uv satisfies the overlay's unpinned transitive dependencies
+    from this checkout's ``.venv`` when one exists (CI's legs have one), so
+    numpy, pandas and the like differed by working directory. The snap-ecps
+    run (``_run_axiom_encode_snap_ecps_compare``) is the exception: it runs in
+    axiom-encode's project environment (``uv run --directory``), so what this
+    list leaves unpinned, policyengine-core included, comes from that
+    project's own dependencies and lock.
+    """
+    return pinned_artifacts.with_args((*pins, *_PE_US_COMPANION_PINS))
 
 
 # PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
-# 1.729.0 were gone by 2026-10-14), so a suite can pin its oracle to the
-# release commit instead. Only GitHub's archive of a full 40-hex commit is
+# 1.729.0 were gone by 2026-10-14). A pruned release with a recorded hashed
+# URL installs from axiom_oracles/pinned_artifacts.py through the version pin;
+# a suite can instead pin its oracle to the release commit. Only GitHub's
+# archive of a full 40-hex commit is
 # accepted: a branch, tag or short SHA could move under the version label.
 _PE_US_SOURCE_RE = re.compile(
     r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"
@@ -2572,9 +2749,28 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     Mirrors the `axiom-encode-tax-ecps-compare` runner's environment; a suite
     whose engine stack needs a different interpreter can pin `python:` in its
     parameters.
+
+    A `population: synthetic` comparison must name its registered case suite
+    in `case_suite:`, forwarded as `--suite`. The CLI's `--suite` defaults to
+    `auto`, which resolves to nyc-synthetic for every engine pair, so an
+    omitted suite would silently compare the wrong cases. `suite:` stays the
+    report label (`--report-suite`).
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    population = str(params.get("population", "enhanced-cps"))
+    case_suite = params.get("case_suite")
+    if population == "synthetic" and not case_suite:
+        raise SystemExit(
+            "population: synthetic comparisons must declare `case_suite:` "
+            "(the registered axiom_oracles suite to load); without it the "
+            "compare CLI falls back to nyc-synthetic"
+        )
+    if case_suite and population != "synthetic":
+        raise SystemExit(
+            f"`case_suite: {case_suite}` only applies to population: "
+            f"synthetic, not {population!r}"
+        )
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
@@ -2587,7 +2783,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "period"
     ) in (None, "")
     if "taxsim" in engines and not keeps_row_years:
-        _require_taxsim_law_year(params["period"], params.get("suite") or "compare")
+        _require_taxsim_law_year(
+            params["period"], params.get("suite") or "compare", params
+        )
     if uses_axiom:
         runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
@@ -2604,7 +2802,6 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         if "taxsim" in engines
         else ()
     )
-    population = str(params.get("population", "enhanced-cps"))
     taxsim_csv_args = _taxsim_csv_cli_args(params, population)
     # A taxsim-csv suite without `period` keeps each row's own tax year; with
     # it, the CLI overrides every row's year (one file, one law year per run).
@@ -2619,11 +2816,12 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
-        *(arg for pin in taxsim_pins for arg in ("--with", pin)),
+        *pinned_artifacts.with_args(taxsim_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
@@ -2632,6 +2830,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         params["right"],
         "--population",
         population,
+        *(["--suite", str(case_suite)] if case_suite else []),
         *taxsim_csv_args,
         "--sample-size",
         str(params.get("sample_size", 1000)),
@@ -2650,8 +2849,15 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
-    if params.get("include_case_inputs"):
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
+    # Tri-state: absent keeps the CLI's case-count default; an explicit false
+    # must reach the CLI, or a small synthetic suite silently gets full
+    # evidence anyway.
+    if params.get("include_case_inputs") is True:
         cmd.append("--include-case-inputs")
+    elif params.get("include_case_inputs") is False:
+        cmd.append("--no-include-case-inputs")
     if params.get("comparison_batch_size"):
         comparison_batch_size = params["comparison_batch_size"]
     elif any(
@@ -2792,10 +2998,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
@@ -2830,7 +3033,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     root_candidates: list[Path] = list(roots)
     if roots_env:
         root_candidates.append(_expand_path(roots_env))
-    engine_roots = explicit_engine_roots(root_candidates)
+    engine_roots = explicit_engine_roots(root_candidates, strict=True)
     composed_doc: dict = {}
     try:
         composed_doc = yaml.safe_load(composed_path.read_text()) or {}
@@ -3330,11 +3533,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.14",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
-        "--with",
-        f"policyengine-taxsim=={_taxsim_pin_version()}",
+        *pinned_artifacts.with_args(
+            (f"policyengine-taxsim=={_taxsim_pin_version()}",)
+        ),
         "python",
         str(generator),
         "--state",
@@ -3581,6 +3786,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3732,6 +3938,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3767,10 +3974,10 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3809,10 +4016,10 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3851,10 +4058,10 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3895,10 +4102,10 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3938,10 +4145,10 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3981,10 +4188,10 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4022,10 +4229,10 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4065,10 +4272,10 @@ def _run_uk_pe_grid(
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4906,6 +5113,7 @@ def _run_sanity(name: str) -> int:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
@@ -6000,125 +6208,223 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
 
 def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
-    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2."""
+    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2.
+
+    A pair whose return is missing, unparseable or nonfinite on either side
+    (or that the producer's ledger marks uncompared) is an engine error, not
+    a comparison (#604, as #368 did for native FIIT). It stays visible as a
+    diagnostic mismatch marked ``uncompared`` and as an entry in ``errors``,
+    the summary's error counts and the case's ``left_errors``/``right_errors``,
+    but it adds nothing to ``comparison_count``, matches or mismatch weight.
+    Genuine zero amounts and False verdicts compare as usual.
+    """
     params = runner.get("parameters", {})
     jurisdiction = str(params.get("jurisdiction", "us-co"))
     state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
     tolerance = float(params.get("tolerance", 1.5))
     amount_concept_id = "us:statutes/7/2014/u#snap_benefit"
     eligibility_concept_id = "us:statutes/7/2014/o#snap_eligible"
-    compared = len(rows)
-    amount_mismatching_rows = [row for row in rows if not _csv_bool(row.get("match"))]
-    eligibility_mismatching_rows = [
-        row
-        for row in rows
-        if _csv_bool(row.get("axiom_snap_eligible"))
-        != _csv_bool(row.get("pe_snap_eligible"))
-    ]
-    amount_matched = compared - len(amount_mismatching_rows)
-    eligibility_matched = compared - len(eligibility_mismatching_rows)
-    amount_match_rate = (amount_matched / compared * 100) if compared else 100.0
-    eligibility_match_rate = (
-        eligibility_matched / compared * 100
-    ) if compared else 100.0
-    left_sum = sum(_csv_float(row.get("axiom_snap_allotment")) for row in rows)
-    right_sum = sum(_csv_float(row.get("pe_snap")) for row in rows)
-    left_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("axiom_snap_eligible"))
-    )
-    right_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("pe_snap_eligible"))
-    )
 
+    errors: list[dict] = []
+    cases: list[dict] = []
+    flat_mismatches: list[dict] = []
+    counts = {
+        concept: {"compared": 0, "matched": 0, "mismatched": 0, "uncompared": 0}
+        for concept in (amount_concept_id, eligibility_concept_id)
+    }
+    left_sum = right_sum = 0.0
+    left_eligible_count = right_eligible_count = 0
     # Every row becomes a case — matches carry both engines' values just
     # like mismatches, so the report alone lets the dashboard show the
     # evidence behind the agreement, not only the disagreements.
-    cases: list[dict] = []
-    flat_mismatches: list[dict] = []
     for row in rows:
         spm_unit_id = str(row.get("spm_unit_id") or "unknown")
         case_id = f"ecps-spm-{spm_unit_id}"
         case_mismatches = []
         case_matches = []
-        axiom_value = _csv_float(row.get("axiom_snap_allotment"))
-        pe_value = _csv_float(row.get("pe_snap"))
-        if not _csv_bool(row.get("match")):
-            difference = _csv_float(row.get("difference"), axiom_value - pe_value)
+        case_errors = {"axiom": [], "policyengine": []}
+        ledger = _csv_error_ledger(row.get("errors"))
+
+        def record(engine: str, column: str, concept: str) -> None:
+            error = {
+                "engine": engine,
+                "case_id": case_id,
+                "concept": concept,
+                "output": column,
+                "error": "missing_or_nonfinite_output",
+            }
+            errors.append(error)
+            case_errors[engine].append(error)
+
+        def failed(engine: str, column: str, value: object) -> bool:
+            return value is None or (engine, column) in ledger
+
+        axiom_value = _csv_finite_float(row.get("axiom_snap_allotment"))
+        pe_value = _csv_finite_float(row.get("pe_snap"))
+        amount_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_allotment", axiom_value),
+                ("policyengine", "pe_snap", pe_value),
+            )
+            if failed(engine, column, value)
+        ]
+        if not amount_failures and _csv_verdict(row.get("amount_compared")) is False:
+            amount_failures = [("axiom", "axiom_snap_allotment")]
+        amount = counts[amount_concept_id]
+        if amount_failures:
+            for engine, column in amount_failures:
+                record(engine, column, amount_concept_id)
+            amount["uncompared"] += 1
+            # Name a missing side as the generic Comparator does, so the row
+            # reads as "no value" and an amount_difference disposition cannot
+            # select it. A ledger-only failure has both values present.
+            if axiom_value is None and pe_value is None:
+                uncompared_kind = "missing_both"
+            elif axiom_value is None:
+                uncompared_kind = "missing_left"
+            elif pe_value is None:
+                uncompared_kind = "missing_right"
+            else:
+                uncompared_kind = "amount_difference"
             mismatch = {
                 "case_id": case_id,
                 "concept": amount_concept_id,
                 "description": "SNAP benefit amount",
-                "difference": difference,
-                "kind": "amount_difference",
+                "difference": None,
+                "kind": uncompared_kind,
                 "left": axiom_value,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_value,
                 "tolerance": tolerance,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            amount["compared"] += 1
+            left_sum += axiom_value
+            right_sum += pe_value
+            if not _csv_bool(row.get("match")):
+                amount["mismatched"] += 1
+                difference = _csv_finite_float(row.get("difference"))
+                mismatch = {
+                    "case_id": case_id,
                     "concept": amount_concept_id,
+                    "description": "SNAP benefit amount",
+                    "difference": axiom_value - pe_value
+                    if difference is None
+                    else difference,
+                    "kind": "amount_difference",
                     "left": axiom_value,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_value,
+                    "tolerance": tolerance,
                 }
-            )
-        axiom_eligible = _csv_bool(row.get("axiom_snap_eligible"))
-        pe_eligible = _csv_bool(row.get("pe_snap_eligible"))
-        if axiom_eligible != pe_eligible:
-            if axiom_eligible and not pe_eligible:
-                kind = "eligibility_left_only"
-            elif pe_eligible and not axiom_eligible:
-                kind = "eligibility_right_only"
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
             else:
-                kind = "eligibility_mismatch"
+                amount["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": amount_concept_id,
+                        "left": axiom_value,
+                        "right": pe_value,
+                    }
+                )
+
+        axiom_eligible = _csv_verdict(row.get("axiom_snap_eligible"))
+        pe_eligible = _csv_verdict(row.get("pe_snap_eligible"))
+        eligibility_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_eligible", axiom_eligible),
+                ("policyengine", "pe_snap_eligible", pe_eligible),
+            )
+            if failed(engine, column, value)
+        ]
+        eligibility = counts[eligibility_concept_id]
+        if eligibility_failures:
+            for engine, column in eligibility_failures:
+                record(engine, column, eligibility_concept_id)
+            eligibility["uncompared"] += 1
             mismatch = {
                 "case_id": case_id,
                 "concept": eligibility_concept_id,
                 "description": "SNAP eligibility",
                 "difference": None,
-                "kind": kind,
+                "kind": "eligibility_mismatch",
                 "left": axiom_eligible,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_eligible,
                 "tolerance": 0,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            eligibility["compared"] += 1
+            left_eligible_count += int(axiom_eligible)
+            right_eligible_count += int(pe_eligible)
+            if axiom_eligible != pe_eligible:
+                eligibility["mismatched"] += 1
+                kind = (
+                    "eligibility_left_only"
+                    if axiom_eligible
+                    else "eligibility_right_only"
+                )
+                mismatch = {
+                    "case_id": case_id,
                     "concept": eligibility_concept_id,
+                    "description": "SNAP eligibility",
+                    "difference": None,
+                    "kind": kind,
                     "left": axiom_eligible,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_eligible,
+                    "tolerance": 0,
                 }
-            )
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
+            else:
+                eligibility["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": eligibility_concept_id,
+                        "left": axiom_eligible,
+                        "right": pe_eligible,
+                    }
+                )
+        case_compared = 2 - bool(amount_failures) - bool(eligibility_failures)
+        # A case with no compared pair was never measured: None, which the
+        # dashboard's tri-state case agreement reads as unmeasured. 0.0 would
+        # read as measured disagreement.
         case_match_rate = (
-            (2 - len(case_mismatches)) / 2 * 100 if case_mismatches else 100.0
+            len(case_matches) / case_compared * 100 if case_compared else None
         )
         metadata = {
-            "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
-            "axiom_net_income": _csv_float(row.get("axiom_net_income")),
-            "axiom_shelter_deduction": _csv_float(
+            "axiom_gross_income": _csv_finite_float(row.get("axiom_gross_income")),
+            "axiom_net_income": _csv_finite_float(row.get("axiom_net_income")),
+            "axiom_shelter_deduction": _csv_finite_float(
                 row.get("axiom_shelter_deduction")
             ),
-            "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
-            "axiom_utility_allowance": _csv_float(
+            "axiom_snap_eligible": axiom_eligible,
+            "axiom_utility_allowance": _csv_finite_float(
                 row.get("axiom_utility_allowance")
             ),
             "case_unit": "spm_unit",
             "dataset": "enhanced_cps",
             "household_id": row.get("household_id"),
             "population": "enhanced-cps",
-            "pe_gross_income": _csv_float(row.get("pe_gross_income")),
-            "pe_net_income": _csv_float(row.get("pe_net_income")),
-            "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
-            "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
-            "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
+            "pe_gross_income": _csv_finite_float(row.get("pe_gross_income")),
+            "pe_net_income": _csv_finite_float(row.get("pe_net_income")),
+            "pe_shelter_deduction": _csv_finite_float(row.get("pe_shelter_deduction")),
+            "pe_snap_eligible": pe_eligible,
+            "pe_utility_allowance": _csv_finite_float(row.get("pe_utility_allowance")),
             "spm_unit_id": spm_unit_id,
             "state": state_code,
             "suite": f"{jurisdiction}-snap-ecps",
@@ -6129,74 +6435,78 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         case = {
             "case_id": case_id,
             "left_engine": "axiom",
-            "left_errors": [],
+            "left_errors": case_errors["axiom"],
             "match_rate": case_match_rate,
             "metadata": metadata,
             "mismatches": case_mismatches,
             "right_engine": "policyengine",
-            "right_errors": [],
+            "right_errors": case_errors["policyengine"],
         }
         if case_matches:
             case["matches"] = case_matches
         cases.append(case)
 
+    def rate(numerator: int, denominator: int, empty: float) -> float:
+        return numerator / denominator * 100 if denominator else empty
+
+    amount = counts[amount_concept_id]
+    eligibility = counts[eligibility_concept_id]
+    amount_match_rate = rate(amount["matched"], amount["compared"], 100.0)
+    eligibility_match_rate = rate(eligibility["matched"], eligibility["compared"], 100.0)
     amount_aggregate = {
         "category": "food",
         "comparison": "amount",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": amount["compared"],
+        "comparison_weight": amount["compared"],
+        "compared": amount["compared"],
         "components": [],
         "concept": amount_concept_id,
         "description": "SNAP benefit amount",
         "left_weighted_sum": left_sum,
-        "match_count": amount_matched,
+        "match_count": amount["matched"],
         "match_rate": amount_match_rate,
-        "match_weight": amount_matched,
-        "matched": amount_matched,
-        "mismatch_count": len(amount_mismatching_rows),
-        "mismatch_weight": len(amount_mismatching_rows),
+        "match_weight": amount["matched"],
+        "matched": amount["matched"],
+        "mismatch_count": amount["mismatched"] + amount["uncompared"],
+        "mismatch_weight": amount["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
         "right_weighted_sum": right_sum,
+        "uncompared_mismatches": amount["uncompared"],
         "weighted_difference": left_sum - right_sum,
         "weighted_match_rate": amount_match_rate,
     }
+    eligibility_compared = eligibility["compared"]
     eligibility_aggregate = {
         "category": "food",
         "comparison": "eligibility",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": eligibility_compared,
+        "comparison_weight": eligibility_compared,
+        "compared": eligibility_compared,
         "components": [],
         "concept": eligibility_concept_id,
         "description": "SNAP eligibility",
-        "left_positive_rate": (left_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "left_positive_rate": rate(left_eligible_count, eligibility_compared, 0.0),
         "left_positive_weight": left_eligible_count,
-        "match_count": eligibility_matched,
+        "match_count": eligibility["matched"],
         "match_rate": eligibility_match_rate,
-        "match_weight": eligibility_matched,
-        "matched": eligibility_matched,
-        "mismatch_count": len(eligibility_mismatching_rows),
-        "mismatch_weight": len(eligibility_mismatching_rows),
+        "match_weight": eligibility["matched"],
+        "matched": eligibility["matched"],
+        "mismatch_count": eligibility["mismatched"] + eligibility["uncompared"],
+        "mismatch_weight": eligibility["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
-        "positive_rate_difference": (
-            (left_eligible_count - right_eligible_count) / compared * 100
-        )
-        if compared
-        else 0.0,
+        "positive_rate_difference": rate(
+            left_eligible_count - right_eligible_count, eligibility_compared, 0.0
+        ),
         "quality_flags": [],
-        "right_positive_rate": (right_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "right_positive_rate": rate(right_eligible_count, eligibility_compared, 0.0),
         "right_positive_weight": right_eligible_count,
+        "uncompared_mismatches": eligibility["uncompared"],
         "weighted_match_rate": eligibility_match_rate,
     }
     mismatches_by_concept = [
@@ -6213,11 +6523,11 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             key=lambda item: (-item[1], item[0]),
         )
     ]
-    summary_comparison_count = compared * 2
-    summary_match_count = amount_matched + eligibility_matched
-    summary_mismatch_count = len(amount_mismatching_rows) + len(
-        eligibility_mismatching_rows
-    )
+    summary_comparison_count = amount["compared"] + eligibility["compared"]
+    summary_match_count = amount["matched"] + eligibility["matched"]
+    summary_uncompared = amount["uncompared"] + eligibility["uncompared"]
+    summary_mismatch_weight = amount["mismatched"] + eligibility["mismatched"]
+    summary_mismatch_count = summary_mismatch_weight + summary_uncompared
     summary_match_rate = (
         summary_match_count / summary_comparison_count * 100
         if summary_comparison_count
@@ -6226,7 +6536,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
 
     return {
         "aggregates": [amount_aggregate, eligibility_aggregate],
-        "case_count": compared,
+        "case_count": len(rows),
         "cases": cases,
         "concepts": [
             {
@@ -6253,7 +6563,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             },
         ],
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": errors,
         "locales": [state_code],
         "mismatches": flat_mismatches,
         "population": "enhanced-cps",
@@ -6262,18 +6572,21 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         "suite": f"{jurisdiction}-snap-ecps",
         "summary": {
             "comparison_count": summary_comparison_count,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(errors),
+            "errors_by_engine": dict(
+                sorted(Counter(error["engine"] for error in errors).items())
+            ),
             "match_count": summary_match_count,
             "mismatch_count": summary_mismatch_count,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": mismatches_by_kind,
             "mismatches_by_scenario": {},
+            "uncompared_mismatches": summary_uncompared,
             "weighted": {
                 "comparison_weight": summary_comparison_count,
                 "match_rate": summary_match_rate,
                 "match_weight": summary_match_count,
-                "mismatch_weight": summary_mismatch_count,
+                "mismatch_weight": summary_mismatch_weight,
             },
         },
     }
@@ -6283,13 +6596,42 @@ def _csv_bool(value: object) -> bool:
     return str(value).strip().lower() in {"1", "true", "t", "yes", "y", "holds"}
 
 
-def _csv_float(value: object, default: float = 0.0) -> float:
-    if value in (None, ""):
-        return default
+def _csv_finite_float(value: object) -> float | None:
+    """A CSV cell as a finite float, or None when blank, unparseable or nonfinite."""
+    if value is None:
+        return None
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
+        number = float(str(value).strip())
+    except ValueError:
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _csv_verdict(value: object) -> bool | None:
+    """A CSV cell as a verdict, or None when it is not one (never False)."""
+    text = str(value).strip().lower() if value is not None else ""
+    if text in {"1", "true", "t", "yes", "y", "holds"}:
+        return True
+    if text in {"0", "false", "f", "no", "n", "not_holds"}:
+        return False
+    return None
+
+
+def _csv_error_ledger(value: object) -> set[tuple[str, str]]:
+    """(engine, column) pairs a producer's JSON error ledger marks invalid."""
+    if value in (None, ""):
+        return set()
+    try:
+        ledger = json.loads(str(value))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"unreadable SNAP error ledger {value!r}") from exc
+    if not isinstance(ledger, list):
+        raise ValueError(f"SNAP error ledger must be a list: {value!r}")
+    return {
+        (str(entry.get("engine")), str(entry.get("output")))
+        for entry in ledger
+        if isinstance(entry, dict)
+    }
 
 
 def _csv_scalar(value: object) -> object:
@@ -6301,9 +6643,11 @@ def _csv_scalar(value: object) -> object:
     if text == "":
         return None
     try:
-        return float(text)
+        number = float(text)
     except ValueError:
         return value
+    # Strict JSON has no NaN or infinity; keep the returned text instead.
+    return number if math.isfinite(number) else text
 
 
 # The dashboard fetches every report on page load, so population-scale runs

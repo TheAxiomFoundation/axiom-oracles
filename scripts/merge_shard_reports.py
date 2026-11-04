@@ -187,6 +187,8 @@ def merge(shards: list[dict]) -> dict:
         provenance = dict(merged["provenance"])
         oracle = dict(provenance.get("oracle") or {})
         oracle["taxsim_binaries"] = [dict(item) for item in binaries]
+        if taxsim and taxsim.get("pin_profile"):
+            oracle["taxsim_pin_profile"] = taxsim["pin_profile"]
         provenance["oracle"] = oracle
         merged["provenance"] = provenance
     return merged
@@ -290,7 +292,10 @@ def _merge_binaries(lists: list[list[dict]], engine: str) -> list[dict]:
     binaries: dict[str, dict] = {}
     for records in lists:
         for binary in records:
-            identity = {k: v for k, v in binary.items() if k != "rows"}
+            # Rows, and rows per pin-profile scope, are counts to sum.
+            identity = {
+                k: v for k, v in binary.items() if k not in ("rows", "scopes")
+            }
             if engine == "taxsim" and identity.get("build_observed") is not None:
                 identity["build_observed"] = normalize_build_stamp(
                     identity["build_observed"]
@@ -299,10 +304,16 @@ def _merge_binaries(lists: list[list[dict]], engine: str) -> list[dict]:
                 identity,
                 sort_keys=True,
             )
+            rows = int(binary.get("rows") or 0)
             if key in binaries:
-                binaries[key]["rows"] += int(binary.get("rows") or 0)
+                binaries[key]["rows"] += rows
             else:
-                binaries[key] = {**binary, "rows": int(binary.get("rows") or 0)}
+                binaries[key] = {**binary, "rows": rows}
+                binaries[key].pop("scopes", None)
+            if "scopes" in binary:
+                scopes = binaries[key].setdefault("scopes", {})
+                for scope, count in binary["scopes"].items():
+                    scopes[scope] = scopes.get(scope, 0) + int(count)
     return list(binaries.values())
 
 

@@ -481,3 +481,68 @@ def test_merged_copies_check_catches_a_shard_without_an_identity_list() -> None:
         SystemExit, match="TAXSIM identity disagrees between engine_identity and provenance$"
     ):
         _load_merge_shard_reports().merge([first, second])
+
+
+def _profiled_shard(binaries: list[dict], profile: str) -> dict:
+    shard = _taxsim_shard(binaries)
+    shard["engine_identity"]["taxsim"]["pin_profile"] = profile
+    return shard
+
+
+@settings(max_examples=100, deadline=None)
+@given(
+    partition=st.lists(
+        st.lists(
+            st.tuples(
+                st.sampled_from(["a", "b"]),
+                st.sampled_from(["default", "override:ga-md"]),
+                st.integers(1, 10_000),
+            ),
+            min_size=1,
+            max_size=4,
+        ),
+        min_size=2,
+        max_size=5,
+    )
+)
+def test_merge_sums_rows_per_pin_scope(partition) -> None:
+    """Scope counts sum per binary, and they still sum to that binary's rows."""
+    shards = [
+        _profiled_shard(
+            [
+                {
+                    "path": "/binary",
+                    "sha256": sha * 64,
+                    "rows": rows,
+                    "scopes": {scope: rows},
+                }
+                for sha, scope, rows in part
+            ],
+            "split",
+        )
+        for part in partition
+    ]
+    expected: dict[str, dict[str, int]] = {}
+    for part in partition:
+        for sha, scope, rows in part:
+            bucket = expected.setdefault(sha * 64, {})
+            bucket[scope] = bucket.get(scope, 0) + rows
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    taxsim = merged["engine_identity"]["taxsim"]
+    assert taxsim["pin_profile"] == "split"
+    assert merged["provenance"]["oracle"]["taxsim_pin_profile"] == "split"
+    assert {b["sha256"]: b["scopes"] for b in taxsim["binaries"]} == expected
+    for binary in taxsim["binaries"]:
+        assert sum(binary["scopes"].values()) == binary["rows"]
+
+
+def test_merge_refuses_shards_run_under_different_pin_profiles() -> None:
+    binary = {"path": "/binary", "sha256": "a" * 64, "rows": 1}
+    shards = [
+        _profiled_shard([dict(binary)], "split"),
+        _profiled_shard([dict(binary)], "other"),
+    ]
+    with pytest.raises(SystemExit, match="shards disagree on engine_identity.taxsim"):
+        _load_merge_shard_reports().merge(shards)

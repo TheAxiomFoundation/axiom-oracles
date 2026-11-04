@@ -9,7 +9,7 @@ and the listed parameter rules get structural patches to their
 The overlay is *materialized* into a single self-contained rulespec root: it
 copies the referenced top-level prefix trees (``us/``, ``us-co/``) as real
 files, applies the rewrites and patches in place, and is compiled with that
-root as the sole ``AXIOM_RULESPEC_REPO_ROOTS`` entry — no fallback root. This
+root as the sole engine root — no fallback root. This
 is a deliberate departure from a sparse overlay fronting the real monorepo,
 which the axiom-rules-engine does not support: given two roots the engine
 loads *every* root's copy of a shared module id rather than shadowing, so a
@@ -57,6 +57,8 @@ from pathlib import Path
 from typing import Any
 
 import yaml
+
+from ..rulespec_roots import require_canonical_rulespec_root
 
 OVERLAY_SPEC_SCHEMA_VERSION = "axiom_oracles.rulespec_overlay.v1"
 
@@ -181,8 +183,12 @@ def build_overlay(
     ``versions[0].formula`` equals its from-value). The overlay root is the
     sole repo root the engine should be given. Returns the overlay root, the
     path to the overlaid program composition, and a provenance dict.
+
+    ``rulespec_root`` must be a canonical ``rulespec-<country>`` checkout
+    (:mod:`axiom_oracles.rulespec_roots`), so the overlay is always derived
+    from one; anything else raises ``ValueError`` before any copy.
     """
-    rulespec_root = Path(rulespec_root)
+    rulespec_root = require_canonical_rulespec_root(rulespec_root)
     overlay_root = Path(dest_dir) / rulespec_root.name
 
     for prefix in _prefix_dirs(spec):
