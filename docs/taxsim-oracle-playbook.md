@@ -142,8 +142,11 @@ full 40-hex commits), point a profile at it or add a profile, and change
 `axiom-oracles taxsim fetch-binaries --all-profiles --platform linux` and the
 test files above, then regenerate the affected suites. A re-pin
 changes which binary produces the numbers. Once a regenerated report records
-the new binaries, the merge expires every disposition whose `oracle_binding`
-doesn't list the binaries that ran and returns its rows to unexplained. To
+the new binaries, the merge checks each disposition that selects live rows. It
+takes the binaries behind those rows from the rows themselves when every
+selected row records one, and otherwise takes every binary the report ran.
+When the disposition's `oracle_binding` leaves out any of those binaries, the
+merge expires the disposition and returns its rows to unexplained. To
 re-verify an expired disposition and re-bind it, see
 [Disposition ledger discipline](#disposition-ledger-discipline).
 
