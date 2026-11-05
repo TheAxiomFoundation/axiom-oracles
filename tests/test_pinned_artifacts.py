@@ -10,6 +10,8 @@ from pathlib import Path
 
 import pytest
 import requests
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles import pinned_artifacts
 
@@ -176,9 +178,10 @@ def test_requirement_installs_a_pruned_pin_from_the_verified_wheel():
 
 
 class _Response:
-    def __init__(self, status: int, body: bytes = b""):
+    def __init__(self, status: int, body: bytes = b"", headers=None):
         self.status_code = status
         self._body = body
+        self.headers = requests.structures.CaseInsensitiveDict(headers or {})
 
     def iter_content(self, size):
         for start in range(0, len(self._body), size):
@@ -444,8 +447,11 @@ def test_scan_fails_closed_on_unparseable_yaml(fake_root):
 
 
 class _Reply:
-    def __init__(self, status: int, versions=()):
+    def __init__(self, status, versions=()):
+        # ``status`` is a code, or ``(code, headers)``.
+        status, headers = status if isinstance(status, tuple) else (status, {})
         self.status_code = status
+        self.headers = requests.structures.CaseInsensitiveDict(headers)
         self._versions = list(versions)
 
     def json(self):
@@ -1035,6 +1041,114 @@ def test_check_classifies_each_archive_status(monkeypatch, no_sleep, status, des
     )
     assert failures == [f"comparisons/y.yaml: policyengine-us archive {url}: {described}"]
     assert session.calls == [f"head {url}"] * tries
+
+
+#: Headers a host may send with a 403 that means "slow down", not "no".
+RATE_LIMITED_403 = {
+    "retry-after": {"Retry-After": "30"},
+    "ratelimit-remaining-0": {"X-RateLimit-Remaining": "0"},
+    "lowercase-names": {"x-ratelimit-remaining": "0"},
+}
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_a_rate_limited_403_is_transient(headers):
+    assert pinned_artifacts.classify_status(403, headers) == "transient"
+    assert pinned_artifacts.is_transient_status(403, headers)
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [None, {}, {"X-RateLimit-Remaining": "1"}, {"X-RateLimit-Remaining": "59"}],
+    ids=["none", "empty", "remaining-1", "remaining-59"],
+)
+def test_a_plain_403_stays_refused(headers):
+    assert pinned_artifacts.classify_status(403, headers) == "refused"
+
+
+@pytest.mark.parametrize("status", [401, 404, 410, 451])
+def test_rate_limit_headers_change_only_a_403(status):
+    # A 404 with Retry-After is still gone; only 403 doubles as a rate limit.
+    headers = {"Retry-After": "30", "X-RateLimit-Remaining": "0"}
+    assert pinned_artifacts.classify_status(status, headers) == (
+        pinned_artifacts.classify_status(status)
+    )
+
+
+@settings(max_examples=300)
+@given(
+    status=st.integers(100, 599),
+    headers=st.dictionaries(
+        st.sampled_from(["Retry-After", "X-RateLimit-Remaining", "ETag", "retry-after"]),
+        st.sampled_from(["0", "1", "30", "", "Wed, 21 Oct 2026 07:28:00 GMT"]),
+    ),
+)
+def test_headers_only_ever_move_a_403_to_transient(status, headers):
+    """Invariant: headers never change any status's class but 403's, and
+    move 403 only from refused to transient."""
+    plain = pinned_artifacts.classify_status(status)
+    with_headers = pinned_artifacts.classify_status(status, headers)
+    if status != 403:
+        assert with_headers == plain
+    else:
+        assert plain == "refused"
+        assert with_headers in ("refused", "transient")
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_fetch_retries_a_rate_limited_403(monkeypatch, tmp_path, no_sleep, headers):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    body = b"wheel"
+    artifact = _artifact(body)
+    replies = [_Response(403, headers=headers), _Response(200, body)]
+    monkeypatch.setattr(requests, "get", lambda *_a, **_k: replies.pop(0))
+    assert REAL_FETCH(artifact).read_bytes() == body
+    assert no_sleep == [pinned_artifacts.RETRY_DELAYS[0]]
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_fetch_reports_a_persistent_rate_limited_403_as_transient(
+    monkeypatch, tmp_path, no_sleep, headers
+):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    calls = []
+
+    def reply(*_a, **_k):
+        calls.append(403)
+        return _Response(403, headers=headers)
+
+    monkeypatch.setattr(requests, "get", reply)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(_artifact(b"x"))
+    assert exc.value.kind == "transient"
+    assert len(calls) == len(pinned_artifacts.RETRY_DELAYS) + 1
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_check_retries_a_rate_limited_403(monkeypatch, no_sleep, headers):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    session = _Session(head={url: [(403, headers)]})
+    _check, (failures, _warnings) = _run_check(
+        monkeypatch, session, {}, {url: {check.Use("comparisons/y.yaml")}}
+    )
+    assert failures == [
+        f"comparisons/y.yaml: policyengine-us archive {url}: "
+        "transient: HTTP 403 on all 3 attempts, not a removal"
+    ]
+    assert session.calls == [f"head {url}"] * 3
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_check_recovers_after_a_rate_limited_403(monkeypatch, no_sleep, headers):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    session = _Session(head={url: [(403, headers), 200]})
+    _check, (failures, _warnings) = _run_check(
+        monkeypatch, session, {}, {url: {check.Use("comparisons/y.yaml")}}
+    )
+    assert failures == []
+    assert session.calls == [f"head {url}"] * 2
 
 
 # ---------------------------------------------------------------------------
