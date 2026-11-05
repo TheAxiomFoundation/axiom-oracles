@@ -48,6 +48,7 @@ CANONICAL_KINDS = (
     "git-uppercase-origin",
     "ssh-origin",
     "inline-comment-origin",
+    "continuation-origin",
     "no-origin",
     "worktree",
     "symlink",
@@ -65,6 +66,8 @@ NON_CANONICAL_KINDS = (
     "include-foreign",
     "includeif-foreign",
     "insteadof-rewrite",
+    "worktree-config-foreign",
+    "continuation-foreign",
     "two-origins",
     "inside-other-repo",
     "empty-dotgit-inside-other-repo",
@@ -127,6 +130,15 @@ def make_root(kind: str, base: Path) -> Path:
         root = base / "rulespec-us"
         _init(root, None)
         _append_config(root, f'[remote "origin"]\n\turl = {CANONICAL_ORIGIN} ; a note\n')
+    elif kind == "continuation-origin":
+        # A trailing backslash joins the next line, so this is the canonical
+        # origin split in two.
+        root = base / "rulespec-us"
+        _init(root, None)
+        _append_config(
+            root,
+            '[remote "origin"]\n\turl = https://github.com/TheAxiom\\\nFoundation/rulespec-us\n',
+        )
     elif kind == "no-origin":
         root = base / "rulespec-us"
         _init(root, None)
@@ -194,6 +206,22 @@ def make_root(kind: str, base: Path) -> Path:
             root,
             '[url "https://github.com/evil/"]\n'
             "\tinsteadOf = https://github.com/TheAxiomFoundation/\n",
+        )
+    elif kind == "worktree-config-foreign":
+        # The shared config names no origin; the per-worktree config, which
+        # git reads once extensions.worktreeConfig is on, names a fork.
+        root = base / "rulespec-us"
+        _init(root, None)
+        _git("-C", str(root), "config", "extensions.worktreeConfig", "true")
+        _git("-C", str(root), "config", "--worktree", "remote.origin.url", FORK_ORIGIN)
+    elif kind == "continuation-foreign":
+        # The first line alone is the canonical origin; the continuation
+        # makes it rulespec-us-fork.
+        root = base / "rulespec-us"
+        _init(root, None)
+        _append_config(
+            root,
+            f'[remote "origin"]\n\turl = {CANONICAL_ORIGIN.removesuffix(".git")}\\\n-fork\n',
         )
     elif kind == "two-origins":
         root = base / "rulespec-us"
@@ -267,6 +295,75 @@ def test_non_canonical_kinds_are_refused_with_a_reason(kind, tmp_path):
     assert canonical_rulespec_root(root) is None
     with pytest.raises(NonCanonicalRuleSpecRoot, match=re.escape(problem)):
         require_canonical_rulespec_root(root)
+
+
+#: The origin git itself reports for the fixtures whose config the reader
+#: must interpret the way git does.
+GIT_SEES_ORIGIN = {
+    "continuation-origin": "https://github.com/TheAxiomFoundation/rulespec-us",
+    "continuation-foreign": "https://github.com/TheAxiomFoundation/rulespec-us-fork",
+    "worktree-config-foreign": FORK_ORIGIN,
+}
+
+
+@pytest.mark.parametrize("kind", sorted(GIT_SEES_ORIGIN))
+def test_fixture_origins_are_the_ones_git_reads(kind, tmp_path):
+    """Differential control: git reads the origin each fixture claims.
+
+    The worktree-config fixture keeps its shared config free of any origin,
+    so a reader that skipped the extensions.worktreeConfig refusal would see
+    a checkout with no origin and accept the fork git would fetch from.
+    """
+    root = make_root(kind, tmp_path)
+    got = subprocess.run(
+        ["git", "-C", str(root), "remote", "get-url", "origin"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    assert got == GIT_SEES_ORIGIN[kind]
+
+
+def test_worktree_config_refusal_names_its_reason(tmp_path):
+    root = make_root("worktree-config-foreign", tmp_path)
+    assert canonical_root_problem(root) == (
+        "its Git config is refused: it enables per-worktree config"
+    )
+
+
+def test_continuation_joins_the_origin_before_it_is_judged(tmp_path):
+    root = make_root("continuation-foreign", tmp_path)
+    assert canonical_root_problem(root) == (
+        "its origin 'https://github.com/TheAxiomFoundation/rulespec-us-fork' "
+        "is not TheAxiomFoundation/rulespec-us on github.com"
+    )
+
+
+@settings(max_examples=200, suppress_health_check=[HealthCheck.too_slow])
+@given(
+    url=st.sampled_from([
+        CANONICAL_ORIGIN,
+        FORK_ORIGIN,
+        "git@github.com:TheAxiomFoundation/rulespec-us.git",
+        "https://github.com/TheAxiomFoundation/rulespec-us-fork",
+    ]),
+    data=st.data(),
+)
+def test_a_continuation_anywhere_in_the_origin_reads_as_unsplit(url, data):
+    """Invariant: a backslash-newline inside a value changes nothing.
+
+    git-config(1) joins the line to the next, so the parsed origin, and the
+    verdict on it, match the unsplit config wherever the split falls.
+    """
+    from axiom_oracles.rulespec_roots import _canonical_origin, _parse_git_config
+
+    cuts = sorted(set(data.draw(st.lists(st.integers(0, len(url)), max_size=3))))
+    pieces = [url[a:b] for a, b in zip([0, *cuts], [*cuts, len(url)])]
+    split = "\\\n".join(pieces)
+    whole = _parse_git_config(f'[remote "origin"]\n\turl = {url}\n')
+    joined = _parse_git_config(f'[remote "origin"]\n\turl = {split}\n')
+    assert joined == whole == [("remote", "origin", "url", url)]
+    assert _canonical_origin(joined[0][3], "rulespec-us") == _canonical_origin(
+        url, "rulespec-us"
+    )
 
 
 def test_missing_paths_files_and_wrong_country_are_refused(tmp_path):

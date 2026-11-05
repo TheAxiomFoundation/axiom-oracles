@@ -95,6 +95,67 @@ def test_axiom_rules_env_leads_with_the_program_checkout(tmp_path):
     ]
 
 
+def _dotdot_program(tmp_path, *, target_origin):
+    """Return ``a/x/../rulespec-us/us/p.yaml`` where ``a/x`` links to ``b/sub``.
+
+    The OS opens ``b/rulespec-us``, whose origin is ``target_origin``.
+    Collapsing ``..`` first would name ``a/rulespec-us``, a canonical decoy.
+    """
+    import subprocess
+
+    def checkout(path, origin):
+        path.mkdir(parents=True)
+        subprocess.run(["git", "init", "-q", str(path)], check=True)
+        subprocess.run(
+            ["git", "-C", str(path), "remote", "add", "origin", origin], check=True
+        )
+        program = path / "us" / "p.yaml"
+        program.parent.mkdir(parents=True)
+        program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
+
+    checkout(tmp_path / "b" / "rulespec-us", target_origin)
+    (tmp_path / "b" / "sub").mkdir()
+    checkout(
+        tmp_path / "a" / "rulespec-us",
+        "https://github.com/TheAxiomFoundation/rulespec-us.git",
+    )
+    (tmp_path / "a" / "x").symlink_to(tmp_path / "b" / "sub", target_is_directory=True)
+    workspace = tmp_path / "workspace"
+    (workspace / "rulespec-us").mkdir(parents=True)
+    return tmp_path / "a" / "x" / ".." / "rulespec-us" / "us" / "p.yaml", workspace
+
+
+def test_axiom_rules_env_checks_the_checkout_the_os_opens(tmp_path):
+    """``x/../rulespec-us`` with ``x`` linking into a fork checks the fork.
+
+    The fork is refused and the lexical decoy ``a/rulespec-us`` never joins
+    the roots; only the workspace checkout is forwarded.
+    """
+    program, workspace = _dotdot_program(
+        tmp_path, target_origin="https://github.com/evil/rulespec-us.git"
+    )
+
+    env = snap_populace.axiom_rules_env(program, workspace)
+
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+        str((workspace / "rulespec-us").resolve()),
+    ]
+
+
+def test_axiom_rules_env_leads_with_the_checkout_the_os_opens(tmp_path):
+    """Control: when ``x`` links into a canonical checkout, that one leads."""
+    program, workspace = _dotdot_program(
+        tmp_path, target_origin="https://github.com/TheAxiomFoundation/rulespec-us.git"
+    )
+
+    env = snap_populace.axiom_rules_env(program, workspace)
+
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+        str((tmp_path / "b" / "rulespec-us").resolve()),
+        str((workspace / "rulespec-us").resolve()),
+    ]
+
+
 def test_set_input_value_can_skip_optional_unknown_inputs():
     inputs = {
         "us-co:regulations/10-ccr-2506-1/4.407.3#input.verified_higher_homeless_shelter_costs": False,
