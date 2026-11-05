@@ -345,6 +345,13 @@ class OutputEvidence:
         its own tolerance, which the report does not record, and the FIIT
         adapter retains no matches. Every other row of a FIIT report,
         including any match, is checked like any other report's.
+        A second kind is exempt the same way: a retained mismatch marked
+        ``"uncompared": true`` in a report that records an engine error.
+        It is a failed return kept as a diagnostic, not a verdict on its
+        values, so values that happen to agree do not contradict it. The
+        engine error already refuses the report's execution evidence. A
+        match never carries the exemption, and without a recorded engine
+        error the flag exempts nothing.
         """
         self.contradicted_scalar_comparisons = set()
         self.scalar_verdicts_reconciled = True
@@ -365,6 +372,7 @@ class OutputEvidence:
             (row.get("case_id"), row, False) for row in report.get("mismatches") or []
             if isinstance(row, dict) and valid_case_id(row.get("case_id"))
         ]
+        engine_errors_recorded = bool(summary.get("error_count") or report.get("errors"))
         verdicts = defaultdict(set)
         for case_id, row, matched in retained:
             if (not isinstance(row, dict) or row.get("variable") is not None
@@ -374,6 +382,8 @@ class OutputEvidence:
             identity = (case_id, row["concept"])
             verdicts[identity].add(matched)
             if self.native_fiit and not matched and "output" in row:
+                continue
+            if not matched and row.get("uncompared") is True and engine_errors_recorded:
                 continue
             if not _scalar_row_valid(row, matched, authorities.get(row["concept"])):
                 self.contradicted_scalar_comparisons.add(identity)
