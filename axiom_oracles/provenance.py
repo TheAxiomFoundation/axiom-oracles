@@ -82,7 +82,8 @@ import subprocess
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
+from urllib.parse import urlsplit
 
 # Shared certificate commit identity. Reject the digit-only forgery shape
 # alongside non-string, abbreviated, and uppercase identities at admission.
@@ -580,37 +581,72 @@ def _remote_url(repo: Path) -> str | None:
     return result.stdout.strip() or None
 
 
-#: ``github.com/`` in any letter case. Host names ignore case, so git sends
-#: ``https://GitHub.com/…`` to github.com; matching only the lowercase
-#: spelling would leave such a fork unrecognized, and
-#: :func:`remote_matches_slug` accepts an unrecognized origin. ASCII-only, so
-#: no Unicode case folding stretches the match to another host.
-_GITHUB_HOST = re.compile(r"github\.com/", re.IGNORECASE | re.ASCII)
+#: Schemes a GitHub origin may use, with each one's own port. An explicit
+#: port is part of the host, so ``github.com:8443`` is another service.
+_GITHUB_SCHEME_PORTS = {"https": 443, "ssh": 22}
+
+#: scp-like ``[user@]host:path``, as git reads it: no ``/`` before the colon,
+#: and a path that does not start with ``/``.
+_SCP_REMOTE = re.compile(r"(?:[^@/:]+@)?([^/:]+):(?!/)(.+)", re.DOTALL)
+
+RemoteKind = Literal["absent", "github", "other"]
+
+
+def parse_github_remote(url: str | None) -> tuple[RemoteKind, str | None]:
+    """Read a git origin URL into its kind and, for GitHub, its ``owner/repo``.
+
+    Returns ``("absent", None)`` when no origin is configured (``None`` or
+    blank), ``("github", slug)`` for a github.com repository and
+    ``("other", None)`` for any other configured origin. A github.com
+    repository is one of:
+
+    * ``https://`` or ``ssh://`` with host ``github.com`` in any ASCII letter
+      case, after any userinfo, and no port or the scheme's own port. The
+      query and fragment are not part of the path;
+    * scp-like ``[user@]github.com:owner/repo``.
+
+    The path must be exactly ``owner/repo``, with an optional ``.git`` and
+    trailing ``/``. The host is read from where the URL puts it, so
+    ``github.com`` elsewhere in the URL (a foreign host's path or userinfo)
+    is not a GitHub origin.
+    """
+    if url is None or not url.strip():
+        return "absent", None
+    url = url.strip()
+    if "://" in url:
+        try:
+            parts = urlsplit(url)
+            host = parts.hostname or ""
+            port = parts.port
+        except ValueError:
+            return "other", None
+        default_port = _GITHUB_SCHEME_PORTS.get(parts.scheme.lower())
+        if default_port is None or port not in (None, default_port):
+            return "other", None
+        path = parts.path
+    else:
+        match = _SCP_REMOTE.fullmatch(url)
+        if match is None:
+            return "other", None
+        host, path = match.group(1), match.group(2)
+    # ASCII-only, so no Unicode case folding stretches the match to another host.
+    if not host.isascii() or host.lower() != "github.com":
+        return "other", None
+    path = path.strip("/")
+    path = path.removesuffix(".git")
+    segments = [part for part in path.split("/") if part]
+    if len(segments) != 2:
+        return "other", None
+    return "github", "/".join(segments)
 
 
 def repo_slug_from_remote(url: str | None) -> str | None:
     """Reduce a git remote URL to its ``owner/repo`` slug.
 
-    Handles both ``git@github.com:Owner/repo.git`` and
-    ``https://github.com/Owner/repo(.git)`` forms, with the host in any
-    letter case. Returns None for anything that is not obviously a
-    GitHub-style remote.
+    Returns the slug only for a github.com repository as
+    :func:`parse_github_remote` reads it, and None for anything else.
     """
-    if not url:
-        return None
-    url = url.strip()
-    if url.endswith(".git"):
-        url = url[: -len(".git")]
-    if url.startswith("git@") and ":" in url:
-        url = url.split(":", 1)[1]
-    elif host := _GITHUB_HOST.search(url):
-        url = url[host.end():]
-    else:
-        return None
-    parts = [p for p in url.split("/") if p]
-    if len(parts) < 2:
-        return None
-    return f"{parts[-2]}/{parts[-1]}"
+    return parse_github_remote(url)[1]
 
 
 def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
@@ -638,8 +674,11 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
             repo = canonical_rulespec_slug(path.name) if path.name else None
             sha = None
         else:
-            remote_slug = repo_slug_from_remote(_remote_url(path))
-            repo = remote_slug or canonical_rulespec_slug(path.name)
+            kind, remote_slug = parse_github_remote(_remote_url(path))
+            # The directory name stands in only for an absent origin. A
+            # configured origin that is not a GitHub repository names no
+            # repository this run can vouch for.
+            repo = remote_slug if kind != "absent" else canonical_rulespec_slug(path.name)
             sha = _git_sha(path)
         entry: dict[str, Any] = {"repo": repo, "sha": sha}
         if sha:
@@ -661,20 +700,24 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
 
 
 def remote_matches_slug(url: str | None, slug: str) -> bool:
-    """Reject a remote URL whose recognized GitHub identity names another repo.
+    """Reject a configured origin that is not the GitHub repository ``slug``.
 
     GitHub identities are case-insensitive. Compare the raw origin identity:
     absorption aliases identify dependencies, not the checkout actually read.
-    Without a recognized origin, callers must rely on layout conventions.
+    Without an origin, callers must rely on layout conventions, so an absent
+    origin matches. A configured origin that is not a GitHub repository (a
+    foreign host, an unsupported scheme or port, a local path) does not.
     :mod:`axiom_oracles.rulespec_roots` uses this same comparison for engine
-    roots, and additionally requires a recognized github.com origin.
+    roots, and additionally requires an origin to be configured.
     """
-    remote_slug = repo_slug_from_remote(url)
-    return remote_slug is None or remote_slug.casefold() == slug.casefold()
+    kind, remote_slug = parse_github_remote(url)
+    if kind == "absent":
+        return True
+    return remote_slug is not None and remote_slug.casefold() == slug.casefold()
 
 
 def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
-    """Reject a checkout whose recognized GitHub origin names another repo.
+    """Reject a checkout whose configured origin is not GitHub repository ``slug``.
 
     See :func:`remote_matches_slug`; this reads the checkout's origin first.
     """
@@ -693,8 +736,9 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     root without `.git` has no SHA to record); returns None when nothing
     matches. Absorbed repo names (:data:`ABSORBED_RULESPEC_REPOS`) resolve
     through the country name. Candidates with a contradictory GitHub origin
-    are rejected even if renamed to that country name; candidates without a
-    recognized origin still rely on the supervised layout conventions.
+    are rejected even if renamed to that country name, and so are candidates
+    whose origin is configured but is no GitHub repository; candidates without
+    an origin still rely on the supervised layout conventions.
     """
     slug = canonical_rulespec_slug(slug)
     name = slug.split("/", 1)[-1]

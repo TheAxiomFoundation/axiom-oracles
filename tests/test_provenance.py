@@ -736,6 +736,13 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch,
     sibling = tmp_path / "snapshot" / "rulespec-us"
     if agreeing:
         subprocess.run(["git", "clone", "-q", "--no-hardlinks", str(pinned), str(sibling)], check=True)
+        # A clone's origin is the local source path, which names no GitHub
+        # repository. Give it the origin a real checkout carries.
+        subprocess.run(
+            ["git", "-C", str(sibling), "remote", "set-url", "origin",
+             "https://github.com/TheAxiomFoundation/rulespec-us.git"],
+            check=True,
+        )
         override_sha = pinned_sha
     else:
         override_sha = _git_checkout(sibling, "sibling")
