@@ -338,7 +338,10 @@ re-emit. The **SNAP QC live replay** workflow
 (`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
 pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
 selected suite with `run_comparison.py --require-live` and fails on any re-emission,
-mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
+mismatch, or error (`scripts/snap_qc_replay.py check`). Its real-checkout overlay
+closure tests cover the six `REQUIRED_SUITES` states (AZ, CA, CO, GA, MD, NY);
+Texas remains pending in `PENDING_SUITES` until its composition lands. The live
+test job fails on any skip. See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,

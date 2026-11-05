@@ -248,12 +248,12 @@ def build_overlay(
     (:mod:`axiom_oracles.rulespec_roots`), so the overlay is always derived
     from one; anything else raises ``ValueError`` before any copy.
     """
+    rulespec_root = require_canonical_rulespec_root(rulespec_root)
     if spec.version_windows is not None and nominal_month is None:
         raise ValueError(
             f"overlay {spec.name} maps version windows onto a nominal month; "
             f"pass nominal_month, the date the engine will evaluate at"
         )
-    rulespec_root = require_canonical_rulespec_root(rulespec_root)
     overlay_root = Path(dest_dir) / rulespec_root.name
 
     for prefix in _prefix_dirs(spec):
@@ -429,14 +429,16 @@ def rules_without_one_version_at(
 ) -> list[tuple[str, str, int]]:
     """List the versioned rules in ``program``'s closure not in force once at ``on``.
 
-    Walks the same import closure as :func:`find_unrewritten_importers` and,
-    for every rule with a non-empty ``versions`` list, counts the versions
-    whose window contains ``on``; the engine's window test is
+    Walks the same import closure as :func:`find_unrewritten_importers` and
+    counts the versions whose window contains ``on``; the engine's window test is
     ``effective_from <= on`` and, when ``effective_to`` is set,
     ``on <= effective_to`` (``from`` and ``to`` are the loader's aliases). A
-    rule without ``versions`` carries no window here (a ``source_relation``,
-    for example) and is skipped. Returns ``(relative file, rule name, number
-    of versions in force)`` for every rule where that number is not exactly
+    non-empty ``versions`` list takes precedence over top-level fields.
+    Otherwise, a non-null top-level ``formula`` or ``effective_from`` (or
+    ``from``) synthesizes one version carrying the top-level window, just as
+    the engine's ``RuleDefinition::effective_versions`` does. Rules with neither are
+    skipped. Returns ``(relative file, rule name, number of versions in force)``
+    for every rule where that number is not exactly
     one, in walk order; empty when every versioned rule resolves.
     """
     offenders: list[tuple[str, str, int]] = []
@@ -449,7 +451,10 @@ def rules_without_one_version_at(
                 continue
             versions = rule.get("versions")
             if not isinstance(versions, list) or not versions:
-                continue
+                _, start = _version_date(rule, "effective_from", "from")
+                if rule.get("formula") is None and start is None:
+                    continue
+                versions = [rule]
             in_force = sum(
                 1
                 for version in versions
@@ -576,8 +581,8 @@ def _apply_version_windows(
 
     Precondition, per rule with versions: exactly one version, starting on the
     source fiscal year's first day and either ending on its last day or open.
-    A rule without ``versions`` must not carry a top-level window or formula
-    either (the engine accepts one, and the mapping would miss it). Anything
+    No mapped rule may carry a top-level window or formula, even alongside
+    ``versions`` (the mapping would leave those fields untouched). Anything
     else raises :class:`OverlayDriftError` naming the file and rule. Formulas
     and values are never touched. Returns the provenance record.
     """
@@ -605,19 +610,19 @@ def _apply_version_windows(
                 continue
             name = rule.get("name")
             versions = rule.get("versions")
-            if not versions:
-                stray = sorted(
-                    key
-                    for key in ("effective_from", "from", "effective_to", "to", "formula")
-                    if key in rule
+            stray = sorted(
+                key
+                for key in ("effective_from", "from", "effective_to", "to", "formula")
+                if key in rule
+            )
+            if stray:
+                raise OverlayDriftError(
+                    f"overlay {spec.name}: {relative}#{name} carries "
+                    f"{', '.join(stray)} outside a versions list, which the "
+                    f"window mapping does not move; the base repo moved and "
+                    f"the overlay is stale"
                 )
-                if stray:
-                    raise OverlayDriftError(
-                        f"overlay {spec.name}: {relative}#{name} carries "
-                        f"{', '.join(stray)} outside a versions list, which the "
-                        f"window mapping does not move; the base repo moved and "
-                        f"the overlay is stale"
-                    )
+            if not versions:
                 continue
             if not isinstance(versions, list) or len(versions) != 1:
                 count = len(versions) if isinstance(versions, list) else versions

@@ -645,6 +645,44 @@ def test_build_overlay_maps_the_from_to_aliases(tmp_path: Path) -> None:
     assert rules_without_one_version_at(build.overlay_root, WINDOW_PROGRAM, NOMINAL) == []
 
 
+@pytest.mark.parametrize("key", ["effective_from", "from", "effective_to", "to", "formula"])
+def test_mapped_rules_refuse_top_level_fields_beside_versions(tmp_path: Path, key: str) -> None:
+    """Mapped rules must store every formula and window inside versions."""
+    root = tmp_path / "rulespec-us"
+    _window_tree(root, windows=_TODAY)
+    relative = _cola_file("deductions")
+    rules = _rules(root / relative)
+    rules[0][key] = "1" if key == "formula" else "2024-09-30"
+    _write(root / relative, yaml.safe_dump({"rules": rules}, sort_keys=False))
+
+    with pytest.raises(OverlayDriftError, match=f"{relative}#deductions_additional_member carries {key}"):
+        build_overlay(_window_spec(), root, tmp_path / "dest", nominal_month=NOMINAL)
+
+
+@settings(max_examples=30, deadline=None)
+@given(
+    fields=st.dictionaries(
+        st.sampled_from(["effective_from", "from", "effective_to", "to", "formula"]),
+        st.sampled_from([None, "2023-10-01", "1"]),
+        min_size=1,
+    ),
+    explicit=st.booleans(),
+)
+def test_mapped_rules_refuse_any_top_level_formula_or_window(fields: dict, explicit: bool) -> None:
+    """Presence is drift, even for null fields or rules with explicit versions."""
+    with tempfile.TemporaryDirectory() as scratch:
+        root = Path(scratch) / "rulespec-us"
+        _window_tree(root, windows=_TODAY)
+        relative = _cola_file("deductions")
+        rules = _rules(root / relative)
+        if not explicit:
+            rules[0].pop("versions")
+        rules[0].update(fields)
+        _write(root / relative, yaml.safe_dump({"rules": rules}, sort_keys=False))
+        with pytest.raises(OverlayDriftError, match="outside a versions list"):
+            build_overlay(_window_spec(), root, Path(scratch) / "dest", nominal_month=NOMINAL)
+
+
 def test_without_the_window_mapping_the_closed_window_selects_nothing(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -715,6 +753,58 @@ def test_rules_without_one_version_at_flags_gaps_and_overlaps(tmp_path: Path) ->
     ]
 
 
+def test_closure_checks_engine_synthesized_versions(tmp_path: Path) -> None:
+    """The engine synthesizes from formula/start only, and explicit versions win."""
+    rules = [
+        {"name": "expired", "formula": "1", "effective_from": "2023-10-01", "effective_to": "2024-09-30"},
+        {"name": "future", "from": "2026-02-01"},
+        {"name": "at_end", "formula": "1", "from": "2025-10-01", "to": "2026-01-01", "versions": []},
+        {"name": "at_start", "formula": "1", "from": "2026-01-01"},
+        {"name": "open", "formula": "1", "effective_from": "2025-10-01"},
+        {"name": "end_only", "effective_to": "2024-09-30"},
+        {"name": "null_fields", "formula": None, "effective_from": None, "to": "2024-09-30"},
+        {"name": "explicit_wins", "formula": "1", "effective_to": "2024-09-30", "versions": [{"effective_from": "2025-10-01", "formula": "2"}]},
+        {"name": "source", "kind": "source_relation"},
+    ]
+    _write(tmp_path / "us/program.yaml", "imports:\n- us:chain\n")
+    _write(tmp_path / "us/chain.yaml", yaml.safe_dump({"rules": rules}))
+
+    assert rules_without_one_version_at(tmp_path, "us/program.yaml", NOMINAL) == [
+        ("us/chain.yaml", "expired", 0),
+        ("us/chain.yaml", "future", 0),
+    ]
+
+
+@settings(max_examples=50, deadline=None)
+@given(
+    bounds=st.tuples(st.dates(), st.dates()).map(sorted),
+    on=st.dates(),
+    aliases=st.booleans(),
+    explicit=st.booleans(),
+    closed=st.booleans(),
+)
+def test_closure_counts_synthesized_windows_with_engine_precedence(
+    bounds: list[date], on: date, aliases: bool, explicit: bool, closed: bool
+) -> None:
+    """Both inclusive bounds apply; explicit versions replace the top-level one."""
+    start, end = bounds
+    version = {"from" if aliases else "effective_from": start.isoformat(), "formula": "1"}
+    if closed:
+        version["to" if aliases else "effective_to"] = end.isoformat()
+    rule = {"name": "window", **version}
+    if explicit:
+        # An explicit version covers on even when the top-level window does not.
+        rule["versions"] = [{"effective_from": on.isoformat(), "formula": "2"}]
+    expected = [] if explicit or (start <= on and (not closed or on <= end)) else [
+        ("us/chain.yaml", "window", 0)
+    ]
+    with tempfile.TemporaryDirectory() as scratch:
+        root = Path(scratch)
+        _write(root / "us/program.yaml", "imports:\n- us:chain\n")
+        _write(root / "us/chain.yaml", yaml.safe_dump({"rules": [rule]}))
+        assert rules_without_one_version_at(root, "us/program.yaml", on) == expected
+
+
 @pytest.mark.parametrize(
     "name",
     [
@@ -738,6 +828,8 @@ def test_packaged_snap_overlays_map_every_fy2024_cola_module(name: str) -> None:
 _RULESPEC_US = Path(os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT", ""))
 
 
+# These are scripts.snap_qc_replay.REQUIRED_SUITES. Texas stays out while
+# tx-snap-qc is in PENDING_SUITES: the live CI step fails on any skip.
 @pytest.mark.skipif(
     _RULESPEC_US == Path()
     or not (_RULESPEC_US / "us/policies/usda/snap/fy-2024-cola").is_dir(),
@@ -757,9 +849,12 @@ _RULESPEC_US = Path(os.environ.get("RULESPEC_US_SNAP_FY2024_ROOT", ""))
 def test_live_overlay_closure_resolves_once_at_the_nominal_month(
     tmp_path: Path, name: str
 ) -> None:
-    """Against a real rulespec-us checkout, every versioned rule in each
-    overlaid program's closure has exactly one version at the nominal month,
-    and the fy-2024-cola rules keep their encoded formulas and values."""
+    """Cover the six REQUIRED_SUITES against a real rulespec-us checkout.
+
+    Texas remains in PENDING_SUITES until its composition lands. Each required
+    closure's explicit or engine-synthesized versions cover the nominal month
+    exactly once, and FY 2024 COLA formulas and values stay encoded.
+    """
     from axiom_oracles.bridges.snap_qc_compare import nominal_month
 
     spec = load_overlay_spec(name)
