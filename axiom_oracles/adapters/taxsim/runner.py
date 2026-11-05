@@ -4,7 +4,7 @@ import logging
 import os
 import subprocess
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from importlib import import_module
 from pathlib import Path
 from typing import Any
@@ -20,6 +20,7 @@ from .projection import (
     TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
     taxsim_input_for_case,
     taxsim_unprojected_inputs_for_case,
+    validate_taxsim_row,
 )
 
 log = logging.getLogger(__name__)
@@ -29,6 +30,21 @@ log = logging.getLogger(__name__)
 DIAGNOSTICS_KEY = "taxsim_stdout_diagnostics"
 
 _STDERR_EXCERPT = 2_000
+
+
+#: Keys under which a result's ``raw`` payload records the pinned binary that
+#: produced it and the profile scope ("default" or "override:<id>") that
+#: selected that binary.
+BINARY_SHA256_KEY = "taxsim_binary_sha256"
+PIN_SCOPE_KEY = "taxsim_pin_scope"
+
+
+@dataclass(frozen=True)
+class TaxsimSelection:
+    """The verified binary one partition of rows runs on."""
+
+    sha256: str
+    path: Path
 
 
 @dataclass(frozen=True)
@@ -57,17 +73,33 @@ class TaxsimPackageRunner(EngineAdapter):
     ``errors`` entry naming it, and any output row that matches no submitted
     case aborts the batch.
 
-    Before running the binary, the default path refuses law years outside
-    the range pinned for that binary (:func:`pins.require_law_years`), so a
+    The default path runs only pinned binaries. Each row's binary is
+    resolved from its (TAXSIM SOI state, law year) under the active pin
+    profile (:func:`pins.active_profile`: ``pin_profile``, then
+    ``$AXIOM_TAXSIM_PIN_PROFILE``, then the pin file's ``default_profile``).
+    Rows are partitioned by resolved binary, and every partition's binary is
+    located as verified bytes (:func:`pins.locate_binary`: SHA-256 and size
+    equal the pin) before any partition runs. An unknown profile, a binary
+    that is not on disk, or bytes whose hash differs from the pin raise
+    :class:`pins.TaxsimPinError`; nothing falls back to another executable.
+
+    Before running a partition, the default path refuses law years outside
+    the range pinned for its binary (:func:`pins.require_law_years`), so a
     Linux host fails with the pinned range instead of the binary's own
-    ``STOP 1``. After each run it records the binary's path, SHA-256, build
-    stamp (embedded and printed) and platform; :meth:`taxsim_identity`
-    returns them for the report's ``engine_identity.taxsim`` block.
+    ``STOP 1``. It hashes the binary again before and after the run. After
+    each run it records the binary's path, SHA-256, build stamp (embedded
+    and printed), platform and rows per profile scope;
+    :meth:`taxsim_identity` returns them, with the profile name, for the
+    report's ``engine_identity.taxsim`` block. Results come back in input
+    order, each stamped with the SHA-256 and scope that produced it.
 
     ``runner_factory`` keeps the older protocol (an object whose ``run()``
     returns records) for tests and for policyengine-taxsim's PolicyEngine
     runner; ``executor`` replaces the binary invocation (tests feed captured
-    stdout through it).
+    stdout through it) and, without ``binary_locator``, the binary lookup.
+
+    Every row, projected or supplied, passes :func:`validate_taxsim_row`
+    before any runner is built.
     """
 
     name = "taxsim"
@@ -78,11 +110,28 @@ class TaxsimPackageRunner(EngineAdapter):
         *,
         id_column: str = "taxsimid",
         executor: Callable[[Any], TaxsimExecution] | None = None,
+        pin_profile: str | None = None,
+        platform: str | None = None,
+        binary_locator: Callable[..., Path] | None = None,
     ) -> None:
         self.runner_factory = runner_factory
         self.id_column = id_column
         self.executor = executor
+        self.pin_profile = pin_profile
+        self.platform = platform
+        self.binary_locator = binary_locator
         self.identity = pins.TaxsimIdentityRecorder()
+        self._profile_name: str | None = None
+
+    def resolved_pin_profile(self) -> str:
+        """The active pin profile, resolved once per runner.
+
+        Raises :class:`pins.TaxsimPinError` for a name the pin file does not
+        declare.
+        """
+        if self._profile_name is None:
+            self._profile_name = pins.active_profile_name(self.pin_profile)
+        return self._profile_name
 
     def taxsim_identity(self) -> dict[str, Any] | None:
         """Identity of every binary this runner executed, or ``None``."""
@@ -93,11 +142,131 @@ class TaxsimPackageRunner(EngineAdapter):
         cases: list[Case],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
-        input_rows = self._input_rows(cases)
+        return self._run_rows(cases, self._input_rows(cases), variables)
+
+    def _run_rows(
+        self,
+        cases: list[Case],
+        input_rows: list[dict[str, Any]],
+        variables: list[str] | None,
+    ) -> list[EngineResult]:
+        # Every row, projected or supplied, reaches the pinned binaries
+        # whenever pins apply; a subclass that runs another engine over
+        # TAXSIM rows (or a test seam) takes the single-run path below.
+        target_variables = self._target_variables(variables)
+        if self._runs_pinned_binaries():
+            return self._run_pinned(cases, input_rows, target_variables)
         input_frame = self._frame_from_rows(input_rows)
         output = self._run(input_frame)
-        target_variables = self._target_variables(variables)
         return self._engine_results(output, cases, target_variables, input_rows)
+
+    def _runs_pinned_binaries(self) -> bool:
+        """Whether this runner executes pinned TAXSIM binaries.
+
+        False for a subclass that runs another engine over TAXSIM rows
+        (``PolicyEngineTaxsimRunner`` overrides ``_run``), for the legacy
+        ``runner_factory`` protocol, and for an injected ``executor`` given
+        without a ``binary_locator`` (a test seam that runs no binary).
+        """
+        if type(self)._run is not TaxsimPackageRunner._run:
+            return False
+        if self.runner_factory is not None:
+            return False
+        return self.executor is None or self.binary_locator is not None
+
+    def _run_pinned(
+        self,
+        cases: list[Case],
+        input_rows: list[dict[str, Any]],
+        variables: list[str] | None,
+    ) -> list[EngineResult]:
+        profile = pins.get_profile(self.resolved_pin_profile())
+        system = pins.normalize_platform(self.platform)
+        partitions: dict[str, list[int]] = {}
+        scopes: list[str] = []
+        for index, row in enumerate(input_rows):
+            # policyengine-taxsim's input formatter fills a missing state
+            # with 0 (TAXSIM "no state"); resolve it the same way.
+            try:
+                resolution = profile.resolve(
+                    row.get("state", 0), row.get("year"), system
+                )
+            except pins.TaxsimPinError as exc:
+                raise pins.TaxsimPinError(
+                    f"case {cases[index].case_id!r}: {exc}"
+                ) from exc
+            partitions.setdefault(resolution.sha256, []).append(index)
+            scopes.append(resolution.scope)
+
+        # Locate and range-check every partition's binary before running any,
+        # so a missing or mismatched binary fails without partial runs.
+        locate = self.binary_locator or pins.locate_binary
+        selections: dict[str, TaxsimSelection] = {}
+        for sha, indices in partitions.items():
+            first = input_rows[indices[0]]
+            path = Path(
+                locate(
+                    sha,
+                    profile=profile.name,
+                    state=first.get("state", 0),
+                    year=first.get("year"),
+                )
+            )
+            if not path.is_absolute():
+                raise pins.TaxsimPinError(
+                    f"TAXSIM binary {sha} located at non-absolute path {path}; "
+                    "only verified absolute paths may execute"
+                )
+            pins.require_law_years(
+                _frame_years(self._frame_from_rows([input_rows[i] for i in indices])),
+                binary_path=path,
+                system=system,
+            )
+            selections[sha] = TaxsimSelection(sha256=sha, path=path)
+
+        self.identity.pin_profile = profile.name
+        results: list[EngineResult | None] = [None] * len(cases)
+        for sha, indices in partitions.items():
+            chunk_rows = [input_rows[i] for i in indices]
+            chunk_cases = [cases[i] for i in indices]
+            frame = self._frame_from_rows(chunk_rows)
+            chunk_scopes: dict[str, int] = {}
+            for index in indices:
+                chunk_scopes[scopes[index]] = chunk_scopes.get(scopes[index], 0) + 1
+            output = self._run_selected(frame, selections[sha], chunk_scopes)
+            chunk_results = self._engine_results(
+                output, chunk_cases, variables, chunk_rows
+            )
+            if len(chunk_results) != len(indices):
+                raise RuntimeError(
+                    f"TAXSIM binary {sha[:12]} returned {len(chunk_results)} "
+                    f"result(s) for {len(indices)} case(s)"
+                )
+            for index, result in zip(indices, chunk_results, strict=True):
+                results[index] = _stamp(result, sha, scopes[index])
+        return [result for result in results if result is not None]
+
+    def _run_selected(
+        self,
+        input_frame: Any,
+        selection: TaxsimSelection,
+        scopes: Mapping[str, int],
+    ) -> Any:
+        if self.executor is not None:
+            execution = self.executor(input_frame)
+        else:
+            execution = self._execute_binary(
+                input_frame, selection=selection, scopes=scopes
+            )
+        if execution.returncode != 0:
+            raise RuntimeError(
+                f"TAXSIM exited with status {execution.returncode}"
+                f"{_binary_suffix(execution)}; stderr: "
+                f"{_excerpt(execution.stderr)!r}; stdout tail: "
+                f"{_excerpt(execution.stdout, tail=True)!r}"
+            )
+        parsed = parse_taxsim_stdout(execution.stdout, id_column=self.id_column)
+        return _ParsedOutput(parsed=parsed, execution=execution)
 
     def run_households(
         self,
@@ -125,16 +294,31 @@ class TaxsimPackageRunner(EngineAdapter):
         parsed = parse_taxsim_stdout(execution.stdout, id_column=self.id_column)
         return _ParsedOutput(parsed=parsed, execution=execution)
 
-    def _execute_binary(self, input_frame: Any) -> TaxsimExecution:
+    def _execute_binary(
+        self,
+        input_frame: Any,
+        *,
+        selection: TaxsimSelection | None = None,
+        scopes: Mapping[str, int] | None = None,
+    ) -> TaxsimExecution:
         """Write the batch with policyengine-taxsim's formatter and run the binary.
 
         policyengine-taxsim's ``TaxsimRunner.run()`` reads the whole stdout
         stream with ``pandas.read_csv`` and coerces every column to numeric,
         which turns the binary's diagnostic lines into rows with NaN ids. Use
-        its input formatting and executable lookup, but capture the raw bytes
-        and parse them here.
+        its input formatting, but capture the raw bytes and parse them here.
+
+        Only a pinned ``selection`` runs: the formatter is given its verified
+        absolute path, and the bytes must still hash to the pinned SHA-256
+        immediately before the run (and again after it, in the recorder).
         """
-        runner = self._runner_factory()(input_frame)
+        if selection is None:
+            raise pins.TaxsimPinError(
+                "no pinned TAXSIM binary was selected for this batch; the "
+                "default runner executes only binaries resolved from a pin "
+                "profile"
+            )
+        runner = self._runner_factory()(input_frame, taxsim_path=selection.path)
         write_input = getattr(runner, "_create_taxsim_input_file", None)
         binary = getattr(runner, "taxsim_path", None)
         if write_input is None or binary is None:
@@ -143,17 +327,24 @@ class TaxsimPackageRunner(EngineAdapter):
                 "_create_taxsim_input_file/taxsim_path; the pinned release in "
                 "taxsim_pins.json does. Refresh the adapter with the pin."
             )
+        if Path(binary) != selection.path:
+            raise pins.TaxsimPinError(
+                f"policyengine-taxsim's TaxsimRunner chose {binary}, not the "
+                f"verified binary {selection.path} (sha256 {selection.sha256})"
+            )
+        binary = selection.path
         checked = pins.require_law_years(
-            _frame_years(input_frame), binary_path=Path(binary)
+            _frame_years(input_frame), binary_path=binary
         )
-        # A batch with no law year skips the range check, but its executable is
-        # still hashed before the run so the recorder can compare after it.
-        if checked is not None:
-            pre_run_sha256 = checked["sha256"]
-        elif Path(binary).is_file():
-            pre_run_sha256 = pins.sha256_file(Path(binary))
-        else:
-            pre_run_sha256 = None
+        pre_run_sha256 = (
+            checked["sha256"] if checked is not None else pins.sha256_file(binary)
+        )
+        if pre_run_sha256 != selection.sha256:
+            raise pins.TaxsimPinError(
+                f"TAXSIM binary {binary} changed after it was verified: sha256 "
+                f"{selection.sha256[:12]} pinned and located, "
+                f"{pre_run_sha256[:12]} before the run"
+            )
         input_path = write_input(runner.input_df)
         try:
             with open(input_path, "rb") as stdin:
@@ -176,14 +367,15 @@ class TaxsimPackageRunner(EngineAdapter):
         )
         if execution.returncode == 0:
             self.identity.observe(
-                Path(binary),
+                binary,
                 rows=len(_frame_records(input_frame)),
                 build_observed=pins.build_stamp_from_stdout(execution.stdout),
                 sha256=pre_run_sha256,
+                scopes=scopes,
             )
         return execution
 
-    def _runner_factory(self) -> Callable[[Any], Any]:
+    def _runner_factory(self) -> Callable[..., Any]:
         if self.runner_factory is not None:
             return self.runner_factory
         for module_name, attr_name in (
@@ -196,18 +388,11 @@ class TaxsimPackageRunner(EngineAdapter):
                 continue
             runner = getattr(module, attr_name, None)
             if runner is not None:
-                # policyengine-taxsim's own executable search assumes
-                # sys.prefix carries the wheel's share/ data files, which is
-                # false inside uv `--with` overlay environments — resolve the
-                # binary with the same resolver preflight uses (including
-                # sys.path archive roots and native source-layout dev runs)
-                # and pass it explicitly.
-                binary = pins.resolve_binary_path()
-                if binary is not None:
-                    # Its signature annotates taxsim_path as str, but
-                    # _validate_executable calls .exists() on it — a Path is
-                    # what actually works.
-                    return lambda frame: runner(frame, taxsim_path=binary)
+                # The binary is always passed explicitly as the verified
+                # absolute path (_execute_binary), never found by
+                # policyengine-taxsim's own executable search. Its signature
+                # annotates taxsim_path as str, but _validate_executable
+                # calls .exists() on it, so a Path is what works.
                 return runner
         raise RuntimeError(
             "Could not import policyengine-taxsim's TaxsimRunner. Install the "
@@ -232,6 +417,10 @@ class TaxsimPackageRunner(EngineAdapter):
             else:
                 normalized = dict(row)
                 normalized.setdefault(self.id_column, case.case_id)
+            # Pre-supplied rows never pass through the projection's own check.
+            # One invalid row aborts the whole binary batch with its
+            # diagnostics discarded, so fail here, naming the case, first.
+            validate_taxsim_row(normalized, case_id=case.case_id)
             submitted = normalized.get(self.id_column)
             key = id_key(case.case_id if submitted is None else submitted)
             if key in cases_by_id:
@@ -413,6 +602,13 @@ class TaxsimPackageRunner(EngineAdapter):
             return runner.run(show_progress=False)
         except TypeError:
             return runner.run()
+
+
+def _stamp(result: EngineResult, sha256: str, scope: str) -> EngineResult:
+    raw = dict(result.raw) if isinstance(result.raw, Mapping) else {}
+    raw[BINARY_SHA256_KEY] = sha256
+    raw[PIN_SCOPE_KEY] = scope
+    return replace(result, raw=raw)
 
 
 @dataclass(frozen=True)

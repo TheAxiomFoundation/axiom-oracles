@@ -91,6 +91,30 @@ jobs:
           print(json.dumps(matrix, indent=2))
           PY
 
+  # Fails, naming the file, when a pinned PolicyEngine artifact stops
+  # installing: a hashed-URL file in axiom_oracles/pinned_artifacts.py stops
+  # downloading or no longer matches its SHA-256, or a runtime pin is neither
+  # on PyPI's index nor in that table. Breaks already tracked in an issue
+  # (KNOWN_OPEN in the script) print as warnings, so only a new break fails.
+  # It runs beside the matrix, so one pruned pin never holds back the suites
+  # that still install.
+  pinned-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install the check's dependencies
+        # The versions uv.lock resolves.
+        run: pip install pyyaml==6.0.3 requests==2.33.1
+
+      - name: Check every pinned PolicyEngine artifact
+        run: python3 scripts/check_pinned_artifacts.py --verbose
+
   compare:
     needs: discover
     runs-on: ubuntu-latest
@@ -144,8 +168,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
         run: |
-          uv pip install --system -e '.[policyengine]'
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Load published data for the comparison
         working-directory: axiom-oracles

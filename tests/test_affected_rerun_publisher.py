@@ -121,7 +121,9 @@ def test_publish_job_mirrors_the_legs_interpreter():
             if s.get("uses", "").startswith("actions/setup-python@")
         )
         install = next(
-            s["run"].strip() for s in steps if "uv pip install" in s.get("run", "")
+            s["run"].strip()
+            for s in steps
+            if "uv sync" in s.get("run", "") or "uv pip install" in s.get("run", "")
         )
         return python, install
 

@@ -190,12 +190,15 @@ def engine_receipt(
 
 
 def _git(repo: Path, *args: str) -> str:
-    from .provenance import _git_env
+    # These are reads of the source checkout (``status`` compares the index
+    # with HEAD's tree), so in a partial clone they must not fetch a missing
+    # object and then attest the completed store.
+    from .provenance import _git_read_env
 
     try:
         result = subprocess.run(
             ["git", "-C", str(repo), *args], check=True,
-            capture_output=True, text=True, timeout=30, env=_git_env(),
+            capture_output=True, text=True, timeout=30, env=_git_read_env(),
         )
     except (OSError, subprocess.SubprocessError) as exc:
         raise EngineIdentityError(f"Cannot verify engine source checkout {repo}") from exc

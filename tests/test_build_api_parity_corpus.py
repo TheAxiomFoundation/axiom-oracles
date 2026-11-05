@@ -80,8 +80,8 @@ def test_co_snap_compares_january_and_records_its_known_difference() -> None:
     [declared] = co_snap["external_comparisons"]
     assert all(m["external_path"].endswith(".2026-01") and "transform" not in m for m in declared["mappings"])
     assert declared["known_difference"]["pinned_engine_outputs"] == {
-        "snap_benefit_amount": 543,
-        "snap_net_income": 7,
+        "snap_benefit_amount": 477,
+        "snap_net_income": 227,
     }
     assert not any("fifty-cent" in note for note in co_snap["notes"])
 
@@ -254,7 +254,7 @@ def test_validation_never_mutates_the_case(mapped: list[str]) -> None:
     assert value == before
 
 
-EVIDENCE = CORPUS / "evidence" / "co-snap-policyengine-2026-10-03.json"
+EVIDENCE = CORPUS / "evidence" / "co-snap-policyengine-2026-11-05.json"
 
 
 def test_co_snap_known_difference_rests_on_committed_evidence() -> None:
@@ -262,33 +262,67 @@ def test_co_snap_known_difference_rests_on_committed_evidence() -> None:
     PolicyEngine responses, and the pins are the January run's values."""
     evidence = json.loads(EVIDENCE.read_text())
     january = evidence["runs"]["january"]["spm_unit"]
-    zero = evidence["runs"]["january_utility_allowance_zero"]["spm_unit"]
-    annual = evidence["runs"]["annual_as_declared_in_v2"]["spm_unit"]
-    [declared] = json.loads((CORPUS / "co-snap-us-co.json").read_text())["external_comparisons"]
+    co_snap = json.loads((CORPUS / "co-snap-us-co.json").read_text())
+    [declared] = co_snap["external_comparisons"]
     pins = declared["known_difference"]["pinned_engine_outputs"]
     assert pins == {
         "snap_benefit_amount": january["snap"]["2026-01"],
         "snap_net_income": january["snap_net_income"]["2026-01"],
     }
-    assert evidence["runs"]["january"]["policyengine_bundle"]["model_version"] == "2.9.0"
-    assert january["snap_utility_allowance"]["2026-01"] == 594
-    assert january["snap_excess_shelter_expense_deduction"]["2026-01"] == 744
-    housing_monthly = annual["housing_cost"]["2026"] / 12
-    assert housing_monthly + 594 - january["snap_net_income_pre_shelter"]["2026-01"] / 2 == 1118.5
-    assert evidence["excess_shelter_cap"]["values"]["2025-10-01"] == 744
-    assert (zero["snap"]["2026-01"], zero["snap_net_income"]["2026-01"]) == (477, 227)
-    assert zero["snap_excess_shelter_expense_deduction"]["2026-01"] == 524.5
-    # The January run is this corpus's own declared request, and the
-    # allowance-0 run differs from it only by that override.
+    assert evidence["runs"]["january"]["policyengine_bundle"]["model_version"] == "2.72.5"
+    assert january["snap_net_income_pre_shelter"]["2026-01"] == 751
+    assert january["snap_excess_shelter_expense_deduction"]["2026-01"] == 524.5
     assert evidence["runs"]["january"]["request"]["household"] == declared["request"]["household"]
-    zero_request = copy.deepcopy(evidence["runs"]["january_utility_allowance_zero"]["request"]["household"])
-    assert zero_request["spm_units"]["spm_unit"].pop("snap_utility_allowance") == {"2026-01": 0}
-    expected = copy.deepcopy(declared["request"]["household"])
-    expected["spm_units"]["spm_unit"].pop("snap_utility_allowance")
-    assert zero_request == expected
+    expected = co_snap["expected_axiom_outputs"]
     note = declared["known_difference"]["note"]
-    for figure in ["$594", "1,118.5", "744", "543", "477 / 227", "524.5", "2.9.0"]:
+    for figure in [
+        "477",
+        "227",
+        str(expected["snap_benefit_amount"]),
+        str(expected["snap_net_income"]),
+        "524.5",
+        "525",
+        "226.5",
+        "2.72.5",
+    ]:
         assert figure in note
+
+
+def test_co_snap_gap_comes_from_where_each_engine_rounds_one_fifty_cent_amount() -> None:
+    """Axiom's expected outputs and PolicyEngine's pins both follow from the
+    same 524.5 of excess shelter, so the pin records rounding and nothing else."""
+    january = json.loads(EVIDENCE.read_text())["runs"]["january"]["spm_unit"]
+    co_snap = json.loads((CORPUS / "co-snap-us-co.json").read_text())
+    expected = co_snap["expected_axiom_outputs"]
+    pins = co_snap["external_comparisons"][0]["known_difference"]["pinned_engine_outputs"]
+    before_shelter = january["snap_net_income_pre_shelter"]["2026-01"]
+    shelter_costs = co_snap["axiom_request"]["household"]["spm_units"]["unit_1"]["shelter_costs"]
+    excess = shelter_costs - before_shelter / 2
+    assert excess == january["snap_excess_shelter_expense_deduction"]["2026-01"]
+    assert january["snap_utility_allowance"]["2026-01"] == 0
+
+    def half_up(amount: float) -> int:
+        return math.floor(amount + 0.5)
+
+    assert before_shelter - half_up(excess) == expected["snap_net_income"]
+    assert half_up(before_shelter - excess) == pins["snap_net_income"]
+    max_allotment = january["snap_max_allotment"]["2026-01"]
+    assert math.floor(max_allotment - 0.3 * expected["snap_net_income"]) == expected["snap_benefit_amount"]
+    assert math.floor(max_allotment - 0.3 * pins["snap_net_income"]) == pins["snap_benefit_amount"]
+
+
+def test_co_snap_utility_allowance_returns_for_an_elderly_adult() -> None:
+    """The allowance fell to 0 because this household has no elderly or disabled
+    member: the run that changes only the adult's age gets the 594 back."""
+    evidence = json.loads(EVIDENCE.read_text())
+    [declared] = json.loads((CORPUS / "co-snap-us-co.json").read_text())["external_comparisons"]
+    run = evidence["runs"]["january_elderly_adult"]
+    assert run["spm_unit"]["snap_utility_allowance"]["2026-01"] == 594
+    assert evidence["runs"]["january"]["spm_unit"]["snap_utility_allowance"]["2026-01"] == 0
+    request = copy.deepcopy(run["request"]["household"])
+    assert request["people"]["adult"]["age"] == {"2026": 65}
+    request["people"]["adult"]["age"] = declared["request"]["household"]["people"]["adult"]["age"]
+    assert request == declared["request"]["household"]
 
 
 def test_evidence_files_are_not_corpus_cases(tmp_path, monkeypatch) -> None:

@@ -960,6 +960,181 @@ case_sets:
         living_renting: true
         living_owner: false
         cash_on_hand: 500
+  us-mfs:
+    locale: US
+    cases:
+    - id: mfs-wages-40000
+      period: '2026'
+      scenario: childless-wages
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-wages-150000
+      period: '2026'
+      scenario: childless-wages
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-wages-250000
+      period: '2026'
+      scenario: childless-wages
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 250000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-wages-450000
+      period: '2026'
+      scenario: childless-wages
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 450000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-wages-750000
+      period: '2026'
+      scenario: childless-wages
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 750000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-child-wages-15000
+      period: '2026'
+      scenario: child-lived-apart
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 15000
+      - id: child-1
+        kind: person
+        age: 8
+        relation: Child
+      facts:
+        state_code: CO
+        married_filing_separately: true
+        lived_apart_from_spouse_all_year: true
+    - id: mfs-child-wages-45000
+      period: '2026'
+      scenario: child-lived-apart
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 45000
+      - id: child-1
+        kind: person
+        age: 8
+        relation: Child
+      facts:
+        state_code: CO
+        married_filing_separately: true
+        lived_apart_from_spouse_all_year: true
+    - id: mfs-ss-cohabiting-wages-20000-ss-24000
+      period: '2026'
+      scenario: social-security
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000
+        social_security_benefits: 24000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+        lived_apart_from_spouse_all_year: false
+    - id: mfs-ss-cohabiting-ss-30000
+      period: '2026'
+      scenario: social-security
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 0
+        social_security_benefits: 30000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+        lived_apart_from_spouse_all_year: false
+    - id: mfs-ss-lived-apart-wages-20000-ss-24000
+      period: '2026'
+      scenario: social-security
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 20000
+        social_security_benefits: 24000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+        lived_apart_from_spouse_all_year: true
+    - id: mfs-eitc-wages-6000
+      period: '2026'
+      scenario: childless-eitc
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-eitc-wages-11000
+      period: '2026'
+      scenario: childless-eitc
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 11000
+      facts:
+        state_code: CO
+        married_filing_separately: true
+    - id: mfs-eitc-wages-16000
+      period: '2026'
+      scenario: childless-eitc
+      entities:
+      - id: head
+        kind: person
+        age: 30
+        relation: HeadOfHousehold
+        yearly_earned_income: 16000
+      facts:
+        state_code: CO
+        married_filing_separately: true
   us-tariff:
     locale: US
     entity: CustomsEntry

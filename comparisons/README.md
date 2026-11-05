@@ -328,7 +328,9 @@ the oracle lives in this repo, so there is no encoder CLI to shell out to.
 FY2024 law is evaluated through a sparse compile-time overlay (SNAP COLA module
 ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus the
 state's standard-utility-allowance amount patches — four Colorado amounts,
-seven New York regional amounts, one California amount) at the nominal period
+seven New York regional amounts, one California amount, and the `fy-2024-cola`
+modules' FY 2024 version windows moved onto the fiscal year that contains the
+nominal month, formulas and values unchanged) at the nominal period
 `2026-01`, because the federal-regulation and state-manual chain is snapshot-
 dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
@@ -348,7 +350,10 @@ called by the affected rerun) provisions the pinned engine, a rulespec-us
 checkout, and the pinned PUF. It runs every selected suite with
 `run_comparison.py --require-live` and fails on any re-emission, mismatch, or
 error (`scripts/snap_qc_replay.py check`); when the affected rerun calls it,
-each exact report is packed and published to `oracle-data`. See the playbook's §10.
+each exact report is packed and published to `oracle-data`. Its real-checkout
+overlay closure tests cover the six `REQUIRED_SUITES` states (AZ, CA, CO, GA,
+MD, NY); Texas remains pending in `PENDING_SUITES` until its composition lands.
+The live test job fails on any skip. See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,

@@ -38,9 +38,9 @@ name: SNAP QC live replay
 # concept the suite compares (benefit included) listed and compared on every
 # case without divergence. The run must also have used the resolved
 # rulespec-us SHA and the pinned engine. The live-tests job
-# runs the two live pytest cases (PUF row counts; engine-backed worked
-# example), which skip unless their inputs are provided, and fails if either
-# skips.
+# runs the PUF row counts, engine-backed worked example, and the six required
+# suites' overlay-closure checks. Texas remains pending in PENDING_SUITES.
+# These tests skip unless their inputs are provided; the job fails on any skip.
 #
 # Reports go up as workflow artifacts and are never committed; the point of
 # this lane is a failing check. See docs/snap-qc-oracle-playbook.md.
@@ -449,15 +449,19 @@ jobs:
         run: |
           uv run pytest -rs --junitxml="$RUNNER_TEMP/live-tests.xml" \
             tests/test_snap_qc_population.py::test_live_fy2024_row_counts \
-            tests/test_snap_qc_compare.py::test_live_engine_reproduces_worked_example
+            tests/test_snap_qc_compare.py::test_live_engine_reproduces_worked_example \
+            tests/test_rulespec_overlay.py::test_live_overlay_closure_resolves_once_at_the_nominal_month
           # A live test that skips proves nothing: fail unless every one ran.
-          python3 - "$RUNNER_TEMP/live-tests.xml" <<'PY'
+          uv run python - "$RUNNER_TEMP/live-tests.xml" <<'PY'
           import sys
           import xml.etree.ElementTree as ET
 
+          from scripts.snap_qc_replay import REQUIRED_SUITES
+
           suite = ET.parse(sys.argv[1]).getroot().find("testsuite")
           tests, skipped = int(suite.get("tests")), int(suite.get("skipped"))
-          if tests != 2 or skipped:
-              raise SystemExit(f"expected 2 live tests to run; ran {tests}, skipped {skipped}")
+          expected = 2 + len(REQUIRED_SUITES)
+          if tests != expected or skipped:
+              raise SystemExit(f"expected {expected} live tests to run; ran {tests}, skipped {skipped}")
           print(f"{tests} live tests ran, none skipped")
           PY

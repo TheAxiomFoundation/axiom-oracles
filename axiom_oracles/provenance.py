@@ -159,6 +159,30 @@ def _git_env(**overrides: str) -> dict[str, str]:
     return env
 
 
+def _git_read_env(**overrides: str) -> dict[str, str]:
+    """``_git_env`` for provenance reads, which must never fetch objects.
+
+    In a partial (promisor) clone Git fetches a missing promised object on
+    demand and stores it in the checkout's object store, even from a private
+    git directory, because objects live in the common directory. A read must
+    not change the repository it describes, so it sets two guards:
+
+    - ``GIT_NO_LAZY_FETCH=1`` stops the fetch on Git 2.45 and later, and on
+      older Git that carries the backport;
+    - ``GIT_ALLOW_PROTOCOL=none`` allows no transport, so a fetch that a Git
+      without that switch still starts cannot reach any remote. It replaces
+      ``protocol.allow`` and every ``protocol.<name>.allow`` setting, and any
+      inherited ``GIT_ALLOW_PROTOCOL``.
+
+    A read that needs a missing object then fails, and the caller records
+    the tree as unverifiable.
+    """
+    env = _git_env(**overrides)
+    env["GIT_NO_LAZY_FETCH"] = "1"
+    env["GIT_ALLOW_PROTOCOL"] = "none"
+    return env
+
+
 def _git_sha(repo: Path) -> str | None:
     """Best-effort 40-hex HEAD SHA of a git checkout; None if unavailable."""
     if repo is None:
@@ -169,7 +193,7 @@ def _git_sha(repo: Path) -> str | None:
             capture_output=True,
             text=True,
             check=True,
-            env=_git_env(),
+            env=_git_read_env(),
         )
     except (subprocess.CalledProcessError, FileNotFoundError, OSError):
         return None
@@ -201,7 +225,7 @@ def _git_output(
         input=stdin,
         capture_output=True,
         check=True,
-        env=env if env is not None else _git_env(),
+        env=env if env is not None else _git_read_env(),
     ).stdout
 
 
@@ -236,7 +260,7 @@ def _private_index(toplevel: Path, workdir: Path) -> dict[str, str]:
         shutil.copy2(source, workdir / source.name)
     if not (workdir / "index").exists():
         raise OSError("checkout index unavailable")
-    return _git_env(
+    return _git_read_env(
         GIT_DIR=str(workdir),
         GIT_COMMON_DIR=common,
         GIT_WORK_TREE=str(toplevel),
@@ -439,6 +463,9 @@ def worktree_state(
     child's recursive digest. The same tracked change on the same commit
     hashes the same whatever the checkout path or local Git config. Reads
     use private index/shared-index copies and never write the checkout.
+    They never fetch either (:func:`_git_read_env`): in a partial clone a
+    tree whose objects are missing locally is unverifiable (``None``), and
+    the object store is left as it was.
     Never raises: provenance must annotate a run, never fail one.
     """
     if repo is None:
@@ -553,12 +580,21 @@ def _remote_url(repo: Path) -> str | None:
     return result.stdout.strip() or None
 
 
+#: ``github.com/`` in any letter case. Host names ignore case, so git sends
+#: ``https://GitHub.com/…`` to github.com; matching only the lowercase
+#: spelling would leave such a fork unrecognized, and
+#: :func:`remote_matches_slug` accepts an unrecognized origin. ASCII-only, so
+#: no Unicode case folding stretches the match to another host.
+_GITHUB_HOST = re.compile(r"github\.com/", re.IGNORECASE | re.ASCII)
+
+
 def repo_slug_from_remote(url: str | None) -> str | None:
     """Reduce a git remote URL to its ``owner/repo`` slug.
 
     Handles both ``git@github.com:Owner/repo.git`` and
-    ``https://github.com/Owner/repo(.git)`` forms. Returns None for anything
-    that is not obviously a GitHub-style remote.
+    ``https://github.com/Owner/repo(.git)`` forms, with the host in any
+    letter case. Returns None for anything that is not obviously a
+    GitHub-style remote.
     """
     if not url:
         return None
@@ -567,8 +603,8 @@ def repo_slug_from_remote(url: str | None) -> str | None:
         url = url[: -len(".git")]
     if url.startswith("git@") and ":" in url:
         url = url.split(":", 1)[1]
-    elif "github.com/" in url:
-        url = url.split("github.com/", 1)[1]
+    elif host := _GITHUB_HOST.search(url):
+        url = url[host.end():]
     else:
         return None
     parts = [p for p in url.split("/") if p]
@@ -624,15 +660,25 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     return entries
 
 
-def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
-    """Reject a checkout whose recognized GitHub origin names another repo.
+def remote_matches_slug(url: str | None, slug: str) -> bool:
+    """Reject a remote URL whose recognized GitHub identity names another repo.
 
     GitHub identities are case-insensitive. Compare the raw origin identity:
     absorption aliases identify dependencies, not the checkout actually read.
     Without a recognized origin, callers must rely on layout conventions.
+    :mod:`axiom_oracles.rulespec_roots` uses this same comparison for engine
+    roots, and additionally requires a recognized github.com origin.
     """
-    remote_slug = repo_slug_from_remote(_remote_url(path))
+    remote_slug = repo_slug_from_remote(url)
     return remote_slug is None or remote_slug.casefold() == slug.casefold()
+
+
+def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
+    """Reject a checkout whose recognized GitHub origin names another repo.
+
+    See :func:`remote_matches_slug`; this reads the checkout's origin first.
+    """
+    return remote_matches_slug(_remote_url(path), slug)
 
 
 def resolve_rulespec_checkout(slug: str) -> Path | None:

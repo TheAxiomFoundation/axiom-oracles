@@ -246,7 +246,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
-        run: uv pip install --system -e '.[policyengine]'
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
+        run: |
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Load published data for the comparison and pack baseline
         working-directory: axiom-oracles
@@ -403,7 +409,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         if: steps.bundles.outputs.count != '0'
-        run: uv pip install --system -e '.[policyengine]'
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
+        run: |
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Publish every refreshed report + derived conformance artifacts
         if: steps.bundles.outputs.count != '0'
