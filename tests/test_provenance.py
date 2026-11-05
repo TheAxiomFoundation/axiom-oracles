@@ -21,9 +21,11 @@ from axiom_oracles.provenance import (
     PROVENANCE_SCHEMA_VERSION,
     RUN_KINDS,
     build_provenance,
+    checkout_remote_matches_slug,
     dataset_provenance_from_identity,
     engine_provenance,
     is_real_run_report,
+    remote_matches_slug,
     repo_slug_from_remote,
     resolve_run_kind,
     rulespec_provenance,
@@ -152,6 +154,86 @@ def test_repo_slug_from_remote_forms(tmp_path):
     # NEGATIVE: a non-GitHub remote yields no slug rather than a wrong one.
     assert repo_slug_from_remote((tmp_path / "rulespec-us").as_uri()) is None
     assert repo_slug_from_remote(None) is None
+
+
+_MIXED_CASE_HOSTS = ("GitHub.com", "GITHUB.COM", "user@GitHub.com", "gItHuB.cOm")
+
+
+@pytest.mark.parametrize("host", _MIXED_CASE_HOSTS)
+def test_repo_slug_from_remote_ignores_host_case(host):
+    # Host names ignore case, so git sends these origins to github.com. A
+    # mixed-case host must still yield the slug, or remote_matches_slug reads
+    # the fork as an unrecognized origin and accepts it.
+    url = f"https://{host}/evil/rulespec-us.git"
+    assert repo_slug_from_remote(url) == "evil/rulespec-us"
+    assert not remote_matches_slug(url, "TheAxiomFoundation/rulespec-us")
+    assert remote_matches_slug(
+        f"https://{host}/TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us",
+    )
+
+
+@pytest.mark.parametrize("host", _MIXED_CASE_HOSTS)
+def test_checkout_behind_mixed_case_host_fork_is_rejected(tmp_path, host):
+    repo = tmp_path / "rulespec-us"
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "remote", "add", "origin",
+         f"https://{host}/evil/rulespec-us"],
+        check=True,
+    )
+    assert not checkout_remote_matches_slug(repo, "TheAxiomFoundation/rulespec-us")
+    # Provenance names the fork, not the directory.
+    assert rulespec_provenance([repo])[0]["repo"] == "evil/rulespec-us"
+
+
+_HOST_CASE = st.lists(st.booleans(), min_size=len("github.com"), max_size=len("github.com"))
+_SLUG_PART = st.from_regex(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,20}", fullmatch=True).filter(
+    lambda part: not part.endswith(".git") and part not in (".", "..")
+)
+
+
+@settings(max_examples=200)
+@given(
+    flips=_HOST_CASE,
+    scheme=st.sampled_from(["https://", "ssh://git@", "https://user@"]),
+    owner=_SLUG_PART,
+    name=_SLUG_PART,
+    suffix=st.sampled_from(["", ".git", "/"]),
+)
+def test_repo_slug_from_remote_is_host_case_invariant(flips, scheme, owner, name, suffix):
+    # Invariant: the slug depends on the path alone, never on how the host
+    # is cased.
+    host = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
+    lower = f"{scheme}github.com/{owner}/{name}{suffix}"
+    mixed = f"{scheme}{host}/{owner}/{name}{suffix}"
+    assert repo_slug_from_remote(mixed) == repo_slug_from_remote(lower)
+    assert repo_slug_from_remote(mixed) is not None
+
+
+@settings(max_examples=200)
+@given(
+    flips=_HOST_CASE,
+    scheme=st.sampled_from(["https://", "ssh://git@", "https://user@", "git@"]),
+    owner=st.sampled_from(["TheAxiomFoundation", "theaxiomfoundation", "evil"]),
+    name=st.sampled_from(["rulespec-us", "RuleSpec-US", "rulespec-uk"]),
+    suffix=st.sampled_from(["", ".git"]),
+)
+def test_canonical_origin_agrees_with_provenance(flips, scheme, owner, name, suffix):
+    # Differential: rulespec_roots._canonical_origin and provenance's
+    # remote_matches_slug both judge whether an origin is
+    # TheAxiomFoundation/rulespec-us on github.com. Where _canonical_origin
+    # accepts, provenance must too; where provenance recognizes the remote and
+    # rejects, _canonical_origin must reject.
+    from axiom_oracles.rulespec_roots import _canonical_origin
+
+    host = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
+    sep = ":" if scheme == "git@" else "/"
+    url = f"{scheme}{host}{sep}{owner}/{name}{suffix}"
+    target = "TheAxiomFoundation/rulespec-us"
+    roots_ok = _canonical_origin(url, "rulespec-us")
+    assert repo_slug_from_remote(url) is not None
+    assert roots_ok == remote_matches_slug(url, target)
 
 
 def test_rulespec_provenance_uses_git_when_available(tmp_path):
