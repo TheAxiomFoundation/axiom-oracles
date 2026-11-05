@@ -1650,6 +1650,28 @@ def test_suite_evidence_checks_the_declared_uncompared_counts(
     assert _evidence(report, tmp_path).content_defects
 
 
+@pytest.mark.parametrize(("pair", "concept"), UNCOMPARED_PAIRS)
+def test_suite_evidence_names_a_wrong_uncompared_count(pair, concept, tmp_path):
+    report = _uncompared_report(pair)
+    report["summary"]["uncompared_mismatches"] = 0
+    # Dropping the pair from both counts keeps the aggregate's compared
+    # counts consistent, so only its uncompared count is wrong.
+    row = aggregate(report, concept)
+    row["uncompared_mismatches"] = 0
+    row["mismatch_count"] -= 1
+    defects = _evidence(report, tmp_path).content_defects
+    assert any(
+        "summary.uncompared_mismatches 0 does not match parsed per-case verdicts 1"
+        in defect
+        for defect in defects
+    )
+    assert any(
+        f"report aggregate {concept!r} declares 0 uncompared mismatches but "
+        "stored verdicts flag 1" in defect
+        for defect in defects
+    )
+
+
 @pytest.mark.parametrize("flag", [False, 1, "true", None])
 def test_suite_evidence_refuses_a_non_true_inline_uncompared_flag(flag, tmp_path):
     report = _uncompared_report((None, True, 0.0, "holds"))
@@ -1661,11 +1683,16 @@ def test_suite_evidence_refuses_a_non_true_inline_uncompared_flag(flag, tmp_path
     )
 
 
-_VALID_PAIR = st.tuples(
-    st.sampled_from([0.0, 50.0, 100.0]),
+# Each generated case agrees on at least one concept: the adapter omits
+# ``matches`` from a case where every pair disagrees, and the validator then
+# cannot fully reconcile the report, at main as here.
+_VALID_PAIR = st.builds(
+    lambda eligible, pe_amount, ax_amount: (
+        pe_amount, eligible, ax_amount, "holds" if eligible else "not_holds"
+    ),
     st.booleans(),
     st.sampled_from([0.0, 50.0, 100.0]),
-    st.sampled_from(["holds", "not_holds"]),
+    st.sampled_from([0.0, 50.0, 100.0]),
 )
 _FAILED_PAIR = st.sampled_from(
     [(None, True, 0.0, "holds"), (math.nan, False, 10.0, "not_holds"),
