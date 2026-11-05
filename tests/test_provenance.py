@@ -211,29 +211,129 @@ def test_repo_slug_from_remote_is_host_case_invariant(flips, scheme, owner, name
     assert repo_slug_from_remote(mixed) is not None
 
 
-@settings(max_examples=200)
-@given(
-    flips=_HOST_CASE,
-    scheme=st.sampled_from(["https://", "ssh://git@", "https://user@", "git@"]),
-    owner=st.sampled_from(["TheAxiomFoundation", "theaxiomfoundation", "evil"]),
-    name=st.sampled_from(["rulespec-us", "RuleSpec-US", "rulespec-uk"]),
-    suffix=st.sampled_from(["", ".git"]),
+_TARGET = "TheAxiomFoundation/rulespec-us"
+
+
+@pytest.mark.parametrize(
+    ("url", "slug", "matches"),
+    (
+        # A foreign host never yields the canonical name, wherever github.com
+        # appears in the URL.
+        ("https://example.invalid/github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("git@example.invalid:TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com@example.invalid/TheAxiomFoundation/rulespec-us", None, False),
+        ("https://github.com.example.invalid/TheAxiomFoundation/rulespec-us", None, False),
+        ("git@github-alias:TheAxiomFoundation/rulespec-us.git", None, False),
+        # A port is part of the host: only the scheme's own port is github.com.
+        ("https://github.com:443/evil/rulespec-us.git", "evil/rulespec-us", False),
+        ("https://github.com:443/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("ssh://git@github.com:22/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("https://github.com:8443/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com:x/TheAxiomFoundation/rulespec-us.git", None, False),
+        # Userinfo is not the host.
+        ("https://user:token@github.com/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("org-1@github.com:TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("github.com:TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        # The real repository spelled with a trailing slash, query or fragment.
+        ("https://github.com/TheAxiomFoundation/rulespec-us.git/", _TARGET, True),
+        ("https://github.com/TheAxiomFoundation/rulespec-us?x=1", _TARGET, True),
+        ("https://github.com/TheAxiomFoundation/rulespec-us#x", _TARGET, True),
+        ("https://GitHub.COM/theaxiomfoundation/RuleSpec-US.git", "theaxiomfoundation/RuleSpec-US", True),
+        # Schemes and paths git can read but this check does not.
+        ("http://github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("git://github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com/x/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com/TheAxiomFoundation", None, False),
+        ("git@github.com:/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("/srv/mirrors/rulespec-us.git", None, False),
+        ("file:///srv/mirrors/rulespec-us.git", None, False),
+    ),
 )
-def test_canonical_origin_agrees_with_provenance(flips, scheme, owner, name, suffix):
-    # Differential: rulespec_roots._canonical_origin and provenance's
-    # remote_matches_slug both judge whether an origin is
-    # TheAxiomFoundation/rulespec-us on github.com. Where _canonical_origin
-    # accepts, provenance must too; where provenance recognizes the remote and
-    # rejects, _canonical_origin must reject.
+def test_remote_forms_agree_across_parsers(url, slug, matches):
     from axiom_oracles.rulespec_roots import _canonical_origin
 
-    host = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
-    sep = ":" if scheme == "git@" else "/"
-    url = f"{scheme}{host}{sep}{owner}/{name}{suffix}"
-    target = "TheAxiomFoundation/rulespec-us"
+    assert repo_slug_from_remote(url) == slug
+    assert remote_matches_slug(url, _TARGET) is matches
+    assert _canonical_origin(url, "rulespec-us") is matches
+
+
+@pytest.mark.parametrize("url", (None, "", "  \n"))
+def test_an_absent_origin_still_matches(url):
+    # No origin: callers fall back on the supervised layout conventions.
+    assert remote_matches_slug(url, _TARGET)
+    assert repo_slug_from_remote(url) is None
+
+
+def _checkout_with_origin(path: Path, origin: str | None) -> Path:
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    if origin is not None:
+        subprocess.run(["git", "-C", str(path), "remote", "add", "origin", origin], check=True)
+    return path
+
+
+@pytest.mark.parametrize(
+    "origin",
+    (
+        "https://example.invalid/github.com/TheAxiomFoundation/rulespec-us.git",
+        "git@example.invalid:TheAxiomFoundation/rulespec-us.git",
+        "https://github.com:8443/TheAxiomFoundation/rulespec-us.git",
+    ),
+)
+def test_checkout_from_a_foreign_host_is_refused_and_not_named_canonical(tmp_path, origin):
+    repo = _checkout_with_origin(tmp_path / "rulespec-us", origin)
+    assert not checkout_remote_matches_slug(repo, _TARGET)
+    # The directory name must not stand in for a configured foreign origin.
+    assert rulespec_provenance([repo])[0]["repo"] != _TARGET
+
+
+def test_checkout_without_origin_keeps_the_layout_name(tmp_path):
+    repo = _checkout_with_origin(tmp_path / "rulespec-us", None)
+    assert checkout_remote_matches_slug(repo, _TARGET)
+    assert rulespec_provenance([repo])[0]["repo"] == _TARGET
+
+
+_PORTS = {"https://": 443, "ssh://git@": 22, "https://user@": 443, "https://u:p@": 443}
+
+
+@settings(max_examples=400)
+@given(
+    flips=_HOST_CASE,
+    scheme=st.sampled_from([*_PORTS, "git@", "", "http://", "git://"]),
+    host=st.sampled_from(["github.com", "example.invalid", "github.com.example.invalid",
+                          "example.invalid/github.com", "github.com@example.invalid"]),
+    port=st.sampled_from(["", ":443", ":22", ":8443"]),
+    owner=st.sampled_from(["TheAxiomFoundation", "theaxiomfoundation", "evil"]),
+    name=st.sampled_from(["rulespec-us", "RuleSpec-US", "rulespec-uk"]),
+    suffix=st.sampled_from(["", ".git", "/", ".git/"]),
+    tail=st.sampled_from(["", "?x=1", "#x"]),
+)
+def test_canonical_origin_agrees_with_provenance(
+    flips, scheme, host, port, owner, name, suffix, tail
+):
+    # Differential: rulespec_roots._canonical_origin and provenance's
+    # remote_matches_slug both judge whether a configured origin is
+    # TheAxiomFoundation/rulespec-us on github.com. They must agree on every
+    # form, and both must agree with the spelled-out rule below.
+    from axiom_oracles.rulespec_roots import _canonical_origin
+
+    cased = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
+    host = host.replace("github.com", cased)
+    scp = scheme in ("git@", "")
+    url = f"{scheme}{host}{'' if scp else port}{':' if scp else '/'}{owner}/{name}{suffix}{tail}"
+    expected = (
+        host.casefold() == "github.com"
+        and scheme in (*_PORTS, "git@", "")
+        and (scp or port in ("", f":{_PORTS[scheme]}"))
+        and not (scp and tail)
+        and owner.casefold() == "theaxiomfoundation"
+        and name.casefold() == "rulespec-us"
+    )
     roots_ok = _canonical_origin(url, "rulespec-us")
-    assert repo_slug_from_remote(url) is not None
-    assert roots_ok == remote_matches_slug(url, target)
+    provenance_ok = remote_matches_slug(url, _TARGET)
+    assert roots_ok == provenance_ok == expected, url
+    # A configured origin that matches is always a recognized one.
+    if provenance_ok:
+        assert repo_slug_from_remote(url) is not None
 
 
 def test_rulespec_provenance_uses_git_when_available(tmp_path):
