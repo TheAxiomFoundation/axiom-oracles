@@ -247,13 +247,25 @@ Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 ### `federal-tax-liability-grid`
 
 Runs one reviewed federal tax case grid through
-`scripts/generate_federal_tax_liability.py`. The Axiom leg reads the selected
-policy's engine-verified RuleSpec companion fixture; the PolicyEngine leg builds
+`scripts/generate_federal_tax_liability.py`. The Axiom leg runs the Axiom
+rules engine on each case's inputs from the selected policy's RuleSpec
+companion fixture and fails if any output the fixture records differs from the
+engine's value; the PolicyEngine leg builds
 fresh 2026 simulations under the config's explicit per-suite PE-US/core pins.
 Runs are policy-isolated and have no committed-report fallback, so one missing
 companion cannot couple the other policies and an unavailable oracle fails
 rather than replaying stale evidence. A policy may select all companion cases
 or an explicitly documented non-vacuous exact-input subset.
+
+Required runner keys: `axiom_rules_repo`. The runner reads the
+`axiom_rules_engine_ref` the rulespec snapshot's HEAD pins
+(`.axiom/workflow-toolchain.toml`, else `.axiom/toolchain.toml`), builds that
+engine revision with a build receipt (using the configured checkout when it is
+that revision, otherwise a detached worktree of it under
+`~/.cache/axiom-oracles/axiom-rules-engine/`), passes the executable to the
+generator, and records the receipt as the report's engine identity. That is
+the engine the snapshot's own CI validates its modules and fixtures with;
+axiom-rules main refuses to load the pinned snapshots' modules.
 
 Required `parameters`: `policy`, `rulespec_roots`,
 `policyengine_version: 4.18.9`, `policyengine_us_version: 1.767.3`, and
@@ -281,11 +293,13 @@ until the next deliberate re-pin.
 Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
 (`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
 PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
-Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
-`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
-rulespec-us CI) and fails closed unless each replayed verdict equals the
-pinned legal expectation and each case still zeroes every unrelated
-exception; the PolicyEngine leg builds fresh person-level monthly simulations
+Axiom leg runs the Axiom rules engine on the nine July 2026 boundary cases'
+inputs from the rulespec-us `us/regulations/7-cfr/273/24.test.yaml` companion
+fixture and fails closed unless every verdict the fixture records equals the
+engine's, each engine verdict equals the pinned legal expectation, and each
+case still zeroes every unrelated exception. The engine revision and receipt
+follow the same rule as `federal-tax-liability-grid` (required runner key
+`axiom_rules_repo`); the PolicyEngine leg builds fresh person-level monthly simulations
 under the reviewed 2026 oracle stack and verifies the oracle's own
 exempted-age brackets flip at the 2025-07-04 effective date before trusting
 its verdicts.

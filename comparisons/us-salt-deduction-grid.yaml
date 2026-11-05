@@ -32,6 +32,9 @@ description: >-
 
 runner:
   type: federal-tax-liability-grid
+  # Builds the engine revision the rulespec snapshot's own toolchain pins
+  # and evaluates every fixture case with it (#675).
+  axiom_rules_repo: $HOME/axiom-rules
   parameters:
     policy: salt_deduction
     period: "2026"

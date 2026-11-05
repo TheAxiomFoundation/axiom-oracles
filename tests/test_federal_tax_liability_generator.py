@@ -34,6 +34,13 @@ def _load_generator():
     return module
 
 
+_FAKE_RECEIPT = {
+    "commit": "c" * 40,
+    "binary_sha256": "d" * 64,
+    "binary_path": "/engine/axiom-rules-engine",
+}
+
+
 def _load_runner():
     path = REPO_ROOT / "scripts" / "run_comparison.py"
     spec = importlib.util.spec_from_file_location("federal_grid_runner", path)
@@ -1907,20 +1914,27 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(runner.subprocess, "run", fake_run)
-
-    runner._run_federal_tax_liability_grid(
-        {
-            "parameters": {
-                "policy": "net_investment_income_tax",
-                "python": "3.13",
-                "rulespec_roots": [str(rulespec)],
-                "policyengine_version": "4.18.9",
-                "policyengine_us_version": "1.767.3",
-                "policyengine_core_version": "3.30.3",
-            }
-        },
-        output,
+    receipts: list[Path] = []
+    monkeypatch.setattr(
+        runner,
+        "_fixture_engine_receipt",
+        lambda _runner, root: receipts.append(root) or _FAKE_RECEIPT,
     )
+    config = {
+        "parameters": {
+            "policy": "net_investment_income_tax",
+            "python": "3.13",
+            "rulespec_roots": [str(rulespec)],
+            "policyengine_version": "4.18.9",
+            "policyengine_us_version": "1.767.3",
+            "policyengine_core_version": "3.30.3",
+        }
+    }
+
+    runner._run_federal_tax_liability_grid(config, output)
+
+    assert config["_engine_receipt"] is _FAKE_RECEIPT
+    assert receipts == [rulespec.resolve()]
 
     assert runner.RUNNERS["federal-tax-liability-grid"] is (
         runner._run_federal_tax_liability_grid
@@ -1934,6 +1948,7 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
+    assert cmd[cmd.index("--axiom-engine") + 1] == _FAKE_RECEIPT["binary_path"]
     assert cmd[cmd.index("--output") + 1] == str(output)
 
 
@@ -2154,6 +2169,9 @@ def test_registry_runner_clones_declared_remote_when_dev_root_is_absent(
         runner.subprocess,
         "run",
         lambda cmd, *, check, cwd: calls.append(cmd),
+    )
+    monkeypatch.setattr(
+        runner, "_fixture_engine_receipt", lambda _runner, _root: _FAKE_RECEIPT
     )
 
     runner._run_federal_tax_liability_grid(
