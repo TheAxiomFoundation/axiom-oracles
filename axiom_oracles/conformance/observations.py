@@ -346,12 +346,12 @@ class OutputEvidence:
         adapter retains no matches. Every other row of a FIIT report,
         including any match, is checked like any other report's.
         A second kind is exempt the same way: a retained mismatch marked
-        ``"uncompared": true`` in a report that records an engine error.
-        It is a failed return kept as a diagnostic, not a verdict on its
-        values, so values that happen to agree do not contradict it. The
-        engine error already refuses the report's execution evidence. A
-        match never carries the exemption, and without a recorded engine
-        error the flag exempts nothing.
+        ``"uncompared": true`` when the report's ``errors`` list records an
+        engine error for that case and concept. It is a failed return kept as
+        a diagnostic, not a verdict on its values, so values that happen to
+        agree do not contradict it. The engine error already refuses the
+        report's execution evidence. A match never carries the exemption, and
+        an error on another case or concept exempts nothing.
         """
         self.contradicted_scalar_comparisons = set()
         self.scalar_verdicts_reconciled = True
@@ -372,7 +372,14 @@ class OutputEvidence:
             (row.get("case_id"), row, False) for row in report.get("mismatches") or []
             if isinstance(row, dict) and valid_case_id(row.get("case_id"))
         ]
-        engine_errors_recorded = bool(summary.get("error_count") or report.get("errors"))
+        errors = report.get("errors")
+        errored = {
+            (error["case_id"], error["concept"])
+            for error in (errors if isinstance(errors, list) else ())
+            if isinstance(error, dict)
+            and isinstance(error.get("case_id"), str)
+            and isinstance(error.get("concept"), str)
+        }
         verdicts = defaultdict(set)
         for case_id, row, matched in retained:
             if (not isinstance(row, dict) or row.get("variable") is not None
@@ -383,7 +390,7 @@ class OutputEvidence:
             verdicts[identity].add(matched)
             if self.native_fiit and not matched and "output" in row:
                 continue
-            if not matched and row.get("uncompared") is True and engine_errors_recorded:
+            if not matched and row.get("uncompared") is True and identity in errored:
                 continue
             if not _scalar_row_valid(row, matched, authorities.get(row["concept"])):
                 self.contradicted_scalar_comparisons.add(identity)

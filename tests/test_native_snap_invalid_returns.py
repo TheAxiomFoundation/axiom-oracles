@@ -1612,12 +1612,41 @@ def test_uncompared_flag_without_an_engine_error_exempts_nothing():
     assert ("ecps-spm-1", ELIGIBILITY) in evidence.contradicted_scalar_comparisons
 
 
+@pytest.mark.parametrize(
+    "field, value",
+    (("case_id", "ecps-spm-other"), ("concept", AMOUNT)),
+    ids=("another_case", "another_concept"),
+)
+def test_uncompared_flag_with_an_error_on_another_row_exempts_nothing(field, value):
+    report = publish(produce([(100.0, True, 100.0, "yes")]))
+    assert report["errors"]
+    for error in report["errors"]:
+        error[field] = value
+    evidence = _scalar_evidence(report)
+    assert ("ecps-spm-1", ELIGIBILITY) in evidence.contradicted_scalar_comparisons
+    assert not evidence.execution_valid
+
+
+def test_uncompared_flag_on_a_summary_count_alone_exempts_nothing():
+    report = publish(produce([(100.0, True, 100.0, "yes")]))
+    report["errors"] = []
+    assert report["summary"]["error_count"]
+    evidence = _scalar_evidence(report)
+    assert ("ecps-spm-1", ELIGIBILITY) in evidence.contradicted_scalar_comparisons
+    assert not evidence.execution_valid
+
+
 def test_uncompared_flag_on_a_match_exempts_nothing():
     report = publish(produce([(100.0, True, 100.0, "holds"), (50.0, True, 50.0, "yes")]))
     case = report["cases"][0]
     [match] = [row for row in case["matches"] if row["concept"] == AMOUNT]
     match["right"] = 0.0
     match["uncompared"] = True
+    # An error on this case and concept leaves the match's verdict as the only
+    # thing standing between this row and the exemption.
+    report["errors"].append(
+        {**report["errors"][0], "case_id": "ecps-spm-1", "concept": AMOUNT}
+    )
     evidence = _scalar_evidence(report)
     assert ("ecps-spm-1", AMOUNT) in evidence.contradicted_scalar_comparisons
 
