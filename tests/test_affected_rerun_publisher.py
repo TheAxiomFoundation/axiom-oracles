@@ -81,7 +81,9 @@ def test_legs_upload_their_bundle_as_refreshed_suite():
 
 def test_publish_job_downloads_every_bundle_and_publishes_once():
     job = _jobs()["publish"]
-    assert job["needs"] == ["select", "rerun"]
+    # snap-qc-replay is the live SNAP QC lane; its legs upload the same
+    # refreshed-<suite> bundles (tests/test_affected_rerun_workflow.py).
+    assert job["needs"] == ["select", "rerun", "snap-qc-replay"]
     # Runs after a partly failed matrix (the passing legs' bundles still
     # publish, and the run stays red for the failed legs), never after a
     # cancellation, and not at all when nothing was selected.
@@ -128,9 +130,10 @@ def test_publish_job_mirrors_the_legs_interpreter():
     assert setup(_jobs()["publish"]) == setup(_jobs()["rerun"])
 
 
-def test_weekly_matrix_skips_every_ci_manual_suite(tmp_path):
-    """Execute comparisons.yml's discover step as written: no ci: manual suite
-    (the SPSD/M suite included) reaches the weekly matrix."""
+def test_weekly_matrix_skips_every_ci_routed_suite(tmp_path):
+    """Execute comparisons.yml's discover step as written: no suite declaring
+    ci: manual (the SPSD/M suite included) or a ci: <lane> (the SNAP QC
+    replays) reaches the weekly matrix."""
     discover = _workflow("comparisons.yml")["jobs"]["discover"]
     run = next(step["run"] for step in discover["steps"] if step.get("id") == "list")
     code = textwrap.dedent(run.split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0])
@@ -148,7 +151,8 @@ def test_weekly_matrix_skips_every_ci_manual_suite(tmp_path):
     manual = set()
     for path in (REPO_ROOT / "comparisons").glob("*.yaml"):
         config = yaml.safe_load(path.read_text())
-        if isinstance(config, dict) and config.get("ci") == "manual":
+        if isinstance(config, dict) and config.get("ci"):
             manual.add(path.stem)
     assert "ca-federal-schedule-tax-spsm" in manual
+    assert "ny-snap-qc" in manual
     assert names and not names & manual
