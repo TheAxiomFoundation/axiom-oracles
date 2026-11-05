@@ -231,6 +231,71 @@ def test_an_output_the_program_does_not_define_fails(fake_rules_engine, tmp_path
         )
 
 
+@pytest.mark.parametrize(
+    "output",
+    (f"{MODULE}#removed", f"{MODULE}#household_total"),
+    ids=("no_rule", "another_entity"),
+)
+def test_a_recorded_output_the_engine_did_not_evaluate_fails(
+    fake_rules_engine, tmp_path, output
+):
+    program = {
+        **PROGRAM,
+        "derived": [
+            *PROGRAM["derived"],
+            {
+                "id": f"{MODULE}#household_total",
+                "entity": "Household",
+                "expr": {"kind": "input"},
+            },
+        ],
+    }
+    binary = fake_rules_engine(program, RULES)
+    root = _root(tmp_path)
+    record = _record("age_66", 66, "holds")
+    record["output"][output] = "999"
+    with pytest.raises(fe.FixtureDisagreement, match="evaluated no such output"):
+        _evaluate(binary, root, [record])
+
+
+_RECORDED_OUTPUTS = st.sampled_from((EXCEPTION, COUNT, AMOUNT))
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    recorded=st.dictionaries(
+        _RECORDED_OUTPUTS, st.sampled_from(("holds", "not_holds", 1, "2.5"))
+    ),
+    returned=st.dictionaries(
+        _RECORDED_OUTPUTS,
+        st.sampled_from(("holds", "not_holds", Decimal(1), Decimal("2.5"))),
+    ),
+)
+def test_agreement_holds_only_when_the_engine_returned_every_recorded_value(
+    recorded, returned
+):
+    agrees = all(
+        output in returned and fe.expected_value(raw) == returned[output]
+        for output, raw in recorded.items()
+    )
+    if agrees:
+        fe.require_agreement("case", returned, recorded)
+    else:
+        with pytest.raises(fe.FixtureDisagreement):
+            fe.require_agreement("case", returned, recorded)
+
+
+def test_a_relation_the_program_never_reads_fails_closed(tmp_path):
+    program = {
+        "relations": [{"name": RELATION, "arity": 2}],
+        "derived": [{"id": EXCEPTION, "entity": "Person", "expr": {"kind": "input"}}],
+    }
+    artifact = tmp_path / "artifact.json"
+    artifact.write_text(json.dumps({"program": program}))
+    with pytest.raises(fe.FixtureEngineError, match="never reads relation"):
+        fe.build_request(_record("c", 30, "not_holds", children=1), artifact, [EXCEPTION])
+
+
 def test_relation_read_from_slot_zero_reverses_the_tuple(tmp_path):
     program = {
         "relations": [{"name": RELATION, "arity": 2}],

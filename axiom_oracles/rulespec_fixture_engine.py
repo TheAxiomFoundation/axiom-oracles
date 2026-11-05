@@ -285,11 +285,15 @@ def build_request(
                     f"{where}: the compiled program declares no relation {key!r}"
                 )
             current = slot["current"]
+            if not current:
+                raise FixtureEngineError(
+                    f"{where}: the compiled program never reads relation {key!r}"
+                )
             if len(current) > 1:
                 raise FixtureEngineError(
                     f"{where}: relation {key!r} is read from both slots"
                 )
-            current_slot = next(iter(current), 1)
+            current_slot = next(iter(current))
             if current_slot not in (0, 1):
                 raise FixtureEngineError(
                     f"{where}: relation {key!r} has queried slot {current_slot!r}"
@@ -451,14 +455,16 @@ def require_agreement(
     engine: Mapping[str, Any],
     fixture_outputs: Mapping[str, Any],
 ) -> None:
-    """Fail unless every recorded fixture output equals the engine's value.
+    """Fail unless the engine returned every recorded fixture output, at its value.
 
-    Only outputs the engine evaluated are checked; callers request every
-    fixture output they read so none escapes the check.
+    :func:`evaluate_fixture_cases` requests every recorded output the program
+    derives on the queried entity, so an output missing here names another
+    entity or no rule at all, and the engine never checked it.
     """
     differences = []
     for output, raw in fixture_outputs.items():
         if output not in engine:
+            differences.append(f"{output}: fixture {raw!r}, engine evaluated no such output")
             continue
         expected = expected_value(raw)
         actual = engine[output]
@@ -494,8 +500,9 @@ def evaluate_fixture_cases(
                     f"absolute output ids; got {required}"
                 )
             # Every other recorded fixture output the program derives on the
-            # same entity is evaluated too, so the whole recorded case is
-            # checked against the engine, not only the values the grid reads.
+            # same entity is evaluated too, and `require_agreement` refuses any
+            # it cannot evaluate, so the engine checks the whole recorded case,
+            # not only the values the grid reads.
             entity = (derived.get(required[0]) or {}).get("entity")
             extra = [
                 str(output)
