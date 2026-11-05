@@ -347,7 +347,8 @@ class OutputEvidence:
         including any match, is checked like any other report's.
         A second kind is exempt the same way: a retained mismatch marked
         ``"uncompared": true`` when the report's ``errors`` list records an
-        engine error for that case and concept. It is a failed return kept as
+        engine error under the same string case id and concept, as the SNAP
+        adapter writes them. It is a failed return kept as
         a diagnostic, not a verdict on its values, so values that happen to
         agree do not contradict it. The engine error already refuses the
         report's execution evidence. A match never carries the exemption, and
