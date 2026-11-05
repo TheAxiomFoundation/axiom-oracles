@@ -580,12 +580,21 @@ def _remote_url(repo: Path) -> str | None:
     return result.stdout.strip() or None
 
 
+#: ``github.com/`` in any letter case. Host names ignore case, so git sends
+#: ``https://GitHub.com/…`` to github.com; matching only the lowercase
+#: spelling would leave such a fork unrecognized, and
+#: :func:`remote_matches_slug` accepts an unrecognized origin. ASCII-only, so
+#: no Unicode case folding stretches the match to another host.
+_GITHUB_HOST = re.compile(r"github\.com/", re.IGNORECASE | re.ASCII)
+
+
 def repo_slug_from_remote(url: str | None) -> str | None:
     """Reduce a git remote URL to its ``owner/repo`` slug.
 
     Handles both ``git@github.com:Owner/repo.git`` and
-    ``https://github.com/Owner/repo(.git)`` forms. Returns None for anything
-    that is not obviously a GitHub-style remote.
+    ``https://github.com/Owner/repo(.git)`` forms, with the host in any
+    letter case. Returns None for anything that is not obviously a
+    GitHub-style remote.
     """
     if not url:
         return None
@@ -594,8 +603,8 @@ def repo_slug_from_remote(url: str | None) -> str | None:
         url = url[: -len(".git")]
     if url.startswith("git@") and ":" in url:
         url = url.split(":", 1)[1]
-    elif "github.com/" in url:
-        url = url.split("github.com/", 1)[1]
+    elif host := _GITHUB_HOST.search(url):
+        url = url[host.end():]
     else:
         return None
     parts = [p for p in url.split("/") if p]
