@@ -21,9 +21,10 @@ so the break shows up here first, with the file to fix:
 3. Every ``policyengine-us`` commit archive a suite or script installs
    downloads.
 
-A 5xx, 408 or 429, or a connection error, is retried twice with backoff and
-reported as transient. A 404 or 410 means the file or release is gone; any
-other 4xx (403, 401, ...) is reported as refused, at once. Breaks already
+A 5xx, 408 or 429, a 403 that carries ``Retry-After`` or
+``X-RateLimit-Remaining: 0``, or a connection error, is retried twice with
+backoff and reported as transient. A 404 or 410 means the file or release is
+gone; any other 4xx (a plain 403, 401, ...) is reported as refused, at once. Breaks already
 tracked in an issue (``KNOWN_OPEN``, keyed by the file that pins them) print
 as warnings, so only a new break fails the run.
 
@@ -384,18 +385,18 @@ def _request(session, method: str, url: str, **kwargs):
             status, error, value = None, str(exc), None
         else:
             status, error, value = response.status_code, None, response
-            if not pinned_artifacts.is_transient_status(status):
+            if not pinned_artifacts.is_transient_status(status, response.headers):
                 return status, None, value
         if attempt + 1 < attempts:
             pinned_artifacts._sleep(pinned_artifacts.RETRY_DELAYS[attempt])
     return status, error, value
 
 
-def _describe(status, error) -> str:
+def _describe(status, error, response=None) -> str:
     attempts = len(pinned_artifacts.RETRY_DELAYS) + 1
     if status is None:
         return f"transient: connection failed on all {attempts} attempts ({error})"
-    kind = pinned_artifacts.classify_status(status)
+    kind = pinned_artifacts.classify_status(status, getattr(response, "headers", None))
     if kind == "transient":
         return f"transient: HTTP {status} on all {attempts} attempts, not a removal"
     if kind == "refused":
@@ -452,7 +453,8 @@ def check(*, verbose: bool = False) -> tuple[list[str], list[str]]:
             else:
                 listed[package] = None
                 failures.append(
-                    f"{package}: cannot read PyPI's index: {_describe(status, error)}"
+                    f"{package}: cannot read PyPI's index: "
+                    f"{_describe(status, error, response)}"
                 )
         if listed[package] is None:
             continue
@@ -474,14 +476,17 @@ def check(*, verbose: bool = False) -> tuple[list[str], list[str]]:
 
     # 3. Every commit archive downloads.
     for url, uses in sorted(sources.items()):
-        status, error, _response = _request(session, "head", url, allow_redirects=True)
+        status, error, response = _request(session, "head", url, allow_redirects=True)
         if status == 200:
             if verbose:
                 print(f"ok   {url}")
             continue
         for use in sorted(uses, key=str):
             issue = KNOWN_OPEN_SOURCES.get((url, use.path))
-            message = f"{use}: policyengine-us archive {url}: {_describe(status, error)}"
+            message = (
+                f"{use}: policyengine-us archive {url}: "
+                f"{_describe(status, error, response)}"
+            )
             if issue:
                 warnings.append(f"{message} (known open: {issue})")
             else:

@@ -35,6 +35,7 @@ import hashlib
 import os
 import tempfile
 import time
+from collections.abc import Mapping
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -137,10 +138,11 @@ class PinnedArtifactError(RuntimeError):
     ``kind`` tells the cases apart:
 
     - ``"gone"``: HTTP 404 or 410, the file was removed;
-    - ``"transient"``: a 5xx, 408 or 429, or a connection error, that
-      persisted through every retry;
-    - ``"refused"``: any other 4xx (403, 401, ...), which a retry would not
-      change and which does not by itself mean the file is gone;
+    - ``"transient"``: a 5xx, 408 or 429, a 403 marked as rate limiting
+      (``Retry-After`` or ``X-RateLimit-Remaining: 0``), or a connection
+      error, that persisted through every retry;
+    - ``"refused"``: any other 4xx (a plain 403, 401, ...), which a retry
+      would not change and which does not by itself mean the file is gone;
     - ``"mismatch"``: the bytes do not hash to the recorded SHA-256.
     """
 
@@ -156,23 +158,43 @@ _sleep = time.sleep
 
 #: Statuses that mean the file was removed.
 GONE_STATUSES = frozenset({404, 410})
-#: 4xx statuses worth a retry: request timeout and rate limiting.
+#: 4xx statuses worth a retry: request timeout and rate limiting. A 403 is
+#: retried too when its headers mark it as rate limiting (classify_status).
 TRANSIENT_CLIENT_STATUSES = frozenset({408, 429})
 
 
-def classify_status(status: int) -> str:
-    """``"ok"``, ``"transient"`` (retry), ``"gone"`` or ``"refused"``."""
+def _rate_limited(headers: Mapping[str, str] | None) -> bool:
+    """Do ``headers`` say the request was rate limited?
+
+    Some hosts answer rate limiting with a 403 rather than a 429; they mark
+    it with ``Retry-After`` or ``X-RateLimit-Remaining: 0``. Header names are
+    compared case-insensitively, whatever mapping holds them.
+    """
+    if not headers:
+        return False
+    names = {str(name).lower(): str(value).strip() for name, value in headers.items()}
+    return "retry-after" in names or names.get("x-ratelimit-remaining") == "0"
+
+
+def classify_status(status: int, headers: Mapping[str, str] | None = None) -> str:
+    """``"ok"``, ``"transient"`` (retry), ``"gone"`` or ``"refused"``.
+
+    A 403 whose ``headers`` mark it as rate limiting is ``"transient"``; the
+    headers change no other status's class.
+    """
     if status == 200:
         return "ok"
     if 500 <= status < 600 or status in TRANSIENT_CLIENT_STATUSES:
         return "transient"
     if status in GONE_STATUSES:
         return "gone"
+    if status == 403 and _rate_limited(headers):
+        return "transient"
     return "refused"
 
 
-def is_transient_status(status: int) -> bool:
-    return classify_status(status) == "transient"
+def is_transient_status(status: int, headers: Mapping[str, str] | None = None) -> bool:
+    return classify_status(status, headers) == "transient"
 
 
 def _normalize(name: str) -> str:
@@ -213,7 +235,7 @@ def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
     """Download ``artifact`` once, verify its SHA-256, and return its path.
 
     A cached file is re-hashed before reuse. A transient status (5xx, 408,
-    429) or a connection error is retried ``len(RETRY_DELAYS)`` times with
+    429, or a rate-limited 403) or a connection error is retried ``len(RETRY_DELAYS)`` times with
     backoff. Raises PinnedArtifactError, naming the file and the table, when
     the download fails (``kind`` ``"gone"``, ``"refused"`` or
     ``"transient"``) or the bytes do not match the recorded hash
@@ -240,7 +262,7 @@ def fetch(artifact: PinnedArtifact, *, timeout: float = 120.0) -> Path:
                     artifact.url, stream=True, timeout=timeout
                 ) as response:
                     status = response.status_code
-                    kind = classify_status(status)
+                    kind = classify_status(status, response.headers)
                     if kind == "transient" and attempt + 1 < attempts:
                         _sleep(RETRY_DELAYS[attempt])
                         continue
