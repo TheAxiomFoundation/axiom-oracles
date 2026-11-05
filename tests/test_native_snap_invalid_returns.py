@@ -1561,3 +1561,160 @@ def test_indirect_pe_outputs_forms_are_allowed_in_their_own_scopes(scope):
     injected = "".join(f"{indent}{form}\n" for form in _INDIRECT_FORMS)
     tree = ast.parse(source.replace(anchor, injected + anchor))
     assert _indirect_pe_outputs_reads(tree) == []
+
+
+# ── suite evidence (#684) ──────────────────────────────────────────────────
+# validate_suite_evidence reads a pair marked uncompared as a failed return
+# kept for diagnosis, not as a measured disagreement. These reports come
+# from the real producer, CSV writer and adapter above.
+GOOD_PAIR = (100.0, True, 100.0, "holds")
+UNCOMPARED_PAIRS = [
+    pytest.param((None, True, 0.0, "holds"), AMOUNT, id="amount-missing"),
+    pytest.param((math.nan, True, 0.0, "holds"), AMOUNT, id="amount-nan"),
+    pytest.param((100.0, True, 100.0, "yes"), ELIGIBILITY, id="eligibility-ledger-only"),
+]
+
+
+def _evidence(report, tmp_path):
+    from axiom_oracles.evidence import validate_suite_evidence
+
+    path = tmp_path / "report.json"
+    path.write_text(json.dumps(report, allow_nan=False))
+    return validate_suite_evidence(path)
+
+
+def _uncompared_report(pair):
+    report = publish(produce([GOOD_PAIR, pair]))
+    assert report["summary"]["uncompared_mismatches"] == 1
+    return report
+
+
+@pytest.mark.parametrize(("pair", "concept"), UNCOMPARED_PAIRS)
+def test_suite_evidence_leaves_an_uncompared_pair_out_of_compared_counts(
+    pair, concept, tmp_path
+):
+    report = _uncompared_report(pair)
+    [row] = report["mismatches"]
+    assert (row["concept"], row["uncompared"]) == (concept, True)
+    evidence = _evidence(report, tmp_path)
+    assert evidence.content_defects == ()
+    assert evidence.reconciliation == "full"
+    # attest still refuses the run for its engine error.
+    assert not attest(report, oracle="policyengine").eligible
+
+
+def test_suite_evidence_is_unchanged_for_a_report_with_no_uncompared_pair(tmp_path):
+    report = publish(produce([GOOD_PAIR, (50.0, True, 50.0, "holds")]))
+    evidence = _evidence(report, tmp_path)
+    assert evidence.content_defects == ()
+    assert evidence.reconciliation == "full"
+
+
+@pytest.mark.parametrize(("pair", "concept"), UNCOMPARED_PAIRS)
+@pytest.mark.parametrize("ledger", ["no-errors", "other-case", "other-concept"])
+def test_suite_evidence_refuses_an_uncompared_pair_without_its_engine_error(
+    pair, concept, ledger, tmp_path
+):
+    report = _uncompared_report(pair)
+    [error] = report["errors"]
+    if ledger == "no-errors":
+        report["errors"] = []
+    elif ledger == "other-case":
+        error["case_id"] = "ecps-spm-1"
+    else:
+        error["concept"] = ELIGIBILITY if concept == AMOUNT else AMOUNT
+    evidence = _evidence(report, tmp_path)
+    assert any("no engine error" in defect for defect in evidence.content_defects)
+
+
+@pytest.mark.parametrize(("pair", "concept"), UNCOMPARED_PAIRS)
+@pytest.mark.parametrize(
+    "tamper",
+    ["summary-count", "aggregate-count", "summary-missing", "report-row-flag", "case-row-flag"],
+)
+def test_suite_evidence_checks_the_declared_uncompared_counts(
+    pair, concept, tamper, tmp_path
+):
+    report = _uncompared_report(pair)
+    if tamper == "summary-count":
+        report["summary"]["uncompared_mismatches"] = 0
+    elif tamper == "summary-missing":
+        del report["summary"]["uncompared_mismatches"]
+    elif tamper == "aggregate-count":
+        aggregate(report, concept)["uncompared_mismatches"] = 0
+    elif tamper == "report-row-flag":
+        del report["mismatches"][0]["uncompared"]
+    else:
+        [case_row] = [case for case in report["cases"] if case["mismatches"]]
+        del case_row["mismatches"][0]["uncompared"]
+    assert _evidence(report, tmp_path).content_defects
+
+
+@pytest.mark.parametrize("flag", [False, 1, "true", None])
+def test_suite_evidence_refuses_a_non_true_inline_uncompared_flag(flag, tmp_path):
+    report = _uncompared_report((None, True, 0.0, "holds"))
+    [case_row] = [case for case in report["cases"] if case["mismatches"]]
+    case_row["mismatches"][0]["uncompared"] = flag
+    assert any(
+        "uncompared must be true" in defect
+        for defect in _evidence(report, tmp_path).content_defects
+    )
+
+
+_VALID_PAIR = st.tuples(
+    st.sampled_from([0.0, 50.0, 100.0]),
+    st.booleans(),
+    st.sampled_from([0.0, 50.0, 100.0]),
+    st.sampled_from(["holds", "not_holds"]),
+)
+_FAILED_PAIR = st.sampled_from(
+    [(None, True, 0.0, "holds"), (math.nan, False, 10.0, "not_holds"),
+     (100.0, True, 100.0, "yes"), (0.0, False, 0.0, "maybe")]
+)
+
+
+@settings(max_examples=40, deadline=None)
+@given(pairs=st.lists(st.one_of(_VALID_PAIR, _FAILED_PAIR), min_size=1, max_size=6))
+def test_every_produced_report_validates_and_conserves_its_counts(pairs):
+    # Invariants: whatever mix of measured and failed pairs a run produces,
+    # its published report passes validate_suite_evidence, and its summary
+    # counts conserve once uncompared pairs are taken out.
+    import tempfile
+
+    report = publish(produce(pairs))
+    summary = report["summary"]
+    assert (
+        summary["match_count"] + summary["mismatch_count"]
+        - summary["uncompared_mismatches"]
+        == summary["comparison_count"]
+    )
+    with tempfile.TemporaryDirectory() as directory:
+        evidence = _evidence(report, Path(directory))
+    assert evidence.content_defects == ()
+
+
+def test_dashboard_publish_indexes_an_uncompared_pair(monkeypatch, tmp_path):
+    # A suite with a versioned case corpus runs validate_suite_evidence when
+    # it refreshes its index; a run with a failed pair must publish like a
+    # suite with no index.
+    from axiom_oracles.evidence import validate_suite_evidence
+
+    run_comparison = runner()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    report = _uncompared_report((None, True, 0.0, "holds"))
+    suite = report["suite"]
+    index_path = tmp_path / "cases" / suite / "index.json"
+    index_path.parent.mkdir(parents=True)
+    index_path.write_text(json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"}))
+
+    run_comparison._write_dashboard_report(report, f"{suite}.json")
+
+    assert json.loads((tmp_path / "manifest.json").read_text())["reports"] == [
+        f"{suite}.json"
+    ]
+    index = json.loads(index_path.read_text())
+    assert index["report_path"].endswith(f"{suite}.json")
+    evidence = validate_suite_evidence(tmp_path / f"{suite}.json")
+    assert evidence.chunk_case_count == 2
+    assert evidence.content_defects == ()
+    assert evidence.binding == "bound", evidence.binding_defects
