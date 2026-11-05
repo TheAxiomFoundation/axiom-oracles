@@ -1282,6 +1282,41 @@ def test_selector_rejects_a_malformed_lane():
             sel.select({"suites": [entry]}, {"r": "x"}, {})
 
 
+def test_selector_rejects_unknown_lane_without_repositories():
+    sel = _load("select_affected_suites.py")
+    affected = {
+        "suites": [{"suite": "s", "name": "s", "repos": [], "lane": "unknown"}]
+    }
+    with pytest.raises(SystemExit, match="names unknown lane 'unknown'"):
+        sel.select(affected, {}, {})
+    with pytest.raises(SystemExit, match="names unknown lane 'unknown'"):
+        sel.force_all_selection(affected)
+
+
+@settings(max_examples=50, database=None, deadline=None)
+@given(
+    lane=st.one_of(
+        st.none(),
+        st.booleans(),
+        st.integers(),
+        st.text(max_size=32).map(lambda suffix: f"unknown-{suffix}"),
+    ),
+    name=st.sampled_from(["s", None]),
+)
+def test_invalid_lane_rejection_is_independent_of_repositories(lane, name):
+    """Both selection modes validate lanes even when no repo can go stale."""
+    sel = _load("select_affected_suites.py")
+    for repos in ([], ["o/r"]):
+        affected = {
+            "suites": [{"suite": "s", "name": name, "repos": repos, "lane": lane}]
+        }
+        with pytest.raises(SystemExit, match="lane") as normal:
+            sel.select(affected, {}, {})
+        with pytest.raises(SystemExit, match="lane") as forced:
+            sel.force_all_selection(affected)
+        assert str(normal.value) == str(forced.value)
+
+
 def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys):
     """force_all (and a normal sweep) put lane suites in lane_<lane>, never in
     the bare matrix the rerun job dispatches, and never in the manual list."""

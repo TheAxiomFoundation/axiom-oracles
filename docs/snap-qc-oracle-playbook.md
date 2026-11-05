@@ -545,7 +545,16 @@ artifacts.
   with the bare legs' bundles. A leg that diverges, errors, or re-emits packs
   nothing: its published report stays as it was, and the failed leg is the
   alarm. Live tests are skipped on these calls.
-
+- **Rolling back a bad publish.** A revert on `oracle-data` alone doesn't
+  stick: it restores provenance at the old rulespec-us commit, so the next
+  6-hourly run selects those suites as stale and republishes them. Stop the
+  route first, then revert:
+  1. On `main`, disable `affected-rerun.yml`, or set the affected suites back
+     to `ci: manual` and regenerate `comparisons/affected_map.json`.
+  2. Revert the bad `data: refresh` commit on `oracle-data`. That one commit
+     carries the affected reports, CO's case corpus under
+     `dashboard/public/data/cases/co-snap-qc/`, and the derived snapshot and
+     certificate outputs, so the revert restores them together.
 - **Engine.** It builds `axiom-rules-engine` at `axiom_artifact_rules_engine_ref`,
   the pin in rulespec-us `.axiom/workflow-toolchain.toml` that
   `program-artifacts.yml` also builds. The build is

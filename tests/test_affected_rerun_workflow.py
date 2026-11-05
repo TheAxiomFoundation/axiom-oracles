@@ -13,6 +13,7 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 import textwrap
@@ -163,3 +164,31 @@ def test_bundle_guard_passes_when_every_suite_left_a_bundle(tmp_path):
     assert result.returncode == 0, result.stderr
     # A bundle for a bare suite does not stand in for a lane suite.
     assert _run_bundle_guard(tmp_path / "x", lane, ["az-snap-qc", "co-tax"]).returncode != 0
+
+
+def test_snap_qc_rollback_stops_the_route_before_reverting_the_whole_publish():
+    """Rollback must stop republishing and restore every output as one commit."""
+    playbook = (REPO_ROOT / "docs" / "snap-qc-oracle-playbook.md").read_text()
+    replay = playbook.split("## 10. The live CI replay\n", 1)[1].split("\n## ", 1)[0]
+    assert "republishes" in replay  # Why a revert alone doesn't stick.
+    steps = re.findall(r"(?m)^ *([12])\. (.+(?:\n {3,}.+)*)", replay)
+    assert [number for number, _ in steps] == ["1", "2"]
+    stop_route, revert_publish = (" ".join(step.split()) for _, step in steps)
+    for required in (
+        "`main`",
+        "disable `affected-rerun.yml`",
+        "`ci: manual`",
+        "regenerate `comparisons/affected_map.json`",
+    ):
+        assert required in stop_route
+    for required in (
+        "Revert",
+        "`data: refresh`",
+        "`oracle-data`",
+        "reports",
+        "`dashboard/public/data/cases/co-snap-qc/`",
+        "snapshot",
+        "certificate",
+        "together",
+    ):
+        assert required in revert_publish

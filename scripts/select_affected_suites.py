@@ -335,6 +335,7 @@ def force_all_selection(affected_map: dict) -> list[dict]:
     selected: list[dict] = []
     for entry in affected_map.get("suites", []):
         name = _registry_name(entry)
+        _lane(entry, name)
         if not entry.get("repos"):
             continue
         selected.append(_decision(entry, name, "force_all"))
