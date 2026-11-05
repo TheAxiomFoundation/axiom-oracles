@@ -2201,3 +2201,122 @@ def test_registry_runner_rejects_missing_or_wrong_federal_oracle_pins(tmp_path):
             {"parameters": parameters},
             tmp_path / "report.json",
         )
+
+
+# ---------------------------------------------------------------------------
+# The Axiom leg runs the engine (#675).
+# ---------------------------------------------------------------------------
+
+
+def _engine_grid(generator, tmp_path, fake_rules_engine, *, shift=0):
+    """A one-module grid whose engine returns each case's income input."""
+    original = generator.POLICIES["net_investment_income_tax"]
+    output = "us:policies/test#net_investment_income_tax"
+    income = "us:policies/test#input.income"
+    config = replace(
+        original,
+        axiom_module_ref="us:policies/test",
+        fixture_path=Path("us/policies/test.test.yaml"),
+        axiom_output=output,
+        comparison_bindings=(),
+        axiom_bridge_outputs={},
+        axiom_diagnostic_outputs={},
+        fixture_input_validator=lambda _case, _actual: None,
+    )
+    root = tmp_path / "rulespec-us"
+    fixture = root / config.fixture_path
+    fixture.parent.mkdir(parents=True)
+    fixture.with_name("test.yaml").write_text("format: rulespec/v1\n")
+    fixture.write_text(
+        json.dumps(
+            [
+                {
+                    "name": case.case_id,
+                    "period": {
+                        "period_kind": "tax_year",
+                        "start": "2026-01-01",
+                        "end": "2026-12-31",
+                    },
+                    "input": {income: index * 100},
+                    # ``shift`` makes the first case's fixture disagree.
+                    "output": {output: index * 100 + (shift if index == 1 else 0)},
+                }
+                for index, case in enumerate(config.cases, start=1)
+            ]
+        )
+    )
+    binary = fake_rules_engine(
+        {
+            "relations": [],
+            "derived": [{"id": output, "entity": "TaxUnit", "expr": {}}],
+        },
+        {output: {"copy": income}},
+    )
+    return config, root, binary, output
+
+
+def test_federal_values_are_the_engines(tmp_path, fake_rules_engine, monkeypatch):
+    generator = _load_generator()
+    config, root, binary, output = _engine_grid(generator, tmp_path, fake_rules_engine)
+    monkeypatch.setattr(generator, "_validate_rulespec_input_contract", lambda *_a: None)
+
+    values, bridge, diagnostics = generator._engine_axiom_values(config, [root], binary)
+
+    assert values == {
+        case.case_id: float(index * 100)
+        for index, case in enumerate(config.cases, start=1)
+    }
+    assert bridge == {case.case_id: {} for case in config.cases}
+    assert diagnostics == {case.case_id: {} for case in config.cases}
+    requests = fake_rules_engine.requests()
+    assert len(requests) == len(config.cases)
+    assert {tuple(r["queries"][0]["outputs"]) for r in requests} == {(output,)}
+
+
+def test_federal_fixture_disagreement_fails_the_run(
+    tmp_path, fake_rules_engine, monkeypatch
+):
+    from axiom_oracles.rulespec_fixture_engine import FixtureDisagreement
+
+    generator = _load_generator()
+    config, root, binary, _output = _engine_grid(
+        generator, tmp_path, fake_rules_engine, shift=1
+    )
+    with pytest.raises(FixtureDisagreement, match=config.cases[0].case_id):
+        generator._engine_axiom_values(config, [root], binary)
+
+
+def test_generate_takes_axiom_values_from_the_engine_pass(monkeypatch):
+    """generate() publishes the engine pass's values, not the fixture's."""
+    generator = _load_generator()
+    config = generator.POLICIES["net_investment_income_tax"]
+    rows = generator._comparison_rows(config)
+    fixture_values = {row_id: 1.0 for row_id, _case, _binding in rows}
+    engine_values = {row_id: 2.0 for row_id, _case, _binding in rows}
+    monkeypatch.setattr(
+        generator,
+        "_axiom_values",
+        lambda *_a: (Path("f"), fixture_values, {}, {}, {}),
+    )
+    monkeypatch.setattr(
+        generator,
+        "_engine_axiom_values",
+        lambda *_a, **_k: (engine_values, {"b": {}}, {"d": {}}),
+    )
+    seen = {}
+    monkeypatch.setattr(
+        generator,
+        "_policyengine_values",
+        lambda _config, bridge: seen.setdefault("bridge", bridge) and ({}, {}, {}),
+    )
+    monkeypatch.setattr(generator, "_assert_non_vacuous", lambda *_a: None)
+    monkeypatch.setattr(
+        generator,
+        "_build_report",
+        lambda _config, **kwargs: seen.update(kwargs) or {},
+    )
+    generator.generate("net_investment_income_tax", [Path("root")], Path("engine"))
+    assert seen["axiom"] is engine_values
+    assert seen["axiom_bridge_values"] == {"b": {}}
+    assert seen["axiom_diagnostic_values"] == {"d": {}}
+
