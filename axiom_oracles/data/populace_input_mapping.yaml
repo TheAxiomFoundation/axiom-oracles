@@ -107,6 +107,11 @@ mappings:
         - { fact: SELF_EMPLOYMENT_INCOME, scale: 0.6 }
       aggregate: sum_over_people
 
+  # Arizona's NA-vocabulary name for the unearned income 7 CFR 273.9(b)(2)
+  # counts; it carries the same sources as snap_total_monthly_unearned_income
+  # below, rent, dividends and interest (taxable and tax-exempt) included.
+  # DES stops counting interest, dividends and royalties for NA from the June
+  # 2026 benefit month (bulletin of 2026-05-15); these suites run January.
   - match: { kind: substring, value: countable_monthly_unearned_income }
     scope: household
     source:
@@ -118,8 +123,20 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+        - RENTAL_INCOME
+        - DIVIDEND_INCOME
+        - QUALIFIED_DIVIDEND_INCOME
+        - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
+  # Interest counts whatever its federal tax treatment: 7 CFR 273.9(b)(2)(v)
+  # lists "dividends, interest, royalties", and no 273.9(c) exclusion turns
+  # on 26 USC 103. Florida excludes "dividends and interest on countable
+  # assets" under the 273.9(c)(19) option (ESS manual 1810.1000); that
+  # belongs in the separate snap_income_exclusions input of 7 CFR 273.10,
+  # which nothing feeds yet (rulespec-us#1646), so this gross total keeps
+  # Florida's interest, as PolicyEngine does (policyengine-us#10080).
   - match: { kind: substring, value: snap_total_monthly_unearned_income }
     scope: household
     source:
@@ -135,6 +152,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_gross_monthly_income }
@@ -157,6 +175,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_monthly_household_income }
@@ -175,6 +194,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   # ---------------------------------------------------------------------
@@ -514,6 +534,18 @@ mappings:
       threshold: 65
       from_facts: [PERSON_AGE, BLIND, DISABLED]
 
+  # Countable unearned income before the $20/month general exclusion
+  # (programs/us/ssi/fy-2026.yaml applies only 1382a(b)(2) to this slot).
+  # Interest and dividends are left out, taxable and tax-exempt alike:
+  # 42 USC 1382a(b)(23) excludes "interest or dividend income from
+  # resources—(A) not excluded under section 1382b(a) ..., or (B) excluded
+  # pursuant to Federal law other than section 1382b(a)" (20 CFR
+  # 416.1124(c)(22)). The population carries annual totals with no link to
+  # the resource that paid them, so all of it is treated as income from
+  # ordinary deposits, stocks and bonds, which are countable resources (20
+  # CFR 416.1201(b)); income from a resource excluded under 1382b(a) follows
+  # that exclusion's own rule and is not modeled. rulespec-us does not encode
+  # (b)(23) yet, so this slot carries the exclusion (axiom-oracles#567).
   - match: { kind: suffix, value: annual_income_not_paid_on_basis_of_need }
     scope: person
     source:
@@ -522,18 +554,25 @@ mappings:
       from_facts:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
-        - INTEREST_INCOME
-        - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
+  # Earnings less the part of the $240 general exclusion the unearned income
+  # above leaves unused: "If you have less than $20 of unearned income in a
+  # month and you have earned income in that month, we will use the rest of
+  # the $20 exclusion to reduce the amount of your countable earned income"
+  # (20 CFR 416.1124(c)(12)). unearned_facts mirrors that entry's list.
   - match: { kind: suffix, value: earned_income_not_excluded_by_preceding_paragraphs }
     scope: person
     source:
       kind: derived
-      transform: sum
+      transform: ssi_earned_after_unused_general_exclusion
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+      unearned_facts:
+        - SOCIAL_SECURITY_BENEFITS
+        - PENSION_INCOME
+        - RENTAL_INCOME
+        - UNEMPLOYMENT_INSURANCE_INCOME
 
   # Citizenship/residency: ECPS lacks the columns; assume citizen residents.
   - match: { kind: suffix, value: citizen_of_united_states }
@@ -710,6 +749,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -821,6 +861,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -835,6 +876,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -880,6 +922,10 @@ mappings:
   # belong to transitively imported rules outside the compared rollup.
   # ---------------------------------------------------------------------
 
+  # MAGI-based income follows 26 USC 36B(d)(2)(B) (42 CFR 435.603(e)), whose
+  # clause (ii) adds back "any amount of interest received or accrued by the
+  # taxpayer during the taxable year which is exempt from tax", so tax-exempt
+  # interest counts here beside the taxable interest already in AGI.
   - match: { kind: exact, value: household_income_as_fraction_of_fpl }
     scope: household
     source:
@@ -893,6 +939,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1084,6 +1131,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1098,6 +1146,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1112,6 +1161,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1154,6 +1204,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1235,8 +1286,8 @@ mappings:
       kind: derived
       transform: monthly
       aggregate: sum_over_people
-      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME,
-        QUALIFIED_DIVIDEND_INCOME]
+      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME,
+        TAX_EXEMPT_INTEREST_INCOME, DIVIDEND_INCOME, QUALIFIED_DIVIDEND_INCOME]
 
   # ---------------------------------------------------------------------
   # MN TANF / MFIP (us-mn/tanf program) — Combined Manual 0022.12.
@@ -1289,6 +1340,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1305,6 +1357,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1319,6 +1372,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1335,6 +1389,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1373,6 +1428,13 @@ mappings:
       transform: sum
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  # Interest here is an upper bound, taxable and tax-exempt alike: A.A.C.
+  # R6-12-503(29) does not count "Dividends, interest, and royalty payments
+  # left on deposit or converted into additional securities", and the
+  # population carries annual totals only, so every dollar is treated as
+  # paid out. DES stops counting interest altogether from the June 2026
+  # benefit month (bulletin of 2026-05-15), after these suites' January
+  # period.
   - match: { kind: suffix, value: caretaker_relative_family_unearned_income }
     scope: household
     source:
@@ -1383,6 +1445,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1399,6 +1462,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1570,6 +1634,12 @@ mappings:
     scope: household
     source: { kind: derived, transform: hh_size }
 
+  # No interest, taxable or tax-exempt: PAMMS 1530 Chart 1530.1 (effective
+  # February 2025) lists "Interest: UNEARNED – income received on
+  # investments" with treatment E, "excluded (E) in determining financial
+  # eligibility and benefit amount", while "Dividend" is I (included).
+  # The chart is not encoded yet (rulespec-us#1648), so this input carries
+  # the exclusion; PolicyEngine counts the interest (policyengine-us#10081).
   - match: { kind: exact, value: assistance_unit_included_income }
     scope: household
     source:
@@ -1581,7 +1651,6 @@ mappings:
         - SELF_EMPLOYMENT_INCOME
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
-        - INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1664,6 +1733,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME

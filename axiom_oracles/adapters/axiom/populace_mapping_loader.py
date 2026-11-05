@@ -121,6 +121,16 @@ def _build_mapper(slot: InputSlot, rule: dict) -> Callable[..., Any]:
     return lambda case_facts, person_facts: None
 
 
+# 42 USC 1382a(b)(2): "the first $240 per year (or proportionately smaller
+# amounts for shorter periods) of income (whether earned or unearned)".
+SSI_ANNUAL_GENERAL_EXCLUSION = 240.0
+
+
+def _ssi_unused_general_exclusion(unearned: float) -> float:
+    """The part of the annual general exclusion unearned income leaves unused."""
+    return SSI_ANNUAL_GENERAL_EXCLUSION - min(SSI_ANNUAL_GENERAL_EXCLUSION, max(0.0, unearned))
+
+
 def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
     transform = source.get("transform")
     # from_facts entries are either a bare concept name or
@@ -215,11 +225,13 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             members = [facts] + [
                 f for f in facts.get("__others__", []) if _abd2(f)
             ][:1]
+            # Same sources as the individual slot
+            # (annual_income_not_paid_on_basis_of_need): interest and
+            # dividends from countable resources are not income under 42 USC
+            # 1382a(b)(23) / 20 CFR 416.1124(c)(22), taxable or tax-exempt.
             unearned_keys = [
                 Concepts.SOCIAL_SECURITY_BENEFITS,
                 Concepts.PENSION_INCOME,
-                Concepts.INTEREST_INCOME,
-                Concepts.DIVIDEND_INCOME,
                 Concepts.RENTAL_INCOME,
                 Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
             ]
@@ -234,9 +246,28 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
                 float(m.get(k, 0) or 0) for m in members for k in earned_keys
             )
             countable_unearned = max(0.0, unearned - 240.0)
-            earned_after_initial = max(0.0, earned - 780.0)
+            # The part of the $240 general exclusion the unearned income does
+            # not use reduces earned income (20 CFR 416.1124(c)(12),
+            # 416.1112(c)(4)), before the $780 and the half.
+            unused_general = _ssi_unused_general_exclusion(unearned)
+            earned_after_initial = max(0.0, earned - unused_general - 780.0)
             countable_earned = earned_after_initial / 2
             return round(countable_unearned + countable_earned, 2)
+
+        if transform == "ssi_earned_after_unused_general_exclusion":
+            # Earned income "not excluded by the preceding paragraphs" of 42
+            # USC 1382a(b), as 1382a(b)(4) uses it: earnings less the part of
+            # the 1382a(b)(2) general exclusion that unearned income left
+            # unused (20 CFR 416.1124(c)(12)). unearned_facts must list the
+            # same sources as the unearned input
+            # annual_income_not_paid_on_basis_of_need.
+            facts = person_facts or {}
+            unearned_keys = [
+                _resolve_concept(name) for name in source.get("unearned_facts", [])
+            ]
+            earned = sum(float(facts.get(k, 0) or 0) for k in from_facts)
+            unearned = sum(float(facts.get(k, 0) or 0) for k in unearned_keys)
+            return round(max(0.0, earned - _ssi_unused_general_exclusion(unearned)), 2)
 
         if transform == "count_age_below":
             people = (case_facts or {}).get("__people__") or []
