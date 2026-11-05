@@ -1,0 +1,39 @@
+[
+  {
+    "props": {
+      "key": "snap__AL",
+      "label": "Alabama SNAP",
+      "region": "us",
+      "households": 2,
+      "total": 1,
+      "mismatches": 0,
+      "rate": 100
+    },
+    "html": "<button type=\"button\" class=\"v2-prog-row\" title=\"Open Alabama SNAP in the program explorer\"><span class=\"v2-prog-label\">Alabama SNAP</span><span class=\"mono v2-region\">US</span><span class=\"mono v2-prog-checks\" title=\"2 comparison cases · 1 checks\">2<span class=\"v2-prog-unit\"> comparison cases</span></span><span class=\"mono v2-prog-rate\"><span class=\"v2-prog-rate-part\"><span class=\"v2-prog-rate-value\">100%</span><span class=\"v2-prog-unit\">agree</span></span></span></button>"
+  },
+  {
+    "props": {
+      "key": "snap__AL",
+      "label": "Alabama SNAP",
+      "region": "us",
+      "households": 2,
+      "total": 4,
+      "mismatches": 1,
+      "rate": 75,
+      "explainedRate": 90
+    },
+    "html": "<button type=\"button\" class=\"v2-prog-row\" title=\"Open Alabama SNAP in the program explorer\"><span class=\"v2-prog-label\">Alabama SNAP</span><span class=\"mono v2-region\">US</span><span class=\"mono v2-prog-checks\" title=\"2 comparison cases · 4 checks\">2<span class=\"v2-prog-unit\"> comparison cases</span></span><span class=\"mono v2-prog-rate\"><span class=\"v2-prog-rate-part\"><span class=\"v2-prog-rate-value\">75.0%</span><span class=\"v2-prog-unit\">agree</span></span><span class=\"v2-prog-rate-part\" title=\"Counting disagreements with schema-validated dispositions as explained\"><span class=\"v2-prog-rate-value\">90.0%</span><span class=\"v2-prog-unit\">explained</span></span></span></button>"
+  },
+  {
+    "props": {
+      "key": "snap__AL",
+      "label": "Alabama SNAP",
+      "region": "us",
+      "households": 2,
+      "total": 0,
+      "mismatches": 0,
+      "rate": null
+    },
+    "html": "<button type=\"button\" class=\"v2-prog-row\" title=\"Open Alabama SNAP in the program explorer\"><span class=\"v2-prog-label\">Alabama SNAP</span><span class=\"mono v2-region\">US</span><span class=\"mono v2-prog-checks\" title=\"2 comparison cases · 0 checks\">2<span class=\"v2-prog-unit\"> comparison cases</span></span><span class=\"mono v2-prog-rate\"><span class=\"v2-prog-rate-part\"><span class=\"v2-prog-rate-value\">—</span><span class=\"v2-prog-unit\">agree</span></span></span></button>"
+  }
+]

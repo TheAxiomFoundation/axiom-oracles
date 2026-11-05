@@ -476,3 +476,190 @@ def test_dashboard_decodes_the_python_zero_output_masks():
     )
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert "ZERO OUTPUT MASKS: true" in proc.stdout
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BUN = shutil.which("bun")
+needs_bun = pytest.mark.skipif(BUN is None, reason="household helpers require Bun")
+
+
+def _emit_household_fixture(module, directory: Path, report: dict) -> Path:
+    """Exercise emit_suite, including its full-case versus fallback decision."""
+    module.DASHBOARD_DATA = directory / "data"
+    module.DASHBOARD_DATA.mkdir(parents=True)
+    module.OUT_ROOT = module.DASHBOARD_DATA / "cases"
+    module.REPORTS = directory / "absent-reports"
+    (module.DASHBOARD_DATA / "snap-probe.json").write_text(json.dumps(report))
+    assert "wrote snap-probe:" in module.emit_suite(
+        "snap-probe", {"basename": "snap-probe"}
+    )
+    return module.OUT_ROOT / "snap-probe" / "chunk-0.json"
+
+
+def _read_household_artifact(path: Path, *, include_delta=False):
+    imports = "caseDisagreements, caseUncompared, caseUnexplainedCount"
+    delta = ""
+    if include_delta:
+        imports += ", hasMismatchDelta"
+        delta = """
+  deltas: c.m.map(hasMismatchDelta),
+  previousDeltas: c.m.map((m) => typeof m.d === "number" && m.d !== 0),
+"""
+    script = f"""
+import {{ {imports} }} from "./dashboard/src/utils/caseMismatches.mjs";
+const cases = await Bun.file(process.argv[1]).json();
+console.log(JSON.stringify(cases.map((c) => ({{
+  disagreements: caseDisagreements(c).length,
+  uncompared: caseUncompared(c).length,
+  unexplained: caseUnexplainedCount(c),
+  {delta}
+}}))));
+"""
+    proc = subprocess.run(
+        [BUN, "-e", script, str(path)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=True,
+        timeout=30,
+    )
+    return json.loads(proc.stdout)
+
+
+@needs_bun
+def test_mismatch_only_emitter_preserves_uncompared_pairs_for_household_reader(tmp_path):
+    from tests.test_native_snap_invalid_returns import produce, publish
+
+    report = publish(produce([(None, True, 100.0, "holds")]))
+    module = _load_module()
+    full = _emit_household_fixture(module, tmp_path / "full", report)
+    fallback = _emit_household_fixture(
+        module, tmp_path / "fallback", {**report, "cases": []}
+    )
+    expected = [{"disagreements": 0, "uncompared": 1, "unexplained": 0}]
+    assert _read_household_artifact(full) == expected
+    assert _read_household_artifact(fallback) == expected
+    index = json.loads(fallback.with_name("index.json").read_text())
+    assert index["partial"] == "mismatch-only"
+
+
+@needs_bun
+def test_household_hides_delta_for_finite_failed_snap_comparison(tmp_path):
+    from tests.test_native_snap_invalid_returns import produce, runner, through_csv
+
+    rows = through_csv(produce([(200.0, True, 100.0, "holds")]))
+    rows[0]["amount_compared"] = "False"
+    rows[0]["errors"] = "[]"
+    report = runner()._adapt_snap_ecps_csv_to_v2(
+        rows, {"parameters": {"jurisdiction": "us-co"}}
+    )
+    path = _emit_household_fixture(_load_module(), tmp_path, report)
+    [case] = json.loads(path.read_text())
+    assert case["m"] == [
+        {
+            "c": "us:statutes/7/2014/u#snap_benefit",
+            "l": 100.0,
+            "x": 200.0,
+            "d": 100.0,
+            "u": True,
+        }
+    ]
+    assert _read_household_artifact(path, include_delta=True) == [
+        {
+            "disagreements": 0,
+            "uncompared": 1,
+            "unexplained": 0,
+            "deltas": [False],
+            "previousDeltas": [True],
+        }
+    ]
+
+
+@settings(max_examples=50, deadline=None, derandomize=True)
+@given(flags=st.lists(st.booleans(), min_size=1, max_size=10))
+def test_property_uncompared_flag_survives_both_compact_paths(flags):
+    """Compacting changes neither a pair's comparison verdict nor legacy rows."""
+    module = _load_module()
+    mismatches = [
+        {
+            "case_id": "case-1",
+            "concept": f"benefit-{index}",
+            "left": 100,
+            "right": 200,
+            **({"uncompared": True} if flag else {}),
+        }
+        for index, flag in enumerate(flags)
+    ]
+    case = {"case_id": "case-1", "matches": [], "mismatches": mismatches}
+    [fallback] = module.mismatch_only_rows({"mismatches": mismatches}, {})
+    full = module.compact_case(case, {})
+    assert fallback["m"] == full["m"]
+    assert [m.get("u") is True for m in fallback["m"]] == flags
+    for mismatch, flagged in zip(fallback["m"], flags, strict=True):
+        if not flagged:
+            assert "u" not in mismatch
+
+
+@pytest.mark.parametrize("flag", [False, True])
+def test_fiit_mismatch_only_rows_preserve_uncompared_flag(flag):
+    [case] = _load_module().mismatch_only_rows(
+        {
+            "mismatches": [
+                {
+                    "entity_id": "person-1",
+                    "surface": "employee-medicare",
+                    "axiom": 0,
+                    "policyengine": None if flag else 50,
+                    "uncompared": flag,
+                }
+            ]
+        },
+        {},
+    )
+    assert (case["m"][0].get("u") is True) is flag
+
+
+@needs_bun
+@settings(max_examples=15, deadline=None, derandomize=True)
+@given(
+    deltas=st.lists(
+        st.tuples(st.integers(-100_000, 100_000), st.booleans()),
+        min_size=1,
+        max_size=10,
+    )
+)
+def test_property_household_delta_requires_a_compared_pair(deltas):
+    script = """
+import { hasMismatchDelta } from "./dashboard/src/utils/caseMismatches.mjs";
+const rows = await new Response(Bun.stdin.stream()).json();
+console.log(JSON.stringify(rows.map(hasMismatchDelta)));
+"""
+    rows = [
+        {"d": delta, **({"u": True} if uncompared else {})}
+        for delta, uncompared in deltas
+    ]
+    result = subprocess.run(
+        [BUN, "-e", script], cwd=ROOT, input=json.dumps(rows), capture_output=True,
+        text=True, check=True, timeout=30,
+    )
+    assert json.loads(result.stdout) == [
+        delta != 0 and not uncompared for delta, uncompared in deltas
+    ]
+
+
+@needs_bun
+def test_household_delta_helper_preserves_unflagged_rendering():
+    script = """
+import { hasMismatchDelta } from "./dashboard/src/utils/caseMismatches.mjs";
+const rows = [{}, ...[null, false, "100", 0, 100, -100, NaN, Infinity].map(
+  (d) => ({ d }))];
+console.log(JSON.stringify(rows.map((m) => ({
+  before: typeof m.d === "number" && m.d !== 0,
+  after: hasMismatchDelta(m),
+}))));
+"""
+    result = subprocess.run(
+        [BUN, "-e", script], cwd=ROOT, capture_output=True, text=True,
+        check=True, timeout=30,
+    )
+    assert all(row["before"] == row["after"] for row in json.loads(result.stdout))

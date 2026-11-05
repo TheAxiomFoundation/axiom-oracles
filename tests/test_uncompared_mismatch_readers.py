@@ -58,10 +58,24 @@ def run_bun(script: str, payload) -> object:
 METRIC = """
 import { reportMetric } from "./dashboard/src/utils/suites.js";
 import { buildNWayData } from "./dashboard/src/utils/data.js";
+import { buildProgramRows, rowVerdict } from "./dashboard/src/utils/programs.js";
+import { groupByOracle } from "./dashboard/src/utils/roster.js";
 const reports = await new Response(Bun.stdin.stream()).json();
 console.log(JSON.stringify(reports.map((report) => ({
   metric: reportMetric(report),
   summary: buildNWayData([report]).summary,
+  programs: buildProgramRows([report]).map(rowVerdict),
+  oracles: groupByOracle([report]),
+}))));
+"""
+
+ROLLUPS = """
+import { buildProgramRows, rowVerdict } from "./dashboard/src/utils/programs.js";
+import { groupByOracle } from "./dashboard/src/utils/roster.js";
+const batches = await new Response(Bun.stdin.stream()).json();
+console.log(JSON.stringify(batches.map(reports => ({
+  programs: buildProgramRows(reports).map(rowVerdict),
+  oracles: groupByOracle(reports),
 }))));
 """
 
@@ -116,6 +130,16 @@ def test_reports_without_the_field_read_as_before():
     assert result["summary"]["overallMatchRate"] == 70
 
 
+@needs_bun
+@pytest.mark.parametrize("suite", ["al-snap-ecps", "ssa-parameters"])
+def test_rollups_disclose_uncompared_pairs_without_changing_agreement(suite):
+    report = report_of(aggregate(compared=1, mismatched=0, uncompared=1))
+    report["suite"] = suite
+    [result] = run_bun(METRIC, [report])
+    assert result["programs"] == [{"rate": 100, "mismatches": 0, "uncompared": 1}]
+    assert result["oracles"][0]["uncompared"] == 1
+
+
 AGGREGATES = st.lists(
     st.tuples(st.integers(0, 50), st.integers(0, 50), st.integers(0, 50)).map(
         lambda t: (t[0], min(t[1], t[0]), t[2])
@@ -156,6 +180,30 @@ def test_property_headline_is_bounded_and_ignores_uncompared_pairs(batches):
         for key in ("total", "mismatches", "matched", "rate"):
             assert metric[key] == want["metric"][key]
         assert got["summary"]["overallMatchRate"] == want["summary"]["overallMatchRate"]
+        for program, baseline in zip(got["programs"], want["programs"], strict=True):
+            assert program["rate"] is None or 0 <= program["rate"] <= 100
+            assert program["rate"] == baseline["rate"]
+            assert program["uncompared"] == sum(u for _, _, u in batch)
+        for oracle, baseline in zip(got["oracles"], want["oracles"], strict=True):
+            assert 0 <= oracle["mismatches"] <= oracle["checks"]
+            assert (oracle["checks"], oracle["mismatches"]) == (
+                baseline["checks"], baseline["mismatches"]
+            )
+            assert oracle["uncompared"] == sum(u for _, _, u in batch)
+    grouped, baseline = run_bun(ROLLUPS, [reports, stripped])
+    uncompared = sum(u for batch in batches for _, _, u in batch)
+    compared = sum(c for batch in batches for c, _, _ in batch)
+    mismatches = sum(m for batch in batches for _, m, _ in batch)
+    [program] = grouped["programs"]
+    assert program["uncompared"] == uncompared
+    assert program["rate"] == baseline["programs"][0]["rate"]
+    assert program["rate"] is None or 0 <= program["rate"] <= 100
+    [oracle] = grouped["oracles"]
+    assert oracle["uncompared"] == uncompared
+    assert (oracle["checks"], oracle["mismatches"]) == (compared, mismatches)
+    assert (oracle["checks"], oracle["mismatches"]) == (
+        baseline["oracles"][0]["checks"], baseline["oracles"][0]["mismatches"]
+    )
 
 
 # ── the household explorer ───────────────────────────────────────────────────

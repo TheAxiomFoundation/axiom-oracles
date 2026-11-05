@@ -25,6 +25,11 @@ export function isUncompared(m) {
   return m?.u === true;
 }
 
+/** Whether a compared compact row has a nonzero numeric delta to display. */
+export function hasMismatchDelta(m) {
+  return !isUncompared(m) && typeof m?.d === "number" && m.d !== 0;
+}
+
 /** A served case's compared disagreements. */
 export function caseDisagreements(c) {
   return (c?.m || []).filter((m) => !isUncompared(m));

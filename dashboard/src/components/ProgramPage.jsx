@@ -293,7 +293,15 @@ function WhySection({ programReports, knownCauses }) {
       (report.aggregates || []).map((a) => [a.concept, a.description]),
     );
     const aggMismatches = new Map();
-    for (const agg of topLevelAggregates(report.aggregates)) {
+    const topLevel = new Set(topLevelAggregates(report.aggregates));
+    const uncomparedConcepts = new Set();
+    for (const agg of report.aggregates || []) {
+      // FIIT rows name child concepts. Their explicit count corrects old
+      // mismatch rows without flags; older reports retain their row fallback.
+      if (!topLevel.has(agg) && !Object.hasOwn(agg, "uncompared_mismatches")) {
+        continue;
+      }
+      if (agg.uncompared_mismatches > 0) uncomparedConcepts.add(agg.concept);
       aggMismatches.set(
         agg.concept,
         (aggMismatches.get(agg.concept) || 0) + comparedMismatchCount(agg),
@@ -323,6 +331,7 @@ function WhySection({ programReports, knownCauses }) {
         singleKind && aggMismatches.has(concept)
           ? aggMismatches.get(concept)
           : recorded;
+      if (exact === 0 && uncomparedConcepts.has(concept)) continue;
       const lowerBound = truncated && !singleKind;
       if (lowerBound) anyLowerBound = true;
       rows.push({

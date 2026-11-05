@@ -945,7 +945,7 @@ def print_report(
     uncompared = sum(
         item.get("uncompared_mismatches", 0) for item in report.output_summary
     )
-    print(f"Mismatches: {len(report.mismatches) - uncompared:,}")
+    print(f"Mismatches: {max(0, len(report.mismatches) - uncompared):,}")
     if uncompared:
         print(f"Uncompared (engine errors): {uncompared:,}")
     if report.errors:
@@ -959,7 +959,7 @@ def print_report(
     for item in report.output_summary:
         print(
             f"  - {item['output']}: "
-            f"{item['mismatches'] - item.get('uncompared_mismatches', 0):,}"
+            f"{max(0, item['mismatches'] - item.get('uncompared_mismatches', 0)):,}"
             f"/{item['compared']:,} mismatch, "
             f"max_abs_diff={item['max_abs_diff']:.2f}, "
             f"max_rel_diff={item['max_relative_diff']:.2g}"

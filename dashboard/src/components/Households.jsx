@@ -7,6 +7,7 @@ import {
   caseDisagreements,
   caseUncompared,
   caseUnexplainedCount,
+  hasMismatchDelta,
   isUncompared,
 } from "../utils/caseMismatches.mjs";
 import { zeroOutputNames } from "../utils/zeroOutputs.mjs";
@@ -671,7 +672,7 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                               {caseValue(m.x)}
                             </td>
                             <td className="mono v2-hht-num">
-                              {typeof m.d === "number" && m.d !== 0 ? (
+                              {hasMismatchDelta(m) ? (
                                 <span className="v2-hh-diff">
                                   $
                                   {Math.abs(

@@ -240,7 +240,7 @@ jobs:
               # mismatch_count includes uncompared pairs (engine errors);
               # compared_values excludes them.
               un = d.get('uncompared_mismatches', 0) or 0
-              cv, mc = d['compared_values'], d['mismatch_count'] - un
+              cv, mc = d['compared_values'], max(0, d['mismatch_count'] - un)
               pct = 100*(cv-mc)/cv if cv else 0
               print(f'compared_values: {cv}')
               print(f'mismatch_count:  {mc}')

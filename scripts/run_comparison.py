@@ -5418,7 +5418,7 @@ def _print_summary(output: Path) -> None:
         # mismatch_count includes uncompared pairs (engine errors), which
         # compared_values excludes; agreement is over compared pairs only.
         uncompared = data.get("uncompared_mismatches", 0) or 0
-        mc = data["mismatch_count"] - uncompared
+        mc = max(0, data["mismatch_count"] - uncompared)
         od = data.get("oracle_divergence_count", 0)
         differences = mc + od
         pct = 100 * (cv - differences) / cv if cv else 0
@@ -5436,8 +5436,7 @@ def _print_summary(output: Path) -> None:
         for row in data.get("output_summary", []):
             by_surface[row["surface"]][0] += row["compared"]
             by_surface[row["surface"]][1] += (
-                row["mismatches"]
-                - row.get("uncompared_mismatches", 0)
+                max(0, row["mismatches"] - row.get("uncompared_mismatches", 0))
                 + row.get("oracle_divergences", 0)
             )
         print()
@@ -5456,6 +5455,20 @@ def _print_summary(output: Path) -> None:
         print(f"Cases:             {cc}")
         print(f"Mismatch entries:  {mm}")
         agg = data.get("aggregates") or []
+        summary = data.get("summary") or {}
+        concepts = {a.get("concept") for a in agg}
+        # Hierarchical reports repeat their parents' pairs in component rows.
+        uncompared = summary.get(
+            "uncompared_mismatches",
+            sum(
+                a.get("uncompared_mismatches", 0) or 0
+                for a in agg
+                if not (a.get("parent") and a["parent"] in concepts)
+            ),
+        )
+        if uncompared:
+            errors = summary.get("error_count", len(data.get("errors") or []))
+            print(f"Uncompared:        {uncompared} (engine errors: {errors})")
         if agg:
             print()
             for a in agg[:8]:
@@ -5463,7 +5476,7 @@ def _print_summary(output: Path) -> None:
                 matched = a.get("matched", a.get("match_count"))
                 uncompared = a.get("uncompared_mismatches", 0) or 0
                 if matched is None:
-                    matched = compared - (a.get("mismatch_count", 0) - uncompared)
+                    matched = compared - max(0, a.get("mismatch_count", 0) - uncompared)
                 line = (
                     f"  {a.get('concept', '?'):40s}  "
                     f"compared={compared}  "
