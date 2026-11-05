@@ -257,7 +257,7 @@ def test_verbose_results_follow_basic_output_ids_in_submitted_order(
         Case(
             case_id=f"case-{key}",
             period="2026",
-            metadata={"taxsim_input": {"taxsimid": key, "year": 2026, "idtl": 5}},
+            metadata={"taxsim_input": {"taxsimid": key, "year": 2026, "mstat": 1, "idtl": 5}},
         )
         for key in reversed(submitted_ids)
     ]
@@ -403,7 +403,7 @@ def test_runner_rejects_duplicate_submitted_ids_before_execution(
         Case(
             case_id=case_id,
             period="2024",
-            metadata={"taxsim_input": {"taxsimid": submitted_id, "year": 2024}},
+            metadata={"taxsim_input": {"taxsimid": submitted_id, "year": 2024, "mstat": 1}},
         )
         for case_id, submitted_id in zip(
             ("first", "second"), submitted_ids, strict=True
@@ -480,7 +480,7 @@ def test_legacy_runner_without_output_ids_preserves_case_identity(projected) -> 
         metadata=(
             {"state": "CA"}
             if projected
-            else {"taxsim_input": {"taxsimid": 1, "year": 2024}}
+            else {"taxsim_input": {"taxsimid": 1, "year": 2024, "mstat": 1}}
         ),
         entities=(Entity("head", "person", facts={Concepts.PERSON_AGE: 40}),),
     )
@@ -522,6 +522,7 @@ def test_legacy_runner_missing_ids_map_positionally_to_submitted_cases(
                 "taxsim_input": {
                     id_column: f"input-{submitted_id}" if text_input_ids else submitted_id,
                     "year": 2024,
+                    "mstat": 1,
                 }
             },
         )

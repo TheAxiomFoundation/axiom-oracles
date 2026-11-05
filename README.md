@@ -72,11 +72,20 @@ Requires Python 3.13 or newer.
 uv pip install -e ".[dev]"
 ```
 
-Install the PolicyEngine extra only when running PE calculations:
+Install the PolicyEngine extra only when running PE calculations. Install it
+from the lock, which records the SHA-256 of every file and checks it:
 
 ```bash
-uv pip install -e ".[policyengine,dev]"
+uv sync --locked --extra policyengine --extra dev
 ```
+
+`policyengine[us]==5.0.0` requires `policyengine-us==1.764.6`, which PyPI's
+index no longer lists. `[tool.uv.sources]` in `pyproject.toml` points that
+release at its hashed URL on files.pythonhosted.org, so after a dependency
+change `uv lock` re-resolves as usual and keeps 1.764.6; CI runs
+`uv lock --check`, so a `pyproject.toml` edit without a re-lock fails on the
+pull request. A plain `uv pip install -e '.[policyengine]'` also resolves
+through that source, but without the lock's hash check.
 
 Install the TAXSIM extra only when running local TAXSIM comparisons:
 
@@ -426,7 +435,9 @@ build that accepts law years 1960-2024 only: run on 2025 or 2026 it prints
 `STOP 1`. Of the platform executables that have been run, only the macOS one
 accepts 2025 and 2026 (the Windows one has not been run); on
 Linux, `compare` stops before loading the population and names the pinned range
-(2024 is the last year that build accepts). The two builds also differ in years
+(2024 is the last year that build accepts). A `--population taxsim-csv` run
+without `--period` keeps each row's own year and skips that up-front check; the
+runner then checks each batch's years against the binary it runs. The two builds also differ in years
 both accept, so a TAXSIM number is specific to the platform that produced it.
 Each bundled executable's build stamp and law-year
 range are pinned in `taxsim_pins.json`, and a report's `engine_identity.taxsim`
@@ -449,6 +460,53 @@ currently maps the PRD SNAP value output to PolicyEngine
 See [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md) for the
 PolicyEngine/TAXSIM comparison path, state-code handling, residual smoke-test
 mismatches, and upstream triage workflow.
+
+### Population source: taxsim-csv (TAXSIM-format input files)
+
+`--population taxsim-csv` loads a TAXSIM-35 input CSV — for example
+policyengine-taxsim's `cps_households.csv`, the file its PolicyEngine-vs-TAXSIM
+dashboard scores — and hands each row to both engines unchanged in
+`metadata["taxsim_input"]`, so `compare policyengine taxsim` runs the rows the
+benchmark ran (the only engine pair that reads TAXSIM rows; other pairs are
+refused). The values are the file's exact cell values. The benchmark's own
+worker parses the file with pandas' default float parser, which can differ
+from the cell text in the last digits; see
+[What the loader guarantees](docs/policyengine-taxsim.md#what-the-loader-guarantees).
+
+```bash
+git -C ~/PolicyEngine/pe-taxsim show \
+  2b69146bfb2e16f83e1c021d72c4258d67872190:cps_households.csv \
+  > /path/to/cps_households.csv
+
+axiom-oracles compare policyengine taxsim \
+  --population taxsim-csv \
+  --taxsim-csv /path/to/cps_households.csv \
+  --taxsim-csv-sha256 ecabc8dd33e8b570fad21650745b9d94f6b51fc9780d9c59bb033ede7d16a689 \
+  --taxsim-csv-origin PolicyEngine/policyengine-taxsim@2b69146bfb2e16f83e1c021d72c4258d67872190:cps_households.csv \
+  --period 2024 --sample-size 0 --output reports/pe-taxsim-cps-2024.json
+```
+
+- `--taxsim-csv` defaults to `$AXIOM_TAXSIM_CSV`; the run fails if neither is
+  set. A `--taxsim-csv-sha256` mismatch fails before any case is built.
+- An explicit `--period YYYY` overrides every row's `year` (the dashboard runs
+  one file per law year this way); without it each case keeps its row's year.
+- TAXSIM state 0 is passed through as 0 and only appears in national-scope
+  runs; `--jurisdiction-fips 01` keeps only that state's rows.
+- `--sample-size N` keeps the N rows whose `sha256("<seed>:<taxsimid>")`
+  digests sort lowest (seed 0), so a sample is reproducible from its ids;
+  `0` loads every row. Cases are unweighted.
+- Column names must be TAXSIM-35 inputs unless
+  `--taxsim-csv-allow-unknown-columns` is passed; `taxsimid` must be unique.
+- The JSON report carries a top-level `dataset_identity` block (path, full
+  sha256, bytes, rows, columns, years, year override, per-state row counts,
+  origin, and a `selection` summary). `scripts/run_comparison.py` suites
+  declare `population: taxsim-csv` with a `taxsim_csv: {path, sha256,
+  origin?}` parameter block and record that identity as `provenance.dataset`.
+
+The Python entry points are
+`axiom_oracles.populations.taxsim_csv.load_taxsim_csv_cases` and
+`taxsim_csv_identity`; [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md#taxsim-format-csv-population)
+has the full contract.
 
 ## Axiom RuleSpec Oracle
 

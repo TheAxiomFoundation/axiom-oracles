@@ -590,8 +590,11 @@ def _stub_snap_runtime(monkeypatch, tmp_path):
     monkeypatch.setattr(sc, "_load_base_member", lambda *a: {})
     monkeypatch.setattr(sc, "sua_amounts_from_overlay", lambda *a: {})
     monkeypatch.setattr(sc, "axiom_rules_env", lambda *a: {})
+    # A real overlay root carries its base checkout's canonical name.
+    overlay_root = tmp_path / "overlay" / "rulespec-us"
+    overlay_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr(sc, "build_overlay", lambda *a, nominal_month: SimpleNamespace(
-        program_path=tmp_path / "program.yaml", overlay_root=tmp_path,
+        program_path=tmp_path / "program.yaml", overlay_root=overlay_root,
         provenance={"fixture": "cached executable"},
     ))
 

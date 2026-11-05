@@ -106,6 +106,7 @@ import yaml
 
 from ..comparison.report import COMPARISON_REPORT_SCHEMA_VERSION, MismatchKind
 from . import snap_populace
+from ..rulespec_roots import engine_env
 from .rulespec_overlay import build_overlay, load_overlay_spec, rewrite_output_ids
 from .snap_populace import (
     JURISDICTION_CONFIGS,
@@ -1135,8 +1136,9 @@ def run_snap_qc_comparison(
         # rather than shadowing, so fronting the monorepo with the overlay would
         # compile both the fy-2024 and fy-2026 cola imports and abort with a
         # duplicate-rule error. The materialized overlay is complete on its own.
-        env = axiom_rules_env(build.program_path, workspace_root)
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
+        env = engine_env(
+            axiom_rules_env(build.program_path, workspace_root), [build.overlay_root]
+        )
         sua_amount_by_tier = sua_amounts_from_overlay(spec, config)
         cases = [
             map_qc_unit(

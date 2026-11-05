@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Mapping, Sequence
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from math import isclose, isfinite
+from typing import Any
 
 from .mappings import ProgramMapping
 from ..bridges.relation_binding import merge_relation_binding_diagnostics
@@ -38,6 +39,24 @@ class HouseholdComparison:
     right_errors: tuple[str, ...] = field(default_factory=tuple)
     relation_binding_diagnostics: dict[str, dict] = field(default_factory=dict)
     engine_receipt: dict = field(default_factory=dict)
+    # Structured failure detail an engine attached to its raw result
+    # (``raw["taxsim_error"]`` for a TAXSIM run that crashed: signature,
+    # returncode, stderr tail, binary sha256), carried so report rows can
+    # say which binary failed and how.
+    left_error_detail: Mapping[str, Any] | None = None
+    right_error_detail: Mapping[str, Any] | None = None
+
+    def __post_init__(self) -> None:
+        if self.has_engine_errors:
+            object.__setattr__(
+                self,
+                "comparisons",
+                [replace(item, matches=False) for item in self.comparisons],
+            )
+
+    @property
+    def has_engine_errors(self) -> bool:
+        return bool(self.left_errors or self.right_errors)
 
     @property
     def match_count(self) -> int:
@@ -137,6 +156,8 @@ class Comparator:
                     comparisons=variable_comparisons,
                     left_errors=left.errors,
                     right_errors=right.errors,
+                    left_error_detail=_error_detail(left),
+                    right_error_detail=_error_detail(right),
                     relation_binding_diagnostics=relation_binding_diagnostics,
                     engine_receipt=engine_receipt,
                 )
@@ -194,7 +215,7 @@ class Comparator:
             variable=mapping.standard,
             left_value=left_value,
             right_value=right_value,
-            matches=matches,
+            matches=matches and not (left.errors or right.errors),
             difference=difference,
             tolerance=mapping.tolerance,
             relative_tolerance=mapping.relative_tolerance,
@@ -287,6 +308,20 @@ def require_usable_ids(results: Sequence[EngineResult], label: str) -> None:
                 f"Invalid {label}: engine {result.engine!r} returned a result "
                 f"with household id {household_id!r}"
             )
+
+
+def _error_detail(result: EngineResult) -> Mapping[str, Any] | None:
+    """The structured failure record an errored engine result carries.
+
+    Interface contract C2: a TAXSIM case whose run fails yields
+    ``EngineResult(values={}, errors=("taxsim-crash:<signature>",),
+    raw={"taxsim_error": {...}})``. Only errored results are inspected.
+    """
+
+    if not result.errors or not isinstance(result.raw, Mapping):
+        return None
+    detail = result.raw.get("taxsim_error")
+    return dict(detail) if isinstance(detail, Mapping) else None
 
 
 def require_unique_ids(ids: Sequence[int | str], label: str) -> None:

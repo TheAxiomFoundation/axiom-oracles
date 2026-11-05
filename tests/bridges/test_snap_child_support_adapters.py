@@ -11,12 +11,16 @@ meaning:
 - the State election to provide the deduction replays the negation of
   ``gov.usda.snap.income.deductions.child_support``, which is true when the
   state excludes. The values have that sense from policyengine-us 2.11.4
-  (PolicyEngine/policyengine-us#9586).
+  (PolicyEngine/policyengine-us#9586, merged as
+  https://github.com/PolicyEngine/policyengine-us/commit/d9e801df417352b8246a4c292a19ec082a518790
+  at version 2.11.3 and first released by the 2.11.4 bump
+  https://github.com/PolicyEngine/policyengine-us/commit/60a4805573a65ea33f2154da0096b07f0a72faf4).
 
-The live tests replay the adapters in PolicyEngine-US the way axiom-encode's
-validator reads these fields. Without a policyengine-us that has #9586 they
-skip, unless AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE=1 (set in CI's
-policyengine-live job) turns the skip into a failure.
+The live tests replay the adapters in PolicyEngine-US, reading the adapter
+fields as #574 describes axiom-encode's validator reading them; this
+repository does not test axiom-encode itself. Without a policyengine-us that
+has #9586 they skip, unless AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE=1 (set in
+CI's policyengine-live job) turns the skip into a failure.
 """
 
 from __future__ import annotations
@@ -193,8 +197,9 @@ def test_unknown_parameter_value_modes_are_rejected(kwargs) -> None:
 def test_registry_routes_the_federal_rules_to_their_adapters(
     legal_id: str, adapter: PolicyEngineUSVarAdapter
 ) -> None:
-    # The validator reaches an adapter only through an exact registry row;
-    # the us:regulations/7-cfr/273/ prefix row is not comparable.
+    # Each of these three rules reaches its adapter through an exact registry
+    # row; the us:regulations/7-cfr/273/ prefix row is not comparable. This
+    # does not claim that every exact registry row has an adapter: many do not.
     mapping = load_policyengine_registry().mapping_for_legal_id(legal_id, country="us")
     assert mapping is not None
     assert mapping.match_type == "exact"

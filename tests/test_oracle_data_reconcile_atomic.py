@@ -105,6 +105,35 @@ def test_reconcile_keeps_whole_reviewed_report_after_disjoint_bot_edit(snapshot_
     assert actual_bytes == reviewed_bytes
 
 
+def test_reconcile_keeps_reviewed_file_when_main_edit_is_inside_bot_edit(
+    snapshot_case,
+):
+    # Main's edit is a subset of the bot's, so Git's clean merge equals the
+    # bot's file and nothing looks synthetic. Only the whole-file selection
+    # of main's changed paths keeps the reviewed bytes (#642).
+    case = snapshot_case
+    original = _counts(matched=40, missing=30, errors=30)
+    reviewed = _counts(matched=50, missing=20, errors=30)
+    bot = copy.deepcopy(reviewed)
+    bot["unchanged_second_6"] = "bot-only regeneration"
+    reviewed_bytes = _diverge_primary(case, original, bot, reviewed)
+
+    # Precondition: Git merges this report cleanly into the bot's bytes. (The
+    # regenerated overview conflicts; reconcile rebuilds it.)
+    merged = (
+        data._git(
+            case.seed, "merge-tree", "--write-tree", "main", "oracle-data", check=False
+        )
+        .stdout.decode()
+        .splitlines()[0]
+    )
+    bot_bytes = (json.dumps(bot, indent=2) + "\n").encode()
+    merged_report = data._git(case.seed, "cat-file", "blob", f"{merged}:{REVIEWED}")
+    assert merged_report.stdout == bot_bytes != reviewed_bytes
+
+    assert _reconcile_and_read(case) == reviewed_bytes
+
+
 @pytest.mark.parametrize("operation", ["prepare", "producer-baseline"])
 def test_ordinary_producer_refuses_clean_line_merged_primary(snapshot_case, operation):
     case = snapshot_case
@@ -394,7 +423,9 @@ def test_reconcile_preserves_reviewed_rename_deletion_and_mode(snapshot_case):
     assert (case.publisher / renamed).read_bytes() == report(
         REVIEWED, reviewed
     ).encode()
-    assert (case.publisher / renamed).stat().st_mode & 0o111 == 0o111
+    # Owner execute only: Git applies the umask on checkout (0700 under 077).
+    assert git(case.publisher, "ls-files", "-s", "--", renamed).startswith("100755")
+    assert (case.publisher / renamed).stat().st_mode & 0o100
     assert not (case.publisher / REVIEWED).exists()
     assert not (case.publisher / deleted).exists()
     assert (case.publisher / bot_only).read_bytes() == report(bot_only, bot).encode()
@@ -409,7 +440,7 @@ def test_reconcile_preserves_reviewed_rename_deletion_and_mode(snapshot_case):
     assert _read(case, baseline=False)
     _assert_bound(case.reader)
     assert (case.reader / renamed).read_bytes() == report(REVIEWED, reviewed).encode()
-    assert (case.reader / renamed).stat().st_mode & 0o111 == 0o111
+    assert (case.reader / renamed).stat().st_mode & 0o100
     assert not (case.reader / REVIEWED).exists()
     assert not (case.reader / deleted).exists()
     assert (case.reader / bot_only).read_bytes() == report(bot_only, bot).encode()
