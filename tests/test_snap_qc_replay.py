@@ -12,10 +12,16 @@ from __future__ import annotations
 import importlib.util
 import itertools
 import json
+import re
+import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 import yaml
+from hypothesis import example, given, settings
+from hypothesis import strategies as st
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = REPO_ROOT / ".github" / "workflows" / "snap-qc-replay.yml"
@@ -651,6 +657,50 @@ def test_replay_matrix_never_fails_fast():
     strategy = _workflow()["jobs"]["replay"]["strategy"]
     assert strategy["fail-fast"] is False
     assert strategy["matrix"]["suite"] == "${{ fromJson(needs.prepare.outputs.suites) }}"
+
+
+def _live_test_command() -> str:
+    return next(
+        step["run"] for step in _steps("live-tests")
+        if step.get("name") == "Run engine-gated tests (no skips allowed)"
+    )
+
+
+def test_live_test_job_runs_the_required_overlay_closures():
+    assert (
+        "tests/test_rulespec_overlay.py::"
+        "test_live_overlay_closure_resolves_once_at_the_nominal_month"
+    ) in _live_test_command()
+
+
+@settings(max_examples=40, deadline=None)
+@example(tests=2, skipped=0)
+@example(tests=2 + len(replay.REQUIRED_SUITES), skipped=0)
+@given(tests=st.integers(min_value=0, max_value=20), skipped=st.integers(min_value=0, max_value=20))
+def test_live_test_gate_accepts_only_all_required_cases_without_skips(tests: int, skipped: int):
+    """Property: omitting any required case or skipping any case fails the live gate."""
+    root = ET.Element("testsuites")
+    ET.SubElement(root, "testsuite", tests=str(tests), skipped=str(skipped))
+    script = _live_test_command().split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    with (
+        patch.object(sys, "argv", ["check_live_tests.py", "live-tests.xml"]),
+        patch.object(ET, "parse", return_value=ET.ElementTree(root)),
+    ):
+        if tests == 2 + len(replay.REQUIRED_SUITES) and skipped == 0:
+            exec(script, {"__name__": "__main__"})
+        else:
+            with pytest.raises(SystemExit):
+                exec(script, {"__name__": "__main__"})
+
+
+def test_playbook_overlay_recipe_includes_the_packaged_window_mapping():
+    from axiom_oracles.bridges.rulespec_overlay import load_overlay_spec
+
+    playbook = (REPO_ROOT / "docs" / "snap-qc-oracle-playbook.md").read_text()
+    section = playbook.split("## 6. The fiscal-year gap and the overlay", 1)[1].split("## 7.", 1)[0]
+    recipes = [yaml.safe_load(block) for block in re.findall(r"```yaml\n(.*?)\n```", section, re.DOTALL)]
+    mapping = load_overlay_spec("us-co-snap-fy2024").version_windows
+    assert {"version_windows": {"source_fiscal_year": mapping.source_fiscal_year}} in recipes
 
 
 def test_workflow_never_commits():

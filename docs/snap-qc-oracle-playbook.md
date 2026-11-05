@@ -253,23 +253,32 @@ PDF p.18). Demonstration-state components
 
 ## 6. The fiscal-year gap and the overlay
 
-Only fy-2026 SNAP COLA modules and compositions exist in rulespec-us today, and the
-Axiom engine selects a parameter version by the latest `effective_from <=
-period.start` (period end is ignored). The entire federal-regulation (7 CFR 273) and
-Colorado-manual (10 CCR 2506-1) chain is snapshot-dated `2025-10-01`, so evaluating
-at a true FY2024 period reads the wrong vintage — true-period FY2024 evaluation is
-impossible today. Broadly re-dating the chain without per-provision legal research
+The state SNAP compositions import fy-2026 COLA modules. The pinned Axiom engine
+checks both inclusive version bounds: `effective_from <= period.start` and, when
+an end is set, `period.start <= effective_to`. It selects the latest applicable
+`effective_from`; period end is ignored. The federal-regulation (7 CFR 273) and
+Colorado-manual (10 CCR 2506-1) chain is snapshot-dated `2025-10-01`, so the chain
+has no applicable version at a true FY2024 period. True-period FY2024 evaluation
+is impossible today. Broadly re-dating the chain without per-provision legal research
 would fabricate legislative history, so it was rejected (filed upstream: snapshot
 dating breaks historical-period evaluation).
 
 The pilot mechanism instead evaluates an FY2024-parameter composition at the nominal
-period `2026-01`:
+period `2026-01`. Its overlay spec enables the window mapping:
+
+```yaml
+version_windows:
+  source_fiscal_year: 2024
+```
+
+The build then applies these changes:
 
 - fy-2024-cola modules (under `us/policies/usda/snap/fy-2024-cola/` —
   `maximum-allotments.yaml`, `deductions.yaml`, `income-eligibility-standards.yaml`)
-  are truthfully dated `effective_from 2023-10-01`; at `2026-01` they resolve as the
-  sole version at or
-  before the period. Their values come from the FNS FY2024 COLA memo (corpus
+  are truthfully dated `effective_from 2023-10-01`, with closed versions ending
+  `effective_to 2024-09-30`. A closed FY2024 window has no applicable version at
+  `2026-01` until the overlay maps it. Their values come from the FNS FY2024 COLA
+  memo (corpus
   `us/guidance/usda/fns/snap-fy2024-cola`, re-archived 2026-07-08 from the Wayback
   capture of the official FNS URL after the earlier archive proved to be a 404 page
   — TheAxiomFoundation/axiom-corpus#281) and are cross-checked
@@ -285,8 +294,18 @@ period `2026-01`:
   `10-ccr-2506-1/4.407.31.yaml` — heating/cooling 594→560, basic 377→356,
   one-utility 71→67, telephone 97→91 (tech doc Table F.7, PDF p.183). Each patch
   asserts its from-value first, so a moved base repo fails loudly instead of silently
-  mispatching. The engine then runs with `AXIOM_RULESPEC_REPO_ROOTS` set to the
-  overlay root alone: the engine unions module ids across roots rather than
+  mispatching.
+- `build_overlay` receives `nominal_month()` from `snap_qc_compare` and maps every
+  version in the COLA rewrite-target modules from the source fiscal year onto the
+  fiscal year containing that month. For `2026-01`, a source window of
+  `2023-10-01` through `2024-09-30` becomes `2025-10-01` through `2026-09-30`.
+  An absent end stays open; formulas and values stay unchanged. The mapping
+  rejects top-level formula/window fields on mapped rules and requires exactly
+  one version for each mapped rule that has versions, starting on the source
+  fiscal year's first day and ending on its last day or remaining open. It raises
+  `OverlayDriftError` if the source shape or window moves. The engine then runs
+  with `AXIOM_RULESPEC_REPO_ROOTS` set to the overlay root alone: the engine unions
+  module ids across roots rather than
   shadowing, so a sparse overlay in front of the real monorepo would compile both
   COLA years and abort on duplicate rules.
 - The same failure follows when the base repo gains a module that imports a COLA
@@ -462,7 +481,8 @@ Colorado parameters exactly.
    the year's Appendix F (Tables F.1, F.2, F.3, F.5, F.6). Mirror the fy-2026 module
    structure so the ids line up.
 3. **Point the overlay (or invert).** Until rulespec-us#759 lands, add an overlay
-   spec whose `module_id_rewrites` map `fy-2026-cola → fy-{YYYY}-cola` and whose
+   spec whose `module_id_rewrites` map `fy-2026-cola → fy-{YYYY}-cola`, whose
+   `version_windows` block sets `source_fiscal_year: {YYYY}` (§6), and whose
    `parameter_patches` carry that year's per-state SUA amounts (Table F.7). After #759
    lands, skip the overlay entirely: set the comparison's period to the true fiscal
    year and let the engine resolve the dated modules directly.
@@ -586,10 +606,13 @@ artifacts.
   automatically, with a warning to promote it, once its composition exists in
   the checkout. `tests/test_snap_qc_replay.py` fails CI if a registered
   snap-qc suite appears in neither list.
-- **Live tests.** A parallel job runs the two live pytest cases, which skip
-  unless their inputs are provided. `test_live_fy2024_row_counts` needs the
-  PUF, and `test_live_engine_reproduces_worked_example` needs the engine and
-  a rulespec-us checkout. The job fails if either one skips.
+- **Live tests.** A parallel job runs the PUF row-count test, the engine-backed
+  worked example, and `test_live_overlay_closure_resolves_once_at_the_nominal_month`
+  for each of the six `REQUIRED_SUITES` states. The closure test uses a real
+  rulespec-us checkout and checks version windows and unchanged COLA formulas and
+  values. Texas stays out of these closure cases while `tx-snap-qc` is in
+  `PENDING_SUITES`. The tests skip unless their inputs are provided; the job
+  requires all eight cases to run and fails on any skip.
 
 To reproduce a leg locally, point the three variables at your checkouts.
 Start from an empty report directory and pass `check` the replay log.

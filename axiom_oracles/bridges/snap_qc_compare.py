@@ -40,10 +40,16 @@ The FY 2024 evaluation runs through a compile-time overlay
 wires each state composition to the FY 2026 COLA parameter set. The overlay
 rewrites the cola module ids to ``fy-2024-cola`` and patches the state's
 standard-utility-allowance amounts, then the engine runs at the nominal period
-``2026-01``: the chain module versions are snapshot-dated to their 2025-10-01
-effective dates, so a true-FY-2024 period cannot select them today. Once
-TheAxiomFoundation/rulespec-us#759 inverts parameter selection to be
-period-driven, the overlay and the nominal period both retire.
+``2026-01`` (:data:`NOMINAL_PERIOD`): the chain module versions start on their
+2025-10-01 effective dates, so a true-FY-2024 period cannot select them today.
+The ``fy-2024-cola`` modules carry the FNS FY 2024 window instead
+(2023-10-01 to 2024-09-30), which no FY 2026 month selects, so the overlay also
+maps every version in those modules onto the fiscal year that contains the
+nominal month (2025-10-01 to 2026-09-30, or an open end where the encoding
+has one), keeping each formula and value: the engine reads FY 2024's numbers
+at 2026-01. Once TheAxiomFoundation/rulespec-us#759 inverts parameter
+selection to be period-driven, the overlay, its window mapping, and the
+nominal period all retire.
 
 Jurisdictions
 -------------
@@ -90,6 +96,7 @@ import os
 import shutil
 import tempfile
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -124,8 +131,16 @@ def suite_name(jurisdiction: str) -> str:
 
 #: Everything is evaluated at this nominal month; see the module docstring and
 #: TheAxiomFoundation/rulespec-us#759 for why true-period evaluation is not yet
-#: possible.
+#: possible. The overlay maps the FY 2024 COLA windows onto the fiscal year
+#: that contains it (:func:`nominal_month`).
 NOMINAL_PERIOD = (2026, 1)
+
+
+def nominal_month() -> date:
+    """The first day of :data:`NOMINAL_PERIOD`, the date the overlay maps the
+    FY 2024 COLA version windows onto."""
+    year, month = NOMINAL_PERIOD
+    return date(year, month, 1)
 
 #: Bound the per-request payload size when running the engine over many cases.
 CHUNK_SIZE = 500
@@ -1114,7 +1129,9 @@ def run_snap_qc_comparison(
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-overlay-"))
     try:
-        build = build_overlay(spec, rulespec_root, overlay_dir)
+        build = build_overlay(
+            spec, rulespec_root, overlay_dir, nominal_month=nominal_month()
+        )
         # Single self-contained root. The engine unions module ids across roots
         # rather than shadowing, so fronting the monorepo with the overlay would
         # compile both the fy-2024 and fy-2026 cola imports and abort with a
