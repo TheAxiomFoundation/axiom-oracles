@@ -3449,15 +3449,30 @@ def print_report(
     print(f"Compared values: {report.compared_values:,}")
     print(f"Tolerance: {tolerance:g}")
     print(f"Relative tolerance: {relative_tolerance:g}")
-    print(f"Mismatches: {len(report.mismatches):,}")
+    # Uncompared pairs (a missing or nonfinite return) are engine errors kept
+    # as diagnostic mismatch rows; they are not compared values.
+    uncompared = sum(
+        item.get("uncompared_mismatches", 0) for item in report.output_summary
+    )
+    print(f"Mismatches: {len(report.mismatches) - uncompared:,}")
+    if uncompared:
+        print(f"Uncompared (engine errors): {uncompared:,}")
+    if report.errors:
+        print(f"Errors: {len(report.errors):,}")
     print()
     print("By output:")
     for item in report.output_summary:
         print(
             f"  - {item['surface']}:{item['output']}: "
-            f"{item['mismatches']:,}/{item['compared']:,} mismatch, "
+            f"{item['mismatches'] - item.get('uncompared_mismatches', 0):,}"
+            f"/{item['compared']:,} mismatch, "
             f"max_abs_diff={item['max_abs_diff']:.2f}, "
             f"max_rel_diff={item['max_relative_diff']:.2g}"
+            + (
+                f", uncompared={item['uncompared_mismatches']:,}"
+                if item.get("uncompared_mismatches")
+                else ""
+            )
         )
     if report.mismatches:
         print()

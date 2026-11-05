@@ -19,6 +19,10 @@ import {
   programKey,
 } from "../utils/suites";
 import { causeFor } from "../utils/programs";
+import {
+  comparedMismatchCount,
+  uncomparedCount,
+} from "../utils/caseMismatches.mjs";
 import DispositionNote from "./DispositionNote";
 
 /**
@@ -132,6 +136,14 @@ function VerdictCard({ report }) {
             ? `${metric.mismatches.toLocaleString()} of ${metric.total.toLocaleString()} checks disagree`
             : `all ${metric.total.toLocaleString()} checks agree`}
         </span>
+        {metric.uncompared > 0 && (
+          <span
+            className="mono pp-verdict-sub"
+            title="An engine returned no valid value, recorded as an engine error; these pairs are not compared"
+          >
+            {`${metric.uncompared.toLocaleString()} not compared (engine errors)`}
+          </span>
+        )}
         {near && near.rate - metric.rate >= 1 && (
           <span className="mono pp-verdict-sub">
             {formatPct(near.rate, 1)} within ${near.threshold}
@@ -238,9 +250,11 @@ function ConceptTable({ programReports }) {
               </span>
             </span>
             <span className="mono pp-concept-figures">
-              {agg.mismatch_count > 0
-                ? `${agg.mismatch_count.toLocaleString()} of ${(agg.comparison_count || 0).toLocaleString()} disagree`
+              {comparedMismatchCount(agg) > 0
+                ? `${comparedMismatchCount(agg).toLocaleString()} of ${(agg.comparison_count || 0).toLocaleString()} disagree`
                 : `all ${(agg.comparison_count || 0).toLocaleString()} agree`}
+              {uncomparedCount(agg) > 0 &&
+                ` · ${uncomparedCount(agg).toLocaleString()} not compared`}
               {agg.weighted_match_rate != null &&
                 agg.match_rate != null &&
                 Math.abs(agg.weighted_match_rate - agg.match_rate) >= 0.3 &&
@@ -282,13 +296,15 @@ function WhySection({ programReports, knownCauses }) {
     for (const agg of topLevelAggregates(report.aggregates)) {
       aggMismatches.set(
         agg.concept,
-        (aggMismatches.get(agg.concept) || 0) + (agg.mismatch_count || 0),
+        (aggMismatches.get(agg.concept) || 0) + comparedMismatchCount(agg),
       );
     }
     const list = report.mismatches || [];
     const truncated = (report.summary?.mismatch_count ?? 0) > list.length;
     const buckets = new Map();
     for (const m of list) {
+      // An uncompared pair is an engine error, not a disagreement pattern.
+      if (m?.uncompared === true) continue;
       const key = `${m.concept}::${m.kind}`;
       buckets.set(key, (buckets.get(key) || 0) + 1);
     }

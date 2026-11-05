@@ -237,10 +237,16 @@ jobs:
           import json
           d = json.load(open('$latest'))
           if 'compared_values' in d:
-              cv, mc = d['compared_values'], d['mismatch_count']
+              # mismatch_count includes uncompared pairs (engine errors);
+              # compared_values excludes them.
+              un = d.get('uncompared_mismatches', 0) or 0
+              cv, mc = d['compared_values'], d['mismatch_count'] - un
               pct = 100*(cv-mc)/cv if cv else 0
               print(f'compared_values: {cv}')
               print(f'mismatch_count:  {mc}')
+              print(f'uncompared:      {un}')
+              er = d.get('errors') or []
+              print(f'errors:          {len(er)}')
               print(f'agreement:       {pct:.4f}%')
           elif 'case_count' in d:
               cc = d.get('case_count', 0)

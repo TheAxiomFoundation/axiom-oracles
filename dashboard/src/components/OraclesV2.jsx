@@ -27,6 +27,7 @@ import {
   SOUTHMOD_MODELS,
 } from "../utils/suites";
 import { ORACLE_IDENTITY, attributedOracles } from "../utils/oracleIdentity";
+import { comparedMismatchCount } from "../utils/caseMismatches.mjs";
 import {
   crossCheckCount,
   groupByOracle,
@@ -89,8 +90,9 @@ function compactCount(n) {
  * One discrepancy class = a (suite, concept, kind) mismatch bucket.
  * Large suites slim the recorded mismatch list, so bucket counts from it
  * are lower bounds — except when a concept shows a single kind, where the
- * aggregate's exact mismatch_count applies (and must, so these figures
- * never contradict the run totals).
+ * aggregate's compared mismatch count applies (and must, so these figures
+ * never contradict the run totals). Uncompared pairs (engine errors) are
+ * not disagreement patterns.
  */
 function buildClasses(reports, knownCauses) {
   const rows = [];
@@ -102,13 +104,15 @@ function buildClasses(reports, knownCauses) {
     for (const agg of topLevelAggregates(report.aggregates)) {
       aggMismatches.set(
         agg.concept,
-        (aggMismatches.get(agg.concept) || 0) + (agg.mismatch_count || 0),
+        (aggMismatches.get(agg.concept) || 0) + comparedMismatchCount(agg),
       );
     }
     const list = report.mismatches || [];
     const truncated = (report.summary?.mismatch_count ?? 0) > list.length;
     const buckets = new Map();
     for (const m of list) {
+      // An uncompared pair is an engine error, not a disagreement pattern.
+      if (m?.uncompared === true) continue;
       const key = `${m.concept}::${m.kind}`;
       buckets.set(key, (buckets.get(key) || 0) + 1);
     }

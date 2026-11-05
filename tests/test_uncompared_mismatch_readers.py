@@ -327,3 +327,53 @@ def test_workflow_step_summary_leaves_uncompared_pairs_out(tmp_path):
     ).stdout
     assert "agreement:       0.0000%" in out
     assert "uncompared:      1" in out
+
+
+# ── the discrepancy ledger's patterns ────────────────────────────────────────
+NODE = shutil.which("node")
+
+CLASSES = r"""
+const fs = require("fs");
+eval(fs.readFileSync("dashboard/src/utils/caseMismatches.mjs", "utf8")
+  .replaceAll("export function", "function"));
+const ledger = fs.readFileSync("dashboard/src/components/OraclesV2.jsx", "utf8");
+const begin = ledger.indexOf("function buildClasses(");
+const end = ledger.indexOf("\nfunction ActionChip(", begin);
+function topLevelAggregates(aggregates) { return aggregates || []; }
+function suiteLabel(suite) { return suite; }
+function suiteMeta() { return {}; }
+function otherOracle() { return ""; }
+function displayEngines() { return {}; }
+function causeFor() { return null; }
+eval(ledger.slice(begin, end));
+const reports = JSON.parse(fs.readFileSync(0, "utf8"));
+console.log(JSON.stringify(buildClasses(reports, []).map(
+  (row) => [row.concept, row.kind, row.count])));
+"""
+
+
+@pytest.mark.skipif(NODE is None, reason="dashboard ledger requires node")
+def test_discrepancy_patterns_leave_uncompared_rows_out():
+    agg = aggregate(compared=1, mismatched=1, uncompared=1)
+    report = report_of(agg)
+    report["summary"] = {"mismatch_count": 2}
+    report["mismatches"] = [
+        {"concept": CONCEPT, "kind": "amount_difference", "difference": 5},
+        {"concept": CONCEPT, "kind": "missing_left", "uncompared": True},
+    ]
+    only_uncompared = report_of(aggregate(compared=0, mismatched=0, uncompared=1, concept="x"))
+    only_uncompared["summary"] = {"mismatch_count": 1}
+    only_uncompared["mismatches"] = [{"concept": "x", "kind": "missing_right", "uncompared": True}]
+    result = subprocess.run(
+        [NODE, "-e", CLASSES], cwd=ROOT, input=json.dumps([report, only_uncompared]),
+        capture_output=True, text=True, check=True, timeout=30,
+    )
+    assert json.loads(result.stdout) == [[CONCEPT, "amount_difference", 1]]
+
+
+def test_program_page_patterns_mirror_the_ledger():
+    """ProgramPage's WhySection repeats buildClasses' counting inline."""
+    source = (ROOT / "dashboard/src/components/ProgramPage.jsx").read_text()
+    assert "if (m?.uncompared === true) continue;" in source
+    assert "+ comparedMismatchCount(agg)," in source
+    assert "agg.mismatch_count" not in source

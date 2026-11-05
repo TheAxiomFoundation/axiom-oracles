@@ -47,6 +47,9 @@ const end = ledger.indexOf("\nfunction ActionChip(", begin);
 if ([causeBegin, causeEnd, begin, end].some(i => i < 0)) {
   throw new Error("dashboard selection source not found");
 }
+// The ledger counts compared mismatches with the shared helpers.
+eval(fs.readFileSync("dashboard/src/utils/caseMismatches.mjs", "utf8")
+  .replaceAll("export function", "function"));
 function topLevelAggregates(aggregates) { return aggregates || []; }
 function suiteLabel(suite) { return suite; }
 function suiteMeta() { return {}; }
@@ -171,8 +174,8 @@ def _dashboard_loaded_buckets(filename, report, causes):
     prefix = JS_BUCKETS.split("const [reports, causes] =")[0]
     script = prefix + r"""
 const loader = fs.readFileSync("dashboard/src/utils/data.js", "utf8");
-eval(loader.replace('import { topLevelAggregates } from "./suites";', "")
-  .replaceAll("export ", ""));
+// The prefix stubs topLevelAggregates and evaluates the shared helpers.
+eval(loader.replace(/^import .*;$/gm, "").replaceAll("export ", ""));
 const [filename, report, causes] = JSON.parse(fs.readFileSync(0, "utf8"));
 global.fetch = async url => {
   if (url === "/data/manifest.json") {
