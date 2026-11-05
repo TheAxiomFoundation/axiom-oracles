@@ -5,8 +5,9 @@ parameter vintage without editing the source repo. The listed modules get
 textual module-id rewrites (for example ``fy-2026-cola`` -> ``fy-2024-cola``),
 the listed parameter rules get structural patches to their
 ``versions[0].formula`` value, and, when the spec has a ``version_windows``
-block, every rule in each module the rewrites point at has its version window
-moved onto the fiscal year that contains the caller's nominal month.
+block, every rule with a ``versions`` list in each module the rewrites point at
+has its version window moved onto the fiscal year that contains the caller's
+nominal month.
 
 The window mapping exists because the replay cannot evaluate at a true
 fiscal-year-2024 month: the shared SNAP chain's versions start 2025-10-01, so
@@ -51,7 +52,8 @@ fiscal year's first day, end on its last day or open) all mean the base repo
 moved and the overlay is stale. After mapping, the build checks that every
 versioned rule in the program's import closure has exactly one version whose
 window contains the nominal month, and raises :class:`OverlayDriftError`
-naming each file and rule that does not. The build records provenance
+with the count of rules that do not and the first 20 files and rules. The
+build records provenance
 (rewrite counts, applied patches, the window mapping with per-file rule and
 version counts, and a sha256 of every changed file) so a report can prove
 exactly which vintage it ran against.
@@ -440,6 +442,11 @@ def rules_without_one_version_at(
     skipped. Returns ``(relative file, rule name, number of versions in force)``
     for every rule where that number is not exactly
     one, in walk order; empty when every versioned rule resolves.
+
+    The check reads modules the engine can load. The engine's own load refuses
+    a version with no start, ``versions: null`` and a version that sets both
+    ``effective_from`` and ``from``; this check counts a missing start as
+    unbounded and does not refuse those shapes.
     """
     offenders: list[tuple[str, str, int]] = []
     for relative, data, _references in _walk_import_closure(overlay_root, program):

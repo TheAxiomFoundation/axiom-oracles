@@ -481,7 +481,8 @@ Colorado parameters exactly.
    the year's Appendix F (Tables F.1, F.2, F.3, F.5, F.6). Mirror the fy-2026 module
    structure so the ids line up.
 3. **Point the overlay (or invert).** Until rulespec-us#759 lands, add an overlay
-   spec whose `module_id_rewrites` map `fy-2026-cola → fy-{YYYY}-cola` and whose
+   spec whose `module_id_rewrites` map `fy-2026-cola → fy-{YYYY}-cola`, whose
+   `version_windows` block sets `source_fiscal_year: {YYYY}` (§6), and whose
    `parameter_patches` carry that year's per-state SUA amounts (Table F.7). After #759
    lands, skip the overlay entirely: set the comparison's period to the true fiscal
    year and let the engine resolve the dated modules directly.
