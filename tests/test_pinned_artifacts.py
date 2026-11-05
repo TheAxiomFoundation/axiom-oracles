@@ -768,9 +768,37 @@ _PE_MARKERS = re.compile(
 )
 
 
+def _command_sequences(tree):
+    """``(node, elements)`` for each list or tuple literal, with ``+`` chains
+    of them (``["uv"] + ["run", ...]``) flattened into one sequence. The
+    operands of a chain are not reported on their own."""
+    import ast
+
+    def flatten(node):
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            # An operand that is not a literal (``list(...)``, a name) stands
+            # in as one unknown element.
+            return (flatten(node.left) or [node.left]) + (flatten(node.right) or [node.right])
+        if isinstance(node, (ast.List, ast.Tuple)):
+            return list(node.elts)
+        return None
+
+    operands = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            operands.update({id(node.left), id(node.right)})
+    for node in ast.walk(tree):
+        if id(node) in operands:
+            continue
+        elements = flatten(node)
+        if elements is not None:
+            yield node, elements
+
+
 def _python_overlays(path: Path) -> list[tuple[int, bool]]:
-    """``(line, isolated)`` for each ``["uv", "run", ..., "--no-project", ...]``
-    list in a function that installs PolicyEngine pins."""
+    """``(line, isolated)`` for each ``"uv", "run", ..., "--no-project", ...``
+    list or tuple, or ``+`` chain of them, in a function that installs
+    PolicyEngine pins."""
     import ast
 
     text = path.read_text()
@@ -779,13 +807,11 @@ def _python_overlays(path: Path) -> list[tuple[int, bool]]:
         n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
     ]
     found = []
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.List) or len(node.elts) < 2:
+    for node, elements in _command_sequences(tree):
+        values = [e.value if isinstance(e, ast.Constant) else None for e in elements]
+        if not any(values[i : i + 2] == ["uv", "run"] for i in range(len(values) - 1)):
             continue
-        head = [e.value for e in node.elts[:2] if isinstance(e, ast.Constant)]
-        if head != ["uv", "run"]:
-            continue
-        flags = {e.value for e in node.elts if isinstance(e, ast.Constant)}
+        flags = {v for v in values if isinstance(v, str)}
         if "--no-project" not in flags or "--directory" in flags:
             continue  # project runs use that project's own environment
         enclosing = [
@@ -816,25 +842,132 @@ def _shell_overlays(path: Path) -> list[tuple[int, bool]]:
     return found
 
 
+def _script_language(path: Path) -> str | None:
+    """``"python"`` or ``"shell"`` from the suffix, else from the shebang."""
+    if path.suffix == ".py":
+        return "python"
+    if path.suffix in (".sh", ".bash"):
+        return "shell"
+    with path.open("rb") as handle:
+        first = handle.readline(200).decode("utf-8", "replace")
+    if not first.startswith("#!"):
+        return None
+    words = first[2:].split()
+    if words and words[0].rsplit("/", 1)[-1] == "env":
+        words = [w for w in words[1:] if not w.startswith("-") and "=" not in w]
+    if not words:
+        return None
+    interpreter = words[0].rsplit("/", 1)[-1]
+    if re.fullmatch(r"python[\d.]*", interpreter):
+        return "python"
+    if interpreter in ("sh", "bash", "dash", "zsh", "ksh"):
+        return "shell"
+    return None
+
+
+def _overlay_sites(root: Path) -> dict[tuple[str, int], bool]:
+    """``{(file, line): isolated}`` for every PolicyEngine overlay under ``root``."""
+    overlays = {}
+    for tree in ("scripts", "ops"):
+        for path in sorted((root / tree).rglob("*")):
+            if "__pycache__" in path.parts or not path.is_file():
+                continue
+            rel = path.relative_to(root).as_posix()
+            language = _script_language(path)
+            if language == "python":
+                overlays[rel] = _python_overlays(path)
+            elif language == "shell":
+                overlays[rel] = _shell_overlays(path)
+    return {(rel, line): isolated for rel, found in overlays.items() for line, isolated in found}
+
+
 def test_every_policyengine_overlay_is_isolated():
     """A ``--no-project`` `uv run` that installs PolicyEngine pins must not
-    layer on the checkout's .venv: every script under scripts/, Python and
-    shell. (The snap-ecps run uses ``--directory``: axiom-encode's project.)"""
-    overlays = {}
-    for path in sorted((REPO_ROOT / "scripts").rglob("*")):
-        if "__pycache__" in path.parts or not path.is_file():
-            continue
-        rel = path.relative_to(REPO_ROOT).as_posix()
-        if path.suffix == ".py":
-            overlays[rel] = _python_overlays(path)
-        elif path.suffix == ".sh":
-            overlays[rel] = _shell_overlays(path)
-    sites = {(rel, line): isolated for rel, found in overlays.items() for line, isolated in found}
+    layer on the checkout's .venv: every script under scripts/ and ops/,
+    Python and shell. (The snap-ecps run uses ``--directory``: axiom-encode's
+    project.)"""
+    sites = _overlay_sites(REPO_ROOT)
     assert sum(1 for rel, _ in sites if rel == "scripts/run_comparison.py") >= 15
     assert any(rel == "scripts/debug_policyengine_env.py" for rel, _ in sites)
     assert any(rel == "scripts/fiit_ecps_eitc_attribution/run_stage.sh" for rel, _ in sites)
     missing = sorted(f"{rel}:{line}" for (rel, line), isolated in sites.items() if not isolated)
     assert missing == []
+
+
+_PY_HEAD = "import subprocess\n\n\ndef run(pins):\n"
+#: Each shape the overlay scan must recognize: (file, text, line of the site).
+#: ``{iso}`` is replaced by ``--isolated`` (or removed) in the command.
+_OVERLAY_SHAPES = {
+    "tuple": (
+        "scripts/tuple_site.py",
+        _PY_HEAD + '    cmd = ("uv", "run",{iso} "--no-project", *_pe_oracle_with_args(pins), "python")\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "concatenated-list": (
+        "scripts/concat_site.py",
+        _PY_HEAD + '    cmd = ["uv"] + ["run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        '    return subprocess.run(cmd + ["python"])\n',
+        5,
+    ),
+    "concatenated-tuple-chain": (
+        "scripts/chain_site.py",
+        _PY_HEAD + '    cmd = ("uv",) + ("run",{iso}) + ("--no-project", *_pe_oracle_with_args(pins))\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "extensionless-shell": (
+        "scripts/run_oracle",
+        "#!/usr/bin/env bash\nset -euo pipefail\n"
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        3,
+    ),
+    "ops-shell": (
+        "ops/run_oracle.sh",
+        "#!/bin/sh\nuv run{iso} --no-project \\\n  --with policyengine-us==1.2.3 python x.py\n",
+        2,
+    ),
+}
+
+
+def _write_shape(root: Path, shape: str, *, isolated: bool) -> tuple[str, int]:
+    rel, text, line = _OVERLAY_SHAPES[shape]
+    python = rel.endswith(".py")
+    iso = (' "--isolated",' if python else " --isolated") if isolated else ""
+    path = root / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text.replace("{iso}", iso))
+    return rel, line
+
+
+@pytest.mark.parametrize("shape", sorted(_OVERLAY_SHAPES))
+def test_overlay_scan_finds_each_unisolated_shape(tmp_path, shape):
+    rel, line = _write_shape(tmp_path, shape, isolated=False)
+    assert _overlay_sites(tmp_path) == {(rel, line): False}
+
+
+@pytest.mark.parametrize("shape", sorted(_OVERLAY_SHAPES))
+def test_overlay_scan_accepts_each_isolated_shape(tmp_path, shape):
+    rel, line = _write_shape(tmp_path, shape, isolated=True)
+    assert _overlay_sites(tmp_path) == {(rel, line): True}
+
+
+def test_overlay_scan_counts_a_concatenation_once(tmp_path):
+    # The operands of ``["uv", "run"] + [...]`` are not separate sites.
+    path = tmp_path / "scripts" / "once.py"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        _PY_HEAD + '    cmd = ["uv", "run", "--no-project"] + ["--isolated"] + '
+        "list(_pe_oracle_with_args(pins))\n    return subprocess.run(cmd)\n"
+    )
+    assert _overlay_sites(tmp_path) == {("scripts/once.py", 5): True}
+
+
+def test_overlay_scan_skips_a_non_shell_extensionless_file(tmp_path):
+    path = tmp_path / "scripts" / "notes"
+    path.parent.mkdir(parents=True)
+    path.write_text("uv run --no-project --with policyengine-us==1.2.3 python x.py\n")
+    assert _overlay_sites(tmp_path) == {}
 
 
 # ---------------------------------------------------------------------------
