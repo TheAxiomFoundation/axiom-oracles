@@ -726,7 +726,7 @@ def _snap_qc_overlay_run(monkeypatch, tmp_path, overlay_root):
         "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE": "1",
         "UNRELATED": "kept",
     })
-    monkeypatch.setattr(sc, "build_overlay", lambda *a: SimpleNamespace(
+    monkeypatch.setattr(sc, "build_overlay", lambda *a, nominal_month: SimpleNamespace(
         program_path=overlay_root / "us-co" / "program.yaml",
         overlay_root=overlay_root,
         provenance={"fixture": "overlay env"},
