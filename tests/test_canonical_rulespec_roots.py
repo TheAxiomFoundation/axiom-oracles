@@ -313,11 +313,13 @@ def test_fixture_origins_are_the_ones_git_reads(kind, tmp_path):
     The worktree-config fixture keeps its shared config free of any origin,
     so a reader that skipped the extensions.worktreeConfig refusal would see
     a checkout with no origin and accept the fork git would fetch from.
+    User and system config are off, so no URL rewrite changes the origin.
     """
     root = make_root(kind, tmp_path)
+    env = {**os.environ, "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
     got = subprocess.run(
         ["git", "-C", str(root), "remote", "get-url", "origin"],
-        check=True, capture_output=True, text=True,
+        check=True, capture_output=True, text=True, env=env,
     ).stdout.strip()
     assert got == GIT_SEES_ORIGIN[kind]
 
