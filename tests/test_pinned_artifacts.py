@@ -977,8 +977,8 @@ def test_overlay_scan_skips_a_non_shell_extensionless_file(tmp_path):
 
 
 # ---------------------------------------------------------------------------
-# Status classes: 404/410 gone; 408, 429 and 5xx retried then transient; any
-# other 4xx refused at once.
+# Status classes: 404/410 gone; 408, 429, 5xx and a rate-limited 403 retried
+# then transient; any other 4xx refused at once.
 # ---------------------------------------------------------------------------
 
 
