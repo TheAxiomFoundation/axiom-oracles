@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import re
+import shlex
 import sys
 from pathlib import Path
 
@@ -783,8 +784,11 @@ def _command_sequences(tree):
     def flatten(node):
         if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
             # An operand that is not a literal (``list(...)``, a name) stands
-            # in as one unknown element.
-            return (flatten(node.left) or [node.left]) + (flatten(node.right) or [node.right])
+            # in as one unknown element. An empty literal adds nothing.
+            left, right = flatten(node.left), flatten(node.right)
+            return ([node.left] if left is None else left) + (
+                [node.right] if right is None else right
+            )
         if isinstance(node, (ast.List, ast.Tuple)):
             return list(node.elts)
         return None
@@ -848,6 +852,25 @@ def _shell_overlays(path: Path) -> list[tuple[int, bool]]:
     return found
 
 
+def _env_command(words: list[str]) -> list[str]:
+    """The command ``env`` runs, from the words after ``env`` in a shebang."""
+    while words:
+        word, *rest = words
+        if word in ("-u", "--unset", "-C", "--chdir"):
+            words = rest[1:]  # the option's value is the next word
+        elif word in ("-S", "--split-string"):
+            return _env_command(shlex.split(" ".join(rest)))
+        elif word.startswith("--split-string="):
+            return _env_command(shlex.split(" ".join([word.partition("=")[2], *rest])))
+        elif word.startswith("-S"):
+            return _env_command(shlex.split(" ".join([word[2:], *rest])))
+        elif word.startswith("-") or "=" in word:
+            words = rest
+        else:
+            return words
+    return []
+
+
 def _script_language(path: Path) -> str | None:
     """``"python"`` or ``"shell"`` from the suffix, else from the shebang."""
     if path.suffix == ".py":
@@ -858,9 +881,9 @@ def _script_language(path: Path) -> str | None:
         first = handle.readline(200).decode("utf-8", "replace")
     if not first.startswith("#!"):
         return None
-    words = first[2:].split()
+    words = shlex.split(first[2:])
     if words and words[0].rsplit("/", 1)[-1] == "env":
-        words = [w for w in words[1:] if not w.startswith("-") and "=" not in w]
+        words = _env_command(words[1:])
     if not words:
         return None
     interpreter = words[0].rsplit("/", 1)[-1]
@@ -922,11 +945,41 @@ _OVERLAY_SHAPES = {
         "    return subprocess.run(cmd)\n",
         5,
     ),
+    "concatenated-empty-list": (
+        "scripts/empty_list_site.py",
+        _PY_HEAD + '    cmd = ["uv"] + [] + ["run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "concatenated-empty-tuple": (
+        "scripts/empty_tuple_site.py",
+        _PY_HEAD + '    cmd = ("uv",) + () + ("run",{iso} "--no-project", *_pe_oracle_with_args(pins))\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "wrapped-by-env": (
+        "scripts/wrapped_site.py",
+        _PY_HEAD + '    cmd = ["env", "A=1", "uv", "run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
     "extensionless-shell": (
         "scripts/run_oracle",
         "#!/usr/bin/env bash\nset -euo pipefail\n"
         "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
         3,
+    ),
+    "env-unset-shebang": (
+        "scripts/run_unset",
+        "#!/usr/bin/env -u SOMETHING bash\n"
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        2,
+    ),
+    "env-quoted-split-shebang": (
+        "scripts/run_split",
+        '#!/usr/bin/env -S "bash -e"\n'
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        2,
     ),
     "ops-shell": (
         "ops/run_oracle.sh",
@@ -974,6 +1027,37 @@ def test_overlay_scan_skips_a_non_shell_extensionless_file(tmp_path):
     path.parent.mkdir(parents=True)
     path.write_text("uv run --no-project --with policyengine-us==1.2.3 python x.py\n")
     assert _overlay_sites(tmp_path) == {}
+
+
+@pytest.mark.parametrize(
+    ("shebang", "language"),
+    [
+        ("#!/bin/sh", "shell"),
+        ("#!/bin/bash -e", "shell"),
+        ("#!/usr/bin/env bash", "shell"),
+        ("#!/usr/bin/env -u SOMETHING bash", "shell"),
+        ("#!/usr/bin/env --unset SOMETHING bash", "shell"),
+        ("#!/usr/bin/env --unset=SOMETHING bash", "shell"),
+        ("#!/usr/bin/env -C /tmp bash", "shell"),
+        ("#!/usr/bin/env -S bash -e", "shell"),
+        ('#!/usr/bin/env -S "bash -e"', "shell"),
+        ("#!/usr/bin/env -Sbash", "shell"),
+        ('#!/usr/bin/env --split-string="bash -e"', "shell"),
+        ("#!/usr/bin/env --split-string bash", "shell"),
+        ("#!/usr/bin/env A=1 python3", "python"),
+        ("#!/usr/bin/env -i python3.14", "python"),
+        ("#!/usr/bin/env -S python3 -u", "python"),
+        ("#!/usr/bin/python3", "python"),
+        ("#!/usr/bin/env", None),
+        ("#!/usr/bin/env -u bash", None),
+        ("#!/usr/bin/env ruby", None),
+        ("not a shebang", None),
+    ],
+)
+def test_script_language_reads_the_shebang_env_would_run(tmp_path, shebang, language):
+    path = tmp_path / "script"
+    path.write_text(shebang + "\n")
+    assert _script_language(path) == language
 
 
 # ---------------------------------------------------------------------------
