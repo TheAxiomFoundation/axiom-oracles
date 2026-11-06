@@ -1,0 +1,91 @@
+name: Propose PolicyEngine US updates
+
+on:
+  schedule:
+    # Tuesday 08:23 UTC, separate from the Monday comparison matrix.
+    - cron: "23 8 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: policyengine-us-updates
+  cancel-in-progress: false
+
+jobs:
+  probe:
+    if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install trusted updater dependencies
+        run: uv sync --locked
+
+      # Candidate packages execute only in this read-only job. No publication
+      # token or repository secrets are passed to the probe.
+      - name: Resolve and compare the current and candidate defaults
+        run: >-
+          uv run --no-sync python scripts/update_policyengine_defaults.py
+          probe --output-dir "$RUNNER_TEMP/policyengine-update"
+
+      - name: Retain the proposal and diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: policyengine-update-${{ github.run_id }}
+          path: ${{ runner.temp }}/policyengine-update/
+          if-no-files-found: warn
+          retention-days: 30
+
+  publish:
+    needs: probe
+    if: >-
+      needs.probe.result == 'success' &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # Never check out a candidate branch or execute code from the artifact.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Install trusted publication dependencies
+        run: uv sync --locked
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: policyengine-update-${{ github.run_id }}
+          path: ${{ runner.temp }}/policyengine-update
+
+      - name: Open a draft version update PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: >-
+          uv run --no-sync python scripts/publish_policyengine_update.py
+          --proposal-dir "$RUNNER_TEMP/policyengine-update"

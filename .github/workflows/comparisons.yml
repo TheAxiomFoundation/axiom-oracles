@@ -110,7 +110,7 @@ jobs:
 
       - name: Install the check's dependencies
         # The versions uv.lock resolves.
-        run: pip install pyyaml==6.0.3 requests==2.33.1
+        run: pip install pyyaml==6.0.3 requests==2.33.1 packaging==26.2
 
       - name: Check every pinned PolicyEngine artifact
         run: python3 scripts/check_pinned_artifacts.py --verbose

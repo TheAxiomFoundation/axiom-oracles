@@ -52,6 +52,12 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from axiom_oracles import pinned_artifacts  # noqa: E402
+from axiom_oracles.policyengine_defaults import (  # noqa: E402
+    DEFAULT_REQUIREMENTS_PATH,
+    load_defaults,
+    pe_pins,
+    validate_requirements_lock,
+)
 from axiom_oracles.provenance import (  # noqa: E402
     _git_env,
     _git_sha,
@@ -2464,18 +2470,10 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
-# PolicyEngine 4.18.9 certifies its bundled manifest at PE-US 1.752.2.
-# Keep the in-repo oracle runner on that certified pair so PE outputs are
-# reproducible across environments; bump both together when refreshing the
-# oracle (stale pins mean we validate against superseded PE tables — the CO
-# TANF grant standards diverged exactly this way at 1.700.0). The
-# axiom-encode subprocess runners above keep their own pins because they are
-# validating the encoder stack.
-_PE_ORACLE_PINS = (
-    "policyengine==4.18.9",
-    "policyengine-us==1.752.2",
-    "policyengine-core==3.28.0",
-)
+# Reviewed defaults are updated together in the manifest. Explicit suite
+# vintages and the encoder subprocess runners retain their separate pins.
+_PE_DEFAULTS = load_defaults()
+_PE_ORACLE_PINS = pe_pins(_PE_DEFAULTS)
 
 def _taxsim_pin_version() -> str:
     """The pinned policyengine-taxsim version, from taxsim_pins.json.
@@ -2566,7 +2564,7 @@ def _require_taxsim_law_year(
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
 
-    Defaults to ``_PE_ORACLE_PINS`` (the certified in-repo pair) so every other
+    Defaults to ``_PE_ORACLE_PINS`` (the reviewed in-repo stack) so every other
     suite is unaffected; a comparison that must validate against a newer oracle
     (e.g. ssi-ecps against the us-pe universe pin policyengine-us 1.767.3) sets
     ``policyengine_version`` / ``policyengine_us_version`` /
@@ -2575,6 +2573,11 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     meta = params.get("policyengine_version")
     us = params.get("policyengine_us_version")
     core = params.get("policyengine_core_version")
+    if (meta or us or core) and not (meta and us and core):
+        raise SystemExit(
+            "US oracle overrides must specify policyengine_version, "
+            "policyengine_us_version and policyengine_core_version together"
+        )
     return (
         f"policyengine=={meta}" if meta else _PE_ORACLE_PINS[0],
         f"policyengine-us=={us}" if us else _PE_ORACLE_PINS[1],
@@ -2608,7 +2611,17 @@ def _pe_oracle_with_args(pins) -> list[str]:
     list leaves unpinned, policyengine-core included, comes from that
     project's own dependencies and lock.
     """
-    return pinned_artifacts.with_args((*pins, *_PE_US_COMPANION_PINS))
+    pins = tuple(pins)
+    companions = (
+        (f"spm-calculator=={_PE_DEFAULTS['spm-calculator']}",)
+        if pins == _PE_ORACLE_PINS
+        else _PE_US_COMPANION_PINS
+    )
+    frozen_args = []
+    if pins == _PE_ORACLE_PINS and DEFAULT_REQUIREMENTS_PATH.exists():
+        validate_requirements_lock(DEFAULT_REQUIREMENTS_PATH.read_text(), _PE_DEFAULTS)
+        frozen_args = ["--with-requirements", str(DEFAULT_REQUIREMENTS_PATH)]
+    return [*frozen_args, *pinned_artifacts.with_args((*pins, *companions))]
 
 
 # PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
@@ -2660,7 +2673,7 @@ def _require_installed_policyengine_us_version(
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
 # need to bypass certification, but the shim keeps policyengine.us import
 # behavior stable for the local CLI.
-_PE_CERT_OVERRIDE = """
+_PE_RUNTIME_BOOTSTRAP = """
 import json, os, sys
 from importlib.metadata import version as _dist_version
 from pathlib import Path
@@ -2702,7 +2715,8 @@ try:
 except Exception:
     pass
 
-from axiom_oracles.cli import cli as _cli
+"""
+_PE_CERT_OVERRIDE = _PE_RUNTIME_BOOTSTRAP + """from axiom_oracles.cli import cli as _cli
 _cli(sys.argv[1:], standalone_mode=False)
 if '--output' in sys.argv:
     _output = Path(sys.argv[sys.argv.index('--output') + 1])

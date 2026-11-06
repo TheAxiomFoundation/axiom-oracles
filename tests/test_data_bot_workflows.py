@@ -9,11 +9,12 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKFLOWS = ROOT / ".github/workflows"
-PUBLISHERS = {
+DATA_PUBLISHERS = {
     ("affected-rerun.yml", "publish"),
     ("comparisons.yml", "rule-coverage"),
     ("oracle-data-reconcile.yml", "reconcile"),
 }
+PUBLISHERS = DATA_PUBLISHERS | {("policyengine-us-updates.yml", "publish")}
 
 
 def workflow(name):
@@ -40,7 +41,10 @@ def assert_safe_publication(name, doc):
         if job.get("permissions", {}).get("contents") != "write":
             continue
         assert (name, job_name) in PUBLISHERS
-        if job_name == "publish":
+        if name == "policyengine-us-updates.yml" and job_name == "publish":
+            assert "scripts/publish_policyengine_update.py --proposal-dir" in shell
+            assert job["permissions"] == {"contents": "write", "pull-requests": "write"}
+        elif job_name == "publish":
             calls = [
                 step["run"]
                 for step in job["steps"]
@@ -696,7 +700,7 @@ def test_unattended_publishers_use_guarded_data_branch(path):
 
 
 def test_workflow_publications_are_serialized_on_the_data_branch():
-    for file, job_name in PUBLISHERS:
+    for file, job_name in DATA_PUBLISHERS:
         assert workflow(file)["jobs"][job_name]["concurrency"] == {
             "group": "oracle-data-publication",
             "cancel-in-progress": False,

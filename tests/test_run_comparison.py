@@ -13,6 +13,7 @@ import pytest
 from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles import pinned_artifacts
+from axiom_oracles.policyengine_defaults import load_defaults
 
 
 def assert_pe_companion_pinned(cmd):
@@ -20,7 +21,13 @@ def assert_pe_companion_pinned(cmd):
     assert any(
         arg.startswith(("policyengine-us==", "policyengine-us @ ")) for arg in cmd
     ), cmd
-    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with", cmd
+    companions = [arg for arg in cmd if arg.startswith("spm-calculator==")]
+    assert len(companions) == 1, cmd
+    assert companions[0] in {
+        "spm-calculator==0.3.1",  # Explicit historical suite stacks.
+        f"spm-calculator=={load_defaults()['spm-calculator']}",
+    }, cmd
+    assert cmd[cmd.index(companions[0]) - 1] == "--with", cmd
 
 
 def load_run_comparison_module():
@@ -3543,22 +3550,21 @@ def test_pe_us_companion_pins_match_uv_lock():
 
 def test_pe_oracle_with_args_appends_the_companion_pins():
     run_comparison = load_run_comparison_module()
-    # PyPI's index no longer lists policyengine-us 1.752.2, so the default
-    # oracle installs the verified wheel from its recorded hashed URL.
-    wheel = pinned_artifacts.cache_path(
-        pinned_artifacts.lookup("policyengine-us", "1.752.2")
+    packages = load_defaults()
+    expected_requirements = [
+        pinned_artifacts.requirement(f"{name}=={version}")
+        for name, version in packages.items()
+    ]
+    frozen_args = (
+        ["--with-requirements", str(run_comparison.DEFAULT_REQUIREMENTS_PATH)]
+        if run_comparison.DEFAULT_REQUIREMENTS_PATH.exists()
+        else []
     )
     assert run_comparison._pe_oracle_with_args(
         run_comparison._resolve_pe_oracle_pins({})
     ) == [
-        "--with",
-        "policyengine==4.18.9",
-        "--with",
-        f"policyengine-us @ {wheel.resolve().as_uri()}",
-        "--with",
-        "policyengine-core==3.28.0",
-        "--with",
-        "spm-calculator==0.3.1",
+        *frozen_args,
+        *(arg for requirement in expected_requirements for arg in ("--with", requirement)),
     ]
 
 
