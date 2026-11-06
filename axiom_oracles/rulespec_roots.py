@@ -20,11 +20,12 @@ canonical when all of the following hold:
 * when the directory or one of its parents is a Git work tree, the directory
   is that work tree's top level, and its ``origin``, when one is configured,
   is ``TheAxiomFoundation/rulespec-<cc>`` on github.com over https or ssh,
-  with or without ``.git``, compared case-insensitively. The owner/repository
-  comparison is :func:`axiom_oracles.provenance.remote_matches_slug`, the one
-  provenance uses, so the two cannot disagree on owner and repository. Forks, other hosts, a
-  subdirectory of another repository and a checkout of a differently named
-  repository are refused.
+  with or without ``.git``, compared case-insensitively. Host, port, path and
+  owner/repository are read by :func:`axiom_oracles.provenance.parse_github_remote`
+  and compared by :func:`axiom_oracles.provenance.remote_matches_slug`, the
+  ones provenance uses, so the two cannot disagree on any origin. Forks, other
+  hosts and ports, a subdirectory of another repository and a checkout of a
+  differently named repository are refused.
 
 A directory outside any Git work tree, and a checkout with no ``origin``,
 pass on the rules above alone. That covers the staged copies
@@ -50,9 +51,8 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
-from urllib.parse import urlsplit
 
-from axiom_oracles.provenance import remote_matches_slug, repo_slug_from_remote
+from axiom_oracles.provenance import parse_github_remote, remote_matches_slug
 
 #: Exact canonical checkout name.
 CANONICAL_ROOT_NAME = re.compile(r"^rulespec-[a-z]{2}$")
@@ -261,35 +261,14 @@ def _origin_url(config: Path) -> str | None:
 
 
 def _canonical_origin(url: str, name: str) -> bool:
-    """Is ``url`` ``TheAxiomFoundation/<name>`` on github.com over https/ssh?"""
-    url = url.strip()
-    if "://" in url:
-        try:
-            parts = urlsplit(url)
-            host = (parts.hostname or "").lower()
-        except ValueError:
-            return False
-        if parts.scheme.lower() not in ("https", "ssh"):
-            return False
-        path = parts.path
-    else:
-        match = re.fullmatch(r"(?:[^@/:]+@)?([^/:]+):(?!/)(.+)", url)
-        if match is None:
-            return False
-        host, path = match.group(1).lower(), match.group(2)
-    if host != "github.com":
-        return False
-    path = path.strip("/")
-    path = path[: -len(".git")] if path.endswith(".git") else path
-    if len([part for part in path.split("/") if part]) != 2:
-        return False
-    # Hand provenance's comparison the host and path parsed above, spelled as
-    # it recognizes them; it treats an unrecognized remote as a match, so the
-    # remote must also be recognized.
-    normalized = f"https://github.com/{path}"
-    return repo_slug_from_remote(normalized) is not None and remote_matches_slug(
-        normalized, f"{CANONICAL_OWNER}/{name}"
-    )
+    """Is ``url`` ``TheAxiomFoundation/<name>`` on github.com over https/ssh?
+
+    Provenance's parser reads the host and path, so the two cannot disagree
+    on any origin form. An origin must be configured here: provenance reads
+    an absent one as a match, and this check is never asked about one.
+    """
+    kind, _ = parse_github_remote(url)
+    return kind == "github" and remote_matches_slug(url, f"{CANONICAL_OWNER}/{name}")
 
 
 # --------------------------------------------------------------------------- #
