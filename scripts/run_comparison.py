@@ -6111,6 +6111,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "right": m.get("policyengine", 0),
                 "tolerance": spec["tolerance"],
             }
+            if m.get("uncompared") is True:
+                mm["uncompared"] = True
             case_mismatches.append(mm)
             flat_mismatches.append(mm)
         if not case_mismatches:

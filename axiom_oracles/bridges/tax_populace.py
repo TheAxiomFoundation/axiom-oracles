@@ -571,6 +571,8 @@ class TaxComparisonRow:
     # so a mismatch row is reviewable without reopening the dataset.
     ages: tuple[int, ...] = ()
     earned: float | None = None
+    # Invalid returns remain diagnostics, outside comparison denominators.
+    uncompared: bool = False
 
 
 @dataclass(frozen=True)
@@ -3317,6 +3319,7 @@ def compare_outputs(
                             axiom=axiom_value,
                             policyengine=pe_value,
                             diff=math.nan,
+                            uncompared=True,
                         )
                     )
                     continue

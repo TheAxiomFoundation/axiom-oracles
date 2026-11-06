@@ -620,6 +620,57 @@ def test_fiit_mismatch_only_rows_preserve_uncompared_flag(flag):
 
 
 @needs_bun
+@pytest.mark.parametrize("fallback", [False, True], ids=["full", "fallback"])
+@pytest.mark.parametrize("finite_return", [0, 50], ids=["agreement", "disagreement"])
+def test_native_fiit_errors_reach_household_reader_as_uncompared(
+    tmp_path, fallback, finite_return,
+):
+    from tests.test_fiit_pattern_readers import fiit_report
+
+    # FIIT enumerates only entities with diagnostic/mismatch rows. A clean
+    # entity leaves the inline cases sparse and makes emit_suite use fallback.
+    pairs = [(0, None)] if finite_return == 0 else [(0, finite_return), (0, None)]
+    if fallback:
+        pairs.insert(0, (0, 0))
+    report = fiit_report(pairs)
+    path = _emit_household_fixture(_load_module(), tmp_path, report)
+    index = json.loads(path.with_name("index.json").read_text())
+    assert index.get("partial") == ("mismatch-only" if fallback else None)
+    expected = [] if finite_return == 0 else [
+        {"disagreements": 1, "uncompared": 0, "unexplained": 1},
+    ]
+    expected.append({"disagreements": 0, "uncompared": 1, "unexplained": 0})
+    assert _read_household_artifact(path) == expected
+
+
+@needs_bun
+def test_native_fiit_fallback_preserves_producer_comparison_status(tmp_path):
+    from tests.test_native_fiit_missing_returns import produce
+
+    raw, _ = produce(None, 0)
+    path = _emit_household_fixture(_load_module(), tmp_path, raw)
+    assert _read_household_artifact(path) == [
+        {"disagreements": 0, "uncompared": 1, "unexplained": 0},
+    ]
+
+
+@settings(max_examples=24, deadline=None, derandomize=True)
+@given(returns=st.lists(st.sampled_from([None, 0, 50]), min_size=1, max_size=8))
+def test_property_native_fiit_comparison_status_survives_both_artifact_paths(returns):
+    """Every retained native pair keeps its compared/uncompared disposition."""
+    from tests.test_fiit_pattern_readers import fiit_report
+
+    report = fiit_report([(0, right) for right in returns])
+    module = _load_module()
+    full = [module.compact_case(case, {}) for case in report["cases"]]
+    fallback = module.mismatch_only_rows(report, {})
+    assert [case["m"] for case in full] == [case["m"] for case in fallback]
+    flags = [m.get("u") is True for case in full for m in case["m"]]
+    assert flags == [right is None for right in returns if right != 0]
+    assert sum(flags) == report["summary"]["uncompared_mismatches"]
+
+
+@needs_bun
 @settings(max_examples=15, deadline=None, derandomize=True)
 @given(
     deltas=st.lists(

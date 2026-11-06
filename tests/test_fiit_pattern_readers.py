@@ -88,7 +88,10 @@ def read_patterns(*reports):
 @pytest.mark.parametrize("reader", ["ledger", "program"])
 def test_fiit_child_patterns_exclude_engine_errors_without_row_flags(reader):
     report = fiit_report([(0, 50), (0, None)])
-    # Published FIIT rows lack this flag; readers must use child aggregates.
+    # Historical published FIIT rows lack this flag; keep testing that fallback
+    # after the native producer starts carrying comparison status.
+    for row in report["mismatches"]:
+        row.pop("uncompared", None)
     assert all("uncompared" not in row for row in report["mismatches"])
     [result] = read_patterns(report)
     assert len(report["aggregates"]) == 2
@@ -102,8 +105,13 @@ def test_fiit_child_patterns_exclude_engine_errors_without_row_flags(reader):
 
 
 @pytest.mark.parametrize("reader", ["ledger", "program"])
-def test_fiit_engine_errors_alone_do_not_create_a_disagreement_pattern(reader):
-    [result] = read_patterns(fiit_report([(0, None)]))
+@pytest.mark.parametrize("with_row_flags", [False, True])
+def test_fiit_engine_errors_alone_do_not_create_a_disagreement_pattern(reader, with_row_flags):
+    report = fiit_report([(0, None)])
+    if not with_row_flags:
+        for row in report["mismatches"]:
+            row.pop("uncompared", None)
+    [result] = read_patterns(report)
     rows = result[reader] if reader == "ledger" else result[reader]["rows"]
     assert rows == []
 
@@ -122,6 +130,44 @@ def test_fiit_truncated_child_pattern_preserves_legacy_fallback(reader, include_
     assert result["metric"]["mismatches"] == 2
     assert len(rows) == 1
     assert rows[0]["count"] == expected
+
+
+@pytest.mark.parametrize("reader", ["ledger", "program"])
+def test_committed_fiit_patterns_use_complete_compared_child_counts(reader):
+    """A single-kind child uses its full aggregate, even when the list is slimmed."""
+    report = json.loads(
+        (ROOT / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
+    )
+    prefix = "us:tax/federal-income-tax#"
+    expected = {
+        f"{prefix}eitc": 17_424,
+        f"{prefix}tax_before_credits": 2_118,
+        f"{prefix}capital_gain": 8,
+        f"{prefix}ctc": 5,
+    }
+    retained = {
+        concept: sum(row["concept"] == concept for row in report["mismatches"])
+        for concept in expected
+    }
+    assert retained[f"{prefix}eitc"] == 367
+    assert retained[f"{prefix}tax_before_credits"] == 620
+    assert len(report["mismatches"]) == 1_000
+    aggregates = {aggregate["concept"]: aggregate for aggregate in report["aggregates"]}
+    for concept, count in expected.items():
+        aggregate = aggregates[concept]
+        assert aggregate["parent"] == f"{prefix}liability"
+        assert aggregate["mismatch_count"] - aggregate["uncompared_mismatches"] == count
+
+    [result] = read_patterns(report)
+    rows = result[reader] if reader == "ledger" else result[reader]["rows"]
+    assert {(row["concept"], row["kind"]): row["count"] for row in rows} == {
+        (concept, "amount_difference"): count for concept, count in expected.items()
+    }
+    # The parent is the run total; counting it as another pattern would double
+    # the children. Each child occurs once, and together they equal that total.
+    assert len(rows) == len(expected)
+    assert sum(row["count"] for row in rows) == result["metric"]["mismatches"] == 19_555
+    assert result["topLevelCount"] == 1
 
 
 @settings(max_examples=12, deadline=None, derandomize=True)

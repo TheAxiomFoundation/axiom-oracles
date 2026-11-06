@@ -691,6 +691,7 @@ def _canonical_mismatch_payloads(
                 normalized.get("left"), normalized.get("right")
             ),
             "e": disposition.get("disposition"),
+            "u": normalized.get("uncompared") is True,
         }
     return payloads, problems
 
@@ -730,6 +731,7 @@ def _served_mismatch_payloads(
                 "x": mismatch.get("x"),
                 "d": mismatch.get("d"),
                 "e": mismatch.get("e"),
+                "u": mismatch.get("u") is True,
             }
     return payloads, problems
 
@@ -804,6 +806,14 @@ def check_suite_artifacts(
         )
 
     shared = canonical_keys & served_keys
+    status_drift = sorted(
+        key for key in shared if canonical[key]["u"] != served[key]["u"]
+    )
+    if status_drift:
+        problems.append(
+            f"{suite}: {len(status_drift)} served mismatch comparison status "
+            f"row(s) drift; examples={status_drift[:5]}"
+        )
     wrong_annotations = sorted(
         key for key in shared if canonical[key]["e"] != served[key]["e"]
     )
