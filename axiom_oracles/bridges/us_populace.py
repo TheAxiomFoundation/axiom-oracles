@@ -940,7 +940,16 @@ def print_report(
     print(f"Skipped cases: {report.skipped_cases:,}")
     print(f"Tolerance: {tolerance:g}")
     print(f"Relative tolerance: {relative_tolerance:g}")
-    print(f"Mismatches: {len(report.mismatches):,}")
+    # Uncompared pairs (a missing or nonfinite return) are engine errors kept
+    # as diagnostic mismatch rows; they are not compared values.
+    uncompared = sum(
+        item.get("uncompared_mismatches", 0) for item in report.output_summary
+    )
+    print(f"Mismatches: {max(0, len(report.mismatches) - uncompared):,}")
+    if uncompared:
+        print(f"Uncompared (engine errors): {uncompared:,}")
+    if report.errors:
+        print(f"Errors: {len(report.errors):,}")
     if report.skipped_reasons:
         print("Skipped reasons:")
         for reason, count in report.skipped_reasons.items():
@@ -949,9 +958,16 @@ def print_report(
     print("By output:")
     for item in report.output_summary:
         print(
-            f"  - {item['output']}: {item['mismatches']:,}/{item['compared']:,} "
-            f"mismatch, max_abs_diff={item['max_abs_diff']:.2f}, "
+            f"  - {item['output']}: "
+            f"{max(0, item['mismatches'] - item.get('uncompared_mismatches', 0)):,}"
+            f"/{item['compared']:,} mismatch, "
+            f"max_abs_diff={item['max_abs_diff']:.2f}, "
             f"max_rel_diff={item['max_relative_diff']:.2g}"
+            + (
+                f", uncompared={item['uncompared_mismatches']:,}"
+                if item.get("uncompared_mismatches")
+                else ""
+            )
         )
     if report.mismatches:
         print()

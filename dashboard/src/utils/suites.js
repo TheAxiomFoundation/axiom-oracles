@@ -1,3 +1,5 @@
+import { comparedMismatchCount, uncomparedCount } from "./caseMismatches.mjs";
+
 /**
  * Central suite metadata.
  *
@@ -1294,13 +1296,19 @@ export function topLevelAggregates(aggregates) {
   return rows.filter((agg) => !(agg.parent && concepts.has(agg.parent)));
 }
 
-/** Aggregate one report's aggregates into a single matched/total metric. */
+/**
+ * Aggregate one report's aggregates into a single matched/total metric.
+ * `mismatches` counts compared pairs only; uncompared pairs (engine errors,
+ * which `mismatch_count` includes) are reported apart as `uncompared`.
+ */
 export function reportMetric(report) {
   let total = 0;
   let mismatches = 0;
+  let uncompared = 0;
   for (const agg of topLevelAggregates(report?.aggregates)) {
     total += agg.comparison_count || 0;
-    mismatches += agg.mismatch_count || 0;
+    mismatches += comparedMismatchCount(agg);
+    uncompared += uncomparedCount(agg);
   }
   // The disposition merge (dispositions/<suite>.yaml) stamps the summary
   // with both rates: raw, and explained — matches plus mismatches carrying
@@ -1310,6 +1318,7 @@ export function reportMetric(report) {
   return {
     total,
     mismatches,
+    uncompared,
     matched: total - mismatches,
     rate: total > 0 ? ((total - mismatches) / total) * 100 : null,
     explainedRate:
@@ -1367,6 +1376,7 @@ export function nearMetric(report, threshold = NEAR_THRESHOLD_USD) {
   if (declared == null || list.length !== declared) return null;
   let near = 0;
   for (const m of list) {
+    if (m?.uncompared === true) continue;
     const diff = m?.difference;
     if (typeof diff === "number" && Math.abs(diff) <= threshold) near += 1;
   }

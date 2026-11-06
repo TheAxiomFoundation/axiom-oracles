@@ -5552,7 +5552,10 @@ def _print_summary(output: Path) -> None:
     print()
     if "compared_values" in data:
         cv = data["compared_values"]
-        mc = data["mismatch_count"]
+        # mismatch_count includes uncompared pairs (engine errors), which
+        # compared_values excludes; agreement is over compared pairs only.
+        uncompared = data.get("uncompared_mismatches", 0) or 0
+        mc = max(0, data["mismatch_count"] - uncompared)
         od = data.get("oracle_divergence_count", 0)
         differences = mc + od
         pct = 100 * (cv - differences) / cv if cv else 0
@@ -5561,14 +5564,17 @@ def _print_summary(output: Path) -> None:
         print(f"Mismatches:        {mc}")
         if od:
             print(f"Known PE issues:   {od}")
+        if uncompared:
+            print(f"Uncompared:        {uncompared} (engine errors: {len(data.get('errors') or [])})")
         print(f"Agreement:         {pct:.4f}%")
         from collections import defaultdict
 
         by_surface = defaultdict(lambda: [0, 0])
         for row in data.get("output_summary", []):
             by_surface[row["surface"]][0] += row["compared"]
-            by_surface[row["surface"]][1] += row["mismatches"] + row.get(
-                "oracle_divergences", 0
+            by_surface[row["surface"]][1] += (
+                max(0, row["mismatches"] - row.get("uncompared_mismatches", 0))
+                + row.get("oracle_divergences", 0)
             )
         print()
         for surf, (c, m) in sorted(by_surface.items(), key=lambda x: -x[1][1]):
@@ -5586,18 +5592,35 @@ def _print_summary(output: Path) -> None:
         print(f"Cases:             {cc}")
         print(f"Mismatch entries:  {mm}")
         agg = data.get("aggregates") or []
+        summary = data.get("summary") or {}
+        concepts = {a.get("concept") for a in agg}
+        # Hierarchical reports repeat their parents' pairs in component rows.
+        uncompared = summary.get(
+            "uncompared_mismatches",
+            sum(
+                a.get("uncompared_mismatches", 0) or 0
+                for a in agg
+                if not (a.get("parent") and a["parent"] in concepts)
+            ),
+        )
+        if uncompared:
+            errors = summary.get("error_count", len(data.get("errors") or []))
+            print(f"Uncompared:        {uncompared} (engine errors: {errors})")
         if agg:
             print()
             for a in agg[:8]:
                 compared = a.get("compared", a.get("comparison_count", 0))
                 matched = a.get("matched", a.get("match_count"))
+                uncompared = a.get("uncompared_mismatches", 0) or 0
                 if matched is None:
-                    matched = compared - a.get("mismatch_count", 0)
+                    matched = compared - max(0, a.get("mismatch_count", 0) - uncompared)
                 line = (
                     f"  {a.get('concept', '?'):40s}  "
                     f"compared={compared}  "
                     f"matched={matched}"
                 )
+                if uncompared:
+                    line += f"  uncompared={uncompared}"
                 # Surface positive-rate context for binary concepts so the
                 # reader can tell whether "agreement" is real agreement or
                 # both-engines-returning-the-dominant-value agreement.
@@ -6225,6 +6248,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "right": m.get("policyengine", 0),
                 "tolerance": spec["tolerance"],
             }
+            if m.get("uncompared") is True:
+                mm["uncompared"] = True
             case_mismatches.append(mm)
             flat_mismatches.append(mm)
         if not case_mismatches:
@@ -6238,12 +6263,19 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         }
         if identity is not None:
             case_metadata["dataset_identity"] = identity
+        # Uncompared rows were never measured. A case with no other row has no
+        # rate, so no reader can count it as a disagreement.
+        case_match_rate = (
+            0.0
+            if any(m.get("uncompared") is not True for m in case_mismatches)
+            else None
+        )
         cases.append(
             {
                 "case_id": case_id,
                 "left_engine": "axiom",
                 "left_errors": [],
-                "match_rate": 0.0,
+                "match_rate": case_match_rate,
                 "metadata": case_metadata,
                 "mismatches": case_mismatches,
                 "right_engine": "policyengine",

@@ -1368,6 +1368,16 @@ body {
   font-weight: 600;
 }
 
+.v2-prog-rate-with-errors {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+.v2-prog-uncompared {
+  max-width: 100%;
+  white-space: normal;
+  text-align: right;
+}
+
 .v2-ledger {
   display: flex;
   flex-direction: column;

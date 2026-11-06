@@ -22,7 +22,7 @@ Row shape (kept deliberately small):
     {"id": case_id, "r": match_rate,
      "h": {"n": household_size, "e": earned_income, "a": ages},
      "m": [{"c": concept, "l": left, "x": right, "d": right_minus_left,
-            "e": disposition_kind_if_explained}, ...]}
+            "e": disposition_kind_if_explained, "u": true_if_uncompared}, ...]}
 
 Usage:
     .venv/bin/python scripts/emit_case_artifacts.py            # all suites
@@ -358,6 +358,7 @@ def finalize_slot_dictionaries(rows: list[dict]) -> tuple[list[str], list[str]]:
 
 def normalize_mismatch(m: dict) -> dict:
     """Standard and fiit-harness mismatch rows -> one shape."""
+    uncompared = {"uncompared": True} if m.get("uncompared") is True else {}
     if "entity_id" in m and "case_id" not in m:
         # fiit harness: entity_id/surface/axiom/policyengine/diff, plus the
         # household context (ages/earned) newer runs attach to each row.
@@ -369,6 +370,7 @@ def normalize_mismatch(m: dict) -> dict:
             "difference": m.get("diff"),
             "ages": [int(a) for a in (m.get("ages") or [])],
             "earned": m.get("earned"),
+            **uncompared,
         }
     return {
         "case_id": m.get("case_id"),
@@ -378,6 +380,7 @@ def normalize_mismatch(m: dict) -> dict:
         "difference": m.get("difference"),
         "ages": m.get("ages") or [],
         "earned": m.get("yearly_earned_income"),
+        **uncompared,
     }
 
 
@@ -408,6 +411,8 @@ def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
         kind = explained.get((m["case_id"], m["concept"]))
         if kind:
             entry["e"] = kind
+        if m.get("uncompared") is True:
+            entry["u"] = True
         row["m"].append(entry)
     return list(by_case.values())
 
@@ -686,6 +691,7 @@ def _canonical_mismatch_payloads(
                 normalized.get("left"), normalized.get("right")
             ),
             "e": disposition.get("disposition"),
+            "u": normalized.get("uncompared") is True,
         }
     return payloads, problems
 
@@ -725,6 +731,7 @@ def _served_mismatch_payloads(
                 "x": mismatch.get("x"),
                 "d": mismatch.get("d"),
                 "e": mismatch.get("e"),
+                "u": mismatch.get("u") is True,
             }
     return payloads, problems
 
@@ -799,6 +806,14 @@ def check_suite_artifacts(
         )
 
     shared = canonical_keys & served_keys
+    status_drift = sorted(
+        key for key in shared if canonical[key]["u"] != served[key]["u"]
+    )
+    if status_drift:
+        problems.append(
+            f"{suite}: {len(status_drift)} served mismatch comparison status "
+            f"row(s) drift; examples={status_drift[:5]}"
+        )
     wrong_annotations = sorted(
         key for key in shared if canonical[key]["e"] != served[key]["e"]
     )

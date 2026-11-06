@@ -58,6 +58,7 @@ export function groupByOracle(verification) {
         reports: [],
         checks: 0,
         mismatches: 0,
+        uncompared: 0,
         households: 0,
         regions: new Set(),
         programs: new Set(),
@@ -68,6 +69,7 @@ export function groupByOracle(verification) {
     const m = reportMetric(report);
     entry.checks += m.total;
     entry.mismatches += m.mismatches;
+    entry.uncompared += m.uncompared;
     entry.households += reportHouseholds(report);
     const meta = suiteMeta(report.suite);
     entry.regions.add(meta.region);
