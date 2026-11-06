@@ -5,11 +5,14 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import re
+import shlex
 import sys
 from pathlib import Path
 
 import pytest
 import requests
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles import pinned_artifacts
 
@@ -176,9 +179,10 @@ def test_requirement_installs_a_pruned_pin_from_the_verified_wheel():
 
 
 class _Response:
-    def __init__(self, status: int, body: bytes = b""):
+    def __init__(self, status: int, body: bytes = b"", headers=None):
         self.status_code = status
         self._body = body
+        self.headers = requests.structures.CaseInsensitiveDict(headers or {})
 
     def iter_content(self, size):
         for start in range(0, len(self._body), size):
@@ -444,8 +448,11 @@ def test_scan_fails_closed_on_unparseable_yaml(fake_root):
 
 
 class _Reply:
-    def __init__(self, status: int, versions=()):
+    def __init__(self, status, versions=()):
+        # ``status`` is a code, or ``(code, headers)``.
+        status, headers = status if isinstance(status, tuple) else (status, {})
         self.status_code = status
+        self.headers = requests.structures.CaseInsensitiveDict(headers)
         self._versions = list(versions)
 
     def json(self):
@@ -768,9 +775,40 @@ _PE_MARKERS = re.compile(
 )
 
 
+def _command_sequences(tree):
+    """``(node, elements)`` for each list or tuple literal, with ``+`` chains
+    of them (``["uv"] + ["run", ...]``) flattened into one sequence. The
+    operands of a chain are not reported on their own."""
+    import ast
+
+    def flatten(node):
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            # An operand that is not a literal (``list(...)``, a name) stands
+            # in as one unknown element. An empty literal adds nothing.
+            left, right = flatten(node.left), flatten(node.right)
+            return ([node.left] if left is None else left) + (
+                [node.right] if right is None else right
+            )
+        if isinstance(node, (ast.List, ast.Tuple)):
+            return list(node.elts)
+        return None
+
+    operands = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Add):
+            operands.update({id(node.left), id(node.right)})
+    for node in ast.walk(tree):
+        if id(node) in operands:
+            continue
+        elements = flatten(node)
+        if elements is not None:
+            yield node, elements
+
+
 def _python_overlays(path: Path) -> list[tuple[int, bool]]:
-    """``(line, isolated)`` for each ``["uv", "run", ..., "--no-project", ...]``
-    list in a function that installs PolicyEngine pins."""
+    """``(line, isolated)`` for each ``"uv", "run", ..., "--no-project", ...``
+    list or tuple, or ``+`` chain of them, in a function that installs
+    PolicyEngine pins."""
     import ast
 
     text = path.read_text()
@@ -779,13 +817,11 @@ def _python_overlays(path: Path) -> list[tuple[int, bool]]:
         n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
     ]
     found = []
-    for node in ast.walk(tree):
-        if not isinstance(node, ast.List) or len(node.elts) < 2:
+    for node, elements in _command_sequences(tree):
+        values = [e.value if isinstance(e, ast.Constant) else None for e in elements]
+        if not any(values[i : i + 2] == ["uv", "run"] for i in range(len(values) - 1)):
             continue
-        head = [e.value for e in node.elts[:2] if isinstance(e, ast.Constant)]
-        if head != ["uv", "run"]:
-            continue
-        flags = {e.value for e in node.elts if isinstance(e, ast.Constant)}
+        flags = {v for v in values if isinstance(v, str)}
         if "--no-project" not in flags or "--directory" in flags:
             continue  # project runs use that project's own environment
         enclosing = [
@@ -816,20 +852,70 @@ def _shell_overlays(path: Path) -> list[tuple[int, bool]]:
     return found
 
 
+def _env_command(words: list[str]) -> list[str]:
+    """The command ``env`` runs, from the words after ``env`` in a shebang."""
+    while words:
+        word, *rest = words
+        if word in ("-u", "--unset", "-C", "--chdir"):
+            words = rest[1:]  # the option's value is the next word
+        elif word in ("-S", "--split-string"):
+            return _env_command(shlex.split(" ".join(rest)))
+        elif word.startswith("--split-string="):
+            return _env_command(shlex.split(" ".join([word.partition("=")[2], *rest])))
+        elif word.startswith("-S"):
+            return _env_command(shlex.split(" ".join([word[2:], *rest])))
+        elif word.startswith("-") or "=" in word:
+            words = rest
+        else:
+            return words
+    return []
+
+
+def _script_language(path: Path) -> str | None:
+    """``"python"`` or ``"shell"`` from the suffix, else from the shebang."""
+    if path.suffix == ".py":
+        return "python"
+    if path.suffix in (".sh", ".bash"):
+        return "shell"
+    with path.open("rb") as handle:
+        first = handle.readline(200).decode("utf-8", "replace")
+    if not first.startswith("#!"):
+        return None
+    words = shlex.split(first[2:])
+    if words and words[0].rsplit("/", 1)[-1] == "env":
+        words = _env_command(words[1:])
+    if not words:
+        return None
+    interpreter = words[0].rsplit("/", 1)[-1]
+    if re.fullmatch(r"python[\d.]*", interpreter):
+        return "python"
+    if interpreter in ("sh", "bash", "dash", "zsh", "ksh"):
+        return "shell"
+    return None
+
+
+def _overlay_sites(root: Path) -> dict[tuple[str, int], bool]:
+    """``{(file, line): isolated}`` for every PolicyEngine overlay under ``root``."""
+    overlays = {}
+    for tree in ("scripts", "ops"):
+        for path in sorted((root / tree).rglob("*")):
+            if "__pycache__" in path.parts or not path.is_file():
+                continue
+            rel = path.relative_to(root).as_posix()
+            language = _script_language(path)
+            if language == "python":
+                overlays[rel] = _python_overlays(path)
+            elif language == "shell":
+                overlays[rel] = _shell_overlays(path)
+    return {(rel, line): isolated for rel, found in overlays.items() for line, isolated in found}
+
+
 def test_every_policyengine_overlay_is_isolated():
     """A ``--no-project`` `uv run` that installs PolicyEngine pins must not
-    layer on the checkout's .venv: every script under scripts/, Python and
-    shell. (The snap-ecps run uses ``--directory``: axiom-encode's project.)"""
-    overlays = {}
-    for path in sorted((REPO_ROOT / "scripts").rglob("*")):
-        if "__pycache__" in path.parts or not path.is_file():
-            continue
-        rel = path.relative_to(REPO_ROOT).as_posix()
-        if path.suffix == ".py":
-            overlays[rel] = _python_overlays(path)
-        elif path.suffix == ".sh":
-            overlays[rel] = _shell_overlays(path)
-    sites = {(rel, line): isolated for rel, found in overlays.items() for line, isolated in found}
+    layer on the checkout's .venv: every script under scripts/ and ops/,
+    Python and shell. (The snap-ecps run uses ``--directory``: axiom-encode's
+    project.)"""
+    sites = _overlay_sites(REPO_ROOT)
     assert sum(1 for rel, _ in sites if rel == "scripts/run_comparison.py") >= 15
     assert any(rel == "scripts/debug_policyengine_env.py" for rel, _ in sites)
     assert any(rel == "scripts/fiit_ecps_eitc_attribution/run_stage.sh" for rel, _ in sites)
@@ -837,9 +923,146 @@ def test_every_policyengine_overlay_is_isolated():
     assert missing == []
 
 
+_PY_HEAD = "import subprocess\n\n\ndef run(pins):\n"
+#: Each shape the overlay scan must recognize: (file, text, line of the site).
+#: ``{iso}`` is replaced by ``--isolated`` (or removed) in the command.
+_OVERLAY_SHAPES = {
+    "tuple": (
+        "scripts/tuple_site.py",
+        _PY_HEAD + '    cmd = ("uv", "run",{iso} "--no-project", *_pe_oracle_with_args(pins), "python")\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "concatenated-list": (
+        "scripts/concat_site.py",
+        _PY_HEAD + '    cmd = ["uv"] + ["run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        '    return subprocess.run(cmd + ["python"])\n',
+        5,
+    ),
+    "concatenated-tuple-chain": (
+        "scripts/chain_site.py",
+        _PY_HEAD + '    cmd = ("uv",) + ("run",{iso}) + ("--no-project", *_pe_oracle_with_args(pins))\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "concatenated-empty-list": (
+        "scripts/empty_list_site.py",
+        _PY_HEAD + '    cmd = ["uv"] + [] + ["run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "concatenated-empty-tuple": (
+        "scripts/empty_tuple_site.py",
+        _PY_HEAD + '    cmd = ("uv",) + () + ("run",{iso} "--no-project", *_pe_oracle_with_args(pins))\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "wrapped-by-env": (
+        "scripts/wrapped_site.py",
+        _PY_HEAD + '    cmd = ["env", "A=1", "uv", "run",{iso} "--no-project", *_pe_oracle_with_args(pins)]\n'
+        "    return subprocess.run(cmd)\n",
+        5,
+    ),
+    "extensionless-shell": (
+        "scripts/run_oracle",
+        "#!/usr/bin/env bash\nset -euo pipefail\n"
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        3,
+    ),
+    "env-unset-shebang": (
+        "scripts/run_unset",
+        "#!/usr/bin/env -u SOMETHING bash\n"
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        2,
+    ),
+    "env-quoted-split-shebang": (
+        "scripts/run_split",
+        '#!/usr/bin/env -S "bash -e"\n'
+        "uv run{iso} --no-project --with policyengine-us==1.2.3 python x.py\n",
+        2,
+    ),
+    "ops-shell": (
+        "ops/run_oracle.sh",
+        "#!/bin/sh\nuv run{iso} --no-project \\\n  --with policyengine-us==1.2.3 python x.py\n",
+        2,
+    ),
+}
+
+
+def _write_shape(root: Path, shape: str, *, isolated: bool) -> tuple[str, int]:
+    rel, text, line = _OVERLAY_SHAPES[shape]
+    python = rel.endswith(".py")
+    iso = (' "--isolated",' if python else " --isolated") if isolated else ""
+    path = root / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text.replace("{iso}", iso))
+    return rel, line
+
+
+@pytest.mark.parametrize("shape", sorted(_OVERLAY_SHAPES))
+def test_overlay_scan_finds_each_unisolated_shape(tmp_path, shape):
+    rel, line = _write_shape(tmp_path, shape, isolated=False)
+    assert _overlay_sites(tmp_path) == {(rel, line): False}
+
+
+@pytest.mark.parametrize("shape", sorted(_OVERLAY_SHAPES))
+def test_overlay_scan_accepts_each_isolated_shape(tmp_path, shape):
+    rel, line = _write_shape(tmp_path, shape, isolated=True)
+    assert _overlay_sites(tmp_path) == {(rel, line): True}
+
+
+def test_overlay_scan_counts_a_concatenation_once(tmp_path):
+    # The operands of ``["uv", "run"] + [...]`` are not separate sites.
+    path = tmp_path / "scripts" / "once.py"
+    path.parent.mkdir(parents=True)
+    path.write_text(
+        _PY_HEAD + '    cmd = ["uv", "run", "--no-project"] + ["--isolated"] + '
+        "list(_pe_oracle_with_args(pins))\n    return subprocess.run(cmd)\n"
+    )
+    assert _overlay_sites(tmp_path) == {("scripts/once.py", 5): True}
+
+
+def test_overlay_scan_skips_a_non_shell_extensionless_file(tmp_path):
+    path = tmp_path / "scripts" / "notes"
+    path.parent.mkdir(parents=True)
+    path.write_text("uv run --no-project --with policyengine-us==1.2.3 python x.py\n")
+    assert _overlay_sites(tmp_path) == {}
+
+
+@pytest.mark.parametrize(
+    ("shebang", "language"),
+    [
+        ("#!/bin/sh", "shell"),
+        ("#!/bin/bash -e", "shell"),
+        ("#!/usr/bin/env bash", "shell"),
+        ("#!/usr/bin/env -u SOMETHING bash", "shell"),
+        ("#!/usr/bin/env --unset SOMETHING bash", "shell"),
+        ("#!/usr/bin/env --unset=SOMETHING bash", "shell"),
+        ("#!/usr/bin/env -C /tmp bash", "shell"),
+        ("#!/usr/bin/env -S bash -e", "shell"),
+        ('#!/usr/bin/env -S "bash -e"', "shell"),
+        ("#!/usr/bin/env -Sbash", "shell"),
+        ('#!/usr/bin/env --split-string="bash -e"', "shell"),
+        ("#!/usr/bin/env --split-string bash", "shell"),
+        ("#!/usr/bin/env A=1 python3", "python"),
+        ("#!/usr/bin/env -i python3.14", "python"),
+        ("#!/usr/bin/env -S python3 -u", "python"),
+        ("#!/usr/bin/python3", "python"),
+        ("#!/usr/bin/env", None),
+        ("#!/usr/bin/env -u bash", None),
+        ("#!/usr/bin/env ruby", None),
+        ("not a shebang", None),
+    ],
+)
+def test_script_language_reads_the_shebang_env_would_run(tmp_path, shebang, language):
+    path = tmp_path / "script"
+    path.write_text(shebang + "\n")
+    assert _script_language(path) == language
+
+
 # ---------------------------------------------------------------------------
-# Status classes: 404/410 gone; 408, 429 and 5xx retried then transient; any
-# other 4xx refused at once.
+# Status classes: 404/410 gone; 408, 429, 5xx and a rate-limited 403 retried
+# then transient; any other 4xx refused at once.
 # ---------------------------------------------------------------------------
 
 
@@ -902,6 +1125,114 @@ def test_check_classifies_each_archive_status(monkeypatch, no_sleep, status, des
     )
     assert failures == [f"comparisons/y.yaml: policyengine-us archive {url}: {described}"]
     assert session.calls == [f"head {url}"] * tries
+
+
+#: Headers a host may send with a 403 that means "slow down", not "no".
+RATE_LIMITED_403 = {
+    "retry-after": {"Retry-After": "30"},
+    "ratelimit-remaining-0": {"X-RateLimit-Remaining": "0"},
+    "lowercase-names": {"x-ratelimit-remaining": "0"},
+}
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_a_rate_limited_403_is_transient(headers):
+    assert pinned_artifacts.classify_status(403, headers) == "transient"
+    assert pinned_artifacts.is_transient_status(403, headers)
+
+
+@pytest.mark.parametrize(
+    "headers",
+    [None, {}, {"X-RateLimit-Remaining": "1"}, {"X-RateLimit-Remaining": "59"}],
+    ids=["none", "empty", "remaining-1", "remaining-59"],
+)
+def test_a_plain_403_stays_refused(headers):
+    assert pinned_artifacts.classify_status(403, headers) == "refused"
+
+
+@pytest.mark.parametrize("status", [401, 404, 410, 451])
+def test_rate_limit_headers_change_only_a_403(status):
+    # A 404 with Retry-After is still gone; only 403 doubles as a rate limit.
+    headers = {"Retry-After": "30", "X-RateLimit-Remaining": "0"}
+    assert pinned_artifacts.classify_status(status, headers) == (
+        pinned_artifacts.classify_status(status)
+    )
+
+
+@settings(max_examples=300)
+@given(
+    status=st.integers(100, 599),
+    headers=st.dictionaries(
+        st.sampled_from(["Retry-After", "X-RateLimit-Remaining", "ETag", "retry-after"]),
+        st.sampled_from(["0", "1", "30", "", "Wed, 21 Oct 2026 07:28:00 GMT"]),
+    ),
+)
+def test_headers_only_ever_move_a_403_to_transient(status, headers):
+    """Invariant: headers never change any status's class but 403's, and
+    move 403 only from refused to transient."""
+    plain = pinned_artifacts.classify_status(status)
+    with_headers = pinned_artifacts.classify_status(status, headers)
+    if status != 403:
+        assert with_headers == plain
+    else:
+        assert plain == "refused"
+        assert with_headers in ("refused", "transient")
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_fetch_retries_a_rate_limited_403(monkeypatch, tmp_path, no_sleep, headers):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    body = b"wheel"
+    artifact = _artifact(body)
+    replies = [_Response(403, headers=headers), _Response(200, body)]
+    monkeypatch.setattr(requests, "get", lambda *_a, **_k: replies.pop(0))
+    assert REAL_FETCH(artifact).read_bytes() == body
+    assert no_sleep == [pinned_artifacts.RETRY_DELAYS[0]]
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_fetch_reports_a_persistent_rate_limited_403_as_transient(
+    monkeypatch, tmp_path, no_sleep, headers
+):
+    monkeypatch.setenv(pinned_artifacts.CACHE_ENV, str(tmp_path))
+    calls = []
+
+    def reply(*_a, **_k):
+        calls.append(403)
+        return _Response(403, headers=headers)
+
+    monkeypatch.setattr(requests, "get", reply)
+    with pytest.raises(pinned_artifacts.PinnedArtifactError) as exc:
+        REAL_FETCH(_artifact(b"x"))
+    assert exc.value.kind == "transient"
+    assert len(calls) == len(pinned_artifacts.RETRY_DELAYS) + 1
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_check_retries_a_rate_limited_403(monkeypatch, no_sleep, headers):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    session = _Session(head={url: [(403, headers)]})
+    _check, (failures, _warnings) = _run_check(
+        monkeypatch, session, {}, {url: {check.Use("comparisons/y.yaml")}}
+    )
+    assert failures == [
+        f"comparisons/y.yaml: policyengine-us archive {url}: "
+        "transient: HTTP 403 on all 3 attempts, not a removal"
+    ]
+    assert session.calls == [f"head {url}"] * 3
+
+
+@pytest.mark.parametrize("headers", RATE_LIMITED_403.values(), ids=RATE_LIMITED_403)
+def test_check_recovers_after_a_rate_limited_403(monkeypatch, no_sleep, headers):
+    check = _load_check_module()
+    url = "https://github.com/a.tar.gz"
+    session = _Session(head={url: [(403, headers), 200]})
+    _check, (failures, _warnings) = _run_check(
+        monkeypatch, session, {}, {url: {check.Use("comparisons/y.yaml")}}
+    )
+    assert failures == []
+    assert session.calls == [f"head {url}"] * 2
 
 
 # ---------------------------------------------------------------------------

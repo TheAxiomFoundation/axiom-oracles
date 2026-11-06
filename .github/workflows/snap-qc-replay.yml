@@ -3,13 +3,15 @@ name: SNAP QC live replay
 # Replays the SNAP QC suites for real and fails on any mismatch or error.
 #
 # The weekly matrix (comparisons.yml) and the 6-hourly affected rerun
-# (affected-rerun.yml) run the snap-qc suites on bare runners. Those runners
-# have no engine binary and no QC public-use file, so
-# scripts/run_comparison.py re-emits the committed dashboard report
-# (provenance.reemitted_report: true). Those legs stay green whether or
-# not the replay still works: California's stopped compiling after
-# rulespec-us#1176 (2026-07-30) and nothing failed. This lane provisions all
-# three and runs every suite with --require-live:
+# (affected-rerun.yml) used to run the snap-qc suites on bare runners. Those
+# runners have no engine binary and no QC public-use file, so
+# scripts/run_comparison.py re-emitted the committed dashboard report
+# (provenance.reemitted_report: true). Those legs stayed green whether or
+# not the replay still worked: California's stopped compiling after
+# rulespec-us#1176 (2026-07-30) and nothing failed. The suites now declare
+# `ci: snap-qc-replay` (TX, still pending, `ci: manual`), which keeps them off
+# both bare matrices. This lane provisions all three and runs every suite
+# with --require-live:
 #
 #   engine    axiom-rules-engine built at the axiom_artifact_rules_engine_ref
 #             pin in rulespec-us's .axiom/workflow-toolchain.toml (the recipe
@@ -42,6 +44,15 @@ name: SNAP QC live replay
 #
 # Reports go up as workflow artifacts and are never committed; the point of
 # this lane is a failing check. See docs/snap-qc-oracle-playbook.md.
+#
+# The affected rerun (affected-rerun.yml) also calls this workflow for the
+# stale suites that declare `ci: snap-qc-replay`, with `publish: true`. Each
+# leg then checks out main over the published data baseline (oracle_data.py
+# materialize --baseline) before it replays, and a leg whose report passes
+# `check` packs it (scripts/commit_refreshed_report.sh --pack) and uploads the
+# bundle as `refreshed-<suite>`, the name the bare rerun legs use. The
+# caller's single publish job applies it to oracle-data with the rest. This
+# workflow still never commits or pushes.
 
 on:
   schedule:
@@ -57,12 +68,43 @@ on:
         description: "rulespec-us branch, tag, or SHA to replay against"
         required: false
         default: main
+  workflow_call:
+    inputs:
+      suites:
+        description: "Snap-qc suites to replay, comma/space-separated (blank = all)"
+        type: string
+        required: false
+        default: ""
+      rulespec_us_ref:
+        description: "rulespec-us branch, tag, or SHA to replay against"
+        type: string
+        required: false
+        default: main
+      run_kind:
+        description: >-
+          provenance.run_kind for the reports (blank: weekly on a schedule,
+          else manual)
+        type: string
+        required: false
+        default: ""
+      publish:
+        description: >-
+          Replay over the published data baseline and upload each live,
+          exact leg's packed bundle as refreshed-<suite> for the caller's
+          publish job
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   contents: read
 
+# Keyed on github.workflow as well as the ref. In a called workflow the
+# github context is the caller's, so a call from the affected rerun lands in
+# its own group (and the caller's own concurrency already serializes it),
+# never queued behind or replacing the weekly or dispatched run on main.
 concurrency:
-  group: snap-qc-replay-${{ github.ref }}
+  group: snap-qc-replay-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -81,6 +123,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
+          # A publishing call selects suites from the same source as its
+          # replay legs, which check out main.
+          ref: ${{ inputs.publish && 'main' || '' }}
 
       - name: Checkout rulespec-us
         uses: actions/checkout@v4
@@ -203,6 +248,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
+          # A publishing call packs against main over the published data, as
+          # affected-rerun.yml's bare legs do; materialize --baseline needs
+          # the oracle-data history.
+          ref: ${{ inputs.publish && 'main' || '' }}
+          fetch-depth: ${{ inputs.publish && '0' || '1' }}
 
       - name: Checkout rulespec-us
         uses: actions/checkout@v4
@@ -240,6 +290,13 @@ jobs:
         working-directory: axiom-oracles
         run: uv sync
 
+      - name: Load published data baseline
+        # Only a publishing call: the replay then rewrites the published
+        # report, and --pack refuses a checkout without this baseline.
+        if: ${{ inputs.publish }}
+        working-directory: axiom-oracles
+        run: uv run python scripts/oracle_data.py materialize --baseline
+
       - name: Verify cached engine receipt against executable bytes
         working-directory: axiom-oracles
         run: >-
@@ -260,7 +317,7 @@ jobs:
           AXIOM_SNAP_QC_RULESPEC_ROOT: ${{ github.workspace }}/rulespec-us
           AXIOM_SNAP_QC_AXIOM_BINARY: ${{ github.workspace }}/engine/target/release/axiom-rules-engine
           AXIOM_SNAP_QC_DATA_DIR: ${{ runner.temp }}/snap-qc-data
-          AXIOM_ORACLES_RUN_KIND: ${{ github.event_name == 'schedule' && 'weekly' || 'manual' }}
+          AXIOM_ORACLES_RUN_KIND: ${{ inputs.run_kind || (github.event_name == 'schedule' && 'weekly' || 'manual') }}
           SUITE: ${{ matrix.suite }}
         run: |
           set -o pipefail
@@ -289,9 +346,43 @@ jobs:
           path: snap-qc-reports/
           if-no-files-found: warn
 
+      # Only for a publishing call (the affected rerun), and only after
+      # `check` accepted the report as live and exact. --pack collects what
+      # the run wrote (the dashboard report, plus the case chunks of a suite
+      # with versioned chunks), vets it once (the re-emission guard,
+      # regenerate + verify every derived artifact, the unexplained ratchet)
+      # and bundles it. It never fetches, commits or pushes.
+      - name: Pack ${{ matrix.suite }}'s live report for the publish job
+        id: pack
+        if: ${{ inputs.publish && success() }}
+        working-directory: axiom-oracles
+        env:
+          PYTHON: ${{ github.workspace }}/axiom-oracles/.venv/bin/python
+          SUITE: ${{ matrix.suite }}
+        run: |
+          scripts/commit_refreshed_report.sh --pack "$RUNNER_TEMP/refreshed" "$SUITE"
+          if [ -d "$RUNNER_TEMP/refreshed/$SUITE" ]; then
+            echo "bundle=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload refreshed-report bundle
+        if: steps.pack.outputs.bundle == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: refreshed-${{ matrix.suite }}
+          path: ${{ runner.temp }}/refreshed/${{ matrix.suite }}/
+          if-no-files-found: error
+          include-hidden-files: true
+          # A "re-run all jobs" re-packs under the same name.
+          overwrite: true
+          retention-days: 7
+
   live-tests:
     name: Engine-gated live tests
     needs: prepare
+    # The weekly and dispatched runs cover these; a publishing call from the
+    # affected rerun only needs the replays.
+    if: ${{ !inputs.publish }}
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:

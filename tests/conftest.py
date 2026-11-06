@@ -87,3 +87,112 @@ def _offline_pinned_artifacts(monkeypatch, tmp_path_factory):
         str(tmp_path_factory.getbasetemp() / "pinned-artifacts"),
     )
     monkeypatch.setattr(pinned_artifacts, "fetch", pinned_artifacts.cache_path)
+
+
+_FAKE_RULES_ENGINE = r'''#!{python}
+"""Test stand-in for axiom-rules-engine: compile and run-compiled only.
+
+``compile`` writes the program in ``spec.json`` beside this file as the
+artifact. ``run-compiled`` evaluates each queried output with the rule the
+spec gives it: ``ge``/``lt``/``eq`` compare an input with a value, ``any``
+and ``all`` combine rules, and a boolean result is a judgment;
+``{"copy": input}`` returns the input, ``{"count": relation}`` counts the
+relation's tuples and ``{"const": value}`` returns a fixed decimal.  Every request is appended to ``requests.jsonl``.
+"""
+import json
+import sys
+from pathlib import Path
+
+HERE = Path(__file__).resolve().parent
+spec = json.loads((HERE / "spec.json").read_text())
+args = sys.argv[1:]
+if args[0] == "compile":
+    output = Path(args[args.index("--output") + 1])
+    output.write_text(json.dumps({"program": spec["program"]}))
+    sys.exit(0)
+if args[0] != "run-compiled":
+    sys.exit(f"unknown command {args[0]}")
+request = json.loads(sys.stdin.read())
+with (HERE / "requests.jsonl").open("a") as log:
+    log.write(json.dumps(request) + "\n")
+inputs = {}
+for record in request["dataset"]["inputs"]:
+    inputs[record["name"]] = record["value"]["value"]
+relations = request["dataset"]["relations"]
+def ev(rule):
+    if "ge" in rule:
+        return inputs[rule["ge"][0]] >= rule["ge"][1]
+    if "lt" in rule:
+        return inputs[rule["lt"][0]] < rule["lt"][1]
+    if "eq" in rule:
+        return inputs[rule["eq"][0]] == rule["eq"][1]
+    if "any" in rule:
+        return any(ev(item) for item in rule["any"])
+    if "all" in rule:
+        return all(ev(item) for item in rule["all"])
+    if "copy" in rule:
+        return inputs[rule["copy"]]
+    if "count" in rule:
+        return sum(1 for r in relations if r["name"] == rule["count"])
+    return rule["const"]
+
+
+results = []
+for query in request["queries"]:
+    outputs = {}
+    for output in query["outputs"]:
+        value = ev(spec["rules"][output])
+        if isinstance(value, bool):
+            outcome = "holds" if value else "not_holds"
+            outputs[output] = {"kind": "judgment", "id": output, "outcome": outcome}
+        else:
+            outputs[output] = {
+                "kind": "scalar",
+                "id": output,
+                "value": {"kind": "decimal", "value": str(value)},
+            }
+    results.append({"entity_id": query["entity_id"], "outputs": outputs})
+print(json.dumps({"results": results}))
+'''
+
+
+@pytest.fixture
+def fake_rules_engine(tmp_path):
+    """Install a receipted stand-in engine; return a writer for its spec.
+
+    ``install(program, rules)`` writes the spec and returns the executable,
+    whose build receipt binds it to commit ``"a" * 40`` so
+    :func:`axiom_oracles.engine_identity.engine_receipt` verifies it.
+    """
+    import json
+    import sys
+
+    directory = tmp_path / "fake-engine"
+    directory.mkdir()
+    binary = directory / "axiom-rules-engine"
+    binary.write_text(_FAKE_RULES_ENGINE.replace("{python}", sys.executable, 1))
+    binary.chmod(0o755)
+    digest = hashlib.sha256(binary.read_bytes()).hexdigest()
+    (directory / "axiom-rules-engine.provenance.json").write_text(
+        json.dumps(
+            {
+                "repository": "TheAxiomFoundation/axiom-rules-engine",
+                "commit": "a" * 40,
+                "binary_sha256": digest,
+                "working_tree": "clean",
+            }
+        )
+    )
+
+    def install(program: dict, rules: dict) -> Path:
+        (directory / "spec.json").write_text(
+            json.dumps({"program": program, "rules": rules})
+        )
+        return binary
+
+    install.requests = lambda: [
+        json.loads(line)
+        for line in (directory / "requests.jsonl").read_text().splitlines()
+    ]
+    install.digest = digest
+    return install

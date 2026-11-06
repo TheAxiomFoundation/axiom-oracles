@@ -4,8 +4,8 @@ Each `*.yaml` in this directory declares one oracle comparison — a head-to-hea
 between two engines over a validation population. `scripts/run_comparison.py`
 reads a config, dispatches to the right runner type, writes a JSON report, and
 prints a headline summary. `.github/workflows/comparisons.yml` matrix-runs
-every config in the registry that does not declare `ci: manual` on a weekly
-schedule.
+every config in the registry that does not declare `ci:` routing (below) on
+a weekly schedule.
 
 ## How to run one locally
 
@@ -56,12 +56,22 @@ YAML (with a comment saying why and what unblocks it). The affected-map
 generator then emits `name: null`, the 6-hourly selector routes it to the
 manual lane instead of dispatching a doomed leg, and the weekly matrix skips
 it. Its committed report refreshes only via a supervised
-`run_comparison.py` run. The seven SNAP QC suites (`*-snap-qc`) declare
-`ci: manual` for that reason: both workflows clone rulespec-us main but never
-build the engine binary or download the QC public-use file, so their legs
-could only re-emit the committed report, and on 2026-09-23 the affected rerun
-committed such re-emissions over the five real reports #548 had landed. The
-same holds, and the same marker applies, for:
+`run_comparison.py` run.
+
+A suite whose real run needs what the bare matrix runners lack can instead
+declare `ci: <lane>`, naming a workflow that provisions it (`CI_LANES` in
+`scripts/generate_affected_map.py`). The map keeps its registry name and adds
+`lane`; the 6-hourly selector hands a stale one to that lane's workflow, never
+the bare matrix; and the weekly matrix skips it. The six SNAP QC suites whose
+compositions are on rulespec-us main declare `ci: snap-qc-replay`: both bare
+workflows clone rulespec-us main but never build the engine binary or
+download the QC public-use file, so there a leg could only re-emit (on
+2026-09-23 the affected rerun committed such re-emissions over the five real
+reports #548 had landed). The affected rerun replays them live through
+`.github/workflows/snap-qc-replay.yml`, and its single publisher publishes a
+report only when the replay is live and exact. `tx-snap-qc` stays
+`ci: manual` until its composition lands. The bare runners cannot run these
+either, and they declare `ci: manual`:
 
 - the 40 EUROMOD-platform suites (`euromod-synthetic-compare`: the BE and DK
   EUROMOD suites and the `*-ukmod` UKMOD suites). Neither workflow provides the
@@ -247,13 +257,25 @@ Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 ### `federal-tax-liability-grid`
 
 Runs one reviewed federal tax case grid through
-`scripts/generate_federal_tax_liability.py`. The Axiom leg reads the selected
-policy's engine-verified RuleSpec companion fixture; the PolicyEngine leg builds
+`scripts/generate_federal_tax_liability.py`. The Axiom leg runs the Axiom
+rules engine on each case's inputs from the selected policy's RuleSpec
+companion fixture and fails if any output the fixture records differs from the
+engine's value; the PolicyEngine leg builds
 fresh 2026 simulations under the config's explicit per-suite PE-US/core pins.
 Runs are policy-isolated and have no committed-report fallback, so one missing
 companion cannot couple the other policies and an unavailable oracle fails
 rather than replaying stale evidence. A policy may select all companion cases
 or an explicitly documented non-vacuous exact-input subset.
+
+Required runner keys: `axiom_rules_repo`. The runner reads the
+`axiom_rules_engine_ref` the rulespec snapshot's HEAD pins
+(`.axiom/workflow-toolchain.toml`, else `.axiom/toolchain.toml`), builds that
+engine revision with a build receipt (using the configured checkout when it is
+that revision, otherwise a detached worktree of it under
+`~/.cache/axiom-oracles/axiom-rules-engine/`), passes the executable to the
+generator, and records the receipt as the report's engine identity. That is
+the engine the snapshot's own CI validates its modules and fixtures with;
+axiom-rules main refuses to load the pinned snapshots' modules.
 
 Required `parameters`: `policy`, `rulespec_roots`,
 `policyengine_version: 4.18.9`, `policyengine_us_version: 1.767.3`, and
@@ -281,11 +303,13 @@ until the next deliberate re-pin.
 Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
 (`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
 PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
-Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
-`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
-rulespec-us CI) and fails closed unless each replayed verdict equals the
-pinned legal expectation and each case still zeroes every unrelated
-exception; the PolicyEngine leg builds fresh person-level monthly simulations
+Axiom leg runs the Axiom rules engine on the nine July 2026 boundary cases'
+inputs from the rulespec-us `us/regulations/7-cfr/273/24.test.yaml` companion
+fixture and fails closed unless every verdict the fixture records equals the
+engine's, each engine verdict equals the pinned legal expectation, and each
+case still zeroes every unrelated exception. The engine revision and receipt
+follow the same rule as `federal-tax-liability-grid` (required runner key
+`axiom_rules_repo`); the PolicyEngine leg builds fresh person-level monthly simulations
 under the reviewed 2026 oracle stack and verifies the oracle's own
 exempted-age brackets flip at the 2025-07-04 effective date before trusting
 its verdicts.
@@ -326,22 +350,24 @@ dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see th
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
 `ny-snap-qc` (847 reviews including the 107 NYSCAP units), `ca-snap-qc`
 (883 reviews), `az-snap-qc`, `ga-snap-qc`, `md-snap-qc`, and `tx-snap-qc`
-(its composition is not on rulespec-us main yet); all seven declare
-`ci: manual` (see above). The runner **skips gracefully**
+(its composition is not on rulespec-us main yet). The six run in the
+`snap-qc-replay` lane and `tx-snap-qc` is `ci: manual` (see above). The runner
+**skips gracefully**
 — re-emitting the committed dashboard report, exactly like
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
 is absent, or while the bridge is still mid-build. Where all three exist it runs
-for real; the checked-in numbers are regenerated there. Because the weekly
-matrix and the affected rerun never have all three, those legs always
-re-emit. The **SNAP QC live replay** workflow
-(`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
-pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
-selected suite with `run_comparison.py --require-live` and fails on any re-emission,
-mismatch, or error (`scripts/snap_qc_replay.py check`). Its real-checkout overlay
-closure tests cover the six `REQUIRED_SUITES` states (AZ, CA, CO, GA, MD, NY);
-Texas remains pending in `PENDING_SUITES` until its composition lands. The live
-test job fails on any skip. See the playbook's §10.
+for real; the checked-in numbers are regenerated there. Neither bare matrix
+has all three, so neither runs these suites. The **SNAP QC live replay**
+workflow (`.github/workflows/snap-qc-replay.yml`, weekly, on demand, and
+called by the affected rerun) provisions the pinned engine, a rulespec-us
+checkout, and the pinned PUF. It runs every selected suite with
+`run_comparison.py --require-live` and fails on any re-emission, mismatch, or
+error (`scripts/snap_qc_replay.py check`); when the affected rerun calls it,
+each exact report is packed and published to `oracle-data`. Its real-checkout
+overlay closure tests cover the six `REQUIRED_SUITES` states (AZ, CA, CO, GA,
+MD, NY); Texas remains pending in `PENDING_SUITES` until its composition lands.
+The live test job fails on any skip. See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
@@ -452,8 +478,10 @@ packs and publishes one suite. The publisher refuses `main`, `master`, and
 other targets.
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
-awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
-runs every suite that does not declare `ci: manual` as a CI signal; it uploads
+awaiting the manual lane, not rerun; stale suites with a `lane` go to that
+lane's workflow, whose bundles the same publish job applies. The weekly full
+matrix (`comparisons.yml`) runs every suite without `ci:` routing as a CI
+signal; it uploads
 reports as artifacts and never commits them. Its separate scheduled KPI job
 prepares the same data branch before generating `rule_verification.json` and
 `rule_verification_summary.json`, and publishes only those files. A manual

@@ -3632,17 +3632,28 @@ def test_snap_abawd_boundary_grid_pins_the_companion(monkeypatch, tmp_path):
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
-    run_comparison._run_snap_abawd_boundary_grid(
-        {
-            "parameters": {
-                "policyengine_version": "4.18.9",
-                "policyengine_us_version": "1.767.3",
-                "policyengine_core_version": "3.30.3",
-                "rulespec_roots": [str(rulespec)],
-            }
-        },
-        tmp_path / "out.json",
+    receipt = {"commit": "c" * 40, "binary_sha256": "d" * 64,
+               "binary_path": "/engine/axiom-rules-engine"}
+    built_for = []
+    monkeypatch.setattr(
+        run_comparison,
+        "_fixture_engine_receipt",
+        lambda _runner, root: built_for.append(root) or receipt,
     )
+    runner = {
+        "parameters": {
+            "policyengine_version": "4.18.9",
+            "policyengine_us_version": "1.767.3",
+            "policyengine_core_version": "3.30.3",
+            "rulespec_roots": [str(rulespec)],
+        }
+    }
+    run_comparison._run_snap_abawd_boundary_grid(runner, tmp_path / "out.json")
+    # The Axiom leg runs the engine the checkout pins, and the report's
+    # engine identity is that executable's receipt (#675).
+    assert built_for == [rulespec.resolve()]
+    assert runner["_engine_receipt"] is receipt
+    assert calls[-1][calls[-1].index("--axiom-engine") + 1] == receipt["binary_path"]
     assert pinned_artifacts.requirement("policyengine-us==1.767.3") in calls[-1]
     assert_pe_companion_pinned(calls[-1])
 
@@ -4329,6 +4340,11 @@ def test_federal_grid_materializes_pin_when_configured_root_mismatches(
         "run",
         lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
     )
+    monkeypatch.setattr(
+        run_comparison,
+        "_fixture_engine_receipt",
+        lambda _runner, _root: {"binary_path": "/engine/axiom-rules-engine"},
+    )
     params = {
         "policy": "qualified_business_income_deduction",
         "policyengine_version": "4.18.9",
@@ -4368,6 +4384,11 @@ def test_federal_grid_accepts_configured_root_matching_pin(monkeypatch, tmp_path
         run_comparison.subprocess,
         "run",
         lambda cmd, *, check, cwd: subprocess.CompletedProcess(cmd, 0),
+    )
+    monkeypatch.setattr(
+        run_comparison,
+        "_fixture_engine_receipt",
+        lambda _runner, _root: {"binary_path": "/engine/axiom-rules-engine"},
     )
     params = {
         "policy": "qualified_business_income_deduction",

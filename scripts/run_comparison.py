@@ -3693,6 +3693,125 @@ def _verify_federal_rulespec_snapshot(
     )
 
 
+# Where rulespec-us records the engine revision its own CI validates the
+# modules and companion fixtures with. Newer snapshots carry the workflow
+# toolchain file; the July 2026 snapshots the federal grids pin carry only
+# the older toolchain file.
+_RULESPEC_ENGINE_PIN_FILES = (
+    (".axiom/workflow-toolchain.toml", "workflow_toolchain"),
+    (".axiom/toolchain.toml", "toolchain"),
+)
+
+
+def _rulespec_engine_pin(root: Path) -> str:
+    """The axiom-rules engine commit a rulespec checkout's HEAD pins.
+
+    Read from HEAD's committed bytes, not the work tree, so the engine
+    choice follows the same commit identity provenance records.
+    """
+    import tomllib
+
+    for relpath, table in _RULESPEC_ENGINE_PIN_FILES:
+        shown = subprocess.run(
+            ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
+            capture_output=True,
+            env=_git_env(),
+        )
+        if shown.returncode != 0:
+            continue
+        try:
+            document = tomllib.loads(shown.stdout.decode("utf-8"))
+        except (UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
+            raise SystemExit(f"{root}: unreadable {relpath}: {exc}") from exc
+        ref = (document.get(table) or {}).get("axiom_rules_engine_ref")
+        if ref is None:
+            continue
+        if not isinstance(ref, str) or not re.fullmatch(r"[0-9a-f]{40}", ref):
+            raise SystemExit(
+                f"{root}: {relpath} axiom_rules_engine_ref must be a full "
+                f"lowercase commit SHA; got {ref!r}"
+            )
+        return ref
+    raise SystemExit(
+        f"{root}: HEAD pins no axiom_rules_engine_ref in "
+        + " or ".join(relpath for relpath, _ in _RULESPEC_ENGINE_PIN_FILES)
+    )
+
+
+def _engine_checkout_at(repo: Path, revision: str) -> Path:
+    """A clean checkout of the axiom-rules engine at ``revision``.
+
+    The configured checkout is used as is when its HEAD is the revision.
+    Otherwise the revision is fetched into it and checked out as a detached
+    worktree under the user cache, reused while it stays clean at that
+    revision, so the configured checkout itself never moves.
+    """
+    from axiom_oracles.engine_identity import EngineIdentityError, _clean_source_commit
+
+    try:
+        if _clean_source_commit(repo) == revision:
+            return repo
+    except EngineIdentityError:
+        pass
+    cache = Path(
+        os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache"
+    ) / "axiom-oracles" / "axiom-rules-engine"
+    worktree = cache / revision
+    if worktree.exists():
+        try:
+            if _clean_source_commit(worktree) == revision:
+                return worktree
+        except EngineIdentityError:
+            pass
+        raise SystemExit(
+            f"{worktree} exists but is not a clean checkout of {revision}; "
+            "remove it and rerun"
+        )
+    cache.mkdir(parents=True, exist_ok=True)
+    has_commit = subprocess.run(
+        ["git", "-C", str(repo), "cat-file", "-e", f"{revision}^{{commit}}"],
+        capture_output=True,
+        env=_git_env(),
+    )
+    if has_commit.returncode != 0:
+        print(f"Fetching axiom-rules engine revision {revision[:12]}...")
+        subprocess.run(
+            ["git", "-C", str(repo), "fetch", "--depth", "1", "--quiet",
+             "origin", revision],
+            check=True,
+            env=_git_env(),
+        )
+    subprocess.run(
+        ["git", "-C", str(repo), "worktree", "add", "--detach", "--quiet",
+         str(worktree), revision],
+        check=True,
+        env=_git_env(),
+    )
+    return worktree
+
+
+def _fixture_engine_receipt(runner: dict, rulespec_root: Path) -> dict:
+    """Build the engine the rulespec snapshot pins and return its receipt.
+
+    The grid evaluates the snapshot's companion-fixture cases with the
+    engine revision that snapshot's own CI validates them with. An engine
+    from a different revision can refuse to load the snapshot's modules
+    (axiom-rules main rejects the plural ``corpus_citation_paths`` every
+    pinned federal snapshot still declares), which would fail every grid for
+    a schema reason unrelated to the law under test.
+    """
+    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+    revision = _rulespec_engine_pin(rulespec_root)
+    checkout = _engine_checkout_at(axiom_rules_repo, revision)
+    receipt = _ensure_engine_binary(checkout, kind="release")
+    if receipt.get("commit") != revision:
+        raise SystemExit(
+            f"built axiom-rules engine is receipted for {receipt.get('commit')}, "
+            f"not the pinned {revision}"
+        )
+    return receipt
+
+
 def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     """Run one independent federal RuleSpec-fixture vs PolicyEngine case grid.
 
@@ -3778,6 +3897,12 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         # rather than the missing development-worktree path.
         params["rulespec_roots"] = [str(roots[0])]
     _verify_federal_rulespec_snapshot(params, roots)
+    if len(roots) != 1:
+        raise SystemExit(
+            "federal-tax-liability-grid evaluates one rulespec checkout; "
+            f"got {len(roots)}"
+        )
+    runner["_engine_receipt"] = _fixture_engine_receipt(runner, roots[0])
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
     cmd = [
@@ -3797,6 +3922,8 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
             for root in roots
             for arg in ("--rulespec-root", str(root))
         ),
+        "--axiom-engine",
+        str(runner["_engine_receipt"]["binary_path"]),
         "--output",
         str(output),
     ]
@@ -3930,6 +4057,12 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
     # actually came from.
     params["rulespec_roots"] = [str(root) for root in roots]
     _verify_federal_rulespec_snapshot(params, roots)
+    if len(roots) != 1:
+        raise SystemExit(
+            "snap-abawd-boundary-grid evaluates one rulespec checkout; "
+            f"got {len(roots)}"
+        )
+    runner["_engine_receipt"] = _fixture_engine_receipt(runner, roots[0])
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
     cmd = [
@@ -3947,6 +4080,8 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
             for root in roots
             for arg in ("--rulespec-root", str(root))
         ),
+        "--axiom-engine",
+        str(runner["_engine_receipt"]["binary_path"]),
         "--output",
         str(output),
     ]
@@ -4953,8 +5088,10 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     The replay needs three things a shared CI runner does not carry: the built
     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
     are dated for the target fiscal year (the overlay base), and the downloaded
-    QC public-use file. The snap-qc suites therefore declare ``ci: manual``, so
-    neither the weekly matrix nor the affected rerun dispatches them. When any
+    QC public-use file. The snap-qc suites therefore never run on the bare
+    weekly or affected-rerun matrices: they declare ``ci: snap-qc-replay`` (the
+    live replay lane, which provisions all three) or, while a composition is
+    pending, ``ci: manual``. When any
     prerequisite is absent — or the bridge is still mid-build — this runner
     **skips gracefully**, re-emitting the committed dashboard report exactly like
     ``_run_euromod_synthetic_compare``; that re-emission never replaces a
