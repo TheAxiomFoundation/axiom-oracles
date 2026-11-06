@@ -1426,13 +1426,18 @@ def _reconcile_full_semantics(
 
     rules = _concept_rules(report, defects, suite)
     errors = report.get("errors")
-    errored = {
-        (error["case_id"], error["concept"])
-        for error in (errors if isinstance(errors, list) else ())
-        if isinstance(error, dict)
-        and isinstance(error.get("case_id"), str)
-        and isinstance(error.get("concept"), str)
-    }
+    errored: set[tuple[str, str]] = set()
+    for error in errors if isinstance(errors, list) else ():
+        if not isinstance(error, dict) or not isinstance(error.get("concept"), str):
+            continue
+        # Canonicalize as case rows are, so integer 2 and string "2" name one
+        # case and a boolean names none. Its defects go unrecorded: an error
+        # without a usable ID excuses no uncompared verdict, and this
+        # validator reads ``errors`` for nothing else, so a report without
+        # uncompared verdicts validates as it did before they existed.
+        case_id = _case_id(error, compact=False, location="", defects=[], suite=suite)
+        if case_id is not None:
+            errored.add((case_id, error["concept"]))
     for verdict in verdicts:
         if verdict.uncompared:
             # Never measured, so no tolerance applies; it stands only as the
@@ -1795,6 +1800,18 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
     )
     if uncompared_count is None and "uncompared_mismatches" not in summary:
         uncompared_count = 0
+    if (
+        mismatch_count is not None
+        and uncompared_count is not None
+        and uncompared_count > mismatch_count
+    ):
+        content_defects.append(
+            _defect(
+                suite,
+                f"summary.uncompared_mismatches {uncompared_count} exceeds "
+                f"mismatch_count {mismatch_count}",
+            )
+        )
     if (
         comparison_count is not None
         and match_count is not None

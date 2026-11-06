@@ -1745,3 +1745,136 @@ def test_dashboard_publish_indexes_an_uncompared_pair(monkeypatch, tmp_path):
     assert evidence.chunk_case_count == 2
     assert evidence.content_defects == ()
     assert evidence.binding == "bound", evidence.binding_defects
+
+
+def _cardinality_evidence(summary, tmp_path):
+    chunk_dir = tmp_path / "cases" / "probe"
+    chunk_dir.mkdir(parents=True)
+    (chunk_dir / "chunk-0.json").write_text(
+        json.dumps([{"id": "1", "r": 100, "h": {}, "m": []}])
+    )
+    report = {"suite": "probe", "case_count": 1, "summary": summary}
+    evidence = _evidence(report, tmp_path)
+    # Bind even invalid content: identity alone must never make it valid.
+    (chunk_dir / "index.json").write_text(json.dumps({
+        "schema_version": "axiom_oracles.chunk_index.v1",
+        "report_path": evidence.report_path,
+        "report_sha256": evidence.report_sha256,
+        "chunks": [chunk.as_dict() for chunk in evidence.chunks],
+    }))
+    return _evidence(report, tmp_path)
+
+
+def test_suite_evidence_refuses_more_uncompared_than_mismatches(tmp_path):
+    evidence = _cardinality_evidence({
+        "comparison_count": 1,
+        "match_count": 2,
+        "mismatch_count": 0,
+        "uncompared_mismatches": 1,
+    }, tmp_path)
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "cardinality"
+    assert evidence.content_defects
+    assert not evidence.valid
+
+
+@settings(max_examples=60, deadline=None, database=None, derandomize=True)
+@example(matches=2, mismatches=0, uncompared=1)
+@example(matches=0, mismatches=2, uncompared=1)
+@example(matches=1, mismatches=0, uncompared=0)
+@given(
+    matches=st.integers(min_value=0, max_value=8),
+    mismatches=st.integers(min_value=0, max_value=8),
+    uncompared=st.integers(min_value=0, max_value=8),
+)
+def test_suite_evidence_summary_counts_conserve(
+    tmp_path_factory, matches, mismatches, uncompared
+):
+    evidence = _cardinality_evidence({
+        "comparison_count": 1,
+        "match_count": matches,
+        "mismatch_count": mismatches,
+        "uncompared_mismatches": uncompared,
+    }, tmp_path_factory.mktemp("summary-counts"))
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "cardinality"
+    # Diagnostic mismatches cannot exceed all mismatches; the remainder
+    # plus matches is exactly the number of measured comparisons.
+    assert evidence.valid == (
+        uncompared <= mismatches and matches + mismatches - uncompared == 1
+    )
+
+
+def _uncompared_report_with_ids(case_id, error_id):
+    report = _uncompared_report((None, True, 0.0, "holds"))
+    report["cases"][0]["case_id"] = f"good-{case_id}"
+    [case] = [case for case in report["cases"] if case["mismatches"]]
+    case["case_id"] = report["mismatches"][0]["case_id"] = case_id
+    for error in report["errors"] + case["right_errors"]:
+        error["case_id"] = error_id
+    return report
+
+
+def test_suite_evidence_accepts_an_integer_engine_error_case_id(tmp_path):
+    report = _uncompared_report_with_ids(2, 2)
+    evidence = _evidence(report, tmp_path)
+    assert evidence.reconciliation == "full"
+    assert evidence.content_defects == ()
+
+
+_CASE_ID = st.one_of(st.integers(), st.text(min_size=1, max_size=16))
+
+
+@settings(max_examples=60, deadline=None, database=None, derandomize=True)
+@example(case_id=2, error_id=2, same_id=False, same_concept=True)
+@example(case_id=2, error_id="2", same_id=False, same_concept=True)
+@example(case_id="2", error_id=2, same_id=False, same_concept=True)
+@example(case_id=1, error_id=True, same_id=False, same_concept=True)
+@example(case_id=0, error_id=False, same_id=False, same_concept=True)
+@given(
+    case_id=_CASE_ID,
+    error_id=st.one_of(_CASE_ID, st.booleans()),
+    same_id=st.booleans(),
+    same_concept=st.booleans(),
+)
+def test_suite_evidence_uncompared_requires_a_canonical_error_id(
+    tmp_path_factory, case_id, error_id, same_id, same_concept
+):
+    if same_id:
+        error_id = case_id
+    report = _uncompared_report_with_ids(case_id, error_id)
+    if not same_concept:
+        report["errors"][0]["concept"] = ELIGIBILITY
+    evidence = _evidence(report, tmp_path_factory.mktemp("error-ids"))
+    # An uncompared verdict needs an error on its canonical case AND concept;
+    # bool is never a valid ID, even though Python equates True with 1.
+    expected = (
+        not isinstance(error_id, bool)
+        and str(case_id) == str(error_id)
+        and same_concept
+    )
+    assert evidence.content_valid == expected
+    if not expected:
+        assert any("no engine error" in defect for defect in evidence.content_defects)
+
+
+@pytest.mark.parametrize(
+    "error",
+    [
+        {"concept": AMOUNT},
+        {"concept": AMOUNT, "case_id": True},
+        {"concept": AMOUNT, "case_id": ""},
+        {"concept": AMOUNT, "case_id": [1]},
+        {"concept": AMOUNT, "id": None},
+    ],
+)
+def test_suite_evidence_ignores_unusable_error_ids_without_an_uncompared_pair(
+    error, tmp_path
+):
+    # Error IDs only excuse uncompared verdicts, so one the validator can't
+    # read leaves a report with no uncompared pair exactly as valid as before.
+    report = publish(produce([GOOD_PAIR, (50.0, True, 50.0, "holds")]))
+    report["errors"] = [*report.get("errors", []), error]
+    evidence = _evidence(report, tmp_path)
+    assert evidence.content_defects == ()
+    assert evidence.reconciliation == "full"
