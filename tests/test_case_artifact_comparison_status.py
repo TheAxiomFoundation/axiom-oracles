@@ -7,7 +7,10 @@ import json
 import pytest
 from hypothesis import given, settings, strategies as st
 
-from tests.test_emit_case_artifacts import _load_module, _write_fixture
+from axiom_oracles.bridges import tax_populace
+from tests.test_emit_case_artifacts import _emit_household_fixture, _load_module, _write_fixture
+from tests.test_fiit_pattern_readers import fiit_report
+from tests.test_native_fiit_missing_returns import Frame, runner
 from tests.test_native_snap_invalid_returns import produce, publish
 
 
@@ -80,3 +83,49 @@ def test_property_compact_payload_parity_includes_comparison_status(tmp_path_fac
 
     problems, _stats = module.check_suite_artifacts("test-suite", config)
     assert any("comparison status" in problem for problem in problems), problems
+
+
+def _fiit_single_case_report(pairs):
+    """Run the native FIIT producer on one tax unit, with one pair per output."""
+    surface = "standard-deduction"
+    specs = list(tax_populace.SURFACE_OUTPUTS[surface].values())
+    assert len(pairs) == len(specs)
+    pe_rows = [{spec["pe"]: right for spec, (_, right) in zip(specs, pairs)}]
+    results = [{"outputs": {
+        spec["axiom"]: {"kind": "quantity", "value": {"value": left}}
+        for spec, (left, _) in zip(specs, pairs)
+    }}]
+    raw = tax_populace.compare_outputs(
+        pe_data={"tax_units": Frame(pe_rows), "persons": Frame(pe_rows),
+                 "tax_unit_ids": [0], "person_ids": [0]},
+        axiom_outputs_by_surface={surface: results}, tolerance=0, relative_tolerance=0,
+    ).to_json()
+    return runner()._adapt_tax_ecps_to_v2(
+        json.loads(json.dumps(raw, allow_nan=False)), {}, suite="fiit-ecps",
+    )
+
+
+@settings(max_examples=30, deadline=None, derandomize=True)
+@given(pairs=st.lists(
+    st.sampled_from([(0, 0), (0, 50), (0, None)]), min_size=3, max_size=3,
+))
+def test_property_fiit_case_rate_is_unknown_only_without_a_compared_row(pairs):
+    """A FIIT case rate never reports a disagreement nobody measured."""
+    module = _load_module()
+    cases = _fiit_single_case_report(pairs)["cases"]
+    assert bool(cases) == any(pair != (0, 0) for pair in pairs)
+    for case in cases:
+        flags = [row.get("uncompared") is True for row in case["mismatches"]]
+        expected = None if all(flags) else 0.0
+        assert case["match_rate"] == expected
+        assert module.compact_case(case, {})["r"] == expected
+
+
+@pytest.mark.parametrize(("right", "rate"), [(None, None), (50, 0)], ids=["invalid", "differs"])
+def test_full_fiit_artifact_keeps_an_uncompared_case_out_of_the_measured_rate(
+    tmp_path, right, rate,
+):
+    report = fiit_report([(0, right)])
+    chunk = _emit_household_fixture(_load_module(), tmp_path, report)
+    [case] = json.loads(chunk.read_text())
+    assert case["r"] == rate

@@ -6126,12 +6126,19 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         }
         if identity is not None:
             case_metadata["dataset_identity"] = identity
+        # Uncompared rows were never measured. A case with no other row has no
+        # rate, so no reader can count it as a disagreement.
+        case_match_rate = (
+            0.0
+            if any(m.get("uncompared") is not True for m in case_mismatches)
+            else None
+        )
         cases.append(
             {
                 "case_id": case_id,
                 "left_engine": "axiom",
                 "left_errors": [],
-                "match_rate": 0.0,
+                "match_rate": case_match_rate,
                 "metadata": case_metadata,
                 "mismatches": case_mismatches,
                 "right_engine": "policyengine",

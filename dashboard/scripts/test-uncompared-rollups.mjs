@@ -75,6 +75,20 @@ test("a partly errored program renders agreement alongside its engine errors", (
   assert.match(html, />1<\/span><span[^>]*>not compared \(engine errors\)<\/span>/);
 });
 
+test("near differences leave out uncompared diagnostics", () => {
+  const probe = (difference) => ({
+    aggregates: [{ concept: "c", comparison_count: 1, mismatch_count: 2,
+      uncompared_mismatches: 1 }],
+    summary: { mismatch_count: 2 },
+    mismatches: [
+      { concept: "c", kind: "amount_difference", difference },
+      { concept: "c", kind: "amount_difference", difference: 0, uncompared: true },
+    ],
+  });
+  assert.deepEqual(suites.nearMetric(probe(50)), { rate: 100, near: 1, threshold: 100 });
+  assert.equal(suites.nearMetric(probe(500)), null);
+});
+
 test("programs without uncompared pairs retain the reviewed rendering exactly", () => {
   // Captured from 32e7a4cdee2d89999a3ec8cc648f3fa5868a45a7. Keep CI's
   // shallow checkout independent of historical Git objects.

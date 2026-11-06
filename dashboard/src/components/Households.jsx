@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { loadSuiteCases } from "../utils/caseData";
-import { caseAgreement } from "../utils/caseAgreement.mjs";
+import { caseAgreement, triangulate } from "../utils/caseAgreement.mjs";
 import {
   caseDisagreements,
   caseUncompared,
@@ -75,33 +75,10 @@ function Triangulation({ runs, bySuite, onPick }) {
   const loaded = runs.filter((r) => bySuite[r.suite]?.cases);
   if (loaded.length < 2) return null;
 
-  const agreement = new Map();
-  const seen = new Map();
-  for (const run of loaded) {
-    for (const row of bySuite[run.suite].cases) {
-      const agrees = caseAgreement(row.r);
-      if (agrees === null) continue;
-      if (!seen.has(row.id)) {
-        seen.set(row.id, 0);
-        agreement.set(row.id, new Set());
-      }
-      seen.set(row.id, seen.get(row.id) + 1);
-      if (agrees) agreement.get(row.id).add(run.oracle);
-    }
-  }
-  const oracles = loaded.map((r) => r.oracle);
-  const buckets = new Map();
-  let joined = 0;
-  for (const [id, count] of seen) {
-    if (count !== loaded.length) continue;
-    joined += 1;
-    const agreeing = agreement.get(id);
-    const key = oracles.filter((o) => agreeing.has(o)).join("+") || "none";
-    if (!buckets.has(key)) buckets.set(key, []);
-    buckets.get(key).push(id);
-  }
+  const { buckets, joined } = triangulate(loaded, bySuite);
   if (!joined) return null;
 
+  const oracles = loaded.map((r) => r.oracle);
   const order = [
     { key: oracles.join("+"), label: "agrees with all oracles", cls: "tri-all" },
     ...oracles.map((o) => ({

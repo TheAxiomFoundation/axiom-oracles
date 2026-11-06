@@ -1376,6 +1376,7 @@ export function nearMetric(report, threshold = NEAR_THRESHOLD_USD) {
   if (declared == null || list.length !== declared) return null;
   let near = 0;
   for (const m of list) {
+    if (m?.uncompared === true) continue;
     const diff = m?.difference;
     if (typeof diff === "number" && Math.abs(diff) <= threshold) near += 1;
   }
