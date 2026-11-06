@@ -1,13 +1,16 @@
 {
   "schema_version": "axiom_oracles.chunk_index.v1",
   "report_path": "dashboard/public/data/axiom-snapqc-co-snap.json",
-  "report_sha256": "4e07e98fedf6468bef7e078f2a7fb5107001e5b43b70072f94048d73baf30a95",
+  "report_sha256": "158f465ed811bd15f3a63c200e75cbc70eeef3371108d85f8967d33f3d1ad067",
   "suite": "co-snap-qc",
   "count": 856,
   "chunk_size": 500,
   "engines": {
     "left": "snap-qc",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.2"
+    }
   },
   "mismatch_concepts": [],
   "source": "run_comparison.py full case corpus",
