@@ -605,8 +605,10 @@ def parse_github_remote(url: str | None) -> tuple[RemoteKind, str | None]:
       query and fragment are not part of the path;
     * scp-like ``[user@]github.com:owner/repo``.
 
-    The path must be exactly ``owner/repo``, with an optional ``.git`` and
-    trailing ``/``. The host is read from where the URL puts it, so
+    The path must hold exactly two segments, ``owner/repo``. Before counting
+    them, the parser strips leading and trailing ``/``, then one ``.git``
+    suffix, and drops empty segments, so ``//owner//repo.git///`` reads as
+    ``owner/repo``. The host is read from where the URL puts it, so
     ``github.com`` elsewhere in the URL (a foreign host's path or userinfo)
     is not a GitHub origin.
     """
@@ -653,12 +655,15 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     """Resolve ``{repo, sha, dirty}`` provenance for each rulespec checkout path.
 
     ``paths`` are local checkout directories (as the runner resolves them from
-    ``rulespec_root`` / ``rulespec_roots``). The ``repo`` slug comes from the
-    origin remote when available, otherwise from the canonicalized directory
-    basename so a report is never left with an anonymous rulespec entry.
-    Remote slugs are recorded as-is: an archived ``rulespec-us-<st>`` checkout
-    retains its own name, so provenance completion cannot use it to prove
-    freshness against ``rulespec-us``. An entry whose ``sha`` resolved carries the
+    ``rulespec_root`` / ``rulespec_roots``). The ``repo`` slug comes from a
+    GitHub origin remote, as :func:`parse_github_remote` reads it. A checkout
+    with no origin, and a path that doesn't exist, fall back to the
+    canonicalized directory basename. A configured origin that names no
+    GitHub repository leaves ``repo`` as None, since this run can't vouch
+    for the directory name. Remote slugs are recorded as-is: an archived
+    ``rulespec-us-<st>`` checkout retains its own name, so provenance
+    completion cannot use it to prove freshness against ``rulespec-us``.
+    An entry whose ``sha`` resolved carries the
     checkout's :func:`worktree_attestation` and both resolved repository roots.
     A path resolving to an enclosing checkout is unverifiable. Deduplicated
     on the whole entry, order-stable, so two checkouts of one commit in
