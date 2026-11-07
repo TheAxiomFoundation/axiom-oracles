@@ -100,7 +100,17 @@ The SSI program spec computes countable unearned income as the input `annual_inc
 
 Colorado's rule lists "Interest (includes tax exempt interest)" among MAGI income (10 CCR 2505-10 §8.100.4.C.1.b.i).
 
+## Dashboards and dispositions
+
+The 22 benefit suites run outside CI (`ci: manual`), and their committed dashboard reports predate this change. This change edits none of those reports and no dispositions file:
+
+- `conformance/legacy-engine-identity.json` freezes each of the reports byte for byte.
+- An edited report must carry a receipt-bound engine identity (`docs/engine-publication-identity.md`).
+- A dispositions edit counts as an edit to the report. `scripts/apply_dispositions.py` merges each suite's entries into its report's `summary.dispositioned` block, and `--check` fails when a committed report differs from that merge.
+
+Instead, an A/B measured the change, running both arms in one pinned toolchain. axiom-oracles#690 lists what the next identity-bound refresh of each report owes. For SSI, that is an `upstream_engine_gap` entry for the rows where PolicyEngine counts interest and dividends, citing PolicyEngine/policyengine-us#10079 and rulespec-us#1645.
+
 ## Tests
 
 - `tests/test_tax_exempt_interest_benefit_inputs.py`: for every income slot the 22 compiled programs read, moving interest between line 2b and line 2a changes nothing; the SSI inputs ignore interest and dividends; Georgia's TANF input ignores interest and keeps dividends; no mapping entry names one interest fact without the other.
-- `tests/test_tax_exempt_interest_policyengine_live.py` (CI's `policyengine-live` job): PolicyEngine gives the two kinds of interest the same weight in SNAP, TANF and Medicaid MAGI, and still counts interest in SSI. The SSI test fails when PolicyEngine/policyengine-us#10079 is fixed, which is the signal to retire the dispositions that cite it.
+- `tests/test_tax_exempt_interest_policyengine_live.py` (CI's `policyengine-live` job): PolicyEngine gives the two kinds of interest the same weight in SNAP, TANF and Medicaid MAGI, and still counts interest in SSI. The SSI test fails when PolicyEngine/policyengine-us#10079 is fixed. That is the signal to retire any SSI disposition that cites it (axiom-oracles#690).
