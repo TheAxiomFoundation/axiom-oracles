@@ -215,11 +215,147 @@ net loss can have gross rents over the limit.
 | TAXSIM grants no QBID on `otherprop` | TAXSIM | `docs/taxsim-oracle-playbook.md`, "no rental in the QBI base" |
 | TAXSIM reduces the childless EITC dollar for dollar above the investment-income limit instead of denying it | TAXSIM | disposition class `taxsim-2026-eitc-investment-limit-vintage` |
 | Tax-Calculator applies the 2026 §461(l) threshold of 256,000; the bridge and the pinned PolicyEngine apply 305,000 | bridge and pinned PolicyEngine | axiom-oracles#611 |
+| TAXSIM pays no EITC when AGI falls below zero, as a farm loss can make it | TAXSIM | [Suite A/B](#suite-ab), unit 111331 |
+| TAXSIM can report a standard deduction of 0 and deduct a smaller itemized amount | TAXSIM | axiom-oracles#689 |
 
-Every figure in this table was produced by running the engines on 2026-10-10
+Engine runs on 2026-10-10 produced every figure in the first eight rows
 (PolicyEngine-US 1.764.6, Tax-Calculator 6.7.1, TAXSIM-35 2.30.0, and the
 Axiom engine pinned by `comparisons/fiit-taxsim-ecps.yaml`); the tests below
-rerun them.
+rerun them. The last two come from replays of the pinned TAXSIM binary in the
+suite A/B.
+
+## Suite A/B
+
+The three Case tax suites ran twice on their pinned stack (PolicyEngine-US
+1.752.2, policyengine 4.18.9, policyengine-core 3.28.0, policyengine-taxsim
+2.30.0, the Axiom engine at `0c39023e`, rulespec-us at `ca2d424f`):
+- once at `db2777c54`, the head of #608, without farm rent;
+- once at `f4fef6fb7`, with it.
+
+This change's code is the same at the PR head. The merges of main since then
+changed only a docstring beside it. A unit has farm rent when its TAXSIM
+`otherprop` or Tax-Calculator `e27200` differs between the runs.
+
+| Suite | Units | With farm rent (a loss) | Mismatch rows, before → after | Moved rows on units without farm rent |
+|---|---|---|---|---|
+| `fiit-taxsim-ecps` | 87,519 | 1,065 (320) | 95,278 → 95,275 | 0 |
+| `co-tax-intersection-taxsim` | 1,201 | 9 (3) | 3,030 → 3,041 | 0 |
+| `taxcalc-fiit-ecps` | 31 | 0 | 20 → 20 | 0 |
+
+No engine value moved on a unit without farm rent. In both runs both TAXSIM
+lanes have no Axiom `employee_fica` value on any unit (axiom-oracles#612).
+Farm rent moves no FICA row, because Form 4835 income is not
+self-employment income. Replaying each unit's persisted `taxsim_input` row
+on its own through the pinned binary reproduced every TAXSIM value cited
+below.
+
+### National lane
+
+Axiom against TAXSIM on EITC and the standard deduction. Sixteen rows moved
+(Axiom / TAXSIM).
+
+| Unit | Farm rent | Concept | Before | After | Class |
+|---|---|---|---|---|---|
+| 102926 | 2,583.82 | EITC | 5,357.91 / 0 | 4,813.76 / 0 | stays in `taxsim-2026-eitc-child-machinery-absent` |
+| 132235 | 2,583.82 | EITC | 5,766.73 / 0 | 5,222.58 / 0 | stays in the same class |
+| 137698 | 65.25 | EITC | 1,730.36 / 0 | 1,716.61 / 0 | stays in the same class |
+| 10330 | 2,164.46 | EITC | 3,104.44 / 0 | 2,758.55 / 0 | stays in the same class |
+| 64449 | 2,164.46 | EITC | 2,793.64 / 0 | 2,447.76 / 0 | stays in the same class |
+| 71130 | 8,468.45 | EITC | 4,427.00 / 270.82 | 3,364.08 / 0 | moves from `taxsim-2026-eitc-childless-schedule-applied-to-units-with-children` to `taxsim-2026-eitc-child-machinery-absent` |
+| 54605 | 12,770.32 | EITC | 4,088.98 / 0 | match | clears; leaves `taxsim-2026-eitc-child-machinery-absent` |
+| 82787 | 28,679.10 | EITC | 4,427.00 / 0 | match | clears; leaves the same class |
+| 136875 | 554,778.25 | EITC | 4,427.00 / 0 | match | clears; leaves the same class |
+| 34333 | 554,778.25 | EITC | 15.84 / 0 | match | clears; leaves the same class |
+| 102899 | 177,215.19 | EITC | 4,427.00 / 444.40 | match | clears; leaves `taxsim-2026-eitc-childless-schedule-applied-to-units-with-children` |
+| 111331 | −39,366.12 | EITC | match (664.00) | 664.00 / 0 | new class: TAXSIM pays no EITC below zero AGI |
+| 139776 | 154,758.91 | standard deduction | 18,150 / 17,750 | 18,150 / 0 | moves from `taxsim-binary-2025-parameter-fallback-r2-standard-deduction` to `taxsim-auto-itemized-standard-deduction-zeroed` |
+| 28135 | −149,483.03 | standard deduction | 32,200 / 0 | match | clears; leaves `taxsim-auto-itemized-standard-deduction-zeroed` |
+| 62306 | 554,778.25 | standard deduction | match (16,100) | 16,100 / 0 | joins `taxsim-auto-itemized-standard-deduction-zeroed` |
+| 6565 | 7,712.48 | standard deduction | match (24,150) | 24,150 / 0 | joins the same class |
+
+- **The EITC rows that stay in their class.** TAXSIM still pays 0. Axiom's
+  credit falls by the 26 USC 32(b)(1) phaseout percentage times the farm
+  rent: 21.06 percent on 102926, 132235 and 137698, and 15.98 percent on
+  10330 and 64449. For example, 0.2106 × 2,583.82 = 544.15 = 5,357.91 −
+  4,813.76.
+- **71130.** TAXSIM's AGI (v10) rises by 14,531.88, more than the farm
+  rent, because more of the unit's Social Security becomes taxable. Its
+  childless credit phases out to 0.
+- **The cleared EITC rows.** Axiom's credit is now 0. On each unit the farm
+  rent alone puts Worksheet 1 line 13 over $12,200, so line 14, the unit's
+  investment income, passes the 2026 limit (Rev. Proc. 2025-32 section
+  .06(2)). TAXSIM already paid 0, or phases out to 0 on 102899.
+- **111331: TAXSIM pays no EITC below zero AGI.** The unit is single, aged
+  25, with wages of 9,840.05 and a farm loss of 39,366.12. Setting
+  `otherprop` so that AGI is 1, 0 and −1 gives a TAXSIM credit of 664, 664
+  and 0.
+  - 26 USC 32(a)(2) limits the credit to the excess of "the credit
+    percentage of the earned income amount, over (B) the phaseout
+    percentage of so much of the adjusted gross income (or, if greater, the
+    earned income) of the taxpayer for the taxable year as exceeds the
+    phaseout amount". A negative AGI therefore cannot reduce it.
+  - Worksheet 1 line 13 floors the net loss at 0.
+  - Axiom pays 664 in both runs. The new entry attributes the row to
+    `taxsim`, with row arithmetic `right == 0` and `left == 664`.
+- **62306, 6565 and 139776: TAXSIM deducts less than the standard
+  deduction.** TAXSIM reports v13 = 0 and deducts itemized deductions (v17)
+  of 10,000, 111.16 and 11,913.24. The standard deductions are 16,100,
+  24,150 and 18,150, and TAXSIM's taxable income (v18) equals v10 − v17 on
+  all three.
+  - 239 of the 244 rows already in `taxsim-auto-itemized-standard-deduction-zeroed`
+    show the same thing, although that class says TAXSIM itemizes when its
+    deductions beat the standard deduction (axiom-oracles#689).
+  - 28135 leaves the class: its farm loss brings TAXSIM back to the 32,200
+    standard deduction.
+
+### Colorado intersection lane
+
+Axiom against TAXSIM on federal taxable income, tax before credits and
+liability, and on Colorado liability. Twenty-six rows moved: eleven are new
+and fifteen changed. Differences are Axiom − TAXSIM.
+
+| Unit | Farm rent | Rows | Class |
+|---|---|---|---|
+| 136343 | 22,185.72 | new: taxable income −4,437.15, tax before credits −976.17, federal liability −976.17; changed: Colorado 1,112.64 → 920.10 | taxable income and tax before credits: new QBID farm-rent class (0.2 × 22,185.72 at 22 percent); liability: the existing `liability-composite-of-member-classes-and-niit-addmed-scope` entry selects it; Colorado: leaves `taxsim-co-refundable-credit-vintage` for a composite of that class and 4.4 percent of the QBID member (1,112.64 − 195.23 + 2.69) |
+| 136377 | 716.98 | new: −143.39, −31.55, −31.55; changed: Colorado 932.48 → 926.26 | as 136343 (932.48 − 6.31 + 0.09) |
+| 136449 | 3,246.69 | new: taxable income −649.34, tax before credits −77.92, federal liability −77.92, Colorado −34.40 | new QBID farm-rent class at 12 percent, with its liability shadow; Colorado: 0.044 × −649.34 − (58.00 − 52.17), the second member a TABOR refund tier of the refundable-credit class |
+| 59064 | 27.06 | new: taxable income −5.41; changed: federal liability −3,400.00 → −3,401.20 | new QBID farm-rent class; liability stays in its composite entry |
+| 58339 | −12,824.43 | changed: taxable income −676.39 → −400.00; tax before credits and federal liability −162.34 → −96.00 | The farm loss zeroes total QBI, but the $400 minimum on active QBI (3,381.97 of Part I rent) remains. Taxable income and tax before credits (24 percent) move from the rental-convention classes to a new class; liability stays in its composite entry |
+| 136208 | −15,421.78 | changed: taxable income 7,575.34 → 7,650.00; tax before credits 4,459.62 → 4,257.00; federal liability 1,324.76 → 1,708.17; Colorado 503.90 → 506.80 | same entries, with new arithmetic: 24,150 − 16,100 − 400 = 7,650 (TAXSIM's head-of-household deduction less the $400 minimum); TAXSIM's tax before credits is 52,382.85; Colorado 9,638.91 − 37.43 = 9,601.48 |
+| 160988 | 40,448.35 | changed: four rows; the taxable income (−400.00), tax before credits (−148.17) and Colorado (30.84) differences hold; federal liability −968,208.88 → −969,745.84 | same entries; TAXSIM's `niit` rises by 1,536.95, and the Axiom composition strips §1411 |
+| 59119 | −9,117.79 | changed: Colorado −98.23 → −99.71 | same entry (`taxsim-co-refundable-credit-vintage`); re-verify at the refresh |
+
+The QBID farm-rent class is the farm-rent sibling of the
+`taxsim-qbid-rental-convention-*` classes. The bridge counts a filer's farm
+rent as QBI (Decision 1), and TAXSIM's `otherprop` is "rent not eligible for
+QBI deduction". On each row the unit's only QBI is that farm rent, and Axiom's
+taxable income trails TAXSIM's by 20 percent of it, to within half a cent:
+Axiom reports taxable income unrounded and TAXSIM rounds it to the cent. On 136343,
+for example, the farm rent is 22,185.71875, 20 percent of it is 4,437.144, and
+the difference is 4,437.148.
+
+### Tax-Calculator lane
+
+The 31 units, from a sample of 25 households, carry no farm rent. The two
+reports are identical. The lane compares Tax-Calculator with PolicyEngine and
+has no Axiom side.
+
+### Landing the dispositions
+
+Each `dispositions/<suite>.yaml` binds its suite's committed full report: the
+row digests and counts in `selector_binding`, and `pinned` values. The
+committed TAXSIM-lane reports predate farm rent, and the zero-unexplained
+ratchet blocks a refresh while #612 leaves `employee_fica` missing on every
+unit; #664 plans the fix. So the entries above land with that refresh, not in
+this change. At the refresh:
+
+1. Make the moves above and add the new entries. Without the moves two entries
+   would select the same row, which is a conservation error on a TAXSIM lane.
+2. Re-derive the arithmetic on the refreshed report. #664 also changes the
+   bridge's §461(l) threshold (#611) and its QBI aggregation (#618), either of
+   which can move 58339, 136208 and 160988.
+3. Stamp `attribution`, `oracle_binding` and the selector bindings
+   (`uv run scripts/bind_dispositions.py <suite>`).
 
 ## Verification
 

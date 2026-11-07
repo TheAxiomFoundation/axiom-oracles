@@ -263,8 +263,9 @@ do not chase the Axiom encoding):
   income both take it, agreeing with Axiom up to the 2026 limit
   (probe: a childless worker with 1,000 of earnings, a 3,000 capital loss
   and 12,200 of farm rent gets 76.50 from Axiom, PolicyEngine,
-  Tax-Calculator and TAXSIM alike). Two departures follow, both
-  TAXSIM-side:
+  Tax-Calculator and TAXSIM alike). Three departures follow, all
+  TAXSIM-side, and the suite A/B in `docs/case-farm-rent-income.md` lists
+  every row that farm rent moved:
   - **QBID.** The Axiom bridge treats farm rent as QBI, the same
     convention as Part I rents (`docs/case-farm-rent-income.md`), so a
     farm-rent unit with taxable income carries a QBID gap
@@ -275,6 +276,11 @@ do not chase the Axiom encoding):
     binary pays 75.50 (76.50 − 1): it reduces the credit dollar for dollar
     instead of denying it, as for Part I rent and interest, which is the
     `taxsim-2026-eitc-investment-limit-vintage` disposition class.
+  - **EITC below zero AGI.** A farm loss can take AGI below zero, and the
+    binary then pays no EITC. A single 25-year-old with 9,840.05 of wages
+    gets 664 at AGI 1 and at AGI 0, and nothing at AGI −1. 26 USC 32(a)(2)
+    phases the credit out on the greater of AGI and earned income, so a
+    negative AGI cannot reduce it, and Axiom pays 664.
 - **§461(l)**: the binary DOES cap excess business losses, at its own
   projected 332,389.95 single / 664,779.90 joint, and it treats net
   positive capital gain as business gross income (the allowance grows
