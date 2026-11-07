@@ -46,13 +46,21 @@ dev = [
 ]
 policyengine = [
   "policyengine[us]==5.0.0",
+  # policyengine[us]==5.0.0 requires policyengine-us==1.764.6, which PyPI's
+  # index no longer lists. Naming it here lets [tool.uv.sources] point it at
+  # its hashed URL, so `uv lock` can still resolve this extra.
+  "policyengine-us==1.764.6",
   # policyengine-us declares spm-calculator>=0.2.0 but imports
   # spm_calculator.geoadj, which spm-calculator 1.0.0 removed. CI installs this
-  # extra with `uv pip install -e '.[policyengine]'`, which ignores uv.lock.
+  # extra from uv.lock (`uv sync --locked --extra policyengine`); the bound
+  # keeps a fresh resolve (`uv lock`, `uv pip install`) off 1.x too.
   "spm-calculator>=0.2.0,<1",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",
+  # policyengine-taxsim needs policyengine-us; name it so the same source
+  # applies and this extra keeps the 1.764.6 the lock already shares.
+  "policyengine-us==1.764.6",
 ]
 taxcalc = [
   "taxcalc==6.7.1",
@@ -73,6 +81,16 @@ gettsim = [
 
 [project.scripts]
 axiom-oracles = "axiom_oracles.cli:cli"
+
+[tool.uv.sources]
+# PyPI's index no longer lists policyengine-us 1.764.6, so a fresh `uv lock`
+# cannot find it by version. files.pythonhosted.org still serves the wheel at
+# the hashed URL axiom_oracles/pinned_artifacts.py records
+# (tests/test_pinned_artifacts.py keeps the two equal); uv.lock records its
+# SHA-256 and `uv sync --locked` verifies it. uv installs the version this URL
+# names and ignores the `==1.764.6` specifier in the extras; the specifier is
+# kept true by test_pyproject_source_is_the_table_row_uv_lock_installs.
+policyengine-us = { url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl" }
 
 [tool.uv]
 # GETTSIM's ttsim-backend transitively conflicts with the PolicyEngine

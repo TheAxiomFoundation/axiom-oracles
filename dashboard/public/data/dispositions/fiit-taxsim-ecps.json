@@ -1,6 +1,6 @@
 {
  "suite": "fiit-taxsim-ecps",
- "updated": "2026-08-24",
+ "updated": "2026-09-25",
  "entries": [
   {
    "id": "taxsim-2026-eitc-child-machinery-absent",
@@ -26469,6 +26469,189 @@
     {
      "expression": "15750 + 2000",
      "equals": 17750.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "ecps-projection-dependent-se-income-fica",
+   "concept": "us:tax/payroll#employee_fica",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Dependent-held (unprojected) self-employment income: TAXSIM-35 has no dependent-income input, so the shared projection sums SE income over head and spouse only (docs/taxsim-oracle-playbook.md), while the axiom leg computes SECA over every member. On every selected row the residual equals axiom's Medicare-only SECA rate (the dispositioned axiom-seca-medicare-rate-only vintage) on exactly the SE income absent from the TAXSIM row: e.g. 5,010 x 0.9235 x 0.029 = 134.18 on ecps-tax-unit-479. A projection-surface limitation, not an oracle disagreement.",
+   "cases": [
+    "ecps-tax-unit-16293",
+    "ecps-tax-unit-1997",
+    "ecps-tax-unit-23427",
+    "ecps-tax-unit-36485",
+    "ecps-tax-unit-44409",
+    "ecps-tax-unit-44626",
+    "ecps-tax-unit-479",
+    "ecps-tax-unit-51038",
+    "ecps-tax-unit-5150",
+    "ecps-tax-unit-5280",
+    "ecps-tax-unit-55866",
+    "ecps-tax-unit-57215",
+    "ecps-tax-unit-5734",
+    "ecps-tax-unit-64210",
+    "ecps-tax-unit-66228"
+   ],
+   "arithmetic": [
+    {
+     "expression": "5010 * 0.9235 * 0.029",
+     "equals": 134.18
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "axiom-seca-medicare-rate-only-r2-leftovers",
+   "concept": "us:tax/payroll#employee_fica",
+   "kind": "amount_difference",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "Leftover rows of the dispositioned axiom-seca-medicare-rate-only class whose mixed dependent-SE composition kept them outside the original selector: on every selected row axiom's employee_fica equals 7.65% of wages plus 0.9235 x 2.9% of ALL members' SE income while TAXSIM's tfica carries the full 15.3% SECA on the head/spouse SE it receives \u2014 the residual reproduces within $5 as 0.02678 x total SE minus TAXSIM's own SECA (tfica - 0.0765 x wages). Same 1401(a) omission, filed with the parent class.",
+   "cases": [
+    "ecps-tax-unit-10820",
+    "ecps-tax-unit-11478",
+    "ecps-tax-unit-25216",
+    "ecps-tax-unit-33996",
+    "ecps-tax-unit-36735",
+    "ecps-tax-unit-37791",
+    "ecps-tax-unit-42808",
+    "ecps-tax-unit-51059",
+    "ecps-tax-unit-62700",
+    "ecps-tax-unit-65027",
+    "ecps-tax-unit-74939"
+   ],
+   "arithmetic": [
+    {
+     "expression": "160326 * 0.9235 * 0.029",
+     "equals": 4293.69
+    },
+    {
+     "expression": "80163 * 0.9235 * 0.153",
+     "equals": 11326.79
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1537"
+  },
+  {
+   "id": "taxsim-binary-2025-parameter-fallback-r2-standard-deduction",
+   "concept": "us:tax/federal-income-tax#standard_deduction",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "More rows of the dispositioned taxsim-binary-2025-parameter-fallback class: TAXSIM's v13 returns the 2025 standard deduction (15,750 single; 17,750 single aged) where the 2026 law year requires 16,100 / 18,150 (Rev. Proc. 2025-32). Axiom carries the published 2026 values.",
+   "cases": [
+    "ecps-tax-unit-139776",
+    "ecps-tax-unit-62434",
+    "ecps-tax-unit-62911"
+   ],
+   "arithmetic": [
+    {
+     "expression": "16100 - 15750",
+     "equals": 350
+    },
+    {
+     "expression": "18150 - 17750",
+     "equals": 400
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-auto-itemized-standard-deduction-zeroed-r2",
+   "concept": "us:tax/federal-income-tax#standard_deduction",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "One more row of the dispositioned taxsim-auto-itemized-standard-deduction-zeroed class: TAXSIM itemizes on its own when computed deductions beat the standard deduction and reports v13 = 0, while axiom reports the statutory standard deduction (35,500 = 32,200 joint + 2 x 1,650 aged). A reporting-surface difference, not a rules disagreement.",
+   "cases": [
+    "ecps-tax-unit-62276"
+   ],
+   "arithmetic": [
+    {
+     "expression": "32200 + 2 * 1650",
+     "equals": 35500
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-childless-eitc-parameter-vintage-r2",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "One more row of the dispositioned taxsim-childless-eitc-parameter-vintage class: a childless unit qualifying through the 58-year-old spouse where TAXSIM's 2025-projected phaseout parameters yield 507.49 against axiom's 419.68 from the published Rev. Proc. 2025-32 schedule.",
+   "cases": [
+    "ecps-tax-unit-152588"
+   ],
+   "arithmetic": [
+    {
+     "expression": "507.49 - 419.68",
+     "equals": 87.81
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-2026-eitc-investment-limit-vintage",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "TAXSIM's 32(i) disqualified-investment-income limit is 2025-projected upward, so it grants the childless credit to a unit whose investment income of 12,214 exceeds the published Rev. Proc. 2025-32 maximum of 12,200. Axiom denies, correctly, now that the ECPS projection computes eitc_relevant_investment_income from the person facts (the ecps-projection-defaults-eitc-investment-income class this row previously carried was resolved by that projection fix \u2014 its other ten rows now match; this row remains because TAXSIM's limit vintage, not the projection, is what grants).",
+   "cases": [
+    "ecps-tax-unit-67900"
+   ],
+   "arithmetic": [
+    {
+     "expression": "12214 - 12200",
+     "equals": 14
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-childless-schedule-and-axiom-earned-netting-composite-eitc",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Two-sided composite reproduced to the cent from a fresh idtl=2 rerun\nof the pinned binary plus the full-evidence axiom chain, on units with a\nqualifying child AND a self-employment loss. TAXSIM side: its\ndispositioned childless-schedule machinery\n(taxsim-2026-eitc-childless-schedule-applied-to-units-with-children)\npays the childless curve on its own AGI - 134692: 664 - 0.0765 x\n(19,185.18 - 10,860) = 27.12 = v25 exactly; 85537 (joint): 664 -\n0.0765 x (26,072.18 - 18,140.05) = 57.19 = v25 exactly at its\nprojected joint childless phase-out start. Axiom side: the bridge's\nearned_income input does not net the SE loss (section 32(c)(2)(A)(ii)\nnets net earnings from self-employment), so phase-out income uses\nunnetted wages - 134692: 0.1598 x (54,361.79 - 23,890) = 4,869.39 >\n4,427 maximum, credit 0; 85537: 0.1598 x (83,386.76 - 31,160) far\nexceeds the maximum, credit 0 - where netting would leave both units\ninside the with-children schedule. Each side's value is exactly\nreproduced by its named mechanism; the residual is their difference.",
+   "cases": [
+    "ecps-tax-unit-134692",
+    "ecps-tax-unit-85537"
+   ],
+   "arithmetic": [
+    {
+     "expression": "664 - 0.0765 * (19185.18 - 10860)",
+     "equals": 27.12
+    },
+    {
+     "expression": "664 - 0.0765 * (26072.18 - 18140.05)",
+     "equals": 57.19
+    },
+    {
+     "expression": "0.1598 * (54361.79 - 23890)",
+     "equals": 4869.39
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "axiom-eitc-earned-income-se-loss-not-netted",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "Axiom-side earned-income measure defect, both sides reproduced\nexactly: the unit has wages 1,998.41 and a self-employment loss of\n2,259.09, so statutory section 32(c)(2) earned income nets to -260.68\nand no credit is allowed - which is TAXSIM's 0.00. The bridge's\nearned_income input does not net the loss, leaving axiom with earned\nincome 1,998.41 and the childless credit min(0.0765 x 1,998.41, 664 -\n0.0765 x (19,417.57 - 10,860)) = min(152.88, 9.35) = 9.35, the\ncommitted axiom value to the cent (phase-out income = AGI 19,417.57,\nidentical in both engines). Same root as\naxiom-eitc-phaseout-income-se-loss-not-netted in\nco-tax-intersection-taxsim; visible until the projection nets SE\nlosses into the section 32 earned-income input.",
+   "cases": [
+    "ecps-tax-unit-132330"
+   ],
+   "arithmetic": [
+    {
+     "expression": "664 - 0.0765 * (19417.57 - 10860)",
+     "equals": 9.35
+    },
+    {
+     "expression": "1998.41 - 2259.09",
+     "equals": -260.68
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"

@@ -91,6 +91,7 @@ gettsim = [
 ]
 policyengine = [
     { name = "policyengine", extra = ["us"], marker = "extra == 'extra-13-axiom-oracles-policyengine' or (extra == 'extra-13-axiom-oracles-gettsim' and extra == 'extra-13-axiom-oracles-taxsim')" },
+    { name = "policyengine-us" },
     { name = "spm-calculator" },
 ]
 taxcalc = [
@@ -98,6 +99,7 @@ taxcalc = [
 ]
 taxsim = [
     { name = "policyengine-taxsim" },
+    { name = "policyengine-us" },
 ]
 
 [package.metadata]
@@ -109,6 +111,8 @@ requires-dist = [
     { name = "pandas", marker = "extra == 'dev'", specifier = ">=2.2" },
     { name = "policyengine", extras = ["us"], marker = "extra == 'policyengine'", specifier = "==5.0.0" },
     { name = "policyengine-taxsim", marker = "extra == 'taxsim'", specifier = "==2.30.0" },
+    { name = "policyengine-us", marker = "extra == 'policyengine'", url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl" },
+    { name = "policyengine-us", marker = "extra == 'taxsim'", url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl" },
     { name = "pydantic", marker = "extra == 'accessnyc-python'", specifier = ">=2.11" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pyyaml", specifier = ">=6.0" },
@@ -1949,7 +1953,7 @@ wheels = [
 [[package]]
 name = "policyengine-us"
 version = "1.764.6"
-source = { registry = "https://pypi.org/simple" }
+source = { url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl" }
 dependencies = [
     { name = "microdf-python" },
     { name = "pandas" },
@@ -1958,10 +1962,27 @@ dependencies = [
     { name = "tables" },
     { name = "tqdm" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6e/cc/9e65a9586069beab1f02102a23f7a0e6332f1a9c2d590cb9f0e68f9ac987/policyengine_us-1.764.6.tar.gz", hash = "sha256:9817d48abc5b7d690b8abe33047005e5cf40b71654a85a2534bb5e3bcf921f79", size = 11009555, upload-time = "2026-07-06T13:13:07.254Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl", hash = "sha256:2b2c5c02c26ab212270948db1f30129728b625fc6109fc9ca0c604b714546909", size = 13117921, upload-time = "2026-07-06T13:13:03.476Z" },
+    { url = "https://files.pythonhosted.org/packages/e2/5a/0566666f30ad06e416f0cf25b24bdee73acd71897fb2de3c0ac43b59e3e3/policyengine_us-1.764.6-py3-none-any.whl", hash = "sha256:2b2c5c02c26ab212270948db1f30129728b625fc6109fc9ca0c604b714546909" },
 ]
+
+[package.metadata]
+requires-dist = [
+    { name = "build", marker = "extra == 'dev'", specifier = ">=1.2.2.post1" },
+    { name = "coverage", marker = "extra == 'dev'", specifier = ">=7.9.2" },
+    { name = "furo", marker = "extra == 'dev'", specifier = ">=2024.8.6" },
+    { name = "jupyter-book", marker = "extra == 'dev'", specifier = ">=1.0.4.post1" },
+    { name = "microdf-python", specifier = ">=1.0.0" },
+    { name = "pandas", specifier = ">=2.0" },
+    { name = "policyengine-core", specifier = ">=3.26.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.9.0" },
+    { name = "setuptools", marker = "extra == 'dev'", specifier = ">=80.9.0" },
+    { name = "spm-calculator", specifier = ">=0.2.0" },
+    { name = "tables", specifier = ">=3.9" },
+    { name = "towncrier", marker = "extra == 'dev'", specifier = ">=24.8.0" },
+    { name = "tqdm", specifier = ">=4.67.1" },
+]
+provides-extras = ["dev"]
 
 [[package]]
 name = "portion"

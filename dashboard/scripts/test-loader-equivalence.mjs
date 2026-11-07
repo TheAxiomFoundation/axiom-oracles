@@ -17,10 +17,13 @@ globalThis.fetch = async (url) => {
 // Keep the existing package mode: these utility sources have no external
 // dependencies and can be imported as explicit ESM data URLs in any cwd.
 const moduleURL = source => `data:text/javascript;base64,${Buffer.from(source).toString('base64')}`;
-const suiteURL = moduleURL(await readFile(new URL('../src/utils/suites.js', import.meta.url), 'utf8'));
+const caseMismatchesURL = moduleURL(await readFile(new URL('../src/utils/caseMismatches.mjs', import.meta.url), 'utf8'));
+const suiteURL = moduleURL((await readFile(new URL('../src/utils/suites.js', import.meta.url), 'utf8'))
+  .replace('"./caseMismatches.mjs"', JSON.stringify(caseMismatchesURL)));
 const unexplainedURL = moduleURL(await readFile(new URL('../src/utils/unexplained.js', import.meta.url), 'utf8'));
 const dataSource = (await readFile(new URL('../src/utils/data.js', import.meta.url), 'utf8'))
-  .replace('"./suites"', JSON.stringify(suiteURL));
+  .replace('"./suites"', JSON.stringify(suiteURL))
+  .replace('"./caseMismatches.mjs"', JSON.stringify(caseMismatchesURL));
 const programSource = (await readFile(new URL('../src/utils/programs.js', import.meta.url), 'utf8'))
   .replace('"./suites.js"', JSON.stringify(suiteURL))
   .replace('"./unexplained.js"', JSON.stringify(unexplainedURL));

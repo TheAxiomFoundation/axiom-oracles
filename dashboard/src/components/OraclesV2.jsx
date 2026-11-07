@@ -27,6 +27,7 @@ import {
   SOUTHMOD_MODELS,
 } from "../utils/suites";
 import { ORACLE_IDENTITY, attributedOracles } from "../utils/oracleIdentity";
+import { comparedMismatchCount } from "../utils/caseMismatches.mjs";
 import {
   crossCheckCount,
   groupByOracle,
@@ -89,8 +90,9 @@ function compactCount(n) {
  * One discrepancy class = a (suite, concept, kind) mismatch bucket.
  * Large suites slim the recorded mismatch list, so bucket counts from it
  * are lower bounds — except when a concept shows a single kind, where the
- * aggregate's exact mismatch_count applies (and must, so these figures
- * never contradict the run totals).
+ * aggregate's compared mismatch count applies (and must, so these figures
+ * never contradict the run totals). Uncompared pairs (engine errors) are
+ * not disagreement patterns.
  */
 function buildClasses(reports, knownCauses) {
   const rows = [];
@@ -99,16 +101,26 @@ function buildClasses(reports, knownCauses) {
       (report.aggregates || []).map((a) => [a.concept, a.description]),
     );
     const aggMismatches = new Map();
-    for (const agg of topLevelAggregates(report.aggregates)) {
+    const topLevel = new Set(topLevelAggregates(report.aggregates));
+    const uncomparedConcepts = new Set();
+    for (const agg of report.aggregates || []) {
+      // FIIT rows name child concepts. Their explicit count corrects old
+      // mismatch rows without flags; older reports retain their row fallback.
+      if (!topLevel.has(agg) && !Object.hasOwn(agg, "uncompared_mismatches")) {
+        continue;
+      }
+      if (agg.uncompared_mismatches > 0) uncomparedConcepts.add(agg.concept);
       aggMismatches.set(
         agg.concept,
-        (aggMismatches.get(agg.concept) || 0) + (agg.mismatch_count || 0),
+        (aggMismatches.get(agg.concept) || 0) + comparedMismatchCount(agg),
       );
     }
     const list = report.mismatches || [];
     const truncated = (report.summary?.mismatch_count ?? 0) > list.length;
     const buckets = new Map();
     for (const m of list) {
+      // An uncompared pair is an engine error, not a disagreement pattern.
+      if (m?.uncompared === true) continue;
       const key = `${m.concept}::${m.kind}`;
       buckets.set(key, (buckets.get(key) || 0) + 1);
     }
@@ -127,6 +139,7 @@ function buildClasses(reports, knownCauses) {
         singleKind && aggMismatches.has(concept)
           ? aggMismatches.get(concept)
           : recorded;
+      if (count === 0 && uncomparedConcepts.has(concept)) continue;
       const lowerBound = truncated && !singleKind;
       const cause = causeFor(knownCauses, report, concept, kind);
       const action = cause?.issue_url
@@ -381,13 +394,24 @@ function ProgRow({ p, onOpenProgram }) {
         {p.households.toLocaleString()}
         <span className="v2-prog-unit"> comparison cases</span>
       </span>
-      <span className="mono v2-prog-rate">
+      <span className={`mono v2-prog-rate${p.uncompared > 0 ? " v2-prog-rate-with-errors" : ""}`}>
         <span className="v2-prog-rate-part">
           <span className="v2-prog-rate-value">
             {formatAgreementRate(p.rate, p.mismatches)}
           </span>
           <span className="v2-prog-unit">agree</span>
         </span>
+        {p.uncompared > 0 && (
+          <span
+            className="v2-prog-rate-part v2-prog-uncompared"
+            title="An engine returned no valid value; these pairs are not compared"
+          >
+            <span className="v2-prog-rate-value">
+              {p.uncompared.toLocaleString()}
+            </span>
+            <span className="v2-prog-unit">not compared (engine errors)</span>
+          </span>
+        )}
         {p.explainedRate != null &&
           p.rate != null &&
           p.explainedRate - p.rate >= 0.05 && (
@@ -443,6 +467,7 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
           region: meta.region,
           total: 0,
           mismatches: 0,
+          uncompared: 0,
           unexplained: 0,
           households: 0,
         });
@@ -452,6 +477,7 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
       const reportUnexplained = countUnexplained([report], knownCauses || []);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.uncompared += m.uncompared;
       entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
       accumulateExplainedRate(entry, m, reportUnexplained);
@@ -673,6 +699,7 @@ export default function OraclesV2() {
     const totals = {
       checks: oracles.reduce((n, o) => n + o.checks, 0),
       mismatches: oracles.reduce((n, o) => n + o.mismatches, 0),
+      uncompared: oracles.reduce((n, o) => n + o.uncompared, 0),
       unexplained: oracles.reduce((n, o) => n + o.unexplained, 0),
       households: oracles.reduce((n, o) => n + o.households, 0),
       programs: new Set(oracles.flatMap((o) => [...o.programs])).size,
@@ -700,6 +727,7 @@ export default function OraclesV2() {
           jurisdiction: meta.jurisdiction,
           total: 0,
           mismatches: 0,
+          uncompared: 0,
           unexplained: 0,
           households: 0,
           oracles: new Set(),
@@ -713,6 +741,7 @@ export default function OraclesV2() {
       );
       entry.total += m.total;
       entry.mismatches += m.mismatches;
+      entry.uncompared += m.uncompared;
       entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));

@@ -197,6 +197,11 @@ class _Verdict:
     outcome: Literal["match", "mismatch"]
     disposition: str | None
     location: str
+    #: A mismatch the producer kept for a failed return (``uncompared`` or
+    #: compact ``u``). It was never measured, so it stays out of every
+    #: compared count and tolerance check, and needs an engine error on its
+    #: own case and concept.
+    uncompared: bool = False
 
 
 @dataclass(frozen=True)
@@ -402,7 +407,21 @@ def _case_verdicts(
     ):
         for concept, (record, index) in records.items():
             marker: str | None = None
+            uncompared = False
             if outcome == "mismatch":
+                # _validate_compact_case already refuses a compact ``u`` that
+                # is not true; the inline flag is checked here.
+                flag_key = "u" if compact else "uncompared"
+                if flag_key in record:
+                    if record[flag_key] is True:
+                        uncompared = True
+                    elif not compact:
+                        defects.append(
+                            _defect(
+                                suite,
+                                f"{location}.{field}[{index}].uncompared must be true",
+                            )
+                        )
                 raw_marker = record.get("e") if compact else record.get("disposition")
                 if raw_marker is not None:
                     if compact:
@@ -439,6 +458,7 @@ def _case_verdicts(
                     outcome=outcome,
                     disposition=marker,
                     location=f"{location}.{field}[{index}]",
+                    uncompared=uncompared,
                 )
             )
     return tuple(verdicts)
@@ -455,6 +475,9 @@ def _case_verdicts_sha256(verdicts: tuple[_Verdict, ...]) -> str:
                 "left": verdict.left,
                 "outcome": verdict.outcome,
                 "right": verdict.right,
+                # Only a flagged verdict carries the key, so every digest
+                # of a corpus without uncompared pairs stays as it was.
+                **({"uncompared": True} if verdict.uncompared else {}),
             },
             allow_nan=False,
             ensure_ascii=False,
@@ -578,6 +601,7 @@ def _validate_compact_case(
         suite=suite,
     )
     raw_mismatches = row.get("m")
+    uncompared = 0
     if isinstance(raw_mismatches, list):
         for index, mismatch in enumerate(raw_mismatches):
             if isinstance(mismatch, dict):
@@ -587,6 +611,13 @@ def _validate_compact_case(
                     defects=defects,
                     suite=suite,
                 )
+                if "u" in mismatch:
+                    if mismatch["u"] is not True:
+                        defects.append(
+                            _defect(suite, f"{location}.m[{index}].u must be true")
+                        )
+                    else:
+                        uncompared += 1
     # ``v`` explicitly stores matched comparisons; a non-empty ``m`` stores
     # explicit mismatch evidence. An absent ``v`` cannot mean zero matches
     # generally (SNAP-QC omits all verdict values), so that row supports full
@@ -600,8 +631,23 @@ def _validate_compact_case(
     )
     if outcomes is not None:
         matches, mismatch_count = outcomes
-        expected_rate = dashboard_match_rate(matches, mismatch_count)
-        if raw_rate is None:
+        # An uncompared row ("u": true) was never measured, so the served
+        # rate leaves it out, as emit_case_artifacts.compact_case does.
+        compared_mismatches = mismatch_count - uncompared
+        expected_rate = (
+            None
+            if not matches and not compared_mismatches and uncompared
+            else dashboard_match_rate(matches, compared_mismatches)
+        )
+        if expected_rate is None:
+            if raw_rate is not None:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{location}.r must be null when no stored pair was compared",
+                    )
+                )
+        elif raw_rate is None:
             defects.append(
                 _defect(
                     suite,
@@ -906,7 +952,7 @@ def _aggregate_verdicts(
         )
         return
 
-    declared: dict[str, tuple[int, int, dict, str]] = {}
+    declared: dict[str, tuple[int, int, int, dict, str]] = {}
     for index, row in enumerate(raw):
         location = f"report aggregates[{index}]"
         if not isinstance(row, dict):
@@ -942,16 +988,44 @@ def _aggregate_verdicts(
         )
         if comparisons is None or mismatches is None:
             continue
-        if mismatches > comparisons:
+        # mismatch_count includes uncompared pairs; comparison_count does not.
+        uncompared = _strict_nonnegative_int(
+            row,
+            "uncompared_mismatches",
+            location=location,
+            defects=defects,
+            suite=suite,
+            required=False,
+        )
+        if uncompared is None:
+            if "uncompared_mismatches" in row:
+                continue
+            uncompared = 0
+        if uncompared > mismatches:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{location}.uncompared_mismatches {uncompared} exceeds "
+                    f"mismatch_count {mismatches}",
+                )
+            )
+            continue
+        compared_mismatches = mismatches - uncompared
+        if compared_mismatches > comparisons:
             defects.append(
                 _defect(
                     suite,
                     f"{location}.mismatch_count {mismatches} exceeds "
-                    f"comparison_count {comparisons}",
+                    f"comparison_count {comparisons}"
+                    + (
+                        f" plus uncompared_mismatches {uncompared}"
+                        if uncompared
+                        else ""
+                    ),
                 )
             )
             continue
-        matches = comparisons - mismatches
+        matches = comparisons - compared_mismatches
         for field, expected in (
             ("compared", comparisons),
             ("match_count", matches),
@@ -975,7 +1049,7 @@ def _aggregate_verdicts(
                         f"verdict count {expected}",
                     )
                 )
-        declared[concept] = (matches, mismatches, row, location)
+        declared[concept] = (matches, compared_mismatches, uncompared, row, location)
 
     actual: dict[str, list[_Verdict]] = {}
     for verdict in verdicts:
@@ -997,12 +1071,32 @@ def _aggregate_verdicts(
             )
         )
     for concept in sorted(set(declared) & set(actual)):
-        expected_matches, expected_mismatches, row, location = declared[concept]
-        concept_verdicts = actual[concept]
+        (
+            expected_matches,
+            expected_mismatches,
+            expected_uncompared,
+            row,
+            location,
+        ) = declared[concept]
+        # Uncompared pairs were never measured: they count only toward
+        # uncompared_mismatches, never toward a compared count, weight or sum.
+        actual_uncompared = sum(verdict.uncompared for verdict in actual[concept])
+        concept_verdicts = [
+            verdict for verdict in actual[concept] if not verdict.uncompared
+        ]
         actual_matches = sum(
             verdict.outcome == "match" for verdict in concept_verdicts
         )
         actual_mismatches = len(concept_verdicts) - actual_matches
+        if expected_uncompared != actual_uncompared:
+            defects.append(
+                _defect(
+                    suite,
+                    f"report aggregate {concept!r} declares "
+                    f"{expected_uncompared} uncompared mismatches but stored "
+                    f"verdicts flag {actual_uncompared}",
+                )
+            )
         if (expected_matches, expected_mismatches) != (
             actual_matches,
             actual_mismatches,
@@ -1241,6 +1335,10 @@ def _reconcile_report_mismatches(
                 )
             )
             continue
+        if "uncompared" in row and row["uncompared"] is not True:
+            defects.append(
+                _defect(suite, f"{location}.uncompared must be true")
+            )
         marker = _report_disposition(
             row,
             location=location,
@@ -1270,16 +1368,32 @@ def _reconcile_report_mismatches(
     for key in sorted(set(reported) & set(stored)):
         report_row, report_marker, location = reported[key]
         stored_verdict = stored[key]
+        if (report_row.get("uncompared") is True) != stored_verdict.uncompared:
+            defects.append(
+                _defect(
+                    suite,
+                    f"{stored_verdict.location} uncompared flag "
+                    f"{stored_verdict.uncompared!r} does not match {location} "
+                    f"flag {report_row.get('uncompared') is True!r}",
+                )
+            )
         rule = rules.get(key[1])
         if rule is not None:
             for side, chunk_value, report_value in (
                 ("left", stored_verdict.left, report_row["left"]),
                 ("right", stored_verdict.right, report_row["right"]),
             ):
+                # A failed return has no value to compare under tolerance
+                # (null, or a verdict the rule cannot read), so both copies of
+                # an uncompared pair must at least be the same value.
                 if not _projected_value_matches(
                     chunk_value,
                     report_value,
                     rule,
+                ) and not (
+                    stored_verdict.uncompared
+                    and type(chunk_value) is type(report_value)
+                    and chunk_value == report_value
                 ):
                     defects.append(
                         _defect(
@@ -1311,7 +1425,41 @@ def _reconcile_full_semantics(
     """Reconcile every canonical verdict with report semantics and aggregates."""
 
     rules = _concept_rules(report, defects, suite)
+    errors = report.get("errors")
+    errored: set[tuple[str, str]] = set()
+    for error in errors if isinstance(errors, list) else ():
+        if not isinstance(error, dict) or not isinstance(error.get("concept"), str):
+            continue
+        # Canonicalize as case rows are, so integer 2 and string "2" name one
+        # case and a boolean names none. Its defects go unrecorded: an error
+        # without a usable ID excuses no uncompared verdict, and this
+        # validator reads ``errors`` for nothing else, so a report without
+        # uncompared verdicts validates as it did before they existed.
+        case_id = _case_id(error, compact=False, location="", defects=[], suite=suite)
+        if case_id is not None:
+            errored.add((case_id, error["concept"]))
     for verdict in verdicts:
+        if verdict.uncompared:
+            # Never measured, so no tolerance applies; it stands only as the
+            # diagnostic of an engine error on its own case and concept.
+            if (verdict.case_id, verdict.concept) not in errored:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{verdict.location} is marked uncompared but the "
+                        "report records no engine error for case "
+                        f"{verdict.case_id!r} and concept {verdict.concept!r}",
+                    )
+                )
+            if verdict.concept not in rules:
+                defects.append(
+                    _defect(
+                        suite,
+                        f"{verdict.location} concept {verdict.concept!r} has no "
+                        "report concept definition",
+                    )
+                )
+            continue
         rule = rules.get(verdict.concept)
         if rule is None:
             defects.append(
@@ -1640,17 +1788,44 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
     )
     match_count = _strict_count(summary, "match_count", content_defects, suite)
     mismatch_count = _strict_count(summary, "mismatch_count", content_defects, suite)
+    # mismatch_count includes uncompared pairs; comparison_count and
+    # match_count do not. Absent means the report recorded none.
+    uncompared_count = _strict_nonnegative_int(
+        summary,
+        "uncompared_mismatches",
+        location="summary",
+        defects=content_defects,
+        suite=suite,
+        required=False,
+    )
+    if uncompared_count is None and "uncompared_mismatches" not in summary:
+        uncompared_count = 0
+    if (
+        mismatch_count is not None
+        and uncompared_count is not None
+        and uncompared_count > mismatch_count
+    ):
+        content_defects.append(
+            _defect(
+                suite,
+                f"summary.uncompared_mismatches {uncompared_count} exceeds "
+                f"mismatch_count {mismatch_count}",
+            )
+        )
     if (
         comparison_count is not None
         and match_count is not None
         and mismatch_count is not None
-        and match_count + mismatch_count != comparison_count
+        and uncompared_count is not None
+        and match_count + mismatch_count - uncompared_count != comparison_count
     ):
         content_defects.append(
             _defect(
                 suite,
                 "summary counts do not conserve "
-                f"({match_count} + {mismatch_count} != {comparison_count})",
+                f"({match_count} + {mismatch_count}"
+                + (f" - {uncompared_count} uncompared" if uncompared_count else "")
+                + f" != {comparison_count})",
             )
         )
 
@@ -1751,11 +1926,13 @@ def validate_suite_evidence(report_path: str | Path) -> EvidenceReport:
         reconciliation = "full"
         actual_matches = sum(outcome[0] for outcome in outcomes if outcome)
         actual_mismatches = sum(outcome[1] for outcome in outcomes if outcome)
-        actual_comparisons = actual_matches + actual_mismatches
+        actual_uncompared = sum(verdict.uncompared for verdict in semantic_verdicts)
+        actual_comparisons = actual_matches + actual_mismatches - actual_uncompared
         for name, declared, actual in (
             ("comparison_count", comparison_count, actual_comparisons),
             ("match_count", match_count, actual_matches),
             ("mismatch_count", mismatch_count, actual_mismatches),
+            ("uncompared_mismatches", uncompared_count, actual_uncompared),
         ):
             if declared is not None and declared != actual:
                 content_defects.append(

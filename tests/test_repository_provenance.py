@@ -533,6 +533,11 @@ def test_runner_binds_clean_state_to_pre_run_content(
                 "policyengine_core_version": "3.30.3",
             },
         }
+        monkeypatch.setattr(
+            run_comparison,
+            "_fixture_engine_receipt",
+            lambda _runner, _root: {"binary_path": "/engine/axiom-rules-engine"},
+        )
         execute = run_comparison._run_federal_tax_liability_grid
     real_run = subprocess.run
 

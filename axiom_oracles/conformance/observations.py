@@ -289,6 +289,7 @@ class OutputEvidence:
         stamp = report.get("attestation")
         summary = report.get("summary") or {}
         summary = summary if isinstance(summary, dict) else {}
+        self._reconcile_scalar_verdicts(report, summary)
         # Every retained actual comparison must reconcile with the aggregate
         # ledger, even when both of its labels have been changed. Case and
         # top-level copies of one mismatch share one comparison identity.
@@ -323,6 +324,91 @@ class OutputEvidence:
             and all(valid_case_id(case_id) and not _comparison_stopped(row)
                     for case_id, row in self.actual_comparisons)
         )
+
+    def _reconcile_scalar_verdicts(self, report, summary):
+        """Check each retained scalar verdict against its values and counts.
+
+        A scalar comparison row (no member ``variable``) is retained as a
+        verdict by its list: ``matches`` or ``mismatches``. Recompute that
+        verdict from the row's returned values with the report's declared
+        comparison kind and tolerances (:func:`scalar_verdict`), never the
+        row's own tolerance. Without a usable declaration only exactly equal,
+        present values can retain a match. A recorded residual must equal
+        the values' difference. A disagreeing row marks its case and concept
+        contradicted. Case and top-level copies of one comparison share an
+        identity, and the summary's mismatch and match counts must account
+        for every retained identity, including scored sum members; a
+        compacted report that drops successful rows still reconciles.
+        One kind of row is exempt from the recompute, though still counted:
+        in a native FIIT report, a retained mismatch carrying the FIIT
+        harness's ``output`` field. The harness compares each output under
+        its own tolerance, which the report does not record, and the FIIT
+        adapter retains no matches. Every other row of a FIIT report,
+        including any match, is checked like any other report's.
+        A second kind is exempt the same way: a retained mismatch marked
+        ``"uncompared": true`` when the report's ``errors`` list records an
+        engine error under the same string case id and concept, as the SNAP
+        adapter writes them. It is a failed return kept as
+        a diagnostic, not a verdict on its values, so values that happen to
+        agree do not contradict it. The engine error already refuses the
+        report's execution evidence. A match never carries the exemption, and
+        an error on another case or concept exempts nothing.
+        """
+        self.contradicted_scalar_comparisons = set()
+        self.scalar_verdicts_reconciled = True
+        declared = defaultdict(list)
+        for row in report.get("concepts") or []:
+            if isinstance(row, dict) and isinstance(row.get("id"), str):
+                declared[row["id"]].append(row)
+        authorities = {
+            concept: rows[0] for concept, rows in declared.items()
+            if len(rows) == 1 and _authority(rows[0]) is not None
+        }
+        retained = [
+            (case_id, row, matched)
+            for case_id, cases in self.cases_by_id.items() for case in cases
+            for matched, key in ((True, "matches"), (False, "mismatches"))
+            for row in case.get(key) or []
+        ] + [
+            (row.get("case_id"), row, False) for row in report.get("mismatches") or []
+            if isinstance(row, dict) and valid_case_id(row.get("case_id"))
+        ]
+        errors = report.get("errors")
+        errored = {
+            (error["case_id"], error["concept"])
+            for error in (errors if isinstance(errors, list) else ())
+            if isinstance(error, dict)
+            and isinstance(error.get("case_id"), str)
+            and isinstance(error.get("concept"), str)
+        }
+        verdicts = defaultdict(set)
+        for case_id, row, matched in retained:
+            if (not isinstance(row, dict) or row.get("variable") is not None
+                    or not isinstance(row.get("concept"), str)
+                    or not ("left" in row or "right" in row)):
+                continue
+            identity = (case_id, row["concept"])
+            verdicts[identity].add(matched)
+            if self.native_fiit and not matched and "output" in row:
+                continue
+            if not matched and row.get("uncompared") is True and identity in errored:
+                continue
+            if not _scalar_row_valid(row, matched, authorities.get(row["concept"])):
+                self.contradicted_scalar_comparisons.add(identity)
+        for identity, retained_verdicts in verdicts.items():
+            if len(retained_verdicts) > 1:
+                self.contradicted_scalar_comparisons.add(identity)
+        member_verdicts = [
+            {matched for _, matched in rows} for rows in self.scored_members.values()
+        ]
+        mismatches = sum(False in found for found in (*verdicts.values(), *member_verdicts))
+        matches = sum(found == {True} for found in (*verdicts.values(), *member_verdicts))
+        mismatch_count = summary.get("mismatch_count", 0)
+        match_count = summary.get("match_count")
+        if mismatches and not _count_covers(mismatch_count, mismatches):
+            self.scalar_verdicts_reconciled = False
+        if matches and match_count is not None and not _count_covers(match_count, matches):
+            self.scalar_verdicts_reconciled = False
 
     def side_for_engine(self, engine):
         sides = self.sides_by_engine.get(engine, ())
@@ -433,6 +519,112 @@ def _scored_member_valid(row, matched):
         return False
 
 
+def _authority(concept):
+    """``(kind, tolerance, relative_tolerance)`` of a usable declaration, or None."""
+    kind = concept.get("comparison")
+    tolerance = concept.get("tolerance", 0)
+    relative_tolerance = concept.get("relative_tolerance", 0)
+    if not isinstance(kind, str) or not kind:
+        return None
+    for value in (tolerance, relative_tolerance):
+        if not _valid_value(value, None, allow_bool=False) or value < 0:
+            return None
+    return kind, tolerance, relative_tolerance
+
+
+def _amount(value):
+    """The Comparator's ``float()`` of an amount value, or None if it has none."""
+    try:
+        return float(value)
+    except (TypeError, ValueError, OverflowError):
+        return None
+
+
+def scalar_verdict(concept, left, right):
+    """The Comparator's verdict for one scalar comparison, or None if unknown.
+
+    Mirrors ``Comparator.compare_mapping``: ``concept`` is the report's
+    declaration for the compared concept, and a missing side never matches.
+    An ``amount`` converts both values with ``float()`` and matches when they
+    are close within the declared absolute or relative tolerance. Every other
+    declared kind matches when both values have the same truth. An amount
+    value ``float()`` cannot convert has no recomputable verdict.
+    """
+    authority = _authority(concept) if isinstance(concept, dict) else None
+    if authority is None:
+        return None
+    kind, tolerance, relative_tolerance = authority
+    if left is None or right is None:
+        return False
+    if kind != "amount":
+        return bool(left) == bool(right)
+    left_number, right_number = _amount(left), _amount(right)
+    if left_number is None or right_number is None:
+        return None
+    return isclose(left_number, right_number, abs_tol=tolerance,
+                   rel_tol=relative_tolerance)
+
+
+def _scalar_row_valid(row, matched, concept):
+    """A retained scalar row's verdict and residual describe its own values."""
+    left, right = row.get("left"), row.get("right")
+    difference = row.get("difference")
+    if concept is None:
+        # No authority: only present, exactly equal values agree under every
+        # kind and tolerance, and they never disagree under any. Other
+        # mismatch verdicts are claims the counts must cover.
+        same = left is not None and right is not None and left == right
+        if matched is not same and (matched or same):
+            return False
+        numeric = (
+            left is not None and right is not None
+            and _valid_value(left, None) and _valid_value(right, None)
+        )
+        residual = _residual(left, right) if numeric else None
+        if numeric and residual is None:
+            return False  # e.g. an integer too large for float
+        return difference is None or _residual_matches(difference, residual)
+    # The row's own tolerance fields are ignored: a forged row cannot widen
+    # the declared tolerance to turn a residual into a match.
+    if scalar_verdict(concept, left, right) is not matched:
+        return False
+    if _authority(concept)[0] == "amount" and left is not None and right is not None:
+        residual = _residual(left, right)
+        return "difference" not in row or _residual_matches(difference, residual)
+    return difference is None
+
+
+def _residual(left, right):
+    """``float(left) - float(right)``, or None when either has no float.
+
+    An integer too large for ``float`` has none, and its row is refused
+    rather than raising.
+    """
+    left_number, right_number = _amount(left), _amount(right)
+    if left_number is None or right_number is None:
+        return None
+    return left_number - right_number
+
+
+def _residual_matches(difference, residual):
+    """A recorded residual is the values' difference, in either orientation.
+
+    The Comparator records left minus right; some diagnostic producers record
+    right minus left, or compute it with different float rounding. Either
+    orientation, within float rounding, names the same comparison; any other
+    number, or a residual for non-numeric values, does not.
+    """
+    return (
+        residual is not None and _valid_value(difference, None, allow_bool=False)
+        and any(isclose(difference, candidate, rel_tol=1e-9, abs_tol=1e-9)
+                for candidate in (residual, -residual))
+    )
+
+
+def _count_covers(count, retained):
+    return isinstance(count, int) and not isinstance(count, bool) and count >= retained
+
+
 def returned_output_rows(report, *, engine, concept, output, targets=(), evidence=None):
     """Read returned values without expanding scalar sums into components."""
     evidence = evidence if evidence is not None else OutputEvidence(report)
@@ -455,6 +647,11 @@ def observed_output_value(
     if not evidence.execution_valid or not valid_case_id(case_id):
         return False
     if case_id in evidence.unreconciled_cases:
+        return False
+    if (not evidence.scalar_verdicts_reconciled
+            or (case_id, concept) in evidence.contradicted_scalar_comparisons):
+        # A retained verdict that its own values or counts contradict cannot
+        # vouch for the values it retains.
         return False
     if (evidence.comparisons_complete and evidence.ledger_targets.get((engine, concept))
             and not evidence.comparisons_by_case_concept.get((case_id, concept))

@@ -125,7 +125,41 @@ def git(repo: Path, *args: str) -> str:
 
 
 def list_tree(repo: Path, ref: str) -> list[str]:
-    return git(repo, "ls-tree", "-r", "--name-only", ref).splitlines()
+    """List every path at ``ref``, NUL-separated so git never quotes one.
+
+    Without ``-z`` git C-quotes paths with non-ASCII bytes (an en dash
+    becomes ``"1437c\\342\\200\\2231.yaml"``), and those quoted names
+    match no blob, so the file would drop out of the counts silently.
+    """
+    raw = subprocess.run(
+        [
+            "git",
+            "--no-replace-objects",
+            "-C",
+            str(repo),
+            "ls-tree",
+            "-rz",
+            "--name-only",
+            ref,
+        ],
+        capture_output=True,
+        check=True,
+    ).stdout
+    paths = [path.decode("utf-8") for path in raw.split(b"\0") if path]
+    _refuse_newline_paths(paths)
+    return paths
+
+
+def _refuse_newline_paths(paths: list[str]) -> None:
+    """Refuse names batch_blobs cannot frame.
+
+    ``git cat-file --batch`` reads one request per line, so a name holding a
+    newline would become two requests and shift every later blob onto the
+    wrong path. Refuse it rather than count files against the wrong bytes.
+    """
+    bad = [path for path in paths if "\n" in path or "\r" in path]
+    if bad:
+        raise ValueError(f"RuleSpec paths contain a newline: {bad!r}")
 
 
 def batch_blobs(repo: Path, ref: str, paths: list[str]) -> dict[str, bytes]:
@@ -137,6 +171,7 @@ def batch_blobs(repo: Path, ref: str, paths: list[str]) -> dict[str, bytes]:
     """
     if not paths:
         return {}
+    _refuse_newline_paths(paths)
     req = "".join(f"{ref}:{p}\n" for p in paths).encode()
     proc = subprocess.run(
         ["git", "--no-replace-objects", "-C", str(repo), "cat-file", "--batch"],

@@ -6,7 +6,36 @@ on:
   push:
     branches: [main]
 
+# A new push to a pull request cancels that pull request's older run of this
+# workflow, so runs for superseded heads stop holding runners. Each push to
+# main and each manual dispatch keys its own group, so nothing cancels it or
+# makes it wait.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('run-{0}', github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  # The same check comparisons.yml runs weekly, on every pull request, so a
+  # change that adds a pin nothing can install fails here, naming the file.
+  pinned-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install the check's dependencies
+        # The versions uv.lock resolves.
+        run: pip install pyyaml==6.0.3 requests==2.33.1
+
+      - name: Check every pinned PolicyEngine artifact
+        run: python3 scripts/check_pinned_artifacts.py --verbose
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -30,6 +59,11 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.3.12"
+
+      # Fails when pyproject.toml changed without a re-lock, so the drift
+      # shows here instead of at the next scheduled `uv sync --locked`.
+      - name: Check uv.lock matches pyproject.toml
+        run: uv lock --check
 
       - name: Install package
         run: uv sync --extra dev
@@ -354,9 +388,11 @@ jobs:
 
   # The SNAP child support adapter tests replay PolicyEngine-US and skip when
   # it is absent. The policyengine extra pins policyengine[us]==5.0.0, whose
-  # policyengine-us 1.764.6 predates PolicyEngine/policyengine-us#9586 and
-  # gives the state child support election the opposite sense. This job
-  # installs a policyengine-us with the fix and turns any skip into a failure.
+  # policyengine-us 1.764.6 (version bump 92e6052d3e05) is an ancestor of
+  # PolicyEngine/policyengine-us#9586 (merge d9e801df4173, first released in
+  # 2.11.4 by bump 60a4805573a6) and gives the state child support election
+  # the opposite sense. This job installs a policyengine-us with the fix and
+  # turns any skip into a failure.
   policyengine-live:
     runs-on: ubuntu-latest
     steps:
@@ -433,7 +469,65 @@ jobs:
         run: |
           bun scripts/test-case-agreement.mjs
           bun scripts/test-oracle-attribution.mjs
-          bun test ./scripts/test-comparison-counts.mjs ./scripts/test-disclosures.mjs
+          bun test ./scripts/test-comparison-counts.mjs ./scripts/test-disclosures.mjs ./scripts/test-uncompared-rollups.mjs
 
       - name: Build dashboard
         run: bun run build
+
+  # The TAXSIM pin tests skip in the dev-only `test` job: it installs neither
+  # policyengine-taxsim nor any pinned TAXSIM executable. This job syncs the
+  # locked taxsim extra, fetches every profile's pinned Linux binaries into the
+  # verified cache (sha256 + size checked before anything is written), and
+  # runs the pin/runtime/golden-probe tests with skips turned into failures,
+  # so a stale pin, a moved blob, or a changed binary cannot pass by skipping.
+  taxsim-pin:
+    runs-on: ubuntu-latest
+    env:
+      AXIOM_TAXSIM_CACHE_DIR: ${{ github.workspace }}/.ci/taxsim-binaries
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with the locked taxsim extra
+        run: uv sync --extra taxsim --extra dev
+
+      - name: Ensure policyengine-taxsim imports
+        run: uv run python -c "import importlib.metadata as m, policyengine_taxsim; print('policyengine-taxsim', m.version('policyengine-taxsim'))"
+
+      - name: Cache verified TAXSIM binaries
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.AXIOM_TAXSIM_CACHE_DIR }}
+          key: taxsim-binaries-${{ hashFiles('axiom_oracles/adapters/taxsim/taxsim_pins.json') }}
+
+      - name: Ensure the gfortran runtime the pinned Linux builds link against
+        # The August/September 2026 Linux builds are dynamically linked against
+        # libgfortran.so.5 and libquadmath.so.0 (the 2.30.0 build needs only libc).
+        run: |
+          ldconfig -p | grep -q 'libgfortran.so.5' && ldconfig -p | grep -q 'libquadmath.so.0' \
+            || (sudo apt-get update && sudo apt-get install -y libgfortran5)
+
+      - name: Fetch every profile's pinned Linux TAXSIM binaries
+        run: uv run axiom-oracles taxsim fetch-binaries --all-profiles --platform linux
+
+      - name: Show pin status
+        run: uv run axiom-oracles taxsim pin-status --all-profiles --platform linux
+
+      - name: Download the pinned policyengine-taxsim wheel
+        run: |
+          set -euo pipefail
+          url=$(uv run python -c "from axiom_oracles.adapters.taxsim import pins; print(pins.load_pins()['distribution']['wheel']['url'])")
+          curl -sSfL "$url" -o "$RUNNER_TEMP/policyengine_taxsim-pinned.whl"
+          echo "AXIOM_TAXSIM_WHEEL=$RUNNER_TEMP/policyengine_taxsim-pinned.whl" >> "$GITHUB_ENV"
+
+      - name: TAXSIM pin, runtime, and golden-probe tests (skips fail)
+        env:
+          AXIOM_TAXSIM_REQUIRE_BINARIES: "1"
+        run: uv run pytest -q -rs tests/test_taxsim_pin.py tests/test_taxsim_pin_runtime.py tests/test_taxsim_identity.py tests/test_taxsim_execution_identity.py

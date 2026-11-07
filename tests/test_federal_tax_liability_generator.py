@@ -15,6 +15,7 @@ import pytest
 import yaml
 from hypothesis import example, given, settings
 from hypothesis import strategies as st
+from axiom_oracles import pinned_artifacts
 
 
 REPO_ROOT = Path(__file__).parents[1]
@@ -31,6 +32,13 @@ def _load_generator():
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+_FAKE_RECEIPT = {
+    "commit": "c" * 40,
+    "binary_sha256": "d" * 64,
+    "binary_path": "/engine/axiom-rules-engine",
+}
 
 
 def _load_runner():
@@ -1906,20 +1914,27 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
         return subprocess.CompletedProcess(cmd, 0)
 
     monkeypatch.setattr(runner.subprocess, "run", fake_run)
-
-    runner._run_federal_tax_liability_grid(
-        {
-            "parameters": {
-                "policy": "net_investment_income_tax",
-                "python": "3.13",
-                "rulespec_roots": [str(rulespec)],
-                "policyengine_version": "4.18.9",
-                "policyengine_us_version": "1.767.3",
-                "policyengine_core_version": "3.30.3",
-            }
-        },
-        output,
+    receipts: list[Path] = []
+    monkeypatch.setattr(
+        runner,
+        "_fixture_engine_receipt",
+        lambda _runner, root: receipts.append(root) or _FAKE_RECEIPT,
     )
+    config = {
+        "parameters": {
+            "policy": "net_investment_income_tax",
+            "python": "3.13",
+            "rulespec_roots": [str(rulespec)],
+            "policyengine_version": "4.18.9",
+            "policyengine_us_version": "1.767.3",
+            "policyengine_core_version": "3.30.3",
+        }
+    }
+
+    runner._run_federal_tax_liability_grid(config, output)
+
+    assert config["_engine_receipt"] is _FAKE_RECEIPT
+    assert receipts == [rulespec.resolve()]
 
     assert runner.RUNNERS["federal-tax-liability-grid"] is (
         runner._run_federal_tax_liability_grid
@@ -1927,12 +1942,13 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     cmd = calls[0]
     assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "policyengine==4.18.9" in cmd
-    assert "policyengine-us==1.767.3" in cmd
+    assert pinned_artifacts.requirement("policyengine-us==1.767.3") in cmd
     assert "policyengine-core==3.30.3" in cmd
     # spm-calculator 1.0.0 removed spm_calculator.geoadj, which PE-US imports.
     assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
+    assert cmd[cmd.index("--axiom-engine") + 1] == _FAKE_RECEIPT["binary_path"]
     assert cmd[cmd.index("--output") + 1] == str(output)
 
 
@@ -2154,6 +2170,9 @@ def test_registry_runner_clones_declared_remote_when_dev_root_is_absent(
         "run",
         lambda cmd, *, check, cwd: calls.append(cmd),
     )
+    monkeypatch.setattr(
+        runner, "_fixture_engine_receipt", lambda _runner, _root: _FAKE_RECEIPT
+    )
 
     runner._run_federal_tax_liability_grid(
         {"parameters": params},
@@ -2182,3 +2201,122 @@ def test_registry_runner_rejects_missing_or_wrong_federal_oracle_pins(tmp_path):
             {"parameters": parameters},
             tmp_path / "report.json",
         )
+
+
+# ---------------------------------------------------------------------------
+# The Axiom leg runs the engine (#675).
+# ---------------------------------------------------------------------------
+
+
+def _engine_grid(generator, tmp_path, fake_rules_engine, *, shift=0):
+    """A one-module grid whose engine returns each case's income input."""
+    original = generator.POLICIES["net_investment_income_tax"]
+    output = "us:policies/test#net_investment_income_tax"
+    income = "us:policies/test#input.income"
+    config = replace(
+        original,
+        axiom_module_ref="us:policies/test",
+        fixture_path=Path("us/policies/test.test.yaml"),
+        axiom_output=output,
+        comparison_bindings=(),
+        axiom_bridge_outputs={},
+        axiom_diagnostic_outputs={},
+        fixture_input_validator=lambda _case, _actual: None,
+    )
+    root = tmp_path / "rulespec-us"
+    fixture = root / config.fixture_path
+    fixture.parent.mkdir(parents=True)
+    fixture.with_name("test.yaml").write_text("format: rulespec/v1\n")
+    fixture.write_text(
+        json.dumps(
+            [
+                {
+                    "name": case.case_id,
+                    "period": {
+                        "period_kind": "tax_year",
+                        "start": "2026-01-01",
+                        "end": "2026-12-31",
+                    },
+                    "input": {income: index * 100},
+                    # ``shift`` makes the first case's fixture disagree.
+                    "output": {output: index * 100 + (shift if index == 1 else 0)},
+                }
+                for index, case in enumerate(config.cases, start=1)
+            ]
+        )
+    )
+    binary = fake_rules_engine(
+        {
+            "relations": [],
+            "derived": [{"id": output, "entity": "TaxUnit", "expr": {}}],
+        },
+        {output: {"copy": income}},
+    )
+    return config, root, binary, output
+
+
+def test_federal_values_are_the_engines(tmp_path, fake_rules_engine, monkeypatch):
+    generator = _load_generator()
+    config, root, binary, output = _engine_grid(generator, tmp_path, fake_rules_engine)
+    monkeypatch.setattr(generator, "_validate_rulespec_input_contract", lambda *_a: None)
+
+    values, bridge, diagnostics = generator._engine_axiom_values(config, [root], binary)
+
+    assert values == {
+        case.case_id: float(index * 100)
+        for index, case in enumerate(config.cases, start=1)
+    }
+    assert bridge == {case.case_id: {} for case in config.cases}
+    assert diagnostics == {case.case_id: {} for case in config.cases}
+    requests = fake_rules_engine.requests()
+    assert len(requests) == len(config.cases)
+    assert {tuple(r["queries"][0]["outputs"]) for r in requests} == {(output,)}
+
+
+def test_federal_fixture_disagreement_fails_the_run(
+    tmp_path, fake_rules_engine, monkeypatch
+):
+    from axiom_oracles.rulespec_fixture_engine import FixtureDisagreement
+
+    generator = _load_generator()
+    config, root, binary, _output = _engine_grid(
+        generator, tmp_path, fake_rules_engine, shift=1
+    )
+    with pytest.raises(FixtureDisagreement, match=config.cases[0].case_id):
+        generator._engine_axiom_values(config, [root], binary)
+
+
+def test_generate_takes_axiom_values_from_the_engine_pass(monkeypatch):
+    """generate() publishes the engine pass's values, not the fixture's."""
+    generator = _load_generator()
+    config = generator.POLICIES["net_investment_income_tax"]
+    rows = generator._comparison_rows(config)
+    fixture_values = {row_id: 1.0 for row_id, _case, _binding in rows}
+    engine_values = {row_id: 2.0 for row_id, _case, _binding in rows}
+    monkeypatch.setattr(
+        generator,
+        "_axiom_values",
+        lambda *_a: (Path("f"), fixture_values, {}, {}, {}),
+    )
+    monkeypatch.setattr(
+        generator,
+        "_engine_axiom_values",
+        lambda *_a, **_k: (engine_values, {"b": {}}, {"d": {}}),
+    )
+    seen = {}
+    monkeypatch.setattr(
+        generator,
+        "_policyengine_values",
+        lambda _config, bridge: seen.setdefault("bridge", bridge) and ({}, {}, {}),
+    )
+    monkeypatch.setattr(generator, "_assert_non_vacuous", lambda *_a: None)
+    monkeypatch.setattr(
+        generator,
+        "_build_report",
+        lambda _config, **kwargs: seen.update(kwargs) or {},
+    )
+    generator.generate("net_investment_income_tax", [Path("root")], Path("engine"))
+    assert seen["axiom"] is engine_values
+    assert seen["axiom_bridge_values"] == {"b": {}}
+    assert seen["axiom_diagnostic_values"] == {"d": {}}
+

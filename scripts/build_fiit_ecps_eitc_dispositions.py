@@ -11,6 +11,12 @@ Build, from the outputs of the three attribution stages
         --raw-report reports/axiom-policyengine-fiit-ecps-0-2026-10-14.json
     uv run scripts/stamp_selector_bindings.py fiit-ecps
 
+Build mode re-derives every stage label from the stage's saved variant
+rows, so each stage payload must carry them. The historical stage-3 payload
+(2026-10-14) predates stage 3 saving ``variant_rows``, so rebuilding the
+committed evidence needs a stage-3 rerun. ``--check`` reads only the
+committed files and is unaffected.
+
 This writes the evidence report the dispositions cite
 (``reports/fiit-ecps-eitc-attribution-2026-10-14.json``) and
 ``dispositions/fiit-ecps.yaml``. The mismatch rows come from the FULL v2
@@ -143,6 +149,7 @@ def row_key(row: dict) -> str:
     return f"{row['case_id'].removeprefix('ecps-')}|{row['output']}"
 
 
+STAGE1_MECHANISMS = ("age", "partnership", "investment")
 STAGE2_MECHANISMS = ("se_loss", "seca")
 STAGE3_MECHANISMS = (
     "div_aggregate", "dependents", "cg_distributions", "farm_rent", "rental_unfloor"
@@ -170,6 +177,70 @@ def require_clearing_attribution(label: str | None, mechanisms: tuple[str, ...],
         if any(other <= selected or selected <= other for other in sets):
             raise invalid
         sets.append(selected)
+
+
+# Each stage payload names its empty (base) variant differently.
+STAGE_VARIANTS = {
+    "stage1": (STAGE1_MECHANISMS, "baseline", "variants"),
+    "stage2": (STAGE2_MECHANISMS, "base", "variants"),
+    "stage3": (STAGE3_MECHANISMS, "bridge_aggregate", "variant_rows"),
+}
+
+
+def _minimal_sets():
+    import importlib.util
+
+    path = ROOT / "scripts" / "fiit_ecps_eitc_attribution" / "minimal_sets.py"
+    spec = importlib.util.spec_from_file_location("fiit_ecps_minimal_sets", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def stage_variant_rows(stage: str, payload: dict) -> dict[frozenset[str], set[str]]:
+    """Every combination's still-mismatched rows, from a stage payload.
+
+    Stages 1 and 2 save ``variants[name]["rows"]``; stage 3 saves
+    ``variant_rows[name]``, a list of row keys. Raises ``ValueError`` unless
+    every combination of the stage's mechanisms is present exactly once.
+    """
+    mechanisms, empty, field = STAGE_VARIANTS[stage]
+    saved = payload.get(field)
+    if not isinstance(saved, dict):
+        raise ValueError(f"{stage}: payload has no {field} to re-derive its labels from")
+    variants: dict[frozenset[str], set[str]] = {}
+    for name, value in saved.items():
+        rows = value.get("rows") if isinstance(value, dict) else value
+        if not isinstance(rows, dict | list):
+            raise ValueError(f"{stage}: variant {name!r} carries no rows")
+        selected = frozenset() if name == empty else frozenset(name.split("+"))
+        if not selected <= set(mechanisms) or selected in variants:
+            raise ValueError(f"{stage}: unexpected or repeated variant {name!r}")
+        variants[selected] = set(rows)
+    if len(variants) != 2 ** len(mechanisms):
+        raise ValueError(
+            f"{stage}: {len(variants)} variants, not every combination of "
+            f"{len(mechanisms)} mechanisms"
+        )
+    return variants
+
+
+def rederived_label_problems(stage: str, payload: dict) -> list[str]:
+    """Labels a stage payload states that its own variant rows do not give."""
+    mechanisms = STAGE_VARIANTS[stage][0]
+    variants = stage_variant_rows(stage, payload)
+    stated = payload["attribution"]
+    derived = _minimal_sets().attribute(
+        stated,
+        variants,
+        lambda selected: "+".join(m for m in mechanisms if m in selected),
+    )
+    return [
+        f"{stage} {key}: label {stated[key].get('mechanism')!r}, its variant rows "
+        f"give {derived[key]['mechanism']!r}"
+        for key in sorted(stated)
+        if stated[key].get("mechanism") != derived[key]["mechanism"]
+    ]
 
 
 def check_failures(checks: dict) -> list[str]:
@@ -296,8 +367,18 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
     # its verdict must pass; do not replace it with equality to the target,
     # which would reject legitimate counterfactual-only base rows.
     base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
-    if base_check in stage3 and stage3[base_check] is not True:
-        problems.append(f"stage3 {base_check}: must be true")
+    if base_check in stage3:
+        # Save the verdict so the offline audit sees it for future runs.
+        checks[base_check] = stage3[base_check]
+        if stage3[base_check] is not True:
+            problems.append(f"stage3 {base_check}: must be true")
+    # Re-derive every stage's labels from its saved variant rows, so a
+    # well-formed but wrong label cannot reach the evidence.
+    for stage, payload in (("stage1", stage1), ("stage2", stage2), ("stage3", stage3)):
+        try:
+            problems.extend(rederived_label_problems(stage, payload))
+        except (KeyError, TypeError, ValueError) as error:
+            problems.append(str(error))
     if problems:
         raise ValueError("; ".join(problems))
     assignment: dict[str, str] = {}
