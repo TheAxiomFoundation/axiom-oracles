@@ -10,7 +10,8 @@ import {
   nearMetric,
   isAxiomPair,
   otherOracle,
-} from "./suites";
+} from "./suites.js";
+import { publishedUnexplained } from "./unexplained.js";
 
 export function buildProgramRows(reports) {
   const programs = new Map();
@@ -27,6 +28,7 @@ export function buildProgramRows(reports) {
         reports: [],
         total: 0,
         mismatches: 0,
+        uncompared: 0,
       });
     }
     const entry = programs.get(key);
@@ -37,6 +39,7 @@ export function buildProgramRows(reports) {
       entry.meta = meta;
     }
     const metric = reportMetric(report);
+    entry.uncompared += metric.uncompared;
     entry.runs.push({
       oracle: otherOracle(report),
       metric,
@@ -67,6 +70,7 @@ export function rowVerdict(row) {
     return {
       rate: ((row.total - row.mismatches) / row.total) * 100,
       mismatches: row.mismatches,
+      uncompared: row.uncompared || 0,
     };
   }
   if ((row.paramTotal || 0) > 0) {
@@ -76,9 +80,10 @@ export function rowVerdict(row) {
           row.paramTotal) *
         100,
       mismatches: row.paramMismatches || 0,
+      uncompared: row.uncompared || 0,
     };
   }
-  return { rate: null, mismatches: 0 };
+  return { rate: null, mismatches: 0, uncompared: row.uncompared || 0 };
 }
 
 /** Match a (suite, concept, kind) mismatch bucket to its known-cause entry. */
@@ -110,23 +115,7 @@ export function countUnexplained(reports, knownCauses) {
   for (const report of reports || []) {
     if (!isAxiomPair(report)) continue;
     if (suiteMeta(report.suite).kind === "diagnostic") continue;
-    const dispositioned = report.summary?.dispositioned;
-    if (
-      dispositioned?.dispositions_file &&
-      dispositioned.unexplained_count != null
-    ) {
-      total += dispositioned.unexplained_count;
-      continue;
-    }
-    const buckets = new Map();
-    for (const m of report.mismatches || []) {
-      const key = `${m.concept}::${m.kind}`;
-      buckets.set(key, (buckets.get(key) || 0) + 1);
-    }
-    for (const [key, count] of buckets) {
-      const [concept, kind] = key.split("::");
-      if (!causeFor(knownCauses, report, concept, kind)) total += count;
-    }
+    total += publishedUnexplained(report, { known_causes: knownCauses || [] });
   }
   return total;
 }

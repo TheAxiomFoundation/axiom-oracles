@@ -13,8 +13,11 @@ Copied verbatim from `TheAxiomFoundation/axiom-encode` @
 `a314fc624967b4e990beb7d9ffc429dae6e26642` (2026-07-05). The only edits are
 mechanical import rewrites (absolute `axiom_encode.*` imports became relative
 imports inside this package). `rulespec_paths.py` collects the
-`validator_pipeline` helpers `ecps_tax` needs, verbatim, so the bridge does
-not depend on the encoder harness. The ported test files under
+`validator_pipeline` helpers `ecps_tax` needs, so the bridge does not depend
+on the encoder harness. Since the canonical RuleSpec hard cut its compile-path
+helpers keep their names but refuse a renamed checkout instead of exposing it
+through a temporary symlink, and `repo_routing.py` no longer carries the
+legacy-layout discovery helpers. The ported test files under
 `tests/bridges/` are the same focused suites the encoder runs against these
 modules — passing them is the copy-fidelity contract.
 
@@ -33,8 +36,8 @@ modules — passing them is the copy-fidelity contract.
 | `coverage.py` | `oracles/policyengine/coverage.py` | Per-rule oracle coverage reports for rulespec repos, backed by `program_surfaces/*.yaml` |
 | `snapscreener.py` | `oracles/snapscreener.py` | SnapScreener diagnostic cross-check |
 | `jurisdiction.py` | `concepts/jurisdiction.py` | Jurisdiction prefix resolution for rulespec checkouts |
-| `repo_routing.py` | `repo_routing.py` | Rulespec monorepo/legacy checkout routing |
-| `rulespec_paths.py` | `harness/validator_pipeline.py` (extracted subset) | Canonical rulespec compile paths and public item-id aliases |
+| `repo_routing.py` | `repo_routing.py` | RuleSpec country-checkout and jurisdiction naming |
+| `rulespec_paths.py` | `harness/validator_pipeline.py` (extracted subset) | Canonical rulespec compile paths (refusing renamed checkouts) and public item-id aliases |
 | `mappings/*.yaml`, `program_surfaces/*.yaml` | same paths | Registry and coverage data files (packaged) |
 
 ## Public API

@@ -331,7 +331,10 @@ def test_provenance_repository_identity_survives_inherited_env(
             assert entry["dirty"] is dirty
             if dirty:
                 assert entry["diff_sha256"] == expected["diff_sha256"]
-        assert engine["axiom_rules_engine_sha"] == actual_sha
+        # A checkout alone proves no build identity; only an executable
+        # receipt can (engine_identity.engine_receipt).
+        assert engine["commit"] is None
+        assert engine["axiom_rules_engine_sha"] is None
         assert exact_head == de_head == actual_sha
         assert observed
         for cmd, env in observed:
@@ -530,6 +533,11 @@ def test_runner_binds_clean_state_to_pre_run_content(
                 "policyengine_core_version": "3.30.3",
             },
         }
+        monkeypatch.setattr(
+            run_comparison,
+            "_fixture_engine_receipt",
+            lambda _runner, _root: {"binary_path": "/engine/axiom-rules-engine"},
+        )
         execute = run_comparison._run_federal_tax_liability_grid
     real_run = subprocess.run
 

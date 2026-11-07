@@ -319,7 +319,7 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         ),
         "explicit_input_count": EXPECTED_EXPLICIT_INPUT_COUNT,
             "explicit_relation_count": EXPECTED_EXPLICIT_RELATION_COUNT,
-            "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 67,
+            "blocked_input_count": EXPECTED_EXPLICIT_INPUT_COUNT - 109,
         "blocked_relation_count": 0,
     }
     assert "NH" not in contract.by_state()
@@ -346,7 +346,13 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
         "MI": ["mi_taxable_income"],
         "MN": ["mn_taxable_income"],
         "MS": ["ms_taxable_income_joint"],
-        "NC": ["nc_taxable_income"],
+        "NC": [
+            "adjusted_gross_income",
+            "charitable_deduction",
+            "medical_expense_deduction",
+            "ctc_qualifying_children",
+            "us_govt_interest",
+        ],
         "NM": ["nm_taxable_income"],
         "OH": ["oh_taxable_income"],
         "OK": ["ok_taxable_income"],

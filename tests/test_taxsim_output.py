@@ -257,7 +257,7 @@ def test_verbose_results_follow_basic_output_ids_in_submitted_order(
         Case(
             case_id=f"case-{key}",
             period="2026",
-            metadata={"taxsim_input": {"taxsimid": key, "year": 2026, "idtl": 5}},
+            metadata={"taxsim_input": {"taxsimid": key, "year": 2026, "mstat": 1, "idtl": 5}},
         )
         for key in reversed(submitted_ids)
     ]
@@ -403,7 +403,7 @@ def test_runner_rejects_duplicate_submitted_ids_before_execution(
         Case(
             case_id=case_id,
             period="2024",
-            metadata={"taxsim_input": {"taxsimid": submitted_id, "year": 2024}},
+            metadata={"taxsim_input": {"taxsimid": submitted_id, "year": 2024, "mstat": 1}},
         )
         for case_id, submitted_id in zip(
             ("first", "second"), submitted_ids, strict=True
@@ -480,7 +480,7 @@ def test_legacy_runner_without_output_ids_preserves_case_identity(projected) -> 
         metadata=(
             {"state": "CA"}
             if projected
-            else {"taxsim_input": {"taxsimid": 1, "year": 2024}}
+            else {"taxsim_input": {"taxsimid": 1, "year": 2024, "mstat": 1}}
         ),
         entities=(Entity("head", "person", facts={Concepts.PERSON_AGE: 40}),),
     )
@@ -522,6 +522,7 @@ def test_legacy_runner_missing_ids_map_positionally_to_submitted_cases(
                 "taxsim_input": {
                     id_column: f"input-{submitted_id}" if text_input_ids else submitted_id,
                     "year": 2024,
+                    "mstat": 1,
                 }
             },
         )
@@ -649,14 +650,27 @@ def test_adapter_runs_the_pinned_binary_without_phantom_rows() -> None:
     assert results[1].values == {"fiitax": 585.0, "siitax": 49.88}
     assert results[1].raw[DIAGNOSTICS_KEY] == [D2_SINGLE_30K] * 6
     assert DIAGNOSTICS_KEY not in results[2].raw
+    # The report records the binary that produced these rows.
+    [binary] = runner.taxsim_identity()["binaries"]
+    assert binary["pinned_key"] == "taxsimtest/taxsimtest-osx.exe"
+    assert binary["sha256"] == pins.bundled_binaries()[binary["pinned_key"]]["sha256"]
+    assert binary["build"] == binary["build_observed"] == "cdate-20260521"
+    assert binary["platform"] == "darwin"
+    assert binary["law_years"] == {"first": 1960, "last": 2026}
+    assert binary["rows"] == 5
 
 
 def test_adapter_runs_verbose_idtl5_with_the_pinned_formatter_and_binary() -> None:
     _pinned_binary()
 
-    [result] = TaxsimPackageRunner().run_cases(
+    runner = TaxsimPackageRunner()
+    [result] = runner.run_cases(
         _cases("california_idtl5_input.csv"), variables=["fiitax", "siitax"]
     )
+    # idtl=5 prints the build in its banner, without the "cdate-" prefix.
+    [binary] = runner.taxsim_identity()["binaries"]
+    assert binary["build"] == "cdate-20260521"
+    assert binary["build_observed"] == "20260521"
 
     assert result.household_id == "case-1"
     assert result.values == {"fiitax": 3820.0, "siitax": 980.7}

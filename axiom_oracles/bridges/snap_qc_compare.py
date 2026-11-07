@@ -40,10 +40,16 @@ The FY 2024 evaluation runs through a compile-time overlay
 wires each state composition to the FY 2026 COLA parameter set. The overlay
 rewrites the cola module ids to ``fy-2024-cola`` and patches the state's
 standard-utility-allowance amounts, then the engine runs at the nominal period
-``2026-01``: the chain module versions are snapshot-dated to their 2025-10-01
-effective dates, so a true-FY-2024 period cannot select them today. Once
-TheAxiomFoundation/rulespec-us#759 inverts parameter selection to be
-period-driven, the overlay and the nominal period both retire.
+``2026-01`` (:data:`NOMINAL_PERIOD`): the chain module versions start on their
+2025-10-01 effective dates, so a true-FY-2024 period cannot select them today.
+The ``fy-2024-cola`` modules carry the FNS FY 2024 window instead
+(2023-10-01 to 2024-09-30), which no FY 2026 month selects, so the overlay also
+maps every version in those modules onto the fiscal year that contains the
+nominal month (2025-10-01 to 2026-09-30, or an open end where the encoding
+has one), keeping each formula and value: the engine reads FY 2024's numbers
+at 2026-01. Once TheAxiomFoundation/rulespec-us#759 inverts parameter
+selection to be period-driven, the overlay, its window mapping, and the
+nominal period all retire.
 
 Jurisdictions
 -------------
@@ -90,13 +96,17 @@ import os
 import shutil
 import tempfile
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
+
+from axiom_oracles.engine_identity import engine_receipt
 
 import yaml
 
 from ..comparison.report import COMPARISON_REPORT_SCHEMA_VERSION, MismatchKind
 from . import snap_populace
+from ..rulespec_roots import engine_env
 from .rulespec_overlay import build_overlay, load_overlay_spec, rewrite_output_ids
 from .snap_populace import (
     JURISDICTION_CONFIGS,
@@ -121,8 +131,16 @@ def suite_name(jurisdiction: str) -> str:
 
 #: Everything is evaluated at this nominal month; see the module docstring and
 #: TheAxiomFoundation/rulespec-us#759 for why true-period evaluation is not yet
-#: possible.
+#: possible. The overlay maps the FY 2024 COLA windows onto the fiscal year
+#: that contains it (:func:`nominal_month`).
 NOMINAL_PERIOD = (2026, 1)
+
+
+def nominal_month() -> date:
+    """The first day of :data:`NOMINAL_PERIOD`, the date the overlay maps the
+    FY 2024 COLA version windows onto."""
+    year, month = NOMINAL_PERIOD
+    return date(year, month, 1)
 
 #: Bound the per-request payload size when running the engine over many cases.
 CHUNK_SIZE = 500
@@ -1111,13 +1129,16 @@ def run_snap_qc_comparison(
 
     overlay_dir = Path(tempfile.mkdtemp(prefix="snap-qc-overlay-"))
     try:
-        build = build_overlay(spec, rulespec_root, overlay_dir)
+        build = build_overlay(
+            spec, rulespec_root, overlay_dir, nominal_month=nominal_month()
+        )
         # Single self-contained root. The engine unions module ids across roots
         # rather than shadowing, so fronting the monorepo with the overlay would
         # compile both the fy-2024 and fy-2026 cola imports and abort with a
         # duplicate-rule error. The materialized overlay is complete on its own.
-        env = axiom_rules_env(build.program_path, workspace_root)
-        env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
+        env = engine_env(
+            axiom_rules_env(build.program_path, workspace_root), [build.overlay_root]
+        )
         sua_amount_by_tier = sua_amounts_from_overlay(spec, config)
         cases = [
             map_qc_unit(
@@ -1129,7 +1150,9 @@ def run_snap_qc_comparison(
             )
             for unit in units
         ]
+        engine = engine_receipt(axiom_binary)
         results = _run_cases(
+            expected_engine_receipt=engine,
             binary=axiom_binary,
             program_path=build.program_path,
             cases=cases,
@@ -1138,6 +1161,8 @@ def run_snap_qc_comparison(
             config=config,
             env=env,
         )
+        if engine_receipt(axiom_binary)["binary_sha256"] != engine["binary_sha256"]:
+            raise RuntimeError("Axiom engine binary changed during SNAP QC execution")
         report = _build_report(
             units=units,
             results=results,
@@ -1152,6 +1177,7 @@ def run_snap_qc_comparison(
             rulespec_root=rulespec_root,
             axiom_binary=axiom_binary,
             pins=_pins_for(snap_qc_population, fiscal_year),
+            engine=engine,
             child_support_convention=config.child_support_convention,
         )
     finally:
@@ -1171,28 +1197,42 @@ def _run_cases(
     output_ids: list[str],
     config: QcJurisdiction,
     env: dict[str, str],
+    expected_engine_receipt: Mapping[str, Any] | None = None,
 ) -> list[dict[str, Any]]:
+    receipt = dict(expected_engine_receipt or engine_receipt(binary))
+
+    def verify_engine() -> None:
+        current = engine_receipt(binary)
+        if any(
+            current.get(field) != receipt.get(field)
+            for field in ("binary_sha256", "commit")
+        ):
+            raise RuntimeError("Axiom engine identity changed during SNAP QC execution")
+
     with tempfile.TemporaryDirectory(prefix="snap-qc-artifact-") as artifact_dir:
         artifact = Path(artifact_dir) / "program.compiled.json"
+        verify_engine()
         compile_program(binary, program_path, artifact, env=env)
+        verify_engine()
         results: list[dict[str, Any]] = []
         for start in range(0, len(cases), CHUNK_SIZE):
             chunk = cases[start : start + CHUNK_SIZE]
             if not chunk:
                 continue
-            results.extend(
-                run_axiom_cases(
-                    binary=binary,
-                    artifact=artifact,
-                    cases=chunk,
-                    period=period,
-                    output_ids=output_ids,
-                    relation_id=config.base.relation_id,
-                    additional_relation_ids=config.base.additional_relation_ids,
-                    member_entity_type=config.base.member_entity_type,
-                    env=env,
-                )
+            verify_engine()
+            chunk_results = run_axiom_cases(
+                binary=binary,
+                artifact=artifact,
+                cases=chunk,
+                period=period,
+                output_ids=output_ids,
+                relation_id=config.base.relation_id,
+                additional_relation_ids=config.base.additional_relation_ids,
+                member_entity_type=config.base.member_entity_type,
+                env=env,
             )
+            verify_engine()
+            results.extend(chunk_results)
     return results
 
 
@@ -1243,6 +1283,7 @@ def _build_report(
     rulespec_root: Path,
     axiom_binary: Path,
     pins: Any,
+    engine: dict[str, Any] | None = None,
     child_support_convention: str = "deduction",
 ) -> dict:
     suite = suite_name(jurisdiction)
@@ -1400,6 +1441,7 @@ def _build_report(
         "provenance": {
             "schema": "axiom_oracles.provenance.v1",
             "generated_by": f"axiom_oracles.bridges.snap_qc_compare::{suite}",
+            "engine": engine or {},
             "oracle": {
                 "name": "snap-qc",
                 "fiscal_year": fiscal_year,

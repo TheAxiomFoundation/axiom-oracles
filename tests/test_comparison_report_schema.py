@@ -104,9 +104,18 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
         comparisons=comparisons,
     )
 
+    # An errored engine run classifies its rows engine_error (the value is
+    # missing BECAUSE the engine failed), with the failure on the row.
     assert report["summary"]["mismatches_by_kind"] == [
-        {"value": MismatchKind.MISSING_LEFT, "count": 1}
+        {"value": MismatchKind.ENGINE_ERROR, "count": 1}
     ]
+    assert report["summary"]["engine_error_count"] == 1
+    assert report["mismatches"][0]["error"] == {
+        "engine": "policyengine",
+        "side": "left",
+        "signature": "unclassified",
+        "messages": ["income_tax: invalid state"],
+    }
     assert report["summary"]["error_count"] == 1
     assert report["summary"]["errors_by_engine"] == {"policyengine": 1}
     assert report["mismatches"][0]["difference"] is None
@@ -207,3 +216,22 @@ def test_strip_heavy_case_metadata_keeps_counts() -> None:
     assert md["household_summary"] == {"ages": [40]}
     # original untouched
     assert "axiom_input_records" in report["cases"][0]["metadata"]
+
+
+def test_executed_axiom_receipt_survives_comparison_and_report():
+    receipt = {"repository": "TheAxiomFoundation/axiom-rules-engine",
+               "commit": "b" * 40, "binary_sha256": "e" * 64, "version": "0.2.2"}
+    mapping = ProgramMapping(
+        standard="us:test#amount", targets={"axiom": "amount", "oracle": "amount"},
+        description="Receipt propagation", category="fixture",
+    )
+    comparisons = Comparator([mapping]).compare(
+        [EngineResult("axiom", 1, {"amount": 10}, raw={"engine_receipt": receipt})],
+        [EngineResult("oracle", 1, {"amount": 10})],
+    )
+    report = build_comparison_report(
+        suite_name="receipt", population="fixture", locales=set(), scope=None,
+        cases=[Case(case_id=1, period="2026")], mappings=[mapping],
+        comparisons=comparisons,
+    )
+    assert report["provenance"]["engine"] == receipt

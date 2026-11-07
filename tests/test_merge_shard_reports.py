@@ -1,5 +1,20 @@
+import copy
 import importlib.util
+from copy import deepcopy
 from pathlib import Path
+
+import pytest
+
+from axiom_oracles.comparison.dispositions import (
+    DISPOSITIONS_SCHEMA_VERSION,
+    apply_dispositions,
+    selection_binding,
+    validate_dispositions,
+)
+from hypothesis import given, settings
+from hypothesis import strategies as st
+
+from axiom_oracles.adapters.taxsim.pins import same_build
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -48,3 +63,486 @@ def test_merge_errors_by_engine_preserves_object_contract() -> None:
         "reference": 1,
     }
     assert isinstance(with_errors["summary"]["errors_by_engine"], dict)
+
+
+def _binary(sha: str, *, rows: int = 1, **overrides) -> dict:
+    return {
+        "sha256": sha * 64,
+        "build": "2025-01-01",
+        "build_observed": "2025-01-01",
+        "platform": "linux-x86_64",
+        "bytes": 123,
+        "rows": rows,
+        "scope": "default",
+        **overrides,
+    }
+
+
+def _lane_shard(case_id: str, binaries: list[dict], location: str) -> dict:
+    shard = _shard({})
+    shard["engines"] = {"left": "axiom", "right": "taxsim"}
+    shard["case_count"] = 1
+    shard["summary"].update(comparison_count=1, mismatch_count=1)
+    shard["mismatches"] = [{
+        "case_id": case_id,
+        "concept": "us:test#income_tax",
+        "kind": "amount_difference",
+        "left": 10,
+        "right": 0,
+        "difference": 10,
+    }]
+    if location in ("engine_identity", "both"):
+        shard["engine_identity"] = {
+            "taxsim": {"pin_profile": "test-profile", "binaries": copy.deepcopy(binaries)},
+        }
+    if location in ("provenance", "both"):
+        shard["provenance"] = {"oracle": {
+            "taxsim_pin_profile": "test-profile",
+            "taxsim_binaries": copy.deepcopy(binaries),
+            "policyengine_taxsim": "2.30.0",
+        }}
+    return shard
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance", "both"])
+def test_merge_mixed_taxsim_binaries_expires_a_only_disposition(location: str) -> None:
+    shards = [
+        _lane_shard("case-a", [_binary("a")], location),
+        _lane_shard("case-b", [_binary("b", scope="state:6/year:2024")], location),
+    ]
+    merged = _load_merge_shard_reports().merge(shards)
+    dispositions = {
+        "schema": DISPOSITIONS_SCHEMA_VERSION,
+        "suite": "sharded-suite",
+        "entries": [{
+            "id": "binary-a-gap",
+            "concept": "us:test#income_tax",
+            "case_selector": {"case_id_prefix": "case-"},
+            "disposition": "upstream_engine_gap",
+            "attribution": "taxsim",
+            "evidence": {
+                "mechanism": "This TAXSIM binary returns zero.",
+                "row_arithmetic": [{"expression": "right", "equals": 0}],
+            },
+            "expires_on_source_change": True,
+            "oracle_binding": {"taxsim_binary_sha256": ["a" * 64]},
+            "selector_binding": selection_binding(merged["mismatches"]),
+        }],
+    }
+    assert validate_dispositions(dispositions, suite_engines=("axiom", "taxsim")) == []
+
+    dispositioned = apply_dispositions(merged, dispositions)
+    block = dispositioned["summary"]["dispositioned"]
+    assert block["counts"]["upstream_engine_gap"] == 0
+    assert block["expired_reasons"] == {"binary-a-gap": "oracle_identity_changed"}
+    assert all("disposition" not in row for row in dispositioned["mismatches"])
+    for binaries in (
+        (merged.get("engine_identity") or {}).get("taxsim", {}).get("binaries"),
+        (merged.get("provenance") or {}).get("oracle", {}).get("taxsim_binaries"),
+    ):
+        if binaries is not None:
+            assert {binary["sha256"] for binary in binaries} == {"a" * 64, "b" * 64}
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance", "both"])
+def test_merge_taxsim_binary_rows_by_sha_scope_and_platform(location: str) -> None:
+    first = _lane_shard("case-a", [_binary("a", rows=2)], location)
+    second = _lane_shard("case-b", [
+        _binary("a", rows=3),
+        _binary("a", scope="state:6/year:2024"),
+        _binary("a", platform="darwin-arm64"),
+    ], location)
+    original = copy.deepcopy([first, second])
+    merged = _load_merge_shard_reports().merge([first, second])
+    binaries = (
+        merged["engine_identity"]["taxsim"]["binaries"]
+        if location != "provenance"
+        else merged["provenance"]["oracle"]["taxsim_binaries"]
+    )
+    assert len(binaries) == 3
+    assert sorted(binary["rows"] for binary in binaries) == [1, 1, 5]
+    assert [first, second] == original
+    if location == "both":
+        assert binaries == merged["provenance"]["oracle"]["taxsim_binaries"]
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance"])
+def test_merge_rejects_different_taxsim_pin_profiles(location: str) -> None:
+    first = _lane_shard("case-a", [_binary("a")], location)
+    second = _lane_shard("case-b", [_binary("b")], location)
+    if location == "engine_identity":
+        second[location]["taxsim"]["pin_profile"] = "other-profile"
+    else:
+        second[location]["oracle"]["taxsim_pin_profile"] = "other-profile"
+    with pytest.raises(SystemExit, match="pin_profile"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance"])
+@pytest.mark.parametrize("missing_first", [False, True])
+def test_merge_rejects_incomplete_taxsim_identity(location: str, missing_first: bool) -> None:
+    first = _lane_shard("case-a", [_binary("a")], location)
+    second = _lane_shard("case-b", [_binary("b")], location)
+    del (first if missing_first else second)[location]
+    with pytest.raises(SystemExit, match="identity"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+@pytest.mark.parametrize("other_version", ["2.31.0", None])
+def test_merge_rejects_inconsistent_taxsim_wrapper_version(other_version: str | None) -> None:
+    first = _lane_shard("case-a", [_binary("a")], "provenance")
+    second = _lane_shard("case-b", [_binary("b")], "provenance")
+    if other_version is None:
+        del second["provenance"]["oracle"]["policyengine_taxsim"]
+    else:
+        second["provenance"]["oracle"]["policyengine_taxsim"] = other_version
+    with pytest.raises(SystemExit, match="policyengine_taxsim"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_rejects_disagreement_between_taxsim_identity_locations() -> None:
+    first = _lane_shard("case-a", [_binary("a")], "both")
+    second = _lane_shard("case-b", [_binary("b")], "both")
+    second["provenance"]["oracle"]["taxsim_binaries"] = [_binary("a")]
+    with pytest.raises(SystemExit, match="identity disagrees"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_preserves_non_taxsim_identity_metadata() -> None:
+    shards = [_shard({}), _shard({})]
+    for shard in shards:
+        shard["engine_identity"] = {"reference": {"release": "1"}}
+        shard["provenance"] = {"oracle": {"name": "reference", "version": "1"}}
+    merged = _load_merge_shard_reports().merge(shards)
+    assert merged["engine_identity"] == shards[0]["engine_identity"]
+    assert merged["provenance"] == shards[0]["provenance"]
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance", "both"])
+def test_merge_rejects_empty_binary_identity_for_nonempty_shard(location: str) -> None:
+    first = _lane_shard("case-a", [_binary("a")], location)
+    second = _lane_shard("case-b", [], location)
+    with pytest.raises(SystemExit, match="incomplete TAXSIM identity"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+@pytest.mark.parametrize("location", ["engine_identity", "provenance", "both"])
+def test_merge_accepts_empty_binary_identity_for_empty_shard(location: str) -> None:
+    first = _lane_shard("case-a", [_binary("a")], location)
+    second = _lane_shard("case-b", [], location)
+    second.update(case_count=0, mismatches=[], summary={})
+    merged = _load_merge_shard_reports().merge([first, second])
+    assert merged["case_count"] == 1
+    assert merged["mismatches"] == first["mismatches"]
+
+
+@pytest.mark.parametrize("other_version", ["2.31.0", None])
+def test_merge_rejects_inconsistent_legacy_taxsim_identity(other_version: str | None) -> None:
+    first = _shard({})
+    second = _shard({})
+    first["provenance"] = {"oracle": {"policyengine_taxsim": "2.30.0"}}
+    if other_version is not None:
+        second["provenance"] = {"oracle": {"policyengine_taxsim": other_version}}
+    with pytest.raises(SystemExit, match="policyengine_taxsim"):
+        _load_merge_shard_reports().merge([first, second])
+def _taxsim_shard(binaries: list[dict]) -> dict:
+    shard = _shard({})
+    shard["case_count"] = sum(binary["rows"] for binary in binaries)
+    shard["engine_identity"] = {
+        "taxsim": {
+            "pinned_policyengine_taxsim": "2.30.0",
+            "binaries": binaries,
+        },
+    }
+    shard["provenance"] = {
+        "schema": "axiom_oracles.provenance.v1",
+        "generated_by": "shard-runner",
+        "dataset": {"sha256": "dataset-sha"},
+        "oracle": {
+            "name": "taxsim",
+            "policyengine_taxsim": "2.30.0",
+            "taxsim_binaries": deepcopy(binaries),
+        },
+    }
+    return shard
+
+
+@pytest.mark.parametrize("second_sha", ["a" * 64, "b" * 64])
+def test_merge_updates_existing_taxsim_provenance(second_sha: str) -> None:
+    """Both identity locations describe every executed binary and its rows."""
+    shards = [
+        _taxsim_shard([{"path": "/binary", "sha256": "a" * 64, "rows": 3}]),
+        _taxsim_shard([{"path": "/binary", "sha256": second_sha, "rows": 4}]),
+    ]
+    original = deepcopy(shards)
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    assert merged["provenance"]["oracle"]["taxsim_binaries"] == binaries
+    assert sum(binary["rows"] for binary in binaries) == 7
+    assert len(binaries) == (1 if second_sha == "a" * 64 else 2)
+    assert merged["provenance"] == {
+        **original[0]["provenance"],
+        "oracle": {
+            **original[0]["provenance"]["oracle"],
+            "taxsim_binaries": binaries,
+        },
+    }
+    assert shards == original
+
+
+def test_merge_equivalent_observed_taxsim_stamps() -> None:
+    """CSV and verbose observations of one build share the first stamp."""
+    binary = {
+        "path": "/one-binary",
+        "sha256": "a" * 64,
+        "build": "cdate-20260521",
+    }
+    shards = [
+        _taxsim_shard(
+            [{**binary, "build_observed": "cdate-20260521", "rows": 3}]
+        ),
+        _taxsim_shard([{**binary, "build_observed": "20260521", "rows": 4}]),
+    ]
+    original = deepcopy(shards)
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    assert binaries == [
+        {**binary, "build_observed": "cdate-20260521", "rows": 7}
+    ]
+    assert merged["provenance"]["oracle"]["taxsim_binaries"] == binaries
+    assert merged["case_count"] == 7
+    assert shards == original
+
+
+@settings(max_examples=100, deadline=None)
+@given(
+    partition=st.lists(
+        st.lists(
+            st.tuples(st.sampled_from(["a", "b", "c"]), st.integers(1, 10_000)),
+            min_size=1,
+            max_size=3,
+        ),
+        min_size=2,
+        max_size=6,
+    )
+)
+def test_merge_taxsim_provenance_conserves_rows_per_binary(partition) -> None:
+    """Both identity locations sum rows for each binary across all shards."""
+    shards = [
+        _taxsim_shard(
+            [
+                {"path": "/binary", "sha256": sha * 64, "rows": rows}
+                for sha, rows in part
+            ]
+        )
+        for part in partition
+    ]
+    expected: dict[str, int] = {}
+    for part in partition:
+        for sha, rows in part:
+            expected[sha * 64] = expected.get(sha * 64, 0) + rows
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    identity_binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    provenance_binaries = merged["provenance"]["oracle"]["taxsim_binaries"]
+    assert provenance_binaries == identity_binaries
+    assert {
+        binary["sha256"]: binary["rows"] for binary in provenance_binaries
+    } == expected
+
+
+@settings(max_examples=100, deadline=None)
+@given(
+    partition=st.lists(
+        st.lists(
+            st.tuples(
+                st.sampled_from(["a", "b", "c"]),
+                st.sampled_from(["/binary-1", "/binary-2"]),
+                st.sampled_from(
+                    [
+                        "cdate-20260521",
+                        "20260521",
+                        "cd2026081819",
+                        "2026081819",
+                        "cdate-compdate",
+                        "compdate",
+                    ]
+                ),
+                st.integers(1, 10_000),
+            ),
+            max_size=6,
+        ),
+        min_size=1,
+        max_size=6,
+    )
+)
+def test_merge_taxsim_stamp_partitions_conserve_rows(partition) -> None:
+    """Every shard split preserves rows and one entry per equivalent stamp."""
+    shards = [
+        _taxsim_shard(
+            [
+                {
+                    "path": path,
+                    "sha256": sha * 64,
+                    "build_observed": stamp,
+                    "rows": rows,
+                }
+                for sha, path, stamp, rows in part
+            ]
+        )
+        for part in partition
+    ]
+    expected_rows: dict[tuple[str, str], int] = {}
+    expected_groups: list[dict] = []
+    for shard in shards:
+        for binary in shard["engine_identity"]["taxsim"]["binaries"]:
+            key = (binary["sha256"], binary["path"])
+            expected_rows[key] = expected_rows.get(key, 0) + binary["rows"]
+            group = next(
+                (
+                    item
+                    for item in expected_groups
+                    if (item["sha256"], item["path"]) == key
+                    and same_build(item["build_observed"], binary["build_observed"])
+                ),
+                None,
+            )
+            if group is None:
+                expected_groups.append(dict(binary))
+            else:
+                group["rows"] += binary["rows"]
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    assert merged["provenance"]["oracle"]["taxsim_binaries"] == binaries
+    assert len(binaries) == len(expected_groups)
+    actual_rows: dict[tuple[str, str], int] = {}
+    for binary in binaries:
+        key = (binary["sha256"], binary["path"])
+        actual_rows[key] = actual_rows.get(key, 0) + binary["rows"]
+    assert actual_rows == expected_rows
+    assert merged["case_count"] == sum(expected_rows.values())
+    for expected in expected_groups:
+        matches = [
+            binary
+            for binary in binaries
+            if (binary["sha256"], binary["path"])
+            == (expected["sha256"], expected["path"])
+            and same_build(binary["build_observed"], expected["build_observed"])
+        ]
+        assert matches == [expected]
+
+
+@pytest.mark.parametrize("missing_first", [False, True])
+def test_merge_requires_every_shard_or_none_to_record_provenance_binaries(
+    missing_first: bool,
+) -> None:
+    """Same version and profile, but one shard's oracle lacks the binary list."""
+    first = _lane_shard("case-a", [_binary("a")], "provenance")
+    second = _lane_shard("case-b", [_binary("b")], "provenance")
+    del (first if missing_first else second)["provenance"]["oracle"]["taxsim_binaries"]
+    with pytest.raises(SystemExit, match="incomplete TAXSIM identity coverage"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_checks_each_shards_copies_not_only_the_merged_ones() -> None:
+    """Two shards' opposite disagreements must not cancel in the merge."""
+    first = _lane_shard("case-a", [_binary("a", rows=2)], "both")
+    second = _lane_shard("case-b", [_binary("a", rows=1)], "both")
+    first["provenance"]["oracle"]["taxsim_binaries"] = [_binary("a", rows=1)]
+    second["provenance"]["oracle"]["taxsim_binaries"] = [_binary("a", rows=2)]
+    with pytest.raises(SystemExit, match="in shard 0"):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def test_merge_accepts_one_shards_copies_listed_in_different_orders() -> None:
+    binaries = [_binary("a"), _binary("b")]
+    first = _lane_shard("case-a", binaries, "both")
+    first["provenance"]["oracle"]["taxsim_binaries"] = list(reversed(binaries))
+    second = _lane_shard("case-b", [_binary("a")], "both")
+    merged = _load_merge_shard_reports().merge([first, second])
+    rows = {b["sha256"]: b["rows"] for b in merged["engine_identity"]["taxsim"]["binaries"]}
+    assert rows == {"a" * 64: 2, "b" * 64: 1}
+
+
+def test_merged_copies_check_catches_a_shard_without_an_identity_list() -> None:
+    """A shard whose engine_identity omits `binaries` skips the per-shard
+    check; the merged comparison still refuses the mismatch."""
+    first = _lane_shard("case-a", [_binary("a")], "both")
+    second = _lane_shard("case-b", [_binary("b")], "both")
+    del second["engine_identity"]["taxsim"]["binaries"]
+    with pytest.raises(
+        SystemExit, match="TAXSIM identity disagrees between engine_identity and provenance$"
+    ):
+        _load_merge_shard_reports().merge([first, second])
+
+
+def _profiled_shard(binaries: list[dict], profile: str) -> dict:
+    shard = _taxsim_shard(binaries)
+    shard["engine_identity"]["taxsim"]["pin_profile"] = profile
+    return shard
+
+
+@settings(max_examples=100, deadline=None)
+@given(
+    partition=st.lists(
+        st.lists(
+            st.tuples(
+                st.sampled_from(["a", "b"]),
+                st.sampled_from(["default", "override:ga-md"]),
+                st.integers(1, 10_000),
+            ),
+            min_size=1,
+            max_size=4,
+        ),
+        min_size=2,
+        max_size=5,
+    )
+)
+def test_merge_sums_rows_per_pin_scope(partition) -> None:
+    """Scope counts sum per binary, and they still sum to that binary's rows."""
+    shards = [
+        _profiled_shard(
+            [
+                {
+                    "path": "/binary",
+                    "sha256": sha * 64,
+                    "rows": rows,
+                    "scopes": {scope: rows},
+                }
+                for sha, scope, rows in part
+            ],
+            "split",
+        )
+        for part in partition
+    ]
+    expected: dict[str, dict[str, int]] = {}
+    for part in partition:
+        for sha, scope, rows in part:
+            bucket = expected.setdefault(sha * 64, {})
+            bucket[scope] = bucket.get(scope, 0) + rows
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    taxsim = merged["engine_identity"]["taxsim"]
+    assert taxsim["pin_profile"] == "split"
+    assert merged["provenance"]["oracle"]["taxsim_pin_profile"] == "split"
+    assert {b["sha256"]: b["scopes"] for b in taxsim["binaries"]} == expected
+    for binary in taxsim["binaries"]:
+        assert sum(binary["scopes"].values()) == binary["rows"]
+
+
+def test_merge_refuses_shards_run_under_different_pin_profiles() -> None:
+    binary = {"path": "/binary", "sha256": "a" * 64, "rows": 1}
+    shards = [
+        _profiled_shard([dict(binary)], "split"),
+        _profiled_shard([dict(binary)], "other"),
+    ]
+    with pytest.raises(SystemExit, match="shards disagree on engine_identity.taxsim"):
+        _load_merge_shard_reports().merge(shards)

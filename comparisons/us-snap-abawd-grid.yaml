@@ -12,10 +12,11 @@
 # dependent-child 13-vs-14 boundary.
 #
 # Axiom boundary: snap_member_abawd_exception_applies from
-# us/regulations/7-cfr/273/24.yaml, replayed from the module's own
-# engine-verified companion fixture (the nine July 2026 boundary cases landed
-# with the rulespec-us #1212 encoding fix).  The generator fails closed unless
-# each replayed verdict equals the pinned legal expectation and each case
+# us/regulations/7-cfr/273/24.yaml, evaluated by the Axiom rules engine on
+# the inputs of the module's companion fixture (the nine July 2026 boundary
+# cases landed with the rulespec-us #1212 encoding fix).  The generator fails
+# closed unless every verdict the fixture records equals the engine's, each
+# engine verdict equals the pinned legal expectation, and each case
 # still zeroes every unrelated exception (negatives additionally pin zero
 # qualifying work, four countable months, no waiver, and no
 # regained/additional eligibility), so a rulespec-side regression at the
@@ -70,6 +71,9 @@ description: >-
 
 runner:
   type: snap-abawd-boundary-grid
+  # Builds the engine revision the rulespec snapshot's own toolchain pins
+  # and evaluates every fixture case with it (#675).
+  axiom_rules_repo: $HOME/axiom-rules
   parameters:
     period: "2026-07"
     concept: >-

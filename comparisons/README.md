@@ -4,12 +4,17 @@ Each `*.yaml` in this directory declares one oracle comparison — a head-to-hea
 between two engines over a validation population. `scripts/run_comparison.py`
 reads a config, dispatches to the right runner type, writes a JSON report, and
 prints a headline summary. `.github/workflows/comparisons.yml` matrix-runs
-every config in the registry that does not declare `ci: manual` on a weekly
-schedule.
+every config in the registry that does not declare `ci:` routing (below) on
+a weekly schedule.
 
 ## How to run one locally
 
+Materialize the latest published data first when the run should use current
+reports and fallback artifacts. Set `AXIOM_ORACLES_DATA_SOURCE=checkout` to
+validate the reviewed checkout or work offline instead.
+
 ```bash
+python3 scripts/oracle_data.py materialize
 uv run scripts/run_comparison.py fiit-ecps --summary
 uv run scripts/run_comparison.py co-snap-ecps --summary
 uv run scripts/run_comparison.py co-snap-qc --summary
@@ -28,6 +33,17 @@ workflows materialize that layout per matrix leg with
 conventions to link, whether to build the compose venv), skip-if-present so a
 supervised machine is never touched (#296, #300).
 
+Source checkouts use `main` with full history. Before selecting suites or
+running a comparison, the workflows run
+`scripts/oracle_data.py materialize --baseline` to combine that source with
+the latest `oracle-data` snapshot. This makes published report provenance and
+fallback reports available at their existing paths while retaining current
+source code. `--baseline` records the combined tree as a disposable detached
+baseline, so packing a run measures its own generated changes. It requires a
+clean tracked worktree and index; save or commit local edits before using it.
+For manual publication, run it before the producer as shown
+[below](#manual-single-suite-publication).
+
 Engine compiles follow the post-hard-cut contract via
 `axiom_oracles/engine_compat.py`: explicit repeatable `--rulespec-root` flags
 naming canonical `rulespec-<cc>` checkouts (staged pure — jurisdiction dirs
@@ -40,12 +56,22 @@ YAML (with a comment saying why and what unblocks it). The affected-map
 generator then emits `name: null`, the 6-hourly selector routes it to the
 manual lane instead of dispatching a doomed leg, and the weekly matrix skips
 it. Its committed report refreshes only via a supervised
-`run_comparison.py` run. The seven SNAP QC suites (`*-snap-qc`) declare
-`ci: manual` for that reason: both workflows clone rulespec-us main but never
-build the engine binary or download the QC public-use file, so their legs
-could only re-emit the committed report, and on 2026-09-23 the affected rerun
-committed such re-emissions over the five real reports #548 had landed. The
-same holds, and the same marker applies, for:
+`run_comparison.py` run.
+
+A suite whose real run needs what the bare matrix runners lack can instead
+declare `ci: <lane>`, naming a workflow that provisions it (`CI_LANES` in
+`scripts/generate_affected_map.py`). The map keeps its registry name and adds
+`lane`; the 6-hourly selector hands a stale one to that lane's workflow, never
+the bare matrix; and the weekly matrix skips it. The six SNAP QC suites whose
+compositions are on rulespec-us main declare `ci: snap-qc-replay`: both bare
+workflows clone rulespec-us main but never build the engine binary or
+download the QC public-use file, so there a leg could only re-emit (on
+2026-09-23 the affected rerun committed such re-emissions over the five real
+reports #548 had landed). The affected rerun replays them live through
+`.github/workflows/snap-qc-replay.yml`, and its single publisher publishes a
+report only when the replay is live and exact. `tx-snap-qc` stays
+`ci: manual` until its composition lands. The bare runners cannot run these
+either, and they declare `ci: manual`:
 
 - the 40 EUROMOD-platform suites (`euromod-synthetic-compare`: the BE and DK
   EUROMOD suites and the `*-ukmod` UKMOD suites). Neither workflow provides the
@@ -163,11 +189,36 @@ sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
 `dataset_identity` block in its `--json` output; the dashboard adapter threads
 it onto the generated v2 report so a checked-in report records which pinned
 artifact produced it. This is the FIIT lane of the A9 runner unification — one
-runner, one schema, one dashboard. The ~19k LOC oracle bridge itself now lives
-in this repo as `axiom_oracles/bridges/` (axiom-encode re-exports it as thin
-shims); this runner still shells out to the encoder CLI in a pinned
-PolicyEngine environment, and pointing it at the in-repo package is a
-follow-up.
+runner, one schema, one dashboard. The ~19k LOC oracle bridge itself lives in
+this repo as `axiom_oracles/bridges/` (axiom-encode re-exports it as thin
+shims). The runner still shells out to the encoder CLI in a pinned
+PolicyEngine environment, but it overlays this checkout's bridge over the
+encoder's pinned axiom-oracles dependency via `PYTHONPATH`, as the UK EFRS
+runner does, so a suite run validates the current bridge.
+
+Optional `parameters.policyengine_us_source` pins the oracle to a release
+commit when PyPI no longer serves the labelled `policyengine_us_version`
+(PolicyEngine prunes old releases). It must be
+`https://github.com/PolicyEngine/policyengine-us/archive/<40-hex>.tar.gz`, and
+the runner checks that the installed version equals the label before it runs.
+The report records it as `provenance.oracle.model_source`.
+
+The harness writes its own JSON shape, so beside the raw report the runner
+publishes the adapted v2 report (every mismatch row; no `cases`, and
+`observed_outputs` dropped above 10,000 rows as in the dashboard copy; the
+binding check reads neither) as
+`reports/<basename>-<sample>-<date>-v2.json`. The premerged dashboard copy
+binds to that file, which `apply_dispositions.py --check` re-derives from.
+After a dispositions edit, rebuild the dashboard copy without re-running the
+population:
+
+```bash
+uv run scripts/run_comparison.py fiit-ecps --from-report reports/axiom-policyengine-fiit-ecps-0-<date>.json
+```
+
+`--from-report` accepts only this suite's stamped report from a real run
+(`provenance.generated_by` names the suite; not a re-emission) under
+`reports/`, executes nothing, and keeps the provenance the run recorded.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.
@@ -206,13 +257,25 @@ Required runner keys: `axiom_rules_repo`. Required `parameters`: `left`,
 ### `federal-tax-liability-grid`
 
 Runs one reviewed federal tax case grid through
-`scripts/generate_federal_tax_liability.py`. The Axiom leg reads the selected
-policy's engine-verified RuleSpec companion fixture; the PolicyEngine leg builds
+`scripts/generate_federal_tax_liability.py`. The Axiom leg runs the Axiom
+rules engine on each case's inputs from the selected policy's RuleSpec
+companion fixture and fails if any output the fixture records differs from the
+engine's value; the PolicyEngine leg builds
 fresh 2026 simulations under the config's explicit per-suite PE-US/core pins.
 Runs are policy-isolated and have no committed-report fallback, so one missing
 companion cannot couple the other policies and an unavailable oracle fails
 rather than replaying stale evidence. A policy may select all companion cases
 or an explicitly documented non-vacuous exact-input subset.
+
+Required runner keys: `axiom_rules_repo`. The runner reads the
+`axiom_rules_engine_ref` the rulespec snapshot's HEAD pins
+(`.axiom/workflow-toolchain.toml`, else `.axiom/toolchain.toml`), builds that
+engine revision with a build receipt (using the configured checkout when it is
+that revision, otherwise a detached worktree of it under
+`~/.cache/axiom-oracles/axiom-rules-engine/`), passes the executable to the
+generator, and records the receipt as the report's engine identity. That is
+the engine the snapshot's own CI validates its modules and fixtures with;
+axiom-rules main refuses to load the pinned snapshots' modules.
 
 Required `parameters`: `policy`, `rulespec_roots`,
 `policyengine_version: 4.18.9`, `policyengine_us_version: 1.767.3`, and
@@ -240,11 +303,13 @@ until the next deliberate re-pin.
 Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
 (`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
 PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
-Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
-`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
-rulespec-us CI) and fails closed unless each replayed verdict equals the
-pinned legal expectation and each case still zeroes every unrelated
-exception; the PolicyEngine leg builds fresh person-level monthly simulations
+Axiom leg runs the Axiom rules engine on the nine July 2026 boundary cases'
+inputs from the rulespec-us `us/regulations/7-cfr/273/24.test.yaml` companion
+fixture and fails closed unless every verdict the fixture records equals the
+engine's, each engine verdict equals the pinned legal expectation, and each
+case still zeroes every unrelated exception. The engine revision and receipt
+follow the same rule as `federal-tax-liability-grid` (required runner key
+`axiom_rules_repo`); the PolicyEngine leg builds fresh person-level monthly simulations
 under the reviewed 2026 oracle stack and verifies the oracle's own
 exempted-age brackets flip at the 2025-07-04 effective date before trusting
 its verdicts.
@@ -277,25 +342,32 @@ the oracle lives in this repo, so there is no encoder CLI to shell out to.
 FY2024 law is evaluated through a sparse compile-time overlay (SNAP COLA module
 ids rewritten from the in-repo fy-2026 vintage to `fy-2024-cola`, plus the
 state's standard-utility-allowance amount patches — four Colorado amounts,
-seven New York regional amounts, one California amount) at the nominal period
+seven New York regional amounts, one California amount, and the `fy-2024-cola`
+modules' FY 2024 version windows moved onto the fiscal year that contains the
+nominal month, formulas and values unchanged) at the nominal period
 `2026-01`, because the federal-regulation and state-manual chain is snapshot-
 dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
 `ny-snap-qc` (847 reviews including the 107 NYSCAP units), `ca-snap-qc`
 (883 reviews), `az-snap-qc`, `ga-snap-qc`, `md-snap-qc`, and `tx-snap-qc`
-(its composition is not on rulespec-us main yet); all seven declare
-`ci: manual` (see above). The runner **skips gracefully**
+(its composition is not on rulespec-us main yet). The six run in the
+`snap-qc-replay` lane and `tx-snap-qc` is `ci: manual` (see above). The runner
+**skips gracefully**
 — re-emitting the committed dashboard report, exactly like
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
 is absent, or while the bridge is still mid-build. Where all three exist it runs
-for real; the checked-in numbers are regenerated there. Because the weekly
-matrix and the affected rerun never have all three, those legs always
-re-emit. The **SNAP QC live replay** workflow
-(`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
-pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
-selected suite with `run_comparison.py --require-live` and fails on any re-emission,
-mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
+for real; the checked-in numbers are regenerated there. Neither bare matrix
+has all three, so neither runs these suites. The **SNAP QC live replay**
+workflow (`.github/workflows/snap-qc-replay.yml`, weekly, on demand, and
+called by the affected rerun) provisions the pinned engine, a rulespec-us
+checkout, and the pinned PUF. It runs every selected suite with
+`run_comparison.py --require-live` and fails on any re-emission, mismatch, or
+error (`scripts/snap_qc_replay.py check`); when the affected rerun calls it,
+each exact report is packed and published to `oracle-data`. Its real-checkout
+overlay closure tests cover the six `REQUIRED_SUITES` states (AZ, CA, CO, GA,
+MD, NY); Texas remains pending in `PENDING_SUITES` until its composition lands.
+The live test job fails on any skip. See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
@@ -380,7 +452,8 @@ are never read. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
 selects only the suites whose report ran against an older SHA — those get
-rerun. Each matrix leg then packs its refresh
+rerun. Selection and matrix legs read the published `oracle-data` snapshot
+materialized over current `main`. Each matrix leg then packs its refresh
 (`scripts/commit_refreshed_report.sh --pack`): it collects the run's private
 outputs, vets them once on its own checkout (the re-emission guard,
 regenerating and verifying every derived artifact, the unexplained ratchet)
@@ -391,31 +464,79 @@ the reports (the dispositions merge + EUROMOD-BE coverage rollup, freshness,
 conformance scoreboard + detail, the daily history snapshot, the burn-down,
 census and certificates), self-checks the tree against ci.yml's staleness
 gates and the unexplained ratchet before pushing, and rebuilds the commit from
-scratch on the current tip whenever a push is rejected, so a concurrent push
-can't strand main stale or conflicted. Run by hand,
-`scripts/commit_refreshed_report.sh <suite> <branch>` still commits one suite
-(pack, then publish that one bundle).
+scratch on the current `oracle-data` tip whenever a push is rejected. Each
+attempt incorporates current `main` first. Conflicts in regenerated aggregates
+use `main`'s version before regeneration and verification; the shared manifest
+retains an append-only union of both report lists. Primary report and authored
+input conflicts refuse publication and materialization until a maintainer
+performs the [source-data conflict recovery](#recovering-source-data-conflicts).
+Readers resolve aggregate conflicts to the published data version, which
+matches the reports they load. A missing data branch is seeded from
+`main`; successful pushes explicitly target `HEAD:refs/heads/oracle-data`
+without force. The [manual sequence below](#manual-single-suite-publication)
+packs and publishes one suite. The publisher refuses `main`, `master`, and
+other targets.
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
-awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
-runs every suite that does not declare `ci: manual` as a CI signal; it uploads
-reports as artifacts and never commits them.
+awaiting the manual lane, not rerun; stale suites with a `lane` go to that
+lane's workflow, whose bundles the same publish job applies. The weekly full
+matrix (`comparisons.yml`) runs every suite without `ci:` routing as a CI
+signal; it uploads
+reports as artifacts and never commits them. Its separate scheduled KPI job
+prepares the same data branch before generating `rule_verification.json` and
+`rule_verification_summary.json`, and publishes only those files. A manual
+dispatch of that job computes the KPI without publishing.
+The affected publisher and KPI job share the `oracle-data-publication`
+concurrency group, serializing their writes to the data branch.
 Regenerate the map after adding a comparison:
 `uv run scripts/generate_affected_map.py`.
 
-Regenerating these aggregates with the report is not optional bookkeeping —
-they are *derived* from the committed reports, so a report refresh that skips
-them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
-stale and reds `conformance_scoreboard.py --check` on **every open PR** until
-someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
-fixed reactively in #282). Regeneration happens inside the publish job's
-push-retry loop, because each attempt rebuilds on the current tip: an
-aggregate recomputed there is consistent with every report committed so far,
-so every push is gate-green — there is no red window and nothing for a
-separate reconcile pass to repair (#283's post-matrix job, briefly on main, is
-superseded by this; see `tests/test_commit_refreshed_report.py`). It used to
-happen in every matrix leg, each racing its siblings to push: with ~47 legs,
-each successful push invalidated every other leg's ~4-minute attempt, and runs
+### Manual single-suite publication
+
+Use a clean disposable checkout of current `main` with full history and the
+suite's required dependencies. Establish the published baseline before running
+the producer; for example:
+
+```bash
+python3 scripts/oracle_data.py materialize --baseline
+uv run scripts/run_comparison.py fiit-ecps --summary
+scripts/commit_refreshed_report.sh fiit-ecps oracle-data
+```
+
+Substitute the registry suite name and its documented producer when the lane
+uses a specialized live-run command. `--baseline` requires no tracked staged
+or unstaged edits and records the combined snapshot in a detached local
+commit. Plain `materialize` leaves `HEAD` unchanged and is insufficient for
+packing a refresh after prior publication. Single-suite and `--pack` modes
+refuse when the locally known `oracle-data` tip is missing from `HEAD`'s
+history; packing itself never fetches. If this guard fires, save the output
+for inspection, restart in a clean checkout, run `materialize --baseline`,
+then rerun the producer and pack. If a remote report changes after packing,
+the stale-bundle guard similarly requires regeneration and repacking.
+
+### Recovering source-data conflicts
+
+For a primary report conflict, follow the
+[recovery procedure](../README.md#recovering-a-source-data-conflict): reconcile
+current `main` into the data branch in a separate checkout, keep reviewed
+`main` report corrections, regenerate and verify derived outputs, and publish
+the merge with a normal push to `oracle-data`. Then rerun selection and rebuild
+old bundles. Do not resolve that refusal by pushing an older bundle over the
+reviewed report.
+
+Regenerating these aggregates with the report is required because they are
+*derived* from its bytes. The `oracle-data` snapshot keeps the reports,
+`conformance/scoreboard.json`, detail, history, census, certificates, and served
+mirrors consistent. Regeneration happens inside the publish job's push-retry
+loop against the combined source and data tip, followed by the existing
+staleness and publication gates (see `tests/test_commit_refreshed_report.py`).
+PR CI independently validates the reviewed committed baseline using
+`AXIOM_ORACLES_DATA_SOURCE=checkout`; a PR that updates baseline reports must
+still regenerate their derivatives. Before publication moved off `main`,
+skipping this step reddened every open PR in the 2026-07-14 income-tax incident
+(#282). Regeneration also used to happen in every matrix leg, each racing its
+siblings to push: with ~47 legs, each successful push invalidated every other
+leg's ~4-minute attempt, and runs
 36239293795 and 35958364304 lost 7 and 11 legs to the 90-minute timeout inside
 that loop. Publishing once removes the race; the legs still vet their own
 refresh so that a refused one fails its own leg (`tests/test_affected_rerun_publisher.py`

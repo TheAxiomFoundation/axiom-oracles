@@ -30,6 +30,7 @@ from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.taxsim import pins as taxsim_pins
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -51,8 +52,15 @@ from .conformance.compositions import (
 )
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
-from .core.geography import GeographyScope, scope_contains
+from .core.geography import GeographyScope, scope_contains, scope_intersection
 from .populations import load_populace_us_cases
+from .populations.taxsim_csv import (
+    TAXSIM_CSV_ENV_VAR,
+    TAXSIM_CSV_SOURCE,
+    TaxsimCsvError,
+    parse_taxsim_csv_origin,
+    read_taxsim_csv,
+)
 from .populations.populace_us import CaseUnit, CaseUnitSelector
 from .suites import available_suites, load_suite
 
@@ -62,13 +70,18 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-# The macOS binary in the pinned policyengine-taxsim 2.30.0 release
+# The macOS binary in the pinned policyengine-taxsim 2.30.0 release (the
+# default pin profile, policyengine-taxsim-2.30.0)
 # (taxsimtest-osx.exe, build 20260521; see adapters/taxsim/taxsim_pins.json)
 # models law year 2026 rate schedules, the OBBBA standard deduction, childless
 # EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
 # validation year as DEFAULT_PERIOD. The Linux binary in the same release
-# (taxsimtest-linux.exe) is an older build that stops at 2024 and fails on
-# 2025 and 2026 rows; on Linux, pass --period 2024. Known 2026 gap in the
+# (taxsimtest-linux.exe, build cdate-compdate) is a different NBER build that
+# accepts law years 1960-2024 only, so `compare` refuses 2025 and 2026 on Linux
+# before loading the population (_require_taxsim_law_year; each binary's range
+# is pinned in taxsim_pins.json); 2024 is the last year a Linux host can pass,
+# and the two builds differ even there (docs/policyengine-taxsim.md). Known
+# 2026 gap in the
 # macOS build, verified empirically: the qualifying-child credit machinery is
 # absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
 # zero, and the EITC ignores qualifying children, so a family with children
@@ -170,9 +183,10 @@ def _attach_axiom_outputs(
 ) -> list[Case]:
     """Stash the axiom engine's non-compared outputs into case metadata.
 
-    In full-evidence mode the runner queries every derived rule; the values
-    beyond the compared concepts' targets are the household's complete
-    computed surface (intermediates included). Ordinary results land under
+    In full-evidence mode the runner records the derived rules the engine
+    evaluated on the case's queried entity (its explain trace); the values
+    beyond the compared concepts' targets are the household's computation
+    chain (intermediates included). Ordinary results land under
     ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
     are not meaningful household sums, so they remain attached to their
     executed entity under ``axiom_result_aggregation_applied.components``.
@@ -424,10 +438,13 @@ def sanity_check(
 )
 @click.option(
     "--population",
-    type=click.Choice(["enhanced-cps", "synthetic"]),
+    type=click.Choice(["enhanced-cps", "synthetic", TAXSIM_CSV_SOURCE]),
     default="enhanced-cps",
     show_default=True,
-    help="Validation population source.",
+    help=(
+        "Validation population source. taxsim-csv loads a TAXSIM-35 input CSV "
+        "(see --taxsim-csv) verbatim for policyengine-vs-taxsim comparisons."
+    ),
 )
 @click.option(
     "--case-shard",
@@ -463,6 +480,46 @@ def sanity_check(
         "dataset-repo reference). Defaults to the certified populace-us "
         "artifact; NYC scopes keep their dedicated file until populace "
         "grows place geography."
+    ),
+)
+@click.option(
+    "--taxsim-csv",
+    "taxsim_csv",
+    type=click.Path(dir_okay=False),
+    envvar=TAXSIM_CSV_ENV_VAR,
+    help=(
+        "TAXSIM-format input CSV for --population taxsim-csv (for example "
+        "policyengine-taxsim's cps_households.csv). Defaults to "
+        f"${TAXSIM_CSV_ENV_VAR}. An explicit --period overrides every row's "
+        "year; without it each case keeps its row's year."
+    ),
+)
+@click.option(
+    "--taxsim-csv-sha256",
+    "taxsim_csv_sha256",
+    default=None,
+    help=(
+        "Expected sha256 of the --taxsim-csv file. A mismatch fails the run "
+        "before any case is built."
+    ),
+)
+@click.option(
+    "--taxsim-csv-origin",
+    "taxsim_csv_origin",
+    default=None,
+    help=(
+        "Where the --taxsim-csv file came from, as REPO@COMMIT:PATH (e.g. "
+        "PolicyEngine/policyengine-taxsim@<sha>:cps_households.csv); recorded "
+        "in the report's dataset_identity."
+    ),
+)
+@click.option(
+    "--taxsim-csv-allow-unknown-columns",
+    "taxsim_csv_allow_unknown_columns",
+    is_flag=True,
+    help=(
+        "Pass --taxsim-csv columns outside the TAXSIM-35 input set through "
+        "verbatim instead of failing the load."
     ),
 )
 @click.option(
@@ -547,7 +604,9 @@ def sanity_check(
     help=(
         "Two-digit FIPS prefix used to filter ECPS households for this "
         "comparison (e.g. `06` for California, `08` for Colorado). When "
-        "unset, the harness applies its legacy Colorado-only SNAP filter."
+        "unset, the harness applies its legacy Colorado-only SNAP filter. "
+        "With --population taxsim-csv it narrows the load to that state's "
+        "rows (state-0 rows drop out)."
     ),
 )
 @click.option(
@@ -574,6 +633,15 @@ def sanity_check(
     type=click.Path(dir_okay=False, path_type=Path),
     help="Write the JSON comparison report to this path.",
 )
+@click.option(
+    "--taxsim-pin-profile",
+    default=None,
+    help=(
+        "TAXSIM binary pin profile (adapters/taxsim/taxsim_pins.json). "
+        "Overrides $AXIOM_TAXSIM_PIN_PROFILE and the pin file's "
+        "default_profile; see `axiom-oracles taxsim pin-status`."
+    ),
+)
 @click.option("--json-output", "--json", is_flag=True, help="Emit JSON.")
 def compare(
     left: str,
@@ -584,6 +652,10 @@ def compare(
     sample_size: int,
     period: str | None,
     ecps_dataset: str | None,
+    taxsim_csv: str | None,
+    taxsim_csv_sha256: str | None,
+    taxsim_csv_origin: str | None,
+    taxsim_csv_allow_unknown_columns: bool,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
     include_components: bool,
@@ -601,18 +673,41 @@ def compare(
     case_shard: str | None,
     comparison_batch_size: int,
     output_path: Path | None,
+    taxsim_pin_profile: str | None,
     json_output: bool,
 ) -> None:
     """Compare two executable program systems over a validation population."""
 
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
+    if "taxsim" in (left, right):
+        try:
+            taxsim_pin_profile = taxsim_pins.active_profile_name(taxsim_pin_profile)
+        except taxsim_pins.TaxsimPinError as exc:
+            raise click.ClickException(str(exc)) from exc
+    _check_taxsim_csv_options(
+        population,
+        {left, right},
+        taxsim_csv_sha256=taxsim_csv_sha256,
+        taxsim_csv_origin=taxsim_csv_origin,
+        taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+    )
 
     gc_was_enabled = gc.isenabled()
     if gc_was_enabled:
         gc.disable()
     try:
+        # taxsim-csv rows carry their own tax year; only an explicit --period
+        # overrides it (the resolved default must not).
+        requested_period = period or None
         period = _resolve_period(period, left, right)
+        # A taxsim-csv row carries its own law year, so without an explicit
+        # --period the default year says nothing about what will run; the
+        # runner then checks each batch's years against its binary.
+        if "taxsim" in {left, right} and (
+            population != TAXSIM_CSV_SOURCE or requested_period
+        ):
+            _require_taxsim_law_year(period, taxsim_pin_profile)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
@@ -651,7 +746,7 @@ def compare(
                     raise click.ClickException(str(exc)) from exc
                 return _populace_us_case_unit((), (), mappings=population_mappings)
 
-        cases = _load_population_cases(
+        cases, dataset_identity = _load_population(
             population=population,
             suite_name=suite_name,
             scope=comparison_scope,
@@ -660,6 +755,12 @@ def compare(
             ecps_dataset=ecps_dataset,
             categories=categories,
             concepts=concepts,
+            requested_period=requested_period,
+            jurisdiction_fips=jurisdiction_fips,
+            taxsim_csv=taxsim_csv,
+            taxsim_csv_sha256=taxsim_csv_sha256,
+            taxsim_csv_origin=taxsim_csv_origin,
+            taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
             case_unit_selector=case_unit_selector,
         )
         if jurisdiction_fips and _wants_snap(concepts):
@@ -772,6 +873,7 @@ def compare(
             axiom_batch_size=axiom_batch_size,
             axiom_record_all_outputs=full_evidence,
             paired_engine=right,
+            taxsim_pin_profile=taxsim_pin_profile,
         )
         right_runner = _build_runner(
             right,
@@ -786,6 +888,7 @@ def compare(
             axiom_batch_size=axiom_batch_size,
             axiom_record_all_outputs=full_evidence,
             paired_engine=left,
+            taxsim_pin_profile=taxsim_pin_profile,
         )
 
         comparator = Comparator(mappings)
@@ -806,6 +909,7 @@ def compare(
                 # filter runs inside the bridge (state tax slices), so an
                 # explicit --include-case-inputs wins over the heuristic.
                 include_inputs=full_evidence,
+                dataset_identity=dataset_identity,
             )
             total_batches = (
                 len(cases) + comparison_batch_size - 1
@@ -880,6 +984,9 @@ def compare(
                     "No cases remain after engine-specific preparation filters."
                 )
 
+            accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            _echo_engine_identity(accumulator.engine_identity)
+
             if output_path:
                 accumulator.write_json(output_path)
 
@@ -888,7 +995,11 @@ def compare(
                 click.echo(json.dumps(report, indent=2, sort_keys=True))
                 return
 
-            _echo_comparison_report(accumulator.to_dict(include_cases=False))
+            # The echo reads only the summary fields; reading the observation
+            # spool back here would undo the streamed write's memory bound.
+            _echo_comparison_report(
+                accumulator.to_dict(include_cases=False, include_outputs=False)
+            )
     finally:
         if gc_was_enabled:
             gc.enable()
@@ -1228,7 +1339,7 @@ def _batched(cases: list[Case], batch_size: int):
         yield cases[start : start + batch_size]
 
 
-def _load_population_cases(
+def _load_population(
     *,
     population: str,
     suite_name: str,
@@ -1238,8 +1349,76 @@ def _load_population_cases(
     ecps_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
+    requested_period: str | None = None,
+    jurisdiction_fips: str | None = None,
+    taxsim_csv: str | None = None,
+    taxsim_csv_sha256: str | None = None,
+    taxsim_csv_origin: str | None = None,
+    taxsim_csv_allow_unknown_columns: bool = False,
+    case_unit_selector: CaseUnitSelector | None = None,
+) -> tuple[list[Case], dict | None]:
+    """Load the population's cases plus its dataset identity, when it has one.
+
+    Only ``taxsim-csv`` reports a dataset identity today (the file's sha256,
+    size, rows, and year override, plus how cases were selected); every other
+    population loads through :func:`_load_population_cases` and returns
+    ``None``. ``requested_period`` is the user's explicit ``--period`` (not the
+    resolved default), because it overrides every taxsim-csv row's year.
+    """
+    if population == TAXSIM_CSV_SOURCE:
+        return _load_taxsim_csv_population(
+            path=taxsim_csv,
+            expected_sha256=taxsim_csv_sha256,
+            origin=taxsim_csv_origin,
+            allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            scope=scope,
+            jurisdiction_fips=jurisdiction_fips,
+            period=requested_period,
+            sample_size=sample_size,
+        )
+    cases = _load_population_cases(
+        population=population,
+        suite_name=suite_name,
+        scope=scope,
+        period=period,
+        sample_size=sample_size,
+        ecps_dataset=ecps_dataset,
+        categories=categories,
+        concepts=concepts,
+        case_unit_selector=case_unit_selector,
+    )
+    return cases, None
+
+
+def _load_population_cases(
+    *,
+    population: str,
+    suite_name: str,
+    scope: GeographyScope | None,
+    period: str | None,
+    sample_size: int,
+    ecps_dataset: str | None,
+    categories: tuple[str, ...] = (),
+    concepts: tuple[str, ...] = (),
+    taxsim_csv: str | None = None,
+    taxsim_csv_sha256: str | None = None,
+    taxsim_csv_origin: str | None = None,
+    taxsim_csv_allow_unknown_columns: bool = False,
     case_unit_selector: CaseUnitSelector | None = None,
 ) -> list[Case]:
+    if population == TAXSIM_CSV_SOURCE:
+        # A direct caller's period is explicit, so it overrides row years.
+        cases, _identity = _load_taxsim_csv_population(
+            path=taxsim_csv,
+            expected_sha256=taxsim_csv_sha256,
+            origin=taxsim_csv_origin,
+            allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            scope=scope,
+            jurisdiction_fips=None,
+            period=period,
+            sample_size=sample_size,
+        )
+        return cases
     if population == "enhanced-cps":
         return load_populace_us_cases(
             scope=scope,
@@ -1258,6 +1437,91 @@ def _load_population_cases(
             return cases[:sample_size]
         return cases
     raise click.ClickException(f"Unknown population '{population}'.")
+
+
+def _load_taxsim_csv_population(
+    *,
+    path: str | None,
+    expected_sha256: str | None,
+    origin: str | None,
+    allow_unknown_columns: bool,
+    scope: GeographyScope | None,
+    jurisdiction_fips: str | None,
+    period: str | None,
+    sample_size: int,
+) -> tuple[list[Case], dict]:
+    if not path:
+        raise click.ClickException(
+            "--population taxsim-csv needs --taxsim-csv PATH (or "
+            f"${TAXSIM_CSV_ENV_VAR})."
+        )
+    try:
+        load_scope = _taxsim_csv_load_scope(scope, jurisdiction_fips)
+        data = read_taxsim_csv(
+            path,
+            period=period,
+            expected_sha256=expected_sha256,
+            origin=parse_taxsim_csv_origin(origin) if origin else None,
+            allow_unknown_columns=allow_unknown_columns,
+        )
+        selection = data.select(scope=load_scope, sample_size=sample_size or None)
+    except (OSError, TaxsimCsvError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    return selection.cases, {**data.identity, "selection": selection.summary}
+
+
+def _taxsim_csv_load_scope(
+    scope: GeographyScope | None,
+    jurisdiction_fips: str | None,
+) -> GeographyScope | None:
+    """The comparison scope, narrowed to ``--jurisdiction-fips`` when given."""
+    if not jurisdiction_fips:
+        return scope
+    try:
+        state = GeographyScope(type="census_state", geoid=jurisdiction_fips)
+    except ValueError as exc:
+        raise TaxsimCsvError(
+            f"--jurisdiction-fips must be a two-digit state FIPS code for "
+            f"--population taxsim-csv; got {jurisdiction_fips!r}."
+        ) from exc
+    narrowed = scope_intersection(scope, state)
+    if narrowed is None:
+        raise TaxsimCsvError(
+            f"--jurisdiction-fips {jurisdiction_fips} lies outside the "
+            f"comparison scope {scope.as_dict() if scope else None}."
+        )
+    return narrowed
+
+
+def _check_taxsim_csv_options(
+    population: str,
+    engines: set[str],
+    *,
+    taxsim_csv_sha256: str | None,
+    taxsim_csv_origin: str | None,
+    taxsim_csv_allow_unknown_columns: bool,
+) -> None:
+    """Reject taxsim-csv flags that would be silently ignored.
+
+    Only the TAXSIM runner and the TAXSIM-row PolicyEngine runner (used when
+    PolicyEngine is paired with TAXSIM) read ``metadata["taxsim_input"]``;
+    every other engine needs projected case facts that a TAXSIM CSV does not
+    carry.
+    """
+    if population != TAXSIM_CSV_SOURCE:
+        if taxsim_csv_sha256 or taxsim_csv_origin or taxsim_csv_allow_unknown_columns:
+            raise click.ClickException(
+                "--taxsim-csv-sha256, --taxsim-csv-origin, and "
+                "--taxsim-csv-allow-unknown-columns apply only to "
+                "--population taxsim-csv."
+            )
+        return
+    if engines != {"policyengine", "taxsim"}:
+        raise click.ClickException(
+            "--population taxsim-csv feeds TAXSIM input rows verbatim, which "
+            "only `compare policyengine taxsim` (either order) consumes; got "
+            f"{' and '.join(sorted(engines))}."
+        )
 
 
 def _populace_us_case_unit(
@@ -1394,6 +1658,56 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
     return replace(case, metadata=metadata)
 
 
+def _require_taxsim_law_year(period: str, profile: str | None = None) -> None:
+    """Fail before any work when the profile's TAXSIM binary rejects the year.
+
+    The Linux and macOS executables in the pinned policyengine-taxsim release
+    are different NBER builds with different law-year ranges
+    (taxsim_pins.json); without this check a Linux run loads the whole
+    population and then dies on the binary's ``STOP 1``. The binaries checked
+    are the ones the pin profile resolves on this host, which are the only
+    ones the runner will execute.
+    """
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise click.ClickException(
+            f"--period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        taxsim_pins.require_profile_law_years([year], profile=profile)
+    except (taxsim_pins.TaxsimLawYearError, taxsim_pins.TaxsimPinError) as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _engine_identity(*runners: EngineAdapter) -> dict | None:
+    """The report's ``engine_identity`` block: binaries the runners executed."""
+    identity: dict = {}
+    for runner in runners:
+        if isinstance(runner, AxiomRulesRunner) and runner.engine_receipt:
+            identity["axiom"] = dict(runner.engine_receipt)
+        if isinstance(runner, TaxsimPackageRunner):
+            taxsim = runner.taxsim_identity()
+            if taxsim:
+                identity["taxsim"] = taxsim
+    return identity or None
+
+
+def _echo_engine_identity(identity: dict | None) -> None:
+    taxsim = (identity or {}).get("taxsim") or {}
+    if taxsim.get("pin_profile"):
+        click.echo(f"TAXSIM pin profile: {taxsim['pin_profile']}", err=True)
+    for binary in taxsim.get("binaries", ()):
+        click.echo(
+            f"TAXSIM binary: {binary['path']} sha256 {binary['sha256'][:12]} "
+            f"build {binary['build_observed'] or binary['build']} on "
+            f"{binary['platform']}/{binary['machine']}"
+            f"{'' if binary['pinned'] else ' (NOT the pinned binary)'}: "
+            f"{binary['rows']} row(s)",
+            err=True,
+        )
+
+
 def _resolve_period(period: str | None, left: str, right: str) -> str:
     if period:
         return period
@@ -1419,6 +1733,7 @@ def _build_runner(
     axiom_batch_size: int = 5_000,
     axiom_record_all_outputs: bool = False,
     paired_engine: str | None = None,
+    taxsim_pin_profile: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
         if accessnyc_mode == "drools":
@@ -1486,7 +1801,7 @@ def _build_runner(
             record_all_outputs=axiom_record_all_outputs,
         )
     if engine == "taxsim":
-        return TaxsimPackageRunner()
+        return TaxsimPackageRunner(pin_profile=taxsim_pin_profile)
     if engine == "taxcalc":
         return TaxCalcPackageRunner()
     if engine == "prd":
@@ -1656,6 +1971,209 @@ def _filter_for_accessnyc_mode(
     ]
 
 
+@cli.group()
+def taxsim() -> None:
+    """Pinned TAXSIM binary commands (profiles, fetch, status)."""
+
+
+_PLATFORM_CHOICES = click.Choice(["linux", "darwin", "windows", "current", "all"])
+
+
+def _selected_platforms(platform_choice: str) -> list[str]:
+    if platform_choice == "all":
+        return list(taxsim_pins.PLATFORMS)
+    return [taxsim_pins.normalize_platform(platform_choice)]
+
+
+def _selected_profiles(profile: str | None, all_profiles: bool) -> list[str]:
+    if all_profiles:
+        if profile:
+            raise click.ClickException("Pass --profile or --all-profiles, not both.")
+        return taxsim_pins.profile_names()
+    return [taxsim_pins.active_profile_name(profile)]
+
+
+@taxsim.command("fetch-binaries")
+@click.option("--profile", default=None, help="Pin profile (default: active).")
+@click.option(
+    "--all-profiles", is_flag=True, help="Fetch the binaries of every profile."
+)
+@click.option(
+    "--platform",
+    "platform_choice",
+    type=_PLATFORM_CHOICES,
+    default="current",
+    show_default=True,
+    help="Binary platform to fetch.",
+)
+@click.option(
+    "--from-git-repo",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=None,
+    help=(
+        "Local PolicyEngine/policyengine-taxsim clone to read pinned git "
+        "blobs from before trying the network."
+    ),
+)
+def taxsim_fetch_binaries(
+    profile: str | None,
+    all_profiles: bool,
+    platform_choice: str,
+    from_git_repo: Path | None,
+) -> None:
+    """Download pinned TAXSIM binaries into the verified cache.
+
+    Every download is checked against the pinned SHA-256 and size before it
+    is written to $AXIOM_TAXSIM_CACHE_DIR (default
+    ~/.cache/axiom-oracles/taxsim-binaries/<sha256>/<filename>).
+    """
+
+    try:
+        profiles = _selected_profiles(profile, all_profiles)
+        platforms = _selected_platforms(platform_choice)
+        shas: list[str] = []
+        for name in profiles:
+            for system in platforms:
+                for sha in taxsim_pins.get_profile(name).binary_shas(system):
+                    if sha not in shas:
+                        shas.append(sha)
+        failures = []
+        for sha in shas:
+            binary = taxsim_pins.pinned_binary(sha)
+            try:
+                result = taxsim_pins.fetch_binary(sha, from_git_repo=from_git_repo)
+            except taxsim_pins.TaxsimPinError as exc:
+                failures.append(str(exc))
+                continue
+            click.echo(
+                f"{result.status:8s} {sha[:12]} {binary.platform:7s} "
+                f"{binary.build:14s} {result.path} ({result.source})"
+            )
+    except taxsim_pins.TaxsimPinError as exc:
+        raise click.ClickException(str(exc)) from exc
+    if failures:
+        raise click.ClickException("\n".join(failures))
+
+
+@taxsim.command("pin-status")
+@click.option("--profile", default=None, help="Pin profile (default: active).")
+@click.option("--all-profiles", is_flag=True, help="Report every profile.")
+@click.option(
+    "--platform",
+    "platform_choice",
+    type=_PLATFORM_CHOICES,
+    default="current",
+    show_default=True,
+)
+@click.option("--json-output", "--json", is_flag=True, help="Emit JSON.")
+def taxsim_pin_status(
+    profile: str | None,
+    all_profiles: bool,
+    platform_choice: str,
+    json_output: bool,
+) -> None:
+    """Show the active pin profile, its resolution table, and binary status."""
+
+    try:
+        active, origin = taxsim_pins.active_profile(profile)
+        names = taxsim_pins.profile_names() if all_profiles else [active]
+        platforms = _selected_platforms(platform_choice)
+        status = {
+            "active_profile": active,
+            "active_profile_source": origin,
+            "default_profile": taxsim_pins.pin_document().default_profile,
+            "policyengine_taxsim": taxsim_pins.pinned_version(),
+            "profiles": [
+                _profile_status(taxsim_pins.get_profile(name), platforms)
+                for name in names
+            ],
+        }
+    except taxsim_pins.TaxsimPinError as exc:
+        raise click.ClickException(str(exc)) from exc
+    if json_output:
+        click.echo(json.dumps(status, indent=2, sort_keys=True))
+        return
+    click.echo(
+        f"Active profile: {active} (from {origin}); default_profile: "
+        f"{status['default_profile']}; policyengine-taxsim "
+        f"{status['policyengine_taxsim']}"
+    )
+    for item in status["profiles"]:
+        click.echo(f"\nProfile {item['name']}: {item['description']}")
+        for row in item["resolution"]:
+            click.echo(
+                f"  {row['cells']:40s} {row['platform']:7s} -> "
+                f"{row['sha256'][:12]} build {row['build']}"
+            )
+        for binary in item["binaries"]:
+            where = binary["path"] or "not found"
+            click.echo(
+                f"  [{binary['status']:8s}] {binary['sha256'][:12]} "
+                f"{binary['platform']:7s} {binary['build']:14s} {where}"
+            )
+
+
+def _profile_status(profile, platforms: list[str]) -> dict:
+    resolution = []
+    for system in platforms:
+        if system not in profile.binaries:
+            continue
+        default_sha = profile.binaries[system]
+        resolution.append(
+            {
+                "cells": "default (all other cells, incl. state 0)",
+                "scope": taxsim_pins.DEFAULT_SCOPE,
+                "platform": system,
+                "sha256": default_sha,
+                "build": taxsim_pins.pinned_binary(default_sha).build,
+            }
+        )
+        for override in profile.overrides:
+            sha = override.binaries[system]
+            states = ",".join(
+                f"{taxsim_pins.taxsim_state_postal(code)}({code})"
+                for code in sorted(override.states)
+            )
+            years = ",".join(str(year) for year in sorted(override.years))
+            resolution.append(
+                {
+                    "cells": f"{states} x {years}",
+                    "scope": override.scope,
+                    "platform": system,
+                    "sha256": sha,
+                    "build": taxsim_pins.pinned_binary(sha).build,
+                }
+            )
+    binaries = []
+    for system in platforms:
+        for sha in profile.binary_shas(system):
+            binary = taxsim_pins.pinned_binary(sha)
+            candidates = taxsim_pins.inspect_candidates(sha)
+            verified = [c for c in candidates if c.status == "verified"]
+            mismatched = [c for c in candidates if c.status == "mismatch"]
+            if verified:
+                status, path = "verified", verified[0].path
+            elif mismatched:
+                status, path = "mismatch", mismatched[0].path
+            else:
+                status, path = "missing", None
+            binaries.append(
+                {
+                    "sha256": sha,
+                    "platform": binary.platform,
+                    "build": binary.build,
+                    "status": status,
+                    "path": str(path) if path is not None else None,
+                }
+            )
+    return {
+        "name": profile.name,
+        "description": profile.description,
+        "resolution": resolution,
+        "binaries": binaries,
+    }
+
+
 def _comparison_report(
     *,
     suite_name: str,
@@ -1683,6 +2201,15 @@ def _echo_comparison_report(report: dict) -> None:
         f"Population {report['population']} / suite {report['suite']} "
         f"({report['case_count']} cases, locales: {', '.join(report['locales'])})"
     )
+    dataset = report.get("dataset_identity")
+    if dataset:
+        year_override = dataset.get("year_override")
+        click.echo(
+            f"Dataset {dataset.get('filename')} sha256 {dataset.get('sha256')} "
+            f"({dataset.get('rows')} rows"
+            + (f"; year override {year_override}" if year_override else "")
+            + ")"
+        )
     click.echo(
         f"Concepts: {len(report['concepts'])}; "
         f"comparisons: {summary['comparison_count']}; "

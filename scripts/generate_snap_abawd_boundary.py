@@ -8,11 +8,12 @@ differ from the pre-amendment 7 CFR 273.24(c) list.  Closure detection alone
 does not verify executable outcomes, so this grid runs the statute boundaries
 through both engines:
 
-* ``axiom`` replays the nine post-P.L. 119-21 boundary cases from the
-  rulespec-us companion fixture ``us/regulations/7-cfr/273/24.test.yaml``
-  (engine-verified in rulespec-us CI at or after the #1212 encoding fix) and
-  fails closed unless each replayed verdict equals the pinned legal
-  expectation; and
+* ``axiom`` runs the Axiom rules engine on the nine post-P.L. 119-21
+  boundary cases' inputs from the rulespec-us companion fixture
+  ``us/regulations/7-cfr/273/24.test.yaml`` and fails closed unless every
+  verdict the fixture records equals the engine's and each engine verdict
+  equals the pinned legal expectation (the fixture and the expectations
+  check the engine; neither supplies a report value); and
 * ``policyengine`` builds a fresh PolicyEngine-US ``Simulation`` per case at
   period 2026-07 under the reviewed 2026 oracle stack and reads
   ``meets_snap_abawd_work_requirements`` for the tested member.
@@ -87,7 +88,7 @@ import sys
 from dataclasses import dataclass
 from importlib.metadata import version as distribution_version
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 import yaml
 
@@ -96,6 +97,9 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from axiom_oracles.comparison.dispositions import report_json_text  # noqa: E402
+from axiom_oracles.rulespec_fixture_engine import (  # noqa: E402
+    evaluate_fixture_cases,
+)
 
 SUITE = "us-snap-abawd-grid"
 TITLE = "SNAP ABAWD post-P.L. 119-21 boundaries — Axiom vs PolicyEngine"
@@ -640,6 +644,59 @@ def _axiom_values(
     return values, diagnostics, module_inputs
 
 
+def _engine_verdicts(
+    roots: list[Path],
+    engine_binary: Path,
+    *,
+    evaluate: Callable[..., dict[str, dict[str, Any]]] = evaluate_fixture_cases,
+) -> tuple[dict[str, bool], dict[str, dict[str, bool]]]:
+    """Evaluate the nine boundary cases through the engine.
+
+    ``evaluate_fixture_cases`` fails when any verdict the fixture records
+    differs from the engine's; the pinned P.L. 119-21 expectations and the
+    construction-level diagnostics are then applied to the engine's own
+    verdicts, so the published values are always the engine's.
+    """
+    records = _fixture_records(_fixture_file(roots))
+    selected = {case.case_id: records[case.case_id] for case in CASES}
+
+    def outputs_for(_case_id: str, record: Mapping[str, Any]) -> list[str]:
+        asserted = record.get("output") or {}
+        return [
+            AXIOM_OUTPUT,
+            *(output for output in AXIOM_DIAGNOSTIC_OUTPUTS if output in asserted),
+        ]
+
+    engine = evaluate(engine_binary, MODULE, roots, selected, outputs_for)
+    values: dict[str, bool] = {}
+    diagnostics: dict[str, dict[str, bool]] = {}
+    for case in CASES:
+        verdicts: dict[str, bool] = {}
+        for output, outcome in engine[case.case_id].items():
+            if outcome not in ("holds", "not_holds"):
+                raise ValueError(
+                    f"{SUITE}: case {case.case_id!r}: the engine returned "
+                    f"{outcome!r} for {output}"
+                )
+            verdicts[output] = outcome == "holds"
+        compared = verdicts.pop(AXIOM_OUTPUT)
+        if compared != case.expected_exception:
+            raise ValueError(
+                f"{SUITE}: case {case.case_id!r}: the engine computes "
+                f"{AXIOM_OUTPUT} = {compared}, but the pinned P.L. 119-21 "
+                f"boundary expectation is {case.expected_exception}"
+            )
+        case_diagnostics = {
+            output: value
+            for output, value in verdicts.items()
+            if output in AXIOM_DIAGNOSTIC_OUTPUTS
+        }
+        _pin_replayed_diagnostics(case, case_diagnostics)
+        values[case.case_id] = compared
+        diagnostics[case.case_id] = case_diagnostics
+    return values, diagnostics
+
+
 def _pe_situation(case: BoundaryCase) -> dict[str, Any]:
     member: dict[str, Any] = {
         "age": {VALIDATION_YEAR: case.age},
@@ -955,6 +1012,10 @@ def _build_report(
                 "module": MODULE,
                 "output": AXIOM_OUTPUT,
                 "outputs": [AXIOM_OUTPUT],
+                "evaluation": (
+                    "axiom-rules-engine run-compiled on the fixture inputs; "
+                    "every recorded fixture verdict must equal the engine's"
+                ),
                 "fixture": str(FIXTURE_PATH),
                 "diagnostic_outputs": list(AXIOM_DIAGNOSTIC_OUTPUTS),
             },
@@ -1011,10 +1072,20 @@ def _build_report(
     }
 
 
-def generate(roots: list[Path]) -> dict[str, Any]:
+def generate(
+    roots: list[Path],
+    engine_binary: Path,
+    *,
+    evaluate: Callable[..., dict[str, dict[str, Any]]] = evaluate_fixture_cases,
+) -> dict[str, Any]:
     if not roots:
         raise ValueError("at least one --rulespec-root is required")
-    axiom, axiom_diagnostics, module_inputs = _axiom_values(roots)
+    # The fixture pass validates each case's construction and pins its
+    # recorded verdicts; the engine pass supplies every published verdict.
+    _fixture_values, _fixture_diagnostics, module_inputs = _axiom_values(roots)
+    axiom, axiom_diagnostics = _engine_verdicts(
+        roots, engine_binary, evaluate=evaluate
+    )
     policyengine, pe_diagnostics, child_routing_probe = _pe_values(CASES)
     _assert_non_vacuous(axiom, policyengine)
     return _build_report(
@@ -1037,8 +1108,17 @@ def main() -> int:
         help="RuleSpec checkout root; repeatable and supplied by comparison YAML",
     )
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--axiom-engine",
+        type=Path,
+        required=True,
+        help="Receipted axiom-rules-engine executable that evaluates the cases",
+    )
     args = parser.parse_args()
-    report = generate([root.resolve() for root in args.rulespec_root])
+    report = generate(
+        [root.resolve() for root in args.rulespec_root],
+        args.axiom_engine.resolve(),
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report_json_text(report))
     summary = report["summary"]

@@ -2,7 +2,15 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { loadSuiteCases } from "../utils/caseData";
-import { caseAgreement } from "../utils/caseAgreement.mjs";
+import { caseAgreement, triangulate } from "../utils/caseAgreement.mjs";
+import {
+  caseDisagreements,
+  caseUncompared,
+  caseUnexplainedCount,
+  hasMismatchDelta,
+  isUncompared,
+} from "../utils/caseMismatches.mjs";
+import { zeroOutputNames } from "../utils/zeroOutputs.mjs";
 import { engineLabel, formatPct } from "../utils/format";
 import { suiteMeta, suiteLabel, otherOracle } from "../utils/suites";
 
@@ -36,9 +44,9 @@ function inputName(name) {
   return tail.replaceAll(/[_-]/g, " ");
 }
 
-function unexplainedCount(c) {
-  return (c.m || []).filter((m) => !m.e).length;
-}
+// An uncompared row ("u": true) is an engine error, shown as "not
+// compared" and never counted as a disagreement.
+const unexplainedCount = caseUnexplainedCount;
 
 export function useSuiteCases(suites) {
   const [bySuite, setBySuite] = useState({});
@@ -67,33 +75,10 @@ function Triangulation({ runs, bySuite, onPick }) {
   const loaded = runs.filter((r) => bySuite[r.suite]?.cases);
   if (loaded.length < 2) return null;
 
-  const agreement = new Map();
-  const seen = new Map();
-  for (const run of loaded) {
-    for (const row of bySuite[run.suite].cases) {
-      const agrees = caseAgreement(row.r);
-      if (agrees === null) continue;
-      if (!seen.has(row.id)) {
-        seen.set(row.id, 0);
-        agreement.set(row.id, new Set());
-      }
-      seen.set(row.id, seen.get(row.id) + 1);
-      if (agrees) agreement.get(row.id).add(run.oracle);
-    }
-  }
-  const oracles = loaded.map((r) => r.oracle);
-  const buckets = new Map();
-  let joined = 0;
-  for (const [id, count] of seen) {
-    if (count !== loaded.length) continue;
-    joined += 1;
-    const agreeing = agreement.get(id);
-    const key = oracles.filter((o) => agreeing.has(o)).join("+") || "none";
-    if (!buckets.has(key)) buckets.set(key, []);
-    buckets.get(key).push(id);
-  }
+  const { buckets, joined } = triangulate(loaded, bySuite);
   if (!joined) return null;
 
+  const oracles = loaded.map((r) => r.oracle);
   const order = [
     { key: oracles.join("+"), label: "agrees with all oracles", cls: "tri-all" },
     ...oracles.map((o) => ({
@@ -163,11 +148,10 @@ function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots, outputSlot
   const matched = c.v || [];
   const [showDefaults, setShowDefaults] = useState(false);
   const [showZeroOutputs, setShowZeroOutputs] = useState(false);
-  const zeroOutputSlots = useMemo(() => {
-    if (!showZeroOutputs || !Array.isArray(outputSlots)) return [];
-    const present = new Set((outputs || []).map((r) => r.n));
-    return outputSlots.filter((n) => !present.has(n));
-  }, [showZeroOutputs, outputSlots, outputs]);
+  const zeroOutputSlots = useMemo(
+    () => (showZeroOutputs ? zeroOutputNames(c, outputSlots) : []),
+    [showZeroOutputs, outputSlots, c],
+  );
   const defaultedSlots = useMemo(() => {
     if (!showDefaults || !Array.isArray(inputSlots)) return [];
     const present = new Set((records || []).map((r) => r.n));
@@ -398,26 +382,34 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bySuite, loadedSuites.join("|")]);
 
+  const anyUncompared = useMemo(
+    () => merged.some((c) => caseUncompared(c).length > 0),
+    [merged],
+  );
+
   const rows = useMemo(() => {
     let out = merged;
     if (picked) out = out.filter((c) => picked.has(c.id));
-    if (status === "mismatch") out = out.filter((c) => (c.m || []).length > 0);
+    if (status === "mismatch")
+      out = out.filter((c) => caseDisagreements(c).length > 0);
+    if (status === "uncompared")
+      out = out.filter((c) => caseUncompared(c).length > 0);
     if (status === "unexplained")
       out = out.filter((c) => unexplainedCount(c) > 0);
     if (status === "explained")
       out = out.filter(
-        (c) => (c.m || []).length > 0 && unexplainedCount(c) === 0,
+        (c) => caseDisagreements(c).length > 0 && unexplainedCount(c) === 0,
       );
     if (status === "match")
       out = out.filter((c) => caseAgreement(c.r) === true);
     if (minDiff > 0)
       out = out.filter((c) =>
-        (c.m || []).some((m) => Math.abs(m.d || 0) >= minDiff),
+        caseDisagreements(c).some((m) => Math.abs(m.d || 0) >= minDiff),
       );
     if (query) out = out.filter((c) => String(c.id).includes(query.trim()));
     return [...out].sort((a, b) => {
       const worst = (c) =>
-        Math.max(0, ...(c.m || []).map((m) => Math.abs(m.d || 0)));
+        Math.max(0, ...caseDisagreements(c).map((m) => Math.abs(m.d || 0)));
       return worst(b) - worst(a);
     });
   }, [merged, picked, status, minDiff, query]);
@@ -476,6 +468,9 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
             <option value="mismatch">disagreements</option>
             <option value="unexplained">unexplained only</option>
             <option value="explained">explained only</option>
+            {anyUncompared && (
+              <option value="uncompared">not compared (engine errors)</option>
+            )}
             {!partial && <option value="match">matches only</option>}
             {!partial && <option value="all">everything</option>}
           </select>
@@ -654,7 +649,7 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                               {caseValue(m.x)}
                             </td>
                             <td className="mono v2-hht-num">
-                              {typeof m.d === "number" && m.d !== 0 ? (
+                              {hasMismatchDelta(m) ? (
                                 <span className="v2-hh-diff">
                                   $
                                   {Math.abs(
@@ -666,7 +661,14 @@ export default function HouseholdsView({ title, reports, onBack, backLabel }) {
                               )}
                             </td>
                             <td className="v2-hht-status">
-                              {m.e ? (
+                              {isUncompared(m) ? (
+                                <span
+                                  className="v2-action"
+                                  title="An engine returned no valid value; this pair was not compared"
+                                >
+                                  not compared
+                                </span>
+                              ) : m.e ? (
                                 <span className="v2-action v2-action-doc">
                                   explained
                                 </span>

@@ -22,7 +22,7 @@ Row shape (kept deliberately small):
     {"id": case_id, "r": match_rate,
      "h": {"n": household_size, "e": earned_income, "a": ages},
      "m": [{"c": concept, "l": left, "x": right, "d": right_minus_left,
-            "e": disposition_kind_if_explained}, ...]}
+            "e": disposition_kind_if_explained, "u": true_if_uncompared}, ...]}
 
 Usage:
     .venv/bin/python scripts/emit_case_artifacts.py            # all suites
@@ -46,6 +46,7 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.evidence import (  # noqa: E402
     dashboard_delta,
     dashboard_match_rate,
+    strict_json_loads,
 )
 
 REPORTS = REPO_ROOT / "reports"
@@ -144,6 +145,13 @@ def engine_pair_records(metadata: dict) -> list[dict]:
         value = metadata[key]
         if value is None or isinstance(value, str):
             continue
+        if key == "axiom_relations" and isinstance(value, (list, tuple)):
+            # Older full reports can still carry internal producer role hints.
+            value = [
+                {field: item for field, item in record.items() if field != "roles"}
+                if isinstance(record, dict) else record
+                for record in value
+            ]
         name = key[len("axiom_") :]
         out.append({"n": name, "v": value})
         peer = metadata.get("pe_" + name)
@@ -172,6 +180,9 @@ def compact_case(case: dict, explained: dict) -> dict:
         kind = explained.get((case.get("case_id"), m.get("concept")))
         if kind:
             row["e"] = kind
+        if m.get("uncompared") is True:
+            # An engine returned no valid value: shown, but never compared.
+            row["u"] = True
         mismatches.append(row)
     if case.get("matched") is False and not mismatches:
         # SNAP-QC case rows carry a headline boolean and first divergent stage
@@ -192,7 +203,13 @@ def compact_case(case: dict, explained: dict) -> dict:
     matches = case.get("matches")
     match_rate = case.get("match_rate")
     if isinstance(matches, list):
-        match_rate = dashboard_match_rate(len(matches), len(mismatches))
+        # Uncompared rows were never measured, so they stay out of the rate.
+        compared = [m for m in mismatches if m.get("u") is not True]
+        match_rate = (
+            None
+            if not matches and not compared and len(compared) < len(mismatches)
+            else dashboard_match_rate(len(matches), len(compared))
+        )
     row = {
         "id": case.get("case_id"),
         "r": match_rate,
@@ -241,17 +258,20 @@ def compact_case(case: dict, explained: dict) -> dict:
     outputs = metadata.get("axiom_all_outputs")
     if isinstance(outputs, dict) and outputs:
         kept_o = []
-        dropped_o = 0
+        zero_o = []
         for name in sorted(outputs):
             value = outputs[name]
             if value is None or value is False or value == 0:
-                dropped_o += 1
+                zero_o.append(name)
                 continue
             kept_o.append({"n": name, "v": value})
         row["o"] = kept_o
-        if dropped_o:
-            row["o0"] = dropped_o
+        if zero_o:
+            row["o0"] = len(zero_o)
+        # Both consumed by finalize_slot_dictionaries, stripped before chunks
+        # are written.
         row["_all_output_names"] = sorted(outputs)
+        row["_zero_output_names"] = zero_o
     else:
         synth = engine_pair_records(metadata)
         if synth:
@@ -288,8 +308,57 @@ def compact_case(case: dict, explained: dict) -> dict:
     return row
 
 
+def zero_output_mask(zero_names, output_slots: list[str]) -> str:
+    """Hex bitmask of ``zero_names`` over ``output_slots``.
+
+    Hex digit ``i // 4`` holds slot ``i`` at bit ``3 - i % 4``, so the mask
+    reads left to right in slot order. dashboard/src/utils/zeroOutputs.mjs
+    decodes it.
+    """
+
+    zero = set(zero_names)
+    bits = "".join("1" if name in zero else "0" for name in output_slots)
+    bits += "0" * (-len(bits) % 4)
+    return "".join(
+        format(int(bits[index : index + 4], 2), "x")
+        for index in range(0, len(bits), 4)
+    )
+
+
+def finalize_slot_dictionaries(rows: list[dict]) -> tuple[list[str], list[str]]:
+    """Build the suite's input/output name dictionaries and bind rows to them.
+
+    ``output_slots`` is the union of every output any case recorded. Cases
+    record different outputs — full evidence lists only the rules the
+    engine evaluated for that case — so a row cannot be assumed to hold a
+    zero for every slot it does not list. Each row with zero-valued outputs
+    gets ``oz``, their bitmask over ``output_slots``; a slot outside both
+    ``o`` and ``oz`` was not evaluated for that case.
+    """
+
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
+        zero_names = row.pop("_zero_output_names", None)
+        if zero_names:
+            row["oz"] = zero_output_mask(zero_names, output_slots)
+    return input_slots, output_slots
+
+
 def normalize_mismatch(m: dict) -> dict:
     """Standard and fiit-harness mismatch rows -> one shape."""
+    uncompared = {"uncompared": True} if m.get("uncompared") is True else {}
     if "entity_id" in m and "case_id" not in m:
         # fiit harness: entity_id/surface/axiom/policyengine/diff, plus the
         # household context (ages/earned) newer runs attach to each row.
@@ -301,6 +370,7 @@ def normalize_mismatch(m: dict) -> dict:
             "difference": m.get("diff"),
             "ages": [int(a) for a in (m.get("ages") or [])],
             "earned": m.get("earned"),
+            **uncompared,
         }
     return {
         "case_id": m.get("case_id"),
@@ -310,6 +380,7 @@ def normalize_mismatch(m: dict) -> dict:
         "difference": m.get("difference"),
         "ages": m.get("ages") or [],
         "earned": m.get("yearly_earned_income"),
+        **uncompared,
     }
 
 
@@ -340,6 +411,8 @@ def mismatch_only_rows(report: dict, explained: dict) -> list[dict]:
         kind = explained.get((m["case_id"], m["concept"]))
         if kind:
             entry["e"] = kind
+        if m.get("uncompared") is True:
+            entry["u"] = True
         row["m"].append(entry)
     return list(by_case.values())
 
@@ -355,20 +428,7 @@ def write_artifacts(
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
@@ -444,6 +504,27 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
     # changed report lacks producer-refreshed chunks.
     if has_versioned_chunks(suite):
         return f"preserve {suite}: versioned chunks (no full case rows in this run)"
+
+    # Complete legacy campaign corpora are also durable evidence. Without
+    # their ignored producer reports, emitting only mismatches would erase
+    # the matched households and their input/output evidence. Validate the
+    # existing corpus against the canonical report before preserving it;
+    # drift requires genuine source rows, never a destructive downgrade.
+    index_path = OUT_ROOT / suite / "index.json"
+    if index_path.exists():
+        index = strict_json_loads(index_path.read_bytes())
+        if not isinstance(index, dict):
+            raise ValueError(f"{suite}: existing case-artifact index must be an object")
+        if "partial" in index and index["partial"] != "mismatch-only":
+            raise ValueError(f"{suite}: unsupported case-artifact partial mode {index['partial']!r}")
+        if "partial" not in index:
+            problems, _stats = check_suite_artifacts(suite, dashboard_config)
+            if problems:
+                raise ValueError(
+                    f"{suite}: cannot preserve complete case corpus without "
+                    f"full source rows: {'; '.join(problems)}"
+                )
+            return f"preserve {suite}: complete legacy chunks (no full case rows in this run)"
 
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.
@@ -610,6 +691,7 @@ def _canonical_mismatch_payloads(
                 normalized.get("left"), normalized.get("right")
             ),
             "e": disposition.get("disposition"),
+            "u": normalized.get("uncompared") is True,
         }
     return payloads, problems
 
@@ -649,6 +731,7 @@ def _served_mismatch_payloads(
                 "x": mismatch.get("x"),
                 "d": mismatch.get("d"),
                 "e": mismatch.get("e"),
+                "u": mismatch.get("u") is True,
             }
     return payloads, problems
 
@@ -723,6 +806,14 @@ def check_suite_artifacts(
         )
 
     shared = canonical_keys & served_keys
+    status_drift = sorted(
+        key for key in shared if canonical[key]["u"] != served[key]["u"]
+    )
+    if status_drift:
+        problems.append(
+            f"{suite}: {len(status_drift)} served mismatch comparison status "
+            f"row(s) drift; examples={status_drift[:5]}"
+        )
     wrong_annotations = sorted(
         key for key in shared if canonical[key]["e"] != served[key]["e"]
     )

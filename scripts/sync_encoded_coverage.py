@@ -189,6 +189,12 @@ STATE_RULES = {
     "nc": [
         (r"^policies/dhhs/fns/", ("snap", None)),
         (r"^regulations/10a-ncac/71u/", ("snap", None)),
+        (
+            r"^policies/income_tax/"
+            r"(pilot|resident_core)_liability_pipeline\.yaml$",
+            ("state_income_tax", None),
+        ),
+        (r"^statutes/105/105-15[1-9]([./]|$)", ("state_income_tax", None)),
     ],
     "nh": [(r"^regulations/he-w-700/", ("snap", None))],
     "ny": [

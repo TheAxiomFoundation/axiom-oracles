@@ -18,6 +18,7 @@ used.
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import sys
 from datetime import datetime
@@ -25,12 +26,23 @@ from pathlib import Path
 
 import yaml
 
+from axiom_oracles.comparison.dispositions import (
+    apply_dispositions,
+    dispositions_path_for_suite,
+    load_dispositions,
+)
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
+from axiom_oracles.engine_identity import VERIFIED_RECEIPT
+from axiom_oracles.engine_publication import (
+    engine_identity_errors,
+    validate_engine_identity,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
+DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 RETIRED_MANIFEST_REPORTS = frozenset(
     {
         "axiom-policyengine-taxsim-al-income-tax-liability.json",
@@ -170,6 +182,20 @@ _DESCRIPTION_BY_OUTPUT = {
         "tax unit in the pinned US Populace; this bounded suite excludes "
         "taxable-income construction, credits, payments, and final annual "
         "liability"
+    ),
+    (
+        "us-nc:policies/income_tax/resident_core_liability_pipeline"
+        "#nc_pit_2026_income_tax_before_credits"
+    ): (
+        "North Carolina tax-year-2026 resident income tax before credits, "
+        "computed by the resident-core pipeline from federal adjusted gross "
+        "income, filing status, and the classified section 105-153.5 "
+        "deduction components (charitable contributions, medical expenses, "
+        "qualified residence interest, real estate property taxes, child "
+        "count, and taxable Social Security) over every routed tax unit in "
+        "the pinned US Populace; additions, subtractions, and itemized items "
+        "the population does not carry enter as reviewed zero constants, and "
+        "credits, payments, and final liability are out of scope"
     ),
     (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
@@ -314,6 +340,106 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
     return generated_at, run_kind, runtime
 
 
+def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict | None:
+    """Carry the source run's identity into its projection without relabelling.
+
+    Never inspect the publisher's engine checkout or executable. A campaign
+    with the canonical block keeps it verbatim, including any additional
+    receipt evidence, provided it came from a verified build receipt and agrees
+    with the campaign's runtime engine block. A runtime block whose commit came
+    from a verified build receipt is the same evidence under its historical
+    field names.
+
+    Campaigns from before receipts recorded the checkout's HEAD and the
+    executable's digest independently, so nothing binds that commit to those
+    bytes. Their projection asserts no engine identity (None): the evidence
+    stays under ``runtime_provenance``, an otherwise unchanged report keeps
+    its committed bytes, and publication admission accepts it only as a
+    byte-identical legacy exception until the campaign is rerun.
+    """
+
+    source_provenance = campaign.get("provenance")
+    if isinstance(source_provenance, dict) and "engine" in source_provenance:
+        engine = deepcopy(source_provenance["engine"])
+        validate_engine_identity({"provenance": {"engine": engine}})
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            raise ValueError("provenance.engine does not come from a verified build receipt")
+        # The runner writes both blocks from one receipt, so they must agree.
+        recorded = runtime.get("axiom_engine") if isinstance(runtime, dict) else None
+        if isinstance(recorded, dict):
+            for field, runtime_fields in (
+                ("commit", ("commit",)),
+                ("binary_sha256", ("binary_sha256", "executable_sha256")),
+            ):
+                for runtime_field in runtime_fields:
+                    value = recorded.get(runtime_field)
+                    if value is not None and str(value).lower() != engine[field].lower():
+                        raise ValueError(
+                            f"provenance.engine.{field} disagrees with "
+                            f"runtime_provenance.axiom_engine.{runtime_field}"
+                        )
+    else:
+        engine = deepcopy(runtime["axiom_engine"])
+        executable = engine.pop("executable_sha256")
+        if engine.setdefault("binary_sha256", executable) != executable:
+            raise ValueError(
+                "runtime_provenance.axiom_engine records two different "
+                "executable digests"
+            )
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            # Malformed historical evidence still fails closed.
+            errors = engine_identity_errors({"provenance": {"engine": engine}})
+            if errors:
+                raise ValueError("; ".join(errors))
+            return None
+    validate_engine_identity({"provenance": {"engine": engine}})
+    return engine
+
+
+def standard_mismatch_row(row: dict, *, concept: str) -> dict:
+    """Give a campaign mismatch the v2 row identity dispositions select on.
+
+    The campaign stores each mismatch by ``tax_unit_id`` with ``axiom`` and
+    ``policyengine`` values. Dispositions select rows by ``concept``,
+    ``case_id`` and ``kind`` and pin ``left``, ``right`` and the signed
+    ``difference`` (left minus right), so the projection adds those fields
+    and keeps the campaign's own.
+    """
+
+    left = float(row["axiom"])
+    right = float(row["policyengine"])
+    return {
+        **row,
+        "case_id": row["tax_unit_id"],
+        "concept": concept,
+        "kind": "amount_difference",
+        "left": left,
+        "right": right,
+        "difference": left - right,
+    }
+
+
+def apply_suite_dispositions(
+    report: dict,
+    dispositions_dir: Path = DISPOSITIONS_DIR,
+) -> dict:
+    """Merge ``dispositions/<suite>.yaml`` into a projected report, if present.
+
+    Suites without a dispositions file are returned unchanged, so their
+    committed reports keep their current shape.
+    """
+
+    path = dispositions_path_for_suite(dispositions_dir, report.get("suite"))
+    if path is None:
+        return report
+    dispositions = load_dispositions(path, repo_root=REPO_ROOT)
+    return apply_dispositions(
+        report,
+        dispositions,
+        dispositions_file=f"dispositions/{path.name}",
+    )
+
+
 def project_state(
     state: str,
     entry: dict,
@@ -321,11 +447,14 @@ def project_state(
     source_name: str,
 ) -> dict:
     compared = int(entry["compared_count"])
-    mismatches = entry.get("mismatches") or []
+    concept = entry["output"]
+    mismatches = [
+        standard_mismatch_row(row, concept=concept)
+        for row in entry.get("mismatches") or []
+    ]
     mismatch_count = int(entry["mismatch_count"])
     matched = compared - mismatch_count
     rate = (matched / compared * 100) if compared else 100.0
-    concept = entry["output"]
     description = _DESCRIPTION_BY_OUTPUT.get(
         concept,
         (
@@ -352,6 +481,7 @@ def project_state(
     }
     generated_at, run_kind, runtime = validate_campaign_run_provenance(campaign)
     rulespec = runtime.get("rulespec") or {}
+    engine = campaign_engine_provenance(campaign, runtime)
     standard_provenance = build_provenance(
         generated_by=(
             "scripts/emit_populace_campaign_artifacts.py"
@@ -368,6 +498,8 @@ def project_state(
         if rulespec.get("repository")
         else None,
     )
+    if engine is not None:
+        standard_provenance["engine"] = engine
     standard_provenance.update(
         {
             "campaign_report": source_name,
@@ -545,11 +677,13 @@ def main() -> int:
         emitted = emit_case_chunks(state, entry)
         if emitted:
             print(emitted)
-        report = project_state(
-            state,
-            entry,
-            campaign,
-            source.name,
+        report = apply_suite_dispositions(
+            project_state(
+                state,
+                entry,
+                campaign,
+                source.name,
+            )
         )
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(

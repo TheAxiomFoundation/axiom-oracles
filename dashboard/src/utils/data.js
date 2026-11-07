@@ -7,6 +7,7 @@
  */
 
 import { topLevelAggregates } from "./suites";
+import { comparedMismatchCount, uncomparedCount } from "./caseMismatches.mjs";
 
 /**
  * @typedef {Object} OracleData
@@ -347,13 +348,17 @@ export function buildNWayData(reports) {
   const aggregateTotals = reports.reduce(
     (acc, r) => {
       for (const agg of topLevelAggregates(r.aggregates)) {
-        acc.matches += (agg.comparison_count - agg.mismatch_count) || 0;
-        acc.mismatches += agg.mismatch_count || 0;
+        // mismatch_count includes uncompared pairs (engine errors), which
+        // comparison_count excludes; count them apart.
+        const mismatches = comparedMismatchCount(agg);
+        acc.matches += (agg.comparison_count - mismatches) || 0;
+        acc.mismatches += mismatches;
+        acc.uncompared += uncomparedCount(agg);
         acc.comparisons += agg.comparison_count || 0;
       }
       return acc;
     },
-    { matches: 0, mismatches: 0, comparisons: 0 },
+    { matches: 0, mismatches: 0, uncompared: 0, comparisons: 0 },
   );
 
   const summary = {
@@ -366,6 +371,7 @@ export function buildNWayData(reports) {
         ? (aggregateTotals.matches / aggregateTotals.comparisons) * 100
         : 0,
     mismatchCount: aggregateTotals.mismatches,
+    uncomparedCount: aggregateTotals.uncompared,
   };
 
   return { oracles, reports, matrix, overallMatrix, concepts, allCases, summary };

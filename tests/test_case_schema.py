@@ -105,6 +105,23 @@ def test_concept_mapping_compares_accessnyc_eligibility_code() -> None:
     assert snap.matches
 
 
+def test_wic_program_label_uses_the_rulespec_pipeline_address() -> None:
+    assert Concepts.WIC_ELIGIBLE == "us:programs/wic#eligible"
+
+    wic = next(
+        mapping
+        for mapping in load_program_mappings()
+        if mapping.concept_id == Concepts.WIC_ELIGIBLE
+    )
+
+    assert (
+        wic.target_for_engine("axiom")
+        == "us:policies/usda/wic/eligibility_pipeline#wic_eligible"
+    )
+    assert wic.target_for_engine("policyengine") == "is_wic_eligible"
+    assert wic.target_for_engine("accessnyc") == "S2R022"
+
+
 def test_default_compare_concepts_are_engine_intersection_for_suite_locale() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -168,6 +185,7 @@ def test_parent_concepts_expand_components_when_requested() -> None:
         Concepts.EMPLOYER_OASDI,
         Concepts.EMPLOYER_MEDICARE,
         Concepts.EMPLOYEE_FICA,
+        "us:tax/payroll#additional_medicare_tax",
     ]
 
 
@@ -622,9 +640,17 @@ def test_belgium_marital_quotient_suite_feeds_related_person_records() -> None:
             record["entity"] == "Person"
             for record in case.metadata["axiom_input_records"]
         )
-        assert case.metadata["axiom_relations"] == {
-            relation: [["head", "taxunit"], ["spouse", "taxunit"]]
-        }
+        assert case.metadata["axiom_relations"] == [
+            {
+                "name": relation,
+                "tuple": [member_id, "taxunit"],
+                "roles": {
+                    "owner_id": "taxunit", "owner_kind": "TaxUnit",
+                    "related_id": member_id, "related_kind": "Person",
+                },
+            }
+            for member_id in ("head", "spouse")
+        ]
         assert case.metadata["euromod_to_axiom_input_bridge"] == {
             "yem": {
                 "records": [

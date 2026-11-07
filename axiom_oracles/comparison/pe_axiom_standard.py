@@ -674,6 +674,14 @@ def _declared_case_ids(entry: dict) -> tuple[str, ...]:
     selector = entry.get("case_selector") or {}
     if isinstance(selector, dict) and isinstance(selector.get("case_ids"), list):
         return tuple(str(value) for value in selector["case_ids"])
+    by_output = selector.get("case_ids_by_output") if isinstance(selector, dict) else None
+    if isinstance(by_output, dict):
+        return tuple(dict.fromkeys(
+            str(value)
+            for ids in by_output.values()
+            if isinstance(ids, list)
+            for value in ids
+        ))
     return ()
 
 

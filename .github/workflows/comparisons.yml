@@ -32,6 +32,8 @@ jobs:
       matrix: ${{ steps.list.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Install PyYAML
         run: pip install pyyaml
@@ -43,9 +45,11 @@ jobs:
         # Registry entries only (#299): skip `*.fixtures.yaml` sanity
         # documents, non-registry kinds (parameter-oracles is a
         # parameter-suite-list with no runner — run_comparison.py crashes on
-        # it), and suites declaring `ci: manual` (not CI-runnable; the
-        # affected-rerun selector leaves those to the manual lane for the
-        # same reason).
+        # it), and suites declaring any `ci:` routing: `ci: manual` (not
+        # CI-runnable; the affected-rerun selector leaves those to the manual
+        # lane for the same reason) or `ci: <lane>` (run by that lane's own
+        # workflow, e.g. snap-qc-replay.yml, which provisions what these bare
+        # runners lack).
         run: |
           python3 - <<'PY'
           import json
@@ -54,7 +58,7 @@ jobs:
           import yaml
           only = os.environ.get("ONLY", "").strip()
           names = []
-          manual = []
+          routed = {}
           for path in sorted(Path("comparisons").glob("*.yaml")):
               if path.name.endswith(".fixtures.yaml"):
                   continue
@@ -63,15 +67,20 @@ jobs:
                   continue
               if not (config.get("runner") or {}).get("type"):
                   continue
-              if config.get("ci") == "manual":
-                  manual.append(path.stem)
+              if config.get("ci"):
+                  routed[path.stem] = config["ci"]
                   continue
               names.append(path.stem)
           if only:
-              if only in manual:
-                  raise SystemExit(
-                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
+              if only in routed:
+                  route = routed[only]
+                  hint = (
                       "run it with a supervised run_comparison.py"
+                      if route == "manual"
+                      else f"run it through the {route} lane workflow"
+                  )
+                  raise SystemExit(
+                      f"{only} declares ci: {route} (see comparisons/{only}.yaml); {hint}"
                   )
               names = [n for n in names if n == only]
               if not names:
@@ -81,6 +90,30 @@ jobs:
               fh.write(f"matrix={json.dumps(matrix)}\n")
           print(json.dumps(matrix, indent=2))
           PY
+
+  # Fails, naming the file, when a pinned PolicyEngine artifact stops
+  # installing: a hashed-URL file in axiom_oracles/pinned_artifacts.py stops
+  # downloading or no longer matches its SHA-256, or a runtime pin is neither
+  # on PyPI's index nor in that table. Breaks already tracked in an issue
+  # (KNOWN_OPEN in the script) print as warnings, so only a new break fails.
+  # It runs beside the matrix, so one pruned pin never holds back the suites
+  # that still install.
+  pinned-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install the check's dependencies
+        # The versions uv.lock resolves.
+        run: pip install pyyaml==6.0.3 requests==2.33.1
+
+      - name: Check every pinned PolicyEngine artifact
+        run: python3 scripts/check_pinned_artifacts.py --verbose
 
   compare:
     needs: discover
@@ -94,6 +127,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
+          ref: main
+          fetch-depth: 0
 
       - name: Checkout axiom-encode
         uses: actions/checkout@v4
@@ -133,8 +168,17 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
         run: |
-          uv pip install --system -e '.[policyengine]'
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+
+      - name: Load published data for the comparison
+        working-directory: axiom-oracles
+        run: python3 scripts/oracle_data.py materialize --baseline
 
       - name: Cache PolicyEngine ECPS dataset
         uses: actions/cache@v4
@@ -200,10 +244,16 @@ jobs:
           import json
           d = json.load(open('$latest'))
           if 'compared_values' in d:
-              cv, mc = d['compared_values'], d['mismatch_count']
+              # mismatch_count includes uncompared pairs (engine errors);
+              # compared_values excludes them.
+              un = d.get('uncompared_mismatches', 0) or 0
+              cv, mc = d['compared_values'], max(0, d['mismatch_count'] - un)
               pct = 100*(cv-mc)/cv if cv else 0
               print(f'compared_values: {cv}')
               print(f'mismatch_count:  {mc}')
+              print(f'uncompared:      {un}')
+              er = d.get('errors') or []
+              print(f'errors:          {len(er)}')
               print(f'agreement:       {pct:.4f}%')
           elif 'case_count' in d:
               cc = d.get('case_count', 0)
@@ -222,19 +272,30 @@ jobs:
 
   # Per-rule verification KPI (Phase-A item A7). Regenerates
   # rule_verification.json + rule_verification_summary.json from the current
-  # rulespec-us tree so the coverage number can't rot, and commits the refresh
-  # back on the weekly schedule. Guards: only commits on schedule (not
+  # rulespec-us tree so the coverage number can't rot, and publishes the refresh
+  # to oracle-data on the weekly schedule. Guards: only commits on schedule (not
   # workflow_dispatch dry-runs), and no-ops cleanly if the checkout is missing.
+  # Source and data are merged before generation; main is never a push target.
   rule-coverage:
     needs: compare
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: oracle-data-publication
+      cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
     steps:
       - name: Checkout axiom-oracles
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Prepare current main source and published data
+        run: python3 scripts/oracle_data.py prepare
 
       - name: Checkout rulespec-us
         uses: actions/checkout@v4
@@ -249,8 +310,12 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package for generation and candidate gates
+        run: uv pip install --system -e .
 
       - name: Regenerate per-rule verification data
         run: |
@@ -261,20 +326,11 @@ jobs:
           python3 scripts/rule_verification.py \
             --rulespec .rulespec-us --ref HEAD --no-fetch
 
-      - name: Commit refreshed coverage KPI (scheduled runs only)
+      - name: Publish refreshed coverage KPI to oracle-data (scheduled runs only)
         if: github.event_name == 'schedule'
         run: |
-          if git diff --quiet -- dashboard/public/data/rule_verification.json \
-               dashboard/public/data/rule_verification_summary.json; then
-            echo "no coverage changes"
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/rule_verification.json \
-                  dashboard/public/data/rule_verification_summary.json
-          git commit -m "data: refresh per-rule verification KPI $(date +%Y-%m-%d)"
-          git push
+          python3 scripts/oracle_data.py publish --group kpi \
+            --message "data: refresh per-rule verification KPI $(date +%Y-%m-%d)"
 
       - name: Summarize coverage KPI
         if: always()

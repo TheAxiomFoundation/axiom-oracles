@@ -15,7 +15,9 @@ import fnmatch
 import hashlib
 import importlib.util
 import json
+import math
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -49,6 +51,7 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles import pinned_artifacts  # noqa: E402
 from axiom_oracles.provenance import (  # noqa: E402
     _git_env,
     _git_sha,
@@ -566,6 +569,18 @@ def main() -> int:
             "prove a real run."
         ),
     )
+    parser.add_argument(
+        "--from-report",
+        type=Path,
+        default=None,
+        help=(
+            "Republish an earlier real run of this comparison from its "
+            "stamped reports/ JSON instead of executing the runner: re-adapt "
+            "it, merge the current dispositions/<suite>.yaml and rebind the "
+            "dashboard copy. For manual suites whose dispositions change "
+            "after a long population run."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -603,6 +618,8 @@ def main() -> int:
         return _run_sanity(args.name)
 
     config = _load_comparison(args.name)
+    if args.from_report is not None:
+        return _republish_from_report(config, args.from_report, summary=args.summary)
     _verify_declared_pins(config)
     if args.sample_size is not None:
         config["runner"]["parameters"]["sample_size"] = args.sample_size
@@ -634,10 +651,31 @@ def main() -> int:
     )
     os.close(staging_fd)
     staging = Path(staging_name)
+    receipt_output = staging.with_name(staging.name + ".engine.json")
 
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
-        runner_fn(config["runner"], staging)
+        # Some generator bridges retain values but discard EngineResult.raw.
+        # Collect their actual executions through a private journal inherited
+        # by subprocesses, rather than infer identity from a configured repo.
+        from axiom_oracles.engine_identity import ENGINE_RECEIPT_OUTPUT_ENV
+
+        previous_receipt_output = os.environ.get(ENGINE_RECEIPT_OUTPUT_ENV)
+        os.environ[ENGINE_RECEIPT_OUTPUT_ENV] = str(receipt_output.resolve())
+        try:
+            runner_fn(config["runner"], staging)
+        finally:
+            if previous_receipt_output is None:
+                os.environ.pop(ENGINE_RECEIPT_OUTPUT_ENV, None)
+            else:
+                os.environ[ENGINE_RECEIPT_OUTPUT_ENV] = previous_receipt_output
+        if receipt_output.exists() and not config["runner"].get("_reemitted_report"):
+            executed = json.loads(receipt_output.read_text())
+            selected = config["runner"].get("_engine_receipt") or {}
+            for field in ("commit", "binary_sha256"):
+                if selected.get(field) is not None and selected[field] != executed.get(field):
+                    raise SystemExit(f"Executed Axiom engine {field} differs from selected receipt")
+            config["runner"]["_engine_receipt"] = executed
         if args.require_live and config["runner"].get("_reemitted_report"):
             # The runner already printed why it could not execute. Refuse
             # before provenance stamping or publication, so this script
@@ -686,7 +724,9 @@ def main() -> int:
                 config,
                 suite=suite,
             )
-            adapted["provenance"] = provenance
+            adapted["provenance"] = _preserve_relation_binding_diagnostics(
+                provenance, adapted.get("provenance")
+            )
         preserve_existing_versioned = bool(
             config["runner"].get("_reemitted_report")
         )
@@ -743,12 +783,153 @@ def main() -> int:
                 )
     finally:
         staging.unlink(missing_ok=True)
+        receipt_output.unlink(missing_ok=True)
+        receipt_output.with_name(receipt_output.name + ".lock").unlink(missing_ok=True)
 
     if args.summary:
         _print_summary(output)
         _print_coverage_warnings(config)
 
     return 0
+
+
+def _republish_from_report(config: dict, source: Path, *, summary: bool) -> int:
+    """Rebuild a suite's dashboard copy from an earlier real run's report.
+
+    The report must be this suite's stamped reports/ JSON from a real
+    execution: its provenance names this comparison and is not a
+    re-emission. Nothing executes and nothing is re-stamped; the report keeps
+    the provenance its run recorded. The dashboard copy is re-adapted from it,
+    merged with the current dispositions and bound to a FULL v2 report under
+    reports/, exactly as the run itself would have published it.
+
+    It holds the report's publication lock from its first read through
+    publication, the lock a run takes to publish that report, and adapts the
+    one snapshot it parsed. So a run that replaces the report meanwhile can
+    never pair one run's results with another's provenance.
+    """
+    name = config["name"]
+    source = source.resolve()
+    reports_dir = (REPO_ROOT / "reports").resolve()
+    if reports_dir not in source.parents:
+        raise SystemExit(
+            f"--from-report {source} must be under {reports_dir}: the "
+            "dashboard copy binds to a repo-relative reports/ path"
+        )
+    dashboard_target = config.get("dashboard", {}).get("filename")
+    if not dashboard_target:
+        raise SystemExit(f"{name} declares no dashboard copy to republish")
+    suite = config.get("dashboard", {}).get("suite", name)
+    runner_type = config["runner"]["type"]
+    lock_path = source.with_name(f".{source.name}.lock")
+    with open(lock_path, "a") as lock_fh:
+        fcntl.flock(lock_fh, fcntl.LOCK_EX)
+        try:
+            raw = json.loads(source.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(f"--from-report {source}: cannot read JSON ({exc})")
+        provenance = raw.get("provenance") if isinstance(raw, dict) else None
+        if not isinstance(provenance, dict):
+            raise SystemExit(f"--from-report {source} carries no provenance block")
+        expected = f"scripts/run_comparison.py::{name}"
+        if provenance.get("generated_by") != expected:
+            raise SystemExit(
+                f"--from-report {source} was generated by "
+                f"{provenance.get('generated_by')!r}, not {expected!r}"
+            )
+        if provenance.get("reemitted_report"):
+            raise SystemExit(
+                f"--from-report {source} is a re-emission, not a real run; "
+                "there is nothing to republish"
+            )
+        adapted = _adapt_raw_to_v2(raw, runner_type, config, suite=suite)
+        adapted["provenance"] = provenance
+        _write_dashboard_report(
+            adapted,
+            dashboard_target,
+            full_report_path=source,
+            dashboard_config=config.get("dashboard"),
+        )
+        if summary:
+            _print_summary(source)
+    return 0
+
+
+def _is_v2_report_for(path: Path, suite: object) -> bool:
+    """Whether ``path`` already holds this suite's v2 report (the binding
+    source a premerged dashboard copy can name)."""
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(data, dict)
+        and data.get("suite") == suite
+        and isinstance(data.get("summary"), dict)
+        and isinstance(data.get("mismatches"), list)
+    )
+
+
+# Population runs record one observed-output row per compared value: about
+# 3.9 million rows and 1 GB for fiit-ecps. No published copy carries more
+# than this many; the raw report under reports/ keeps every row.
+_PUBLISHED_MAX_OBSERVED_OUTPUTS = 10_000
+
+
+def _without_observed_outputs(report: dict) -> dict:
+    """Drop ``observed_outputs`` past the published cap, with the claims they back.
+
+    Attestation binds an output only to returned values the report body
+    shows, and a stamp may not claim more than the body shows
+    (``axiom_oracles.conformance.attestation``). A copy without the rows
+    therefore cannot keep the stamp's per-output claims either: ``outputs``
+    is emptied and ``outputs_complete`` set false, so the copy attests no
+    output instead of claiming counts that nothing in it backs.
+    ``observed_outputs_omitted`` records how many rows were dropped, and
+    ``output_summary`` keeps each output's comparison count.
+    """
+    observed = report.get("observed_outputs")
+    if (
+        not isinstance(observed, list)
+        or len(observed) <= _PUBLISHED_MAX_OBSERVED_OUTPUTS
+    ):
+        return report
+    slim = {key: value for key, value in report.items() if key != "observed_outputs"}
+    slim["observed_outputs_omitted"] = len(observed)
+    stamp = slim.get("attestation")
+    if isinstance(stamp, dict) and "outputs" in stamp:
+        slim["attestation"] = {**stamp, "outputs": [], "outputs_complete": False}
+    return slim
+
+
+def _write_full_v2_report(adapted: dict, output: Path) -> Path:
+    """Publish the adapted v2 report, every mismatch row kept, beside ``output``.
+
+    Harnesses such as ``tax-populace-compare`` emit their own JSON shape, so
+    the raw report under reports/ is not a v2 report and cannot be the
+    source a premerged dashboard copy binds to: apply_dispositions.py
+    --check requires the pointed file to be this suite's FULL v2 report.
+    This writes that report atomically in the same directory, without
+    ``cases`` (the dashboard's case chunks carry them; the consumer
+    re-derives only from ``summary`` and ``mismatches``) and with
+    ``observed_outputs`` capped as in the dashboard copy
+    (``_without_observed_outputs``).
+    """
+    full = _without_observed_outputs(
+        {key: value for key, value in adapted.items() if key != "cases"}
+    )
+    target = output.with_name(f"{output.stem}-v2{output.suffix}")
+    fd, name = tempfile.mkstemp(
+        dir=target.parent, prefix=f".{target.name}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(fd, "w") as fh:
+            fh.write(json.dumps(full, indent=2, sort_keys=True))
+            fh.write("\n")
+        os.replace(name, target)
+    finally:
+        Path(name).unlink(missing_ok=True)
+    return target
 
 
 def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
@@ -837,7 +1018,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
-    from axiom_oracles.engine_compat import explicit_engine_roots
+    from axiom_oracles.engine_compat import declared_engine_roots
 
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
@@ -853,7 +1034,7 @@ def _declared_repo_root_checkouts(params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    return [str(path) for path in explicit_engine_roots(roots)]
+    return [str(path) for path in declared_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
@@ -888,7 +1069,7 @@ def _complete_rulespecs_from_affected_map(
     suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.engine_compat import declared_engine_roots
         from axiom_oracles.provenance import (
             canonical_rulespec_slug,
             checkout_remote_matches_slug,
@@ -911,7 +1092,7 @@ def _complete_rulespecs_from_affected_map(
         }
         declared_roots = [Path(path) for path in declared_paths or []]
         declared_roots.extend(
-            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+            path for path in declared_engine_roots(declared_roots) if path not in declared_roots
         )
         observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
@@ -1029,8 +1210,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
 
     Reads the config for rulespec checkout paths / remote, engine repo, and the
     oracle stack pins; reads the just-written report for a ``dataset_identity``
-    block (threaded by the FIIT/UK adapters). Everything degrades gracefully —
-    provenance must annotate a run, never fail one.
+    block (threaded by the FIIT/UK adapters). Optional metadata degrades
+    gracefully; conflicting executable identity rejects the run.
     """
     from axiom_oracles.provenance import (
         build_provenance,
@@ -1093,10 +1274,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Workspace containers may contribute country children even when another
     # composition path already supplied a SHA. Stamp the compiler's normalized
     # children as well, retaining their raw origins and unknown SHA observations.
-    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, declared_engine_roots
 
     rulespec_paths = list(dict.fromkeys([
-        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+        *rulespec_paths, *(str(path) for path in declared_engine_roots(rulespec_paths)),
     ]))
     rulespecs = []
     for raw in rulespec_paths:
@@ -1207,32 +1388,52 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     if runner.get("_reemitted_report"):
         rulespecs = [{"repo": entry.get("repo"), "sha": None} for entry in rulespecs]
 
-    # Engine identity (Axiom side under test).
-    axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
-    axiom_rules_path = None
-    if axiom_rules_ref:
-        try:
-            axiom_rules_path = _resolve_path(str(axiom_rules_ref), "axiom_rules_repo")
-        except SystemExit:
-            axiom_rules_path = None
-    engine = engine_provenance(axiom_rules_path)
-    # Verifiable executable identity, when the lane resolved one (us-tariff-
-    # panel records the binary path + sha256 of its bytes): the repo-derived
-    # `axiom_rules_engine_sha` above labels the checkout's current HEAD, which
-    # can postdate the build that actually ran (#448 review round 3).
-    engine_binary = params.get("engine_binary")
-    engine_binary_sha256 = params.get("engine_binary_sha256")
-    if engine_binary:
-        engine = {**engine, "binary": str(engine_binary)}
-    if engine_binary_sha256:
-        engine = {**engine, "binary_sha256": str(engine_binary_sha256)}
-    # A re-emission executed no engine. Recording the leg's own checkout here
-    # labels the copied numbers with an engine that never produced them, and
-    # _stamp_report_provenance then writes that version into the report's
-    # engines.versions: re-emissions of the BE marital-quotient report turned
-    # its real run's axiom_rules_engine 0.1.0 into 0.2.2.
+    # Receipts come from execution, never from a neighbouring checkout's HEAD.
+    # In-process runners carry them in the report; subprocess lanes retain the
+    # receipt obtained when selecting/building their explicitly passed binary.
+    try:
+        completed_report = json.loads(output.read_text())
+    except (OSError, ValueError):
+        completed_report = {}
+    existing_provenance = completed_report.get("provenance") or {}
+    from axiom_oracles.engine_publication import is_axiom_report
+
+    uses_axiom = (
+        is_axiom_report(completed_report)
+        or "axiom" in (params.get("left"), params.get("right"))
+        or (
+            not (params.get("left") and params.get("right"))
+            and bool(runner.get("axiom_rules_repo"))
+        )
+    )
+    executed_engine = (
+        existing_provenance.get("engine")
+        or (completed_report.get("engine_identity") or {}).get("axiom")
+        or {}
+    )
+    selected_engine = runner.get("_engine_receipt") or {}
+    if not runner.get("_reemitted_report") and selected_engine and executed_engine:
+        for field in ("commit", "binary_sha256"):
+            if (
+                executed_engine.get(field) is not None
+                and executed_engine.get(field) != selected_engine.get(field)
+            ):
+                raise SystemExit(f"Executed Axiom engine {field} differs from selected receipt")
+    engine = (
+        selected_engine
+        or executed_engine
+        or (engine_provenance(None) if uses_axiom else {})
+    )
+    if not runner.get("_reemitted_report") and runner.get("_engine_receipt"):
+        from axiom_oracles.engine_identity import engine_receipt
+
+        selected = runner["_engine_receipt"]
+        if selected.get("binary_sha256"):
+            current = engine_receipt(selected["binary"])
+            if current["binary_sha256"] != selected["binary_sha256"]:
+                raise SystemExit("Axiom executable changed during comparison")
     if runner.get("_reemitted_report"):
-        engine = {}
+        engine = None
 
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
@@ -1251,6 +1452,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 else None
             ),
         }
+        # Not a `policyengine_*` key: attestation reads those as country-model
+        # versions (conformance/attestation.py).
+        if params.get("pinned", True) and params.get("policyengine_us_source"):
+            oracle["model_source"] = str(params["policyengine_us_source"])
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
             "name": "policyengine",
@@ -1306,6 +1511,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+        if "taxsim" in engines:
+            oracle.update(_taxsim_oracle_identity(output))
     elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
@@ -1321,7 +1528,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
-            "policyengine_taxsim": _taxsim_pin_version(),
+            **_taxsim_oracle_identity(output),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
@@ -1398,7 +1605,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         identity = _normalize_dataset_identity(raw_report) if isinstance(
             raw_report, dict
         ) else None
-        dataset = dataset_provenance_from_identity(identity)
+        if identity is not None and identity.get("source") == "taxsim-csv":
+            # The taxsim-csv loader's identity is the whole provenance: the
+            # file's full sha256, size, rows, year override, per-state row
+            # counts, and origin — dataset_provenance_from_identity keeps only
+            # the populace-shaped fields.
+            dataset = _taxsim_csv_dataset_provenance(identity)
+        else:
+            dataset = dataset_provenance_from_identity(identity)
     except (OSError, json.JSONDecodeError):
         dataset = None
     if dataset is None:
@@ -1422,12 +1636,40 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # generated_at timestamp dates the re-emission, not the numbers.
     if runner.get("_reemitted_report"):
         provenance["reemitted_report"] = True
+        # Historical identity belongs to the copied results, including empty,
+        # unknown, or legacy fields. Preserve it exactly, without normalization.
+        if "engine" in existing_provenance:
+            provenance["engine"] = existing_provenance["engine"]
+        else:
+            provenance.pop("engine", None)
         # The source report's identity + original generation time, when the
         # re-emitting lane recorded it: generated_at above dates the
         # re-emission, THIS dates the numbers (sol stack review F6).
         if runner.get("_reemitted_source"):
             provenance["reemitted_from"] = runner["_reemitted_source"]
     return provenance
+
+
+def _preserve_relation_binding_diagnostics(
+    provenance: dict,
+    existing_provenance: object,
+) -> dict:
+    """Keep public-safe run diagnostics while replacing runner provenance."""
+    from axiom_oracles.bridges.relation_binding import public_relation_binding_diagnostics
+
+    combined = dict(provenance)
+    if combined.get("reemitted_report"):
+        if isinstance(existing_provenance, dict) and "engine" in existing_provenance:
+            combined["engine"] = existing_provenance["engine"]
+        else:
+            combined.pop("engine", None)
+    key = "relation_binding_diagnostics"
+    if key in combined:
+        combined[key] = public_relation_binding_diagnostics(combined[key])
+    if isinstance(existing_provenance, dict):
+        if key in existing_provenance:
+            combined[key] = public_relation_binding_diagnostics(existing_provenance[key])
+    return combined
 
 
 def _stamp_report_provenance(
@@ -1443,14 +1685,147 @@ def _stamp_report_provenance(
     insertion order, with/without trailing newline). Re-detect the original
     formatting and re-emit in the same shape so adding provenance produces a
     one-key diff rather than reordering every key.
+
+    A full-evidence report can be gigabytes, so its peak is one
+    ``json.load``: that reads the whole text and parses it, then the text is
+    freed. Nothing else builds a whole-report string: each candidate format
+    is compared by streaming its encoding against the file
+    (:func:`_report_matches_format`), and the stamped report is streamed to
+    a sibling temporary file that then replaces the report, so a failed
+    write leaves the report as it was. The bytes written are what
+    ``json.dumps`` of the stamped report in the detected format, plus the
+    original trailing newline, would give, and the file keeps its mode.
+
+    ``output`` must be this user's regular file, as the publisher requires
+    of its staging path; anything else (a symlink, say) is refused with
+    ``SystemExit`` before anything is read or written. A missing file is
+    left alone, as before.
     """
+    if _own_regular_report(output) is None:
+        return
     try:
-        original_text = output.read_text()
-        data = json.loads(original_text)
+        with open(output) as handle:  # read_text()'s defaults
+            data = json.load(handle)
     except (OSError, json.JSONDecodeError):
         return
     if not isinstance(data, dict):
         return
+    # Detect the format on the unedited parse, as the comparison against a
+    # fresh parse of the original text did, before the edits below.
+    sort_keys, indent = next(
+        (
+            (sort_keys, indent)
+            for sort_keys, indent in _STAMP_FORMATS
+            if _report_matches_format(output, data, indent=indent, sort_keys=sort_keys)
+        ),
+        # Unknown formatting (hand-edited): default to indent=2 sorted.
+        (True, 2),
+    )
+    trailing = "\n" if _file_ends_with_newline(output) else ""
+    _apply_report_provenance(
+        data,
+        provenance,
+        require_engine_versions=require_engine_versions,
+        preserve_runner_provenance=preserve_runner_provenance,
+    )
+    _replace_report(
+        output,
+        lambda handle: (
+            json.dump(data, handle, indent=indent, sort_keys=sort_keys),
+            handle.write(trailing),
+        ),
+    )
+
+
+def _own_regular_report(output: Path) -> os.stat_result | None:
+    """``lstat`` of a report this user owns as a regular file; None if absent.
+
+    Mirrors the publisher's check on its staging path: anything else is
+    refused with ``SystemExit``, so a swapped-in symlink is never followed.
+    """
+    try:
+        info = os.lstat(output)
+    except FileNotFoundError:
+        return None
+    if not stat.S_ISREG(info.st_mode) or info.st_uid != os.getuid():
+        raise SystemExit(
+            f"staging report {output} is not this user's regular file — "
+            "refusing to stamp it"
+        )
+    return info
+
+
+def _replace_report(output: Path, write) -> None:
+    """Write ``output`` through ``write(handle)``, all or nothing.
+
+    The report, which must still be this user's regular file, is replaced
+    atomically by a sibling temporary file with its mode. If the write
+    fails, the temporary file is removed and the report is unchanged.
+    """
+    info = _own_regular_report(output)
+    if info is None:
+        raise SystemExit(f"staging report {output} disappeared while stamping it")
+    descriptor, temporary = tempfile.mkstemp(
+        prefix=f".{output.name}.", suffix=".stamp", dir=output.parent
+    )
+    try:
+        with open(descriptor, "w") as handle:  # write_text()'s defaults
+            write(handle)
+        os.chmod(temporary, stat.S_IMODE(info.st_mode))
+        os.replace(temporary, output)
+    except BaseException:
+        Path(temporary).unlink(missing_ok=True)
+        raise
+
+
+#: Candidate (sort_keys, indent) formats, in detection order.
+_STAMP_FORMATS = ((True, 2), (True, 1), (False, 2), (False, 1))
+_STAMP_READ_CHARS = 1 << 16
+
+
+def _report_matches_format(
+    path: Path, data: object, *, indent: int, sort_keys: bool
+) -> bool:
+    """Whether ``path`` holds ``json.dumps(data, indent=, sort_keys=)``, optionally
+    followed by one newline, compared chunk by chunk without building either
+    whole string."""
+    encoder = json.JSONEncoder(indent=indent, sort_keys=sort_keys)
+    with open(path) as handle:  # read_text()'s defaults
+        buffer, position = "", 0
+        for chunk in encoder.iterencode(data):
+            while position + len(chunk) > len(buffer):
+                more = handle.read(_STAMP_READ_CHARS)
+                if not more:
+                    return False
+                buffer = buffer[position:] + more
+                position = 0
+            if not buffer.startswith(chunk, position):
+                return False
+            position += len(chunk)
+        tail = buffer[position:position + 2]
+        if len(tail) < 2:
+            tail += handle.read(2 - len(tail))
+        return tail in ("", "\n")
+
+
+def _file_ends_with_newline(path: Path) -> bool:
+    """``path.read_text().endswith("\n")`` without reading the whole file."""
+    with open(path, "rb") as handle:
+        handle.seek(0, os.SEEK_END)
+        size = handle.tell()
+        # Universal newlines read a final "\r" or "\r\n" as "\n" too.
+        handle.seek(max(size - 1, 0))
+        return handle.read(1) in (b"\n", b"\r")
+
+
+def _apply_report_provenance(
+    data: dict,
+    provenance: dict,
+    *,
+    require_engine_versions: bool,
+    preserve_runner_provenance: bool,
+) -> None:
+    """Stamp ``provenance`` and the resolved engine versions onto a parsed report."""
     existing_provenance = data.get("provenance")
     if preserve_runner_provenance and isinstance(existing_provenance, dict):
         # DE's unified pair record carries the evidence-producing execution
@@ -1466,8 +1841,26 @@ def _stamp_report_provenance(
                 "generated_at": provenance.get("generated_at"),
             },
         }
+        if provenance.get("reemitted_report"):
+            data["provenance"]["reemitted_report"] = True
+            if "engine" in existing_provenance:
+                data["provenance"]["engine"] = existing_provenance["engine"]
+            else:
+                data["provenance"].pop("engine", None)
+        elif provenance.get("engine"):
+            producer_engine = existing_provenance.get("engine")
+            data["provenance"]["engine"] = {
+                **(producer_engine if isinstance(producer_engine, dict) else {}),
+                **provenance["engine"],
+            }
     else:
-        data["provenance"] = provenance
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            provenance, existing_provenance
+        )
+    if preserve_runner_provenance:
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            data["provenance"], data["provenance"],
+        )
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -1477,7 +1870,9 @@ def _stamp_report_provenance(
         versions = dict(engines.get("versions") or {})
         engine = provenance.get("engine") or {}
         oracle = provenance.get("oracle") or {}
-        axiom_version = engine.get("axiom_rules_engine_version")
+        axiom_version = None if provenance.get("reemitted_report") else (
+            engine.get("version") or engine.get("axiom_rules_engine_version")
+        )
         expected_versions = {}
         policyengine_pin = oracle.get("policyengine_package")
         if (
@@ -1507,19 +1902,6 @@ def _stamp_report_provenance(
             versions["axiom_rules_engine"] = str(axiom_version)
         if versions:
             engines["versions"] = versions
-    trailing = "\n" if original_text.endswith("\n") else ""
-    for sort_keys in (True, False):
-        for indent in (2, 1):
-            reserialized = json.dumps(
-                json.loads(original_text), indent=indent, sort_keys=sort_keys
-            )
-            if original_text in (reserialized, reserialized + "\n"):
-                output.write_text(
-                    json.dumps(data, indent=indent, sort_keys=sort_keys) + trailing
-                )
-                return
-    # Unknown formatting (hand-edited): default to indent=2 sorted.
-    output.write_text(json.dumps(data, indent=2, sort_keys=True) + trailing)
 
 
 def _print_coverage_warnings(config: dict) -> None:
@@ -1584,7 +1966,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
     rulespec_root = _ensure_rulespec_us_checkout(runner["rulespec_remote"])
     # The clone is deleted in the finally below, before provenance is stamped —
     # record its HEAD now so the report can say which rulespec-us SHA it ran
@@ -1604,19 +1986,23 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # --allow-policyengine-us-version to the harness.
     # Oracle PE stack. The pinned versions default to the model version the
     # certified Populace artifact was built with (1.729.0), but a comparison can
-    # override them to validate against a newer certified oracle — the us-pe
-    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
-    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
-    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
-    # bypasses the build_with gate), so only the PE computation vintage moves.
+    # override them to validate against a newer certified oracle (the us-pe
+    # universe pins policyengine-us 1.767.3). The harness still runs against the
+    # pinned Populace inputs (--allow-policyengine-us-version bypasses the
+    # build_with gate), so only the PE computation vintage moves.
     pe_meta = params.get("policyengine_version", "4.11.0")
     pe_us = params.get("policyengine_us_version", "1.729.0")
     pe_core = params.get("policyengine_core_version", "3.26.11")
+    pe_us_source = params.get("policyengine_us_source")
     pe_pins = (
         _pe_oracle_with_args(
             (
                 f"policyengine=={pe_meta}",
-                f"policyengine-us=={pe_us}",
+                (
+                    _policyengine_us_source_requirement(pe_us_source)
+                    if pe_us_source
+                    else f"policyengine-us=={pe_us}"
+                ),
                 f"policyengine-core=={pe_core}",
             )
         )
@@ -1630,15 +2016,34 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             "policyengine-core",
         ]
     )
-    cmd = [
+    uv_prefix = [
         "uv",
         "run",
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(axiom_encode_repo),
         *pe_pins,
+    ]
+    if pinned and pe_us_source:
+        # The source is an immutable commit, but the suite labels it with a
+        # version; refuse to spend a population run under a label the
+        # installed distribution does not carry.
+        _require_installed_policyengine_us_version(uv_prefix, pe_us)
+    # Overlay THIS checkout's bridge over the encoder's pinned axiom-oracles
+    # dependency, as the UK EFRS runner does: tax-populace-compare is a thin
+    # re-export of axiom_oracles.bridges.tax_populace, so without the overlay
+    # a suite run validates whatever axiom-oracles commit axiom-encode pins,
+    # not this checkout. uv rejects a second URL for one package, so the
+    # overlay rides PYTHONPATH, which precedes site-packages on sys.path.
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(REPO_ROOT)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+    )
+    cmd = [
+        *uv_prefix,
         "axiom-encode",
         "tax-populace-compare",
         "--rulespec-root",
@@ -1664,7 +2069,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         cmd.append("--allow-uncertified-policyengine-data")
     try:
         with output.open("w") as f:
-            subprocess.run(cmd, check=True, stdout=f)
+            subprocess.run(cmd, check=True, stdout=f, cwd=REPO_ROOT, env=env)
     finally:
         # Measure after execution against the captured commit, even if the
         # harness or a concurrent checkout moved HEAD to a new clean commit.
@@ -1691,15 +2096,15 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     rulespec_root = _resolve_path(runner["rulespec_root"], "rulespec_root")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
     params = runner["parameters"]
     universal_credit_program = _compose_uk_universal_credit_program(params)
-    pe_pins = [
-        "--with",
-        f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
-        "--with",
-        f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
-    ]
+    pe_pins = pinned_artifacts.with_args(
+        (
+            f"policyengine-uk=={params.get('policyengine_uk_version', '2.88.56')}",
+            f"policyengine-core=={params.get('policyengine_core_version', '3.26.11')}",
+        )
+    )
     data_folder = (
         _resolve_path(params["data_folder"], "data_folder")
         if params.get("data_folder")
@@ -1724,6 +2129,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
             "--python",
             str(params.get("python", "3.13")),
             "--no-project",
+            "--isolated",
             "--with-editable",
             str(axiom_encode_repo),
             *pe_pins,
@@ -1878,10 +2284,7 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
         params.get("axiom_composed_program", "/tmp/uk-universal-credit-composed.yaml")
     )
     composed_path.parent.mkdir(parents=True, exist_ok=True)
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
@@ -1890,7 +2293,30 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
     return composed_path.resolve()
 
 
+def _checked_compose_roots(params: dict) -> list[Path]:
+    """The suite's ``rulespec_roots`` for axiom-compose, each checked first.
+
+    Each must be a canonical ``rulespec-<country>`` checkout or one of its
+    jurisdiction directories (``axiom_oracles.rulespec_roots``); anything else
+    raises before axiom-compose reads it. The paths are passed on as given.
+    """
+    from axiom_oracles.rulespec_roots import require_canonical_content_root
+
+    roots = [
+        _resolve_path(root, "rulespec_roots")
+        for root in params.get("rulespec_roots", [])
+    ]
+    for root in roots:
+        require_canonical_content_root(root)
+    return roots
+
+
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
+    from axiom_oracles.bridges.relation_binding import (
+        merge_relation_binding_diagnostics,
+        public_relation_binding_diagnostics,
+    )
+
     if not reports:
         return {
             "compared_persons": 0,
@@ -1906,7 +2332,12 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "projection_notes": [],
         }
     if len(reports) == 1:
-        return reports[0]
+        report = dict(reports[0])
+        if "provenance" in report:
+            report["provenance"] = _preserve_relation_binding_diagnostics(
+                report["provenance"], report["provenance"],
+            )
+        return report
     merged = {
         "compared_persons": max(r.get("compared_persons", 0) for r in reports),
         "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
@@ -1920,7 +2351,11 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     }
     seen_notes: set[str] = set()
     seen_skipped: set[str] = set()
+    diagnostics: dict = {}
     for report in reports:
+        merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
+            (report.get("provenance") or {}).get("relation_binding_diagnostics", {}),
+        ))
         merged["errors"].extend(report.get("errors") or [])
         merged["mismatches"].extend(report.get("mismatches", []))
         merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
@@ -1936,6 +2371,8 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
                 merged["projection_notes"].append(note)
     merged["mismatch_count"] = len(merged["mismatches"])
     merged["oracle_divergence_count"] = len(merged["oracle_divergences"])
+    if diagnostics.get("count"):
+        merged["provenance"] = {"relation_binding_diagnostics": diagnostics}
     return merged
 
 
@@ -1951,7 +2388,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     axiom_binary = None
     if runner.get("axiom_rules_repo"):
         axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-        _ensure_engine_binary(axiom_rules_repo, kind="release")
+        runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
         axiom_binary = axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
 
     with tempfile.TemporaryDirectory(prefix="snap-ecps-compare.") as tmp:
@@ -2010,8 +2447,20 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
         with csv_path.open(newline="") as f:
             rows = list(csv.DictReader(f))
+        # The bridge's optional sidecar carries run diagnostics separately
+        # from the CSV rows. Read them before removing the temporary files.
+        identity_path = csv_path.with_suffix(csv_path.suffix + ".dataset_identity.json")
+        try:
+            sidecar = json.loads(identity_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            sidecar = {}
+        diagnostic_provenance = _preserve_relation_binding_diagnostics({}, sidecar)
 
     report = _adapt_snap_ecps_csv_to_v2(rows, runner)
+    if diagnostic_provenance:
+        report["provenance"] = _preserve_relation_binding_diagnostics(
+            report.get("provenance") or {}, diagnostic_provenance
+        )
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
@@ -2040,6 +2489,78 @@ def _taxsim_pin_version() -> str:
     from axiom_oracles.adapters.taxsim import pins
 
     return pins.pinned_version()
+
+
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
+def _taxsim_oracle_identity(output: Path) -> dict:
+    """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
+
+    ``policyengine_taxsim`` is the pinned package version the runner
+    installs. ``taxsim_binaries`` is the report's
+    ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
+    (embedded and printed), platform and row count of each TAXSIM binary
+    the run executed. ``taxsim_pin_profile`` is the report's
+    ``engine_identity.taxsim.pin_profile``, the profile that selected those
+    binaries. A report without that block (written before it existed)
+    records the version only.
+    """
+    identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
+    try:
+        report = json.loads(output.read_text())
+    except (OSError, json.JSONDecodeError):
+        return identity
+    taxsim = (
+        (report.get("engine_identity") or {}).get("taxsim")
+        if isinstance(report, dict)
+        else None
+    )
+    if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
+        identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+    return identity
+
+
+def _require_taxsim_law_year(
+    period: object, suite: str, params: dict | None = None
+) -> None:
+    """Stop before building anything when TAXSIM rejects the law year here.
+
+    With ``params`` (an axiom-oracles compare), checks the binaries the
+    suite's pin profile resolves on this platform, the only ones the CLI's
+    runner executes. Without it (the state generator, which runs the wheel's
+    bundled binary), checks the pinned bundled binary for this platform
+    (what ``--with policyengine-taxsim==<pin>`` installs into the run's
+    environment), not whatever this script's own venv holds.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise SystemExit(
+            f"{suite}: period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        if params is not None:
+            pins.require_profile_law_years(
+                [year], profile=_taxsim_pin_profile(params)
+            )
+        else:
+            pins.require_law_years([year], use_installed=False)
+    except (pins.TaxsimLawYearError, pins.TaxsimPinError) as exc:
+        raise SystemExit(f"{suite}: {exc}") from exc
 
 
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
@@ -2072,12 +2593,68 @@ _PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
 
 
 def _pe_oracle_with_args(pins) -> list[str]:
-    """``uv run --with`` arguments for PE oracle pins plus their companions."""
-    return [
-        arg
-        for pin in (*pins, *_PE_US_COMPANION_PINS)
-        for arg in ("--with", pin)
-    ]
+    """``uv run --with`` arguments for PE oracle pins plus their companions.
+
+    A pin PyPI's index no longer lists installs from the verified hashed-URL
+    file recorded in axiom_oracles/pinned_artifacts.py, so the run keeps the
+    exact release it pins (or fails naming the file that stopped downloading).
+
+    Every ``--no-project`` overlay that installs these passes ``--isolated``.
+    Without it, uv satisfies the overlay's unpinned transitive dependencies
+    from this checkout's ``.venv`` when one exists (CI's legs have one), so
+    numpy, pandas and the like differed by working directory. The snap-ecps
+    run (``_run_axiom_encode_snap_ecps_compare``) is the exception: it runs in
+    axiom-encode's project environment (``uv run --directory``), so what this
+    list leaves unpinned, policyengine-core included, comes from that
+    project's own dependencies and lock.
+    """
+    return pinned_artifacts.with_args((*pins, *_PE_US_COMPANION_PINS))
+
+
+# PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
+# 1.729.0 were gone by 2026-10-14). A pruned release with a recorded hashed
+# URL installs from axiom_oracles/pinned_artifacts.py through the version pin;
+# a suite can instead pin its oracle to the release commit. Only GitHub's
+# archive of a full 40-hex commit is
+# accepted: a branch, tag or short SHA could move under the version label.
+_PE_US_SOURCE_RE = re.compile(
+    r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"
+)
+
+
+def _policyengine_us_source_requirement(source: str) -> str:
+    """PEP 508 direct reference for a commit-pinned policyengine-us source."""
+    if not isinstance(source, str) or not _PE_US_SOURCE_RE.fullmatch(source):
+        raise SystemExit(
+            "policyengine_us_source must be "
+            "https://github.com/PolicyEngine/policyengine-us/archive/<40-hex "
+            f"commit>.tar.gz; got {source!r}"
+        )
+    return f"policyengine-us @ {source}"
+
+
+def _require_installed_policyengine_us_version(
+    uv_prefix: list[str], expected: str
+) -> None:
+    """Fail unless the environment ``uv_prefix`` builds holds ``expected``."""
+    result = subprocess.run(
+        [
+            *uv_prefix,
+            "python",
+            "-c",
+            "from importlib.metadata import version; "
+            "print(version('policyengine-us'))",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    installed = result.stdout.strip().splitlines()[-1] if result.stdout else ""
+    if installed != str(expected):
+        raise SystemExit(
+            f"policyengine_us_source installs policyengine-us {installed!r}, "
+            f"but the suite labels its oracle {expected!r}; refusing to run"
+        )
 
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
@@ -2172,17 +2749,45 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     Mirrors the `axiom-encode-tax-ecps-compare` runner's environment; a suite
     whose engine stack needs a different interpreter can pin `python:` in its
     parameters.
+
+    A `population: synthetic` comparison must name its registered case suite
+    in `case_suite:`, forwarded as `--suite`. The CLI's `--suite` defaults to
+    `auto`, which resolves to nyc-synthetic for every engine pair, so an
+    omitted suite would silently compare the wrong cases. `suite:` stays the
+    report label (`--report-suite`).
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    population = str(params.get("population", "enhanced-cps"))
+    case_suite = params.get("case_suite")
+    if population == "synthetic" and not case_suite:
+        raise SystemExit(
+            "population: synthetic comparisons must declare `case_suite:` "
+            "(the registered axiom_oracles suite to load); without it the "
+            "compare CLI falls back to nyc-synthetic"
+        )
+    if case_suite and population != "synthetic":
+        raise SystemExit(
+            f"`case_suite: {case_suite}` only applies to population: "
+            f"synthetic, not {population!r}"
+        )
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
     # Axiom side, so it needs neither a built engine binary nor a composed
     # program — skip the Rust dependency entirely rather than force a build.
     uses_axiom = "axiom" in engines
+    # A taxsim-csv suite without a period keeps each row's own law year; the
+    # runner checks every batch's years against its binary instead.
+    keeps_row_years = params.get("population") == "taxsim-csv" and params.get(
+        "period"
+    ) in (None, "")
+    if "taxsim" in engines and not keeps_row_years:
+        _require_taxsim_law_year(
+            params["period"], params.get("suite") or "compare", params
+        )
     if uses_axiom:
-        _ensure_engine_binary(axiom_rules_repo, kind="release")
+        runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
     # Tax-Calculator is an optional extra; install its pin into the isolated
     # `uv run` when either side is the taxcalc adapter. Without an explicit
@@ -2197,17 +2802,26 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         if "taxsim" in engines
         else ()
     )
+    taxsim_csv_args = _taxsim_csv_cli_args(params, population)
+    # A taxsim-csv suite without `period` keeps each row's own tax year; with
+    # it, the CLI overrides every row's year (one file, one law year per run).
+    period_args = (
+        []
+        if population == "taxsim-csv" and params.get("period") is None
+        else ["--period", str(params["period"])]
+    )
     cmd = [
         "uv",
         "run",
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
-        *(arg for pin in taxsim_pins for arg in ("--with", pin)),
+        *pinned_artifacts.with_args(taxsim_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
@@ -2215,11 +2829,12 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         params["left"],
         params["right"],
         "--population",
-        params.get("population", "enhanced-cps"),
+        population,
+        *(["--suite", str(case_suite)] if case_suite else []),
+        *taxsim_csv_args,
         "--sample-size",
         str(params.get("sample_size", 1000)),
-        "--period",
-        str(params["period"]),
+        *period_args,
         *(["--report-suite", str(params["suite"])] if params.get("suite") else []),
         *(["--include-components"] if params.get("include_components") else []),
         *_concept_args(params),
@@ -2234,8 +2849,15 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
-    if params.get("include_case_inputs"):
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
+    # Tri-state: absent keeps the CLI's case-count default; an explicit false
+    # must reach the CLI, or a small synthetic suite silently gets full
+    # evidence anyway.
+    if params.get("include_case_inputs") is True:
         cmd.append("--include-case-inputs")
+    elif params.get("include_case_inputs") is False:
+        cmd.append("--no-include-case-inputs")
     if params.get("comparison_batch_size"):
         comparison_batch_size = params["comparison_batch_size"]
     elif any(
@@ -2279,6 +2901,67 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
 
 
+def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
+    """``--taxsim-csv*`` flags for a suite's ``taxsim_csv`` parameter block.
+
+    A ``population: taxsim-csv`` suite must declare::
+
+        taxsim_csv:
+          path: $HOME/.../cps_households.csv   # env/~ expanded
+          sha256: <64 hex>                     # the CLI fails closed on mismatch
+          origin:                              # optional provenance
+            repo: PolicyEngine/policyengine-taxsim
+            commit: <git sha>
+            path: cps_households.csv
+          allow_unknown_columns: false         # optional
+
+    The sha256 is mandatory for registered suites: a committed report must name
+    the exact file it scored. The block is rejected on any other population.
+    """
+    block = params.get("taxsim_csv")
+    if population != "taxsim-csv":
+        if block is not None:
+            raise SystemExit(
+                "`taxsim_csv` parameters apply only to `population: taxsim-csv`"
+            )
+        return []
+    if not isinstance(block, dict) or not block.get("path"):
+        raise SystemExit(
+            "`population: taxsim-csv` comparisons must declare "
+            "`taxsim_csv: {path, sha256}` under runner.parameters"
+        )
+    unknown = set(block) - {"path", "sha256", "origin", "allow_unknown_columns"}
+    if unknown:
+        raise SystemExit(f"unknown `taxsim_csv` keys: {sorted(unknown)}")
+    if not block.get("sha256"):
+        raise SystemExit(
+            "`taxsim_csv.sha256` is required: a registered suite must pin the "
+            "exact TAXSIM input file it scores"
+        )
+    args = [
+        "--taxsim-csv",
+        str(_expand_path(block["path"])),
+        "--taxsim-csv-sha256",
+        str(block["sha256"]),
+    ]
+    origin = block.get("origin")
+    if origin is not None:
+        if not isinstance(origin, dict) or set(origin) != {"repo", "commit", "path"}:
+            raise SystemExit(
+                "`taxsim_csv.origin` must be a mapping with exactly repo, commit, "
+                "and path"
+            )
+        args.extend(
+            [
+                "--taxsim-csv-origin",
+                f"{origin['repo']}@{origin['commit']}:{origin['path']}",
+            ]
+        )
+    if block.get("allow_unknown_columns"):
+        args.append("--taxsim-csv-allow-unknown-columns")
+    return args
+
+
 def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
     """Compose/compile a program artifact when the comparison config declares one.
 
@@ -2315,10 +2998,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     composed_path.parent.mkdir(parents=True, exist_ok=True)
     compiled_path.parent.mkdir(parents=True, exist_ok=True)
 
-    roots = [
-        _resolve_path(root, "rulespec_roots")
-        for root in params.get("rulespec_roots", [])
-    ]
+    roots = _checked_compose_roots(params)
     compose_cmd = [str(compose_binary), str(program_path)]
     for root in roots:
         compose_cmd.extend(["--rulespec-root", str(root)])
@@ -2353,7 +3033,7 @@ def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None
     root_candidates: list[Path] = list(roots)
     if roots_env:
         root_candidates.append(_expand_path(roots_env))
-    engine_roots = explicit_engine_roots(root_candidates)
+    engine_roots = explicit_engine_roots(root_candidates, strict=True)
     composed_doc: dict = {}
     try:
         composed_doc = yaml.safe_load(composed_path.read_text()) or {}
@@ -2447,7 +3127,7 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
         return
 
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
-    _ensure_engine_binary(axiom_rules_repo, kind="release")
+    runner["_engine_receipt"] = _ensure_engine_binary(axiom_rules_repo, kind="release")
     cmd = [
         "uv",
         "run",
@@ -2826,12 +3506,23 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     unavailable; committed numerical reports are never silently reused.
     """
     params = runner["parameters"]
+    # The generator re-checks its own TAXSIM_YEAR against the binary it
+    # resolves; this stops a Linux host before the environment is built. A
+    # config that declares neither year is left to the generator's check.
+    declared_year = params.get("taxsim_law_year", params.get("period"))
+    if declared_year is not None:
+        _require_taxsim_law_year(declared_year, str(params["state"]))
     rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos(params)
     # The config object is shared with the outer provenance stamper. Record the
     # exact paths that actually execute, so a successful grid can never replace
     # generator provenance with a null RuleSpec SHA or empty engine block.
     params["rulespec_roots"] = [str(rulespec_root)]
     params["axiom_rules_repo"] = str(axiom_rules_repo)
+    from axiom_oracles.engine_identity import engine_receipt
+
+    runner["_engine_receipt"] = engine_receipt(
+        axiom_rules_repo / "target" / "release" / "axiom-rules-engine"
+    )
     state = str(params["state"]).lower()
     pe_pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_state_income_tax_liability.py"
@@ -2842,11 +3533,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.14",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
-        "--with",
-        f"policyengine-taxsim=={_taxsim_pin_version()}",
+        *pinned_artifacts.with_args(
+            (f"policyengine-taxsim=={_taxsim_pin_version()}",)
+        ),
         "python",
         str(generator),
         "--state",
@@ -3000,6 +3693,125 @@ def _verify_federal_rulespec_snapshot(
     )
 
 
+# Where rulespec-us records the engine revision its own CI validates the
+# modules and companion fixtures with. Newer snapshots carry the workflow
+# toolchain file; the July 2026 snapshots the federal grids pin carry only
+# the older toolchain file.
+_RULESPEC_ENGINE_PIN_FILES = (
+    (".axiom/workflow-toolchain.toml", "workflow_toolchain"),
+    (".axiom/toolchain.toml", "toolchain"),
+)
+
+
+def _rulespec_engine_pin(root: Path) -> str:
+    """The axiom-rules engine commit a rulespec checkout's HEAD pins.
+
+    Read from HEAD's committed bytes, not the work tree, so the engine
+    choice follows the same commit identity provenance records.
+    """
+    import tomllib
+
+    for relpath, table in _RULESPEC_ENGINE_PIN_FILES:
+        shown = subprocess.run(
+            ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
+            capture_output=True,
+            env=_git_env(),
+        )
+        if shown.returncode != 0:
+            continue
+        try:
+            document = tomllib.loads(shown.stdout.decode("utf-8"))
+        except (UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
+            raise SystemExit(f"{root}: unreadable {relpath}: {exc}") from exc
+        ref = (document.get(table) or {}).get("axiom_rules_engine_ref")
+        if ref is None:
+            continue
+        if not isinstance(ref, str) or not re.fullmatch(r"[0-9a-f]{40}", ref):
+            raise SystemExit(
+                f"{root}: {relpath} axiom_rules_engine_ref must be a full "
+                f"lowercase commit SHA; got {ref!r}"
+            )
+        return ref
+    raise SystemExit(
+        f"{root}: HEAD pins no axiom_rules_engine_ref in "
+        + " or ".join(relpath for relpath, _ in _RULESPEC_ENGINE_PIN_FILES)
+    )
+
+
+def _engine_checkout_at(repo: Path, revision: str) -> Path:
+    """A clean checkout of the axiom-rules engine at ``revision``.
+
+    The configured checkout is used as is when its HEAD is the revision.
+    Otherwise the revision is fetched into it and checked out as a detached
+    worktree under the user cache, reused while it stays clean at that
+    revision, so the configured checkout itself never moves.
+    """
+    from axiom_oracles.engine_identity import EngineIdentityError, _clean_source_commit
+
+    try:
+        if _clean_source_commit(repo) == revision:
+            return repo
+    except EngineIdentityError:
+        pass
+    cache = Path(
+        os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache"
+    ) / "axiom-oracles" / "axiom-rules-engine"
+    worktree = cache / revision
+    if worktree.exists():
+        try:
+            if _clean_source_commit(worktree) == revision:
+                return worktree
+        except EngineIdentityError:
+            pass
+        raise SystemExit(
+            f"{worktree} exists but is not a clean checkout of {revision}; "
+            "remove it and rerun"
+        )
+    cache.mkdir(parents=True, exist_ok=True)
+    has_commit = subprocess.run(
+        ["git", "-C", str(repo), "cat-file", "-e", f"{revision}^{{commit}}"],
+        capture_output=True,
+        env=_git_env(),
+    )
+    if has_commit.returncode != 0:
+        print(f"Fetching axiom-rules engine revision {revision[:12]}...")
+        subprocess.run(
+            ["git", "-C", str(repo), "fetch", "--depth", "1", "--quiet",
+             "origin", revision],
+            check=True,
+            env=_git_env(),
+        )
+    subprocess.run(
+        ["git", "-C", str(repo), "worktree", "add", "--detach", "--quiet",
+         str(worktree), revision],
+        check=True,
+        env=_git_env(),
+    )
+    return worktree
+
+
+def _fixture_engine_receipt(runner: dict, rulespec_root: Path) -> dict:
+    """Build the engine the rulespec snapshot pins and return its receipt.
+
+    The grid evaluates the snapshot's companion-fixture cases with the
+    engine revision that snapshot's own CI validates them with. An engine
+    from a different revision can refuse to load the snapshot's modules
+    (axiom-rules main rejects the plural ``corpus_citation_paths`` every
+    pinned federal snapshot still declares), which would fail every grid for
+    a schema reason unrelated to the law under test.
+    """
+    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+    revision = _rulespec_engine_pin(rulespec_root)
+    checkout = _engine_checkout_at(axiom_rules_repo, revision)
+    receipt = _ensure_engine_binary(checkout, kind="release")
+    if receipt.get("commit") != revision:
+        raise SystemExit(
+            f"built axiom-rules engine is receipted for {receipt.get('commit')}, "
+            f"not the pinned {revision}"
+        )
+    return receipt
+
+
 def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
     """Run one independent federal RuleSpec-fixture vs PolicyEngine case grid.
 
@@ -3085,6 +3897,12 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         # rather than the missing development-worktree path.
         params["rulespec_roots"] = [str(roots[0])]
     _verify_federal_rulespec_snapshot(params, roots)
+    if len(roots) != 1:
+        raise SystemExit(
+            "federal-tax-liability-grid evaluates one rulespec checkout; "
+            f"got {len(roots)}"
+        )
+    runner["_engine_receipt"] = _fixture_engine_receipt(runner, roots[0])
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
     cmd = [
@@ -3093,6 +3911,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3103,6 +3922,8 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
             for root in roots
             for arg in ("--rulespec-root", str(root))
         ),
+        "--axiom-engine",
+        str(runner["_engine_receipt"]["binary_path"]),
         "--output",
         str(output),
     ]
@@ -3236,6 +4057,12 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
     # actually came from.
     params["rulespec_roots"] = [str(root) for root in roots]
     _verify_federal_rulespec_snapshot(params, roots)
+    if len(roots) != 1:
+        raise SystemExit(
+            "snap-abawd-boundary-grid evaluates one rulespec checkout; "
+            f"got {len(roots)}"
+        )
+    runner["_engine_receipt"] = _fixture_engine_receipt(runner, roots[0])
     pins = _resolve_pe_oracle_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
     cmd = [
@@ -3244,6 +4071,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
+        "--isolated",
         *_pe_oracle_with_args(pins),
         "python",
         str(generator),
@@ -3252,6 +4080,8 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
             for root in roots
             for arg in ("--rulespec-root", str(root))
         ),
+        "--axiom-engine",
+        str(runner["_engine_receipt"]["binary_path"]),
         "--output",
         str(output),
     ]
@@ -3279,10 +4109,10 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3321,10 +4151,10 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3363,10 +4193,10 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3407,10 +4237,10 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3450,10 +4280,10 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3493,10 +4323,10 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3534,10 +4364,10 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -3577,10 +4407,10 @@ def _run_uk_pe_grid(
         "--python",
         "3.13",
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
-        "--with",
-        "policyengine-uk==2.89.2",
+        *pinned_artifacts.with_args(("policyengine-uk==2.89.2",)),
         "python",
         str(generator),
     ]
@@ -4058,6 +4888,10 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
     checkout, _ = _us_tariff_panel_env()
     runner.setdefault("parameters", {})["rulespec_roots"] = [str(checkout)]
     engine_binary = _us_tariff_panel_engine_binary()
+    if engine_binary is not None:
+        from axiom_oracles.engine_identity import engine_receipt
+
+        runner["_engine_receipt"] = engine_receipt(engine_binary)
     engine_binary_sha256 = (
         hashlib.sha256(engine_binary.read_bytes()).hexdigest()
         if engine_binary is not None
@@ -4254,8 +5088,10 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     The replay needs three things a shared CI runner does not carry: the built
     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
     are dated for the target fiscal year (the overlay base), and the downloaded
-    QC public-use file. The snap-qc suites therefore declare ``ci: manual``, so
-    neither the weekly matrix nor the affected rerun dispatches them. When any
+    QC public-use file. The snap-qc suites therefore never run on the bare
+    weekly or affected-rerun matrices: they declare ``ci: snap-qc-replay`` (the
+    live replay lane, which provisions all three) or, while a composition is
+    pending, ``ci: manual``. When any
     prerequisite is absent — or the bridge is still mid-build — this runner
     **skips gracefully**, re-emitting the committed dashboard report exactly like
     ``_run_euromod_synthetic_compare``; that re-emission never replaces a
@@ -4414,6 +5250,7 @@ def _run_sanity(name: str) -> int:
         "--python",
         str(params.get("python", "3.14")),
         "--no-project",
+        "--isolated",
         "--with-editable",
         str(REPO_ROOT),
         *_pe_oracle_with_args(pe_pins),
@@ -4653,15 +5490,22 @@ def _expand_path(raw: str | Path) -> Path:
     return Path(expanded).resolve()
 
 
-def _ensure_engine_binary(repo: Path, *, kind: str) -> None:
-    bin_path = repo / "target" / kind / "axiom-rules-engine"
-    if bin_path.exists():
-        return
-    print(f"Building {kind} axiom-rules-engine in {repo}...")
-    cmd = ["cargo", "build", "--bin", "axiom-rules-engine"]
+def _ensure_engine_binary(repo: Path, *, kind: str) -> dict:
+    from axiom_oracles.engine_identity import ensure_engine_binary
+
+    cmd = ["cargo", "build", "--locked", "--jobs", "4", "--bin", "axiom-rules-engine"]
     if kind == "release":
         cmd.append("--release")
-    subprocess.run(cmd, check=True, cwd=repo)
+
+    def build(command, **kwargs):
+        print(f"Building {kind} axiom-rules-engine in {repo}...")
+        return subprocess.run(command, **kwargs)
+
+    # A cached target/ can hold an unreceipted or older binary; only one
+    # receipted for this checkout's HEAD is reused.
+    return ensure_engine_binary(
+        repo, repo / "target" / kind / "axiom-rules-engine", cmd, run=build
+    )
 
 
 def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Path:
@@ -4708,7 +5552,10 @@ def _print_summary(output: Path) -> None:
     print()
     if "compared_values" in data:
         cv = data["compared_values"]
-        mc = data["mismatch_count"]
+        # mismatch_count includes uncompared pairs (engine errors), which
+        # compared_values excludes; agreement is over compared pairs only.
+        uncompared = data.get("uncompared_mismatches", 0) or 0
+        mc = max(0, data["mismatch_count"] - uncompared)
         od = data.get("oracle_divergence_count", 0)
         differences = mc + od
         pct = 100 * (cv - differences) / cv if cv else 0
@@ -4717,14 +5564,17 @@ def _print_summary(output: Path) -> None:
         print(f"Mismatches:        {mc}")
         if od:
             print(f"Known PE issues:   {od}")
+        if uncompared:
+            print(f"Uncompared:        {uncompared} (engine errors: {len(data.get('errors') or [])})")
         print(f"Agreement:         {pct:.4f}%")
         from collections import defaultdict
 
         by_surface = defaultdict(lambda: [0, 0])
         for row in data.get("output_summary", []):
             by_surface[row["surface"]][0] += row["compared"]
-            by_surface[row["surface"]][1] += row["mismatches"] + row.get(
-                "oracle_divergences", 0
+            by_surface[row["surface"]][1] += (
+                max(0, row["mismatches"] - row.get("uncompared_mismatches", 0))
+                + row.get("oracle_divergences", 0)
             )
         print()
         for surf, (c, m) in sorted(by_surface.items(), key=lambda x: -x[1][1]):
@@ -4742,18 +5592,35 @@ def _print_summary(output: Path) -> None:
         print(f"Cases:             {cc}")
         print(f"Mismatch entries:  {mm}")
         agg = data.get("aggregates") or []
+        summary = data.get("summary") or {}
+        concepts = {a.get("concept") for a in agg}
+        # Hierarchical reports repeat their parents' pairs in component rows.
+        uncompared = summary.get(
+            "uncompared_mismatches",
+            sum(
+                a.get("uncompared_mismatches", 0) or 0
+                for a in agg
+                if not (a.get("parent") and a["parent"] in concepts)
+            ),
+        )
+        if uncompared:
+            errors = summary.get("error_count", len(data.get("errors") or []))
+            print(f"Uncompared:        {uncompared} (engine errors: {errors})")
         if agg:
             print()
             for a in agg[:8]:
                 compared = a.get("compared", a.get("comparison_count", 0))
                 matched = a.get("matched", a.get("match_count"))
+                uncompared = a.get("uncompared_mismatches", 0) or 0
                 if matched is None:
-                    matched = compared - a.get("mismatch_count", 0)
+                    matched = compared - max(0, a.get("mismatch_count", 0) - uncompared)
                 line = (
                     f"  {a.get('concept', '?'):40s}  "
                     f"compared={compared}  "
                     f"matched={matched}"
                 )
+                if uncompared:
+                    line += f"  uncompared={uncompared}"
                 # Surface positive-rate context for binary concepts so the
                 # reader can tell whether "agreement" is real agreement or
                 # both-engines-returning-the-dominant-value agreement.
@@ -4795,19 +5662,35 @@ def _print_quality_flags(aggregates: list) -> None:
 
 
 def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
-    raw = json.loads(raw_path.read_text())
+    return _adapt_raw_to_v2(
+        json.loads(raw_path.read_text()), runner_type, config, suite=suite
+    )
+
+
+def _adapt_raw_to_v2(raw: dict, runner_type: str, config: dict, *, suite: str) -> dict:
+    """``_adapt_to_v2`` over an already-parsed report."""
     if runner_type == "axiom-encode-tax-ecps-compare":
-        return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    if runner_type == "axiom-encode-uk-efrs-compare":
-        return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+        adapted = _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    elif runner_type == "axiom-encode-uk-efrs-compare":
+        adapted = _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+    else:
+        adapted = raw
+    diagnostic_provenance = _preserve_relation_binding_diagnostics({}, raw.get("provenance"))
+    if diagnostic_provenance:
+        adapted["provenance"] = {**adapted.get("provenance", {}), **diagnostic_provenance}
+    raw_provenance = raw.get("provenance")
+    if isinstance(raw_provenance, dict) and "engine" in raw_provenance:
+        # Format adapters may reconstruct provenance. Identity still belongs
+        # to the source results, including unresolved historical fields.
+        adapted.setdefault("provenance", {})["engine"] = raw_provenance["engine"]
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
     # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
     # not the per-comparison identity, so without this override every
     # state's SNAP report collapses into one suite bucket in the
     # dashboard's suite selector.
-    raw["suite"] = suite
-    return raw
+    adapted["suite"] = suite
+    return adapted
 
 
 def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
@@ -5158,6 +6041,16 @@ def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[di
     return selected
 
 
+def _taxsim_csv_dataset_provenance(identity: dict) -> dict:
+    """provenance.dataset for a ``population: taxsim-csv`` CLI report.
+
+    The CLI writes the loader's file identity (plus a ``selection`` summary of
+    scope and sampling) as the report's top-level ``dataset_identity``; it is
+    recorded whole so the provenance names the exact TAXSIM input file.
+    """
+    return dict(identity)
+
+
 def _normalize_dataset_identity(raw: dict) -> dict | None:
     """Return the encode `dataset_identity` block, or None when absent/empty.
 
@@ -5347,10 +6240,16 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "difference": m.get("diff", 0),
                 "kind": "amount_difference",
                 "left": m.get("axiom", 0),
+                # One concept covers several compared outputs, so a case can
+                # carry several rows under it; dispositions select by output
+                # (case_selector.case_ids_by_output).
+                "output": m["output"],
                 "parent": spec["parent"],
                 "right": m.get("policyengine", 0),
                 "tolerance": spec["tolerance"],
             }
+            if m.get("uncompared") is True:
+                mm["uncompared"] = True
             case_mismatches.append(mm)
             flat_mismatches.append(mm)
         if not case_mismatches:
@@ -5364,12 +6263,19 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         }
         if identity is not None:
             case_metadata["dataset_identity"] = identity
+        # Uncompared rows were never measured. A case with no other row has no
+        # rate, so no reader can count it as a disagreement.
+        case_match_rate = (
+            0.0
+            if any(m.get("uncompared") is not True for m in case_mismatches)
+            else None
+        )
         cases.append(
             {
                 "case_id": case_id,
                 "left_engine": "axiom",
                 "left_errors": [],
-                "match_rate": 0.0,
+                "match_rate": case_match_rate,
                 "metadata": case_metadata,
                 "mismatches": case_mismatches,
                 "right_engine": "policyengine",
@@ -5471,125 +6377,223 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
 
 def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
-    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2."""
+    """Convert snap-ecps-compare row CSV into axiom.comparison_report.v2.
+
+    A pair whose return is missing, unparseable or nonfinite on either side
+    (or that the producer's ledger marks uncompared) is an engine error, not
+    a comparison (#604, as #368 did for native FIIT). It stays visible as a
+    diagnostic mismatch marked ``uncompared`` and as an entry in ``errors``,
+    the summary's error counts and the case's ``left_errors``/``right_errors``,
+    but it adds nothing to ``comparison_count``, matches or mismatch weight.
+    Genuine zero amounts and False verdicts compare as usual.
+    """
     params = runner.get("parameters", {})
     jurisdiction = str(params.get("jurisdiction", "us-co"))
     state_code = str(params.get("state") or jurisdiction.rsplit("-", 1)[-1]).upper()
     tolerance = float(params.get("tolerance", 1.5))
     amount_concept_id = "us:statutes/7/2014/u#snap_benefit"
     eligibility_concept_id = "us:statutes/7/2014/o#snap_eligible"
-    compared = len(rows)
-    amount_mismatching_rows = [row for row in rows if not _csv_bool(row.get("match"))]
-    eligibility_mismatching_rows = [
-        row
-        for row in rows
-        if _csv_bool(row.get("axiom_snap_eligible"))
-        != _csv_bool(row.get("pe_snap_eligible"))
-    ]
-    amount_matched = compared - len(amount_mismatching_rows)
-    eligibility_matched = compared - len(eligibility_mismatching_rows)
-    amount_match_rate = (amount_matched / compared * 100) if compared else 100.0
-    eligibility_match_rate = (
-        eligibility_matched / compared * 100
-    ) if compared else 100.0
-    left_sum = sum(_csv_float(row.get("axiom_snap_allotment")) for row in rows)
-    right_sum = sum(_csv_float(row.get("pe_snap")) for row in rows)
-    left_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("axiom_snap_eligible"))
-    )
-    right_eligible_count = sum(
-        1 for row in rows if _csv_bool(row.get("pe_snap_eligible"))
-    )
 
+    errors: list[dict] = []
+    cases: list[dict] = []
+    flat_mismatches: list[dict] = []
+    counts = {
+        concept: {"compared": 0, "matched": 0, "mismatched": 0, "uncompared": 0}
+        for concept in (amount_concept_id, eligibility_concept_id)
+    }
+    left_sum = right_sum = 0.0
+    left_eligible_count = right_eligible_count = 0
     # Every row becomes a case — matches carry both engines' values just
     # like mismatches, so the report alone lets the dashboard show the
     # evidence behind the agreement, not only the disagreements.
-    cases: list[dict] = []
-    flat_mismatches: list[dict] = []
     for row in rows:
         spm_unit_id = str(row.get("spm_unit_id") or "unknown")
         case_id = f"ecps-spm-{spm_unit_id}"
         case_mismatches = []
         case_matches = []
-        axiom_value = _csv_float(row.get("axiom_snap_allotment"))
-        pe_value = _csv_float(row.get("pe_snap"))
-        if not _csv_bool(row.get("match")):
-            difference = _csv_float(row.get("difference"), axiom_value - pe_value)
+        case_errors = {"axiom": [], "policyengine": []}
+        ledger = _csv_error_ledger(row.get("errors"))
+
+        def record(engine: str, column: str, concept: str) -> None:
+            error = {
+                "engine": engine,
+                "case_id": case_id,
+                "concept": concept,
+                "output": column,
+                "error": "missing_or_nonfinite_output",
+            }
+            errors.append(error)
+            case_errors[engine].append(error)
+
+        def failed(engine: str, column: str, value: object) -> bool:
+            return value is None or (engine, column) in ledger
+
+        axiom_value = _csv_finite_float(row.get("axiom_snap_allotment"))
+        pe_value = _csv_finite_float(row.get("pe_snap"))
+        amount_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_allotment", axiom_value),
+                ("policyengine", "pe_snap", pe_value),
+            )
+            if failed(engine, column, value)
+        ]
+        if not amount_failures and _csv_verdict(row.get("amount_compared")) is False:
+            amount_failures = [("axiom", "axiom_snap_allotment")]
+        amount = counts[amount_concept_id]
+        if amount_failures:
+            for engine, column in amount_failures:
+                record(engine, column, amount_concept_id)
+            amount["uncompared"] += 1
+            # Name a missing side as the generic Comparator does, so the row
+            # reads as "no value" and an amount_difference disposition cannot
+            # select it. A ledger-only failure has both values present.
+            if axiom_value is None and pe_value is None:
+                uncompared_kind = "missing_both"
+            elif axiom_value is None:
+                uncompared_kind = "missing_left"
+            elif pe_value is None:
+                uncompared_kind = "missing_right"
+            else:
+                uncompared_kind = "amount_difference"
             mismatch = {
                 "case_id": case_id,
                 "concept": amount_concept_id,
                 "description": "SNAP benefit amount",
-                "difference": difference,
-                "kind": "amount_difference",
+                "difference": None,
+                "kind": uncompared_kind,
                 "left": axiom_value,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_value,
                 "tolerance": tolerance,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            amount["compared"] += 1
+            left_sum += axiom_value
+            right_sum += pe_value
+            if not _csv_bool(row.get("match")):
+                amount["mismatched"] += 1
+                difference = _csv_finite_float(row.get("difference"))
+                mismatch = {
+                    "case_id": case_id,
                     "concept": amount_concept_id,
+                    "description": "SNAP benefit amount",
+                    "difference": axiom_value - pe_value
+                    if difference is None
+                    else difference,
+                    "kind": "amount_difference",
                     "left": axiom_value,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_value,
+                    "tolerance": tolerance,
                 }
-            )
-        axiom_eligible = _csv_bool(row.get("axiom_snap_eligible"))
-        pe_eligible = _csv_bool(row.get("pe_snap_eligible"))
-        if axiom_eligible != pe_eligible:
-            if axiom_eligible and not pe_eligible:
-                kind = "eligibility_left_only"
-            elif pe_eligible and not axiom_eligible:
-                kind = "eligibility_right_only"
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
             else:
-                kind = "eligibility_mismatch"
+                amount["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": amount_concept_id,
+                        "left": axiom_value,
+                        "right": pe_value,
+                    }
+                )
+
+        axiom_eligible = _csv_verdict(row.get("axiom_snap_eligible"))
+        pe_eligible = _csv_verdict(row.get("pe_snap_eligible"))
+        eligibility_failures = [
+            (engine, column)
+            for engine, column, value in (
+                ("axiom", "axiom_snap_eligible", axiom_eligible),
+                ("policyengine", "pe_snap_eligible", pe_eligible),
+            )
+            if failed(engine, column, value)
+        ]
+        eligibility = counts[eligibility_concept_id]
+        if eligibility_failures:
+            for engine, column in eligibility_failures:
+                record(engine, column, eligibility_concept_id)
+            eligibility["uncompared"] += 1
             mismatch = {
                 "case_id": case_id,
                 "concept": eligibility_concept_id,
                 "description": "SNAP eligibility",
                 "difference": None,
-                "kind": kind,
+                "kind": "eligibility_mismatch",
                 "left": axiom_eligible,
                 "parent": None,
                 "relative_tolerance": 0,
                 "right": pe_eligible,
                 "tolerance": 0,
+                "uncompared": True,
             }
             case_mismatches.append(mismatch)
             flat_mismatches.append(mismatch)
         else:
-            case_matches.append(
-                {
+            eligibility["compared"] += 1
+            left_eligible_count += int(axiom_eligible)
+            right_eligible_count += int(pe_eligible)
+            if axiom_eligible != pe_eligible:
+                eligibility["mismatched"] += 1
+                kind = (
+                    "eligibility_left_only"
+                    if axiom_eligible
+                    else "eligibility_right_only"
+                )
+                mismatch = {
+                    "case_id": case_id,
                     "concept": eligibility_concept_id,
+                    "description": "SNAP eligibility",
+                    "difference": None,
+                    "kind": kind,
                     "left": axiom_eligible,
+                    "parent": None,
+                    "relative_tolerance": 0,
                     "right": pe_eligible,
+                    "tolerance": 0,
                 }
-            )
+                case_mismatches.append(mismatch)
+                flat_mismatches.append(mismatch)
+            else:
+                eligibility["matched"] += 1
+                case_matches.append(
+                    {
+                        "concept": eligibility_concept_id,
+                        "left": axiom_eligible,
+                        "right": pe_eligible,
+                    }
+                )
+        case_compared = 2 - bool(amount_failures) - bool(eligibility_failures)
+        # A case with no compared pair was never measured: None, which the
+        # dashboard's tri-state case agreement reads as unmeasured. 0.0 would
+        # read as measured disagreement.
         case_match_rate = (
-            (2 - len(case_mismatches)) / 2 * 100 if case_mismatches else 100.0
+            len(case_matches) / case_compared * 100 if case_compared else None
         )
         metadata = {
-            "axiom_gross_income": _csv_float(row.get("axiom_gross_income")),
-            "axiom_net_income": _csv_float(row.get("axiom_net_income")),
-            "axiom_shelter_deduction": _csv_float(
+            "axiom_gross_income": _csv_finite_float(row.get("axiom_gross_income")),
+            "axiom_net_income": _csv_finite_float(row.get("axiom_net_income")),
+            "axiom_shelter_deduction": _csv_finite_float(
                 row.get("axiom_shelter_deduction")
             ),
-            "axiom_snap_eligible": _csv_bool(row.get("axiom_snap_eligible")),
-            "axiom_utility_allowance": _csv_float(
+            "axiom_snap_eligible": axiom_eligible,
+            "axiom_utility_allowance": _csv_finite_float(
                 row.get("axiom_utility_allowance")
             ),
             "case_unit": "spm_unit",
             "dataset": "enhanced_cps",
             "household_id": row.get("household_id"),
             "population": "enhanced-cps",
-            "pe_gross_income": _csv_float(row.get("pe_gross_income")),
-            "pe_net_income": _csv_float(row.get("pe_net_income")),
-            "pe_shelter_deduction": _csv_float(row.get("pe_shelter_deduction")),
-            "pe_snap_eligible": _csv_bool(row.get("pe_snap_eligible")),
-            "pe_utility_allowance": _csv_float(row.get("pe_utility_allowance")),
+            "pe_gross_income": _csv_finite_float(row.get("pe_gross_income")),
+            "pe_net_income": _csv_finite_float(row.get("pe_net_income")),
+            "pe_shelter_deduction": _csv_finite_float(row.get("pe_shelter_deduction")),
+            "pe_snap_eligible": pe_eligible,
+            "pe_utility_allowance": _csv_finite_float(row.get("pe_utility_allowance")),
             "spm_unit_id": spm_unit_id,
             "state": state_code,
             "suite": f"{jurisdiction}-snap-ecps",
@@ -5600,74 +6604,78 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         case = {
             "case_id": case_id,
             "left_engine": "axiom",
-            "left_errors": [],
+            "left_errors": case_errors["axiom"],
             "match_rate": case_match_rate,
             "metadata": metadata,
             "mismatches": case_mismatches,
             "right_engine": "policyengine",
-            "right_errors": [],
+            "right_errors": case_errors["policyengine"],
         }
         if case_matches:
             case["matches"] = case_matches
         cases.append(case)
 
+    def rate(numerator: int, denominator: int, empty: float) -> float:
+        return numerator / denominator * 100 if denominator else empty
+
+    amount = counts[amount_concept_id]
+    eligibility = counts[eligibility_concept_id]
+    amount_match_rate = rate(amount["matched"], amount["compared"], 100.0)
+    eligibility_match_rate = rate(eligibility["matched"], eligibility["compared"], 100.0)
     amount_aggregate = {
         "category": "food",
         "comparison": "amount",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": amount["compared"],
+        "comparison_weight": amount["compared"],
+        "compared": amount["compared"],
         "components": [],
         "concept": amount_concept_id,
         "description": "SNAP benefit amount",
         "left_weighted_sum": left_sum,
-        "match_count": amount_matched,
+        "match_count": amount["matched"],
         "match_rate": amount_match_rate,
-        "match_weight": amount_matched,
-        "matched": amount_matched,
-        "mismatch_count": len(amount_mismatching_rows),
-        "mismatch_weight": len(amount_mismatching_rows),
+        "match_weight": amount["matched"],
+        "matched": amount["matched"],
+        "mismatch_count": amount["mismatched"] + amount["uncompared"],
+        "mismatch_weight": amount["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
         "right_weighted_sum": right_sum,
+        "uncompared_mismatches": amount["uncompared"],
         "weighted_difference": left_sum - right_sum,
         "weighted_match_rate": amount_match_rate,
     }
+    eligibility_compared = eligibility["compared"]
     eligibility_aggregate = {
         "category": "food",
         "comparison": "eligibility",
-        "comparison_count": compared,
-        "comparison_weight": compared,
-        "compared": compared,
+        "comparison_count": eligibility_compared,
+        "comparison_weight": eligibility_compared,
+        "compared": eligibility_compared,
         "components": [],
         "concept": eligibility_concept_id,
         "description": "SNAP eligibility",
-        "left_positive_rate": (left_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "left_positive_rate": rate(left_eligible_count, eligibility_compared, 0.0),
         "left_positive_weight": left_eligible_count,
-        "match_count": eligibility_matched,
+        "match_count": eligibility["matched"],
         "match_rate": eligibility_match_rate,
-        "match_weight": eligibility_matched,
-        "matched": eligibility_matched,
-        "mismatch_count": len(eligibility_mismatching_rows),
-        "mismatch_weight": len(eligibility_mismatching_rows),
+        "match_weight": eligibility["matched"],
+        "matched": eligibility["matched"],
+        "mismatch_count": eligibility["mismatched"] + eligibility["uncompared"],
+        "mismatch_weight": eligibility["mismatched"],
         "missing_both_count": 0,
         "missing_left_count": 0,
         "missing_right_count": 0,
         "parent": None,
-        "positive_rate_difference": (
-            (left_eligible_count - right_eligible_count) / compared * 100
-        )
-        if compared
-        else 0.0,
+        "positive_rate_difference": rate(
+            left_eligible_count - right_eligible_count, eligibility_compared, 0.0
+        ),
         "quality_flags": [],
-        "right_positive_rate": (right_eligible_count / compared * 100)
-        if compared
-        else 0.0,
+        "right_positive_rate": rate(right_eligible_count, eligibility_compared, 0.0),
         "right_positive_weight": right_eligible_count,
+        "uncompared_mismatches": eligibility["uncompared"],
         "weighted_match_rate": eligibility_match_rate,
     }
     mismatches_by_concept = [
@@ -5684,11 +6692,11 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             key=lambda item: (-item[1], item[0]),
         )
     ]
-    summary_comparison_count = compared * 2
-    summary_match_count = amount_matched + eligibility_matched
-    summary_mismatch_count = len(amount_mismatching_rows) + len(
-        eligibility_mismatching_rows
-    )
+    summary_comparison_count = amount["compared"] + eligibility["compared"]
+    summary_match_count = amount["matched"] + eligibility["matched"]
+    summary_uncompared = amount["uncompared"] + eligibility["uncompared"]
+    summary_mismatch_weight = amount["mismatched"] + eligibility["mismatched"]
+    summary_mismatch_count = summary_mismatch_weight + summary_uncompared
     summary_match_rate = (
         summary_match_count / summary_comparison_count * 100
         if summary_comparison_count
@@ -5697,7 +6705,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
 
     return {
         "aggregates": [amount_aggregate, eligibility_aggregate],
-        "case_count": compared,
+        "case_count": len(rows),
         "cases": cases,
         "concepts": [
             {
@@ -5724,7 +6732,7 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
             },
         ],
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": errors,
         "locales": [state_code],
         "mismatches": flat_mismatches,
         "population": "enhanced-cps",
@@ -5733,18 +6741,21 @@ def _adapt_snap_ecps_csv_to_v2(rows: list[dict], runner: dict) -> dict:
         "suite": f"{jurisdiction}-snap-ecps",
         "summary": {
             "comparison_count": summary_comparison_count,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(errors),
+            "errors_by_engine": dict(
+                sorted(Counter(error["engine"] for error in errors).items())
+            ),
             "match_count": summary_match_count,
             "mismatch_count": summary_mismatch_count,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": mismatches_by_kind,
             "mismatches_by_scenario": {},
+            "uncompared_mismatches": summary_uncompared,
             "weighted": {
                 "comparison_weight": summary_comparison_count,
                 "match_rate": summary_match_rate,
                 "match_weight": summary_match_count,
-                "mismatch_weight": summary_mismatch_count,
+                "mismatch_weight": summary_mismatch_weight,
             },
         },
     }
@@ -5754,13 +6765,42 @@ def _csv_bool(value: object) -> bool:
     return str(value).strip().lower() in {"1", "true", "t", "yes", "y", "holds"}
 
 
-def _csv_float(value: object, default: float = 0.0) -> float:
-    if value in (None, ""):
-        return default
+def _csv_finite_float(value: object) -> float | None:
+    """A CSV cell as a finite float, or None when blank, unparseable or nonfinite."""
+    if value is None:
+        return None
     try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default
+        number = float(str(value).strip())
+    except ValueError:
+        return None
+    return number if math.isfinite(number) else None
+
+
+def _csv_verdict(value: object) -> bool | None:
+    """A CSV cell as a verdict, or None when it is not one (never False)."""
+    text = str(value).strip().lower() if value is not None else ""
+    if text in {"1", "true", "t", "yes", "y", "holds"}:
+        return True
+    if text in {"0", "false", "f", "no", "n", "not_holds"}:
+        return False
+    return None
+
+
+def _csv_error_ledger(value: object) -> set[tuple[str, str]]:
+    """(engine, column) pairs a producer's JSON error ledger marks invalid."""
+    if value in (None, ""):
+        return set()
+    try:
+        ledger = json.loads(str(value))
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"unreadable SNAP error ledger {value!r}") from exc
+    if not isinstance(ledger, list):
+        raise ValueError(f"SNAP error ledger must be a list: {value!r}")
+    return {
+        (str(entry.get("engine")), str(entry.get("output")))
+        for entry in ledger
+        if isinstance(entry, dict)
+    }
 
 
 def _csv_scalar(value: object) -> object:
@@ -5772,9 +6812,11 @@ def _csv_scalar(value: object) -> object:
     if text == "":
         return None
     try:
-        return float(text)
+        number = float(text)
     except ValueError:
         return value
+    # Strict JSON has no NaN or infinity; keep the returned text instead.
+    return number if math.isfinite(number) else text
 
 
 # The dashboard fetches every report on page load, so population-scale runs
@@ -5851,6 +6893,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         MAX_CASES,
         compact_case,
         explained_lookup,
+        finalize_slot_dictionaries,
     )
 
     if len(raw_cases) > MAX_CASES:
@@ -5859,20 +6902,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         )
     explained = explained_lookup(report)
     rows = [compact_case(case, explained) for case in raw_cases]
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
 
     out_dir = DASHBOARD_DATA_DIR / "cases" / suite
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -5956,6 +6986,9 @@ def _slim_report_for_dashboard(
     intersection suite's unexplained rows were physically untriageable behind
     the default cap) raises ``dashboard.max_mismatches`` in its comparison
     YAML instead of relying on the ephemeral reports/ artifact.
+
+    ``observed_outputs`` past ``_PUBLISHED_MAX_OBSERVED_OUTPUTS`` are dropped
+    whole (``_without_observed_outputs``), never sampled.
     """
     if max_mismatches is None:
         max_mismatches = _DASHBOARD_MAX_MISMATCHES
@@ -6022,7 +7055,7 @@ def _slim_report_for_dashboard(
     ):
         slim["summary"] = dict(summary)
         slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
-    return slim
+    return _without_observed_outputs(slim)
 
 
 def _merge_dispositions(report: dict) -> dict:
@@ -6115,7 +7148,12 @@ def _write_dashboard_report(
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
+    adapted = report
     report = _merge_dispositions(report)
+    report = dict(report)
+    for key in ("provenance", "dataset_identity"):
+        if isinstance(report.get(key), dict):
+            report[key] = _preserve_relation_binding_diagnostics(report[key], report[key])
     versioned_case_chunks = _uses_versioned_case_chunks(report)
     if preserve_existing_versioned and versioned_case_chunks:
         # A skip-capable runner copied the committed dashboard view and did
@@ -6223,6 +7261,20 @@ def _write_dashboard_report(
                 )
                 return
             full_report_path = None
+    if (
+        full_report_path is not None
+        and merged_is_complete
+        and slim_is_premerged
+        and not _is_v2_report_for(full_report_path, report.get("suite"))
+    ):
+        # The run's own report is in the harness's shape (tax-populace-
+        # compare, for example), which the consumer cannot re-derive from.
+        # Publish the adapted v2 report beside it and bind to that instead.
+        full_report_path = _write_full_v2_report(adapted, full_report_path)
+        source_rel = (
+            full_report_path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+        )
+        print(f"Wrote full v2 report: {full_report_path}")
     if (
         full_report_path is not None
         and merged_is_complete

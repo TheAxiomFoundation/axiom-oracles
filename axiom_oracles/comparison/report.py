@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 from .comparator import (
@@ -17,6 +19,10 @@ from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
+from ..bridges.relation_binding import (
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 
 
 COMPARISON_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2"
@@ -32,6 +38,16 @@ class MismatchKind:
     MISSING_RIGHT = "missing_right"
     MISSING_BOTH = "missing_both"
     VALUE_MISMATCH = "value_mismatch"
+    # Either engine reported errors for the case: the row is a mismatch
+    # whatever the values, and ``row["error"]`` says which engine failed and
+    # how (interface contract C2).
+    ENGINE_ERROR = "engine_error"
+
+
+#: ``row["error"]["signature"]`` for an engine error whose messages carry no
+#: ``<engine>-crash:<signature>`` prefix.
+UNCLASSIFIED_ERROR_SIGNATURE = "unclassified"
+_CRASH_MESSAGE = re.compile(r"^[A-Za-z0-9_.-]+-crash:(?P<signature>.+)$")
 
 
 # Below this case count a suite is small enough to carry full evidence —
@@ -77,7 +93,12 @@ class ComparisonReportAccumulator:
 
     When `case_rows_path` is supplied, per-case rows are written as JSONL and can
     later be streamed into the final JSON report without keeping every successful
-    case row in memory.
+    case row in memory. Returned-output observation rows are spooled the same
+    way, beside it (:func:`observed_outputs_path`), so memory does not grow
+    with the number of returned values. :meth:`write_json` writes the same
+    bytes either way. The caller owns both files: the accumulator creates
+    them and never deletes them, so pass a path in a directory the caller
+    removes (the CLI uses a temporary directory).
     """
 
     def __init__(
@@ -90,8 +111,13 @@ class ComparisonReportAccumulator:
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
         include_inputs: bool = False,
+        dataset_identity: dict[str, Any] | None = None,
     ) -> None:
         self.include_inputs = include_inputs
+        # File-level identity of the population's source dataset (e.g. the
+        # taxsim-csv loader's sha256/rows/year override), emitted as the
+        # report's top-level ``dataset_identity`` block when present.
+        self.dataset_identity = dataset_identity
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
@@ -105,9 +131,13 @@ class ComparisonReportAccumulator:
         }
         self._case_rows_path = case_rows_path
         self._case_rows: list[dict] = []
+        self._output_rows_path = (
+            observed_outputs_path(case_rows_path) if case_rows_path is not None else None
+        )
         if self._case_rows_path is not None:
             self._case_rows_path.parent.mkdir(parents=True, exist_ok=True)
             self._case_rows_path.write_text("")
+            self._output_rows_path.write_text("")
 
         self._case_count = 0
         self._match_count = 0
@@ -118,12 +148,19 @@ class ComparisonReportAccumulator:
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
         self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        # Only when no spool path was given; otherwise see _output_rows_path.
         self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
         self._right_engine: str | None = None
         self._seen_case_ids: set[int | str] = set()
+        self._relation_binding_diagnostics: dict = {}
+        self._engine_receipt: dict = {}
+        self._axiom_receipt_presence: bool | None = None
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -182,11 +219,31 @@ class ComparisonReportAccumulator:
                 f"output concepts for case {item.household_id!r}",
             )
 
+        receipt = self._engine_receipt
+        receipt_presence = self._axiom_receipt_presence
+        for item in comparisons:
+            if "axiom" in (item.left_engine, item.right_engine):
+                present = bool(item.engine_receipt)
+                if receipt_presence is not None and receipt_presence != present:
+                    raise ValueError("Axiom comparisons mix missing and present executable receipts")
+                receipt_presence = present
+            if item.engine_receipt:
+                if receipt and receipt != item.engine_receipt:
+                    raise ValueError("Axiom executable identity changed between batches")
+                receipt = dict(item.engine_receipt)
+        self._engine_receipt = receipt
+        self._axiom_receipt_presence = receipt_presence
         self._seen_case_ids.update(case_ids)
         if self._left_engine is None and comparisons:
             self._left_engine, self._right_engine = _engine_pair(comparisons)
 
         self._case_count += len(cases)
+        for item in comparisons:
+            for diagnostics in item.relation_binding_diagnostics.values():
+                merge_relation_binding_diagnostics(
+                    self._relation_binding_diagnostics,
+                    public_relation_binding_diagnostics(diagnostics),
+                )
         self._match_count += sum(item.match_count for item in comparisons)
         self._mismatch_count += sum(item.mismatch_count for item in comparisons)
 
@@ -211,7 +268,7 @@ class ComparisonReportAccumulator:
                     rows = [dict(case_id=item.household_id, engine=engine,
                                  concept=comparison.variable, variable=variable, value=value)
                             for variable, value in values]
-                    self._output_rows.extend(rows)
+                    self._append_output_rows(rows)
                     evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
                                 "errors": list(item.left_errors) + list(item.right_errors)}
                     for row in rows:
@@ -234,8 +291,51 @@ class ComparisonReportAccumulator:
             )
         )
 
-    def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+    def to_dict(
+        self, *, include_cases: bool = True, include_outputs: bool = True
+    ) -> dict:
+        """The report document; a streamed one reads its spools back.
+
+        ``include_outputs=False`` leaves out ``observed_outputs``, so a
+        caller that needs only the summary does not load every returned value.
+        """
+        return self._document(include_cases=include_cases, include_outputs=include_outputs)
+
+    def _document(self, *, include_cases: bool, include_outputs: bool) -> dict:
+        summary = {
+            "match_count": self._match_count,
+            "mismatch_count": self._mismatch_count,
+            "comparison_count": self._comparison_count,
+            "weighted": _weighted_summary_from_totals(
+                self._comparison_weight,
+                self._match_weight,
+                self._mismatch_weight,
+            ),
+            "mismatches_by_concept": _count_rows(
+                self._mismatch_rows,
+                "concept",
+            ),
+            "mismatches_by_kind": _count_rows(self._mismatch_rows, "kind"),
+            "mismatches_by_scenario": _count_rows(
+                self._mismatch_rows,
+                "scenario",
+            ),
+            "error_count": len(self._error_rows),
+            "errors_by_engine": _count_object(self._error_rows, "engine"),
+        }
+        engine_error_count = sum(
+            1
+            for row in self._mismatch_rows
+            if row.get("kind") == MismatchKind.ENGINE_ERROR
+        )
+        # Present only when a case errored, so reports without engine
+        # errors keep their exact pre-existing summary shape.
+        if engine_error_count:
+            summary["engine_error_count"] = engine_error_count
+        report = {
+            **({"provenance": {
+                "relation_binding_diagnostics": self._relation_binding_diagnostics,
+            }} if self._relation_binding_diagnostics.get("count") else {}),
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -244,27 +344,7 @@ class ComparisonReportAccumulator:
             "scope": self.scope.as_dict() if self.scope is not None else None,
             "concepts": _concept_rows(self.mappings),
             "case_count": self._case_count,
-            "summary": {
-                "match_count": self._match_count,
-                "mismatch_count": self._mismatch_count,
-                "comparison_count": self._comparison_count,
-                "weighted": _weighted_summary_from_totals(
-                    self._comparison_weight,
-                    self._match_weight,
-                    self._mismatch_weight,
-                ),
-                "mismatches_by_concept": _count_rows(
-                    self._mismatch_rows,
-                    "concept",
-                ),
-                "mismatches_by_kind": _count_rows(self._mismatch_rows, "kind"),
-                "mismatches_by_scenario": _count_rows(
-                    self._mismatch_rows,
-                    "scenario",
-                ),
-                "error_count": len(self._error_rows),
-                "errors_by_engine": _count_object(self._error_rows, "engine"),
-            },
+            "summary": summary,
             "aggregates": _aggregate_rows_from_buckets(
                 self._aggregate_buckets,
                 self.mappings,
@@ -276,12 +356,21 @@ class ComparisonReportAccumulator:
                 }
                 for mapping in self.mappings
             },
-            "observed_outputs": list(self._output_rows),
+            **({"observed_outputs": list(self._iter_output_rows())}
+               if include_outputs else {}),
             "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
         }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        receipt = self._engine_receipt or (self.engine_identity or {}).get("axiom")
+        if receipt:
+            report.setdefault("provenance", {})["engine"] = dict(receipt)
+        if self.dataset_identity is not None:
+            report["dataset_identity"] = self.dataset_identity
+        return report
 
     def _attestation(self) -> dict:
         """Stamp what this run actually executed (axiom-oracles#355).
@@ -307,12 +396,15 @@ class ComparisonReportAccumulator:
     def write_json(self, path: Path) -> None:
         """Write the final report JSON, streaming per-case rows when possible."""
 
-        report = self.to_dict(include_cases=False)
+        report = self._document(include_cases=False, include_outputs=False)
         path.parent.mkdir(parents=True, exist_ok=True)
         with path.open("w") as handle:
             handle.write("{\n")
-            for key in sorted(key for key in report if key != "cases"):
-                handle.write(_top_level_json_entry(key, report[key]))
+            for key in sorted({*report, "observed_outputs"} - {"cases"}):
+                if key == "observed_outputs":
+                    _write_json_list_entry(handle, key, self._iter_output_rows())
+                else:
+                    handle.write(_top_level_json_entry(key, report[key]))
                 handle.write(",\n")
             handle.write(f'  {json.dumps("cases")}: [')
             wrote_case = False
@@ -332,6 +424,25 @@ class ComparisonReportAccumulator:
             for row in rows:
                 handle.write(json.dumps(row, sort_keys=True) + "\n")
 
+    def _append_output_rows(self, rows: list[dict]) -> None:
+        if self._output_rows_path is None:
+            self._output_rows.extend(rows)
+            return
+        with self._output_rows_path.open("a") as handle:
+            for row in rows:
+                handle.write(json.dumps(row, sort_keys=True) + "\n")
+
+    def _iter_output_rows(self):
+        if self._output_rows_path is None:
+            yield from self._output_rows
+            return
+        if not self._output_rows_path.exists():
+            return
+        with self._output_rows_path.open() as handle:
+            for line in handle:
+                if line.strip():
+                    yield json.loads(line)
+
     def _stored_case_rows(self) -> list[dict]:
         return list(self._iter_case_rows())
 
@@ -350,7 +461,11 @@ class ComparisonReportAccumulator:
 def classify_mismatch(
     comparison: VariableComparison,
     mapping: ProgramMapping | None = None,
+    *,
+    engine_error: bool = False,
 ) -> str:
+    if engine_error:
+        return MismatchKind.ENGINE_ERROR
     if comparison.left_value is None and comparison.right_value is None:
         return MismatchKind.MISSING_BOTH
     if comparison.left_value is None:
@@ -391,27 +506,95 @@ def _mismatch_rows(
     for item in comparisons:
         case = cases_by_id.get(item.household_id)
         metadata = dict(case.metadata) if case is not None else {}
+        engine_error = item.has_engine_errors
+        error = _engine_error_record(item) if engine_error else None
+        facts = metadata.get("selector_facts")
         for mismatch in item.mismatches():
             mapping = mappings_by_id.get(mismatch.variable)
-            rows.append(
-                {
-                    "case_id": item.household_id,
-                    "scenario": metadata.get("scenario"),
-                    "yearly_earned_income": metadata.get("yearly_earned_income"),
-                    "ages": metadata.get("ages"),
-                    "pregnant_head": metadata.get("pregnant_head"),
-                    "concept": mismatch.variable,
-                    "description": mismatch.description,
-                    "kind": classify_mismatch(mismatch, mapping),
-                    "left": mismatch.left_value,
-                    "right": mismatch.right_value,
-                    "difference": mismatch.difference,
-                    "tolerance": mismatch.tolerance,
-                    "relative_tolerance": mismatch.relative_tolerance,
-                    "parent": mapping.parent if mapping is not None else None,
-                }
-            )
+            row = {
+                "case_id": item.household_id,
+                "scenario": metadata.get("scenario"),
+                "yearly_earned_income": metadata.get("yearly_earned_income"),
+                "ages": metadata.get("ages"),
+                "pregnant_head": metadata.get("pregnant_head"),
+                "concept": mismatch.variable,
+                "description": mismatch.description,
+                "kind": classify_mismatch(
+                    mismatch, mapping, engine_error=engine_error
+                ),
+                "left": mismatch.left_value,
+                "right": mismatch.right_value,
+                "difference": mismatch.difference,
+                "tolerance": mismatch.tolerance,
+                "relative_tolerance": mismatch.relative_tolerance,
+                "parent": mapping.parent if mapping is not None else None,
+            }
+            # Interface contract C3: a population's flat selector facts ride
+            # verbatim on each of its mismatch rows, only when it sets them,
+            # so structured disposition selectors can bound on them.
+            if isinstance(facts, Mapping):
+                row["facts"] = dict(facts)
+            if error is not None:
+                row["error"] = error
+            rows.append(row)
     return rows
+
+
+def engine_error_signature(
+    messages: tuple[str, ...] | list[str],
+    detail: Mapping | None = None,
+) -> str:
+    """Stable failure signature for an errored engine run.
+
+    ``<engine>-crash:<signature>`` messages (contract C2, e.g.
+    ``taxsim-crash:SIGFPE`` or ``taxsim-crash:rc=139``) yield their
+    signature; otherwise a structured ``detail["signature"]`` is used; any
+    other error is :data:`UNCLASSIFIED_ERROR_SIGNATURE`.
+    """
+
+    for message in messages:
+        found = _CRASH_MESSAGE.match(str(message).strip())
+        if found:
+            return found.group("signature").strip()
+    if isinstance(detail, Mapping):
+        signature = detail.get("signature")
+        if isinstance(signature, str) and signature.strip():
+            return signature.strip()
+    return UNCLASSIFIED_ERROR_SIGNATURE
+
+
+def _engine_error_record(item: HouseholdComparison) -> dict:
+    """``row["error"]`` for an errored case: which engine failed, and how.
+
+    Describes the first errored side (left before right); when both sides
+    errored the right side rides along under ``other_side``. A structured
+    failure detail contributes the failing binary's sha256 and return code.
+    """
+
+    records = []
+    for side, engine, errors, detail in (
+        ("left", item.left_engine, item.left_errors, item.left_error_detail),
+        ("right", item.right_engine, item.right_errors, item.right_error_detail),
+    ):
+        if not errors:
+            continue
+        record: dict[str, Any] = {
+            "engine": engine,
+            "side": side,
+            "signature": engine_error_signature(errors, detail),
+            "messages": [str(message) for message in errors],
+        }
+        if isinstance(detail, Mapping):
+            if isinstance(detail.get("binary_sha256"), str):
+                record["binary_sha256"] = detail["binary_sha256"]
+            returncode = detail.get("returncode")
+            if isinstance(returncode, int) and not isinstance(returncode, bool):
+                record["returncode"] = returncode
+        records.append(record)
+    error = dict(records[0])
+    if len(records) > 1:
+        error["other_side"] = records[1]
+    return error
 
 
 def _error_rows(comparisons: list[HouseholdComparison]) -> list[dict]:
@@ -447,6 +630,9 @@ def _case_rows(
 ) -> list[dict]:
     rows = []
     for item in comparisons:
+        case = cases_by_id.get(item.household_id)
+        facts = case.metadata.get("selector_facts") if case is not None else None
+        error = _engine_error_record(item) if item.has_engine_errors else None
         row = {
             "case_id": item.household_id,
             "left_engine": item.left_engine,
@@ -454,12 +640,18 @@ def _case_rows(
             "left_errors": list(item.left_errors),
             "right_errors": list(item.right_errors),
             "metadata": _case_report_metadata(
-                cases_by_id.get(item.household_id),
+                case,
                 include_inputs=include_inputs,
             ),
             "match_rate": item.match_rate,
             "mismatches": [
-                _case_mismatch_row(mismatch, mappings_by_id)
+                _case_mismatch_row(
+                    mismatch,
+                    mappings_by_id,
+                    engine_error=item.has_engine_errors,
+                    facts=facts,
+                    error=error,
+                )
                 for mismatch in item.mismatches()
             ],
         }
@@ -482,12 +674,16 @@ def _case_rows(
 def _case_mismatch_row(
     mismatch: VariableComparison,
     mappings_by_id: dict[str, ProgramMapping],
+    *,
+    engine_error: bool = False,
+    facts: Mapping | None = None,
+    error: dict | None = None,
 ) -> dict:
     mapping = mappings_by_id.get(mismatch.variable)
-    return {
+    row = {
         "concept": mismatch.variable,
         "description": mismatch.description,
-        "kind": classify_mismatch(mismatch, mapping),
+        "kind": classify_mismatch(mismatch, mapping, engine_error=engine_error),
         "left": mismatch.left_value,
         "right": mismatch.right_value,
         "difference": mismatch.difference,
@@ -495,6 +691,11 @@ def _case_mismatch_row(
         "relative_tolerance": mismatch.relative_tolerance,
         "parent": mapping.parent if mapping is not None else None,
     }
+    if isinstance(facts, Mapping):
+        row["facts"] = dict(facts)
+    if error is not None:
+        row["error"] = error
+    return row
 
 
 def _case_report_metadata(
@@ -516,6 +717,15 @@ def _case_report_metadata(
         for key, value in metadata.items()
         if include_inputs or key not in stripped
     }
+    relations = compact.get("axiom_relations")
+    if isinstance(relations, (list, tuple)):
+        # Roles guide tuple construction; public evidence keeps the tuple
+        # and all other relation fields without changing producer metadata.
+        compact["axiom_relations"] = [
+            {key: value for key, value in record.items() if key != "roles"}
+            if isinstance(record, dict) else record
+            for record in relations
+        ]
     for key in stripped:
         value = metadata.get(key)
         if isinstance(value, (list, tuple, dict)):
@@ -908,6 +1118,22 @@ def strip_heavy_case_metadata(report: dict) -> dict:
             case = {**case, "metadata": metadata}
         slim_cases.append(case)
     return {**report, "cases": slim_cases}
+
+
+def observed_outputs_path(case_rows_path: Path) -> Path:
+    """Where a streamed report spools its returned-output rows."""
+    return case_rows_path.with_name(case_rows_path.name + ".observed_outputs.jsonl")
+
+
+def _write_json_list_entry(handle, key: str, rows) -> None:
+    """Stream ``_top_level_json_entry(key, list(rows))``, one row at a time."""
+    handle.write(f"  {json.dumps(key)}: [")
+    wrote = False
+    for row in rows:
+        handle.write(",\n" if wrote else "\n")
+        handle.write(_indented_json(row, 4))
+        wrote = True
+    handle.write("\n  ]" if wrote else "]")
 
 
 def _top_level_json_entry(key: str, value: object) -> str:

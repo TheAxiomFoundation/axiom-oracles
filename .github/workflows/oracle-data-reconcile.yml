@@ -1,0 +1,104 @@
+name: Reconcile Oracle Data
+
+# A reviewed main change may update generated reports or aggregates. Rebuild
+# against the live publication and bind that complete result for consumers.
+on:
+  push:
+    branches: [main]
+    paths:
+      - dashboard/public/data/**
+      - conformance/scoreboard.json
+      - conformance/detail/**
+      - conformance/history/**
+      - conformance/exercise-census.json
+      - conformance/de-certificate-census.json
+      - conformance/executable/de-kindergeld-status.json
+      - conformance/executable/nz-treasury-incomeexplorer.json
+      - certificates/**
+      - closure/de/summary.json
+      - closure/nz/summary.json
+      - comparisons/de-worker-dual-oracle/axiom-euromod.json
+      - comparisons/de-worker-dual-oracle/axiom-gettsim.json
+      - comparisons/de-worker-dual-oracle/unified-record.json
+      - comparisons/affected_map.json
+      - comparisons/nz-treasury-incomeexplorer/single-person-attestations.json
+      - axiom_oracles/data/euromod_be_coverage.json
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */3 * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: oracle-data-publication
+      cancel-in-progress: false
+      queue: max
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package for generation and candidate gates
+        run: uv pip install --system -e .
+
+      - name: Reconcile and publish current main data
+        run: |
+          if [ "${GITHUB_EVENT_NAME:-}" = "schedule" ]; then
+            # Probe both readers and the producer's exact-candidate gates in
+            # a disposable checkout so a no-op leaves the publisher clean.
+            if (
+              probe_dir="$(mktemp -d "$RUNNER_TEMP/oracle-data-probe.XXXXXX")" || exit 1
+              trap 'python3 -c "import shutil, sys; shutil.rmtree(sys.argv[1])" "$probe_dir"' EXIT
+              origin_url="$(git remote get-url origin)" || exit 1
+              # The reader intentionally falls back to main for a missing
+              # branch; a schedule must bootstrap that publication instead.
+              git ls-remote --exit-code --heads "$origin_url" refs/heads/oracle-data >/dev/null || exit 1
+              # Chain setup explicitly: errexit is disabled inside an if test.
+              git clone --quiet --shared --no-checkout . "$probe_dir" &&
+              git -C "$probe_dir" remote set-url origin "$origin_url" &&
+              git -C "$probe_dir" fetch --quiet --no-tags origin refs/heads/main &&
+              git -C "$probe_dir" checkout --quiet --detach FETCH_HEAD &&
+              cd "$probe_dir" &&
+              python3 scripts/oracle_data.py materialize &&
+              # Restore the consumer overlay before preparing the clean
+              # producer baseline. Untracked published additions need clean.
+              git reset --hard --quiet HEAD &&
+              python3 -c 'from scripts.oracle_data import DATA_PATHS; import subprocess; subprocess.run(["git", "clean", "-fdx", "--", *DATA_PATHS], check=True)' &&
+              python3 scripts/oracle_data.py verify-baseline
+            ); then
+              echo "Consumer reads and producer baseline gates succeed; no reconciliation needed."
+              exit 0
+            fi
+            echo "Consumer or producer probe failed; reconciling current main and data."
+          fi
+          for attempt in 1 2 3; do
+            python3 scripts/oracle_data.py prepare --reconcile
+            # Retry from a clean generated tree. An earlier attempt may have
+            # created outputs that the new main revision no longer generates.
+            python3 -c 'from scripts.oracle_data import DATA_PATHS; import subprocess; subprocess.run(["git", "clean", "-fdx", "--", *DATA_PATHS], check=True)'
+            SIMULATE_DERIVED_REFRESH=1 scripts/commit_refreshed_report.sh reconcile oracle-data
+            if python3 scripts/oracle_data.py publish --group all \
+              --bootstrap \
+              --message "data: reconcile reviewed main changes"; then
+              exit 0
+            fi
+            echo "Publication attempt $attempt failed; rebuilding against current main and data."
+          done
+          echo "Reconciliation publication failed after 3 attempts." >&2
+          exit 1

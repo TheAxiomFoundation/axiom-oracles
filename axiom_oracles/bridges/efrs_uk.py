@@ -21,6 +21,12 @@ from typing import Any, Callable
 
 import yaml
 
+from .relation_binding import (
+    RelationBinder,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
+from .rulespec_paths import _canonical_checkout_for
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -44,6 +50,29 @@ WEEKS_IN_YEAR = 52
 MONTHS_IN_YEAR = 12
 MIN_POLICYENGINE_UK_VERSION = "2.88"
 CATEGORY_THRESHOLD_WEEKLY_TOLERANCE = 1.0
+# Person variables that only newer PolicyEngine UK releases define. The loader
+# skips them on older releases, and the projections that read them fall back to
+# the older release's own semantics. Upstream citations below are to
+# policyengine-uk at POLICYENGINE_UK_EXACT_AGE_COMMIT, the merge of
+# PolicyEngine/policyengine-uk#1899 (first released in 2.111.2).
+POLICYENGINE_UK_EXACT_AGE_COMMIT = "0c7ea8210d39d4c9b42aa452ad7161d6ad1ec738"
+OPTIONAL_POLICYENGINE_UK_PERSON_VARIABLES = frozenset(
+    {
+        # policyengine_uk/variables/household/demographic/
+        # months_since_last_birthday.py: months since the last birthday on
+        # 6 October, which with a whole age places the date of birth.
+        "months_since_last_birthday",
+    }
+)
+# policyengine_uk/utils/dates.py (_LATEST_MONTHS_SINCE_BIRTHDAY,
+# exact_age_in_months) clips months since the last birthday to [0, 12 - 1e-4],
+# so an exact age never rounds onto the next birthday.
+POLICYENGINE_UK_LATEST_MONTHS_SINCE_BIRTHDAY = 12 - 1e-4
+# policyengine_uk/variables/gov/dwp/months_since_state_pension_age.py rounds
+# with np.round(..., 3), to a thousandth of a month, and is_SP_age.py tests the
+# result >= 0, so a person who attains State Pension age at the commencement
+# of 6 October counts despite float error.
+POLICYENGINE_UK_MONTHS_SINCE_STATE_PENSION_AGE_DECIMALS = 3
 
 NATIONAL_INSURANCE_SECTION_1_PROGRAM_PATH = Path("statutes/ukpga/1992/4/1.yaml")
 NATIONAL_INSURANCE_SECTION_1_BASE = "uk:statutes/ukpga/1992/4/1"
@@ -964,6 +993,7 @@ SURFACE_SPECS = {
             "age",
             "gender",
             "is_SP_age",
+            "months_since_last_birthday",
             "state_pension_age",
         ),
     ),
@@ -1903,24 +1933,38 @@ class UKEFRSComparisonReport:
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
     errors: list[dict[str, Any]] = field(default_factory=list)
+    relation_binding_diagnostics: dict[str, Any] = field(default_factory=dict)
 
     def to_json(self) -> dict[str, Any]:
         from axiom_oracles.conformance.observations import json_output_values
 
-        return json_output_values({
-            "compared_persons": self.compared_persons,
-            "compared_benunits": self.compared_benunits,
-            "compared_values": self.compared_values,
-            "mismatch_count": len(self.mismatches),
-            "mismatches": [row.__dict__ for row in self.mismatches],
-            "oracle_divergence_count": len(self.oracle_divergences),
-            "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
-            "output_summary": self.output_summary,
-            "skipped_surfaces": self.skipped_surfaces,
-            "projection_notes": self.projection_notes,
-            "dataset_identity": self.dataset_identity,
-            "errors": self.errors,
-        })
+        return json_output_values(
+            {
+                "compared_persons": self.compared_persons,
+                "compared_benunits": self.compared_benunits,
+                "compared_values": self.compared_values,
+                "mismatch_count": len(self.mismatches),
+                "mismatches": [row.__dict__ for row in self.mismatches],
+                "oracle_divergence_count": len(self.oracle_divergences),
+                "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
+                "output_summary": self.output_summary,
+                "skipped_surfaces": self.skipped_surfaces,
+                "projection_notes": self.projection_notes,
+                "dataset_identity": self.dataset_identity,
+                "errors": self.errors,
+                **(
+                    {
+                        "provenance": {
+                            "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                                self.relation_binding_diagnostics,
+                            ),
+                        }
+                    }
+                    if self.relation_binding_diagnostics.get("count")
+                    else {}
+                ),
+            }
+        )
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
@@ -2229,9 +2273,7 @@ def compare_uk_efrs(
         ):
             program = universal_credit_program.resolve()
             if not program.exists():
-                raise SystemExit(
-                    f"{selected_surface} RuleSpec not found: {program}"
-                )
+                raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
         else:
             # rulespec-uk moved its content under a top-level ``uk/``
             # jurisdiction directory (canonical-layout cut, 2026-06-12).
@@ -2429,6 +2471,28 @@ def load_policyengine_uk_data(
     return pe_data
 
 
+def add_policyengine_uk_person_outputs(
+    merged: Any, sim: Any, *, variables: tuple[str, ...], year: int
+) -> Any:
+    defined_variables = sim.tax_benefit_system.variables
+    for variable in variables:
+        if (
+            variable in OPTIONAL_POLICYENGINE_UK_PERSON_VARIABLES
+            and variable not in defined_variables
+        ):
+            log(
+                f"PolicyEngine UK does not define {variable}; projections "
+                "that read it fall back to this release's semantics."
+            )
+            continue
+        merged[variable] = sim.calculate(
+            variable,
+            period=year,
+            map_to="person",
+        ).values
+    return merged
+
+
 def load_local_policyengine_uk_data(
     *,
     local_path: Path,
@@ -2494,12 +2558,9 @@ def load_policyengine_uk_dataset(
         person_columns.append("person_benunit_id")
     merged = person[person_columns].copy()
     log("Running PolicyEngine UK person outputs...")
-    for variable in person_variables:
-        merged[variable] = sim.calculate(
-            variable,
-            period=year,
-            map_to="person",
-        ).values
+    add_policyengine_uk_person_outputs(
+        merged, sim, variables=person_variables, year=year
+    )
     if {"state_pension_reported", "state_pension_type"} & set(person_variables):
         merged["state_pension_reported_data_year"] = sim.calculate(
             "state_pension_reported",
@@ -3936,6 +3997,9 @@ def run_axiom_parameter_outputs(
 def rulespec_scalar_parameter_values(
     program: Path, *, rulespec_root: Path, period_start: str
 ) -> dict[str, float]:
+    # Read imports only from a canonical checkout (or one of its direct
+    # jurisdiction directories), the same rule run_axiom_program applies.
+    _canonical_checkout_for(rulespec_root)
     return _rulespec_scalar_parameter_values(
         program.resolve(),
         rulespec_root=rulespec_root.resolve(),
@@ -4038,6 +4102,7 @@ def build_axiom_request(
     pe_data: dict[str, Any],
     year: int,
     surface: str = "personal-allowance",
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "national-insurance-class-1":
         return build_national_insurance_class_1_request(pe_data=pe_data, year=year)
@@ -4055,7 +4120,11 @@ def build_axiom_request(
     if surface == "marriage-allowance":
         return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
-        return build_income_tax_income_base_request(pe_data=pe_data, year=year)
+        return build_income_tax_income_base_request(
+            pe_data=pe_data,
+            year=year,
+            artifact=artifact,
+        )
     if surface == "income-tax-section-10-earned-income":
         return build_income_tax_section_10_request(pe_data=pe_data, year=year)
     if surface == "income-tax-section-11d-savings-income":
@@ -4188,6 +4257,9 @@ def build_axiom_request(
     raise ValueError(f"unsupported UK Populace surface: {surface}")
 
 
+# Input entity kinds follow each RuleSpec's scope. A benefit-unit projection
+# can represent a statutory Person (the claimant), so its ID prefix alone
+# does not determine whether its inputs belong to Person or Family.
 def build_national_insurance_class_1_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
@@ -4221,6 +4293,7 @@ def build_national_insurance_class_1_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4256,6 +4329,7 @@ def build_national_insurance_class_4_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4296,6 +4370,7 @@ def build_national_insurance_class_4_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4331,6 +4406,7 @@ def build_national_insurance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4365,6 +4441,7 @@ def build_personal_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4419,6 +4496,7 @@ def build_marriage_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4439,12 +4517,13 @@ def build_marriage_allowance_request(
 
 
 def build_income_tax_income_base_request(
-    *, pe_data: dict[str, Any], year: int
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     interval = tax_year_interval(year)
     inputs: list[dict[str, Any]] = []
     relations: list[dict[str, Any]] = []
     queries: list[dict[str, Any]] = []
+    relation_binder = RelationBinder(artifact)
     for row in rows_for_surface(pe_data, "income-tax-income-base"):
         person_id = int(row_value(row, "person_id"))
         entity_id = person_entity_id(person_id)
@@ -4453,11 +4532,21 @@ def build_income_tax_income_base_request(
                 person_id,
                 str(component["name"]),
             )
+            relation_name = (
+                f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            )
+            roles = {
+                "owner_id": entity_id,
+                "owner_kind": "Person",
+                "related_id": payment_id,
+                "related_kind": "Payment",
+            }
             relations.append(
                 {
-                    "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
-                    "tuple": [payment_id, entity_id],
+                    "name": relation_name,
+                    "tuple": relation_binder.tuple(relation_name, **roles),
                     "interval": interval,
+                    **({"roles": roles} if artifact is None else {}),
                 }
             )
             inputs.append(
@@ -4466,6 +4555,7 @@ def build_income_tax_income_base_request(
                     payment_id,
                     interval,
                     money(component["amount_charged_to_income_tax"]),
+                    entity="Payment",
                 )
             )
             inputs.append(
@@ -4474,6 +4564,7 @@ def build_income_tax_income_base_request(
                     payment_id,
                     interval,
                     money(component["relief_deducted_under_section_24"]),
+                    entity="Payment",
                 )
             )
         for name, value in project_income_tax_section_23_inputs(row).items():
@@ -4483,6 +4574,7 @@ def build_income_tax_income_base_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4521,6 +4613,7 @@ def build_income_tax_section_10_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4559,6 +4652,7 @@ def build_income_tax_section_11d_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4597,6 +4691,7 @@ def build_income_tax_section_13_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4631,6 +4726,7 @@ def build_child_benefit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4663,6 +4759,7 @@ def build_benefit_cap_relevant_amount_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -4686,7 +4783,7 @@ def build_benefit_cap_relevant_amount_request(
 def build_state_pension_credit_qualifying_age_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
-    interval = day_interval(year)
+    interval = fiscal_mid_year_day_interval(year)
     inputs: list[dict[str, Any]] = []
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "state-pension-credit-qualifying-age"):
@@ -4700,6 +4797,7 @@ def build_state_pension_credit_qualifying_age_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4735,6 +4833,7 @@ def build_pension_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4767,6 +4866,7 @@ def build_pension_credit_child_addition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4802,6 +4902,7 @@ def build_pension_credit_deemed_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4843,6 +4944,7 @@ def build_legacy_weekly_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4933,13 +5035,16 @@ def build_housing_benefit_applicable_amount_request(
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
         entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+        for name, value in project_housing_benefit_applicable_amount_inputs(
+            row
+        ).items():
             inputs.append(
                 input_record(
                     f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -4977,6 +5082,7 @@ def build_housing_benefit_non_dependant_deductions_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5012,6 +5118,7 @@ def build_housing_benefit_entitlement_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5049,6 +5156,7 @@ def build_state_pension_credit_guarantee_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5088,6 +5196,7 @@ def build_state_pension_credit_savings_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5151,6 +5260,7 @@ def build_universal_credit_childcare_element_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5188,6 +5298,7 @@ def build_universal_credit_childcare_work_condition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5223,6 +5334,7 @@ def build_universal_credit_award_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5257,6 +5369,7 @@ def build_universal_credit_housing_costs_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5294,6 +5407,7 @@ def build_universal_credit_income_deduction_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5331,6 +5445,7 @@ def build_universal_credit_assessable_capital_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5366,6 +5481,7 @@ def build_universal_credit_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5401,6 +5517,7 @@ def build_universal_credit_work_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5436,6 +5553,7 @@ def build_student_loan_repayment_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5473,6 +5591,7 @@ def build_carers_allowance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5510,6 +5629,7 @@ def build_carer_support_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5545,6 +5665,7 @@ def build_scottish_child_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5578,6 +5699,7 @@ def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5602,7 +5724,9 @@ def build_pip_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
     for row in rows_for_surface(pe_data, "personal-independence-payment-final"):
         entity_id = person_entity_id(int(row_value(row, "person_id")))
         for name, value in project_pip_final_inputs(row).items():
-            inputs.append(input_record(name, entity_id, interval, value))
+            inputs.append(
+                input_record(name, entity_id, interval, value, entity="Person")
+            )
         queries.append(
             {
                 "entity_id": entity_id,
@@ -5838,8 +5962,47 @@ def project_state_pension_credit_qualifying_age_inputs(row: Any) -> dict[str, An
         == "FEMALE",
         "pensionable_age": state_pension_age,
         "pensionable_age_for_woman_born_same_day": state_pension_age,
-        "claimant_age": money(row_value(row, "age", 0)),
+        "claimant_age": policyengine_uk_exact_age(row, state_pension_age),
     }
+
+
+def policyengine_uk_exact_age(row: Any, state_pension_age: float) -> float:
+    """The person's exact age on 6 October, as PolicyEngine UK's is_SP_age reads it.
+
+    At policyengine-uk POLICYENGINE_UK_EXACT_AGE_COMMIT (#1899),
+    state_pension_age.py gives the person's own State Pension age from the date
+    of birth that age and months_since_last_birthday place, and is_SP_age.py
+    holds when months_since_state_pension_age.py's 12 * exact age - 12 *
+    state_pension_age, rounded to a thousandth of a month, is at least zero.
+    For a whole age, utils/dates.py's exact age in months is 12 * age +
+    months_since_last_birthday clipped to [0, 12 - 1e-4]; a fractional age is
+    read as the exact age there, which this projection does not reproduce
+    (months_since_last_birthday.py: microdata records age in whole years).
+    The exact age here is floor(age) + months_since_last_birthday / 12 with
+    the same clip. Where that rounds to the
+    State Pension age, the State Pension age is returned itself, so a person
+    who attains it at the commencement of 6 October stays an exact tie instead
+    of landing either side of it by float32 storage error. Earlier releases
+    (2.88.56's is_SP_age.py is age >= state_pension_age) have no
+    months_since_last_birthday, so without it the exact age is the age.
+    """
+    age = money(row_value(row, "age", 0))
+    months_since_last_birthday = row_value(row, "months_since_last_birthday")
+    if months_since_last_birthday is None:
+        return age
+    whole_years = math.floor(age)
+    months = min(
+        max(money(months_since_last_birthday), 0.0),
+        POLICYENGINE_UK_LATEST_MONTHS_SINCE_BIRTHDAY,
+    )
+    months_since_state_pension_age = (
+        MONTHS_IN_YEAR * whole_years + months - MONTHS_IN_YEAR * state_pension_age
+    )
+    # numpy.round, as PolicyEngine UK uses, scales and rounds half to even.
+    scale = 10**POLICYENGINE_UK_MONTHS_SINCE_STATE_PENSION_AGE_DECIMALS
+    if round(months_since_state_pension_age * scale) == 0:
+        return state_pension_age
+    return whole_years + months / MONTHS_IN_YEAR
 
 
 def project_national_insurance_final_inputs(row: Any) -> dict[str, Any]:
@@ -6512,9 +6675,7 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
         ]
     if surface == "marriage-allowance":
         return [
-            row
-            for row in persons
-            if money(row_value(row, "marriage_allowance", 0)) > 0
+            row for row in persons if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
@@ -6531,6 +6692,7 @@ def compare_outputs(
     mismatches: list[UKEFRSComparisonRow] = []
     oracle_divergences: list[UKEFRSOracleDivergence] = []
     errors: list[dict[str, Any]] = []
+    diagnostics: dict[str, Any] = {}
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -6555,24 +6717,37 @@ def compare_outputs(
                 f"for {len(persons):,} PolicyEngine rows"
             )
         for index, result in enumerate(axiom_outputs):
+            merge_relation_binding_diagnostics(
+                diagnostics,
+                public_relation_binding_diagnostics(
+                    result.get("relation_binding_diagnostics") or {},
+                ),
+            )
             pe_row = persons[index]
             entity_id = entity_id_for_surface(surface, pe_row)
-            if (
-                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
-                or ("executed" in result and result["executed"] is not True)
-            ):
+            if any(
+                result.get(key) for key in ("error", "errors", "skipped", "skip_reason")
+            ) or ("executed" in result and result["executed"] is not True):
                 # Keep stop evidence independently of displayed mismatches,
                 # including results whose returned values would have matched.
-                errors.append({
-                    "engine": "axiom",
-                    "case_id": entity_id,
-                    "surface": surface,
-                    **{
-                        key: result[key]
-                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
-                        if key in result
-                    },
-                })
+                errors.append(
+                    {
+                        "engine": "axiom",
+                        "case_id": entity_id,
+                        "surface": surface,
+                        **{
+                            key: result[key]
+                            for key in (
+                                "error",
+                                "errors",
+                                "skipped",
+                                "skip_reason",
+                                "executed",
+                            )
+                            if key in result
+                        },
+                    }
+                )
                 continue
             outputs = result.get("outputs") or {}
             for name, spec in output_specs.items():
@@ -6631,6 +6806,7 @@ def compare_outputs(
         output_summary=list(summary.values()),
         dataset_identity=pe_data.get("dataset_identity") or None,
         errors=errors,
+        relation_binding_diagnostics=diagnostics,
         skipped_surfaces=SKIPPED_SURFACES,
         projection_notes=[
             "Personal allowance projection supplies validation-population adjusted net income "
@@ -6690,13 +6866,50 @@ def compare_outputs(
             "compares the weekly RuleSpec aggregate against PolicyEngine's "
             "annual child_minimum_guarantee_addition divided by 52.",
             "State Pension Credit Act section 1 qualifying-age comparison "
-            "queries RuleSpec's day-level qualifying_age on a representative "
-            "day and supplies PolicyEngine's annual state_pension_age for both "
-            "the pensionable-age leaf and the woman-born-same-day leaf. The "
-            "same projection compares the attained-age judgment against "
-            "PolicyEngine's is_SP_age boolean. Current PolicyEngine UK "
-            "data exposes the modern equalized-age surface rather than "
-            "historical sex-specific age transitions.",
+            "queries RuleSpec's day-level qualifying_age on 6 October of the "
+            "fiscal year and supplies PolicyEngine's state_pension_age for both"
+            " the pensionable-age leaf and the woman-born-same-day leaf (the "
+            "day does not change RuleSpec's result, which takes pensionable age"
+            " as an input). At policyengine-uk 0c7ea821 (the merge of #1899, "
+            "first released in 2.111.2): is_SP_age.py is "
+            "months_since_state_pension_age >= 0; "
+            "months_since_state_pension_age.py rounds 12 x exact age - 12 x "
+            "state_pension_age to a thousandth of a month on 6 October; "
+            "utils/dates.py takes the exact age of a whole age as age plus "
+            "months_since_last_birthday, clipped to [0, 12 - 1e-4] months; and "
+            "state_pension_age.py gives each person's own State Pension age "
+            "from the date of birth those place. The attained-age judgment is "
+            "therefore compared with claimant_age = floor(age) + "
+            "months_since_last_birthday / 12, clipped the same way, not the "
+            "whole age; where that rounds to the State Pension age at a "
+            "thousandth of a month, claimant_age is the State Pension age "
+            "itself, so attaining it at the commencement of 6 October is a tie."
+            " Whole age would put people below a State Pension age they have "
+            "reached whenever it exceeds their whole age. Under Pensions Act "
+            "1995 Sch 4 para 1 rule (7) and table 3 (66 years and 1 to 11 "
+            "months for births from 6 April 1960 to 5 March 1961), that covers "
+            "66-year-olds born 6 April to 5 July 1960 in 2026-27 and 7 October "
+            "1960 to 5 January 1961 in 2027-28. In simulations built from data,"
+            " months_since_last_birthday.py spreads each year of age and sex "
+            "evenly over the year, and state_pension_age.py measures from that "
+            "birth instant to the commencement of the anniversary of the day "
+            "starting at or after it, so a State Pension age of 66 or 67 years "
+            "comes out above that whole number by part of a day, and whole age "
+            "would also miss people who have reached it. PolicyEngine UK "
+            "releases before #1899, including the 2.88.56 that "
+            "uk-tax-benefits-efrs pins, have no months_since_last_birthday: "
+            "is_SP_age there is age >= state_pension_age, with "
+            "state_pension_age set by sex and year, and the projection supplies"
+            " age unchanged. rulespec-uk takes pensionable age as an input "
+            "until Pensions Act 1995 Sch 4 para 1 is encoded (rulespec-uk#369)."
+            " PolicyEngine's Pension Credit age conditions read is_SP_age "
+            "(meets_pension_credit_age_conditions.py), with no separate "
+            "qualifying-age variable, so the woman-born-same-day leaf also "
+            "takes the person's own State Pension age. Under Sch 4 para 1 rule "
+            "(1), men born before 6 December 1953 attain pensionable age at 65;"
+            " men born on or after it follow the same rules as a woman born the "
+            "same day, so the two leaves differ only for those men, who are "
+            "over both from 2019-20.",
             "State Pension Credit Act section 2 guarantee-credit comparison "
             "projects PolicyEngine's annual minimum_guarantee into the "
             "statutory appropriate minimum guarantee by supplying "
@@ -6904,7 +7117,9 @@ def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
             return math.nan
         maximum_amount, income_reduction = float(maximum), float(reduction)
         # max(0, NaN) itself erases a missing return, so validate first.
-        if not all(math.isfinite(value) for value in (maximum_amount, income_reduction)):
+        if not all(
+            math.isfinite(value) for value in (maximum_amount, income_reduction)
+        ):
             return math.nan
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:
@@ -7266,6 +7481,19 @@ def day_interval(year: int) -> dict[str, str]:
         "name": "day",
         "start": f"{year:04d}-04-06",
         "end": f"{year:04d}-04-06",
+    }
+
+
+def fiscal_mid_year_day_interval(year: int) -> dict[str, str]:
+    """6 October of the fiscal year starting in ``year``: the day on which
+    PolicyEngine UK reads State Pension age status and exact age from #1899
+    (is_SP_age.py and months_since_last_birthday.py at
+    POLICYENGINE_UK_EXACT_AGE_COMMIT)."""
+    return {
+        "period_kind": "custom",
+        "name": "day",
+        "start": f"{year:04d}-10-06",
+        "end": f"{year:04d}-10-06",
     }
 
 

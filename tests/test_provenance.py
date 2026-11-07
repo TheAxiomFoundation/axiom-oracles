@@ -1,4 +1,9 @@
-"""Tests for the provenance module (O2) and run_comparison's stamping."""
+"""Tests for provenance and run_comparison's stamping.
+
+Certification commit invariants: every premise producer uses the identical
+GIT_SHA validator; its language is 40 lowercase hex characters with at least
+one a-f. Enumerate every producer importing it so a local regex cannot drift.
+"""
 
 from __future__ import annotations
 
@@ -9,18 +14,61 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.provenance import (
+    GIT_SHA,
     PROVENANCE_SCHEMA_VERSION,
     RUN_KINDS,
     build_provenance,
+    checkout_remote_matches_slug,
     dataset_provenance_from_identity,
     engine_provenance,
     is_real_run_report,
+    remote_matches_slug,
     repo_slug_from_remote,
     resolve_run_kind,
     rulespec_provenance,
 )
+
+
+@pytest.mark.parametrize(
+    "producer",
+    (
+        "certify",
+        "closure_ledger",
+        "executable_reproduction",
+        "de_executable",
+        "de_axiom_legs",
+        "tariff_executable_reproduction",
+        "de_closure_ledger",
+        "de_closure",
+        "nz_closure",
+        "nz_executable_reproduction",
+        "us_tariff_closure",
+    ),
+)
+def test_certification_commit_validator_is_shared(producer):
+    module = importlib.import_module(f"scripts.{producer}")
+    assert module.GIT_SHA is GIT_SHA
+
+
+@pytest.mark.parametrize(
+    ("value", "accepted"),
+    (
+        ("d83ba3db30e2f63376aacf822d116687589b8564", True),
+        ("0" * 39 + "a", True),
+        ("f" * 40, True),
+        ("6" * 40, False),
+        ("A" * 40, False),
+        ("g" * 40, False),
+        ("a" * 39, False),
+        ("a" * 41, False),
+        ("a" * 40 + "\n", False),
+    ),
+)
+def test_certification_commit_shape(value, accepted):
+    assert (GIT_SHA.fullmatch(value) is not None) is accepted
 
 
 def _load_run_comparison():
@@ -58,10 +106,14 @@ def test_is_real_run_report(report, real):
 
 
 def test_build_provenance_always_has_schema_and_timestamp():
-    block = build_provenance(generated_by="x")
+    receipt = engine_provenance(None)
+    block = build_provenance(generated_by="x", engine=receipt)
     assert block["schema"] == PROVENANCE_SCHEMA_VERSION
     assert block["generated_at"].endswith("Z")
     assert block["run_kind"] in RUN_KINDS
+    assert block["engine"]["source_status"] == "unresolved"
+    assert block["engine"]["commit"] is None
+    assert block["engine"]["version"] is None
 
 
 def test_build_provenance_omits_empty_subblocks():
@@ -90,7 +142,7 @@ def test_resolve_run_kind_env(monkeypatch):
 # --- repo slug + rulespec provenance ---------------------------------------
 
 
-def test_repo_slug_from_remote_forms():
+def test_repo_slug_from_remote_forms(tmp_path):
     assert (
         repo_slug_from_remote("git@github.com:TheAxiomFoundation/rulespec-us.git")
         == "TheAxiomFoundation/rulespec-us"
@@ -100,8 +152,188 @@ def test_repo_slug_from_remote_forms():
         == "TheAxiomFoundation/rulespec-us"
     )
     # NEGATIVE: a non-GitHub remote yields no slug rather than a wrong one.
-    assert repo_slug_from_remote("file:///tmp/rulespec-us") is None
+    assert repo_slug_from_remote((tmp_path / "rulespec-us").as_uri()) is None
     assert repo_slug_from_remote(None) is None
+
+
+_MIXED_CASE_HOSTS = ("GitHub.com", "GITHUB.COM", "user@GitHub.com", "gItHuB.cOm")
+
+
+@pytest.mark.parametrize("host", _MIXED_CASE_HOSTS)
+def test_repo_slug_from_remote_ignores_host_case(host):
+    # Host names ignore case, so git sends these origins to github.com. A
+    # mixed-case host must still yield the slug, or remote_matches_slug reads
+    # the fork as an unrecognized origin and accepts it.
+    url = f"https://{host}/evil/rulespec-us.git"
+    assert repo_slug_from_remote(url) == "evil/rulespec-us"
+    assert not remote_matches_slug(url, "TheAxiomFoundation/rulespec-us")
+    assert remote_matches_slug(
+        f"https://{host}/TheAxiomFoundation/rulespec-us",
+        "TheAxiomFoundation/rulespec-us",
+    )
+
+
+@pytest.mark.parametrize("host", _MIXED_CASE_HOSTS)
+def test_checkout_behind_mixed_case_host_fork_is_rejected(tmp_path, host):
+    repo = tmp_path / "rulespec-us"
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(
+        ["git", "-C", str(repo), "remote", "add", "origin",
+         f"https://{host}/evil/rulespec-us"],
+        check=True,
+    )
+    assert not checkout_remote_matches_slug(repo, "TheAxiomFoundation/rulespec-us")
+    # Provenance names the fork, not the directory.
+    assert rulespec_provenance([repo])[0]["repo"] == "evil/rulespec-us"
+
+
+_HOST_CASE = st.lists(st.booleans(), min_size=len("github.com"), max_size=len("github.com"))
+_SLUG_PART = st.from_regex(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,20}", fullmatch=True).filter(
+    lambda part: not part.endswith(".git") and part not in (".", "..")
+)
+
+
+@settings(max_examples=200)
+@given(
+    flips=_HOST_CASE,
+    scheme=st.sampled_from(["https://", "ssh://git@", "https://user@"]),
+    owner=_SLUG_PART,
+    name=_SLUG_PART,
+    suffix=st.sampled_from(["", ".git", "/"]),
+)
+def test_repo_slug_from_remote_is_host_case_invariant(flips, scheme, owner, name, suffix):
+    # Invariant: the slug depends on the path alone, never on how the host
+    # is cased.
+    host = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
+    lower = f"{scheme}github.com/{owner}/{name}{suffix}"
+    mixed = f"{scheme}{host}/{owner}/{name}{suffix}"
+    assert repo_slug_from_remote(mixed) == repo_slug_from_remote(lower)
+    assert repo_slug_from_remote(mixed) is not None
+
+
+_TARGET = "TheAxiomFoundation/rulespec-us"
+
+
+@pytest.mark.parametrize(
+    ("url", "slug", "matches"),
+    (
+        # A foreign host never yields the canonical name, wherever github.com
+        # appears in the URL.
+        ("https://example.invalid/github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("git@example.invalid:TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com@example.invalid/TheAxiomFoundation/rulespec-us", None, False),
+        ("https://github.com.example.invalid/TheAxiomFoundation/rulespec-us", None, False),
+        ("git@github-alias:TheAxiomFoundation/rulespec-us.git", None, False),
+        # A port is part of the host: only the scheme's own port is github.com.
+        ("https://github.com:443/evil/rulespec-us.git", "evil/rulespec-us", False),
+        ("https://github.com:443/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("ssh://git@github.com:22/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("https://github.com:8443/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com:x/TheAxiomFoundation/rulespec-us.git", None, False),
+        # Userinfo is not the host.
+        ("https://user:token@github.com/TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("org-1@github.com:TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        ("github.com:TheAxiomFoundation/rulespec-us.git", _TARGET, True),
+        # The real repository spelled with a trailing slash, query or fragment.
+        ("https://github.com/TheAxiomFoundation/rulespec-us.git/", _TARGET, True),
+        ("https://github.com/TheAxiomFoundation/rulespec-us?x=1", _TARGET, True),
+        ("https://github.com/TheAxiomFoundation/rulespec-us#x", _TARGET, True),
+        ("https://GitHub.COM/theaxiomfoundation/RuleSpec-US.git", "theaxiomfoundation/RuleSpec-US", True),
+        # Schemes and paths git can read but this check does not.
+        ("http://github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("git://github.com/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com/x/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("https://github.com/TheAxiomFoundation", None, False),
+        ("git@github.com:/TheAxiomFoundation/rulespec-us.git", None, False),
+        ("/srv/mirrors/rulespec-us.git", None, False),
+        ("file:///srv/mirrors/rulespec-us.git", None, False),
+    ),
+)
+def test_remote_forms_agree_across_parsers(url, slug, matches):
+    from axiom_oracles.rulespec_roots import _canonical_origin
+
+    assert repo_slug_from_remote(url) == slug
+    assert remote_matches_slug(url, _TARGET) is matches
+    assert _canonical_origin(url, "rulespec-us") is matches
+
+
+@pytest.mark.parametrize("url", (None, "", "  \n"))
+def test_an_absent_origin_still_matches(url):
+    # No origin: callers fall back on the supervised layout conventions.
+    assert remote_matches_slug(url, _TARGET)
+    assert repo_slug_from_remote(url) is None
+
+
+def _checkout_with_origin(path: Path, origin: str | None) -> Path:
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    if origin is not None:
+        subprocess.run(["git", "-C", str(path), "remote", "add", "origin", origin], check=True)
+    return path
+
+
+@pytest.mark.parametrize(
+    "origin",
+    (
+        "https://example.invalid/github.com/TheAxiomFoundation/rulespec-us.git",
+        "git@example.invalid:TheAxiomFoundation/rulespec-us.git",
+        "https://github.com:8443/TheAxiomFoundation/rulespec-us.git",
+    ),
+)
+def test_checkout_from_a_foreign_host_is_refused_and_not_named_canonical(tmp_path, origin):
+    repo = _checkout_with_origin(tmp_path / "rulespec-us", origin)
+    assert not checkout_remote_matches_slug(repo, _TARGET)
+    # The directory name must not stand in for a configured foreign origin.
+    assert rulespec_provenance([repo])[0]["repo"] != _TARGET
+
+
+def test_checkout_without_origin_keeps_the_layout_name(tmp_path):
+    repo = _checkout_with_origin(tmp_path / "rulespec-us", None)
+    assert checkout_remote_matches_slug(repo, _TARGET)
+    assert rulespec_provenance([repo])[0]["repo"] == _TARGET
+
+
+_PORTS = {"https://": 443, "ssh://git@": 22, "https://user@": 443, "https://u:p@": 443}
+
+
+@settings(max_examples=400)
+@given(
+    flips=_HOST_CASE,
+    scheme=st.sampled_from([*_PORTS, "git@", "", "http://", "git://"]),
+    host=st.sampled_from(["github.com", "example.invalid", "github.com.example.invalid",
+                          "example.invalid/github.com", "github.com@example.invalid"]),
+    port=st.sampled_from(["", ":443", ":22", ":8443"]),
+    owner=st.sampled_from(["TheAxiomFoundation", "theaxiomfoundation", "evil"]),
+    name=st.sampled_from(["rulespec-us", "RuleSpec-US", "rulespec-uk"]),
+    suffix=st.sampled_from(["", ".git", "/", ".git/"]),
+    tail=st.sampled_from(["", "?x=1", "#x"]),
+)
+def test_canonical_origin_agrees_with_provenance(
+    flips, scheme, host, port, owner, name, suffix, tail
+):
+    # Differential: rulespec_roots._canonical_origin and provenance's
+    # remote_matches_slug both judge whether a configured origin is
+    # TheAxiomFoundation/rulespec-us on github.com. They must agree on every
+    # form, and both must agree with the spelled-out rule below.
+    from axiom_oracles.rulespec_roots import _canonical_origin
+
+    cased = "".join(c.upper() if f else c for c, f in zip("github.com", flips))
+    host = host.replace("github.com", cased)
+    scp = scheme in ("git@", "")
+    url = f"{scheme}{host}{'' if scp else port}{':' if scp else '/'}{owner}/{name}{suffix}{tail}"
+    expected = (
+        host.casefold() == "github.com"
+        and scheme in (*_PORTS, "git@", "")
+        and (scp or port in ("", f":{_PORTS[scheme]}"))
+        and not (scp and tail)
+        and owner.casefold() == "theaxiomfoundation"
+        and name.casefold() == "rulespec-us"
+    )
+    roots_ok = _canonical_origin(url, "rulespec-us")
+    provenance_ok = remote_matches_slug(url, _TARGET)
+    assert roots_ok == provenance_ok == expected, url
+    # A configured origin that matches is always a recognized one.
+    if provenance_ok:
+        assert repo_slug_from_remote(url) is not None
 
 
 def test_rulespec_provenance_uses_git_when_available(tmp_path):
@@ -214,19 +446,40 @@ def test_rulespec_provenance_dedupes(tmp_path):
     assert entries == [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
 
 
-def test_engine_provenance_reads_cargo_version(tmp_path):
+def test_engine_provenance_checkout_cannot_prove_executable_identity(tmp_path):
     repo = tmp_path / "axiom-rules"
     repo.mkdir()
     (repo / "Cargo.toml").write_text(
         '[package]\nname = "axiom-rules-engine"\nversion = "0.4.2"\n'
     )
     prov = engine_provenance(repo)
-    assert prov["axiom_rules_engine_version"] == "0.4.2"
+    assert prov["commit"] is None
+    assert prov["binary_sha256"] is None
+    assert prov["version"] is None
+    assert prov["axiom_rules_engine_version"] is None
 
 
 def test_engine_provenance_none_repo():
     prov = engine_provenance(None)
     assert prov["axiom_rules_engine_sha"] is None
+    assert prov["commit"] is None
+    assert prov["source_status"] == "unresolved"
+
+
+def test_engine_provenance_reads_executable_receipt(tmp_path):
+    import hashlib
+    from axiom_oracles.engine_identity import engine_binding_receipt_path
+
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"actual executed bytes")
+    digest = hashlib.sha256(binary.read_bytes()).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "commit": "b" * 40, "binary_sha256": digest, "version": "0.4.2",
+    }))
+    prov = engine_provenance(tmp_path, binary_path=binary)
+    assert (prov["commit"], prov["binary_sha256"], prov["version"]) == (
+        "b" * 40, digest, "0.4.2",
+    )
 
 
 # --- dataset identity reuse -------------------------------------------------
@@ -483,6 +736,13 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch,
     sibling = tmp_path / "snapshot" / "rulespec-us"
     if agreeing:
         subprocess.run(["git", "clone", "-q", "--no-hardlinks", str(pinned), str(sibling)], check=True)
+        # A clone's origin is the local source path, which names no GitHub
+        # repository. Give it the origin a real checkout carries.
+        subprocess.run(
+            ["git", "-C", str(sibling), "remote", "set-url", "origin",
+             "https://github.com/TheAxiomFoundation/rulespec-us.git"],
+            check=True,
+        )
         override_sha = pinned_sha
     else:
         override_sha = _git_checkout(sibling, "sibling")
@@ -838,7 +1098,7 @@ def test_reemit_strips_shas_from_explicitly_configured_roots(tmp_path):
         assert entry.get("sha") is None, entry
 
 
-def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
+def test_reemit_keeps_the_copied_engine_identity_and_label(
     tmp_path, monkeypatch
 ):
     """A re-emission executed no engine, so it must not claim the leg's own
@@ -859,6 +1119,7 @@ def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
     output = tmp_path / "r.json"
     copied = {
         "suite": "be-marital-quotient",
+        "provenance": {"engine": {"commit": "a" * 40, "version": "0.1.0"}},
         "engines": {
             "left": "euromod",
             "right": "axiom",
@@ -879,19 +1140,131 @@ def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
     block = run_comparison._build_run_provenance(
         config, "euromod-synthetic-compare", output
     )
-    assert "engine" not in block
+    assert block["engine"] == copied["provenance"]["engine"]
     run_comparison._stamp_report_provenance(output, block)
     assert json.loads(output.read_text())["engines"]["versions"] == {
         "axiom_rules_engine": "0.1.0"
     }
 
-    # A real run still records, and labels the report with, the engine it ran.
+    # A real run uses the receipt the execution wrote, without querying HEAD.
     config["runner"].pop("_reemitted_report")
+    actual = {"commit": "e" * 40, "binary_sha256": "c" * 64,
+              "version": "0.2.2"}
+    output.write_text(json.dumps({**copied, "provenance": {"engine": actual}}))
     block = run_comparison._build_run_provenance(
         config, "euromod-synthetic-compare", output
     )
-    assert block["engine"]["axiom_rules_engine_version"] == "0.2.2"
+    assert block["engine"] == actual
     run_comparison._stamp_report_provenance(output, block)
     assert json.loads(output.read_text())["engines"]["versions"] == {
         "axiom_rules_engine": "0.2.2"
     }
+
+
+@settings(max_examples=100, deadline=None, suppress_health_check=[
+    HealthCheck.function_scoped_fixture, HealthCheck.too_slow,
+])
+@given(engine=st.dictionaries(
+    st.text(alphabet="abcdef_é0123456789", max_size=30),
+    st.one_of(st.none(), st.booleans(), st.integers(),
+              st.text(alphabet="abcdef_é0123456789", max_size=80),
+              st.lists(st.text(alphabet="abcdef_é0123456789", max_size=20), max_size=4)),
+    max_size=12,
+))
+def test_reemission_never_changes_copied_engine_block(tmp_path, engine):
+    runner = _load_run_comparison()
+    path = tmp_path / "copied.json"
+    path.write_text(json.dumps({
+        "engines": {"left": "axiom", "right": "oracle"},
+        "provenance": {"engine": engine},
+    }))
+    config = {"name": "copied", "runner": {
+        "parameters": {}, "_reemitted_report": True,
+        "_engine_receipt": {"commit": "f" * 40, "binary_sha256": "a" * 64},
+    }}
+    block = runner._build_run_provenance(config, "test-copy", path)
+    assert block["engine"] == engine
+    runner._stamp_report_provenance(path, block)
+    assert json.loads(path.read_text())["provenance"]["engine"] == engine
+    adapted = runner._preserve_relation_binding_diagnostics(
+        {"reemitted_report": True, "engine": {"commit": "f" * 40}},
+        {"engine": engine},
+    )
+    assert adapted["engine"] == engine
+
+
+def test_selected_executable_change_rejects_report_stamping(tmp_path):
+    from axiom_oracles.engine_identity import engine_receipt
+
+    runner = _load_run_comparison()
+    binary = tmp_path / "engine"
+    binary.write_bytes(b"before execution")
+    receipt = engine_receipt(binary)
+    binary.write_bytes(b"after execution")
+    output = tmp_path / "report.json"
+    output.write_text('{}')
+    with pytest.raises(SystemExit, match="executable changed"):
+        runner._build_run_provenance({"runner": {
+            "parameters": {}, "_engine_receipt": receipt,
+        }}, "test-execution", output)
+
+
+def test_execution_receipt_disagreement_is_rejected(tmp_path):
+    runner = _load_run_comparison()
+    output = tmp_path / "report.json"
+    output.write_text(json.dumps({"provenance": {"engine": {
+        "commit": "a" * 40, "binary_sha256": "b" * 64,
+    }}}))
+    with pytest.raises(SystemExit, match="differs from selected receipt"):
+        runner._build_run_provenance({"runner": {"parameters": {},
+            "_engine_receipt": {"commit": "c" * 40, "binary_sha256": "b" * 64},
+        }}, "test-execution", output)
+
+
+@pytest.mark.parametrize('runner_type,adapter_name', [
+    ('axiom-encode-tax-ecps-compare', '_adapt_tax_ecps_to_v2'),
+    ('axiom-encode-uk-efrs-compare', '_adapt_uk_efrs_to_v2'),
+])
+def test_format_adapter_keeps_copied_engine_block(monkeypatch, runner_type, adapter_name):
+    registry = _load_run_comparison()
+    engine = {'commit': 'a' * 40, 'version': None, 'legacy': {'source': 'copied'}}
+    provenance = {'reemitted_report': True, 'engine': engine}
+    monkeypatch.setattr(registry, adapter_name, lambda *a, **k: {'summary': {}})
+    adapted = registry._adapt_raw_to_v2(
+        {'provenance': provenance}, runner_type, {}, suite='copy',
+    )
+    final = registry._preserve_relation_binding_diagnostics(provenance, adapted['provenance'])
+    assert final['engine'] == engine
+
+
+def test_preserved_producer_provenance_keeps_actual_execution_identity(tmp_path):
+    registry = _load_run_comparison()
+    path = tmp_path / 'producer.json'
+    path.write_text(json.dumps({'provenance': {
+        'engine': {'build_metadata': {'compiler': 'producer'}, 'version': 'old'},
+        'execution_receipt': {'producer_specific': True},
+    }}))
+    receipt = {'repository': 'TheAxiomFoundation/axiom-rules-engine',
+               'commit': 'c' * 40, 'binary_sha256': 'b' * 64, 'version': '1.0'}
+    registry._stamp_report_provenance(path, {'engine': receipt},
+                                      preserve_runner_provenance=True)
+    provenance = json.loads(path.read_text())['provenance']
+    assert {key: provenance['engine'][key] for key in receipt} == receipt
+    assert provenance['engine']['build_metadata'] == {'compiler': 'producer'}
+    assert provenance['execution_receipt'] == {'producer_specific': True}
+
+
+def test_preserved_producer_cannot_clear_copy_marker_or_replace_its_engine(tmp_path):
+    registry = _load_run_comparison()
+    path = tmp_path / 'copied-producer.json'
+    historical = {'commit': 'a' * 40, 'binary_sha256': 'b' * 64, 'version': None}
+    path.write_text(json.dumps({'provenance': {
+        'engine': historical, 'reemitted_report': False,
+    }}))
+    registry._stamp_report_provenance(path, {
+        'reemitted_report': True,
+        'engine': {'commit': 'c' * 40, 'binary_sha256': 'd' * 64},
+    }, preserve_runner_provenance=True)
+    provenance = json.loads(path.read_text())['provenance']
+    assert provenance['reemitted_report'] is True
+    assert provenance['engine'] == historical

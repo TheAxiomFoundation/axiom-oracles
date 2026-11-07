@@ -32,6 +32,23 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from axiom_oracles.bridges.relation_binding import RelationBinder
+
+
+# Projection keys these entity scopes by the household id. This is an adapter
+# convention, never evidence for relation binding.
+_UNIT_ENTITIES = frozenset(
+    {
+        "Household",
+        "SnapUnit",
+        "TaxUnit",
+        "SpmUnit",
+        "TanfUnit",
+        "AssistanceUnit",
+        "Family",
+    }
+)
+
 
 # ---------------------------------------------------------------------------
 # Input enumeration + type inference
@@ -60,19 +77,6 @@ class InputSlot:
 # back to Judgment because the SNAP program is judgment-dominated.
 _BOOLEAN_OPS = {"and", "or", "not", "comparison", "if"}
 _NUMERIC_OPS = {"add", "sub", "mul", "div", "max", "min", "ceil", "floor"}
-
-
-# Entities the engine keys by the case's household id; anything else is a
-# pseudo entity whose inputs get broadcast per person too (see below).
-_UNIT_ENTITIES = {
-    "Household",
-    "SnapUnit",
-    "TaxUnit",
-    "SpmUnit",
-    "TanfUnit",
-    "AssistanceUnit",
-    "Family",
-}
 
 
 def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
@@ -421,7 +425,9 @@ def _resolve_value(
         return mapper(case_facts, None)
 
     # Fact-table fallback: look up by slot name (or its unqualified suffix).
-    unqualified = slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    unqualified = (
+        slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    )
     facts_table = person_facts if slot.entity == "Person" else case_facts
     if facts_table is None:
         facts_table = {}
@@ -470,6 +476,7 @@ def attach_generic_inputs(
     with open(compiled_program_path) as f:
         compiled = json.load(f)
     program = compiled.get("program", compiled)
+    relation_binder = RelationBinder(compiled)
 
     # If the caller didn't pass a mapping, resolve one from the default YAML.
     # The mapping table itself is data
@@ -567,14 +574,32 @@ def attach_generic_inputs(
         if member_relation not in variants:
             variants.insert(0, member_relation)
         emit_bare = bare_name != member_relation and len(variants) == 1
+        relation_names = [*variants, *([bare_name] if emit_bare else [])]
+        owner_kind_by_name = {
+            name: relation_binder.owner_kind(
+                name,
+                default_owner_kind=household_entity,
+                related_kind="Person",
+            )
+            for name in relation_names
+        }
 
         relation_records: list[dict[str, Any]] = []
         for pid in person_ids:
-            tuple_pair = [pid, household_entity_id]
-            for name in variants:
-                relation_records.append({"name": name, "tuple": tuple_pair})
-            if emit_bare:
-                relation_records.append({"name": bare_name, "tuple": tuple_pair})
+            for name in relation_names:
+                roles = {
+                    "owner_id": household_entity_id,
+                    "owner_kind": owner_kind_by_name[name],
+                    "related_id": pid,
+                    "related_kind": "Person",
+                }
+                relation_records.append(
+                    {
+                        "name": name,
+                        "tuple": relation_binder.tuple(name, **roles),
+                        "roles": roles,
+                    }
+                )
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
