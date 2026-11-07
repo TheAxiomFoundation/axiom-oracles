@@ -60,10 +60,10 @@ So the invariants are:
   unearned income, the unused rest of it off earnings, then $780 and half the
   remainder; the individual and couple inputs agree.
 
-The slot names are the income input slots of the 22 benefit programs as
-compiled on 2026-10-10 (rulespec-us c13cdf7d, axiom-compose 9a514ac, engine
-0c39023e; Kansas TANF has none). Each is resolved through the shipped mapping
-table, first match winning, exactly as the projector does.
+The slot names come from the income input slots of the 22 benefit programs
+we compiled on 2026-10-10 (rulespec-us c13cdf7d, axiom-compose 9a514ac,
+engine 0c39023e; Kansas TANF has none). The tests resolve each through the
+shipped mapping table, first match winning, as the projector does.
 """
 
 from __future__ import annotations

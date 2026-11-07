@@ -2,19 +2,19 @@
 
 The benefit suites compare Axiom with PolicyEngine on household Cases that
 carry tax-exempt interest (axiom-oracles#567). The Axiom input projection
-counts it for SNAP, TANF and Medicaid MAGI exactly like taxable interest, and
-leaves all interest out of SSI (tests/test_tax_exempt_interest_benefit_inputs.py
-has the law). These tests replay one person in PolicyEngine-US and pin the
-counterpart's side of each claim, so the two engines are known to read the
-same household the same way wherever the law lets them:
+counts it for SNAP, TANF and Medicaid MAGI like taxable interest, and leaves
+all interest out of SSI (tests/test_tax_exempt_interest_benefit_inputs.py has
+the law). These tests replay one person in PolicyEngine-US and pin the
+counterpart's side of each claim, so we know the two engines read the same
+household the same way wherever the law lets them:
 
 * SNAP, TANF (the federal source list) and Medicaid MAGI give a dollar of
   tax-exempt interest and a dollar of taxable interest the same weight.
 * SSI counts both in countable income, which 42 USC 1382a(b)(23) does not
-  allow (PolicyEngine/policyengine-us#10079). That last test is a tripwire:
-  whether PolicyEngine drops the sources or excludes them downstream, the
-  countable income falls to zero and the test fails, and the ssi-ecps
-  dispositions citing the issue should be retired with it.
+  allow (PolicyEngine/policyengine-us#10079). The last test trips when
+  PolicyEngine fixes that: whether PolicyEngine drops the sources or excludes
+  them downstream, the countable income falls to zero and the test fails.
+  Retire it then, with any ssi-ecps disposition that cites the issue.
 
 Expected amounts come from the inputs alone: 12,000 a year is 1,000 a month;
 a filer with no other income has AGI equal to the taxable interest; and SSI

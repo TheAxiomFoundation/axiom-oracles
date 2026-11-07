@@ -536,16 +536,17 @@ mappings:
 
   # Countable unearned income before the $20/month general exclusion
   # (programs/us/ssi/fy-2026.yaml applies only 1382a(b)(2) to this slot).
-  # Interest and dividends are left out, taxable and tax-exempt alike:
+  # It leaves out interest and dividends, taxable and tax-exempt alike:
   # 42 USC 1382a(b)(23) excludes "interest or dividend income from
   # resources—(A) not excluded under section 1382b(a) ..., or (B) excluded
   # pursuant to Federal law other than section 1382b(a)" (20 CFR
   # 416.1124(c)(22)). The population carries annual totals with no link to
-  # the resource that paid them, so all of it is treated as income from
-  # ordinary deposits, stocks and bonds, which are countable resources (20
-  # CFR 416.1201(b)); income from a resource excluded under 1382b(a) follows
-  # that exclusion's own rule and is not modeled. rulespec-us does not encode
-  # (b)(23) yet, so this slot carries the exclusion (axiom-oracles#567).
+  # the resource that paid them, so the projection treats all of it as
+  # income from ordinary deposits, stocks and bonds, countable resources
+  # under 20 CFR 416.1201(b); income from a resource that 1382b(a) excludes
+  # follows that exclusion's own rule, which the projection does not model.
+  # rulespec-us does not encode (b)(23) yet, so this slot carries the
+  # exclusion (axiom-oracles#567).
   - match: { kind: suffix, value: annual_income_not_paid_on_basis_of_need }
     scope: person
     source:
@@ -1428,13 +1429,12 @@ mappings:
       transform: sum
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
-  # Interest here is an upper bound, taxable and tax-exempt alike: A.A.C.
-  # R6-12-503(29) does not count "Dividends, interest, and royalty payments
-  # left on deposit or converted into additional securities", and the
-  # population carries annual totals only, so every dollar is treated as
-  # paid out. DES stops counting interest altogether from the June 2026
-  # benefit month (bulletin of 2026-05-15), after these suites' January
-  # period.
+  # This slot counts every dollar of interest, taxable and tax-exempt alike,
+  # an upper bound: A.A.C. R6-12-503(29) does not count "Dividends,
+  # interest, and royalty payments left on deposit or converted into
+  # additional securities", and the population carries annual totals only.
+  # DES stops counting interest altogether from the June 2026 benefit month
+  # (bulletin of 2026-05-15), after these suites' January period.
   - match: { kind: suffix, value: caretaker_relative_family_unearned_income }
     scope: household
     source:
@@ -1637,9 +1637,10 @@ mappings:
   # No interest, taxable or tax-exempt: PAMMS 1530 Chart 1530.1 (effective
   # February 2025) lists "Interest: UNEARNED – income received on
   # investments" with treatment E, "excluded (E) in determining financial
-  # eligibility and benefit amount", while "Dividend" is I (included).
-  # The chart is not encoded yet (rulespec-us#1648), so this input carries
-  # the exclusion; PolicyEngine counts the interest (policyengine-us#10081).
+  # eligibility and benefit amount", and marks "Dividend" I (included).
+  # rulespec-us does not encode the chart yet (rulespec-us#1648), so this
+  # input carries the exclusion; PolicyEngine counts the interest
+  # (policyengine-us#10081).
   - match: { kind: exact, value: assistance_unit_included_income }
     scope: household
     source:

@@ -1,27 +1,27 @@
 # Tax-exempt interest in the benefit lanes
 
-Household Cases carry `Concepts.TAX_EXEMPT_INTEREST_INCOME` (Form 1040 line 2a: interest that 26 USC 103 keeps out of federal gross income, mostly state and municipal bond interest) beside the taxable `Concepts.INTEREST_INCOME` (line 2b). PolicyEngine receives both. Whether a benefit program counts line 2a is a question for that program's own income definition, so the Axiom input projection (`axiom_oracles/data/populace_input_mapping.yaml`) lists the fact only where the program counts it.
+Household Cases carry `Concepts.TAX_EXEMPT_INTEREST_INCOME` (Form 1040 line 2a: interest that 26 USC 103 keeps out of federal gross income, mostly state and municipal bond interest) beside the taxable `Concepts.INTEREST_INCOME` (line 2b). PolicyEngine receives both. The Axiom input projection (`axiom_oracles/data/populace_input_mapping.yaml`) lists line 2a only for the programs whose own income definition counts it.
 
-This page records the rule behind each of the 22 benefit suites (axiom-oracles#567). No program below distinguishes taxable from tax-exempt interest: each either counts interest or does not.
+None of the programs behind the 22 benefit suites (axiom-oracles#567) distinguishes taxable from tax-exempt interest: each either counts interest or does not.
 
 ## Summary
 
 | Program | Suites | Counts interest? | Axiom input projection |
 |---|---|---|---|
 | SNAP | al, az, ca, ga, ma, nc, ny, sc, tn | Yes | Both interest facts in every SNAP income slot |
-| SNAP | fl | No (state option) | Still counted: the exclusion is not encoded (rulespec-us#1646) |
+| SNAP | fl | No (state option) | Both interest facts, since rulespec-us does not encode the exclusion yet (rulespec-us#1646) |
 | TANF | al, ca, co, de, mn, ny, wa | Yes | Both interest facts in each state's income slots |
 | TANF | az | Yes, when paid out | Both interest facts, as an upper bound |
 | TANF | ga | No | Neither interest fact; dividends stay |
-| TANF | ks | Yes | No income slot: the suite compares the maximum benefit |
+| TANF | ks | Yes | No income slot; the suite compares only the maximum benefit |
 | SSI | ssi | No, nor dividends | Neither interest fact, nor dividends |
 | Medicaid MAGI | medicaid-magi-co | Yes | Both interest facts |
 
-PolicyEngine counts taxable and tax-exempt interest in all four programs (`interest_income` adds the two; Medicaid MAGI adds tax-exempt interest to adjusted gross income). Where the law does not, there is a PolicyEngine issue: SSI (PolicyEngine/policyengine-us#10079), Florida SNAP and TCA (#10080), Georgia TANF (#10081).
+PolicyEngine counts taxable and tax-exempt interest in all four programs (`interest_income` adds the two; Medicaid MAGI adds tax-exempt interest to adjusted gross income). Where the law does not, we filed a PolicyEngine issue: SSI (PolicyEngine/policyengine-us#10079), Florida SNAP and TCA (#10080) and Georgia TANF (#10081).
 
-## How the quotations were gathered
+## Sources
 
-Every quotation was retrieved on 2026-10-10 from the linked source. The federal texts and Georgia's TANF chart were fetched directly while writing the change. The state texts come from the research and adversarial-verification runs for #567, which quoted the official source where it could be retrieved and say so where a fallback (Cornell LII) was used. Dates are the edition or revision the source states.
+We retrieved every quotation below from its linked source on 2026-10-10, fetching the federal texts and Georgia's TANF chart directly. The state texts come from the research and adversarial-verification runs for #567, which quote the official source where they could reach it and name Cornell LII where they fell back to it. Each date gives the edition or revision the source states.
 
 ## SNAP
 
@@ -47,13 +47,13 @@ No exclusion in 273.9(c) turns on federal tax treatment. A state may go further 
 
 Arizona stops counting interest, dividends and royalties for SNAP and cash assistance "effective the benefit month of 06/2026" (DES urgent bulletin, 2026-05-15). The suites run January 2026.
 
-Two small-amount rules are unresolved and not modeled. South Carolina's SNAP manual adopted its TANF interest treatment in 2016 ("SNAP will follow SC TANF Policy regarding interest income"), and the TANF regulation allows "Up to four hundred dollars of interest and dividends per benefit group" to be excluded a year (S.C. Code Regs. 114-1140(N)(2)); whether that still applies to SNAP is unclear. Tennessee's 2017 manual counted interest only "in excess of $60 quarterly", and the current Policy 24.14 does not repeat it.
+The sc-snap and tn-snap suites leave out two small-amount rules whose current force we could not settle. South Carolina's SNAP manual adopted its TANF interest treatment in 2016 ("SNAP will follow SC TANF Policy regarding interest income"). The TANF regulation excludes "Up to four hundred dollars of interest and dividends per benefit group" a year (S.C. Code Regs. 114-1140(N)(2)), and we could not confirm that SNAP still follows it. Tennessee's 2017 manual counted interest only "in excess of $60 quarterly", and the current Policy 24.14 does not repeat it.
 
 **Florida.** DCF ESS Program Policy Manual, passage 1810.1000 (FS):
 
 > Payments of dividends and interest on countable assets, including interest on bank accounts, are excluded as unearned income. This includes interest on a trust account when the interest is either paid to the assistance group, or allowed to accrue to the account at the option of the recipient. Royalties are counted as unearned income.
 
-Passage 1820.1000 gives cash assistance the matching rule, which is what 273.9(c)(19) requires. Florida's composed SNAP program takes unearned income through the shared federal input `snap_total_monthly_unearned_income`, and the separate `snap_income_exclusions` input of 7 CFR 273.10 has no producer, so Axiom counts Florida's interest today, as PolicyEngine does. The two engines agree and both overstate income. Owed: rulespec-us#1646.
+Passage 1820.1000 gives cash assistance the matching rule, as 273.9(c)(19) requires. Florida's composed SNAP program takes unearned income through the shared federal input `snap_total_monthly_unearned_income`. Nothing feeds the separate `snap_income_exclusions` input of 7 CFR 273.10, so Axiom counts Florida's interest, as PolicyEngine does. The two engines agree, and both overstate income. rulespec-us#1646 tracks the missing exclusion.
 
 ## TANF
 
@@ -70,13 +70,13 @@ Passage 1820.1000 gives cash assistance the matching rule, which is what 273.9(c
 | NY | "Normally, accrued interest on an exempt resource is countable unearned income in the month received and countable toward the resource limit in ensuing months." | OTDA 03-INF-25, attachment, Q47; 18 NYCRR 352.22 lists the exemptions and has none for interest |
 | WA | "Unearned income is income you get from a source other than employment or self-employment."; "Count interest income as unearned income" | WAC 388-450-0025(1); DSHS EA-Z Manual, Treatment of Income |
 
-**Arizona.** The population carries annual interest totals with no record of whether the interest was paid out, so the projection treats every dollar as paid out. That overstates income for interest left on deposit, on both engines.
+**Arizona.** The population carries annual interest totals and does not record whether the holder took the interest or left it on deposit, so the projection counts every dollar. That overstates income on both engines wherever interest stayed on deposit.
 
-**Georgia.** `assistance_unit_included_income` is Georgia's own slot, so the projection follows the chart: interest out, dividends in. PolicyEngine's Georgia TANF uses the federal source list, which counts interest (PolicyEngine/policyengine-us#10081). The chart is not encoded (rulespec-us#1648).
+**Georgia.** Georgia's TANF program reads its own income slot, `assistance_unit_included_income`, so the projection follows the chart: interest out, dividends in. PolicyEngine's Georgia TANF uses the federal source list, which counts interest (PolicyEngine/policyengine-us#10081). rulespec-us does not encode the chart yet (rulespec-us#1648).
 
-**Kansas.** Interest counts, with two conflicting small-amount exemptions (K.A.R. 30-4-113(p): "interest income that does not exceed $50.00 per month per family group"; KEESM 6410(35): interest and dividends "received irregularly", "unpredictable" and "less than $30 in a quarter"). The composed Kansas program compares the maximum benefit only and has no income input.
+**Kansas.** Interest counts, with two conflicting small-amount exemptions (K.A.R. 30-4-113(p): "interest income that does not exceed $50.00 per month per family group"; KEESM 6410(35): interest and dividends "received irregularly", "unpredictable" and "less than $30 in a quarter"). The composed Kansas program compares only the maximum benefit and has no income input.
 
-**Narrow exclusions none of the suites models.** Interest held in individual development accounts and ABLE accounts, specified tribal trust funds, California restricted accounts, New York tuition accounts, and each state's small or infrequent-income rule. The population cannot identify any of them.
+**Narrow exclusions.** The population cannot identify interest held in individual development accounts, ABLE accounts, specified tribal trust funds, California restricted accounts or New York tuition accounts. Nor can it identify the income a state's small or infrequent-income rule excludes, so none of the suites models these exclusions.
 
 ## SSI
 
@@ -86,9 +86,9 @@ Passage 1820.1000 gives cash assistance the matching rule, which is what 273.9(c
 
 20 CFR 416.1124(c)(22) ([eCFR](https://www.ecfr.gov/current/title-20/section-416.1124), current 2026-10-01): "We do not count as unearned income— ... (22) Interest and dividend income from a countable resource or from a resource excluded under a Federal statute other than section 1613(a) of the Social Security Act".
 
-Stocks, bonds and financial institution accounts are "ordinarily liquid" resources (20 CFR 416.1201(b)), and "Municipal, corporate, and government bonds are negotiable and transferable. Therefore, their value as a resource is their CMV." (POMS SI 01140.250 B).
+20 CFR 416.1201(b) gives stocks, bonds and financial institution accounts as examples of "ordinarily liquid" resources, and POMS SI 01140.250 B counts bonds as resources: "Municipal, corporate, and government bonds are negotiable and transferable. Therefore, their value as a resource is their CMV."
 
-The SSI program spec computes countable unearned income as the input `annual_income_not_paid_on_basis_of_need` less the $20 monthly general exclusion, and rulespec-us encodes only 1382a(b)(2) and (b)(4). So the projection carries the (b)(23) exclusion: it leaves interest and dividends out of that input and out of the couple transform, treating all of a person's interest and dividends as income from countable resources. Income from a resource excluded under 1382b(a) follows that exclusion's own rule and is not modeled. Owed: rulespec-us#1645. PolicyEngine counts the income: PolicyEngine/policyengine-us#10079.
+The SSI program spec computes countable unearned income as the input `annual_income_not_paid_on_basis_of_need` less the $20 monthly general exclusion, and rulespec-us encodes only 1382a(b)(2) and (b)(4). So the projection carries the (b)(23) exclusion: it leaves interest and dividends out of that input and out of the couple transform, treating all of a person's interest and dividends as income from countable resources. Income from a resource that 1382b(a) excludes follows that exclusion's own rule, which the projection does not model. rulespec-us#1645 tracks encoding (b)(23). PolicyEngine counts the income (PolicyEngine/policyengine-us#10079).
 
 ## Medicaid MAGI
 
@@ -102,15 +102,15 @@ Colorado's rule lists "Interest (includes tax exempt interest)" among MAGI incom
 
 ## Dashboards and dispositions
 
-The 22 benefit suites run outside CI (`ci: manual`), and their committed dashboard reports predate this change. This change edits none of those reports and no dispositions file:
+The 22 benefit suites run outside CI (`ci: manual`), and their committed dashboard reports predate the projection above. A dispositions edit lands only with a refreshed report:
 
-- `conformance/legacy-engine-identity.json` freezes each of the reports byte for byte.
+- `scripts/apply_dispositions.py` merges each suite's entries into its report's `summary.dispositioned` block, and `--check` fails when a committed report differs from that merge.
+- `conformance/legacy-engine-identity.json` freezes each of these reports byte for byte.
 - An edited report must carry a receipt-bound engine identity (`docs/engine-publication-identity.md`).
-- A dispositions edit counts as an edit to the report. `scripts/apply_dispositions.py` merges each suite's entries into its report's `summary.dispositioned` block, and `--check` fails when a committed report differs from that merge.
 
-Instead, an A/B measured the change, running both arms in one pinned toolchain. axiom-oracles#690 lists what the next identity-bound refresh of each report owes. For SSI, that is an `upstream_engine_gap` entry for the rows where PolicyEngine counts interest and dividends, citing PolicyEngine/policyengine-us#10079 and rulespec-us#1645.
+We measured the projection with an A/B that ran both arms in one pinned toolchain. axiom-oracles#690 records the results and what the next identity-bound refresh of each report owes. For SSI, that refresh adds an `upstream_engine_gap` entry for the rows where PolicyEngine counts interest and dividends, citing PolicyEngine/policyengine-us#10079 and rulespec-us#1645.
 
 ## Tests
 
 - `tests/test_tax_exempt_interest_benefit_inputs.py`: for every income slot the 22 compiled programs read, moving interest between line 2b and line 2a changes nothing; the SSI inputs ignore interest and dividends; Georgia's TANF input ignores interest and keeps dividends; no mapping entry names one interest fact without the other.
-- `tests/test_tax_exempt_interest_policyengine_live.py` (CI's `policyengine-live` job): PolicyEngine gives the two kinds of interest the same weight in SNAP, TANF and Medicaid MAGI, and still counts interest in SSI. The SSI test fails when PolicyEngine/policyengine-us#10079 is fixed. That is the signal to retire any SSI disposition that cites it (axiom-oracles#690).
+- `tests/test_tax_exempt_interest_policyengine_live.py` (CI's `policyengine-live` job): PolicyEngine gives the two kinds of interest the same weight in SNAP, TANF and Medicaid MAGI, and still counts interest in SSI. When PolicyEngine fixes PolicyEngine/policyengine-us#10079, the SSI test fails. Retire the test then, with any SSI disposition that cites the issue (axiom-oracles#690).
