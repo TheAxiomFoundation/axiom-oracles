@@ -77,8 +77,9 @@ do not are older and differ):
    is not changed here: the Axiom bridge's qualified-dividend and Schedule D
    leaves sum every tax-unit member, dependents included, as PolicyEngine
    does (PolicyEngine/policyengine-us#9869). Line 7a does not.
-2. In every view 0 <= qualified <= ordinary, and the three PolicyEngine
-   dividend inputs agree (alias = qualified + non-qualified) for every person.
+2. In every view 0 <= qualified <= ordinary, and each person's three
+   PolicyEngine dividend inputs are that person's line 3b, line 3a and the
+   difference, read straight off the facts.
 3. Raising a filer's capital gain distributions by d moves exactly the
    line 7a inputs, each by d, or exactly the Schedule D long-term inputs
    when the return files Schedule D.
@@ -91,7 +92,10 @@ do not are older and differ):
    alone) conserves long-term gain plus line 7a, is idempotent, and leaves
    no return with both line 7a and Schedule D amounts. Every projection
    applies it itself: a Case and the same Case folded in advance reach each
-   engine as identical inputs.
+   engine as identical inputs. A return is the head and the spouse the Case
+   names, as the producer folds each tax unit; on a household Case, which
+   names no spouse, every other adult files alone, so no projection moves
+   one adult's line 7a because another adult files Schedule D.
 7. No benefit income list sums QUALIFIED_DIVIDEND_INCOME beside
    DIVIDEND_INCOME (that would count line 3a twice).
 
@@ -515,12 +519,20 @@ def test_axiom_bridge_takes_line_7a_as_an_input_wherever_gains_flow() -> None:
             "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
         ]
     )
-    # The worksheet lines already read it. Line 9 adds it outside the
-    # conditional, so no reading of the formula can count it twice.
+    # The worksheet lines already read it. Line 9 adds line 7a to the
+    # Schedule D term, as Tax-Calculator's dwks9 does: counted once, and a
+    # dependent's Schedule D gain in the every-member leaves (#619) stays in
+    # line 9 beside the filers' line 7a, as it stays in the 1(h) long-term
+    # gain input. PolicyEngine's dwks09 instead drops the Schedule D term
+    # whenever line 7a is positive; the two agree on every return the fold
+    # leaves, which never has both.
     for line in ("capital_gains_worksheet_line_9", "capital_gains_worksheet_line_10"):
         assert "non_sch_d_capital_gains" in formulas[line]
-    assert formulas["capital_gains_worksheet_line_9"].startswith(
-        "max(0, non_sch_d_capital_gains + (if non_sch_d_capital_gains > 0: 0 else: "
+    assert formulas["capital_gains_worksheet_line_9"] == (
+        "max(0, non_sch_d_capital_gains + max(0, min("
+        "capital_gains_tax_long_term_capital_gains "
+        "+ capital_gains_tax_qualified_dividend_income, net_capital_gains)) "
+        "- min(0, investment_income_form_4952))"
     )
     assert "person_non_sch_d_capital_gains" in formulas["person_agi_for_co_withholding"]
 
@@ -640,6 +652,56 @@ def test_mixed_return_nets_distributions_on_schedule_d_in_every_engine() -> None
     )
 
 
+# A household Case, as populations/populace_us builds one: person 0 is the
+# head and every other adult is "Other", so no spouse is named. The head's
+# 22-year-old child heads their own tax unit and has a capital loss on their
+# own Schedule D; the head's return has only line 7a.
+HOUSEHOLD = _case(
+    _person(
+        "person-1",
+        "HeadOfHousehold",
+        50,
+        **{Concepts.YEARLY_EARNED_INCOME: 40_000, CGD: 2_000},
+    ),
+    _person(
+        "person-2",
+        "Other",
+        22,
+        **{Concepts.YEARLY_EARNED_INCOME: 15_000, LTCG: -1_000},
+    ),
+)
+
+
+def test_household_fold_never_joins_returns_the_case_does_not_name() -> None:
+    # PolicyEngine and the Axiom bridge price the two adults as one tax unit
+    # (with no spouse named, _tax_filers pairs the two oldest adults), but
+    # the fold follows the returns the Case names, so the head's line 7a
+    # stays line 7a, as the producer, which folds each tax unit, left it.
+    rows = _policyengine_rows(HOUSEHOLD)
+    assert rows["person-1"]["non_sch_d_capital_gains"] == 2_000
+    assert rows["person-1"]["long_term_capital_gains"] == 0
+    assert rows["person-2"]["long_term_capital_gains"] == -1_000
+    situation = PolicyEngineRunner()._build_situation_from_case(HOUSEHOLD)["people"]
+    assert situation["person-1"]["non_sch_d_capital_gains"] == {2026: 2_000}
+    assert situation["person-1"]["long_term_capital_gains"] == {2026: 0}
+
+    records = _axiom_records(HOUSEHOLD)
+    assert (
+        records[("person-1", f"{BRIDGE}#input.person_non_sch_d_capital_gains")] == 2_000
+    )
+    assert records[("person-1", f"{BRIDGE}#input.person_long_term_capital_gains")] == 0
+    # The bridge's filers are both adults, so its filer sums carry both
+    # amounts, unfolded.
+    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 2_000
+    assert (
+        records[("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains")] == -1_000
+    )
+
+    taxcalc = taxcalc_input_for_case(HOUSEHOLD)
+    assert (taxcalc["e01100"], taxcalc["p23250"]) == (2_000, 0)
+    assert taxsim_input_for_case(HOUSEHOLD)["ltcg"] == 2_000
+
+
 # ---------------------------------------------------------------------------
 # Properties.
 # ---------------------------------------------------------------------------
@@ -677,6 +739,75 @@ def _tax_unit_cases(draw):
             _person(f"child-{index}", "Child", 7 + index, **draw(_income_facts()))
         )
     return _case(*people)
+
+
+@st.composite
+def _household_cases(draw):
+    """Household-shaped Cases: a head, sometimes a named spouse, and adults
+    the Case names only as "Other" (populace_us household Cases name no
+    spouse at all), younger or older than the head, beside children."""
+    people = [_person("person-1", "HeadOfHousehold", 45, **draw(_income_facts()))]
+    if draw(st.booleans()):
+        people.append(_person("person-2", "Spouse", 43, **draw(_income_facts())))
+    for index in range(draw(st.integers(0, 2))):
+        age = draw(st.integers(min_value=18, max_value=80))
+        people.append(_person(f"other-{index}", "Other", age, **draw(_income_facts())))
+    for index in range(draw(st.integers(0, 2))):
+        people.append(
+            _person(f"child-{index}", "Child", 7 + index, **draw(_income_facts()))
+        )
+    return _case(*people)
+
+
+@st.composite
+def _producer_household_cases(draw):
+    """Household Cases as populations/populace_us builds them: each tax unit
+    folded per return first (its head and spouse together, each dependent
+    alone), then person 0 named the head, anyone under 18 "Child" and every
+    other adult "Other", whatever tax unit they belong to."""
+    size = draw(st.integers(min_value=1, max_value=5))
+    rows = [draw(_income_facts()) for _ in range(size)]
+    ages = [draw(st.integers(min_value=18, max_value=80))] + [
+        draw(st.integers(min_value=0, max_value=80)) for _ in range(size - 1)
+    ]
+    tax_units = [0] + [draw(st.integers(min_value=0, max_value=2)) for _ in ages[1:]]
+    for unit in sorted(set(tax_units)):
+        members = [index for index, owner in enumerate(tax_units) if owner == unit]
+        filers = 2 if len(members) > 1 and draw(st.booleans()) else 1
+        fold_tax_unit_returns(
+            [rows[index] for index in members[:filers]],
+            [rows[index] for index in members[filers:]],
+        )
+    return _case(
+        *(
+            _person(
+                f"person-{index + 1}",
+                "HeadOfHousehold" if index == 0 else "Child" if age < 18 else "Other",
+                age,
+                **rows[index],
+            )
+            for index, age in enumerate(ages)
+        )
+    )
+
+
+def _folded_by_named_returns(case):
+    """Each person's (line 7a, Schedule D long-term gain) after line 7's
+    Exception 1, stated without the library: a return is the head and the
+    spouse the Case names; everyone else, adult or child, files alone."""
+    filers = _filers(case)
+    returns = [filers] + [[person] for person in _dependents(case)]
+    folded = {}
+    for people in returns:
+        files_schedule_d = any(_number(p, STCG) or _number(p, LTCG) for p in people)
+        for person in people:
+            distributions = max(0.0, _number(person, CGD))
+            folded[person.entity_id] = (
+                (0.0, _number(person, LTCG) + distributions)
+                if files_schedule_d
+                else (distributions, _number(person, LTCG))
+            )
+    return folded
 
 
 def _approx(view):
@@ -742,15 +873,20 @@ def test_property_member_sums_agree_where_engines_sum_every_member(case) -> None
 
 @PROPERTY_SETTINGS
 @given(case=_tax_unit_cases())
-def test_property_policyengine_alias_equals_its_parts(case) -> None:
+def test_property_policyengine_person_inputs_are_the_persons_lines(case) -> None:
     for person in case.entities:
         row = _person_income_inputs(person)
+        lines = _return_lines([person])
         assert 0 <= row["qualified_dividend_income"] <= row["dividend_income"]
-        assert row["non_qualified_dividend_income"] >= 0
-        assert row["dividend_income"] == pytest.approx(
-            row["qualified_dividend_income"] + row["non_qualified_dividend_income"]
+        assert row["dividend_income"] == pytest.approx(lines["ordinary"])
+        assert row["qualified_dividend_income"] == pytest.approx(lines["qualified"])
+        assert row["non_qualified_dividend_income"] == pytest.approx(
+            lines["non_qualified"]
         )
-        assert row["non_sch_d_capital_gains"] >= 0
+        # Before the fold, which _tax_unit_people applies per return.
+        assert row["non_sch_d_capital_gains"] == pytest.approx(
+            max(0.0, _number(person, CGD))
+        )
 
 
 def _with_fact(case, entity_id, concept, value):
@@ -956,7 +1092,69 @@ def test_property_fold_conserves_and_is_idempotent(members) -> None:
 
 
 @PROPERTY_SETTINGS
-@given(case=_tax_unit_cases())
+@given(case=_household_cases())
+def test_property_fold_joins_only_the_returns_the_case_names(case) -> None:
+    """Every projection folds per return the Case names, whichever pair of
+    adults an engine then prices as filers: each person's line 7a and
+    long-term gain are those of _folded_by_named_returns."""
+    expected = _folded_by_named_returns(case)
+    rows = _policyengine_rows(case)
+    records = _axiom_records(case)
+    for person in case.entities:
+        line_7a, long_term = expected[person.entity_id]
+        row = rows[person.entity_id]
+        assert (row["non_sch_d_capital_gains"], row["long_term_capital_gains"]) == (
+            pytest.approx(line_7a),
+            pytest.approx(long_term),
+        )
+        assert (
+            records[
+                (person.entity_id, f"{BRIDGE}#input.person_non_sch_d_capital_gains")
+            ],
+            records[
+                (person.entity_id, f"{BRIDGE}#input.person_long_term_capital_gains")
+            ],
+        ) == (pytest.approx(line_7a), pytest.approx(long_term))
+    filers = _filers(case)
+    taxcalc = taxcalc_input_for_case(case)
+    assert taxcalc["e01100"] == pytest.approx(
+        sum(expected[p.entity_id][0] for p in filers)
+    )
+    assert taxcalc["p23250"] == pytest.approx(
+        sum(expected[p.entity_id][1] for p in filers)
+    )
+    assert taxsim_input_for_case(case)["ltcg"] == pytest.approx(
+        sum(sum(expected[p.entity_id]) for p in filers)
+    )
+
+
+@PROPERTY_SETTINGS
+@given(case=_producer_household_cases())
+def test_property_projection_fold_changes_no_producer_household_case(case) -> None:
+    """The producer folds each tax unit, and a household Case names no
+    spouse, so each projection folds every person alone: a finer split of
+    returns already folded, which finds nothing left to move."""
+    assert _policyengine_rows(case) == {
+        person.entity_id: _person_income_inputs(person) for person in case.entities
+    }
+    records = _axiom_records(case)
+    for person in case.entities:
+        assert records[
+            (person.entity_id, f"{BRIDGE}#input.person_non_sch_d_capital_gains")
+        ] == pytest.approx(max(0.0, _number(person, CGD)))
+        assert records[
+            (person.entity_id, f"{BRIDGE}#input.person_long_term_capital_gains")
+        ] == pytest.approx(_number(person, LTCG))
+    head = case.entities[0]
+    taxcalc = taxcalc_input_for_case(case)
+    assert (taxcalc["e01100"], taxcalc["p23250"]) == (
+        pytest.approx(max(0.0, _number(head, CGD))),
+        pytest.approx(_number(head, LTCG)),
+    )
+
+
+@PROPERTY_SETTINGS
+@given(case=st.one_of(_tax_unit_cases(), _household_cases()))
 def test_property_projections_fold_schedule_d_themselves(case) -> None:
     """A Case and the same Case folded in advance reach every engine as
     identical inputs: the Schedule D fold is part of each projection, not a

@@ -147,6 +147,13 @@ HOUSEHOLDS = {
     "eitc-7a-over-limit": _parent(**{CGD: 12_201}),
     "eitc-3b-at-limit": _parent(**{DIV: 12_200, QDIV: 6_000}),
     "eitc-3b-over-limit": _parent(**{DIV: 12_201, QDIV: 6_000}),
+    # The head's line 7a beside a dependent's Schedule D gain, which the
+    # every-member capital_gains_tax_* leaves of the Axiom bridge carry
+    # (axiom-oracles#619).
+    "line-7a-child-schedule-d": (
+        *_single(**{DIV: 5_000, QDIV: 3_000, CGD: 2_000}),
+        _person("person-2", "Child", 10, **{LTCG: 1_000}),
+    ),
 }
 
 # (taxable income, tax before credits), worked in the module docstring.
@@ -357,6 +364,26 @@ def test_axiom_worksheet_counts_line_7a_once(
     assert values[AXIOM_WORKSHEET_LINE_9] == pytest.approx(line_9)
     assert values[AXIOM_WORKSHEET_LINE_10] == pytest.approx(line_10)
     assert values[AXIOM_NET_CAPITAL_GAIN] == pytest.approx(net_capital_gain)
+
+
+def test_axiom_worksheet_line_9_keeps_a_dependents_schedule_d_gain(
+    axiom_rule_values,
+) -> None:
+    """Worksheet line 9 adds the filers' line 7a to the Schedule D term.
+
+    The every-member capital_gains_tax_* leaves (axiom-oracles#619,
+    PolicyEngine/policyengine-us#9869) carry the child's 1,000 of long-term
+    gain beside the head's 2,000 of line 7a: line 9 is 2,000 + min(1,000 +
+    3,000, 1,000) = 3,000 against 2,000 for the head alone. The 1(h) net
+    capital gain moves by the same 1,000. Taking line 7a in place of the
+    Schedule D term whenever line 7a is positive, as PolicyEngine's dwks09
+    does, would leave line 9 at 2,000 and drop the gain from line 9 alone.
+    """
+    alone = axiom_rule_values["line-7a"]
+    beside = axiom_rule_values["line-7a-child-schedule-d"]
+    assert beside[AXIOM_WORKSHEET_LINE_9] == pytest.approx(3_000)
+    for rule in (AXIOM_WORKSHEET_LINE_9, AXIOM_NET_CAPITAL_GAIN):
+        assert beside[rule] - alone[rule] == pytest.approx(1_000)
 
 
 @pytest.mark.parametrize("case_id", sorted(WORKED))

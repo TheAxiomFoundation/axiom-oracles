@@ -1272,22 +1272,30 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "capital_gains_worksheet_line_9",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 9",
+        source=(
+            "Oracle comparison bridge matching PolicyEngine Schedule D worksheet "
+            "line 9, with line 7a added to the Schedule D term as in "
+            "Tax-Calculator's dwks9"
+        ),
+        # PolicyEngine's dwks09 takes line 7a instead of the Schedule D term
+        # whenever line 7a is positive. The two agree on every return without
+        # both, which the Schedule D fold guarantees for the filers. They
+        # differ only while the every-member capital_gains_tax_* leaves
+        # (axiom-oracles#619) put a dependent's Schedule D gain beside the
+        # filers' line 7a; adding keeps that gain in line 9 as the 1(h)
+        # long-term gain input below keeps it.
         formula=(
             "max("
             "0, "
             "non_sch_d_capital_gains "
-            "+ (if non_sch_d_capital_gains > 0: "
-            "0 "
-            "else: "
-            "max("
+            "+ max("
             "0, "
             "min("
             "capital_gains_tax_long_term_capital_gains "
             "+ capital_gains_tax_qualified_dividend_income, "
             "net_capital_gains"
             ")"
-            ")) "
+            ") "
             "- min(0, investment_income_form_4952)"
             ")"
         ),
@@ -3506,9 +3514,12 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
             "for the tax unit; rename the person."
         )
     # Line 7a joins Schedule D on a return that files one
-    # (core/investment_income); relations, ages and earnings are untouched,
-    # so _tax_filers picks the same people afterwards.
-    people = with_schedule_d_fold(people, _tax_filers(people))
+    # (core/investment_income). A return is the head and the spouse the Case
+    # names, as in the producer and every other projection, not the pair
+    # _tax_filers falls back to when no spouse is named. Relations, ages and
+    # earnings are untouched, so _tax_filers picks the same people afterwards.
+    head = _head(people)
+    people = with_schedule_d_fold(people, (head, _spouse(people, head)))
 
     filing = _tax_unit_filing(case, people)
     records = _tax_unit_input_records(case, people, filing)

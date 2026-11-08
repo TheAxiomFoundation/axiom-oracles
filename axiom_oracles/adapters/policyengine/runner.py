@@ -1009,9 +1009,20 @@ class PolicyEngineRunner(EngineAdapter):
 
 def _tax_unit_people(case: Case) -> list[Entity]:
     """The Case's people, priced as one tax unit like every tax projection:
-    line 7a folded onto Schedule D per return (core/investment_income)."""
+    line 7a folded onto Schedule D per return (core/investment_income).
+
+    A return is the head and the spouse the Case names, as in the producer
+    and every other projection. ``_tax_filers``' fallback, which pairs the
+    two oldest adults when no spouse is named, decides how PolicyEngine
+    prices the people, not which of them share a return: on a household
+    Case it can pair the head with an adult child who files separately,
+    and the producer has already folded each real tax unit.
+    """
     people = list(case.entities_of_kind("person"))
-    return with_schedule_d_fold(people, _tax_filers(people))
+    if not people:
+        return people
+    head = _head(people)
+    return with_schedule_d_fold(people, (head, _spouse(people, head)))
 
 
 def _person_income_inputs(entity: Entity) -> dict[str, float]:

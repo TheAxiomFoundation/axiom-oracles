@@ -80,7 +80,7 @@ Who is summed:
   no spouse, PolicyEngine and the Axiom bridge fall back to the two oldest
   adults while TAXSIM and Tax-Calculator take only named relations, so
   "the same filers" holds for Cases whose relations name the head and
-  spouse.
+  spouse. The Schedule D fold below never uses that fallback.
 
 Not modelled: Exception 1's second condition. Form 1099-DIV boxes 2b, 2c and
 2d have no Case concept, so a return is taken to meet it.
@@ -97,7 +97,9 @@ PolicyEngine-US defines `dividend_income` as an alias of
 artifact also stores a legacy column under that name, and a stored value
 overrides the alias (PolicyEngine/microcosm#24 lists it among the
 formula-owned columns the artifact should not store). In the pinned artifact
-(sha256 `16be6338f9d0...`, raw 2024 values, unweighted):
+(sha256 `16be6338f9d0...`, raw 2024 values, unweighted;
+`scripts/probe_case_investment_income.py` prints every artifact figure on
+this page):
 
 | Column | Nonzero persons | Sum |
 |---|---|---|
@@ -115,7 +117,8 @@ no longer on the Case.
 
 Line 7a is loaded, fail closed, on both case units, like the Schedule D
 gains: the two are reports of one kind of income, and the fold below must
-give a person the same facts on a household Case and on a tax-unit Case. No
+give a person the same dividend and capital-gain facts on a household Case
+and on a tax-unit Case. No
 Axiom benefit income list (`data/populace_input_mapping.yaml`) reads capital
 gains of either kind, while PolicyEngine's `medicaid_magi` starts from AGI;
 that gap is older than this change and covers Schedule D gains too.
@@ -130,6 +133,15 @@ is dropped. A tax unit's filers (head and spouse) are one return; a
 dependent's gains are on the dependent's own return, so a child's capital
 loss never moves the parents' line 7a.
 
+A return is the head and the spouse the Case names; everyone else files
+alone. On a tax-unit Case those are the tax unit's filers. A household Case
+names no spouse (person 0 is the head, anyone under 18 "Child", every other
+adult "Other"), so there every adult files alone, and an adult child's
+capital loss never moves the head's line 7a. PolicyEngine and the Axiom
+bridge still price such a household as one tax unit, pairing the two oldest
+adults; that approximation is older than this change, and the fold does not
+follow it.
+
 The fold is applied twice, by the same function:
 
 - The Populace producer folds each tax unit (`fold_tax_unit_returns`), on
@@ -141,8 +153,17 @@ The fold is applied twice, by the same function:
   3,063 tax units with line 7a.
 - Every tax projection folds the people it is about to price
   (`with_schedule_d_fold`), so a hand-built or future Case that carries both
-  paths is still priced identically everywhere. TAXSIM needs no fold: its
-  `ltcg` column is Schedule D long-term gain plus line 7a on either path.
+  paths is still priced identically everywhere. On a Case the producer
+  built it moves nothing: a tax-unit Case names the returns the producer
+  folded, and a household Case splits them further, into one person each.
+  TAXSIM needs no fold: its `ltcg` column is Schedule D long-term gain plus
+  line 7a on either path.
+
+Grouping the projection fold by the two oldest adults instead would move
+line 7a onto Schedule D on 70 household Cases of the pinned artifact
+(unweighted, all states), where the two oldest adults are heads of different tax units, one
+with line 7a and the other with a Schedule D amount. 144 households have
+line 7a beside another tax unit's Schedule D amount.
 
 The state-tax campaign's TAXSIM leg (`bridges/state_tax_populace_runner.py`)
 reads the same dividend and line 7a sources as the loader.
@@ -171,6 +192,21 @@ reads the same dividend and line 7a sources as the loader.
     `otherprop` and `ltcg` alike, so every Case line is inside it; but it
     reduces the credit dollar for dollar above the limit instead of
     disallowing it.
+- **Schedule D worksheet line 9.** PolicyEngine-US 1.764.6's `dwks09`
+  sums `non_sch_d_capital_gains` over every member and takes that sum in
+  place of the Schedule D term whenever it is positive. Tax-Calculator
+  6.7.1's `dwks9` adds `e01100` to the Schedule D term ("The two cases are
+  mutually exclusive, so the sum captures both"), and so does the Axiom
+  bridge's `capital_gains_worksheet_line_9`. The forms agree on a return
+  without both, which the fold leaves on every return. They differ only
+  where a sum over people the fold treats as separate returns puts one
+  person's line 7a beside another's Schedule D amount: the bridge's
+  every-member `capital_gains_tax_*` leaves (a dependent's gain beside the
+  filers' line 7a), PolicyEngine's `add(tax_unit, ...)`, and a household
+  that PolicyEngine or the bridge prices as one tax unit. In the pinned artifact every line 7a and Schedule
+  D amount sits on a tax-unit head row, so no tax-unit Case has both. Within
+  the bridge, line 9 reaches only worksheet lines 10, 13, 14 and 19 and the
+  Form 6251 Part III capital gain lines.
 - **Axiom** leaves 26 USC 1411 out of the composed program
   (axiom-encode#1213). The bridge's 1411 net-gain rule now includes line 7a
   (Form 8960 line 5a), but it is inert until 1411 is composed again, so on

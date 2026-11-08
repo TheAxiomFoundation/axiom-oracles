@@ -2133,6 +2133,18 @@ _NON_SEPARATE_PRE_MFS_DIGESTS = {
 }
 
 
+# Input records the digests above predate: Form 1040 line 7a, which
+# axiom-oracles#615 made an input (it was a generated rule with formula "0").
+# None of the Cases above has capital gain distributions, so each is 0; the
+# digests cover every other record unchanged.
+_LINE_7A_INPUTS = frozenset(
+    {
+        "us:tax/oracle-bridge#input.non_sch_d_capital_gains",
+        "us:tax/oracle-bridge#input.person_non_sch_d_capital_gains",
+    }
+)
+
+
 @pytest.mark.parametrize(
     "case",
     _non_separate_regression_cases(),
@@ -2142,8 +2154,13 @@ def test_axiom_tax_projection_keeps_non_separate_inputs_byte_identical(
     case: Case,
 ) -> None:
     metadata = attach_axiom_tax_inputs_to_case(case).metadata
+    records = metadata["axiom_input_records"]
+    line_7a = [record for record in records if record["name"] in _LINE_7A_INPUTS]
+    assert line_7a and all(record["value"] == 0 for record in line_7a)
     payload = {
-        "records": metadata["axiom_input_records"],
+        "records": [
+            record for record in records if record["name"] not in _LINE_7A_INPUTS
+        ],
         "relations": metadata["axiom_relations"],
     }
     digest = hashlib.sha256(
