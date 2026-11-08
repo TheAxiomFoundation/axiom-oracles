@@ -115,17 +115,46 @@ def test_incoming_attributes_preserve_exact_bound_bytes_and_identical_reads(
 @pytest.mark.parametrize(
     "baseline", [False, True], ids=["consumer", "producer-baseline"]
 )
-@pytest.mark.parametrize("setting", ["local-attributes-crlf", "core-autocrlf"])
+@pytest.mark.parametrize(
+    "setting",
+    [
+        "local-attributes-crlf",
+        "core-autocrlf",
+        "autocrlf-alias",
+        "core-eol-crlf",
+        "local-filter",
+        "local-encoding",
+    ],
+)
 def test_local_checkout_transformations_preserve_exact_bound_bytes(
     snapshot_case, baseline, setting
 ):
+    # Each case publishes a real delta (the sidecar), so the read must write
+    # bytes; a fixture with no published delta would pass vacuously (#642).
     case = snapshot_case
     _publish_raw_sidecar(case)
     reader = case.baseline_reader if baseline else case.reader
+    attributes = reader / ".git/info/attributes"
     if setting == "local-attributes-crlf":
-        (reader / ".git/info/attributes").write_text(f"{SIDECAR} text eol=crlf\n")
-    else:
+        attributes.write_text(f"{SIDECAR} text eol=crlf\n")
+    elif setting == "core-autocrlf":
         git(reader, "config", "core.autocrlf", "true")
+    elif setting == "autocrlf-alias":
+        git(reader, "config", "core.autocrlf", "yes")
+    elif setting == "core-eol-crlf":
+        attributes.write_text(f"{SIDECAR} text\n")
+        git(reader, "config", "core.eol", "crlf")
+    elif setting == "local-filter":
+        code = (
+            "import sys; sys.stdout.buffer.write(sys.stdin.buffer.read().replace("
+            "b'\"revision\": 1', b'\"revision\": 999'))"
+        )
+        command = shlex.quote(sys.executable) + " -c " + shlex.quote(code)
+        attributes.write_text(f"{SIDECAR} filter=change-number\n")
+        git(reader, "config", "filter.change-number.smudge", command)
+        git(reader, "config", "filter.change-number.clean", "cat")
+    else:
+        attributes.write_text(f"{SIDECAR} working-tree-encoding=UTF-16LE\n")
 
     # Set transformations after the clean checkout exists. They must not cause
     # a false refusal or change the incoming sidecar's raw bound bytes.
@@ -197,3 +226,74 @@ def test_candidate_gate_checks_exact_primary_blob_instead_of_smudged_bytes(
     assert git(case.origin, "rev-parse", data.DATA_REF) == before_data
     assert git(case.publisher, "rev-parse", "HEAD") == before_head
     assert git(case.publisher, "write-tree") == before_index
+
+
+def test_publish_refuses_checkout_attributes_on_any_bound_path(snapshot_case):
+    # A .gitattributes published inside the data paths would make every later
+    # snapshot writer refuse in prepare and reconcile (#642), so binding must
+    # refuse it as write_snapshot does, before anything is committed.
+    case = snapshot_case
+    data.prepare(case.publisher)
+    (case.publisher / ATTRIBUTES).write_bytes(b"sidecar.json text eol=crlf\n")
+    (case.publisher / SIDECAR).write_bytes(CONTENT)
+    _overview(case.publisher)
+    before_main = git(case.origin, "rev-parse", data.MAIN_REF)
+    before_data = git(case.origin, "rev-parse", data.DATA_REF)
+    before_head = git(case.publisher, "rev-parse", "HEAD")
+    before_index = git(case.publisher, "write-tree")
+
+    with pytest.raises(data.DataError, match="checkout filters"):
+        data.publish(case.publisher, group="dashboard", message="bind attributes")
+
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == before_main
+    assert git(case.origin, "rev-parse", data.DATA_REF) == before_data
+    assert git(case.publisher, "rev-parse", "HEAD") == before_head
+    assert git(case.publisher, "write-tree") == before_index
+
+
+def test_publish_still_binds_attribute_free_sidecar(snapshot_case):
+    # Control for the refusal above: the same sidecar without attributes binds.
+    case = snapshot_case
+    data.prepare(case.publisher)
+    (case.publisher / SIDECAR).write_bytes(CONTENT)
+    _overview(case.publisher)
+    assert data.publish(case.publisher, group="dashboard", message="bind sidecar")
+    data.materialize(case.reader)
+    assert (case.reader / SIDECAR).read_bytes() == CONTENT
+    _assert_bound(case.reader)
+
+
+@pytest.mark.parametrize("setting", ["core.autocrlf=true", "core.eol=crlf"])
+def test_converted_checkout_refusal_names_the_conversion(snapshot_case, setting):
+    # Under core.autocrlf=true (the Git for Windows default) the checkout
+    # holds CRLF bytes, so a read must refuse, but by naming the conversion
+    # rather than claiming local data edits (#642).
+    case = snapshot_case
+    _publish_raw_sidecar(case)
+    reader = case.reader
+    name, value = setting.split("=")
+    git(reader, "config", name, value)
+    if name == "core.eol":
+        (reader / ".git/info/attributes").write_text("*.json text\n")
+    # Re-check out the data files so Git applies the conversion to them.
+    for path in _data_files(reader):
+        (reader / path).unlink()
+    git(reader, "checkout", "--", "dashboard/public/data/")
+
+    def state() -> tuple:
+        return (
+            git(reader, "rev-parse", "HEAD"),
+            git(reader, "write-tree"),
+            _data_files(reader),
+            data._state_path(reader).exists(),
+        )
+
+    before = state()
+
+    with pytest.raises(data.DataError) as refused:
+        data.materialize(reader)
+
+    message = str(refused.value)
+    assert name in message and "AXIOM_ORACLES_DATA_SOURCE=checkout" in message
+    assert "local data edits" not in message
+    assert state() == before

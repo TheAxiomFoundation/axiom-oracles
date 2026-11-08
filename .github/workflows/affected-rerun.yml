@@ -7,10 +7,15 @@ name: Affected suite rerun
 # never commits them. This workflow keeps the reports on oracle-data fresh,
 # without paying for the whole matrix every 6 hours. Suites whose
 # map entry has `name: null` (parameter suites, and suites declaring
-# `ci: manual`, such as the SNAP QC replays, the EUROMOD/UKMOD suites, the UK
-# PolicyEngine case grids and the us-tariff grid, which these runners could
-# only re-emit or copy) are reported as awaiting the manual lane, never
-# dispatched.
+# `ci: manual`, such as the EUROMOD/UKMOD suites, the UK PolicyEngine case
+# grids and the us-tariff grid, which these runners could only re-emit or
+# copy) are reported as awaiting the manual lane, never dispatched. Suites
+# declaring `ci: snap-qc-replay` (the SNAP QC replays, which these bare
+# runners could likewise only re-emit) go to the snap-qc-replay job instead:
+# it calls snap-qc-replay.yml, which provisions the pinned engine, a
+# rulespec-us checkout and the pinned QC file, and packs a `refreshed-<suite>`
+# bundle only for a report its `check` accepts as live and exact. The same
+# publish job applies those bundles.
 #
 # Selection is deterministic and committed:
 #   comparisons/affected_map.json   suite → affected rulespec repos
@@ -71,6 +76,8 @@ jobs:
     outputs:
       matrix: ${{ steps.select.outputs.matrix }}
       count: ${{ steps.select.outputs.count }}
+      snap_qc: ${{ steps.select.outputs.lane_snap_qc_replay }}
+      snap_qc_count: ${{ steps.select.outputs.lane_snap_qc_replay_count }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -167,6 +174,10 @@ jobs:
             echo "Selected $count CI-runnable suite(s) to rerun:"
             python3 -c "import json,sys; [print('-', x['name']) for x in json.loads(sys.argv[1])['include']]" \
               '${{ steps.select.outputs.matrix }}' || true
+            echo ""
+            echo "SNAP QC suites for the live replay lane: ${{ steps.select.outputs.lane_snap_qc_replay_count }}"
+            python3 -c "import json,sys; [print('-', x) for x in json.loads(sys.argv[1] or '[]')]" \
+              '${{ steps.select.outputs.lane_snap_qc_replay }}' || true
             if [ "$manual_count" != "0" ]; then
               echo ""
               echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual lane (parameter suites: scripts/run_parameter_comparisons.py; ci-manual registry suites: a supervised run_comparison.py run):"
@@ -235,7 +246,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
-        run: uv pip install --system -e '.[policyengine]'
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
+        run: |
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Load published data for the comparison and pack baseline
         working-directory: axiom-oracles
@@ -309,14 +326,37 @@ jobs:
           overwrite: true
           retention-days: 7
 
+  # Stale SNAP QC suites (ci: snap-qc-replay) never go to the bare matrix
+  # above: there run_comparison.py could only re-emit the committed report.
+  # The live replay lane provisions what they need, replays them with
+  # --require-live, and packs and uploads a `refreshed-<suite>` bundle only
+  # for a report its `check` accepts as live and exact. It never publishes.
+  snap-qc-replay:
+    needs: select
+    # An absent count (a selector that emits no lane output) reads as zero,
+    # so fromJson never sees an empty suite list.
+    if: (needs.select.outputs.snap_qc_count || '0') != '0'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/snap-qc-replay.yml
+    with:
+      suites: ${{ join(fromJson(needs.select.outputs.snap_qc), ' ') }}
+      run_kind: affected-rerun
+      publish: true
+
   publish:
     # The ONLY job that writes to oracle-data. It commits every bundle
     # the legs uploaded in ONE commit, so there is no sibling to race: a push
     # is retried only when another workflow or a human moved the branch.
+    # Bundles come from both the bare matrix and the SNAP QC replay lane; a
+    # SNAP QC leg that diverged, errored or re-emitted uploaded none, so its
+    # published report stays as it was and that failed leg is the alarm.
     # Runs when some legs failed (their bundles simply are not there, and the
     # run still ends red for them), but never after a cancellation.
-    needs: [select, rerun]
-    if: ${{ !cancelled() && needs.select.outputs.count != '0' }}
+    needs: [select, rerun, snap-qc-replay]
+    if: >-
+      ${{ !cancelled() && (needs.select.outputs.count != '0'
+      || needs.select.outputs.snap_qc_count != '0') }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
     concurrency:
@@ -369,7 +409,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         if: steps.bundles.outputs.count != '0'
-        run: uv pip install --system -e '.[policyengine]'
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
+        run: |
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Publish every refreshed report + derived conformance artifacts
         if: steps.bundles.outputs.count != '0'
@@ -380,3 +426,34 @@ jobs:
         run: |
           scripts/commit_refreshed_report.sh --publish \
             "$RUNNER_TEMP/refreshed" "oracle-data"
+
+      - name: Every passing SNAP QC replay left a bundle
+        # The lane uploads from a called workflow. If those uploads ever stop
+        # reaching this job's download, every lane leg is green, publish
+        # applies only the bare bundles, and the run would end green while
+        # the SNAP QC reports silently stay stale on every sweep. When the
+        # whole lane succeeded, each suite it replayed must have left a
+        # refreshed-<suite> bundle; otherwise this fails. It runs after the
+        # publish step, so the bare refreshes still land and the run is red.
+        # A lane with a failed leg already ends the run red, so this skips.
+        if: ${{ !cancelled() && needs.snap-qc-replay.result == 'success' }}
+        env:
+          SNAP_QC: ${{ needs.select.outputs.snap_qc }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path(os.environ["RUNNER_TEMP"]) / "refreshed"
+          suites = json.loads(os.environ.get("SNAP_QC") or "[]")
+          missing = [s for s in suites if not (root / f"refreshed-{s}").is_dir()]
+          if missing:
+              raise SystemExit(
+                  "::error title=SNAP QC bundles missing::the live replay lane "
+                  "passed for " + ", ".join(suites) + " but publish found no "
+                  "bundle for " + ", ".join(missing) + "; their published "
+                  "reports were not refreshed"
+              )
+          print(f"{len(suites)} SNAP QC bundle(s) present: " + ", ".join(suites))
+          PY

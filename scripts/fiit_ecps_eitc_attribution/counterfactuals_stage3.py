@@ -208,6 +208,11 @@ def main() -> int:
         "base_counterfactual_only_rows": extra,
         "policyengine_aggregate_variant_clears_all": all_clear,
         "variants": {("+".join(sorted(f)) or "bridge_aggregate"): len(r) for f, r in variants.items()},
+        # The rows themselves, so the disposition builder can re-derive every
+        # label with minimal_sets.attribute instead of trusting it.
+        "variant_rows": {
+            (switch_name(f) or "bridge_aggregate"): sorted(r) for f, r in variants.items()
+        },
         "attribution": attribution,
     }
     args.out.write_text(json.dumps(payload, indent=1, sort_keys=True))

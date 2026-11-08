@@ -37,11 +37,8 @@ from .relation_binding import (
     public_relation_binding_diagnostics,
     relation_tuple,
 )
-from .rulespec_paths import (
-    _canonical_rulespec_compile_path,
-    _rulespec_public_item_keys,
-    _rulespec_repo_alias_parent,
-)
+from ..rulespec_roots import engine_env, require_canonical_rulespec_root
+from .rulespec_paths import _rulespec_public_item_keys
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
     format_dataset_identity,
@@ -574,6 +571,8 @@ class TaxComparisonRow:
     # so a mismatch row is reviewable without reopening the dataset.
     ages: tuple[int, ...] = ()
     earned: float | None = None
+    # Invalid returns remain diagnostics, outside comparison denominators.
+    uncompared: bool = False
 
 
 @dataclass(frozen=True)
@@ -2931,32 +2930,19 @@ def run_axiom_program(
         record_engine_receipt(receipt)
         return process
 
-    env = os.environ.copy()
-    roots = [rulespec_root, rulespec_root.parent]
-    alias_parent = _rulespec_repo_alias_parent(rulespec_root)
-    if alias_parent is not None:
-        roots.insert(0, alias_parent)
-    existing_roots = env.get("AXIOM_RULESPEC_REPO_ROOTS", "")
-    if existing_roots:
-        roots.extend(Path(root) for root in existing_roots.split(os.pathsep) if root)
-    deduped_roots: list[str] = []
-    seen: set[str] = set()
-    for root in roots:
-        raw = str(root)
-        if raw and raw not in seen:
-            seen.add(raw)
-            deduped_roots.append(raw)
-    env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(deduped_roots)
-    compile_program = _canonical_rulespec_compile_path(program, rulespec_root)
+    # The engine reaches exactly one canonical country checkout (or the
+    # staged copy below, derived from it). No inherited root list, workspace
+    # parent or renamed alias is forwarded (axiom_oracles.rulespec_roots).
+    checkout = require_canonical_rulespec_root(rulespec_root)
+    compile_program = program
     with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
         # The engine CLI requires an explicit --rulespec-root naming a
         # canonical rulespec-<country> checkout whose top level holds ONLY
-        # jurisdiction directories (the env var above is read by the Python
-        # adapter layer, never by the binary). Upstream rulespec-us also
+        # jurisdiction directories. Upstream rulespec-us also
         # carries root-level programs/ (compositions), which the engine
         # forbids — so stage a filtered copy of just the jurisdiction
         # directories and compile against that.
-        engine_root = Path(rulespec_root)
+        engine_root = checkout
         country = engine_root.name.removeprefix("rulespec-").split("-")[0]
         forbidden = ("legislation", "policies", "programs", "regulations", "statutes")
         try:
@@ -2999,13 +2985,8 @@ def run_axiom_program(
         artifact = Path(tmpdir) / f"{program.stem}.json"
         # Newer engines take explicit, repeatable --rulespec-root flags and
         # ignore AXIOM_RULESPEC_REPO_ROOTS; older engines only read the env
-        # var and reject the flag. When a staged root exists, point the env
-        # at it first so old engines resolve through it too; otherwise keep
-        # the alias-first ordering established above.
-        if engine_root != Path(rulespec_root):
-            env["AXIOM_RULESPEC_REPO_ROOTS"] = os.pathsep.join(
-                [str(engine_root), *deduped_roots]
-            )
+        # var and reject the flag. Both receive the same single root.
+        env = engine_env(None, [engine_root])
         base_cmd = [
             str(binary),
             "compile",
@@ -3338,6 +3319,7 @@ def compare_outputs(
                             axiom=axiom_value,
                             policyengine=pe_value,
                             diff=math.nan,
+                            uncompared=True,
                         )
                     )
                     continue
@@ -3470,15 +3452,30 @@ def print_report(
     print(f"Compared values: {report.compared_values:,}")
     print(f"Tolerance: {tolerance:g}")
     print(f"Relative tolerance: {relative_tolerance:g}")
-    print(f"Mismatches: {len(report.mismatches):,}")
+    # Uncompared pairs (a missing or nonfinite return) are engine errors kept
+    # as diagnostic mismatch rows; they are not compared values.
+    uncompared = sum(
+        item.get("uncompared_mismatches", 0) for item in report.output_summary
+    )
+    print(f"Mismatches: {max(0, len(report.mismatches) - uncompared):,}")
+    if uncompared:
+        print(f"Uncompared (engine errors): {uncompared:,}")
+    if report.errors:
+        print(f"Errors: {len(report.errors):,}")
     print()
     print("By output:")
     for item in report.output_summary:
         print(
             f"  - {item['surface']}:{item['output']}: "
-            f"{item['mismatches']:,}/{item['compared']:,} mismatch, "
+            f"{max(0, item['mismatches'] - item.get('uncompared_mismatches', 0)):,}"
+            f"/{item['compared']:,} mismatch, "
             f"max_abs_diff={item['max_abs_diff']:.2f}, "
             f"max_rel_diff={item['max_relative_diff']:.2g}"
+            + (
+                f", uncompared={item['uncompared_mismatches']:,}"
+                if item.get("uncompared_mismatches")
+                else ""
+            )
         )
     if report.mismatches:
         print()

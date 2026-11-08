@@ -422,3 +422,148 @@ def test_runner_rejects_a_different_oracle_stack():
             },
             Path("/nonexistent/output.json"),
         )
+
+
+# ---------------------------------------------------------------------------
+# The Axiom leg runs the engine (#675): the fixture verdicts and the pinned
+# P.L. 119-21 expectations check the engine's output, and a disagreement
+# fails the run instead of publishing either value.
+# ---------------------------------------------------------------------------
+
+_INAPPLICABLE = f"{GENERATOR.MODULE}#snap_member_abawd_time_limit_inapplicable"
+_CHILD_UNDER_14 = (
+    f"{GENERATOR.MODULE}"
+    "#snap_member_abawd_responsible_for_dependent_child_under_fourteen"
+)
+
+
+def _statute_rule(age_threshold: int = 65) -> dict:
+    """2015(o)(3) as P.L. 119-21 replaced it, over the fixture's inputs."""
+    module_input = GENERATOR._module_input
+    return {
+        "any": [
+            {"ge": [module_input("member_age"), age_threshold]},
+            {"eq": [module_input("member_is_indian_or_urban_indian"), True]},
+            {"eq": [module_input("member_is_california_indian"), True]},
+            {
+                "all": [
+                    {
+                        "eq": [
+                            module_input(
+                                "member_is_parent_or_household_member_"
+                                "responsible_for_dependent_child"
+                            ),
+                            True,
+                        ]
+                    },
+                    {"lt": [module_input("member_youngest_dependent_child_age"), 14]},
+                ]
+            },
+        ]
+    }
+
+
+def _install_engine(fake_rules_engine, age_threshold: int = 65):
+    rule = _statute_rule(age_threshold)
+    program = {
+        "relations": [],
+        "derived": [
+            {"id": output, "entity": "Person", "expr": {"kind": "input"}}
+            for output in (GENERATOR.AXIOM_OUTPUT, _INAPPLICABLE, _CHILD_UNDER_14)
+        ],
+    }
+    child_rule = {
+        "lt": [GENERATOR._module_input("member_youngest_dependent_child_age"), 14]
+    }
+    return fake_rules_engine(
+        program,
+        {
+            GENERATOR.AXIOM_OUTPUT: rule,
+            _INAPPLICABLE: rule,
+            _CHILD_UNDER_14: child_rule,
+        },
+    )
+
+
+def _fixture_root(tmp_path: Path, records: list[dict]) -> Path:
+    root = tmp_path / "rulespec-us"
+    fixture = root / GENERATOR.FIXTURE_PATH
+    fixture.parent.mkdir(parents=True)
+    fixture.with_name("24.yaml").write_text("format: rulespec/v1\n")
+    fixture.write_text(yaml.safe_dump(records, sort_keys=False))
+    return root
+
+
+def test_published_verdicts_are_the_engines(fake_rules_engine, tmp_path):
+    binary = _install_engine(fake_rules_engine)
+    root = _fixture_root(tmp_path, [_valid_record(case) for case in GENERATOR.CASES])
+
+    values, diagnostics = GENERATOR._engine_verdicts([root], binary)
+
+    assert values == {case.case_id: case.expected_exception for case in GENERATOR.CASES}
+    assert all(_INAPPLICABLE in diagnostics[case.case_id] for case in GENERATOR.CASES)
+    requests = fake_rules_engine.requests()
+    assert len(requests) == len(GENERATOR.CASES)
+    assert all(
+        request["queries"][0]["outputs"][0] == GENERATOR.AXIOM_OUTPUT
+        for request in requests
+    )
+
+
+def test_an_engine_that_disagrees_with_the_fixture_fails_the_run(
+    fake_rules_engine, tmp_path
+):
+    """An engine that moved the age boundary to 64 disagrees with the
+    fixture's age-64 verdict, so the run fails and publishes neither."""
+    from axiom_oracles.rulespec_fixture_engine import FixtureDisagreement
+
+    binary = _install_engine(fake_rules_engine, age_threshold=64)
+    root = _fixture_root(tmp_path, [_valid_record(case) for case in GENERATOR.CASES])
+
+    with pytest.raises(FixtureDisagreement, match="age_64"):
+        GENERATOR._engine_verdicts([root], binary)
+
+
+def test_an_engine_off_the_statute_boundary_fails_even_when_the_fixture_agrees(
+    fake_rules_engine, tmp_path
+):
+    """Fixture and engine both moved to 64: the pinned P.L. 119-21
+    expectation still fails the run on the engine's own verdict."""
+    binary = _install_engine(fake_rules_engine, age_threshold=64)
+    records = [_valid_record(case) for case in GENERATOR.CASES]
+    for record in records:
+        if record["name"] == "age_64_subject_despite_general_work_exemption":
+            record["output"][GENERATOR.AXIOM_OUTPUT] = "holds"
+            record["output"][_INAPPLICABLE] = "holds"
+    root = _fixture_root(tmp_path, records)
+
+    with pytest.raises(ValueError, match="pinned P.L. 119-21 boundary expectation"):
+        GENERATOR._engine_verdicts([root], binary)
+
+
+def test_generate_fails_before_reporting_on_a_disagreement(
+    fake_rules_engine, tmp_path, monkeypatch
+):
+    from axiom_oracles.rulespec_fixture_engine import FixtureDisagreement
+
+    binary = _install_engine(fake_rules_engine, age_threshold=64)
+    root = _fixture_root(tmp_path, [_valid_record(case) for case in GENERATOR.CASES])
+    monkeypatch.setattr(
+        GENERATOR,
+        "_pe_values",
+        lambda _cases: pytest.fail("PolicyEngine must not run after a disagreement"),
+    )
+    monkeypatch.setattr(
+        GENERATOR,
+        "_build_report",
+        lambda *_a, **_k: pytest.fail("no report after a disagreement"),
+    )
+    with pytest.raises(FixtureDisagreement):
+        GENERATOR.generate([root], binary)
+
+
+def test_report_names_the_engine_evaluation():
+    axiom = {case.case_id: case.expected_exception for case in GENERATOR.CASES}
+    empty = {case.case_id: {} for case in GENERATOR.CASES}
+    report = GENERATOR._build_report(axiom, empty, empty, dict(axiom), empty)
+    assert "run-compiled" in report["engine_bindings"]["axiom"]["evaluation"]

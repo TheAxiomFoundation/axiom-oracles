@@ -4,8 +4,11 @@
 Each invocation selects exactly one policy.  The selected policy's reviewed
 case grid is evaluated independently:
 
-* ``axiom`` reads the expected value from that policy's engine-verified
-  RuleSpec companion fixture plus any reviewed repo-owned extension; and
+* ``axiom`` runs the Axiom rules engine on each case's inputs from that
+  policy's RuleSpec companion fixture plus any reviewed repo-owned
+  extension, and fails unless every output the fixture records equals the
+  engine's value (the fixture checks the engine; it never supplies a report
+  value); and
 * ``policyengine`` builds a fresh PolicyEngine-US ``Simulation`` at tax year
   2026 from the same case inputs.
 
@@ -37,6 +40,9 @@ if str(REPO_ROOT) not in sys.path:
 
 from axiom_oracles.comparison.dispositions import report_json_text  # noqa: E402
 from axiom_oracles.bridges import load_policyengine_registry  # noqa: E402
+from axiom_oracles.rulespec_fixture_engine import (  # noqa: E402
+    evaluate_fixture_cases,
+)
 
 VALIDATION_YEAR = 2026
 ENGINE_VERSIONS = {
@@ -4016,6 +4022,82 @@ def _axiom_values(
     )
 
 
+def _engine_number(case_id: str, output: str, value: Any) -> float:
+    if not isinstance(value, Decimal):
+        raise ValueError(
+            f"case {case_id!r} output {output!r}: the engine returned "
+            f"{value!r}, not a number"
+        )
+    numeric = float(value)
+    if not isfinite(numeric):
+        raise ValueError(f"case {case_id!r} output {output!r} is not finite")
+    return numeric
+
+
+def _engine_axiom_values(
+    config: PolicyConfig,
+    roots: list[Path],
+    engine_binary: Path,
+    *,
+    evaluate: Callable[..., dict[str, dict[str, Any]]] = evaluate_fixture_cases,
+) -> tuple[
+    dict[str, float],
+    dict[str, dict[str, float]],
+    dict[str, dict[str, float]],
+]:
+    """Evaluate every configured case through the engine.
+
+    ``evaluate_fixture_cases`` compares each recorded fixture output with the
+    engine's value and raises on any difference, so a fixture that disagrees
+    with the engine fails the run instead of publishing either number.
+    """
+    fixture = _fixture_file(config, roots)
+    by_name = _merged_fixture_records(config, fixture)
+    bindings = _scored_bindings(config)
+    records = {case.case_id: by_name[case.case_id] for case in config.cases}
+
+    def outputs_for(case_id: str, _record: Mapping[str, Any]) -> list[str]:
+        scored = [
+            binding.concept
+            for binding in bindings
+            if not binding.case_ids or case_id in binding.case_ids
+        ]
+        return [
+            *scored,
+            *config.axiom_bridge_outputs,
+            *config.axiom_diagnostic_outputs,
+        ]
+
+    engine = evaluate(
+        engine_binary,
+        config.axiom_module_ref,
+        roots,
+        records,
+        outputs_for,
+    )
+    values = {
+        row_id: _engine_number(
+            case.case_id, binding.concept, engine[case.case_id][binding.concept]
+        )
+        for row_id, case, binding in _comparison_rows(config)
+    }
+    bridge = {
+        case.case_id: {
+            output: _engine_number(case.case_id, output, engine[case.case_id][output])
+            for output in config.axiom_bridge_outputs
+        }
+        for case in config.cases
+    }
+    diagnostics = {
+        case.case_id: {
+            output: _engine_number(case.case_id, output, engine[case.case_id][output])
+            for output in config.axiom_diagnostic_outputs
+        }
+        for case in config.cases
+    }
+    return values, bridge, diagnostics
+
+
 def _numeric_fixture_output(
     *,
     fixture: Path,
@@ -4505,6 +4587,10 @@ def _build_report(
                 "auxiliary_modules": list(config.axiom_auxiliary_module_refs),
                 "output": config.axiom_output,
                 "outputs": scored_concepts,
+                "evaluation": (
+                    "axiom-rules-engine run-compiled on the fixture inputs; "
+                    "every recorded fixture output must equal the engine's"
+                ),
                 "fixture": str(config.fixture_path),
                 "supplemental_fixtures": [
                     str(path) for path in config.supplemental_fixture_paths
@@ -4596,7 +4682,13 @@ def _build_report(
     return report
 
 
-def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
+def generate(
+    policy: str,
+    roots: list[Path],
+    engine_binary: Path,
+    *,
+    evaluate: Callable[..., dict[str, dict[str, Any]]] = evaluate_fixture_cases,
+) -> dict[str, Any]:
     if policy not in POLICIES:
         raise KeyError(f"unknown federal policy {policy!r}")
     if not roots:
@@ -4604,13 +4696,19 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
     config = POLICIES[policy]
     _validate_policy_config(config)
     _assert_registry_comparable_bindings(config)
+    # The fixture pass validates the case construction and the shape of
+    # every recorded output; the engine pass then supplies every Axiom value
+    # and fails on any output where the engine and the fixture disagree.
     (
         _fixture,
-        axiom,
+        _fixture_values,
         fixture_inputs,
-        bridge_values,
-        diagnostic_values,
+        _fixture_bridge_values,
+        _fixture_diagnostic_values,
     ) = _axiom_values(config, roots)
+    axiom, bridge_values, diagnostic_values = _engine_axiom_values(
+        config, roots, engine_binary, evaluate=evaluate
+    )
     policyengine, components, unbound_diagnostics = _policyengine_values(
         config,
         bridge_values,
@@ -4639,15 +4737,27 @@ def main() -> int:
         help="RuleSpec checkout root; repeatable and supplied by comparison YAML",
     )
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--axiom-engine",
+        type=Path,
+        help="Receipted axiom-rules-engine executable that evaluates the cases",
+    )
     parser.add_argument("--list", action="store_true")
     args = parser.parse_args()
     if args.list:
         for key, config in sorted(POLICIES.items()):
             print(f"{key:32s} {config.suite}")
         return 0
-    if args.policy is None or args.output is None:
-        parser.error("--policy and --output are required unless --list is used")
-    report = generate(args.policy, [root.resolve() for root in args.rulespec_root])
+    if args.policy is None or args.output is None or args.axiom_engine is None:
+        parser.error(
+            "--policy, --output and --axiom-engine are required unless --list "
+            "is used"
+        )
+    report = generate(
+        args.policy,
+        [root.resolve() for root in args.rulespec_root],
+        args.axiom_engine.resolve(),
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(report_json_text(report))
     summary = report["summary"]

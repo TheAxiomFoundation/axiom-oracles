@@ -1446,6 +1446,11 @@ def test_a_pinned_federal_run_records_only_the_snapshot_that_ran(
         return real_run(cmd, *args, **kwargs)
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        run_comparison,
+        "_fixture_engine_receipt",
+        lambda _runner, _root: {"binary_path": "/engine/axiom-rules-engine"},
+    )
     config = {"name": "fed-pinned", "runner": {"type": "federal-tax-liability-grid", "parameters": params}}
     output = tmp_path / "r.json"
     output.write_text(json.dumps({"suite": "fed-pinned"}))

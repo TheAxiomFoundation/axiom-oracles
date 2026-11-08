@@ -12,10 +12,16 @@ from __future__ import annotations
 import importlib.util
 import itertools
 import json
+import re
+import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
 import yaml
+from hypothesis import example, given, settings
+from hypothesis import strategies as st
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = REPO_ROOT / ".github" / "workflows" / "snap-qc-replay.yml"
@@ -554,12 +560,85 @@ def _steps(job: str) -> list[dict]:
     return _workflow()["jobs"][job]["steps"]
 
 
-def test_workflow_runs_weekly_and_on_demand_only():
+def test_workflow_runs_weekly_on_demand_and_when_called():
     workflow = _workflow()
     triggers = workflow.get("on", workflow.get(True))  # YAML 1.1 reads `on` as True
-    assert set(triggers) == {"schedule", "workflow_dispatch"}
+    assert set(triggers) == {"schedule", "workflow_dispatch", "workflow_call"}
     assert triggers["schedule"][0]["cron"].split()[-1] == "1"  # weekly (Mondays)
     assert workflow["permissions"] == {"contents": "read"}
+    called = triggers["workflow_call"]["inputs"]
+    # Only a caller that publishes (the affected rerun) asks for bundles.
+    assert called["publish"] == {
+        **called["publish"], "type": "boolean", "default": False
+    }
+    assert called["run_kind"]["type"] == "string"
+    assert set(called) >= set(triggers["workflow_dispatch"]["inputs"])
+
+
+def test_required_suites_run_in_the_live_lane_and_pending_ones_stay_manual():
+    """The replay lane can run exactly REQUIRED_SUITES, so exactly those route
+    the affected rerun to it (ci: snap-qc-replay); a pending suite has no
+    composition on rulespec-us main and stays ci: manual until promoted."""
+    registered = replay.registered_suites()
+    for name in replay.REQUIRED_SUITES:
+        assert registered[name].get("ci") == "snap-qc-replay", name
+    for name in replay.PENDING_SUITES:
+        assert registered[name].get("ci") == "manual", name
+
+
+def test_publish_packs_only_a_live_exact_report_over_the_published_baseline():
+    steps = _steps("replay")
+    names = [step.get("name", "") for step in steps]
+    baseline = next(
+        i for i, step in enumerate(steps)
+        if "oracle_data.py materialize --baseline" in step.get("run", "")
+    )
+    replay_step = next(i for i, step in enumerate(steps) if step.get("id") == "replay")
+    check = next(i for i, step in enumerate(steps) if "snap_qc_replay.py check" in step.get("run", ""))
+    pack = next(i for i, step in enumerate(steps) if step.get("id") == "pack")
+    upload = next(i for i, name in enumerate(names) if name == "Upload refreshed-report bundle")
+    assert baseline < replay_step < check < pack < upload
+    assert steps[baseline]["if"] == "${{ inputs.publish }}"
+    condition = steps[pack]["if"]
+    assert "inputs.publish" in condition and "success()" in condition
+    run = steps[pack]["run"]
+    assert 'scripts/commit_refreshed_report.sh --pack "$RUNNER_TEMP/refreshed" "$SUITE"' in run
+    assert "--publish" not in run and "git push" not in run
+    assert steps[pack]["env"]["PYTHON"].endswith("/.venv/bin/python")
+    assert steps[upload]["if"] == "steps.pack.outputs.bundle == 'true'"
+    assert steps[upload]["with"]["name"] == "refreshed-${{ matrix.suite }}"
+    assert steps[upload]["with"]["path"] == "${{ runner.temp }}/refreshed/${{ matrix.suite }}/"
+    assert steps[upload]["with"]["if-no-files-found"] == "error"
+    # A publishing leg checks out main with the history materialize needs.
+    checkout = next(
+        step for step in steps
+        if step.get("uses", "").startswith("actions/checkout@")
+        and step["with"].get("path") == "axiom-oracles"
+    )
+    assert checkout["with"]["ref"] == "${{ inputs.publish && 'main' || '' }}"
+    assert checkout["with"]["fetch-depth"] == "${{ inputs.publish && '0' || '1' }}"
+    # A publishing call only needs the replays.
+    assert "!inputs.publish" in _workflow()["jobs"]["live-tests"]["if"]
+
+
+def test_a_call_never_shares_the_weekly_runs_concurrency_group():
+    """In a called workflow the github context is the caller's, so keying the
+    group on github.workflow puts the affected rerun's call in its own group,
+    never queued behind (or queued in place of) the weekly run on main."""
+    group = _workflow()["concurrency"]["group"]
+    assert "${{ github.workflow }}" in group and "${{ github.ref }}" in group
+    assert _workflow()["concurrency"]["cancel-in-progress"] is False
+
+
+def test_a_publishing_call_selects_suites_from_main_like_its_legs():
+    checkout = _steps("prepare")[0]
+    assert checkout["with"]["path"] == "axiom-oracles"
+    assert checkout["with"]["ref"] == "${{ inputs.publish && 'main' || '' }}"
+
+
+def test_run_kind_input_overrides_the_trigger_default():
+    env = next(step for step in _steps("replay") if step.get("id") == "replay")["env"]
+    assert env["AXIOM_ORACLES_RUN_KIND"].startswith("${{ inputs.run_kind ||")
 
 
 def test_every_job_checks_rulespec_us_out_under_its_repo_basename():
@@ -651,6 +730,50 @@ def test_replay_matrix_never_fails_fast():
     strategy = _workflow()["jobs"]["replay"]["strategy"]
     assert strategy["fail-fast"] is False
     assert strategy["matrix"]["suite"] == "${{ fromJson(needs.prepare.outputs.suites) }}"
+
+
+def _live_test_command() -> str:
+    return next(
+        step["run"] for step in _steps("live-tests")
+        if step.get("name") == "Run engine-gated tests (no skips allowed)"
+    )
+
+
+def test_live_test_job_runs_the_required_overlay_closures():
+    assert (
+        "tests/test_rulespec_overlay.py::"
+        "test_live_overlay_closure_resolves_once_at_the_nominal_month"
+    ) in _live_test_command()
+
+
+@settings(max_examples=40, deadline=None)
+@example(tests=2, skipped=0)
+@example(tests=2 + len(replay.REQUIRED_SUITES), skipped=0)
+@given(tests=st.integers(min_value=0, max_value=20), skipped=st.integers(min_value=0, max_value=20))
+def test_live_test_gate_accepts_only_all_required_cases_without_skips(tests: int, skipped: int):
+    """Property: omitting any required case or skipping any case fails the live gate."""
+    root = ET.Element("testsuites")
+    ET.SubElement(root, "testsuite", tests=str(tests), skipped=str(skipped))
+    script = _live_test_command().split("<<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    with (
+        patch.object(sys, "argv", ["check_live_tests.py", "live-tests.xml"]),
+        patch.object(ET, "parse", return_value=ET.ElementTree(root)),
+    ):
+        if tests == 2 + len(replay.REQUIRED_SUITES) and skipped == 0:
+            exec(script, {"__name__": "__main__"})
+        else:
+            with pytest.raises(SystemExit):
+                exec(script, {"__name__": "__main__"})
+
+
+def test_playbook_overlay_recipe_includes_the_packaged_window_mapping():
+    from axiom_oracles.bridges.rulespec_overlay import load_overlay_spec
+
+    playbook = (REPO_ROOT / "docs" / "snap-qc-oracle-playbook.md").read_text()
+    section = playbook.split("## 6. The fiscal-year gap and the overlay", 1)[1].split("## 7.", 1)[0]
+    recipes = [yaml.safe_load(block) for block in re.findall(r"```yaml\n(.*?)\n```", section, re.DOTALL)]
+    mapping = load_overlay_spec("us-co-snap-fy2024").version_windows
+    assert {"version_windows": {"source_fiscal_year": mapping.source_fiscal_year}} in recipes
 
 
 def test_workflow_never_commits():

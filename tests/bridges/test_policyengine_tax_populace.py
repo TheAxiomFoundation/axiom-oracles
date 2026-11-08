@@ -5,6 +5,8 @@ from pathlib import Path
 
 import pytest
 
+from axiom_oracles.rulespec_roots import NonCanonicalRuleSpecRoot
+
 import axiom_oracles.bridges.tax_populace as tax_populace
 from axiom_oracles.engine_identity import (
     ENGINE_RECEIPT_OUTPUT_ENV,
@@ -170,151 +172,44 @@ def test_remove_raw_columns_replaced_by_outputs_prefers_period_values():
     assert merged.loc[0, "american_opportunity_credit"] == 2_500
 
 
-def test_run_axiom_program_compiles_through_canonical_repo_alias(
+def test_run_axiom_program_refuses_renamed_worktree_before_the_engine_runs(
     monkeypatch,
     tmp_path,
 ):
+    """A worktree named other than rulespec-<country> is refused, not aliased.
+
+    Before the hard cut this checkout was exposed to the engine through a
+    temporary ``rulespec-uk`` symlink plus its parent workspace in
+    ``AXIOM_RULESPEC_REPO_ROOTS``.
+    """
     rulespec_root = tmp_path / "rulespec-uk-worktree"
     program = rulespec_root / "statutes" / "ukpga" / "2007" / "3" / "35.yaml"
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n")
+    (rulespec_root / ".git").mkdir()
+    (rulespec_root / ".git" / "config").write_text(
+        '[remote "origin"]\n\turl = https://github.com/TheAxiomFoundation/rulespec-uk.git\n'
+    )
     axiom_rules_path = tmp_path / "axiom-rules-engine"
     binary = axiom_rules_path / "target" / "release" / "axiom-rules-engine"
     binary.parent.mkdir(parents=True)
     binary.write_text("")
-
-    compiled_programs = []
-    compile_env_roots = []
-    runtime_requests = []
+    engine_calls = []
 
     def fake_run(cmd, **kwargs):
-        if len(cmd) >= 6 and cmd[:3] == ["git", "-C", str(rulespec_root)]:
-            return tax_populace.subprocess.CompletedProcess(
-                cmd,
-                0,
-                stdout="https://github.com/TheAxiomFoundation/rulespec-uk.git\n",
-                stderr="",
-            )
-        if "compile" in cmd:
-            compiled_programs.append(cmd[cmd.index("--program") + 1])
-            compile_env_roots.extend(
-                kwargs["env"]["AXIOM_RULESPEC_REPO_ROOTS"].split(tax_populace.os.pathsep)
-            )
-            output_path = cmd[cmd.index("--output") + 1]
-            with open(output_path, "w") as artifact:
-                artifact.write(
-                    tax_populace.json.dumps(
-                        {
-                            "program": {
-                                "parameters": [],
-                                "derived": [
-                                    {
-                                        "id": "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance",
-                                        "name": "personal_allowance",
-                                        "entity": "Person",
-                                    }
-                                ],
-                            }
-                        }
-                    )
-                )
-            return tax_populace.subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
-        if "run-compiled" in cmd:
-            runtime_requests.append(tax_populace.json.loads(kwargs["input"]))
-            return tax_populace.subprocess.CompletedProcess(
-                cmd,
-                0,
-                stdout=tax_populace.json.dumps(
-                    {
-                        "results": [
-                            {
-                                "outputs": {
-                                    "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance": {
-                                        "kind": "scalar",
-                                        "value": {
-                                            "kind": "integer",
-                                            "value": 12570,
-                                        },
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                ),
-                stderr="",
-            )
-        raise AssertionError(f"unexpected command: {cmd}")
+        engine_calls.append(cmd)
+        raise AssertionError(f"engine must not run: {cmd}")
 
     monkeypatch.setattr(tax_populace.subprocess, "run", fake_run)
-
-    results = tax_populace.run_axiom_program(
-        program=program,
-        request={
-            "mode": "explain",
-            "dataset": {
-                "inputs": [
-                    {
-                        "name": "uk:statutes/ukpga/2007/3/35#input.adjusted_net_income",
-                        "entity": "Person",
-                        "entity_id": "person_1",
-                        "interval": {
-                            "start": "2026-01-01",
-                            "end": "2026-12-31",
-                        },
-                        "value": {
-                            "kind": "decimal",
-                            "value": "20000",
-                        },
-                    }
-                ],
-                "relations": [
-                    {
-                        "name": "uk:statutes/ukpga/2007/3/35#relation.members",
-                        "tuple": ["person_1", "household_1"],
-                        "interval": {
-                            "start": "2026-01-01",
-                            "end": "2026-12-31",
-                        },
-                    }
-                ],
-            },
-            "queries": [
-                {
-                    "entity_id": "person_1",
-                    "period": {
-                        "period_kind": "tax_year",
-                        "start": "2026-01-01",
-                        "end": "2026-12-31",
-                    },
-                    "outputs": ["uk:statutes/ukpga/2007/3/35#personal_allowance"],
-                }
-            ],
-        },
-        rulespec_root=rulespec_root,
-        axiom_rules_path=axiom_rules_path,
-    )
-
-    assert (
-        results[0]["outputs"]["uk:statutes/ukpga/2007/3/35#personal_allowance"][
-            "value"
-        ]["value"]
-        == 12570
-    )
-    assert compiled_programs
-    assert "rulespec-uk" in compiled_programs[0].split("/")
-    assert "rulespec-uk-worktree" not in compiled_programs[0].split("/")
-    assert runtime_requests[0]["dataset"]["inputs"][0]["name"] == (
-        "uk-worktree:statutes/ukpga/2007/3/35#input.adjusted_net_income"
-    )
-    assert runtime_requests[0]["dataset"]["relations"][0]["name"] == (
-        "uk-worktree:statutes/ukpga/2007/3/35#relation.members"
-    )
-    assert runtime_requests[0]["queries"][0]["outputs"] == [
-        "uk-worktree:statutes/ukpga/2007/3/35#personal_allowance"
-    ]
-    assert str(rulespec_root) in compile_env_roots
-    assert str(rulespec_root.parent) in compile_env_roots
-    assert compile_env_roots[0] != str(rulespec_root)
+    with pytest.raises(NonCanonicalRuleSpecRoot, match="rulespec-uk-worktree"):
+        tax_populace.run_axiom_program(
+            program=program,
+            request={"queries": []},
+            rulespec_root=rulespec_root,
+            axiom_rules_path=axiom_rules_path,
+        )
+    assert engine_calls == []
+    assert not list(tmp_path.glob("**/axiom-rulespec-repo-aliases"))
 
 
 @pytest.mark.parametrize(
@@ -2724,6 +2619,7 @@ def test_run_axiom_program_passes_the_configured_timeouts(monkeypatch, tmp_path)
 def _receipted_program_fixture(monkeypatch, tmp_path):
     rulespec = tmp_path / "rulespec-us"
     program = rulespec / "us/fixtures/program.yaml"
+    program.parent.mkdir(parents=True)
     engine = tmp_path / "engine"
     binary = engine / "target/release/axiom-rules-engine"
     binary.parent.mkdir(parents=True)
@@ -2734,8 +2630,6 @@ def _receipted_program_fixture(monkeypatch, tmp_path):
     }))
     journal = tmp_path / "execution.json"
     monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
-    monkeypatch.setattr(tax_populace, "_rulespec_repo_alias_parent", lambda _: None)
-    monkeypatch.setattr(tax_populace, "_canonical_rulespec_compile_path", lambda path, _: path)
     monkeypatch.setattr(tax_populace, "_runtime_axiom_request", lambda request, **kwargs: (request, {}))
     arguments = {
         "program": program, "request": {"queries": []},

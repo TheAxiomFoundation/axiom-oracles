@@ -47,7 +47,7 @@
   "notes": [
     "Canonical values are monthly. Convenience input shelter_costs is treated as total shelter costs for this Axiom case.",
     "Utility allowance outputs are requested separately so client parity tools can identify whether another engine adds them by default.",
-    "The Colorado corpus-direct composition rounds the excess shelter deduction to whole dollars (floor(x + 0.5) in us:regulations/7-cfr/273/10#snap_excess_shelter_cost as composed for Colorado): excess shelter is 525 and net income 226; the rounding question is tracked in rulespec-us#1167. The PolicyEngine comparison differs by more than this rounding, because PolicyEngine also applies a standard utility allowance this case omits; the comparison's known_difference records both (axiom-api#257)."
+    "The Colorado corpus-direct composition rounds the excess shelter deduction to whole dollars (floor(x + 0.5) in us:regulations/7-cfr/273/10#snap_excess_shelter_cost as composed for Colorado), which gives excess shelter of 525 and net income of 226; rulespec-us#1167 tracks the rounding question. The PolicyEngine comparison differs by this rounding, and the comparison's known_difference records it (axiom-api#257)."
   ],
   "external_comparisons": [
     {
@@ -233,10 +233,10 @@
       },
       "known_difference": {
         "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/257",
-        "note": "Measured 2026-10-03 at household.api.policyengine.org/us/calculate_demo (policyengine_bundle model_version 2.9.0) for January 2026: PolicyEngine applies a $594 standard utility allowance on top of the $900 housing cost, which raises its excess shelter cost to 1,118.5 (900 + 594 - 751 / 2), and returns a 744 deduction, its cap for the contiguous US from 2025-10-01, against 525 here; net income is 7 against 226 and the benefit 543 against 478. This case treats shelter_costs as total shelter costs with no utility allowance. With PolicyEngine's utility allowance set to 0, a $1 gap remains (477 / 227 against 478 / 226): Axiom rounds the excess shelter deduction to 525 where PolicyEngine returns 524.5 (rulespec-us#1167). The responses are in evidence/co-snap-policyengine-2026-10-03.json.",
+        "note": "On 2026-11-05, household.api.policyengine.org/us/calculate_demo (policyengine_bundle model_version 2.72.5) returned a benefit of 477 and net income of 227 for January 2026, against Axiom's 478 and 226. Excess shelter comes to 524.5 (900 - 751 / 2) in both engines. Axiom rounds that deduction to 525 and subtracts it from 751, which leaves 226. PolicyEngine subtracts 524.5 and rounds the resulting 226.5 up to 227. A state agency chooses its rounding procedure under 7 CFR 273.10(e)(1)(ii), and rulespec-us#1167 tracks the question. The responses are in evidence/co-snap-policyengine-2026-11-05.json.",
         "pinned_engine_outputs": {
-          "snap_benefit_amount": 543,
-          "snap_net_income": 7
+          "snap_benefit_amount": 477,
+          "snap_net_income": 227
         }
       }
     }

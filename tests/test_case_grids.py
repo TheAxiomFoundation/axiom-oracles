@@ -66,7 +66,7 @@ def test_expected_jurisdictions_present() -> None:
 @pytest.mark.parametrize(
     "jurisdiction,expected_sets,expected_cases",
     [
-        ("us", 3, 84),
+        ("us", 4, 97),
         ("be", 33, 142),
         ("de", 2, 21),
         ("uk", 26, 143),

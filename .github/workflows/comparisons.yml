@@ -45,9 +45,11 @@ jobs:
         # Registry entries only (#299): skip `*.fixtures.yaml` sanity
         # documents, non-registry kinds (parameter-oracles is a
         # parameter-suite-list with no runner — run_comparison.py crashes on
-        # it), and suites declaring `ci: manual` (not CI-runnable; the
-        # affected-rerun selector leaves those to the manual lane for the
-        # same reason).
+        # it), and suites declaring any `ci:` routing: `ci: manual` (not
+        # CI-runnable; the affected-rerun selector leaves those to the manual
+        # lane for the same reason) or `ci: <lane>` (run by that lane's own
+        # workflow, e.g. snap-qc-replay.yml, which provisions what these bare
+        # runners lack).
         run: |
           python3 - <<'PY'
           import json
@@ -56,7 +58,7 @@ jobs:
           import yaml
           only = os.environ.get("ONLY", "").strip()
           names = []
-          manual = []
+          routed = {}
           for path in sorted(Path("comparisons").glob("*.yaml")):
               if path.name.endswith(".fixtures.yaml"):
                   continue
@@ -65,15 +67,20 @@ jobs:
                   continue
               if not (config.get("runner") or {}).get("type"):
                   continue
-              if config.get("ci") == "manual":
-                  manual.append(path.stem)
+              if config.get("ci"):
+                  routed[path.stem] = config["ci"]
                   continue
               names.append(path.stem)
           if only:
-              if only in manual:
-                  raise SystemExit(
-                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
+              if only in routed:
+                  route = routed[only]
+                  hint = (
                       "run it with a supervised run_comparison.py"
+                      if route == "manual"
+                      else f"run it through the {route} lane workflow"
+                  )
+                  raise SystemExit(
+                      f"{only} declares ci: {route} (see comparisons/{only}.yaml); {hint}"
                   )
               names = [n for n in names if n == only]
               if not names:
@@ -83,6 +90,30 @@ jobs:
               fh.write(f"matrix={json.dumps(matrix)}\n")
           print(json.dumps(matrix, indent=2))
           PY
+
+  # Fails, naming the file, when a pinned PolicyEngine artifact stops
+  # installing: a hashed-URL file in axiom_oracles/pinned_artifacts.py stops
+  # downloading or no longer matches its SHA-256, or a runtime pin is neither
+  # on PyPI's index nor in that table. Breaks already tracked in an issue
+  # (KNOWN_OPEN in the script) print as warnings, so only a new break fails.
+  # It runs beside the matrix, so one pruned pin never holds back the suites
+  # that still install.
+  pinned-artifacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Install the check's dependencies
+        # The versions uv.lock resolves.
+        run: pip install pyyaml==6.0.3 requests==2.33.1
+
+      - name: Check every pinned PolicyEngine artifact
+        run: python3 scripts/check_pinned_artifacts.py --verbose
 
   compare:
     needs: discover
@@ -137,8 +168,13 @@ jobs:
 
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
+        # Install from uv.lock, not a fresh resolve: the lock records each
+        # file's hashed URL and SHA-256, so a release PyPI's index has since
+        # pruned (policyengine-us 1.764.6) still installs, verified. Later
+        # steps call python3, so put the synced environment first on PATH.
         run: |
-          uv pip install --system -e '.[policyengine]'
+          uv sync --locked --python 3.14 --extra policyengine
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
 
       - name: Load published data for the comparison
         working-directory: axiom-oracles
@@ -208,10 +244,16 @@ jobs:
           import json
           d = json.load(open('$latest'))
           if 'compared_values' in d:
-              cv, mc = d['compared_values'], d['mismatch_count']
+              # mismatch_count includes uncompared pairs (engine errors);
+              # compared_values excludes them.
+              un = d.get('uncompared_mismatches', 0) or 0
+              cv, mc = d['compared_values'], max(0, d['mismatch_count'] - un)
               pct = 100*(cv-mc)/cv if cv else 0
               print(f'compared_values: {cv}')
               print(f'mismatch_count:  {mc}')
+              print(f'uncompared:      {un}')
+              er = d.get('errors') or []
+              print(f'errors:          {len(er)}')
               print(f'agreement:       {pct:.4f}%')
           elif 'case_count' in d:
               cc = d.get('case_count', 0)

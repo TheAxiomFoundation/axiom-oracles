@@ -724,55 +724,6 @@ def test_reader_refuses_local_generated_files_outside_bound_set(
 
 
 @pytest.mark.parametrize("baseline", [False, True])
-@pytest.mark.parametrize(
-    "setting",
-    [
-        "attributes-eol",
-        "core.autocrlf",
-        "autocrlf-alias",
-        "core.eol",
-        "filter",
-        "working-tree-encoding",
-    ],
-)
-def test_reader_bypasses_checkout_transformations_or_refuses_without_changes(
-    snapshot_case,
-    baseline,
-    setting,
-):
-    case = snapshot_case
-    attributes = {
-        "attributes-eol": "text eol=crlf",
-        "filter": "filter=fixture",
-        "working-tree-encoding": "working-tree-encoding=UTF-8",
-    }
-    if setting in attributes:
-        commit(
-            case.seed,
-            {
-                ".gitattributes": f"dashboard/public/data/*.json {attributes[setting]}\n",
-            },
-        )
-        git(case.seed, "push", "origin", f"HEAD:{data.MAIN_REF}")
-    reader = case.baseline_reader if baseline else case.reader
-    git(reader, "fetch", "origin", data.MAIN_REF)
-    git(reader, "reset", "--hard", "FETCH_HEAD")
-    if setting == "core.autocrlf":
-        git(reader, "config", setting, "true")
-    elif setting == "autocrlf-alias":
-        git(reader, "config", "core.autocrlf", "yes")
-    elif setting == "core.eol":
-        git(reader, "config", setting, "crlf")
-    elif setting == "filter":
-        git(reader, "config", "filter.fixture.clean", "cat")
-        git(reader, "config", "filter.fixture.smudge", "cat")
-    # Local configurations can already have smudged the checkout during the
-    # explicit reset above. Preserve those raw-byte edits by refusing safely;
-    # otherwise a successful read must reproduce the exact bound Git blobs.
-    _read(case, baseline=baseline)
-
-
-@pytest.mark.parametrize("baseline", [False, True])
 def test_reader_never_succeeds_with_a_new_report_smudged_to_crlf(
     snapshot_case, baseline
 ):

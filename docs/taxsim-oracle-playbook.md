@@ -18,15 +18,137 @@ Axiom's correctness does not go on the dashboard.
 
 ## Identity
 
-Every TAXSIM number is produced by the Fortran binary bundled in the pinned
-`policyengine-taxsim` release. `axiom_oracles/adapters/taxsim/taxsim_pins.json`
-is the **single source of truth** for that identity (release version, PyPI
-artifact hashes, per-binary SHA-256). Runtime code resolves the version via
-`axiom_oracles.adapters.taxsim.pins.pinned_version()`; the only versioned
-literal allowed in the repo is `pyproject.toml`'s dependency declaration, and
-`tests/test_taxsim_pin.py::test_no_divergent_version_literals` enforces both
-rules (the #266 incident — a stale literal silently regenerating four suites
-at the wrong law year — is why).
+Every TAXSIM number is produced by an NBER `taxsimtest` executable that
+`TaxsimPackageRunner` runs through `policyengine-taxsim`'s `TaxsimRunner`
+(input formatting and output parsing). Which executable ran is pinned by
+SHA-256, not implied by the package version.
+`axiom_oracles/adapters/taxsim/taxsim_pins.json` (schema
+`axiom-oracles/taxsim-pin/v2`) is the **single source of truth**:
+
+- `distribution` pins the `policyengine-taxsim` package (version, PyPI sdist
+  and wheel hashes, and the executables its wheel bundles). Runtime code
+  reads the version via `pins.pinned_version()`; the only versioned literal
+  allowed in the repo is `pyproject.toml`'s `taxsim` extra, and
+  `tests/test_taxsim_pin.py::test_no_divergent_version_literals` enforces
+  both rules (the #266 incident — a stale literal silently regenerating four
+  suites at the wrong law year — is why).
+- `binaries` pins every executable the adapter may run: SHA-256, byte size,
+  platform, the build stamp read from its bytes, and where to fetch it
+  (pinned `PolicyEngine/policyengine-taxsim` git blobs, NBER URLs, PyPI
+  wheels), plus golden-probe results with their evidence.
+- `profiles` map every (TAXSIM SOI state, tax year) to one pinned binary per
+  platform: a profile default plus declarative overrides.
+  `default_profile` is the one field that changes when the benchmark moves
+  to another binary vintage.
+
+| Profile | Linux build (sha256) | What it reproduces |
+| --- | --- | --- |
+| `dashboard-2026-09` | `cd2026090910` (`8aa880ae…`); GA/MD × 2024–2025: `cd2026081819` (`00a321d2…`) | The September 2026 pe-taxsim dashboard: `summary_<year>.json` records `taxsimBinarySha256` `8aa880ae…` for 2021–2025 and, for 2024 and 2025, a `taxsimFallback` sending GA and MD to `00a321d2…` (the September Linux build raises SIGFPE there; pe-taxsim #1214) |
+| `pe-taxsim-main-2026-08` | `cd2026081819` (`00a321d2…`) everywhere | The August builds pe-taxsim `main` bundled from #1150 until #1206 merged (2026-11-02), and the `policyengine-taxsim` 2.31.7 wheel's |
+| `policyengine-taxsim-2.30.0` (default) | `cdate-compdate` (`0d934f20…`) everywhere | The v1 pin: the executables bundled in `policyengine-taxsim` 2.30.0, which the `taxsim` extra installs |
+
+No profile pins the November 1 builds (`cd2026110117`: Linux `beb897fd…`, macOS `21d36bac…`) that pe-taxsim `main` has bundled since #1206 merged; pe-taxsim's Windows build stayed at `a8207e7c…`. A profile for them is a follow-up.
+
+`axiom-oracles taxsim pin-status [--profile P | --all-profiles] [--platform
+linux|darwin|windows|current|all] [--json]` prints the active profile, where
+it came from, the resolution table, and which binaries are present.
+
+**Profile selection** (first that is set wins): the `--taxsim-pin-profile`
+flag on `compare` (or a runner's `pin_profile=` argument), then
+`$AXIOM_TAXSIM_PIN_PROFILE`, then a suite's
+`runner.parameters.taxsim_pin_profile`, then `default_profile`.
+`scripts/run_comparison.py` resolves the last three and passes the result to
+the CLI as `--taxsim-pin-profile`. An unknown name fails the run.
+
+**Resolution and the runtime check.** Each TAXSIM row resolves from its
+`state` (TAXSIM SOI code; 0 = no state, which resolves to the profile
+default) and `year`. Before anything runs, every binary the batch needs is
+located and hashed, in this order: `$AXIOM_TAXSIM_BINARY_DIR`
+(`<dir>/<sha256>/<filename>`, then `<dir>/<filename>`), the cache
+(`$AXIOM_TAXSIM_CACHE_DIR`, default
+`~/.cache/axiom-oracles/taxsim-binaries/<sha256>/<filename>`), then the
+installed `policyengine-taxsim` wheel's bundled executable. Only a candidate
+whose SHA-256 and size match the pin is used; otherwise the run fails with a
+`TaxsimPinError` naming the SHA-256, profile, (state, year), every path
+checked, and the fetch command. There is no fallback to
+`policyengine-taxsim`'s own executable search: the adapter always passes the
+verified path. Hashes are cached per process by (path, mtime, size).
+
+**Fetching.** `axiom-oracles taxsim fetch-binaries [--profile P |
+--all-profiles] [--platform ...] [--from-git-repo ~/PolicyEngine/pe-taxsim]`
+tries the local clone's pinned blobs, then
+`raw.githubusercontent.com/<repo>/<commit>/<path>`, then pinned URLs, then
+pinned wheels, and writes to the cache only bytes whose SHA-256 and size
+match (atomically, mode 0755). The August and September 2026 Linux builds
+link dynamically against `libgfortran.so.5` and `libquadmath.so.0` (the
+2.30.0 Linux build is statically linked and needs no shared libraries), so a bare Linux image needs
+`libgfortran5`.
+
+**Execution.** Rows are partitioned by resolved binary. Every partition's
+binary is located and range-checked before any partition runs, so a missing
+or mismatched binary fails the batch with no partial run. Each partition then
+goes through the per-batch checks the runner already had: its law years are
+checked against the binary's pinned range (`pins.require_law_years`), the
+bytes are hashed again just before the run and must still equal the pinned
+SHA-256, and after the run the recorder hashes them a third time
+(`TaxsimIdentityRecorder`). policyengine-taxsim's `TaxsimRunner` only
+formats the input; the adapter runs the verified absolute path itself and
+parses stdout with `parse_taxsim_stdout`. Results return in input order,
+each with `raw["taxsim_binary_sha256"]` and `raw["taxsim_pin_scope"]`.
+TAXSIM runs records sequentially in one process, and a record's result can
+depend on the records before it (pe-taxsim #1214's crash needs a Delaware
+record before a Maryland record), so a partitioned row is not guaranteed to
+equal what one combined run would have produced. A non-zero exit fails the
+batch, as before. `PolicyEngineTaxsimRunner` (the PolicyEngine emulator over
+TAXSIM rows) is unaffected: one run, no partitioning, no binary lookup.
+
+**Provenance.** The CLI report's `engine_identity.taxsim` block gains
+`pin_profile`, and each binary entry gains `scopes`, the rows it ran per
+profile scope (`default` or `override:<id>`), next to the path, SHA-256,
+build stamps, platform and rows it already recorded. `run_comparison.py`
+lifts them into `provenance.oracle.taxsim_pin_profile` and
+`provenance.oracle.taxsim_binaries`, and `scripts/merge_shard_reports.py`
+sums rows and scope rows across shards and refuses shards run under
+different profiles. Reports written before the runner recorded a binary
+record at most the `policyengine_taxsim` package version.
+
+**Scope.** The state income-tax liability grids
+(`scripts/generate_state_income_tax_liability.py`) and the Populace
+state-tax leg (`bridges/state_tax_populace_runner.py`) still run the
+executable bundled in the installed `policyengine-taxsim` wheel and ignore
+`--taxsim-pin-profile` and `$AXIOM_TAXSIM_PIN_PROFILE`. Their provenance
+records the package version and, in `engine_identity.taxsim`, the hash of
+the binary that ran. `pinned_entry_for_sha` also finds every v2 profile
+binary, so if such a caller runs a wheel other than the pinned 2.30.0 one
+whose binary is a profile binary, its identity reads `pinned: true` with key
+`binaries/<sha256>` while `distribution` still names 2.30.0.
+
+**CI.** The `taxsim-pin` job in `.github/workflows/ci.yml` syncs the locked
+`taxsim` extra, fetches every profile's Linux binaries, downloads the pinned
+wheel, and runs `tests/test_taxsim_pin.py`,
+`tests/test_taxsim_pin_runtime.py`, `tests/test_taxsim_identity.py` and
+`tests/test_taxsim_execution_identity.py` with
+`AXIOM_TAXSIM_REQUIRE_BINARIES=1`, which turns every "binary not
+present" skip into a failure. It checks each binary's embedded build stamp
+and runs pe-taxsim's canonical VA 2021 opt(30) probe on it, asserting only
+values documented for that exact binary (2068.05 / 500 for the August and
+September builds; 2568.05 / 0 for the 2.30.0 Linux build, per pe-taxsim
+#1095).
+
+**Re-pinning.** Add each new executable under `binaries` (SHA-256 and size
+computed from the bytes, `build` read from them, git/URL/wheel sources with
+full 40-hex commits), point a profile at it or add a profile, and change
+`default_profile` only when the benchmark should move. Run
+`axiom-oracles taxsim fetch-binaries --all-profiles --platform linux` and the
+test files above, then regenerate the affected suites. A re-pin
+changes which binary produces the numbers. Once a regenerated report records
+the new binaries, the merge checks each disposition that selects live rows. It
+takes the binaries behind those rows from the rows themselves when every
+selected row records one, and otherwise takes every binary the report records.
+When the disposition's `oracle_binding` leaves out any of those binaries, the
+merge expires the disposition and returns its rows to unexplained. To
+re-verify an expired disposition and re-bind it, see
+[Disposition ledger discipline](#disposition-ledger-discipline).
 
 ## Where TAXSIM is graded
 
@@ -276,3 +398,40 @@ TAXSIM suites persist **every** mismatch row in the committed dashboard copy
 unexplained rows were once physically untriageable behind the default
 1,000-row cap). If a TAXSIM suite's mismatch count approaches its cap, raise
 the cap in the same change that regenerates the suite.
+
+## Disposition ledger discipline
+
+A suite with `taxsim` on either side is a TAXSIM lane, and its
+`dispositions/<suite>.yaml` is held to the hardened rules in
+[`dispositions/README.md`](../dispositions/README.md#taxsim-lanes): every
+entry names its `attribution` (`taxsim`, the other side's engine,
+`convention`, `input`, or `two_sided`), binds the TAXSIM identity it was
+classified against (`oracle_binding`), binds its selected population
+(`selector_binding`, or `pinned` values for a single row), and reconciles
+per row (`evidence.row_arithmetic`) or cites an upstream record. A row
+claimed by two entries fails the merge.
+
+Consequences for a re-pin or a refresh:
+
+- **Re-pinning TAXSIM expires every classification** bound to the previous
+  identity: the merge compares each entry's `oracle_binding` with the
+  binaries the new report records, and a mismatch returns the entry's rows
+  to unexplained (`expired_reasons: oracle_identity_changed`), which the
+  unexplained ratchet then gates. The reports committed before binaries
+  were recorded carry `identity_unrecorded: true` bindings: their committed
+  provenance contains neither binary digests nor a TAXSIM package version.
+  This explicit legacy exception preserves the existing assignments without
+  asserting an unrecorded identity. It expires the first time a report records
+  any TAXSIM identity (binary digests or a package version). An unrecorded
+  binary change with identical rows remains undetectable; refreshed reports
+  must record their actual binary identity.
+- **Re-verify, then re-bind.** After re-checking a class against the
+  refreshed report, stamp its bindings from the committed FULL report with
+  `uv run scripts/bind_dispositions.py <suite>` (`--check` reports drift
+  without writing) in the same commit as the report. Never re-bind a class
+  that was not re-verified: the binding is the claim that it was.
+- **Engine crashes are rows, not gaps in the report.** A case whose TAXSIM
+  run fails becomes `engine_error` mismatch rows carrying the crash
+  signature and failing binary (`row["error"]`); disposition them with
+  `kind: engine_error` and `match.error_signature`, bound to that binary's
+  sha256.
