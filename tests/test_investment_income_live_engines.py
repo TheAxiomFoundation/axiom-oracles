@@ -3,9 +3,9 @@
 Each engine prices the same Case through its own projection: PolicyEngine-US
 (the installed release), PSL Tax-Calculator, the pinned TAXSIM-35 binary, and
 the Axiom engine and rulespec-us roots that comparisons/fiit-taxsim-ecps.yaml
-pins (skipped when that checkout is absent, as on CI). The expected values
-are worked by hand from the 2025 worksheets at the 2026 amounts below; they
-are not copied from any engine.
+pins (those tests skip when that checkout is absent, as on CI). The expected
+values come from working the 2025 worksheets by hand at the 2026 amounts
+below; no engine produced them.
 
 2026 amounts, Rev. Proc. 2025-32:
 
@@ -43,7 +43,7 @@ on Schedule D instead (line 15 = line 16 = 2,000, worksheet line 3 = 2,000)
 gives the same return: this is the metamorphic check every engine must pass.
 
 Without line 7a: AGI 65,000, taxable income 48,900; line 4 = 3,000, line 5
-= 45,900, all 3,000 falls under 49,450 and is taxed at 0%; tax = 5,260.
+= 45,900, all 3,000 falls under 49,450 and takes the 0% rate; tax = 5,260.
 With all 5,000 qualified: line 5 = 43,900; tax = 1,240 + 12% x 31,500 =
 5,020. With none qualified: tax = 1,240 + 12% x 36,500 = 5,620. Line 3b is
 5,000 in all three, so AGI and taxable income never move with the split.
@@ -51,10 +51,11 @@ With all 5,000 qualified: line 5 = 43,900; tax = 1,240 + 12% x 31,500 =
 Known engine differences this module records rather than hides:
 
 - TAXSIM-35 at law year 2026 gives 5,410.10 on the line 7a return, 67.40
-  below the worksheet, and the same on the Schedule D version, so only its
-  AGI, taxable income and that equivalence are asserted for those two.
-- TAXSIM-35 has no child EITC at law year 2026. Its investment-income test
-  is exercised at 2024 instead: every column the projection uses counts,
+  short of the worksheet, and the same on the Schedule D version, so the
+  tests assert only its AGI, taxable income and that equivalence for those
+  two.
+- TAXSIM-35 has no child EITC at law year 2026. The tests run its
+  investment-income test at 2024 instead: every column the projection uses counts,
   but the credit falls dollar for dollar above the limit rather than to zero.
 - Tax-Calculator 6.7.1 leaves e01100 out of its EITC investment income
   (calcfunctions.py: ``invinc = (e00400 + e00300 + e00600 + max(0., c01000)
@@ -100,7 +101,7 @@ OUTPUTS = (
     Concepts.EITC,
 )
 # The Axiom AGI and capital gains worksheet are bridge rules with no concept
-# mapping; they are requested by their rule ids.
+# mapping; the tests request them by their rule ids.
 BRIDGE = "us:tax/oracle-bridge#"
 AXIOM_AGI = BRIDGE + "adjusted_gross_income"
 AXIOM_WORKSHEET_LINE_9 = BRIDGE + "capital_gains_worksheet_line_9"

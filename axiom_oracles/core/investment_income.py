@@ -35,15 +35,15 @@ Where the amounts flow on the 2025 return (each engine must follow them):
 line 3b and line 7a both enter total income (the Social Security Benefits
 Worksheet, line 3, combines "lines 1z, 2b, 3b, 4b, 5b, 7a, and 8");
 the Qualified Dividends and Capital Gain Tax Worksheet takes line 3a on its
-line 2 and, when Schedule D is not filed, line 7a on its line 3; and the EIC
+line 2 and, on a return without Schedule D, line 7a on its line 3; and the EIC
 investment income (Pub. 596 Worksheet 1) takes line 3b on its line 3 and
 line 7a (a loss entered as zero) on its line 5.
 
-Amounts are never negative: they are payments reported on Form 1099-DIV.
-The normalization below keeps a Case that violates the line 3a / line 3b
-relation (qualified above ordinary, which some legacy rows carry) priced
-identically by every engine: qualified dividends are floored at zero and
-ordinary dividends are never less than the qualified part.
+Amounts are never negative: they are payments that Form 1099-DIV reports.
+The normalization below makes every engine price a Case that violates the
+line 3a / line 3b relation (qualified above ordinary, which some legacy rows
+carry) identically: it floors qualified dividends at zero and never lets
+ordinary dividends fall short of the qualified part.
 """
 
 from __future__ import annotations
@@ -137,10 +137,10 @@ def fold_capital_gain_distributions_into_schedule_d(
     the filers (head and spouse) of a tax unit, or one dependent, whose
     capital gains belong on the dependent's own return. When any of them
     carries a Schedule D amount (a nonzero short- or long-term capital gain
-    or loss), Exception 1 does not apply, so each member's capital gain
-    distributions are added to that member's long-term capital gains
-    (26 USC 852(b)(3)(B)) and the no-Schedule-D fact is removed. Returns the
-    number of members whose distributions were folded.
+    or loss), Exception 1 does not apply, so this adds each member's capital
+    gain distributions to that member's long-term capital gains
+    (26 USC 852(b)(3)(B)) and removes the no-Schedule-D fact. Returns the
+    number of members whose distributions it moved.
     """
 
     members = list(members)
@@ -184,11 +184,11 @@ def with_schedule_d_fold(
     """A tax unit's people with line 7a folded onto Schedule D, per return.
 
     Every tax projection prices a Case's people as one tax unit and starts
-    from this list, so a Case whose filers carry both line 7a and Schedule D
-    amounts (which Exception 1 rules out) is priced the same way by every
-    engine. ``filers`` are the head and spouse among ``people`` (``None``
-    entries are ignored). The entities are returned as they are when nothing
-    is folded.
+    from this list, so every engine prices a Case whose filers carry both
+    line 7a and Schedule D amounts (which Exception 1 rules out) the same
+    way. ``filers`` are the head and spouse among ``people`` (it skips
+    ``None`` entries). It returns the entities as they are when it folds
+    nothing.
     """
 
     people = list(people)

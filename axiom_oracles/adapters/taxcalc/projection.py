@@ -68,8 +68,8 @@ def taxcalc_input_for_case(
         )
 
     # Line 7a joins Schedule D on a return that files one
-    # (core/investment_income); relations and ages are untouched, so the
-    # filers are the same people before and after.
+    # (core/investment_income); the fold leaves relations and ages alone, so
+    # the filers are the same people before and after.
     head = _head(people)
     people = with_schedule_d_fold(people, (head, _spouse(people, head)))
     head = _head(people)

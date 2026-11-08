@@ -90,7 +90,7 @@ class Concepts:
     # Schedule D net short- and long-term capital gain or loss.
     SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
     LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"
-    # Form 1040 line 7a when Schedule D is not required (the line 7b box):
+    # Form 1040 line 7a when the return needs no Schedule D (the line 7b box):
     # capital gain distributions from Form 1099-DIV box 2a, long-term under
     # 26 USC 852(b)(3)(B). Disjoint from the Schedule D concepts above; see
     # core/investment_income.py.

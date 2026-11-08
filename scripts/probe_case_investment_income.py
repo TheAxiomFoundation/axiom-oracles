@@ -3,7 +3,7 @@
 
 Reads the person table of the certified Populace US 2024 artifact, which the
 population loader resolves and checks against its sha256 pin, and prints raw
-2024 values, unweighted, as JSON. No PolicyEngine run is involved.
+2024 values, unweighted, as JSON. It runs no PolicyEngine simulation.
 
 - ``columns``: each dividend and capital-gain column's nonzero persons, sum
   and the tax-unit roles (``tax_unit_role_input``) that carry it.

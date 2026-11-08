@@ -47,7 +47,7 @@ Where the lines flow:
 
 - Social Security Benefits Worksheet, line 3 (p. 32): "Combine the amounts
   from Form 1040 or 1040-SR, lines 1z, 2b, 3b, 4b, 5b, 7a, and 8": line 3b and
-  line 7a are total income; line 3a is not added again.
+  line 7a are total income; line 3a does not count again.
 - Qualified Dividends and Capital Gain Tax Worksheet (p. 38): line 2 "Enter
   the amount from Form 1040 or 1040-SR, line 3a"; line 3 "Are you filing
   Schedule D? ... No. Enter the amount from Form 1040 or 1040-SR, line 7a."
@@ -73,8 +73,8 @@ do not are older and differ):
    decoded from its own input representation (PolicyEngine person inputs,
    TAXSIM dividends/otherprop/ltcg, Tax-Calculator e00600/e00650/e01100, the
    Axiom bridge inputs, the Axiom benefit mapping), including on Cases that
-   violate line 3a <= line 3b or carry negative amounts. One older exception
-   is not changed here: the Axiom bridge's qualified-dividend and Schedule D
+   violate line 3a <= line 3b or carry negative amounts. This change leaves
+   one older exception alone: the Axiom bridge's qualified-dividend and Schedule D
    leaves sum every tax-unit member, dependents included, as PolicyEngine
    does (PolicyEngine/policyengine-us#9869). Line 7a does not.
 2. In every view 0 <= qualified <= ordinary, and each person's three
@@ -85,7 +85,7 @@ do not are older and differ):
    when the return files Schedule D.
 4. Moving d from non-qualified to qualified at fixed line 3b moves only the
    qualified inputs (+d) and their non-qualified complements (-d); each
-   engine's total going into AGI is unchanged.
+   engine's total going into AGI stays the same.
 5. A dependent's dividends, line 7a and Schedule D amounts never reach the
    filers' TAXSIM row, Tax-Calculator row, or the Axiom filer sums.
 6. The Schedule D fold (per return: the filers together, each dependent
@@ -286,7 +286,7 @@ def test_with_schedule_d_fold_keeps_entities_it_does_not_change() -> None:
     ]
     assert folded[0].facts[LTCG] == 2_000 and CGD not in folded[0].facts
     assert folded[2].facts[CGD] == 300
-    # The input entities are not mutated.
+    # The fold leaves the input entities as they were.
     assert head.facts[CGD] == 2_000 and LTCG not in head.facts
 
 
@@ -653,7 +653,7 @@ def test_mixed_return_nets_distributions_on_schedule_d_in_every_engine() -> None
 
 
 # A household Case, as populations/populace_us builds one: person 0 is the
-# head and every other adult is "Other", so no spouse is named. The head's
+# head and every other adult is "Other", so the Case names no spouse. The head's
 # 22-year-old child heads their own tax unit and has a capital loss on their
 # own Schedule D; the head's return has only line 7a.
 HOUSEHOLD = _case(

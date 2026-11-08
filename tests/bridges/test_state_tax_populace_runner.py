@@ -3976,7 +3976,7 @@ def test_calculate_taxsim_targets_reads_form_1040_lines_3a_3b_and_7a() -> None:
 
 def test_calculate_taxsim_targets_adds_line_7a_to_schedule_d_gain() -> None:
     # The spouse's Schedule D gain means the return files Schedule D, so the
-    # head's distributions are reported there (Form 1040 line 7, Exception 1
+    # head's distributions go there (Form 1040 line 7, Exception 1
     # fails). TAXSIM's ltcg is their sum on either path, which is why this
     # leg needs no Schedule D fold.
     row, _ = _taxsim_row_for_investment_income(

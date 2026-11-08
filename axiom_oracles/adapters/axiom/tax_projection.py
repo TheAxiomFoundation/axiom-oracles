@@ -3516,8 +3516,9 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     # Line 7a joins Schedule D on a return that files one
     # (core/investment_income). A return is the head and the spouse the Case
     # names, as in the producer and every other projection, not the pair
-    # _tax_filers falls back to when no spouse is named. Relations, ages and
-    # earnings are untouched, so _tax_filers picks the same people afterwards.
+    # _tax_filers falls back to when the Case names no spouse. The fold leaves
+    # relations, ages and earnings alone, so _tax_filers picks the same people
+    # afterwards.
     head = _head(people)
     people = with_schedule_d_fold(people, (head, _spouse(people, head)))
 

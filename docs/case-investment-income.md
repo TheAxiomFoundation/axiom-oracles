@@ -39,7 +39,7 @@ Where the lines go on the return:
 
 | Use | Source text | Lines |
 |---|---|---|
-| Total income, AGI | Social Security Benefits Worksheet line 3: "Combine the amounts from Form 1040 or 1040-SR, lines 1z, 2b, 3b, 4b, 5b, 7a, and 8" | 3b and 7a (3a is not added again) |
+| Total income, AGI | Social Security Benefits Worksheet line 3: "Combine the amounts from Form 1040 or 1040-SR, lines 1z, 2b, 3b, 4b, 5b, 7a, and 8" | 3b and 7a (3b already holds 3a) |
 | Preferential rates, 26 USC 1(h) | Qualified Dividends and Capital Gain Tax Worksheet: line 2 "line 3a"; line 3 "Are you filing Schedule D? ... No. Enter the amount from Form 1040 or 1040-SR, line 7a" | 3a and 7a |
 | EITC investment income, 26 USC 32(i) | Pub. 596 (2025) Worksheet 1: line 3 "line 3b"; line 5 "line 7a. If the amount on that line is a loss, enter -0-" | 3b and 7a |
 | Net investment income, 26 USC 1411 | Instructions for Form 8960 (2024), line 5a: combine "Form 1040 or 1040-SR, line 7, and Schedule 1 (Form 1040), line 4" | 3b (line 2) and 7a |
@@ -64,11 +64,11 @@ priced identically by every engine.
 | Tax-Calculator (`adapters/taxcalc/projection.py`) | `e00600` | `e00650` | `e01100` |
 | Axiom benefit mapping (`adapters/axiom/generic_inputs.py`) | `DIVIDEND_INCOME`, counted once | not listed beside it | not carried (see below) |
 
-Who is summed:
+Whose amounts each engine sums:
 
 - TAXSIM, Tax-Calculator and the Axiom AGI leaves sum the filers (head and
   spouse). So does every Axiom line 7a input: a dependent's distributions
-  are on the dependent's own return, in AGI and in the 1(h) base alike.
+  belong to the dependent's own return, in AGI and in the 1(h) base alike.
 - The Axiom bridge's older qualified-dividend and Schedule D leaves
   (`capital_gains_tax_*`, the 1(h) qualified-dividend input) sum every
   tax-unit member, dependents included, as PolicyEngine's
@@ -83,7 +83,7 @@ Who is summed:
   spouse. The Schedule D fold below never uses that fallback.
 
 Not modelled: Exception 1's second condition. Form 1099-DIV boxes 2b, 2c and
-2d have no Case concept, so a return is taken to meet it.
+2d have no Case concept, so every projection treats a return as meeting it.
 
 ## What the Populace producer loads
 
@@ -108,14 +108,14 @@ this page):
 | `non_qualified_dividend_income` | 24,426 | $6.42B |
 | `non_sch_d_capital_gains` | 3,086 | $25.1M |
 
-The legacy column cannot be line 3b: it is below the qualified amount on
+The legacy column cannot be line 3b: it falls short of the qualified amount on
 2,631 of the 4,103 persons that carry both. Nor is it a part to add: every
 amount in the split sits on a tax-unit head row, while the legacy column
 also has amounts on 4,969 spouse rows and 142 dependent rows, and 11,760
 persons carry it with no split at all ($59.0M). Those persons' dividends are
 no longer on the Case.
 
-Line 7a is loaded, fail closed, on both case units, like the Schedule D
+The loader reads line 7a, fail closed, on both case units, like the Schedule D
 gains: the two are reports of one kind of income, and the fold below must
 give a person the same dividend and capital-gain facts on a household Case
 and on a tax-unit Case. No
@@ -127,10 +127,10 @@ that gap is older than this change and covers Schedule D gains too.
 
 Exception 1 is a condition on a return, so a return never has both line 7a
 and Schedule D amounts. When the people on one return carry a Schedule D
-amount (a nonzero short- or long-term gain or loss), each one's capital gain
-distributions are added to that person's long-term gain and the line 7a fact
-is dropped. A tax unit's filers (head and spouse) are one return; a
-dependent's gains are on the dependent's own return, so a child's capital
+amount (a nonzero short- or long-term gain or loss), the fold adds each
+one's capital gain distributions to that person's long-term gain and drops
+the line 7a fact. A tax unit's filers (head and spouse) make one return; a
+dependent's gains belong to the dependent's own return, so a child's capital
 loss never moves the parents' line 7a.
 
 A return is the head and the spouse the Case names; everyone else files
@@ -142,18 +142,18 @@ bridge still price such a household as one tax unit, pairing the two oldest
 adults; that approximation is older than this change, and the fold does not
 follow it.
 
-The fold is applied twice, by the same function:
+The same function applies the fold twice:
 
 - The Populace producer folds each tax unit (`fold_tax_unit_returns`), on
   either case unit, and records the number of people folded in
   `metadata["capital_gain_distributions_folded_into_schedule_d"]`, so the
   Case itself holds coherent returns. In the pinned artifact 3,086 persons
   carry line 7a, one per tax unit; 23 of them also carry a Schedule D
-  amount on the same row (14 a capital loss) and are folded, which leaves
-  3,063 tax units with line 7a.
+  amount on the same row (14 a capital loss), and the fold moves their
+  line 7a, which leaves 3,063 tax units with line 7a.
 - Every tax projection folds the people it is about to price
-  (`with_schedule_d_fold`), so a hand-built or future Case that carries both
-  paths is still priced identically everywhere. On a Case the producer
+  (`with_schedule_d_fold`), so every engine still prices a hand-built or
+  future Case that carries both paths identically. On a Case the producer
   built it moves nothing: a tax-unit Case names the returns the producer
   folded, and a household Case splits them further, into one person each.
   TAXSIM needs no fold: its `ltcg` column is Schedule D long-term gain plus
@@ -184,12 +184,12 @@ reads the same dividend and line 7a sources as the loader.
   what 852(b)(3)(B) makes it. Two behaviours of the pinned binary show up
   in the live tests:
   - On the worked 2026 return whose preferential income straddles the
-    $49,450 zero-rate amount, its tax is $67.40 below the worksheet, by the
-    same amount whether the gain is entered as line 7a or as Schedule D
-    long-term gain.
-  - Its EITC investment-income test (exercised at law year 2024, since the
-    binary has no child EITC at 2026) counts `intrec`, `dividends`,
-    `otherprop` and `ltcg` alike, so every Case line is inside it; but it
+    $49,450 zero-rate amount, its tax falls $67.40 short of the worksheet,
+    by the same amount whether the return enters the gain as line 7a or as
+    Schedule D long-term gain.
+  - Its EITC investment-income test (which the live tests run at law year
+    2024, since the binary has no child EITC at 2026) counts `intrec`,
+    `dividends`, `otherprop` and `ltcg` alike, so it covers every Case line; but it
     reduces the credit dollar for dollar above the limit instead of
     disallowing it.
 - **Schedule D worksheet line 9.** PolicyEngine-US 1.764.6's `dwks09`
@@ -203,12 +203,18 @@ reads the same dividend and line 7a sources as the loader.
   person's line 7a beside another's Schedule D amount: the bridge's
   every-member `capital_gains_tax_*` leaves (a dependent's gain beside the
   filers' line 7a), PolicyEngine's `add(tax_unit, ...)`, and a household
-  that PolicyEngine or the bridge prices as one tax unit. In the pinned artifact every line 7a and Schedule
+  that PolicyEngine or the bridge prices as one tax unit. There the bridge
+  also disagrees with itself on a loss: line 9 floors the Schedule D term at
+  zero and then adds line 7a, while the 26 USC 1(h) long-term gain input adds
+  line 7a to the every-member gain as it stands. A dependent's 1,000
+  long-term loss beside the filer's 2,000 of line 7a leaves line 9 at 2,000
+  and takes 1,000 off the 1(h) net capital gain (axiom-oracles#619 tracks the
+  every-member leaves). In the pinned artifact every line 7a and Schedule
   D amount sits on a tax-unit head row, so no tax-unit Case has both. Within
   the bridge, line 9 reaches only worksheet lines 10, 13, 14 and 19 and the
   Form 6251 Part III capital gain lines.
 - **Axiom** leaves 26 USC 1411 out of the composed program
   (axiom-encode#1213). The bridge's 1411 net-gain rule now includes line 7a
-  (Form 8960 line 5a), but it is inert until 1411 is composed again, so on
-  the Axiom side no net investment income tax is computed on dividends,
-  line 7a or any other investment income.
+  (Form 8960 line 5a), but it stays inert until the composed program
+  includes 1411 again, so the Axiom side computes no net investment income
+  tax on dividends, line 7a or any other investment income.

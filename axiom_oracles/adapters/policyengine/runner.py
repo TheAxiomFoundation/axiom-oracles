@@ -1013,7 +1013,7 @@ def _tax_unit_people(case: Case) -> list[Entity]:
 
     A return is the head and the spouse the Case names, as in the producer
     and every other projection. ``_tax_filers``' fallback, which pairs the
-    two oldest adults when no spouse is named, decides how PolicyEngine
+    two oldest adults when the Case names no spouse, decides how PolicyEngine
     prices the people, not which of them share a return: on a household
     Case it can pair the head with an adult child who files separately,
     and the producer has already folded each real tax unit.
@@ -1043,8 +1043,8 @@ def _person_income_inputs(entity: Entity) -> dict[str, float]:
     line 3a, so PolicyEngine's ``dividend_income`` (its alias for
     ``ordinary_dividend_income`` = qualified + non-qualified, read by the
     gross-income, net-investment-income and benefit unearned-income source
-    lists) gets line 3b, and both leaves are pinned so the alias and its
-    parts agree.
+    lists) gets line 3b, and the runner pins both leaves so the alias and
+    its parts agree.
     """
     inputs = {
         pe_variable: float(entity.fact(concept, 0) or 0)
