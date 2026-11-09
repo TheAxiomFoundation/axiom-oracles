@@ -9,6 +9,11 @@ from ...core.engine import EngineAdapter
 from ...core.case import Case, Concepts, Entity
 from ...core.filing import SeparateFiling, separate_filing
 from ...core.geography import pe_inputs_for_scope
+from ...core.investment_income import (
+    person_dividends,
+    person_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
+)
 from ...core.household import Household
 from ...core.results import EngineResult
 from ...comparison.mappings import engine_targets_for_concepts
@@ -44,6 +49,7 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
     Concepts.SHORT_TERM_CAPITAL_GAINS: "short_term_capital_gains",
     Concepts.LONG_TERM_CAPITAL_GAINS: "long_term_capital_gains",
+    Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: "non_sch_d_capital_gains",
     Concepts.PENSION_INCOME: "taxable_pension_income",
     Concepts.SSI_BENEFITS: "ssi",
     Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
@@ -366,7 +372,7 @@ class PolicyEngineRunner(EngineAdapter):
         year = int(str(case.period).split("-", 1)[0])
         people = {}
         person_names = []
-        person_entities = list(case.entities_of_kind("person"))
+        person_entities = _tax_unit_people(case)
         head, spouse = _tax_filers(person_entities)
         head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
             _separate_filing(case, head, spouse)
@@ -434,7 +440,7 @@ class PolicyEngineRunner(EngineAdapter):
         variables: list[str] | None = None,
     ) -> dict[str, Any]:
         year = int(str(case.period).split("-", 1)[0])
-        person_entities = list(case.entities_of_kind("person"))
+        person_entities = _tax_unit_people(case)
         head, spouse = _tax_filers(person_entities)
         head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
             _separate_filing(case, head, spouse)
@@ -840,7 +846,7 @@ class PolicyEngineRunner(EngineAdapter):
                 if value is not None:
                     spm_unit_row[pe_variable] = float(value)
             spm_unit_rows.append(spm_unit_row)
-            person_entities = list(case.entities_of_kind("person"))
+            person_entities = _tax_unit_people(case)
             head, spouse = _tax_filers(person_entities)
             head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
                 _separate_filing(case, head, spouse)
@@ -1001,6 +1007,24 @@ class PolicyEngineRunner(EngineAdapter):
         return list(requested)
 
 
+def _tax_unit_people(case: Case) -> list[Entity]:
+    """The Case's people, priced as one tax unit like every tax projection:
+    line 7a folded onto Schedule D per return (core/investment_income).
+
+    A return is the head and the spouse the Case names, as in the producer
+    and every other projection. ``_tax_filers``' fallback, which pairs the
+    two oldest adults when the Case names no spouse, decides how PolicyEngine
+    prices the people, not which of them share a return: on a household
+    Case it can pair the head with an adult child who files separately,
+    and the producer has already folded each real tax unit.
+    """
+    people = list(case.entities_of_kind("person"))
+    if not people:
+        return people
+    head = _head(people)
+    return with_schedule_d_fold(people, (head, _spouse(people, head)))
+
+
 def _person_income_inputs(entity: Entity) -> dict[str, float]:
     """Person income inputs, pinned for every mapped source.
 
@@ -1012,19 +1036,27 @@ def _person_income_inputs(entity: Entity) -> dict[str, float]:
     which made month-defined outputs and year-shaped booleans price two
     different income surfaces for the same household.
 
-    The legacy ``dividend_income`` input is PolicyEngine's ordinary-dividends
-    aggregation alias, and both the SNAP unearned-income and IRS gross-income
-    source lists read it — so it must carry the declared qualified dividends
-    too. ``qualified_dividend_income`` stays declared separately for rate
-    treatment.
+    Dividends and line 7a distributions are read through
+    core/investment_income, as every other projection reads them; callers
+    pass people from ``_tax_unit_people``.
+    ``Concepts.DIVIDEND_INCOME`` is Form 1040 line 3b and already includes
+    line 3a, so PolicyEngine's ``dividend_income`` (its alias for
+    ``ordinary_dividend_income`` = qualified + non-qualified, read by the
+    gross-income, net-investment-income and benefit unearned-income source
+    lists) gets line 3b, and the runner pins both leaves so the alias and
+    its parts agree.
     """
     inputs = {
         pe_variable: float(entity.fact(concept, 0) or 0)
         for concept, pe_variable in _PERSON_INCOME_CONCEPT_TO_PE.items()
     }
-    inputs["dividend_income"] = float(
-        entity.fact(Concepts.DIVIDEND_INCOME, 0) or 0
-    ) + float(entity.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0) or 0)
+    dividends = person_dividends(entity)
+    inputs["dividend_income"] = dividends.ordinary
+    inputs["qualified_dividend_income"] = dividends.qualified
+    inputs["non_qualified_dividend_income"] = dividends.non_qualified
+    inputs["non_sch_d_capital_gains"] = (
+        person_non_schedule_d_capital_gain_distributions(entity)
+    )
     return inputs
 
 

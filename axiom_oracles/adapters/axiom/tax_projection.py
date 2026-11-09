@@ -6,6 +6,13 @@ from typing import Any
 from ...bridges.relation_binding import relation_tuple
 from ...core.case import Case, Concepts, Entity
 from ...core.filing import SeparateFiling, separate_filing
+from ...core.investment_income import (
+    person_dividends,
+    person_non_schedule_d_capital_gain_distributions,
+    sum_dividends,
+    sum_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
+)
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
     AXIOM_INPUT_RECORDS_METADATA_KEY,
@@ -983,6 +990,12 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         formula="person_positive_dividend_income_for_agi > 0",
     ),
     _generated_person_rule(
+        "person_has_non_sch_d_capital_gains_for_agi",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying person Form 1040 line 7a capital gain distributions reported without Schedule D",
+        formula="person_non_sch_d_capital_gains > 0",
+    ),
+    _generated_person_rule(
         "person_positive_taxable_interest_income_for_agi",
         dtype="Money",
         unit="USD",
@@ -1198,6 +1211,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle comparison bridge approximating 26 USC 199A(a)(2) capital-gain cap from ECPS leaves",
         formula=(
             "max(0, capital_gains_tax_long_term_capital_gains "
+            "+ non_sch_d_capital_gains "
             "+ capital_gains_tax_qualified_dividend_income)"
         ),
     ),
@@ -1221,13 +1235,6 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "max(-1500, net_capital_gains) "
             "else: max(-3000, net_capital_gains)"
         ),
-    ),
-    _generated_tax_unit_rule(
-        "non_sch_d_capital_gains",
-        dtype="Money",
-        unit="USD",
-        source="Oracle comparison bridge default for capital gains not reported on Schedule D",
-        formula="0",
     ),
     _generated_tax_unit_rule(
         "investment_income_form_4952",
@@ -1265,22 +1272,33 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "capital_gains_worksheet_line_9",
         dtype="Money",
         unit="USD",
-        source="Oracle comparison bridge matching PolicyEngine Schedule D worksheet line 9",
+        source=(
+            "Oracle comparison bridge matching PolicyEngine Schedule D worksheet "
+            "line 9, with line 7a added to the Schedule D term as in "
+            "Tax-Calculator's dwks9"
+        ),
+        # PolicyEngine's dwks09 takes line 7a instead of the Schedule D term
+        # whenever line 7a exceeds zero. The two agree on every return without
+        # both, which the Schedule D fold guarantees for the head and the
+        # spouse a Case names. They differ where this tax unit sums people
+        # the fold treats as separate returns: the every-member
+        # capital_gains_tax_* leaves (axiom-oracles#619) with a dependent's
+        # Schedule D gain beside the filers' line 7a, or a household Case
+        # that _tax_filers pairs into one unit. Adding keeps that gain in
+        # line 9, as the 1(h) long-term gain input below keeps it.
         formula=(
             "max("
             "0, "
-            "(if non_sch_d_capital_gains > 0: "
             "non_sch_d_capital_gains "
-            "else: "
-            "max("
+            "+ max("
             "0, "
             "min("
             "capital_gains_tax_long_term_capital_gains "
             "+ capital_gains_tax_qualified_dividend_income, "
             "net_capital_gains"
+            ")"
             ") "
-            ") + non_sch_d_capital_gains"
-            ") - min(0, investment_income_form_4952)"
+            "- min(0, investment_income_form_4952)"
             ")"
         ),
     ),
@@ -1573,6 +1591,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "+ person_taxable_interest_income "
             "+ person_short_term_capital_gains "
             "+ person_long_term_capital_gains "
+            "+ person_non_sch_d_capital_gains "
             "+ person_pension_income "
             "+ person_unemployment_compensation"
             ")"
@@ -1588,6 +1607,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "+ person_positive_self_employment_income_for_agi "
             "+ person_positive_rental_income_for_agi "
             "+ person_positive_capital_gains_for_agi "
+            "+ max(0, person_non_sch_d_capital_gains) "
             "+ person_positive_dividend_income_for_agi "
             "+ person_positive_taxable_interest_income_for_agi "
             "+ person_positive_pension_income_for_agi "
@@ -2063,6 +2083,19 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         ),
     ),
     _generated_tax_unit_rule(
+        "non_sch_d_capital_gains_for_agi",
+        dtype="Money",
+        unit="USD",
+        source="26 USC 61 and 852(b)(3)(B), Form 1040 line 7a capital gain distributions reported without Schedule D",
+        formula=(
+            "sum_where("
+            "filer_adjusted_earnings_of_tax_unit, "
+            "person_non_sch_d_capital_gains, "
+            "person_has_non_sch_d_capital_gains_for_agi"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
         "positive_taxable_interest_income_for_agi",
         dtype="Money",
         unit="USD",
@@ -2111,6 +2144,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "+ positive_self_employment_income_for_agi "
             "+ positive_rental_income_for_agi "
             "+ positive_capital_gains_for_agi "
+            "+ non_sch_d_capital_gains_for_agi "
             "+ positive_dividend_income_for_agi "
             "+ positive_taxable_interest_income_for_agi "
             "+ positive_pension_income_for_agi "
@@ -2132,10 +2166,11 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception",
         dtype="Money",
         unit="USD",
-        source="Oracle composition bridge routing ECPS capital-gain leaves into 26 USC 1411(c)(1)(A)(iii)",
+        source="Oracle composition bridge routing ECPS capital-gain leaves, Form 1040 line 7 (Form 8960 line 5a), into 26 USC 1411(c)(1)(A)(iii)",
         formula=(
             "capital_gains_tax_short_term_capital_gains "
-            "+ capital_gains_tax_long_term_capital_gains"
+            "+ capital_gains_tax_long_term_capital_gains "
+            "+ non_sch_d_capital_gains"
         ),
     ),
     _generated_tax_unit_rule(
@@ -3419,11 +3454,13 @@ _INPUT_REF_OVERRIDES.update(
             "filer_taxable_interest_income",
             "filer_unemployment_compensation",
             "is_colorado_tax_unit",
+            "non_sch_d_capital_gains",
             "oracle_person_age",
             "oracle_person_is_qualifying_child_dependent",
             "oracle_person_is_tax_unit_dependent",
             "person_dividend_income",
             "person_long_term_capital_gains",
+            "person_non_sch_d_capital_gains",
             "person_payroll_earnings",
             "person_pension_income",
             "person_rental_income_for_qbid",
@@ -3478,6 +3515,14 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
             f"Axiom federal tax projection reserves entity id {_TAX_UNIT_ID!r} "
             "for the tax unit; rename the person."
         )
+    # Line 7a joins Schedule D on a return that files one
+    # (core/investment_income). A return is the head and the spouse the Case
+    # names, as in the producer and every other projection, not the pair
+    # _tax_filers falls back to when the Case names no spouse. The fold leaves
+    # relations, ages and earnings alone, so _tax_filers picks the same people
+    # afterwards.
+    head = _head(people)
+    people = with_schedule_d_fold(people, (head, _spouse(people, head)))
 
     filing = _tax_unit_filing(case, people)
     records = _tax_unit_input_records(case, people, filing)
@@ -3492,19 +3537,8 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
 
 
 def _sum_dividends(entities) -> float:
-    """Total dividends, never less than the qualified split.
-
-    ECPS rows sometimes carry only the qualified-dividend leaf; qualified
-    dividends are a subset of total dividends, so the ordinary total is at
-    least the qualified amount.
-    """
-    return sum(
-        max(
-            _number(entity.fact(Concepts.DIVIDEND_INCOME, 0)),
-            _number(entity.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
-        )
-        for entity in entities
-    )
+    """Form 1040 line 3b ordinary dividends (core/investment_income)."""
+    return sum_dividends(entities).ordinary
 
 
 def _eitc_relevant_investment_income(
@@ -3521,16 +3555,17 @@ def _eitc_relevant_investment_income(
     zero before the baskets are added, so a loss in one basket never
     offsets income in another; lines 1-3 are added unfloored. On the Case
     surface, interest and dividends (lines 1-3) are taxable interest,
-    tax-exempt interest (line 2, Form 1040 line 2a), and ordinary
-    dividends; capital gain net income is short- plus long-term gains; and
-    passive activity income is rental income only. The Case deliberately
-    carries no farm-rent concept, because the Axiom federal oracle bridge
-    has no gross-income slot for it (axiom-oracles issue
-    #566), and no passive partnership/S-corp concept. The checked
-    PolicyEngine-US 1.764.6 source has generic partnership and S-corporation
-    inputs but no dedicated passive split; other producer versions were not
-    checked. Form 4797 amounts, royalties, and estate/trust passive income
-    are not modeled either.
+    tax-exempt interest (line 2, Form 1040 line 2a), and Form 1040 line 3b
+    ordinary dividends; capital gain net income (line 5, Form 1040 line 7a)
+    is short- plus long-term Schedule D gains plus capital gain distributions
+    reported without Schedule D; and passive activity income is rental
+    income only. The Case deliberately carries no farm-rent concept, because
+    the Axiom federal oracle bridge has no gross-income slot for it
+    (axiom-oracles issue #566), and no passive partnership/S-corp concept.
+    The checked PolicyEngine-US 1.764.6 source has generic partnership and
+    S-corporation inputs but no dedicated passive split; other producer
+    versions were not checked. Form 4797 amounts, royalties, and estate/trust
+    passive income are not modeled either.
     """
     return (
         interest_and_dividends
@@ -3568,10 +3603,13 @@ def _tax_unit_input_records(
         earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    capital_gains_tax_qualified_dividends = _sum_concept(
-        people,
-        Concepts.QUALIFIED_DIVIDEND_INCOME,
-    )
+    # Form 1040 line 7a without Schedule D, over the filers: a dependent's
+    # distributions belong on the dependent's own return, in AGI and in the
+    # 1(h) base alike. The capital_gains_tax_* leaves below sum every member,
+    # as PolicyEngine-US 1.764.6's add(tax_unit, ...) does
+    # (PolicyEngine/policyengine-us#9869; axiom-oracles#619 tracks them).
+    non_sch_d_capital_gains = sum_non_schedule_d_capital_gain_distributions(earners)
+    capital_gains_tax_qualified_dividends = sum_dividends(people).qualified
     capital_gains_tax_short_capital_gains = _sum_concept(
         people,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
@@ -3579,6 +3617,14 @@ def _tax_unit_input_records(
     capital_gains_tax_long_capital_gains = _sum_concept(
         people,
         Concepts.LONG_TERM_CAPITAL_GAINS,
+    )
+    # 26 USC 1222(3) long-term capital gain for the encoded 1(h) module: a
+    # capital gain dividend "shall be treated by the shareholders as a gain
+    # from the sale or exchange of a capital asset held for more than 1 year"
+    # (852(b)(3)(B)), so line 7a joins Schedule D's long-term gain there. The
+    # bridge's own worksheet rules keep the two apart, as PolicyEngine does.
+    section_1222_long_term_capital_gains = (
+        capital_gains_tax_long_capital_gains + non_sch_d_capital_gains
     )
     tax_unit_dividends = _sum_dividends(people)
     tax_unit_interest = _sum_concept(people, Concepts.INTEREST_INCOME)
@@ -3632,7 +3678,9 @@ def _tax_unit_input_records(
                 filer_interest + filer_tax_exempt_interest + filer_dividends
             ),
             capital_gain_net_income=(
-                filer_short_capital_gains + filer_long_capital_gains
+                filer_short_capital_gains
+                + filer_long_capital_gains
+                + non_sch_d_capital_gains
             ),
             passive_activity_income=filer_rental,
         ),
@@ -3696,13 +3744,14 @@ def _tax_unit_input_records(
         "qualified_dividend_income": capital_gains_tax_qualified_dividends,
         "taxable_interest_income": tax_unit_interest,
         "short_term_capital_gains": capital_gains_tax_short_capital_gains,
-        "long_term_capital_gains": capital_gains_tax_long_capital_gains,
+        "long_term_capital_gains": section_1222_long_term_capital_gains,
         "rental_income": filer_rental,
         "pension_annuity_disability_benefits_received": filer_pensions,
         "filer_dividend_income": filer_dividends,
         "filer_taxable_interest_income": filer_interest,
         "filer_short_term_capital_gains": filer_short_capital_gains,
         "filer_long_term_capital_gains": filer_long_capital_gains,
+        "non_sch_d_capital_gains": non_sch_d_capital_gains,
         "filer_rental_income": filer_rental,
         "filer_pension_annuity_disability_benefits_received": filer_pensions,
         "filer_unemployment_compensation": filer_unemployment,
@@ -3792,7 +3841,7 @@ def _tax_unit_input_records(
         )
     )
     for name, value in {
-        "long_term_capital_gains": capital_gains_tax_long_capital_gains,
+        "long_term_capital_gains": section_1222_long_term_capital_gains,
         "short_term_capital_gains": capital_gains_tax_short_capital_gains,
         "net_capital_gain_taken_into_account_as_investment_income_under_section_163_d_4_B_iii": 0,
         "qualified_dividend_income": capital_gains_tax_qualified_dividends,
@@ -3885,15 +3934,13 @@ def _person_input_records(
             "oracle_person_age": age,
             "oracle_person_is_qualifying_child_dependent": is_dependent and age < 19,
             "oracle_person_is_tax_unit_dependent": is_dependent,
-            # Qualified dividends are a subset of total dividends and some
-            # ECPS rows carry only the qualified leaf; AGI must include them
-            # either way (mirrors _sum_dividends).
-            "person_dividend_income": max(
-                _number(person.fact(Concepts.DIVIDEND_INCOME, 0)),
-                _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
-            ),
+            # Form 1040 line 3b, which includes line 3a (core/investment_income).
+            "person_dividend_income": person_dividends(person).ordinary,
             "person_long_term_capital_gains": _number(
                 person.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0)
+            ),
+            "person_non_sch_d_capital_gains": (
+                person_non_schedule_d_capital_gain_distributions(person)
             ),
             "person_payroll_earnings": _earned_income(person),
             "person_pension_income": _number(person.fact(Concepts.PENSION_INCOME, 0)),
@@ -4416,10 +4463,11 @@ def _dependent_gross_income(dependent: Entity) -> float:
     return (
         _earned_income(dependent)
         + max(0, _number(dependent.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)))
-        + _number(dependent.fact(Concepts.DIVIDEND_INCOME, 0))
+        + person_dividends(dependent).ordinary
         + _number(dependent.fact(Concepts.INTEREST_INCOME, 0))
         + _number(dependent.fact(Concepts.SHORT_TERM_CAPITAL_GAINS, 0))
         + _number(dependent.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0))
+        + person_non_schedule_d_capital_gain_distributions(dependent)
         + _number(dependent.fact(Concepts.PENSION_INCOME, 0))
         + _number(dependent.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
         + max(0, _number(dependent.fact(Concepts.RENTAL_INCOME, 0)))
