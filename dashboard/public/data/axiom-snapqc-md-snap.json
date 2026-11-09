@@ -5254,7 +5254,10 @@
   ],
   "engines": {
     "left": "snap-qc",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.1.2"
+    }
   },
   "errors": [],
   "locales": [
@@ -5263,8 +5266,19 @@
   "mismatches": [],
   "population": "snap-qc-puf",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-09-23T00:23:17Z",
+    "engine": {
+      "axiom_rules_engine_sha": "98af0dcec5a09e1dca12d1458e08ccb02516c1ef",
+      "axiom_rules_engine_version": "0.1.2",
+      "binary": "/home/runner/work/axiom-oracles/axiom-oracles/engine/target/release/axiom-rules-engine",
+      "binary_path": "/home/runner/work/axiom-oracles/axiom-oracles/engine/target/release/axiom-rules-engine",
+      "binary_sha256": "de9817ce2b009831b6270423d8fa46d249ff2e8de61dd63cba2ed670d7068bbf",
+      "commit": "98af0dcec5a09e1dca12d1458e08ccb02516c1ef",
+      "repository": "TheAxiomFoundation/axiom-rules-engine",
+      "source_status": "verified build receipt",
+      "version": "0.1.2",
+      "working_tree": "clean"
+    },
+    "generated_at": "2026-11-06T07:17:05Z",
     "generated_by": "scripts/run_comparison.py::md-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -5274,11 +5288,14 @@
     },
     "rulespecs": [
       {
+        "dirty": false,
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "f43dec520dd392bc5333934f56dad7498363e704"
+        "sha": "fe62a527af2315170d653c413345e27834a5d221",
+        "sha_toplevel": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us",
+        "worktree_toplevel": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us"
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -5314,11 +5331,14 @@
     "match_rate": 100,
     "mismatch_count": 0,
     "provenance": {
-      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-post-engine-ffd8213/target/release/axiom-rules-engine",
+      "axiom_binary": "/home/runner/work/axiom-oracles/axiom-oracles/engine/target/release/axiom-rules-engine",
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
           "us-md/policies/dhs/fia/snap/standard-utility-allowances.yaml": "2ead566b55d0c5e6e1105c7ae28271dc34d4762eaeeffb9f8d26be82fbcdd239",
+          "us/policies/usda/snap/fy-2024-cola/deductions.yaml": "678ba4f3c20218a90e6ef5293e811470521f4720f8eb4686f87bdb25e4a48b10",
+          "us/policies/usda/snap/fy-2024-cola/income-eligibility-standards.yaml": "864a5fa1e6000442fc0acdfb9b45266b4e87130bcdb56f3106945b5b2eed6a0d",
+          "us/policies/usda/snap/fy-2024-cola/maximum-allotments.yaml": "3a7bd2cc68963ac57f73a49cb440456f2751a089b875740f78adecc758170dd4",
           "us/policies/usda/snap/state-plan-composition.yaml": "06b8dea0853ff9e5a89a7c62080d3603b3e1a321b70951d1ea0f470fb9cfc163",
           "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
           "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
@@ -5362,8 +5382,38 @@
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-harness-refresh-rulespec/rulespec-us",
-        "schema": "axiom_oracles.rulespec_overlay.v1"
+        "rulespec_root": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us",
+        "schema": "axiom_oracles.rulespec_overlay.v1",
+        "version_windows": {
+          "files": {
+            "us/policies/usda/snap/fy-2024-cola/deductions.yaml": {
+              "closed_versions": 0,
+              "open_versions": 16,
+              "rules": 16
+            },
+            "us/policies/usda/snap/fy-2024-cola/income-eligibility-standards.yaml": {
+              "closed_versions": 31,
+              "open_versions": 0,
+              "rules": 31
+            },
+            "us/policies/usda/snap/fy-2024-cola/maximum-allotments.yaml": {
+              "closed_versions": 0,
+              "open_versions": 16,
+              "rules": 16
+            }
+          },
+          "nominal_month": "2026-01-01",
+          "source_fiscal_year": 2024,
+          "source_window": [
+            "2023-10-01",
+            "2024-09-30"
+          ],
+          "target_fiscal_year": 2026,
+          "target_window": [
+            "2025-10-01",
+            "2026-09-30"
+          ]
+        }
       },
       "period": "2026-01",
       "period_rationale": "Evaluated at the nominal month 2026-01: the Colorado SNAP chain module versions are snapshot-dated to 2025-10-01, so a true FY 2024 period cannot select them until the parameter-set inversion in TheAxiomFoundation/rulespec-us#759 lands.",
@@ -5373,7 +5423,7 @@
         "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
         "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-harness-refresh-rulespec/rulespec-us"
+      "rulespec_root": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us"
     },
     "stages": [],
     "weighted": {
