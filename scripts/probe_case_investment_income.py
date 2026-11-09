@@ -15,7 +15,9 @@ population loader resolves and checks against its sha256 pin, and prints raw
   "Child", every other adult "Other", in artifact row order, as
   ``populations/populace_us.py`` builds them) where the two oldest adults,
   whom PolicyEngine and the Axiom bridge price as filers when a Case names
-  no spouse, pair one person's line 7a with another's Schedule D amount.
+  no spouse, pair one person's line 7a with another's Schedule D amount, and
+  where pricing the household as one tax unit puts the filers' line 7a beside
+  a positive Schedule D term on the worksheet.
 
     uv run python scripts/probe_case_investment_income.py [out.json]
 """
@@ -99,6 +101,8 @@ def _fold(person: pd.DataFrame) -> pd.DataFrame:
     return person.assign(
         schedule_d=schedule_d,
         line_7a=distributions.where(~files_schedule_d, 0.0),
+        long_term_after_fold=person["long_term_capital_gains"]
+        + distributions.where(files_schedule_d, 0.0),
         folded=(distributions > 0) & files_schedule_d,
     )
 
@@ -132,7 +136,7 @@ def _schedule_d_fold(person: pd.DataFrame) -> dict[str, object]:
 def _household_cases(person: pd.DataFrame) -> dict[str, object]:
     with_line_7a = person["line_7a"] > 0
     households = person.loc[with_line_7a, "person_household_id"].unique()
-    beside = paired = 0
+    beside = paired = both_on_worksheet = 0
     paired_line_7a = 0.0
     for _, people in person[person["person_household_id"].isin(households)].groupby(
         "person_household_id", sort=False
@@ -160,12 +164,23 @@ def _household_cases(person: pd.DataFrame) -> dict[str, object]:
         ):
             paired += 1
             paired_line_7a += float(pair["line_7a"].sum())
+        # The bridge's worksheet term for the household as one tax unit:
+        # net_capital_gains and the capital_gains_tax_* leaves sum every member.
+        long_term = float(people["long_term_after_fold"].sum())
+        qualified = float(people["qualified_dividend_income"].clip(lower=0).sum())
+        short_term = float(people["short_term_capital_gains"].sum())
+        schedule_d_term = max(0.0, min(long_term + qualified, long_term + short_term))
+        if (pair["line_7a"] > 0).any() and schedule_d_term > 0:
+            both_on_worksheet += 1
     return {
         "households": int(person["person_household_id"].nunique()),
         "households_with_line_7a": int(len(households)),
         "households_with_line_7a_beside_another_tax_units_schedule_d": beside,
         "households_whose_two_oldest_adults_pair_line_7a_with_schedule_d": paired,
         "line_7a_on_those_pairs": paired_line_7a,
+        "households_whose_worksheet_has_line_7a_and_a_schedule_d_term": (
+            both_on_worksheet
+        ),
     }
 
 

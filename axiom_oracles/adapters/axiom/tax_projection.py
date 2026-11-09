@@ -1278,12 +1278,14 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "Tax-Calculator's dwks9"
         ),
         # PolicyEngine's dwks09 takes line 7a instead of the Schedule D term
-        # whenever line 7a is positive. The two agree on every return without
-        # both, which the Schedule D fold guarantees for the filers. They
-        # differ only while the every-member capital_gains_tax_* leaves
-        # (axiom-oracles#619) put a dependent's Schedule D gain beside the
-        # filers' line 7a; adding keeps that gain in line 9 as the 1(h)
-        # long-term gain input below keeps it.
+        # whenever line 7a exceeds zero. The two agree on every return without
+        # both, which the Schedule D fold guarantees for the head and the
+        # spouse a Case names. They differ where this tax unit sums people
+        # the fold treats as separate returns: the every-member
+        # capital_gains_tax_* leaves (axiom-oracles#619) with a dependent's
+        # Schedule D gain beside the filers' line 7a, or a household Case
+        # that _tax_filers pairs into one unit. Adding keeps that gain in
+        # line 9, as the 1(h) long-term gain input below keeps it.
         formula=(
             "max("
             "0, "
@@ -3602,10 +3604,10 @@ def _tax_unit_input_records(
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
     # Form 1040 line 7a without Schedule D, over the filers: a dependent's
-    # distributions are on the dependent's own return, in AGI and in the
-    # 1(h) base alike. The older capital_gains_tax_* leaves below still sum
-    # every member, as PolicyEngine's add(tax_unit, ...) does
-    # (PolicyEngine/policyengine-us#9869).
+    # distributions belong on the dependent's own return, in AGI and in the
+    # 1(h) base alike. The capital_gains_tax_* leaves below sum every member,
+    # as PolicyEngine-US 1.764.6's add(tax_unit, ...) does
+    # (PolicyEngine/policyengine-us#9869; axiom-oracles#619 tracks them).
     non_sch_d_capital_gains = sum_non_schedule_d_capital_gain_distributions(earners)
     capital_gains_tax_qualified_dividends = sum_dividends(people).qualified
     capital_gains_tax_short_capital_gains = _sum_concept(
