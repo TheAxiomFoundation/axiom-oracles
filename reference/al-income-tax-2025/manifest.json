@@ -1,0 +1,189 @@
+{
+  "schema_version": "al_income_tax_2025.reference_manifest.v1",
+  "comparison": "al-income-tax-2025-ecps",
+  "tax_year": 2025,
+  "jurisdiction": "US-AL",
+  "population": {
+    "name": "Alabama eCPS",
+    "households": 1155,
+    "taxsimid_min": 88052,
+    "taxsimid_max": 89206,
+    "key": "taxsimid"
+  },
+  "hash_scope": "Every bundle file except manifest.json itself; no self-referential hash.",
+  "files": {
+    "households.csv": {
+      "sha256": "1bc19cf5328604648286c989e07e2248aa60a5699c31fcdd20c8a95f1a74b2da",
+      "bytes": 201724,
+      "source": "data/al_inputs_2025.csv",
+      "role": "Original Alabama eCPS TAXSIM input rows, Alabama coded state 1.",
+      "rows": 1155,
+      "columns": 40,
+      "unique_taxsimids": 1155
+    },
+    "engine_outputs_state1.csv": {
+      "sha256": "f8441f1ad03fc44ac371999269833bd28308a12254607c96ba0a935377f87b4b",
+      "bytes": 1143512,
+      "source": "data/al_2025_state1.csv",
+      "role": "PolicyEngine and TAXSIM outputs from the corrected state-1 release; primary comparison observations.",
+      "rows": 2310,
+      "columns": 98,
+      "unique_taxsimids": 1155
+    },
+    "engine_outputs_state0.csv": {
+      "sha256": "8fedc6494853058470b6753d18ae9268921660098e9269ce9c62ed67e1cfd42a",
+      "bytes": 1123774,
+      "source": "data/al_2025_state0.csv",
+      "role": "Earlier state-0 release observations; federal/SALT diagnostic baseline only.",
+      "rows": 2310,
+      "columns": 98,
+      "unique_taxsimids": 1155
+    },
+    "pe_intermediates.csv": {
+      "sha256": "468dd25bd5f30345d1f581c28dbe49d4284377f66c3950e61693422f60e90c17",
+      "bytes": 503304,
+      "source": "data/pe_al_intermediates_2025.csv",
+      "role": "PolicyEngine replay with additional Alabama and federal intermediates; separate from committed release observations.",
+      "rows": 1155,
+      "columns": 70,
+      "unique_taxsimids": 1155
+    },
+    "ground_truth_fixtures.yaml": {
+      "sha256": "136463a3f0b6c904a54b06b9a1b51758557d3b2685c11dd8e619598b6574c7ac",
+      "bytes": 21002,
+      "source": "data/ground_truth_fixtures.yaml",
+      "role": "Document/page-labelled official booklet, tax-table, deduction-chart, form and statutory extracts; never engine-derived legal expectations."
+    },
+    "README.md": {
+      "sha256": "0a8f47bc77ee491d8908574e60a5e3f8ab58b4b607ce313207d6d9ea812dbbd6",
+      "bytes": 4215,
+      "role": "Bundle usage, provenance boundaries and source caveats."
+    }
+  },
+  "provenance": {
+    "input_work_directory": "Assembled 2026-09-24 from the Alabama TY2025 adjudication working set (pe-taxsim worktree .diag/al-ty2025, git-excluded); every file is hash-pinned below.",
+    "pe_taxsim_state_correction": {
+      "pull_request": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1204",
+      "commit": "7d75045",
+      "note": "PR revision supplied with the task; distinct from the release provenance emulatorCommit."
+    },
+    "engines": {
+      "policyengine_us_version": "2.6.17",
+      "policyengine_core_version": "3.32.6",
+      "taxsim_binary_sha256": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b"
+    },
+    "flags": {
+      "assume_w2_wages": true,
+      "disable_salt": false,
+      "salt": "native",
+      "policyengine_output_detail": 5
+    },
+    "pe_intermediates": {
+      "kind": "separate_replay",
+      "script_source": "scripts/al_income_tax_2025_pe_intermediates.py",
+      "script_sha256": "056a4e6e8d4e9193c7706733947a6175c17bcfbea5584335d3becc84ddafcdae",
+      "input_sha256": "1bc19cf5328604648286c989e07e2248aa60a5699c31fcdd20c8a95f1a74b2da",
+      "flags": {
+        "assume_w2_wages": true,
+        "disable_salt": false
+      },
+      "release_max_abs_drift_usd": {
+        "al_agi": 4.0,
+        "al_taxable_income": 8.0,
+        "al_income_tax": 0.5
+      },
+      "drift_explanation": "Source design review attributes drift to float32 adapter/serialization rounding; released observations are retained.",
+      "evidence": "Replay reproduces the released PE siitax within $0.05; see drift figures.",
+      "run_with": "the pinned policyengine-taxsim 7d75045 environment (policyengine-us 2.6.17): python scripts/al_income_tax_2025_pe_intermediates.py reference/al-income-tax-2025/households.csv pe_intermediates.csv"
+    },
+    "prototype": {
+      "note": "Frame assembly ported from the reviewed prototype into scripts/generate_al_income_tax_2025.py; the prototype's CSV sha256 is retained for comparison.",
+      "reference_csv_sha256": "b8d2389b40ccb9baf8b1644b3ede9b614f04d318599c2fe4f7e76d5ab37374b3"
+    },
+    "signed_corpus": {
+      "repository": "TheAxiomFoundation/axiom-corpus",
+      "release_tag": "us-rulespec-2026-09-14-wave4-r2-union",
+      "content_sha256": "528f596ac8c9e4b0f99d43489425a1e901b9b0ac84cece411560acd9a62fe30f",
+      "scope": "Contains Alabama TY2025 source documents.",
+      "signature_verification": "Verified 2026-09-24 outside this lane: registry object == R2 object; axiom_encode.corpus_release.verify_release_object at axiom-encode f856cfcb with AXIOM_CORPUS_RELEASE_PUBLIC_KEY KwIYEbbs/905yxn/9Yi6jYTF8oyZcq1FlxiG4e0y0tg= -> 1,042 scopes, 45,880 artifacts; all 333 Alabama income-tax artifacts hash-match. Not re-verified by this lane.",
+      "pinnable": "No: the 22.9 MB release object exceeds axiom-encode MAX_RELEASE_OBJECT_BYTES (16 MiB); see rulespec-us#1404."
+    },
+    "pending_narrow_union": {
+      "status": "draft selector; awaits axiom-corpus #739 and #740, then publish and mirror",
+      "pull_request": "https://github.com/TheAxiomFoundation/axiom-corpus/pull/746",
+      "release": "us-rulespec-2026-09-24-al-ty2025-income-tax-union",
+      "decision": "d270"
+    },
+    "axiom_module": {
+      "path": "us-al/policies/income_tax/2025_resident_liability.yaml",
+      "status_at_bundle_creation": "pending_module",
+      "reason": "Composed Alabama TY2025 module does not exist; encoding is blocked on signing decision d270."
+    }
+  },
+  "releases": {
+    "state1": {
+      "release_tag": "full-ecps-comparison-run-35859275514",
+      "release_url": "https://github.com/PolicyEngine/pe-taxsim/releases/tag/full-ecps-comparison-run-35859275514",
+      "state": 1,
+      "role": "primary_comparison",
+      "provenance_source": "data/releases/full-ecps-comparison-run-35859275514/provenance_2025.json",
+      "provenance_sha256": "f28ac39f94914e1d923693edbacf323b1eb20f3596519974768c8708ac429b9c",
+      "provenance": {
+        "source": "cps_households.csv",
+        "sourceSha256": "ecabc8dd33e8b570fad21650745b9d94f6b51fc9780d9c59bb033ede7d16a689",
+        "year": 2025,
+        "emulatorCommit": "2b69146bfb2e16f83e1c021d72c4258d67872190",
+        "requirementsSha256": "5ed792d03b33330e246da3bfd109c0cc2e57628a691eb68bbdeec0ab7aed1c86",
+        "scriptSha256": "bb60bf51ea908d16ffb90165ced2593c503f56841c6704b7901b608962fff22a",
+        "batchSize": 5000,
+        "limit": 0,
+        "generatedAt": "2026-09-23T13:28:17.106095+00:00",
+        "policyengineUsVersion": "2.6.17",
+        "policyengineCoreVersion": "3.32.6",
+        "spmCalculatorVersion": "1.0.0.post1",
+        "peakWorkerRssMiB": 1701,
+        "assumeW2Wages": true,
+        "disableSalt": false,
+        "policyengineOutputDetail": 5,
+        "taxsimBinarySha256": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
+        "records": 111347,
+        "outputSha256": "8c63f5b8d82127db15d8997e2b1a741587250a5df5c542b9566b7000297a80de"
+      },
+      "full_output_bytes": 105581255,
+      "full_output_sha256_verified_at_bundle_creation": true,
+      "committed_extract": "engine_outputs_state1.csv"
+    },
+    "state0": {
+      "release_tag": "full-ecps-comparison-run-35633580408",
+      "release_url": "https://github.com/PolicyEngine/pe-taxsim/releases/tag/full-ecps-comparison-run-35633580408",
+      "state": 0,
+      "role": "federal_salt_diagnostic",
+      "provenance_source": "data/releases/full-ecps-comparison-run-35633580408/provenance_2025.json",
+      "provenance_sha256": "8bb7852929f8a779d0df2cdd64934624eaaaffd43a41ab4a119e7ccbf5bffd7e",
+      "provenance": {
+        "sourceTag": "full-ecps-comparison-2026.07.07",
+        "sourceSha256": "5d367768529d02e6d49d0c88ce06a4671343cc809de2279abc9678160266a728",
+        "year": 2025,
+        "emulatorCommit": "ab6e7a733289d1404c0a6d0c2f8661e7f0d88810",
+        "requirementsSha256": "5ed792d03b33330e246da3bfd109c0cc2e57628a691eb68bbdeec0ab7aed1c86",
+        "scriptSha256": "fba8b9c2c5e76a688cca05bd22f429790e8d946eb6f92d0c16a502fa87e44f0d",
+        "batchSize": 5000,
+        "limit": 0,
+        "generatedAt": "2026-09-21T18:47:51.713205+00:00",
+        "policyengineUsVersion": "2.6.17",
+        "policyengineCoreVersion": "3.32.6",
+        "spmCalculatorVersion": "1.0.0.post1",
+        "peakWorkerRssMiB": 1705,
+        "assumeW2Wages": true,
+        "disableSalt": false,
+        "policyengineOutputDetail": 5,
+        "taxsimBinarySha256": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
+        "records": 111347,
+        "outputSha256": "5fc14a6d979e2507246cc0bd895d97b32a1d3841ee60ed3c940bbf090f4d612d"
+      },
+      "full_output_bytes": 110847232,
+      "full_output_sha256_verified_at_bundle_creation": true,
+      "committed_extract": "engine_outputs_state0.csv"
+    }
+  }
+}

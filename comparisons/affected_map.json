@@ -22,6 +22,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "al-income-tax-2025-ecps",
+      "name": null,
+      "report": "reports/al-income-tax-2025-three-way.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/al-income-tax-2025-ecps.yaml"
+    },
+    {
       "suite": "al-income-tax-populace",
       "name": null,
       "report": "axiom-policyengine-al-income-tax-populace.json",
