@@ -245,7 +245,7 @@ def test_household_explorer_reads_the_shared_helpers():
 
 # ── Python readers ───────────────────────────────────────────────────────────
 def us_report(uncompared: int):
-    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges import us_populace as us_microcosm
 
     return {
         "compared_values": 1,
@@ -261,7 +261,7 @@ def us_report(uncompared: int):
                 "uncompared_mismatches": uncompared,
             }
         ],
-    }, us_populace
+    }, us_microcosm
 
 
 def load_runner():
@@ -309,10 +309,10 @@ def us_variable_report():
 
 
 def test_us_variable_text_summary_separates_uncompared_pairs(capsys):
-    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges import us_populace as us_microcosm
 
     report = us_variable_report()
-    us_populace.print_report(
+    us_microcosm.print_report(
         report, tolerance=0.01, relative_tolerance=1e-9, max_differences=5
     )
     out = capsys.readouterr().out
@@ -323,14 +323,14 @@ def test_us_variable_text_summary_separates_uncompared_pairs(capsys):
 
 
 def test_fiit_text_summary_separates_uncompared_pairs(capsys):
-    from axiom_oracles.bridges import tax_populace
+    from axiom_oracles.bridges import tax_populace as tax_microcosm
 
-    report = tax_populace.TaxComparisonReport(
+    report = tax_microcosm.TaxComparisonReport(
         compared_tax_units=1,
         compared_persons=1,
         compared_values=1,
         mismatches=[
-            tax_populace.TaxComparisonRow(
+            tax_microcosm.TaxComparisonRow(
                 surface="s", entity_id="tu_1", output="o",
                 axiom=float("nan"), policyengine=0.0, diff=float("nan"),
             )
@@ -345,7 +345,7 @@ def test_fiit_text_summary_separates_uncompared_pairs(capsys):
         projection_notes=[],
         errors=[{"engine": "axiom"}],
     )
-    tax_populace.print_report(report, tolerance=1, relative_tolerance=0)
+    tax_microcosm.print_report(report, tolerance=1, relative_tolerance=0)
     out = capsys.readouterr().out
     assert "Mismatches: 0\n" in out
     assert "Uncompared (engine errors): 1" in out

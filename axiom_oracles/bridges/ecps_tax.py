@@ -3,7 +3,7 @@
 The federal-tax oracle bridge was renamed to ``tax_populace`` because every
 data path it drives resolves the certified **populace-us** artifact (via
 ``population.load_populace_dataset``), never Enhanced CPS — the ``ecps`` name
-was a naming lie left over from the pre-populace era (see
+was a naming lie left over from the pre-Microcosm era (see
 TheAxiomFoundation/axiom-oracles#74).
 
 This module is retained only so external callers that still import
@@ -20,7 +20,7 @@ from __future__ import annotations
 import sys
 import warnings
 
-import axiom_oracles.bridges.tax_populace as _tax_populace
+import axiom_oracles.bridges.tax_populace as _tax_microcosm
 
 warnings.warn(
     "axiom_oracles.bridges.ecps_tax is deprecated; import "
@@ -30,4 +30,4 @@ warnings.warn(
     stacklevel=2,
 )
 
-sys.modules[__name__] = _tax_populace
+sys.modules[__name__] = _tax_microcosm

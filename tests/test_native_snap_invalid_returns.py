@@ -26,7 +26,7 @@ from types import SimpleNamespace
 import pytest
 from hypothesis import example, given, settings, strategies as st
 
-from axiom_oracles.bridges import snap_populace
+from axiom_oracles.bridges import snap_populace as snap_microcosm
 from axiom_oracles.bridges.snap_populace import (
     COMPARED_AXIOM_OUTPUT,
     JURISDICTION_CONFIGS,
@@ -112,13 +112,13 @@ def produce(pairs):
             )
         )
         results.append(axiom_outputs(ax_amount, ax_eligible))
-    return snap_populace.compare(cases, results, 1.5, config=CONFIG)
+    return snap_microcosm.compare(cases, results, 1.5, config=CONFIG)
 
 
 def through_csv(rows) -> list[dict]:
     """Serialize with the producer's CSV writer and read back as the runner does."""
     buffer = io.StringIO()
-    snap_populace.write_csv_handle(buffer, rows)
+    snap_microcosm.write_csv_handle(buffer, rows)
     buffer.seek(0)
     return list(csv.DictReader(buffer))
 
@@ -197,7 +197,7 @@ def test_producer_controls_keep_genuine_zero_and_false(pe_eligible, ax_eligible)
 
 def test_producer_summary_prints_with_invalid_rows(capsys):
     rows = produce([(None, True, 100.0, "holds"), (90.0, True, 100.0, "holds")])
-    snap_populace.print_summary(rows, 1.5, 5)
+    snap_microcosm.print_summary(rows, 1.5, 5)
     out = capsys.readouterr().out
     assert "Uncompared rows (invalid returns): 1" in out
     assert "Max absolute difference: $10.00" in out
@@ -419,13 +419,13 @@ def load_stub(
         SimpleNamespace(Microsimulation=lambda **_kwargs: sim),
     )
     monkeypatch.setattr(
-        snap_populace, "load_populace_dataset", lambda *_a, **_k: object()
+        snap_microcosm, "load_populace_dataset", lambda *_a, **_k: object()
     )
-    monkeypatch.setattr(snap_populace, "legalize_inputs", lambda inputs, _index: inputs)
-    return snap_populace.load_policyengine_cases(
+    monkeypatch.setattr(snap_microcosm, "legalize_inputs", lambda inputs, _index: inputs)
+    return snap_microcosm.load_policyengine_cases(
         config=config,
         base_inputs={},
-        period=snap_populace.month_period(2026, 1),
+        period=snap_microcosm.month_period(2026, 1),
         state=state,
         sample_size=None,
         positive_snap_only=positive_snap_only,
@@ -436,7 +436,7 @@ def load_stub(
 
 @pytest.mark.parametrize("invalid", INVALID)
 @pytest.mark.parametrize(
-    "variable", sorted(snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES)
+    "variable", sorted(snap_microcosm.POLICYENGINE_INPUT_SUPPORT_VARIABLES)
 )
 def test_loader_rejects_invalid_support_values_before_projection(
     monkeypatch, invalid, variable
@@ -797,7 +797,7 @@ def test_every_support_variable_read_for_inputs_is_validated():
     assert problems == []
     assert {"water_expense", "is_snap_eligible", "snap_assets"} <= reads
     unlisted = (
-        reads - _EXEMPT_READS - snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES
+        reads - _EXEMPT_READS - snap_microcosm.POLICYENGINE_INPUT_SUPPORT_VARIABLES
     )
     assert not unlisted, unlisted
 
@@ -1009,7 +1009,7 @@ _UNLISTED_READS = {
 def _guard_rejects(source: str) -> bool:
     reads, problems = _support_reads(source)
     unlisted = (
-        reads - _EXEMPT_READS - snap_populace.POLICYENGINE_INPUT_SUPPORT_VARIABLES
+        reads - _EXEMPT_READS - snap_microcosm.POLICYENGINE_INPUT_SUPPORT_VARIABLES
     )
     return bool(problems or unlisted)
 
@@ -1035,7 +1035,7 @@ def test_drift_guard_exemptions_are_keyed_to_their_exact_statements():
 
 # ── generic US variable comparison (us_populace) ─────────────────────────────
 def us_compare(pe_value, axiom_value):
-    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges import us_populace as us_microcosm
     from axiom_oracles.bridges.registry import PolicyEngineMapping
 
     mapping = PolicyEngineMapping(
@@ -1045,7 +1045,7 @@ def us_compare(pe_value, axiom_value):
         policyengine_variable="ca_capi",
     )
     cases = [
-        us_populace.USVariableCase(
+        us_microcosm.USVariableCase(
             variable="ca_capi",
             person_id=person,
             spm_unit_id=person,
@@ -1059,7 +1059,7 @@ def us_compare(pe_value, axiom_value):
         {"outputs": {mapping.legal_id: {"value": {"value": value}}}}
         for value in (600.0, axiom_value)
     ]
-    return us_populace.compare_outputs(
+    return us_microcosm.compare_outputs(
         variables=("ca_capi",),
         cases_by_variable={"ca_capi": cases},
         mappings_by_variable={"ca_capi": (mapping,)},
@@ -1207,7 +1207,7 @@ def produce_case(case):
             PE_COMPARED_OUTPUT: case.pe_outputs[PE_COMPARED_OUTPUT],
         },
     )
-    [row] = snap_populace.compare([case], [axiom_outputs()], 1.5, config=CONFIG)
+    [row] = snap_microcosm.compare([case], [axiom_outputs()], 1.5, config=CONFIG)
     return row
 
 
@@ -1250,7 +1250,7 @@ def test_person_support_check_refuses_misaligned_person_arrays(monkeypatch):
 def test_us_variable_missing_axiom_return_is_an_uncompared_error(path, pe_value):
     # A missing Axiom row or output is an invalid return: an engine error and
     # an uncompared diagnostic mismatch, with no 0.0 stand-in on either side.
-    from axiom_oracles.bridges import us_populace
+    from axiom_oracles.bridges import us_populace as us_microcosm
     from axiom_oracles.bridges.registry import PolicyEngineMapping
 
     mapping = PolicyEngineMapping(
@@ -1260,7 +1260,7 @@ def test_us_variable_missing_axiom_return_is_an_uncompared_error(path, pe_value)
         policyengine_variable="ca_capi",
     )
     cases = [
-        us_populace.USVariableCase(
+        us_microcosm.USVariableCase(
             variable="ca_capi",
             person_id=person,
             spm_unit_id=person,
@@ -1273,7 +1273,7 @@ def test_us_variable_missing_axiom_return_is_an_uncompared_error(path, pe_value)
     outputs = [{"outputs": {mapping.legal_id: {"value": {"value": 600.0}}}}]
     if path == "missing_axiom_output":
         outputs.append({"outputs": {}})
-    raw = us_populace.compare_outputs(
+    raw = us_microcosm.compare_outputs(
         variables=("ca_capi",),
         cases_by_variable={"ca_capi": cases},
         mappings_by_variable={"ca_capi": (mapping,)},
@@ -1361,7 +1361,7 @@ def test_unparseable_axiom_decimal_is_an_axiom_error_not_a_crash(garbage):
     [("us-ny", "BUA"), ("us-ny", "TUA"), ("us-az", "TUA")],
 )
 def test_bua_tua_project_only_where_a_branch_names_them(jurisdiction, utility_type):
-    projected = snap_populace.project_utility_allowance_type(
+    projected = snap_microcosm.project_utility_allowance_type(
         JURISDICTION_CONFIGS[jurisdiction], utility_type, "NY_NAS"
     )
     assert any(value is True for value in projected.values())
@@ -1379,7 +1379,7 @@ def test_bua_tua_project_only_where_a_branch_names_them(jurisdiction, utility_ty
 )
 def test_bua_tua_are_refused_where_no_branch_names_them(jurisdiction, utility_type):
     with pytest.raises(ValueError, match="snap_utility_allowance_type"):
-        snap_populace.project_utility_allowance_type(
+        snap_microcosm.project_utility_allowance_type(
             JURISDICTION_CONFIGS[jurisdiction], utility_type, ""
         )
 

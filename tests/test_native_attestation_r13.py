@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from hypothesis import example, given, settings, strategies as st
 
-from axiom_oracles.bridges import efrs_uk, tax_populace
+from axiom_oracles.bridges import efrs_uk, tax_populace as tax_microcosm
 from axiom_oracles.conformance.attestation import attest
 from axiom_oracles.conformance.loader import Universe, parse
 from axiom_oracles.conformance.scoreboard import score_jurisdiction
@@ -56,12 +56,12 @@ class _Frame:
 
 
 def _fiit_raw(flags=None, *, stopped_returns=True, amount=0):
-    spec = next(iter(tax_populace.SURFACE_OUTPUTS["employee-medicare"].values()))
+    spec = next(iter(tax_microcosm.SURFACE_OUTPUTS["employee-medicare"].values()))
     outputs = {spec["axiom"]: {"kind": "quantity", "value": {"value": amount}}}
     results = [{"outputs": outputs}]
     if flags is not None:
         results.append({"outputs": outputs if stopped_returns else {}, **flags})
-    return tax_populace.compare_outputs(
+    return tax_microcosm.compare_outputs(
         pe_data={
             "tax_units": _Frame([{}]),
             "persons": _Frame([{spec["pe"]: amount} for _ in results]),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Audit all tax units in the pinned US Populace state-tax campaign."""
+"""Audit all tax units in the pinned US Microcosm state-tax campaign."""
 
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.populace_year != contract.populace_year:
         raise SystemExit(
-            f"campaign Populace year is {contract.populace_year}, "
+            f"campaign Microcosm year is {contract.populace_year}, "
             f"got {args.populace_year}"
         )
     identity: dict = {}

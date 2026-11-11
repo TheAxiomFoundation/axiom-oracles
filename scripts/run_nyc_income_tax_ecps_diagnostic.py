@@ -8,11 +8,11 @@ upstream tax-unit projections for New York taxable income and supplied NYC
 credits that are not yet independently recomposed from raw ECPS facts.
 
 This diagnostic deliberately loads the NYC per-city Enhanced-CPS file
-(``NYC_ECPS_DATASET`` below) rather than the certified populace-us artifact
-every other US suite reads: populace-us has no place geography yet, so a
-national populace artifact cannot be filtered to NYC. It is the sanctioned last
-Enhanced-CPS load in this repo and retires only when the populace spine grows
-place grain — TheAxiomFoundation/axiom-oracles#74 (and PolicyEngine/populace#204).
+(``NYC_ECPS_DATASET`` below) rather than the certified Microcosm US artifact
+every other US suite reads: Microcosm US has no place geography yet, so a
+national Microcosm artifact cannot be filtered to NYC. It is the sanctioned last
+Enhanced-CPS load in this repo and retires only when the Microcosm spine grows
+place grain — TheAxiomFoundation/axiom-oracles#74 (and PolicyEngine/microcosm#204).
 The ``ecps`` naming here is therefore accurate, not a leftover lie.
 """
 

@@ -770,7 +770,7 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
     ]
     header = f"""\
 # Dispositions for fiit-ecps (Axiom RuleSpec vs PolicyEngine-US 1.729.0 over
-# the pinned Populace artifact populace-us-2024-f0af251), refreshed from the
+# the pinned Microcosm artifact populace-us-2024-f0af251), refreshed from the
 # 2026-10-14 run: rulespec-us 172bf04e, axiom-rules-engine v0.1.2 98af0dce,
 # axiom-oracles with #632. {evidence['run']['mismatch_count']:,} mismatch rows; every one is
 # in exactly one entry below, listed by output (case_ids_by_output), and each

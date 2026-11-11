@@ -335,7 +335,7 @@ def test_case_artifact_check_fails_closed_on_incomplete_canonical_list(tmp_path)
 
 def test_served_delta_parity_accepts_either_faithful_convention():
     """PR #475 CI: two served-delta sign conventions coexist on main — this
-    emitter writes right-minus-left (dashboard_delta) while the populace
+    emitter writes right-minus-left (dashboard_delta) while Microcosm
     campaign artifacts (AL/MA/NC/SC/TN SNAP) serve the report's stored
     left-minus-right `difference`. The parity check must accept either
     (both are faithful projections of the same (l, x)) and reject anything

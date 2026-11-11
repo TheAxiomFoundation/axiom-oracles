@@ -3,7 +3,7 @@
 The SNAP oracle bridge was renamed to ``snap_populace`` because every data
 path it drives resolves the certified **populace-us** artifact (via
 ``population.load_populace_dataset``), never Enhanced CPS — the ``ecps`` name
-was a naming lie left over from the pre-populace era (see
+was a naming lie left over from the pre-Microcosm era (see
 TheAxiomFoundation/axiom-oracles#74).
 
 This module is retained only so external callers that still import
@@ -20,7 +20,7 @@ from __future__ import annotations
 import sys
 import warnings
 
-import axiom_oracles.bridges.snap_populace as _snap_populace
+import axiom_oracles.bridges.snap_populace as _snap_microcosm
 
 warnings.warn(
     "axiom_oracles.bridges.ecps_snap is deprecated; import "
@@ -30,4 +30,4 @@ warnings.warn(
     stacklevel=2,
 )
 
-sys.modules[__name__] = _snap_populace
+sys.modules[__name__] = _snap_microcosm

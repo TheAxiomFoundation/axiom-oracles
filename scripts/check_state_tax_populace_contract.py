@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Fail closed when the all-state Populace projection contract drifts."""
+"""Fail closed when the all-state Microcosm projection contract drifts."""
 
 from __future__ import annotations
 
@@ -38,14 +38,14 @@ def main(argv: list[str] | None = None) -> int:
         _validate_generator_registry(contract)
         summary = readiness_summary(contract)
     except (OSError, StateTaxPopulaceContractError) as exc:
-        print(f"state-tax-populace contract invalid: {exc}", file=sys.stderr)
+        print(f"state-tax-microcosm contract invalid: {exc}", file=sys.stderr)
         return 1
 
     if args.json:
         print(json.dumps(summary, indent=2, sort_keys=True))
     else:
         print(
-            "state-tax-populace contract OK: "
+            "state-tax-microcosm contract OK: "
             f"{summary['jurisdiction_count']} jurisdictions, "
             f"{summary['ready_count']} ready, "
             f"{summary['blocked_count']} blocked, "
@@ -73,28 +73,28 @@ def _validate_generator_registry(contract) -> None:
 
     errors: list[str] = []
     states = tuple(item.state for item in contract.jurisdictions)
-    registry_states = getattr(generator, "_POPULACE_STATES", generator._STATES)
+    registry_states = getattr(generator, "_MICROCOSM_STATES", generator._STATES)
     if set(states) != set(registry_states):
-        errors.append("jurisdiction set differs from generator Populace states")
+        errors.append("jurisdiction set differs from generator Microcosm states")
     if contract.validation_year != generator.VALIDATION_YEAR:
         errors.append("validation year differs from generator VALIDATION_YEAR")
     for item in contract.jurisdictions:
         state = item.state
         generated = (
             generator._TAXSIM_STATE.get(state),
-            getattr(generator, "_POPULACE_MODULE", {}).get(
+            getattr(generator, "_MICROCOSM_MODULE", {}).get(
                 state, generator._MODULE.get(state)
             ),
-            getattr(generator, "_POPULACE_OUTPUT", {}).get(
+            getattr(generator, "_MICROCOSM_OUTPUT", {}).get(
                 state, generator._LIABILITY_OUTPUT.get(state)
             ),
-            getattr(generator, "_POPULACE_PE_VAR", {}).get(
+            getattr(generator, "_MICROCOSM_PE_VAR", {}).get(
                 state, generator._PE_VAR.get(state)
             ),
-            getattr(generator, "_POPULACE_TOL", {}).get(
+            getattr(generator, "_MICROCOSM_TOL", {}).get(
                 state, generator._TOL.get(state)
             ),
-            getattr(generator, "_POPULACE_AGGREGATION", {}).get(
+            getattr(generator, "_MICROCOSM_AGGREGATION", {}).get(
                 state, "tax_unit"
             ),
         )

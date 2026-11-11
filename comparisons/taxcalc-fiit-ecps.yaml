@@ -1,8 +1,8 @@
 # Federal individual income tax — PSL Tax-Calculator vs PolicyEngine, pinned
-# Populace.
+# Microcosm.
 #
 # A third US tax engine (Tax-Calculator) validated against the certified
-# PolicyEngine oracle over the standing Populace US population, so the Axiom
+# PolicyEngine oracle over the standing Microcosm US population, so the Axiom
 # federal-tax encoding is triangulated against two independent engines rather
 # than one. Neither side is Axiom — this lane is oracle-vs-oracle, so it
 # exercises no rulespec repo and needs no engine binary; it establishes the
@@ -18,7 +18,7 @@ description: >-
   Compares every federal income tax surface (AGI, standard deduction, taxable
   income, tax before credits, EITC, CTC, AMT, liability) PSL Tax-Calculator
   computes against PolicyEngine, over a deterministic slice of the certified
-  Populace US validation population.
+  Microcosm US validation population.
 
 runner:
   type: axiom-oracles-compare

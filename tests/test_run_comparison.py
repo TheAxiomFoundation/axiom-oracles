@@ -104,7 +104,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
             "year": 2026,
             "python": "3.13",
             "surface": "all",
-            # No data_folder: Populace loads from the pinned HF cache, so the
+            # No data_folder: Microcosm loads from the pinned HF cache, so the
             # live fiit-ecps.yaml omits the key. Assert --data-folder is then
             # not passed (and note passing a missing dir would SystemExit).
             "pinned": True,
@@ -113,7 +113,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     run_comparison._run_axiom_encode_tax_ecps_compare(runner_config, output)
 
     cmd = next(command for command in calls if command[0] == "uv")
-    # The encoder renamed the subcommand in its ECPS→Populace rename; no
+    # The encoder renamed the former ECPS subcommand; no
     # `tax-ecps-compare` alias survives on axiom-encode main (#296).
     assert "tax-populace-compare" in cmd
     assert "tax-ecps-compare" not in cmd
@@ -124,7 +124,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
     assert "policyengine==4.11.0" in cmd
-    # 1.729.0 is the version the certified pinned Populace artifact was built
+    # 1.729.0 is the version the certified pinned Microcosm artifact was built
     # with and clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723);
     # the old 1.705.16 pin was below the floor and failed hard.
     assert pinned_artifacts.requirement("policyengine-us==1.729.0") in cmd

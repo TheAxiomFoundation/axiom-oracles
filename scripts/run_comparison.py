@@ -1597,7 +1597,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         except Exception:  # provenance must annotate, never fail a run
             pass
 
-    # Dataset identity — reuse the pinned-populace identity (#80/#952) when the
+    # Dataset identity — reuse the pinned-Microcosm identity (#80/#952) when the
     # report carries one.
     dataset = None
     try:
@@ -1609,7 +1609,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             # The taxsim-csv loader's identity is the whole provenance: the
             # file's full sha256, size, rows, year override, per-state row
             # counts, and origin — dataset_provenance_from_identity keeps only
-            # the populace-shaped fields.
+            # the Microcosm-shaped fields.
             dataset = _taxsim_csv_dataset_provenance(identity)
         else:
             dataset = dataset_provenance_from_identity(identity)
@@ -1961,7 +1961,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     """`axiom-encode tax-populace-compare` via uv run with the pinned PE stack.
 
     The encoder renamed the subcommand from tax-ecps-compare in its
-    ECPS→Populace rename (no alias survives on axiom-encode main); the runner
+    ECPS→Microcosm rename (no alias survives on axiom-encode main); the runner
     type keeps the old name so existing suite YAMLs stay valid.
     """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
@@ -1976,7 +1976,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     runner["_cloned_rulespec_us_sha_toplevel"] = _git_toplevel(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
-    # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
+    # PolicyEngine-US 1.729.0 is the model version the certified pinned Microcosm
     # artifact was built with (axiom-encode population.py::POPULACE_PINS, built_with
     # "1.729.0"), and it clears the tax harness's floor (ecps_tax.py
     # MIN_POLICYENGINE_US_VERSION = "1.723"). The previously pinned 1.705.16 is
@@ -1985,10 +1985,10 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # by the other runners) with an explicit newer -us is why the runner passes
     # --allow-policyengine-us-version to the harness.
     # Oracle PE stack. The pinned versions default to the model version the
-    # certified Populace artifact was built with (1.729.0), but a comparison can
+    # certified Microcosm artifact was built with (1.729.0), but a comparison can
     # override them to validate against a newer certified oracle (the us-pe
     # universe pins policyengine-us 1.767.3). The harness still runs against the
-    # pinned Populace inputs (--allow-policyengine-us-version bypasses the
+    # pinned Microcosm inputs (--allow-policyengine-us-version bypasses the
     # build_with gate), so only the PE computation vintage moves.
     pe_meta = params.get("policyengine_version", "4.11.0")
     pe_us = params.get("policyengine_us_version", "1.729.0")
@@ -2085,7 +2085,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     """`axiom-encode uk-populace-compare` via uv run with the pinned PE UK stack.
 
     The encoder renamed the subcommand from ``uk-efrs-compare`` in its
-    ECPS→Populace rename (axiom-encode #1108 hard cut; no alias survives on
+    ECPS→Microcosm rename (axiom-encode #1108 hard cut; no alias survives on
     axiom-encode main). The runner type keeps the old name so existing suite
     YAMLs stay valid — same convention as ``axiom-encode-tax-ecps-compare``.
     The implementation behind the subcommand is this repo's own
@@ -2380,7 +2380,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     """`axiom-encode snap-populace-compare`, adapted from CSV to v2 JSON.
 
     The encoder renamed the subcommand from snap-ecps-compare in its
-    ECPS→Populace rename; the runner type keeps the old name so existing
+    ECPS→Microcosm rename; the runner type keeps the old name so existing
     suite YAMLs stay valid.
     """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
@@ -2586,7 +2586,7 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
 # Every oracle pin (1.700.0 through 1.784.4) declares ``spm-calculator>=0.2.0``
 # but imports ``spm_calculator.geoadj``, which spm-calculator 1.0.0
 # (2026-09-11) removed. Unpinned, ``uv run --with`` resolves 1.0.x,
-# PolicyEngine-US fails to import, and the populace loader reports "Install the
+# PolicyEngine-US fails to import, and the Microcosm loader reports "Install the
 # US PolicyEngine extra". Pin the version uv.lock resolves; tests keep this,
 # the ``policyengine`` extra and scripts/debug_policyengine_env.py in step.
 _PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
@@ -2886,7 +2886,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         cmd.extend(["--jurisdiction-fips", str(params["jurisdiction_fips"])])
     if params.get("ecps_dataset"):
         # Population dataset override (path or hf:// URL) — e.g. the certified
-        # populace-us artifact instead of the enhanced CPS.
+        # Microcosm US artifact instead of the enhanced CPS.
         cmd.extend(["--ecps-dataset", str(params["ecps_dataset"])])
     env = dict(os.environ)
     roots_env = params.get("axiom_rulespec_repo_roots")
@@ -4980,7 +4980,7 @@ def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | 
     # The bridge and its snap_populace dependency may lack optional deps or still
     # be mid-build; a failed import means "skip", never a hard error.
     try:
-        from axiom_oracles.bridges import snap_populace
+        from axiom_oracles.bridges import snap_populace as snap_microcosm
         from axiom_oracles.bridges.snap_qc_compare import (  # noqa: F401
             run_snap_qc_comparison,
         )
@@ -5002,12 +5002,12 @@ def _snap_qc_skip_reason(runner: dict, params: dict, fiscal_year: int) -> str | 
     # helpers the bridge uses so this precondition matches what the bridge would
     # attempt. Resolution must degrade, never crash the runner.
     try:
-        workspace_root = snap_populace.resolve_workspace_root(
+        workspace_root = snap_microcosm.resolve_workspace_root(
             _snap_qc_optional_path(
                 runner.get("workspace_root") or params.get("workspace_root")
             )
         )
-        axiom_binary = snap_populace.resolve_axiom_binary(
+        axiom_binary = snap_microcosm.resolve_axiom_binary(
             workspace_root,
             _snap_qc_optional_path(
                 runner.get("axiom_binary")
@@ -6056,7 +6056,7 @@ def _normalize_dataset_identity(raw: dict) -> dict | None:
 
     `axiom-encode tax-populace-compare --json` emits a top-level
     `dataset_identity` object (added in axiom-encode#952) describing exactly
-    which Populace artifact the PolicyEngine oracle ran against — the pinned
+    which Microcosm artifact the PolicyEngine oracle ran against — the pinned
     revision, the sha256 (first 12 hex), the PolicyEngine model version it was
     built with, and how it resolved (`pinned` / `local-override` / `unpinned`).
     Older harness output (pre-#952) omits the key; a run that fell through an
@@ -6096,7 +6096,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     The encode `dataset_identity` block (axiom-encode#952) is threaded onto the
     report top-level and into each case's metadata so a checked-in FIIT report
-    is self-documenting about which pinned Populace artifact produced it. It is
+    is self-documenting about which pinned Microcosm artifact produced it. It is
     carried at top-level (not only in cases) so it survives dashboard case-row
     slimming, which can drop every case on a clean run.
     """
@@ -6368,7 +6368,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         outputs_complete=outputs_complete,
     )
     # Thread encode's dataset identity onto the report top-level so the
-    # checked-in FIIT report records which pinned Populace artifact produced
+    # checked-in FIIT report records which pinned Microcosm artifact produced
     # it — and so it survives even when `cases` is slimmed to empty on a run
     # with no mismatches (`_slim_report_for_dashboard`).
     if identity is not None:

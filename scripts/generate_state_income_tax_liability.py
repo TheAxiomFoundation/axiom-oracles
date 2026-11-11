@@ -236,15 +236,15 @@ _PE_VAR = {
     # TABOR sales-tax refund); each is decomposed exactly in dispositions.
     "CO": "co_income_tax_before_non_refundable_credits",
 }
-# The Populace registry covers every declared campaign jurisdiction, including
+# The Microcosm registry covers every declared campaign jurisdiction, including
 # narrow surfaces that are intentionally not valid legacy six-case grids.
-_POPULACE_STATES = tuple(_TAXSIM_STATE)
+_MICROCOSM_STATES = tuple(_TAXSIM_STATE)
 
 # Arkansas's reviewed 2026 RuleSpec exposes only a Person-grain schedule
 # component and boundary fixtures. It has no broad liability output or six
 # standard grid fixtures, so retaining it here would silently reuse a deleted
 # concept. Keep the reason explicit and independently testable while the
-# Populace campaign validates the narrow component truthfully.
+# Microcosm campaign validates the narrow component truthfully.
 _GRID_EXCLUDED_STATES = {
     "AL": (
         "canonical RuleSpec exposes only the section 40-18-5 schedule on "
@@ -324,10 +324,10 @@ _LIABILITY_OUTPUT["NY"] = (
     f"{_MODULE['NY']}#ny_pit_pilot_main_income_tax"
 )
 
-# The Populace campaign may validate a narrower source-faithful surface than
+# The Microcosm campaign may validate a narrower source-faithful surface than
 # the legacy six-case grid. Keep these explicit so the grid's historical broad
 # concept and artifacts do not get relabeled.
-_POPULACE_MODULE = {
+_MICROCOSM_MODULE = {
     "CA": _MODULE["CA"],
     "DC": (
         "us-dc:policies/income_tax/"
@@ -337,32 +337,32 @@ _POPULACE_MODULE = {
     "MN": _MODULE["MN"],
     "NC": "us-nc:policies/income_tax/resident_core_liability_pipeline",
 }
-_POPULACE_OUTPUT = {
+_MICROCOSM_OUTPUT = {
     "AR": (
         f"{_MODULE['AR']}#"
         "ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     ),
     "CA": (
-        f"{_POPULACE_MODULE['CA']}#"
+        f"{_MICROCOSM_MODULE['CA']}#"
         "ca_pit_pilot_behavioral_health_services_tax"
     ),
     "CT": _LIABILITY_OUTPUT["CT"],
     "DC": (
-        f"{_POPULACE_MODULE['DC']}#"
+        f"{_MICROCOSM_MODULE['DC']}#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     ),
     "DE": _LIABILITY_OUTPUT["DE"],
     "KS": (
-        f"{_POPULACE_MODULE['KS']}#"
+        f"{_MICROCOSM_MODULE['KS']}#"
         "ks_pit_2026_k40es_schedule_before_credits"
     ),
     "MS": _LIABILITY_OUTPUT["MS"],
-    "MN": f"{_POPULACE_MODULE['MN']}#mn_pit_pilot_schedule_tax",
-    "NC": f"{_POPULACE_MODULE['NC']}#nc_pit_2026_income_tax_before_credits",
+    "MN": f"{_MICROCOSM_MODULE['MN']}#mn_pit_pilot_schedule_tax",
+    "NC": f"{_MICROCOSM_MODULE['NC']}#nc_pit_2026_income_tax_before_credits",
     "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
 }
-_POPULACE_PE_VAR = {
+_MICROCOSM_PE_VAR = {
     "AR": "ar_income_tax_before_non_refundable_credits_indiv",
     "CA": "ca_mental_health_services_tax",
     "CT": "ct_resident_ordinary_tax_before_personal_credit_derived",
@@ -374,7 +374,7 @@ _POPULACE_PE_VAR = {
     "OH": "oh_nonbusiness_income_tax_before_non_refundable_credits_derived",
     "UT": "ut_resident_income_tax_before_credits_derived",
 }
-_POPULACE_AGGREGATION = {
+_MICROCOSM_AGGREGATION = {
     "AR": "person_sum_to_tax_unit",
     "DE": "person_sum_to_tax_unit",
     "MS": "person_sum_to_tax_unit",
@@ -1065,7 +1065,7 @@ _TOL = {
     "NY": (2.25, 0.0000001),
     "IL": (5.0, 0.02),
     "MA": (1.0, 0.0),
-    # Ohio's legacy grid retains a $1 band; the full-Populace registry below
+    # Ohio's legacy grid retains a $1 band; the full-Microcosm registry below
     # applies the tighter reviewed absolute-or-relative tolerance.
     "OH": (1.0, 0.0),
     # Virginia matches PolicyEngine exactly (fixed statutory brackets, no
@@ -1140,11 +1140,11 @@ _TOL = {
     "CO": (1.0, 0.0),
 }
 
-# Full-Populace contracts may use tighter reviewed tolerances than the legacy
+# Full-Microcosm contracts may use tighter reviewed tolerances than the legacy
 # mixed PolicyEngine/TAXSIM case grids. The grid tolerances above retain room
 # for TAXSIM law-vintage differences; these overrides apply only to the pinned
-# Populace registry check.
-_POPULACE_TOL = {
+# Microcosm registry check.
+_MICROCOSM_TOL = {
     "AL": (0.01, 0.0000001),
     "AR": (0.01, 0.0000001),
     "AZ": (0.01, 0.0000001),
@@ -1407,7 +1407,7 @@ def main(argv: list[str] | None = None) -> int:
     axiom.update(_utah_axiom_liabilities(cases, utah_values))
     # States whose reviewed RuleSpec has migrated its companion tests from the
     # six-case wage grid to boundary fixtures can no longer seed the Axiom
-    # side of this report from fixtures. Skip them LOUDLY — the Populace
+    # side of this report from fixtures. Skip them LOUDLY — the Microcosm
     # campaign (scripts/run_state_tax_populace.py) is their validation path —
     # instead of aborting the whole run, which used to silently freeze every
     # state's committed grid data.
@@ -1424,7 +1424,7 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"{state}: SKIPPED — fixtures no longer carry the six-case "
                 f"grid ({len(missing)} of 6 cases missing); validated by the "
-                "Populace campaign instead"
+                "Microcosm campaign instead"
             )
         else:
             runnable.append(state)

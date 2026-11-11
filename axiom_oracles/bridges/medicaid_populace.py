@@ -1,6 +1,6 @@
-"""Compare Medicaid RuleSpec eligibility against PolicyEngine over Populace.
+"""Compare Medicaid RuleSpec eligibility against PolicyEngine over Microcosm.
 
-This command runs the real Axiom rules engine over Populace-derived person
+This command runs the real Axiom rules engine over Microcosm-derived person
 records.  Its initial projection maps PolicyEngine's Medicaid component
 predicates into the corresponding RuleSpec source inputs so residual
 differences identify surface-composition gaps, not missing microdata plumbing.
@@ -162,14 +162,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--sample-size",
         type=int,
         default=None,
-        help="Limit after filtering. Omit to run all matching Populace people.",
+        help="Limit after filtering. Omit to run all matching Microcosm people.",
     )
     parser.add_argument(
         "--pre-sample-households",
         type=int,
         default=None,
         help=(
-            "Subset the local Populace household sample before constructing "
+            "Subset the local Microcosm household sample before constructing "
             "PolicyEngine. This preserves whole households and avoids building "
             "the full Medicaid graph for smoke tests."
         ),
@@ -202,7 +202,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--populace-year",
         type=int,
         default=DEFAULT_US_POPULACE_YEAR,
-        help="Published US Populace dataset year to load.",
+        help="Published US Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--program",
@@ -386,9 +386,9 @@ def pre_sample_households(
     person = dataset.person
     household = dataset.household
     if "household_id" not in household:
-        raise SystemExit("Populace household table is missing household_id.")
+        raise SystemExit("Microcosm household table is missing household_id.")
     if "person_household_id" not in person:
-        raise SystemExit("Populace person table is missing person_household_id.")
+        raise SystemExit("Microcosm person table is missing person_household_id.")
 
     candidate_households = household[_household_state_mask(household, state_filter)]
     selected_household_ids = set(
@@ -406,7 +406,7 @@ def pre_sample_households(
     )
     if sampled_person.empty:
         raise SystemExit(
-            "Pre-sampling selected no Populace people. Check --state and "
+            "Pre-sampling selected no Microcosm people. Check --state and "
             "--pre-sample-households."
         )
 
@@ -743,7 +743,7 @@ def load_policyengine_cases(
     except Exception as exc:  # pragma: no cover - depends on optional deps
         raise SystemExit(_policyengine_import_error_message(exc)) from exc
 
-    print(f"Loading PolicyEngine Populace US {populace_year} dataset...", flush=True)
+    print(f"Loading PolicyEngine Microcosm US {populace_year} dataset...", flush=True)
     dataset = load_populace_dataset(
         "us",
         year=populace_year,
@@ -779,7 +779,7 @@ def load_policyengine_cases(
     if sample_size is not None:
         indices = indices[:sample_size]
 
-    print(f"Projecting {len(indices):,} Populace people...", flush=True)
+    print(f"Projecting {len(indices):,} Microcosm people...", flush=True)
     values = {
         "age": calculate(sim, "age", year),
         "medicaid_income_level": calculate(sim, "medicaid_income_level", year),
@@ -1177,7 +1177,7 @@ def main(args: argparse.Namespace | None = None) -> None:
     if identity_line:
         print(identity_line, flush=True)
     env = axiom_rules_env(program, workspace_root)
-    with tempfile.TemporaryDirectory(prefix="medicaid-pe-populace-") as tmp_dir:
+    with tempfile.TemporaryDirectory(prefix="medicaid-pe-microcosm-") as tmp_dir:
         artifact = Path(tmp_dir) / "program.bin"
         print(f"Compiling {program}...", flush=True)
         compile_program(binary, program, artifact, env=env)
@@ -1243,7 +1243,7 @@ def main(args: argparse.Namespace | None = None) -> None:
             f"Match rate {match_rate:.1%} is below required {args.min_match_rate:.1%}"
         )
     if args.fail_on_mismatch and mismatches:
-        raise SystemExit(f"{mismatches} Medicaid Populace rows mismatched")
+        raise SystemExit(f"{mismatches} Medicaid Microcosm rows mismatched")
 
 
 if __name__ == "__main__":

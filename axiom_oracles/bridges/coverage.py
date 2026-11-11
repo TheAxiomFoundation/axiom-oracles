@@ -646,13 +646,13 @@ def build_policyengine_program_surface_report(
     active_pending_surfaces = [
         surface for surface in pending_surfaces if surface.lifecycle == "active"
     ]
-    unvalidated_populace_surfaces = [
+    unvalidated_microcosm_surfaces = [
         surface
         for surface in surfaces
-        if _surface_requires_populace_validation(surface)
+        if _surface_requires_microcosm_validation(surface)
         and surface.populace_validation_status != "validated"
     ]
-    populace_validation_counts = Counter(
+    microcosm_validation_counts = Counter(
         surface.populace_validation_status for surface in surfaces
     )
     actionable_surfaces = sorted(
@@ -684,12 +684,12 @@ def build_policyengine_program_surface_report(
         },
         "pending_surfaces": len(pending_surfaces),
         "active_pending_surfaces": len(active_pending_surfaces),
-        "unvalidated_populace_surfaces": len(unvalidated_populace_surfaces),
-        "populace_validation_counts": dict(sorted(populace_validation_counts.items())),
+        "unvalidated_populace_surfaces": len(unvalidated_microcosm_surfaces),
+        "populace_validation_counts": dict(sorted(microcosm_validation_counts.items())),
         "unvalidated_populace_items": [
             surface.as_dict()
             for surface in sorted(
-                unvalidated_populace_surfaces,
+                unvalidated_microcosm_surfaces,
                 key=lambda surface: (
                     -(surface.policybench_household_weight or 0.0),
                     _candidate_priority_rank(surface.priority or ""),
@@ -705,7 +705,7 @@ def build_policyengine_program_surface_report(
     }
 
 
-def _surface_requires_populace_validation(
+def _surface_requires_microcosm_validation(
     surface: PolicyEngineProgramSurfaceItem,
 ) -> bool:
     """Return whether a PE-facing surface needs population-level parity evidence."""
@@ -1126,7 +1126,7 @@ def _candidate_from_coverage_item(
                 "Do not treat this direct PolicyEngine mapping as parity-ready "
                 "yet. Encode or import the unresolved primary-source "
                 "dependencies listed in upstream_completeness_issues, then "
-                "rerun coverage and Populace validation."
+                "rerun coverage and Microcosm validation."
             ),
         )
 
@@ -1438,11 +1438,11 @@ def _load_policyengine_program_surface_manifest(
                 "surfaces P1/P2 and demote historical, inactive, or sunset "
                 "surfaces."
             )
-        _validate_populace_validation(raw_surface, path=path)
+        _validate_microcosm_validation(raw_surface, path=path)
     return payload
 
 
-def _validate_populace_validation(raw_surface: dict[str, Any], *, path: Path) -> None:
+def _validate_microcosm_validation(raw_surface: dict[str, Any], *, path: Path) -> None:
     raw_validation = raw_surface.get("populace_validation")
     if raw_validation is None:
         return
@@ -1455,7 +1455,7 @@ def _validate_populace_validation(raw_surface: dict[str, Any], *, path: Path) ->
     status = str(raw_validation.get("status") or "")
     if status not in POPULACE_VALIDATION_STATUSES:
         raise ValueError(
-            f"Unsupported PolicyEngine surface Populace validation status for "
+            f"Unsupported PolicyEngine surface Microcosm validation status for "
             f"{variable}: {status}"
         )
     if status == "validated":
@@ -1472,14 +1472,14 @@ def _validate_populace_validation(raw_surface: dict[str, Any], *, path: Path) ->
         command = str(raw_validation.get("command") or "")
         if "populace" not in command:
             raise ValueError(
-                f"Validated PolicyEngine surface {variable} must cite a Populace "
+                f"Validated PolicyEngine surface {variable} must cite a Microcosm "
                 f"comparison command: {path}"
             )
     if status in {"blocked", "not_applicable", "pending_validator"}:
         rationale = str(raw_validation.get("rationale") or "").strip()
         if len(rationale) < 20:
             raise ValueError(
-                f"PolicyEngine surface {variable} Populace validation status "
+                f"PolicyEngine surface {variable} Microcosm validation status "
                 f"{status} requires a rationale: {path}"
             )
 
@@ -1517,7 +1517,7 @@ def _program_surface_item_from_payload(
         payload,
         legal_ids=legal_ids,
     )
-    populace_validation = _populace_validation_fields(payload)
+    microcosm_validation = _microcosm_validation_fields(payload)
     return PolicyEngineProgramSurfaceItem(
         country=country,
         program_id=str(payload["program_id"]),
@@ -1542,15 +1542,15 @@ def _program_surface_item_from_payload(
             if policybench_output
             else None
         ),
-        populace_validation_status=populace_validation["status"],
-        populace_validation_command=populace_validation.get("command"),
-        populace_validation_dataset=populace_validation.get("dataset"),
-        populace_validation_last_run=populace_validation.get("last_run"),
-        populace_validation_rationale=populace_validation.get("rationale"),
+        populace_validation_status=microcosm_validation["status"],
+        populace_validation_command=microcosm_validation.get("command"),
+        populace_validation_dataset=microcosm_validation.get("dataset"),
+        populace_validation_last_run=microcosm_validation.get("last_run"),
+        populace_validation_rationale=microcosm_validation.get("rationale"),
     )
 
 
-def _populace_validation_fields(payload: dict[str, Any]) -> dict[str, str | None]:
+def _microcosm_validation_fields(payload: dict[str, Any]) -> dict[str, str | None]:
     raw_validation = payload.get("populace_validation")
     if not isinstance(raw_validation, dict):
         return {"status": "not_configured"}

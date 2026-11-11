@@ -1,6 +1,6 @@
 # axiom_oracles.bridges — shared oracle-bridge layer
 
-The PolicyEngine/Populace oracle bridge, extracted from the encoder
+The PolicyEngine/Microcosm oracle bridge, extracted from the encoder
 (`axiom_encode.oracles.policyengine`) so that axiom-oracles owns one copy and
 other repos consume it as a package instead of duplicating it. This closes the
 June 9 architecture-review P1 item ("~17k LOC oracle bridge embedded in the
@@ -25,8 +25,8 @@ modules — passing them is the copy-fidelity contract.
 
 | Module | Origin (in axiom-encode) | What it does |
 |---|---|---|
-| `population.py` | `oracles/policyengine/population.py` | Pinned Populace artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch |
-| `tax_populace.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Populace). Renamed from `ecps_tax.py` — the data is populace-us, not Enhanced CPS (axiom-oracles#74); `ecps_tax.py` remains as a deprecation-alias shim |
+| `population.py` | `oracles/policyengine/population.py` | Pinned Microcosm artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch |
+| `tax_populace.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Microcosm). Renamed from `ecps_tax.py` — the data is Microcosm US, not Enhanced CPS (axiom-oracles#74); `ecps_tax.py` remains as a deprecation-alias shim |
 | `snap_populace.py` | `oracles/policyengine/ecps_snap.py` | SNAP population comparison harness. Renamed from `ecps_snap.py`; `ecps_snap.py` remains as a deprecation-alias shim |
 | `us_populace.py` | `oracles/policyengine/us_populace.py` | Generic US variable population comparison |
 | `medicaid_populace.py` | `oracles/policyengine/medicaid_populace.py` | Medicaid/MAGI population comparison |
@@ -58,7 +58,7 @@ lazy):
   mirror the encoder originals name-for-name; the encoder re-exports them as
   shims, so a symbol rename here is a breaking change for both repos.
 - `tax_populace` and `snap_populace` were renamed from `ecps_tax` / `ecps_snap`
-  (axiom-oracles#74 — every data path resolves the certified populace-us
+  (axiom-oracles#74 — every data path resolves the certified Microcosm US
   artifact, never Enhanced CPS). The old module paths remain as deprecation
   shims that re-export the renamed modules (and swap themselves into
   `sys.modules`, so encode's own `ecps_tax` / `ecps_snap` shims keep working);
@@ -84,7 +84,7 @@ implementation detail shared with the encoder copy, not API.
 
 ## Follow-ups (deliberately out of scope here)
 
-- Point the `scripts/run_comparison.py` populace/EFRS lanes at this package
+- Point the `scripts/run_comparison.py` Microcosm/EFRS lanes at this package
   in-process instead of shelling out to `axiom-encode`.
 - Migrate encoder-internal callers (`cli.py`, `validator_pipeline.py`) to
   import `axiom_oracles.bridges` directly, then delete the encoder shims.

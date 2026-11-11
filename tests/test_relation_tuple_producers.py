@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 
 from axiom_oracles.adapters.axiom import generic_inputs, runner, snap_co_projection
-from axiom_oracles.bridges import efrs_uk, snap_populace, tax_populace
+from axiom_oracles.bridges import efrs_uk, snap_populace as snap_microcosm, tax_populace as tax_microcosm
 from axiom_oracles.core.case import Case, Entity
 from axiom_oracles.suites import be_worker
 
@@ -246,7 +246,7 @@ def _assert_adapter_case(case, artifact, path, owner_id, member_ids, current_slo
 def test_snap_bridge_constructs_order_before_binding(
     monkeypatch, tmp_path, current_slot, typed
 ):
-    config = snap_populace.JURISDICTION_CONFIGS["us-ca"]
+    config = snap_microcosm.JURISDICTION_CONFIGS["us-ca"]
     names = [config.relation_id, *config.additional_relation_ids]
     artifact = _artifact(names, "Household", "Person", current_slot, typed)
     current_slot = current_slot if typed else 1
@@ -266,13 +266,13 @@ def test_snap_bridge_constructs_order_before_binding(
         )
         return subprocess.CompletedProcess(cmd, 0, stdout='{"results": []}', stderr="")
 
-    monkeypatch.setattr(snap_populace, "bind_request_relations", no_inference)
-    monkeypatch.setattr(snap_populace.subprocess, "run", fake_run)
-    snap_populace.run_axiom_cases(
+    monkeypatch.setattr(snap_microcosm, "bind_request_relations", no_inference)
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", fake_run)
+    snap_microcosm.run_axiom_cases(
         binary=tmp_path / "engine",
         artifact=path,
         cases=[
-            snap_populace.ProjectedCase(
+            snap_microcosm.ProjectedCase(
                 spm_unit_id=42,
                 household_id=420,
                 inputs={},
@@ -280,7 +280,7 @@ def test_snap_bridge_constructs_order_before_binding(
                 pe_outputs={},
             )
         ],
-        period=snap_populace.Period(
+        period=snap_microcosm.Period(
             label="2026-01",
             year=2026,
             month=1,
@@ -323,8 +323,8 @@ def test_efrs_producer_orders_roles_after_compilation(
         assert all("roles" not in row for row in request["dataset"]["relations"])
         return request
 
-    monkeypatch.setattr(tax_populace, "bind_request_relations", no_inference)
-    runtime, _ = tax_populace._runtime_axiom_request(
+    monkeypatch.setattr(tax_microcosm, "bind_request_relations", no_inference)
+    runtime, _ = tax_microcosm._runtime_axiom_request(
         request,
         artifact_payload=artifact,
         rulespec_root=tmp_path / "rulespec-uk",

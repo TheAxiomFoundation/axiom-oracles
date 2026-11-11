@@ -3,7 +3,7 @@
 The US-representative population loader was renamed from ``enhanced_cps`` to
 ``populace_us`` because every scope it serves resolves the certified
 **populace-us** artifact — the only Enhanced-CPS load left is the NYC per-city
-file, kept until the populace spine grows place geography (see
+file, kept until the Microcosm spine grows place geography (see
 TheAxiomFoundation/axiom-oracles#74).
 
 This module re-exports the new one under the old path so external callers keep
@@ -17,7 +17,7 @@ from __future__ import annotations
 import sys
 import warnings
 
-import axiom_oracles.populations.populace_us as _populace_us
+import axiom_oracles.populations.populace_us as _microcosm_us
 
 warnings.warn(
     "axiom_oracles.populations.enhanced_cps is deprecated; import "
@@ -28,4 +28,4 @@ warnings.warn(
     stacklevel=2,
 )
 
-sys.modules[__name__] = _populace_us
+sys.modules[__name__] = _microcosm_us

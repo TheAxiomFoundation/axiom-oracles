@@ -174,7 +174,7 @@ set for a probe that does not belong in the shared grid.
 ### `axiom-encode-tax-ecps-compare`
 
 Invokes `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`
-in the encoder's ECPS→Populace rename; no alias survives on axiom-encode main
+in the encoder's ECPS→Microcosm rename; no alias survives on axiom-encode main
 — the runner type keeps the old name so existing suite YAMLs stay valid) via
 `uv run`. Builds a release `axiom-rules-engine` binary if missing; clones
 `rulespec-us` fresh into a directory named exactly `rulespec-us` (required by
@@ -184,7 +184,7 @@ PolicyEngine version stack. The runner installs the local `axiom-encode`
 checkout with `--with-editable` so comparison configs can validate unmerged
 harness changes before they land.
 
-The oracle population is the pinned Populace US artifact (resolved and
+The oracle population is the pinned Microcosm US artifact (resolved and
 sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
 `dataset_identity` block in its `--json` output; the dashboard adapter threads
 it onto the generated v2 report so a checked-in report records which pinned
@@ -226,7 +226,7 @@ Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 ### `axiom-encode-uk-efrs-compare`
 
 Invokes `axiom-encode uk-populace-compare` (renamed from `uk-efrs-compare` in
-the encoder's ECPS→Populace hard cut, axiom-encode #1108; no alias survives
+the encoder's ECPS→Microcosm hard cut, axiom-encode #1108; no alias survives
 on axiom-encode main — the runner type keeps the old name so existing suite
 YAMLs stay valid) via `uv run` with the pinned PolicyEngine UK stack. The
 subcommand's implementation is this repo's own
@@ -404,7 +404,7 @@ implementations live in the orchestrator.
 Every report `run_comparison.py` writes carries a `provenance` block
 (`axiom_oracles.provenance.v1`): the rulespec repos + SHAs the cases ran
 against, the Axiom engine SHA/version, the oracle stack identity, the pinned
-dataset identity (reused from `dataset_identity`, axiom-encode#952 / populace#80),
+dataset identity (reused from `dataset_identity`, axiom-encode#952 / microcosm#80),
 `generated_by`, `run_kind` (`weekly` | `pr-triggered` | `affected-rerun` |
 `manual`, from `$AXIOM_ORACLES_RUN_KIND`), and `generated_at`. It is additive —
 a checked-in report records exactly what produced it. `axiom_oracles/provenance.py`

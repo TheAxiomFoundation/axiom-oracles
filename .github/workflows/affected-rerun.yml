@@ -258,7 +258,7 @@ jobs:
         working-directory: axiom-oracles
         run: python3 scripts/oracle_data.py materialize --baseline
 
-      - name: Cache pinned populace-us artifact (HF hub cache)
+      - name: Cache pinned Microcosm US artifact (HF hub cache)
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
@@ -287,7 +287,7 @@ jobs:
           AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
           # Stamp the refreshed report as an affected-rerun (provenance.run_kind).
           AXIOM_ORACLES_RUN_KIND: affected-rerun
-          # Pinned Populace artifacts: the UK one lives in a private HF repo
+          # Pinned Microcosm artifacts: the UK one lives in a private HF repo
           # (policyengine/populace-uk-private), and the public US one is
           # rate-limited unauthenticated. Empty until the org
           # HUGGING_FACE_TOKEN is restored and shared to this repo

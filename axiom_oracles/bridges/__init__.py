@@ -1,8 +1,8 @@
-"""Shared PolicyEngine/Populace oracle-bridge layer.
+"""Shared PolicyEngine/Microcosm oracle-bridge layer.
 
 This package is the shared home of the oracle bridge code that previously
 lived inside the encoder as ``axiom_encode.oracles.policyengine`` (the ~19k
-LOC PolicyEngine/Populace comparison harnesses) plus the engine-neutral
+LOC PolicyEngine/Microcosm comparison harnesses) plus the engine-neutral
 ``Case``/``Concepts`` types that downstream repos otherwise duplicate.
 
 Modules mirror the encoder layout one-to-one and were copied verbatim from
@@ -10,7 +10,7 @@ TheAxiomFoundation/axiom-encode @ a314fc624967b4e990beb7d9ffc429dae6e26642
 (only intra-package imports were adjusted). See ``README.md`` in this
 directory for the public API and stability contract.
 
-PolicyEngine, populace-data, and huggingface-hub remain optional runtime
+PolicyEngine, microcosm-data, and huggingface-hub remain optional runtime
 dependencies: every module in this package imports them lazily, so the
 package (and this ``__init__``) is importable without any of them installed.
 """

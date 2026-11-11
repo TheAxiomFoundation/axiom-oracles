@@ -1,6 +1,6 @@
-"""Compare SNAP RuleSpec output against PolicyEngine over Populace.
+"""Compare SNAP RuleSpec output against PolicyEngine over Microcosm.
 
-The comparator projects PolicyEngine Populace SPM-unit records into a
+The comparator projects PolicyEngine Microcosm SPM-unit records into a
 jurisdiction's SNAP composition input surface, including related member facts,
 runs the Axiom rules engine over the projected records, and compares regular monthly SNAP
 allotments against PolicyEngine's normal allotment. It uses these targets
@@ -166,7 +166,7 @@ JURISDICTION_CONFIGS = {
         ),
         relation_id=AXIOM_RELATION_ID_BY_LABEL["member_of_household"],
         member_entity_type="Person",
-        temp_prefix="co-snap-pe-populace-",
+        temp_prefix="co-snap-pe-microcosm-",
         display_name="Colorado SNAP",
     ),
     "us-ca": JurisdictionConfig(
@@ -214,7 +214,7 @@ JURISDICTION_CONFIGS = {
             "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
-        temp_prefix="ca-snap-pe-populace-",
+        temp_prefix="ca-snap-pe-microcosm-",
         display_name="California SNAP",
         additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
@@ -244,7 +244,7 @@ JURISDICTION_CONFIGS = {
         utility_allowance_labels=(),
         relation_id=AXIOM_RELATION_ID_BY_LABEL["member_of_household"],
         member_entity_type="Person",
-        temp_prefix="az-snap-pe-populace-",
+        temp_prefix="az-snap-pe-microcosm-",
         display_name="Arizona SNAP",
         # The projector supplies PE eligibility and benefit inputs to this program.
         # Remove only when compared outcomes are independent of PE-derived inputs.
@@ -277,7 +277,7 @@ JURISDICTION_CONFIGS = {
             "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
-        temp_prefix="ga-snap-pe-populace-",
+        temp_prefix="ga-snap-pe-microcosm-",
         display_name="Georgia SNAP",
         additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
@@ -308,7 +308,7 @@ JURISDICTION_CONFIGS = {
             "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
-        temp_prefix="md-snap-pe-populace-",
+        temp_prefix="md-snap-pe-microcosm-",
         display_name="Maryland SNAP",
         additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
@@ -339,7 +339,7 @@ JURISDICTION_CONFIGS = {
             "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
-        temp_prefix="tx-snap-pe-populace-",
+        temp_prefix="tx-snap-pe-microcosm-",
         display_name="Texas SNAP",
         additional_relation_ids=(AXIOM_RELATION_ID_BY_LABEL["member_of_household"],),
     ),
@@ -415,7 +415,7 @@ JURISDICTION_CONFIGS = {
             "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
-        temp_prefix="ny-snap-pe-populace-",
+        temp_prefix="ny-snap-pe-microcosm-",
         display_name="New York SNAP",
         additional_relation_ids=(
             AXIOM_RELATION_ID_BY_LABEL["member_of_household"],
@@ -716,14 +716,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         type=int,
         default=None,
         help=(
-            "Limit after state filtering. Omit to run all matching Populace SPM units."
+            "Limit after state filtering. Omit to run all matching Microcosm SPM units."
         ),
     )
     parser.add_argument(
         "--positive-snap-only",
         action="store_true",
         help=(
-            "Only compare Populace SPM units where PolicyEngine normal allotment "
+            "Only compare Microcosm SPM units where PolicyEngine normal allotment "
             "is positive. A unit whose allotment is missing or nonfinite is kept, "
             "so it reaches the error ledger: it counts toward the projected units "
             "(and toward --sample-size, displacing a valid unit) but never toward "
@@ -735,8 +735,8 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         choices=("raw-expenses", "policyengine-type"),
         default="raw-expenses",
         help=(
-            "How to project Populace utility facts. raw-expenses uses itemized "
-            "utility expenses from Populace. policyengine-type maps "
+            "How to project Microcosm utility facts. raw-expenses uses itemized "
+            "utility expenses from Microcosm. policyengine-type maps "
             "PolicyEngine's utility-allowance type into jurisdiction utility "
             "facts for oracle parity."
         ),
@@ -745,7 +745,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--populace-year",
         type=int,
         default=DEFAULT_US_POPULACE_YEAR,
-        help="Published US Populace dataset year to load.",
+        help="Published US Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--tolerance",
@@ -1268,7 +1268,7 @@ def load_policyengine_cases(
             "snap-populace-compare"
         ) from exc
 
-    print(f"Loading PolicyEngine Populace US {populace_year} dataset...")
+    print(f"Loading PolicyEngine Microcosm US {populace_year} dataset...")
     dataset = load_populace_dataset(
         "us",
         year=populace_year,
@@ -1309,10 +1309,10 @@ def load_policyengine_cases(
     if sample_size is not None:
         indices = indices[:sample_size]
 
-    print(f"Projecting {len(indices):,} {state} Populace SPM units...")
+    print(f"Projecting {len(indices):,} {state} Microcosm SPM units...")
     if skipped_empty_units:
         print(
-            f"Skipped {skipped_empty_units:,} {state} Populace SPM units "
+            f"Skipped {skipped_empty_units:,} {state} Microcosm SPM units "
             "with SNAP unit size < 1."
         )
 
@@ -1729,7 +1729,7 @@ def arizona_utility_inputs(
     telephone_only: bool,
     elderly_or_disabled: bool,
 ) -> dict[str, bool | int]:
-    # Populace reports expenses but not DES verification or LIHEAP history.
+    # Microcosm reports expenses but not DES verification or LIHEAP history.
     # Treat a reported bill as verified for this diagnostic projection, and
     # leave the unobserved LIHEAP conditions false. Neither assumption proves
     # parity for households where those facts determine the allowance.
@@ -1919,7 +1919,7 @@ def compile_program(
     )
     staged_roots: list[Path] = []
     if roots and jurisdictions:
-        with_stage = tempfile.mkdtemp(prefix="snap-populace-roots-")
+        with_stage = tempfile.mkdtemp(prefix="snap-microcosm-roots-")
         staged_roots = [
             stage_pure_root(root, jurisdictions, Path(with_stage)) for root in roots
         ]
@@ -2276,7 +2276,7 @@ def print_summary(
         else 0.0
     )
     print()
-    print(f"Evaluated {total:,} PolicyEngine Populace SPM units")
+    print(f"Evaluated {total:,} PolicyEngine Microcosm SPM units")
     print(f"Comparable rows: {len(comparable_rows):,}/{total:,}")
     print(f"Tolerance: ${tolerance:,.2f}")
     print(
@@ -2431,7 +2431,7 @@ def main(args: argparse.Namespace | None = None) -> int:
     if identity_line:
         print(identity_line)
     if not cases:
-        print("No matching Populace SPM units.")
+        print("No matching Microcosm SPM units.")
         return 1
 
     with tempfile.TemporaryDirectory(prefix=config.temp_prefix) as temp_dir:
@@ -2440,7 +2440,7 @@ def main(args: argparse.Namespace | None = None) -> int:
         compile_program(
             axiom_binary, program, artifact, env=env, workspace_root=workspace_root
         )
-        print("Running the Axiom rules engine over projected Populace records...")
+        print("Running the Axiom rules engine over projected Microcosm records...")
         results = run_axiom_cases(
             binary=axiom_binary,
             artifact=artifact,

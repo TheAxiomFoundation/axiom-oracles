@@ -35,7 +35,7 @@ from scripts.emit_populace_campaign_artifacts import (
 
 DASHBOARD_DATA = Path(__file__).resolve().parents[1] / "dashboard/public/data"
 REPO_ROOT = Path(__file__).resolve().parents[1]
-POPULACE_SUITE_CONFIG = (
+MICROCOSM_SUITE_CONFIG = (
     REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
 )
 
@@ -86,14 +86,14 @@ def test_manifest_reconciliation_retires_only_declared_taxsim_ghosts(tmp_path):
     }
 
 
-def test_manifest_reconciliation_rejects_missing_required_populace_report(
+def test_manifest_reconciliation_rejects_missing_required_microcosm_report(
     tmp_path,
 ):
     required = "axiom-policyengine-al-income-tax-populace.json"
 
     with pytest.raises(
         ValueError,
-        match="missing required configured Populace report",
+        match="missing required configured Microcosm report",
     ):
         reconcile_manifest_reports(
             [],
@@ -122,9 +122,9 @@ def test_every_dashboard_manifest_target_exists():
     assert missing == []
 
 
-def test_configured_populace_reports_are_published_and_manifested():
+def test_configured_microcosm_reports_are_published_and_manifested():
     manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
-    config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    config = yaml.safe_load(MICROCOSM_SUITE_CONFIG.read_text())
     required = {suite["report"] for suite in config["suites"]}
 
     assert required <= set(manifest["reports"])
@@ -214,7 +214,7 @@ def test_connecticut_dashboard_description_names_narrow_component():
     assert "ordinary section 12-700 tax before the personal credit" in description
     assert description != (
         "State income tax liability over every routed tax unit in the "
-        "pinned US Populace"
+        "pinned US Microcosm"
     )
 
 
@@ -442,7 +442,7 @@ def test_kansas_dashboard_description_names_k40es_schedule():
     assert "liability" not in description.lower()
 
 
-def test_committed_indiana_populace_evidence_is_canonical_and_complete(
+def test_committed_indiana_microcosm_evidence_is_canonical_and_complete(
     tmp_path,
     monkeypatch,
 ):
@@ -546,7 +546,7 @@ def test_committed_indiana_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
-def test_committed_pennsylvania_populace_evidence_is_canonical_and_complete(
+def test_committed_pennsylvania_microcosm_evidence_is_canonical_and_complete(
     tmp_path,
     monkeypatch,
 ):
@@ -657,7 +657,7 @@ def test_committed_pennsylvania_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
-def test_committed_south_carolina_populace_evidence_is_canonical_and_complete(
+def test_committed_south_carolina_microcosm_evidence_is_canonical_and_complete(
     tmp_path,
     monkeypatch,
 ):
@@ -765,7 +765,7 @@ def test_committed_south_carolina_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
-def test_committed_montana_populace_evidence_is_canonical_and_complete(
+def test_committed_montana_microcosm_evidence_is_canonical_and_complete(
     tmp_path,
     monkeypatch,
 ):
@@ -858,7 +858,7 @@ def test_committed_montana_populace_evidence_is_canonical_and_complete(
 
     manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
     assert manifest["reports"].count(report_path.name) == 1
-    suite_config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    suite_config = yaml.safe_load(MICROCOSM_SUITE_CONFIG.read_text())
     assert [
         suite
         for suite in suite_config["suites"]
@@ -889,7 +889,7 @@ def test_committed_montana_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
-def test_committed_arkansas_populace_evidence_is_canonical_and_complete(
+def test_committed_arkansas_microcosm_evidence_is_canonical_and_complete(
     tmp_path,
     monkeypatch,
 ):
@@ -993,7 +993,7 @@ def test_committed_arkansas_populace_evidence_is_canonical_and_complete(
 
     manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
     assert manifest["reports"].count(report_path.name) == 1
-    suite_config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    suite_config = yaml.safe_load(MICROCOSM_SUITE_CONFIG.read_text())
     assert [
         suite
         for suite in suite_config["suites"]
@@ -1024,7 +1024,7 @@ def test_committed_arkansas_populace_evidence_is_canonical_and_complete(
     assert second == first
 
 
-def test_committed_kansas_populace_evidence_is_canonical_and_complete():
+def test_committed_kansas_microcosm_evidence_is_canonical_and_complete():
     rulespec_sha = "a0a3032ca9e25b6d7d6d6b92be3f9609d796d143"
     engine_sha = "ffd8213271947b0189a9dd61a055c1e0e78908a0"
     executable_sha = (
@@ -1114,7 +1114,7 @@ def test_committed_kansas_populace_evidence_is_canonical_and_complete():
     )
 
 
-def test_committed_dc_populace_evidence_is_canonical_and_complete():
+def test_committed_dc_microcosm_evidence_is_canonical_and_complete():
     rulespec_sha = "6b0773d3f7fa6719f208154f3e609e292ab7abe7"
     engine_sha = "ffd8213271947b0189a9dd61a055c1e0e78908a0"
     executable_sha = (
@@ -1437,7 +1437,7 @@ def test_mississippi_dashboard_description_names_person_schedule():
     description = report["aggregates"][0]["description"]
     assert "section 27-7-5 Person-grain" in description
     assert "caller-supplied completed Mississippi taxable income" in description
-    assert "only for Populace accounting" in description
+    assert "only for Microcosm accounting" in description
     assert "liability" not in description.lower()
 
 
@@ -2397,7 +2397,7 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
 
     manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())
     assert manifest["reports"].count(report_path.name) == 1
-    suite_config = yaml.safe_load(POPULACE_SUITE_CONFIG.read_text())
+    suite_config = yaml.safe_load(MICROCOSM_SUITE_CONFIG.read_text())
     assert [
         suite
         for suite in suite_config["suites"]

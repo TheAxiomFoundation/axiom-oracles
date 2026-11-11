@@ -13,7 +13,7 @@ from types import SimpleNamespace
 import pytest
 from hypothesis import example, given, settings, strategies as st
 
-from axiom_oracles.bridges import tax_populace
+from axiom_oracles.bridges import tax_populace as tax_microcosm
 from axiom_oracles.conformance.attestation import attest
 from axiom_oracles.conformance.loader import Universe, parse
 from axiom_oracles.conformance.scoreboard import score_jurisdiction
@@ -54,7 +54,7 @@ def universe():
 
 
 def produce(oracle_value, axiom_value, *, sibling=0, surface="employee-medicare"):
-    specs = tax_populace.SURFACE_OUTPUTS[surface]
+    specs = tax_microcosm.SURFACE_OUTPUTS[surface]
     name, output = next(iter(specs.items()))
     pe_rows = [{spec["pe"]: sibling for spec in specs.values()},
                {spec["pe"]: 0 for spec in specs.values()}]
@@ -64,7 +64,7 @@ def produce(oracle_value, axiom_value, *, sibling=0, surface="employee-medicare"
         for spec in specs.values()
     }} for amount in (sibling, 0)]
     results[1]["outputs"][output["axiom"]]["value"]["value"] = axiom_value
-    raw = tax_populace.compare_outputs(
+    raw = tax_microcosm.compare_outputs(
         pe_data={"tax_units": Frame(pe_rows), "persons": Frame(pe_rows),
                  "tax_unit_ids": [1, 2], "person_ids": [1, 2]},
         axiom_outputs_by_surface={surface: results}, tolerance=0, relative_tolerance=0,
@@ -183,15 +183,15 @@ def test_shard_merge_sums_uncompared_diagnostic_mismatches():
     assert not attest(merged, oracle=universe().oracle).eligible
 
 
-@pytest.mark.parametrize("surface", list(tax_populace.SURFACE_OUTPUTS))
+@pytest.mark.parametrize("surface", list(tax_microcosm.SURFACE_OUTPUTS))
 @pytest.mark.parametrize("side", ["axiom", "policyengine"])
 def test_every_fiit_surface_excludes_missing_returns(surface, side):
     raw, name = produce(None if side == "policyengine" else 0,
                         None if side == "axiom" else 0, surface=surface)
-    expected = 2 * len(tax_populace.SURFACE_OUTPUTS[surface]) - 1
+    expected = 2 * len(tax_microcosm.SURFACE_OUTPUTS[surface]) - 1
     assert raw["compared_values"] == expected
     assert raw["mismatch_count"] == raw["uncompared_mismatches"] == 1
-    marker = "person_2" if surface in tax_populace.PAYROLL_SURFACES else "tax_unit_2"
+    marker = "person_2" if surface in tax_microcosm.PAYROLL_SURFACES else "tax_unit_2"
     assert raw["errors"] == [{"engine": side, "case_id": marker, "surface": surface,
                                "output": name, "error": "missing_or_nonfinite_output"}]
 
@@ -216,10 +216,10 @@ def load_stub(monkeypatch, value, *, entity):
     variable = "adjusted_gross_income" if entity == "tax_unit" else "employment_income"
     sim = SimpleNamespace(calculate=lambda name, period: [value])
     monkeypatch.setitem(sys.modules, "policyengine_us", SimpleNamespace(Microsimulation=lambda **_kwargs: sim))
-    monkeypatch.setattr(tax_populace, "load_populace_dataset", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr(tax_populace, "population_table", lambda _dataset, kind: tables[kind])
-    monkeypatch.setattr(tax_populace, "select_tax_unit_indices", lambda **_kwargs: [0])
-    return tax_populace.load_policyengine_tax_data(
+    monkeypatch.setattr(tax_microcosm, "load_populace_dataset", lambda *_args, **_kwargs: object())
+    monkeypatch.setattr(tax_microcosm, "population_table", lambda _dataset, kind: tables[kind])
+    monkeypatch.setattr(tax_microcosm, "select_tax_unit_indices", lambda **_kwargs: [0])
+    return tax_microcosm.load_policyengine_tax_data(
         year=2026, sample_size=1, positive_ctc_only=False, data_folder=ROOT,
         populace_year=2024, tax_unit_variables=(variable,) if entity == "tax_unit" else (),
         person_variables=(variable,) if entity == "person" else (),

@@ -344,7 +344,7 @@ def test_default_yaml_maps_ma_categorical_assistance_inputs() -> None:
     )
 
 
-def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> None:
+def test_deprecated_ecps_mapping_loader_alias_resolves_to_microcosm_loader() -> None:
     # The loader was renamed ecps_mapping_loader -> populace_mapping_loader
     # (axiom-oracles#74). The old module path and the old
     # load_ecps_mapping_for_program name must still work (same object) and warn.

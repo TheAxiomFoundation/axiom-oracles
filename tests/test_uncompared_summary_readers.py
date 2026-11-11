@@ -69,7 +69,7 @@ def test_runner_case_aggregate_floors_malformed_mismatches(tmp_path):
 
 
 def variable_report(kind, mismatches, uncompared):
-    from axiom_oracles.bridges import tax_populace, us_populace
+    from axiom_oracles.bridges import tax_populace as tax_microcosm, us_populace as us_microcosm
 
     output = {
         "surface": "probe", "output": "amount", "compared": 5,
@@ -84,18 +84,18 @@ def variable_report(kind, mismatches, uncompared):
         projection_notes=[],
     )
     if kind == "fiit":
-        row = tax_populace.TaxComparisonRow(surface="probe", **values)
-        report = tax_populace.TaxComparisonReport(
+        row = tax_microcosm.TaxComparisonRow(surface="probe", **values)
+        report = tax_microcosm.TaxComparisonReport(
             compared_tax_units=1, mismatches=[row] * mismatches, **common,
         )
-        printer, options = tax_populace.print_report, {}
+        printer, options = tax_microcosm.print_report, {}
     else:
-        row = us_populace.USVariableComparisonRow(variable="probe", **values)
-        report = us_populace.USVariableComparisonReport(
+        row = us_microcosm.USVariableComparisonRow(variable="probe", **values)
+        report = us_microcosm.USVariableComparisonReport(
             variables=("probe",), compared_spm_units=1, skipped_cases=0,
             skipped_reasons={}, mismatches=[row] * mismatches, **common,
         )
-        printer, options = us_populace.print_report, {"max_differences": 0}
+        printer, options = us_microcosm.print_report, {"max_differences": 0}
     with redirect_stdout(io.StringIO()) as captured:
         printer(report, tolerance=0.01, relative_tolerance=0, **options)
     return captured.getvalue()

@@ -85,7 +85,7 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
         "scripts.check_state_tax_populace_contract.importlib.util.module_from_spec",
         lambda spec: SimpleNamespace(
             _STATES=(),
-            _POPULACE_STATES=tuple(
+            _MICROCOSM_STATES=tuple(
                 item.state for item in contract.jurisdictions
             ),
             VALIDATION_YEAR=2026,
@@ -104,7 +104,7 @@ def test_generator_registry_validation_fails_on_drift(monkeypatch) -> None:
                 item.state: (item.tolerance, item.relative_tolerance)
                 for item in contract.jurisdictions
             },
-            _POPULACE_AGGREGATION={
+            _MICROCOSM_AGGREGATION={
                 item.state: item.comparison_aggregation
                 for item in contract.jurisdictions
             },

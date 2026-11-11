@@ -50,7 +50,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax earned-income amount charged at the basic rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax earned-income amount charged at the basic rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#income_charged_at_higher_rate
     country: uk
@@ -61,7 +61,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax earned-income amount charged at the higher rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax earned-income amount charged at the higher rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#income_charged_at_additional_rate
     country: uk
@@ -72,7 +72,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax earned-income amount charged at the additional rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax earned-income amount charged at the additional rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_basic_rate
     country: uk
@@ -83,7 +83,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax on earned income charged at the basic rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax on earned income charged at the basic rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_higher_rate
     country: uk
@@ -94,7 +94,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax on earned income charged at the higher rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax on earned income charged at the higher rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#tax_on_income_charged_at_additional_rate
     country: uk
@@ -105,7 +105,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same UK income tax on earned income charged at the additional rate under section 10, with the Populace oracle comparing only the ordinary non-Scottish UK-rate branch.
+    rationale: Same UK income tax on earned income charged at the additional rate under section 10, with the Microcosm oracle comparing only the ordinary non-Scottish UK-rate branch.
 
   - legal_id: uk:statutes/ukpga/2007/3/10#income_tax_on_section_10_income
     country: uk
@@ -367,7 +367,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same final annual person-level National Insurance contribution aggregate after the UK Populace adapter supplies PolicyEngine UK's Class 1, Class 2, Class 3, and final Class 4 contribution amounts.
+    rationale: Same final annual person-level National Insurance contribution aggregate after the UK Microcosm adapter supplies PolicyEngine UK's Class 1, Class 2, Class 3, and final Class 4 contribution amounts.
 
   - legal_id: uk:statutes/ukpga/1992/4/8#primary_class_1_contribution
     country: uk
@@ -378,7 +378,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same employee Class 1 NI aggregate after the UK Populace adapter projects weekly section 8 inputs, PolicyEngine ni_liable, and converts PolicyEngine's annual output to a weekly value.
+    rationale: Same employee Class 1 NI aggregate after the UK Microcosm adapter projects weekly section 8 inputs, PolicyEngine ni_liable, and converts PolicyEngine's annual output to a weekly value.
 
   - legal_id: uk:statutes/ukpga/1992/4/8#main_primary_class_1_contribution
     country: uk
@@ -389,7 +389,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same main-band employee Class 1 NI component after the UK Populace adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
+    rationale: Same main-band employee Class 1 NI component after the UK Microcosm adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
 
   - legal_id: uk:statutes/ukpga/1992/4/8#additional_primary_class_1_contribution
     country: uk
@@ -400,7 +400,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same additional-band employee Class 1 NI component after the UK Populace adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
+    rationale: Same additional-band employee Class 1 NI component after the UK Microcosm adapter projects weekly section 8 inputs and compares on PolicyEngine ni_liable rows.
 
   - legal_id: uk:statutes/ukpga/1992/4/15#lower_profits_limit
     country: uk
@@ -449,7 +449,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same main-band Class 4 NI component after the UK Populace adapter projects annual section 15 profits and compares on PolicyEngine ni_liable rows.
+    rationale: Same main-band Class 4 NI component after the UK Microcosm adapter projects annual section 15 profits and compares on PolicyEngine ni_liable rows.
 
   - legal_id: uk:statutes/ukpga/1992/4/15#additional_class_4_contribution
     country: uk
@@ -544,7 +544,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same Regulation 100 Class 4 annual maximum after the UK Populace adapter projects annual primary Class 1, Class 4 main-rate, and profits inputs.
+    rationale: Same Regulation 100 Class 4 annual maximum after the UK Microcosm adapter projects annual primary Class 1, Class 4 main-rate, and profits inputs.
 
   - legal_id: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
     country: uk
@@ -655,7 +655,7 @@ mappings:
     period: year
     unit: GBP
     comparison: money
-    rationale: Same wrapper variable for annual student-loan repayments; in local Populace this may be supplied as reported input data, but the PolicyEngine formula delegates to student_loan_repayment.
+    rationale: Same wrapper variable for annual student-loan repayments; in local Microcosm this may be supplied as reported input data, but the PolicyEngine formula delegates to student_loan_repayment.
 
   - legal_id: uk:policies/govuk/student-loan-repayments#listed_student_loan_plan_applies
     country: uk
@@ -901,7 +901,7 @@ mappings:
     unit: GBP
     comparison: money
     candidate_priority: P2
-    rationale: Same Pension Credit child-related addition after the UK Populace adapter projects PolicyEngine's child count, pre-2017 eldest-child flag, and disability buckets into Schedule IIA inputs and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same Pension Credit child-related addition after the UK Microcosm adapter projects PolicyEngine's child count, pre-2017 eldest-child flag, and disability buckets into Schedule IIA inputs and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:regulations/uksi/2002/2005/schedule/2#wtc_basic_element_amount
     country: uk
@@ -1828,7 +1828,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same Pension Credit deemed income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit pension_credit_assessable_capital into the Regulation 15 claimant-capital leaf and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same Pension Credit deemed income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit pension_credit_assessable_capital into the Regulation 15 claimant-capital leaf and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:regulations/uksi/2008/794/118#capital_tariff_weekly_income
     country: uk
@@ -1839,7 +1839,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same income-related ESA tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit esa_income_assessable_capital into the Regulation 118 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same income-related ESA tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit esa_income_assessable_capital into the Regulation 118 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:policies/govuk/esa-income#income_related_esa_annual_amount
     country: uk
@@ -1861,7 +1861,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same income-based JSA tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit jsa_income_assessable_capital into the Regulation 116 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same income-based JSA tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit jsa_income_assessable_capital into the Regulation 116 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:regulations/uksi/1987/1967/53#capital_tariff_weekly_income
     country: uk
@@ -1872,7 +1872,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same Income Support tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit income_support_assessable_capital into the Regulation 53 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same Income Support tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit income_support_assessable_capital into the Regulation 53 claimant-capital leaf, sets the prescribed-accommodation branch false because PolicyEngine does not expose that legal predicate, limits comparison to capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:regulations/uksi/2006/213/52#capital_tariff_weekly_income
     country: uk
@@ -1883,7 +1883,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same working-age Housing Benefit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 52 claimant-capital leaf, sets the prescribed-circumstances branch false because PolicyEngine does not expose that legal predicate, limits comparison to non-pension-age rows with capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same working-age Housing Benefit tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 52 claimant-capital leaf, sets the prescribed-circumstances branch false because PolicyEngine does not expose that legal predicate, limits comparison to non-pension-age rows with capital at or below GBP 16,000, and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:regulations/uksi/2006/214/29#capital_tariff_weekly_income
     country: uk
@@ -1894,7 +1894,7 @@ mappings:
     period: week
     unit: GBP
     comparison: money
-    rationale: Same pension-age Housing Benefit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 29 claimant-capital leaf, projects the regulation 44(2) capital-disregard exception false because PolicyEngine applies capital exclusions upstream, limits comparison to pension-age rows without guarantee credit, and converts PolicyEngine's annual output to a weekly amount.
+    rationale: Same pension-age Housing Benefit tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit housing_benefit_assessable_capital into the Regulation 29 claimant-capital leaf, projects the regulation 44(2) capital-disregard exception false because PolicyEngine applies capital exclusions upstream, limits comparison to pension-age rows without guarantee credit, and converts PolicyEngine's annual output to a weekly amount.
 
   - legal_id: uk:policies/govuk/housing-benefit#housing_benefit_annual_amount
     country: uk
@@ -1949,7 +1949,7 @@ mappings:
     unit: year
     comparison: count
     candidate_priority: P3
-    rationale: State Pension Credit Act section 1 defines a source-level qualifying age at day granularity. The UK Populace oracle supplies PolicyEngine UK's state_pension_age to both statutory pensionable-age leaves on 6 October of the fiscal year. At policyengine-uk 0c7ea821 (the merge of PolicyEngine/policyengine-uk#1899, first released in 2.111.2), state_pension_age.py gives each person's own State Pension age from their date of birth and is_SP_age.py reads State Pension age status on 6 October; earlier releases, including the pinned 2.88.56, set state_pension_age by sex and year. PolicyEngine's Pension Credit age conditions read is_SP_age (meets_pension_credit_age_conditions.py), with no separate qualifying-age variable. Under Pensions Act 1995 Sch 4 para 1 rule (1), men born before 6 December 1953 attain pensionable age at 65, so only they can differ from a woman born the same day, and they are over both from 2019-20.
+    rationale: State Pension Credit Act section 1 defines a source-level qualifying age at day granularity. The UK Microcosm oracle supplies PolicyEngine UK's state_pension_age to both statutory pensionable-age leaves on 6 October of the fiscal year. At policyengine-uk 0c7ea821 (the merge of PolicyEngine/policyengine-uk#1899, first released in 2.111.2), state_pension_age.py gives each person's own State Pension age from their date of birth and is_SP_age.py reads State Pension age status on 6 October; earlier releases, including the pinned 2.88.56, set state_pension_age by sex and year. PolicyEngine's Pension Credit age conditions read is_SP_age (meets_pension_credit_age_conditions.py), with no separate qualifying-age variable. Under Pensions Act 1995 Sch 4 para 1 rule (1), men born before 6 December 1953 attain pensionable age at 65, so only they can differ from a woman born the same day, and they are over both from 2019-20.
 
   - legal_id: uk:statutes/ukpga/2002/16/1#claimant_has_attained_qualifying_age
     country: uk
@@ -1960,7 +1960,7 @@ mappings:
     period: day
     comparison: boolean
     candidate_priority: P3
-    rationale: State Pension Credit Act section 1 tests whether the claimant has attained the statutory qualifying age at day granularity. The UK Populace oracle compares RuleSpec's judgment output to PolicyEngine UK's is_SP_age after supplying the state_pension_age projection used for qualifying_age. At policyengine-uk 0c7ea821 (#1899), is_SP_age.py tests months_since_state_pension_age.py, the exact age on 6 October less State Pension age, rounded to a thousandth of a month, against zero, so claimant_age is the exact age floor(age) + months_since_last_birthday / 12, with months clipped to [0, 12 - 1e-4] as in utils/dates.py. Releases without months_since_last_birthday, including the pinned 2.88.56, test age >= state_pension_age, and claimant_age is then the age.
+    rationale: State Pension Credit Act section 1 tests whether the claimant has attained the statutory qualifying age at day granularity. The UK Microcosm oracle compares RuleSpec's judgment output to PolicyEngine UK's is_SP_age after supplying the state_pension_age projection used for qualifying_age. At policyengine-uk 0c7ea821 (#1899), is_SP_age.py tests months_since_state_pension_age.py, the exact age on 6 October less State Pension age, rounded to a thousandth of a month, against zero, so claimant_age is the exact age floor(age) + months_since_last_birthday / 12, with months clipped to [0, 12 - 1e-4] as in utils/dates.py. Releases without months_since_last_birthday, including the pinned 2.88.56, test age >= state_pension_age, and claimant_age is then the age.
 
   - legal_id: uk:statutes/ukpga/2002/16/2#guarantee_credit
     country: uk
@@ -1972,7 +1972,7 @@ mappings:
     unit: GBP
     comparison: money
     candidate_priority: P2
-    rationale: Same annual State Pension Credit guarantee credit amount. The Populace oracle projects claimant income from PolicyEngine's pension_credit_income, appropriate minimum guarantee from minimum_guarantee, and entitlement from is_guarantee_credit_eligible.
+    rationale: Same annual State Pension Credit guarantee credit amount. The Microcosm oracle projects claimant income from PolicyEngine's pension_credit_income, appropriate minimum guarantee from minimum_guarantee, and entitlement from is_guarantee_credit_eligible.
 
   - legal_id: uk:statutes/ukpga/2002/16/2#appropriate_minimum_guarantee
     country: uk
@@ -1984,7 +1984,7 @@ mappings:
     unit: GBP
     comparison: money
     candidate_priority: P3
-    rationale: Same annual State Pension Credit appropriate minimum guarantee, after the Populace oracle projects PolicyEngine's standard_minimum_guarantee and positive additional amount decomposition into the section 2 formula.
+    rationale: Same annual State Pension Credit appropriate minimum guarantee, after the Microcosm oracle projects PolicyEngine's standard_minimum_guarantee and positive additional amount decomposition into the section 2 formula.
 
   - legal_id: uk:statutes/ukpga/2002/16/2#guarantee_credit_condition_satisfied
     country: uk
@@ -2002,7 +2002,7 @@ mappings:
     unit: GBP
     comparison: money
     candidate_priority: P2
-    rationale: Same annual Pension Credit savings credit amount. The Populace oracle projects section 3 inputs from PolicyEngine's savings-credit income, claimant income, minimum-guarantee, standard-minimum-guarantee, and prescribed threshold/rate parameters.
+    rationale: Same annual Pension Credit savings credit amount. The Microcosm oracle projects section 3 inputs from PolicyEngine's savings-credit income, claimant income, minimum-guarantee, standard-minimum-guarantee, and prescribed threshold/rate parameters.
 
   - legal_id: uk:statutes/ukpga/2002/16/3#maximum_savings_credit
     country: uk
@@ -2037,7 +2037,7 @@ mappings:
     period: month
     unit: GBP
     comparison: money
-    rationale: Welfare Reform Act 2012 section 8 computes the award as the positive difference between the maximum amount and prescribed income deductions. PolicyEngine UK's universal_credit_pre_benefit_cap also applies the stochastic would_claim_uc take-up gate, so the Populace oracle compares the equivalent pre-take-up expression from uc_maximum_amount and uc_income_reduction.
+    rationale: Welfare Reform Act 2012 section 8 computes the award as the positive difference between the maximum amount and prescribed income deductions. PolicyEngine UK's universal_credit_pre_benefit_cap also applies the stochastic would_claim_uc take-up gate, so the Microcosm oracle compares the equivalent pre-take-up expression from uc_maximum_amount and uc_income_reduction.
 
   - legal_id: uk:regulations/uksi/2013/376/36#standard_allowance_single_under_25_amount
     country: uk
@@ -2192,7 +2192,7 @@ mappings:
     period: month
     unit: GBP
     comparison: money
-    rationale: Same Universal Credit tariff income from capital after the UK Populace adapter projects PolicyEngine's benefit-unit assessed capital to the Regulation 72 capital leaf and converts PolicyEngine's annual output to a monthly amount.
+    rationale: Same Universal Credit tariff income from capital after the UK Microcosm adapter projects PolicyEngine's benefit-unit assessed capital to the Regulation 72 capital leaf and converts PolicyEngine's annual output to a monthly amount.
 
   - legal_id: uk:regulations/uksi/2013/376/18#claimant_capital_for_prescribed_capital_limit
     country: uk
@@ -2203,7 +2203,7 @@ mappings:
     period: day
     unit: GBP
     comparison: money
-    rationale: Same Universal Credit assessable capital stock after the UK Populace adapter projects PolicyEngine's benefit-unit uc_assessable_capital into the Regulation 18 claimant-capital leaf, with other-member inclusion set to zero because PolicyEngine already resolves household capital allocation, reported-capital overrides, and exclusions upstream.
+    rationale: Same Universal Credit assessable capital stock after the UK Microcosm adapter projects PolicyEngine's benefit-unit uc_assessable_capital into the Regulation 18 claimant-capital leaf, with other-member inclusion set to zero because PolicyEngine already resolves household capital allocation, reported-capital overrides, and exclusions upstream.
 
   - legal_id: uk:regulations/uksi/2013/376/32#work_condition_met_for_assessment_period
     country: uk
@@ -2214,7 +2214,7 @@ mappings:
     period: month
     unit: bool
     comparison: bool
-    rationale: Same Universal Credit childcare work-condition predicate, with the Populace oracle projecting person-level adult work status into the Regulation 32 claimant and other-member work leaves.
+    rationale: Same Universal Credit childcare work-condition predicate, with the Microcosm oracle projecting person-level adult work status into the Regulation 32 claimant and other-member work leaves.
 
   - legal_id: uk:programs/universal-credit/fy-2026-27#amount_included_under_section_10_responsibility_for_children_and_young_persons
     country: uk
@@ -2222,7 +2222,7 @@ mappings:
     mapping_type: not_comparable
     policyengine_variable: uc_child_element
     candidate_priority: P4
-    rationale: The Universal Credit program wrapper composes child and disabled-child amounts across benefit-unit children. PolicyEngine UK exposes adjacent child element variables and parameters, while the Populace oracle currently compares the constituent source-law outputs rather than this program-boundary aggregate.
+    rationale: The Universal Credit program wrapper composes child and disabled-child amounts across benefit-unit children. PolicyEngine UK exposes adjacent child element variables and parameters, while the Microcosm oracle currently compares the constituent source-law outputs rather than this program-boundary aggregate.
 
   - legal_id: uk:programs/universal-credit/fy-2026-27#amount_included_under_section_11_housing_costs
     country: uk
@@ -2315,7 +2315,7 @@ mappings:
     mapping_type: not_comparable
     policyengine_variable: uc_income_reduction
     candidate_priority: P4
-    rationale: The Universal Credit program wrapper sums prescribed earned and unearned income deductions. PolicyEngine UK exposes adjacent income-reduction outputs, but there is not yet a tested Populace adapter for this program-boundary deduction composite.
+    rationale: The Universal Credit program wrapper sums prescribed earned and unearned income deductions. PolicyEngine UK exposes adjacent income-reduction outputs, but there is not yet a tested Microcosm adapter for this program-boundary deduction composite.
 
   - legal_id: uk:programs/universal-credit/fy-2026-27#universal_credit_maximum_amount
     country: uk
@@ -3409,7 +3409,7 @@ prefixes:
     country: uk
     program: tax
     mapping_type: not_comparable
-    rationale: Composed single-individual UKMOD Scottish non-savings non-dividend income-tax oracle pipeline; its band and liability outputs apply the Scottish Rate Resolution 2026-27 rates (Income Tax Act 2007 section 11A charged via Scotland Act 1998 section 80C, with the section 35 personal allowance) for the UKMOD tin_s comparison on a Scottish taxpayer (drgn1=12) rather than adding new PolicyEngine UK oracle variables — PolicyEngine's Populace oracle compares only the ordinary non-Scottish UK-rate branch.
+    rationale: Composed single-individual UKMOD Scottish non-savings non-dividend income-tax oracle pipeline; its band and liability outputs apply the Scottish Rate Resolution 2026-27 rates (Income Tax Act 2007 section 11A charged via Scotland Act 1998 section 80C, with the section 35 personal allowance) for the UKMOD tin_s comparison on a Scottish taxpayer (drgn1=12) rather than adding new PolicyEngine UK oracle variables — PolicyEngine's Microcosm oracle compares only the ordinary non-Scottish UK-rate branch.
 
   # Composed Family-level UKMOD Child Benefit oracle pilot pipeline. It wires the
   # SI 2006/965 regulation 2 enhanced/other weekly rates and the SSCBA 1992

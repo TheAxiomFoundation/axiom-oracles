@@ -7,7 +7,7 @@ import json
 import pytest
 from hypothesis import given, settings, strategies as st
 
-from axiom_oracles.bridges import tax_populace
+from axiom_oracles.bridges import tax_populace as tax_microcosm
 from tests.test_emit_case_artifacts import _emit_household_fixture, _load_module, _write_fixture
 from tests.test_fiit_pattern_readers import fiit_report
 from tests.test_native_fiit_missing_returns import Frame, runner
@@ -88,14 +88,14 @@ def test_property_compact_payload_parity_includes_comparison_status(tmp_path_fac
 def _fiit_single_case_report(pairs):
     """Run the native FIIT producer on one tax unit, with one pair per output."""
     surface = "standard-deduction"
-    specs = list(tax_populace.SURFACE_OUTPUTS[surface].values())
+    specs = list(tax_microcosm.SURFACE_OUTPUTS[surface].values())
     assert len(pairs) == len(specs)
     pe_rows = [{spec["pe"]: right for spec, (_, right) in zip(specs, pairs)}]
     results = [{"outputs": {
         spec["axiom"]: {"kind": "quantity", "value": {"value": left}}
         for spec, (left, _) in zip(specs, pairs)
     }}]
-    raw = tax_populace.compare_outputs(
+    raw = tax_microcosm.compare_outputs(
         pe_data={"tax_units": Frame(pe_rows), "persons": Frame(pe_rows),
                  "tax_unit_ids": [0], "person_ids": [0]},
         axiom_outputs_by_surface={surface: results}, tolerance=0, relative_tolerance=0,

@@ -36,7 +36,7 @@ def _write_binary(
     path.chmod(0o755)
 
 
-@pytest.fixture(params=["grid", "populace"])
+@pytest.fixture(params=["grid", "microcosm"])
 def direct_call(request, monkeypatch, tmp_path):
     """Exercise each caller through an upstream-compatible runner interface."""
     binary = tmp_path / "executed-taxsim"

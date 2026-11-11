@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from hypothesis import given, settings, strategies as st
 
-from axiom_oracles.bridges import tax_populace
+from axiom_oracles.bridges import tax_populace as tax_microcosm
 from tests.test_native_fiit_missing_returns import Frame, runner
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,7 +21,7 @@ pytestmark = pytest.mark.skipif(BUN is None, reason="dashboard patterns require 
 def fiit_report(pairs):
     """Run the native FIIT producer and adapter; retain their actual hierarchy."""
     surface = "employee-medicare"
-    specs = tax_populace.SURFACE_OUTPUTS[surface]
+    specs = tax_microcosm.SURFACE_OUTPUTS[surface]
     output = next(iter(specs.values()))
     pe_rows = [{spec["pe"]: 0 for spec in specs.values()} for _ in pairs]
     results = [{"outputs": {
@@ -31,7 +31,7 @@ def fiit_report(pairs):
     for index, (left, right) in enumerate(pairs):
         pe_rows[index][output["pe"]] = right
         results[index]["outputs"][output["axiom"]]["value"]["value"] = left
-    raw = tax_populace.compare_outputs(
+    raw = tax_microcosm.compare_outputs(
         pe_data={"tax_units": Frame(pe_rows), "persons": Frame(pe_rows),
                  "tax_unit_ids": list(range(len(pairs))),
                  "person_ids": list(range(len(pairs)))},

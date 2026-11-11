@@ -678,7 +678,7 @@ def _canonical_mismatch_payloads(
             "x": normalized.get("right"),
             # Two sign conventions for the served delta coexist on main: this
             # emitter writes the documented right-minus-left dashboard delta,
-            # while the populace-campaign artifacts (AL/MA/NC/SC/TN SNAP,
+            # while the Microcosm-campaign artifacts (AL/MA/NC/SC/TN SNAP,
             # checked by the same CI step) serve the report's stored
             # `difference` (left-minus-right). Both are faithful projections
             # of the same (l, x) pair. The parity check therefore accepts a

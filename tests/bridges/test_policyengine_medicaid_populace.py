@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from axiom_oracles.bridges import medicaid_populace
+from axiom_oracles.bridges import medicaid_populace as medicaid_microcosm
 
 
 class FakeUSDataset:
@@ -53,7 +53,7 @@ def test_pre_sample_households_preserves_whole_state_households():
         ),
     )
 
-    sampled = medicaid_populace.pre_sample_households(
+    sampled = medicaid_microcosm.pre_sample_households(
         dataset,
         household_count=1,
         state_filter="CA",
@@ -86,7 +86,7 @@ def test_runtime_output_id_for_public_id_resolves_branch_qualified_id(tmp_path: 
     )
 
     assert (
-        medicaid_populace.runtime_output_id_for_public_id(
+        medicaid_microcosm.runtime_output_id_for_public_id(
             artifact,
             "us:statutes/42/1396a/a/10#is_medicaid_eligible",
         )
@@ -118,7 +118,7 @@ def test_axiom_output_ids_by_label_can_request_eligibility_only(
         encoding="utf-8",
     )
     monkeypatch.setattr(
-        medicaid_populace,
+        medicaid_microcosm,
         "AXIOM_COMPONENT_OUTPUT_IDS",
         {
             "optional_senior_disabled": (
@@ -127,14 +127,14 @@ def test_axiom_output_ids_by_label_can_request_eligibility_only(
         },
     )
 
-    assert medicaid_populace.axiom_output_ids_by_label(
+    assert medicaid_microcosm.axiom_output_ids_by_label(
         artifact,
         include_diagnostics=False,
     ) == {
         "eligible": "us:statutes/42/1396a/a/10#is_medicaid_eligible",
     }
     assert (
-        medicaid_populace.axiom_output_ids_by_label(
+        medicaid_microcosm.axiom_output_ids_by_label(
             artifact,
             include_diagnostics=True,
         )["optional_senior_disabled"]
@@ -143,7 +143,7 @@ def test_axiom_output_ids_by_label_can_request_eligibility_only(
 
 
 def test_project_case_inputs_uses_shared_income_projection_for_medicaid_imports():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=10,
         medicaid_income_level=0.25,
@@ -188,7 +188,7 @@ def test_project_case_inputs_uses_shared_income_projection_for_medicaid_imports(
 
 
 def test_project_case_inputs_uses_shared_pregnancy_projection_for_medicaid_imports():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=35,
         medicaid_income_level=0.25,
@@ -218,7 +218,7 @@ def test_project_case_inputs_uses_shared_pregnancy_projection_for_medicaid_impor
 
 
 def test_project_case_inputs_maps_senior_disabled_category_to_statutory_inputs():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=64,
         medicaid_income_level=0.25,
@@ -262,7 +262,7 @@ def test_project_case_inputs_maps_senior_disabled_category_to_statutory_inputs()
 
 
 def test_project_case_inputs_maps_young_adult_category_to_statutory_inputs():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=20,
         medicaid_income_level=0.25,
@@ -302,7 +302,7 @@ def test_project_case_inputs_maps_young_adult_category_to_statutory_inputs():
 
 
 def test_project_case_inputs_maps_working_disabled_category_to_statutory_inputs():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=41,
         medicaid_income_level=0.25,
@@ -350,7 +350,7 @@ def test_project_case_inputs_maps_working_disabled_category_to_statutory_inputs(
 
 
 def test_project_case_inputs_maps_ssi_excess_earnings_category_to_statutory_inputs():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=72,
         medicaid_income_level=0.25,
@@ -402,7 +402,7 @@ def test_project_case_inputs_maps_ssi_excess_earnings_category_to_statutory_inpu
 
 
 def test_project_case_inputs_maps_medically_needy_category_to_cfr_inputs():
-    inputs = medicaid_populace._project_case_inputs(
+    inputs = medicaid_microcosm._project_case_inputs(
         {},
         age=44,
         medicaid_income_level=0.25,
@@ -469,7 +469,7 @@ def test_summarize_by_pe_category_counts_directional_mismatches():
         },
     ]
 
-    summary = medicaid_populace.summarize_by_pe_category(rows)
+    summary = medicaid_microcosm.summarize_by_pe_category(rows)
 
     assert summary == [
         {

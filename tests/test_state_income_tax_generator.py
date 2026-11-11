@@ -144,19 +144,19 @@ def test_mississippi_canonical_schedule_uses_live_person_execution():
     module = "us-ms:policies/income_tax/2026_section_27_7_5_schedule"
 
     assert "MS" in generator._TAXSIM_STATE
-    assert "MS" in generator._POPULACE_STATES
+    assert "MS" in generator._MICROCOSM_STATES
     assert "MS" in generator._STATES
     assert "MS" in generator._LIVE_AXIOM_STATES
     assert generator._MODULE["MS"] == module
     assert generator._LIABILITY_OUTPUT["MS"] == (
         f"{module}#ms_pit_2026_section_27_7_5_schedule_tax"
     )
-    assert generator._POPULACE_OUTPUT["MS"] == generator._LIABILITY_OUTPUT["MS"]
+    assert generator._MICROCOSM_OUTPUT["MS"] == generator._LIABILITY_OUTPUT["MS"]
     assert generator._PE_VAR["MS"] == "ms_income_tax_before_credits_joint"
-    assert generator._POPULACE_PE_VAR["MS"] == "ms_income_tax_before_credits_joint"
-    assert generator._POPULACE_AGGREGATION["MS"] == "person_sum_to_tax_unit"
+    assert generator._MICROCOSM_PE_VAR["MS"] == "ms_income_tax_before_credits_joint"
+    assert generator._MICROCOSM_AGGREGATION["MS"] == "person_sum_to_tax_unit"
     assert generator._TOL["MS"] == (0.01, 1e-7)
-    assert generator._POPULACE_TOL["MS"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["MS"] == (0.01, 1e-7)
     assert generator._parse_args(["--state", "MS"]).state == "MS"
 
 
@@ -165,30 +165,30 @@ def test_delaware_legacy_grid_is_explicitly_decoupled() -> None:
     module = "us-de:policies/income_tax/pilot_liability_pipeline"
 
     assert "DE" in generator._TAXSIM_STATE
-    assert "DE" in generator._POPULACE_STATES
+    assert "DE" in generator._MICROCOSM_STATES
     assert "DE" not in generator._STATES
     assert "Person-grain" in generator._GRID_EXCLUDED_STATES["DE"]
-    assert generator._POPULACE_OUTPUT["DE"] == (
+    assert generator._MICROCOSM_OUTPUT["DE"] == (
         f"{module}#de_pit_pilot_separate_schedule_tax"
     )
-    assert generator._LIABILITY_OUTPUT["DE"] == generator._POPULACE_OUTPUT["DE"]
+    assert generator._LIABILITY_OUTPUT["DE"] == generator._MICROCOSM_OUTPUT["DE"]
     assert (
         generator._PE_VAR["DE"]
         == "de_income_tax_before_non_refundable_credits_indv"
     )
     assert (
-        generator._POPULACE_PE_VAR["DE"]
+        generator._MICROCOSM_PE_VAR["DE"]
         == "de_income_tax_before_non_refundable_credits_indv"
     )
-    assert generator._POPULACE_AGGREGATION["DE"] == "person_sum_to_tax_unit"
-    assert generator._POPULACE_TOL["DE"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_AGGREGATION["DE"] == "person_sum_to_tax_unit"
+    assert generator._MICROCOSM_TOL["DE"] == (0.01, 1e-7)
 
 
 def test_mississippi_live_grid_maps_reordered_results_by_person_id(
     monkeypatch, tmp_path
 ):
     generator = _load_generator()
-    tax_populace = __import__(
+    tax_microcosm = __import__(
         "axiom_oracles.bridges.tax_populace",
         fromlist=["run_axiom_program"],
     )
@@ -197,7 +197,7 @@ def test_mississippi_live_grid_maps_reordered_results_by_person_id(
     monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
     monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
     monkeypatch.setattr(
-        tax_populace,
+        tax_microcosm,
         "run_axiom_program",
         lambda **_kwargs: [
             {
@@ -239,7 +239,7 @@ def test_mississippi_live_grid_maps_reordered_results_by_person_id(
 
 def test_mississippi_live_grid_rejects_wrong_person_id(monkeypatch, tmp_path):
     generator = _load_generator()
-    tax_populace = __import__(
+    tax_microcosm = __import__(
         "axiom_oracles.bridges.tax_populace",
         fromlist=["run_axiom_program"],
     )
@@ -248,7 +248,7 @@ def test_mississippi_live_grid_rejects_wrong_person_id(monkeypatch, tmp_path):
     monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
     monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
     monkeypatch.setattr(
-        tax_populace,
+        tax_microcosm,
         "run_axiom_program",
         lambda **_kwargs: [
             {
@@ -415,7 +415,7 @@ def test_utah_live_grid_matches_reordered_results_by_exact_tax_unit_id(
     monkeypatch, tmp_path
 ):
     generator = _load_generator()
-    tax_populace = __import__(
+    tax_microcosm = __import__(
         "axiom_oracles.bridges.tax_populace",
         fromlist=["run_axiom_program"],
     )
@@ -423,7 +423,7 @@ def test_utah_live_grid_matches_reordered_results_by_exact_tax_unit_id(
     monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
     monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
     monkeypatch.setattr(
-        tax_populace,
+        tax_microcosm,
         "run_axiom_program",
         lambda **_kwargs: [
             {
@@ -464,7 +464,7 @@ def test_utah_live_grid_rejects_duplicate_or_unexpected_tax_unit_id(
     monkeypatch, tmp_path, entity_ids
 ):
     generator = _load_generator()
-    tax_populace = __import__(
+    tax_microcosm = __import__(
         "axiom_oracles.bridges.tax_populace",
         fromlist=["run_axiom_program"],
     )
@@ -472,7 +472,7 @@ def test_utah_live_grid_rejects_duplicate_or_unexpected_tax_unit_id(
     monkeypatch.setattr(generator, "RULESPEC_US", tmp_path)
     monkeypatch.setattr(generator, "AXIOM_RULES", tmp_path)
     monkeypatch.setattr(
-        tax_populace,
+        tax_microcosm,
         "run_axiom_program",
         lambda **_kwargs: [
             {
@@ -545,7 +545,7 @@ def test_alabama_is_excluded_from_legacy_grid_and_uses_canonical_module():
     legacy_report = "axiom-policyengine-taxsim-al-income-tax-liability.json"
 
     assert "AL" not in generator._STATES
-    assert "AL" in generator._POPULACE_STATES
+    assert "AL" in generator._MICROCOSM_STATES
     assert generator._MODULE["AL"] == (
         "us-al:policies/income_tax/"
         "2026_section_40_18_5_schedule_before_credits"
@@ -576,7 +576,7 @@ def test_recent_state_income_tax_oracle_registrations():
         assert generator._TAXSIM_STATE[state] == taxsim_code
         assert generator._PE_VAR[state] == policyengine_target
         assert generator._TOL[state] == tolerance
-        assert state in generator._POPULACE_STATES
+        assert state in generator._MICROCOSM_STATES
         if state == "AR":
             assert state not in generator._STATES
             assert "Person-grain" in generator._GRID_EXCLUDED_STATES[state]
@@ -589,29 +589,29 @@ def test_recent_state_income_tax_oracle_registrations():
             f"{generator._MODULE[state]}"
             f"#{state.lower()}_pit_pilot_income_tax_liability"
         )
-    assert generator._POPULACE_TOL["CO"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["CO"] == (0.01, 1e-7)
 
     assert "NH" not in generator._TAXSIM_STATE
-    assert "NH" not in generator._POPULACE_STATES
+    assert "NH" not in generator._MICROCOSM_STATES
     assert "NH" not in generator._STATES
 
 
-def test_kansas_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
+def test_kansas_microcosm_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
     generator = _load_generator()
     canonical_module = (
         "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
     )
     legacy_module = "us-ks:policies/income_tax/pilot_liability_pipeline"
 
-    assert generator._POPULACE_MODULE["KS"] == canonical_module
-    assert generator._POPULACE_OUTPUT["KS"] == (
+    assert generator._MICROCOSM_MODULE["KS"] == canonical_module
+    assert generator._MICROCOSM_OUTPUT["KS"] == (
         f"{canonical_module}#ks_pit_2026_k40es_schedule_before_credits"
     )
     assert (
-        generator._POPULACE_PE_VAR["KS"]
+        generator._MICROCOSM_PE_VAR["KS"]
         == "ks_k40es_schedule_before_credits_reviewed"
     )
-    assert generator._POPULACE_TOL["KS"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["KS"] == (0.01, 1e-7)
 
     assert generator._MODULE["KS"] == legacy_module
     assert generator._LIABILITY_OUTPUT["KS"] == (
@@ -621,7 +621,7 @@ def test_kansas_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None
     assert generator._TOL["KS"] == (1.0, 0.0)
 
 
-def test_dc_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
+def test_dc_microcosm_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
     generator = _load_generator()
     canonical_module = (
         "us-dc:policies/income_tax/"
@@ -629,16 +629,16 @@ def test_dc_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
     )
     legacy_module = "us-dc:policies/income_tax/pilot_liability_pipeline"
 
-    assert generator._POPULACE_MODULE["DC"] == canonical_module
-    assert generator._POPULACE_OUTPUT["DC"] == (
+    assert generator._MICROCOSM_MODULE["DC"] == canonical_module
+    assert generator._MICROCOSM_OUTPUT["DC"] == (
         f"{canonical_module}#"
         "dc_pit_2026_section_47_1806_03_schedule_before_credits"
     )
     assert (
-        generator._POPULACE_PE_VAR["DC"]
+        generator._MICROCOSM_PE_VAR["DC"]
         == "dc_income_tax_before_credits_joint"
     )
-    assert generator._POPULACE_TOL["DC"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["DC"] == (0.01, 1e-7)
 
     assert generator._MODULE["DC"] == legacy_module
     assert generator._LIABILITY_OUTPUT["DC"] == (
@@ -649,19 +649,19 @@ def test_dc_populace_schedule_is_decoupled_from_legacy_taxsim_grid() -> None:
     assert "DC" in generator._STATES
 
 
-def test_california_populace_bhst_is_decoupled_from_legacy_taxsim_grid() -> None:
+def test_california_microcosm_bhst_is_decoupled_from_legacy_taxsim_grid() -> None:
     generator = _load_generator()
     module = "us-ca:policies/income_tax/pilot_liability_pipeline"
 
-    assert generator._POPULACE_MODULE["CA"] == module
-    assert generator._POPULACE_OUTPUT["CA"] == (
+    assert generator._MICROCOSM_MODULE["CA"] == module
+    assert generator._MICROCOSM_OUTPUT["CA"] == (
         f"{module}#ca_pit_pilot_behavioral_health_services_tax"
     )
     assert (
-        generator._POPULACE_PE_VAR["CA"]
+        generator._MICROCOSM_PE_VAR["CA"]
         == "ca_mental_health_services_tax"
     )
-    assert generator._POPULACE_TOL["CA"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["CA"] == (0.01, 1e-7)
 
     assert generator._MODULE["CA"] == module
     assert generator._LIABILITY_OUTPUT["CA"] == (
@@ -675,19 +675,19 @@ def test_california_populace_bhst_is_decoupled_from_legacy_taxsim_grid() -> None
     assert "CA" in generator._STATES
 
 
-def test_minnesota_populace_schedule_is_decoupled_from_legacy_grid() -> None:
+def test_minnesota_microcosm_schedule_is_decoupled_from_legacy_grid() -> None:
     generator = _load_generator()
     module = "us-mn:policies/income_tax/pilot_liability_pipeline"
 
-    assert generator._POPULACE_MODULE["MN"] == module
-    assert generator._POPULACE_OUTPUT["MN"] == (
+    assert generator._MICROCOSM_MODULE["MN"] == module
+    assert generator._MICROCOSM_OUTPUT["MN"] == (
         f"{module}#mn_pit_pilot_schedule_tax"
     )
     assert (
-        generator._POPULACE_PE_VAR["MN"]
+        generator._MICROCOSM_PE_VAR["MN"]
         == "mn_basic_tax_precision_stable"
     )
-    assert generator._POPULACE_TOL["MN"] == (1.0, 0.0)
+    assert generator._MICROCOSM_TOL["MN"] == (1.0, 0.0)
 
     assert generator._MODULE["MN"] == module
     assert generator._LIABILITY_OUTPUT["MN"] == (
@@ -716,7 +716,7 @@ def test_kentucky_registry_uses_canonical_live_schedule_surface() -> None:
         == "ky_income_tax_before_non_refundable_credits_unit"
     )
     assert generator._TOL["KY"] == (0.01, 1e-7)
-    assert generator._POPULACE_TOL["KY"] == (0.01, 1e-7)
+    assert generator._MICROCOSM_TOL["KY"] == (0.01, 1e-7)
     assert "KY" in generator._LIVE_AXIOM_STATES
     assert "KY" in generator._STATES
 
@@ -725,16 +725,16 @@ def test_arkansas_legacy_grid_is_explicitly_decoupled() -> None:
     generator = _load_generator()
 
     assert "AR" in generator._TAXSIM_STATE
-    assert "AR" in generator._POPULACE_STATES
+    assert "AR" in generator._MICROCOSM_STATES
     assert "AR" not in generator._STATES
-    assert generator._POPULACE_OUTPUT["AR"].endswith(
+    assert generator._MICROCOSM_OUTPUT["AR"].endswith(
         "#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv"
     )
     assert (
-        generator._POPULACE_PE_VAR["AR"]
+        generator._MICROCOSM_PE_VAR["AR"]
         == "ar_income_tax_before_non_refundable_credits_indiv"
     )
-    assert generator._POPULACE_AGGREGATION["AR"] == "person_sum_to_tax_unit"
+    assert generator._MICROCOSM_AGGREGATION["AR"] == "person_sum_to_tax_unit"
 
 
 def test_georgia_uses_canonical_annual_before_credit_surface(
@@ -788,7 +788,7 @@ def test_connecticut_canonical_component_retires_the_legacy_grid() -> None:
     generator = _load_generator()
 
     assert "CT" in generator._TAXSIM_STATE
-    assert "CT" in generator._POPULACE_STATES
+    assert "CT" in generator._MICROCOSM_STATES
     assert "CT" not in generator._STATES
     assert "98-fixture" in generator._GRID_EXCLUDED_STATES["CT"]
     assert generator._MODULE["CT"].endswith(
@@ -798,7 +798,7 @@ def test_connecticut_canonical_component_retires_the_legacy_grid() -> None:
         "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
     )
     assert (
-        generator._POPULACE_PE_VAR["CT"]
+        generator._MICROCOSM_PE_VAR["CT"]
         == "ct_resident_ordinary_tax_before_personal_credit_derived"
     )
 

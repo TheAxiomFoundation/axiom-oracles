@@ -77,7 +77,7 @@ entry cannot be added, have its digest changed, or be restored by a revert
 after removal. CI checks out full history for this ratchet, and a shallow
 clone is refused, since it lacks the commits that removed exceptions.
 
-Populace campaign projections (`scripts/emit_populace_campaign_artifacts.py`)
+Microcosm campaign projections (`scripts/emit_populace_campaign_artifacts.py`)
 copy a campaign's canonical `provenance.engine` block verbatim, or its runtime
 engine block when that block's `source_status` is `verified build receipt`.
 Campaigns from before build receipts recorded the engine checkout's HEAD and

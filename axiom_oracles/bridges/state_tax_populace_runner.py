@@ -1,4 +1,4 @@
-"""Route and execute reviewed state income-tax Populace comparisons.
+"""Route and execute reviewed state income-tax Microcosm comparisons.
 
 Population accounting remains independent of execution.  Runnable projections
 are limited to exact sources admitted by the declarative contract; unresolved
@@ -397,7 +397,7 @@ def route_tax_units(
         household_id = _clean_id(row["household_id"])
         if household_id in household_rows:
             raise StateTaxPopulationRoutingError(
-                f"duplicate household_id in Populace: {household_id}"
+                f"duplicate household_id in Microcosm: {household_id}"
             )
         household_rows[household_id] = (
             _normalize_fips(row["state_fips"]),
@@ -737,7 +737,7 @@ def _precision_stable_mn_basic_tax(
     """Recover mn_basic_tax in float64 and prove equivalence to its raw output.
 
     PolicyEngine stores money variables as binary32. At the extreme synthetic
-    values present in Populace, one-half binary32 ULP can exceed the campaign's
+    values present in Microcosm, one-half binary32 ULP can exceed the campaign's
     $1 structural tolerance. This projection reads only mn_basic_tax's own
     active PolicyEngine class, upstreams, and marginal scales. It fails closed
     unless the published raw output is the correctly rounded binary32 result.
@@ -864,7 +864,7 @@ def validate_campaign_dataset_identity(
         reported_sha
     ):
         errors.append(
-            "sha256 does not identify the contract's certified Populace artifact"
+            "sha256 does not identify the contract's certified Microcosm artifact"
         )
     if errors:
         raise StateTaxPopulationRoutingError(
@@ -1724,7 +1724,7 @@ def calculate_policyengine_targets(
 # Person-level PolicyEngine variables projected into the per-tax-unit TAXSIM
 # input row. Concept keys mirror populations/populace_us.py's tax-unit person
 # loader (less its SSI benefit and resource facts, which no tax projection
-# reads) so the populace TAXSIM leg feeds the binary the same input surface as
+# reads) so the Microcosm TAXSIM leg feeds the binary the same input surface as
 # the Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is
 # the single row-assembly authority for both);
 # tests/bridges/test_state_tax_populace_runner.py pins the mirror.
@@ -1754,7 +1754,7 @@ def taxsim_target_column(output_concept: str) -> str | None:
     final-liability concepts map ``siitax``. A concept with no ``taxsim``
     mapping returns None and its jurisdiction is *skipped* by the TAXSIM
     leg — never silently graded against a guessed column. (The audit that
-    forced this: CT/DC/KS/MN/OH populace outputs are pre-credit schedules a
+    forced this: CT/DC/KS/MN/OH Microcosm outputs are pre-credit schedules a
     ``siitax`` default would misgrade, and CA's Behavioral Health Services
     Tax has no truthful TAXSIM surface at all.)
     """
@@ -1785,7 +1785,7 @@ def calculate_taxsim_targets(
     state through the pinned policyengine-taxsim binary, and graded on the
     column :func:`taxsim_target_column` resolves for the jurisdiction's
     output concept. Person identity, order, and tax-unit links are verified
-    against the certified Populace tables before any values are used —
+    against the certified Microcosm tables before any values are used —
     the same fail-closed discipline as the PolicyEngine legs.
 
     When supplied, ``unprojected_inputs`` collects nonzero dropped filer
@@ -1828,7 +1828,7 @@ def calculate_taxsim_targets(
     _reject_duplicate_ids(tax_unit_ids, "tax_unit_id")
     if raw_persons is None:
         raise StateTaxPopulationRoutingError(
-            "TAXSIM targets require the Populace person table"
+            "TAXSIM targets require the Microcosm person table"
         )
     _require_columns(
         raw_persons, {"person_id", "person_tax_unit_id"}, "person"
@@ -1841,7 +1841,7 @@ def calculate_taxsim_targets(
     unknown = sorted(set(person_tax_unit_ids) - set(tax_unit_ids), key=str)
     if unknown:
         raise StateTaxPopulationRoutingError(
-            "TAXSIM targets: Populace people link to unknown tax_unit_id "
+            "TAXSIM targets: Microcosm people link to unknown tax_unit_id "
             "values: " + ", ".join(str(value) for value in unknown)
         )
 
@@ -1875,7 +1875,7 @@ def calculate_taxsim_targets(
     if modeled_person_ids != person_ids:
         raise StateTaxPopulationRoutingError(
             "TAXSIM targets: PolicyEngine Person identity/order does not "
-            "match the certified Populace person table"
+            "match the certified Microcosm person table"
         )
     modeled_person_tax_unit_ids = [
         _clean_id(value)
@@ -2335,7 +2335,7 @@ def calculate_policyengine_projection_inputs(
                 if slot.slot not in reviewed_slots:
                     raise StateTaxPopulationRoutingError(
                         f"{state}: runtime projector does not support raw "
-                        f"Populace source for {slot.slot}"
+                        f"Microcosm source for {slot.slot}"
                     )
                 ready_state_ids = {
                     route.tax_unit_id
@@ -2555,7 +2555,7 @@ def _validate_reviewed_population_assumptions(
         return
     if raw_persons is None:
         raise StateTaxPopulationRoutingError(
-            f"{state}: reviewed population assumptions require the Populace "
+            f"{state}: reviewed population assumptions require the Microcosm "
             "person table"
         )
     _require_columns(
@@ -3318,14 +3318,14 @@ def _selected_person_members(
 
     if raw_persons is None:
         raise StateTaxPopulationRoutingError(
-            f"{state}: declared Person inputs/relations require the Populace "
+            f"{state}: declared Person inputs/relations require the Microcosm "
             "person table"
         )
     columns = set(getattr(raw_persons, "columns", ()))
     missing_columns = sorted({"person_id", "person_tax_unit_id"} - columns)
     if missing_columns:
         raise StateTaxPopulationRoutingError(
-            f"{state}: Populace person table is missing required columns: "
+            f"{state}: Microcosm person table is missing required columns: "
             + ", ".join(missing_columns)
         )
     rows = raw_persons.to_dict("records")
@@ -3344,7 +3344,7 @@ def _selected_person_members(
             members[tax_unit_id].append(person_id)
     if unknown:
         raise StateTaxPopulationRoutingError(
-            f"{state}: Populace people link to unknown tax_unit_id values: "
+            f"{state}: Microcosm people link to unknown tax_unit_id values: "
             + ", ".join(str(value) for value in sorted(unknown, key=str))
         )
     missing_members = sorted(
@@ -4337,7 +4337,7 @@ def _reviewed_filer_inclusions(
     ):
         raise StateTaxPopulationRoutingError(
             f"{state}: PolicyEngine filer-role cardinality does not match the "
-            "certified Populace person table"
+            "certified Microcosm person table"
         )
     heads_by_tax_unit: dict[int | str, int] = {
         tax_unit_id: 0 for tax_unit_id in tax_unit_ids
@@ -4401,7 +4401,7 @@ def _reviewed_person_values(
 
     if raw_persons is None:
         raise StateTaxPopulationRoutingError(
-            f"{state}: reviewed Person projections require the Populace person table"
+            f"{state}: reviewed Person projections require the Microcosm person table"
         )
     _require_columns(
         raw_persons,
@@ -4418,13 +4418,13 @@ def _reviewed_person_values(
     if len(policyengine_person_ids) != len(person_ids):
         raise StateTaxPopulationRoutingError(
             f"{state}: PolicyEngine Person cardinality does not match the certified "
-            f"Populace person table ({len(policyengine_person_ids)} != "
+            f"Microcosm person table ({len(policyengine_person_ids)} != "
             f"{len(person_ids)})"
         )
     if policyengine_person_ids != person_ids:
         raise StateTaxPopulationRoutingError(
             f"{state}: PolicyEngine Person identity/order does not match the certified "
-            "Populace person table"
+            "Microcosm person table"
         )
 
     tax_unit_id_set = set(tax_unit_ids)
@@ -4434,13 +4434,13 @@ def _reviewed_person_values(
     unknown = sorted(set(person_tax_unit_ids) - tax_unit_id_set, key=str)
     if unknown:
         raise StateTaxPopulationRoutingError(
-            f"{state}: Populace people link to unknown tax_unit_id values: "
+            f"{state}: Microcosm people link to unknown tax_unit_id values: "
             + ", ".join(str(value) for value in unknown)
         )
     missing = sorted(tax_unit_id_set - set(person_tax_unit_ids), key=str)
     if missing:
         raise StateTaxPopulationRoutingError(
-            f"{state}: Populace tax units have no Person members: "
+            f"{state}: Microcosm tax units have no Person members: "
             + ", ".join(str(value) for value in missing)
         )
     policyengine_person_tax_unit_ids = [
@@ -4452,7 +4452,7 @@ def _reviewed_person_values(
     if len(policyengine_person_tax_unit_ids) != len(person_tax_unit_ids):
         raise StateTaxPopulationRoutingError(
             f"{state}: PolicyEngine Person-to-TaxUnit mapping cardinality does not "
-            "match the certified Populace person table "
+            "match the certified Microcosm person table "
             f"({len(policyengine_person_tax_unit_ids)} != "
             f"{len(person_tax_unit_ids)})"
         )
@@ -4587,7 +4587,7 @@ def _require_columns(
     if missing:
         prefix = f"{state}: " if state else ""
         raise StateTaxPopulationRoutingError(
-            f"{prefix}Populace {label} table is missing required columns: "
+            f"{prefix}Microcosm {label} table is missing required columns: "
             + ", ".join(missing)
         )
 
@@ -4632,11 +4632,11 @@ def _clean_weight(value: Any) -> float:
         weight = float(value)
     except (TypeError, ValueError) as exc:
         raise StateTaxPopulationRoutingError(
-            f"invalid Populace population weight: {value!r}"
+            f"invalid Microcosm population weight: {value!r}"
         ) from exc
     if not math.isfinite(weight):
         raise StateTaxPopulationRoutingError(
-            "Populace population weight must be finite"
+            "Microcosm population weight must be finite"
         )
     return weight
 

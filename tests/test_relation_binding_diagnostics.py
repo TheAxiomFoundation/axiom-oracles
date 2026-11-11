@@ -174,7 +174,7 @@ def test_candidate_selection_counts_every_execution_ambiguity(valid_selection):
 @pytest.mark.parametrize("two_queries", [False, True])
 def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, matched, two_queries):
     import pandas as pd
-    from axiom_oracles.bridges import tax_populace
+    from axiom_oracles.bridges import tax_populace as tax_microcosm
 
     root = tmp_path / "rulespec-us"
     root.mkdir()
@@ -184,7 +184,7 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
     binary = engine_root / "target/release/axiom-rules-engine"
     binary.parent.mkdir(parents=True)
     binary.touch()
-    monkeypatch.setattr(tax_populace.tempfile, "tempdir", str(tmp_path))
+    monkeypatch.setattr(tax_microcosm.tempfile, "tempdir", str(tmp_path))
     def run(cmd, **kwargs):
         if "compile" in cmd:
             from pathlib import Path
@@ -197,7 +197,7 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
                 "kind": "integer", "value": 0,
             }}},
         } for query in request["queries"]]}), "")
-    monkeypatch.setattr(tax_populace.subprocess, "run", run)
+    monkeypatch.setattr(tax_microcosm.subprocess, "run", run)
     query_ids = ["tax_unit_1", "member"] if two_queries else ["tax_unit_1"]
     ids = ["member", "tax_unit_1"] if matched else ["unlabelled-a", "unlabelled-b"]
     request = {"dataset": {"inputs": [], "relations": [
@@ -206,17 +206,17 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
     before = deepcopy(request)
     with warnings.catch_warnings(record=True) as emitted:
         warnings.simplefilter("always")
-        results = tax_populace.run_axiom_program(
+        results = tax_microcosm.run_axiom_program(
             program=program, request=request, rulespec_root=root, axiom_rules_path=engine_root,
         )
     assert not emitted
     assert request == before
     assert results[0]["relation_binding_diagnostics"]["count"] == 25
     assert sum(row.get("relation_binding_diagnostics", {}).get("count", 0) for row in results) == 25
-    monkeypatch.setattr(tax_populace, "SURFACE_OUTPUTS", {
+    monkeypatch.setattr(tax_microcosm, "SURFACE_OUTPUTS", {
         "ctc": {"n": {"axiom": "n", "pe": "n"}},
     })
-    report = tax_populace.compare_outputs(
+    report = tax_microcosm.compare_outputs(
         pe_data={"tax_unit_ids": list(range(1, len(query_ids) + 1)), "person_ids": [],
                  "tax_units": pd.DataFrame([{"n": 0}] * len(query_ids)), "persons": pd.DataFrame()},
         axiom_outputs_by_surface={"ctc": results}, tolerance=0, relative_tolerance=0,
@@ -226,7 +226,7 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
 
 @pytest.mark.parametrize("roles", [False, True])
 def test_tax_runtime_without_collector_warns_for_untyped_relation(tmp_path, roles):
-    from axiom_oracles.bridges import tax_populace
+    from axiom_oracles.bridges import tax_populace as tax_microcosm
 
     record = _case("probe", roles=roles).metadata["axiom_relations"][0]
     request = {
@@ -236,7 +236,7 @@ def test_tax_runtime_without_collector_warns_for_untyped_relation(tmp_path, role
     before = deepcopy(request)
     with warnings.catch_warnings(record=True) as emitted:
         warnings.simplefilter("always")
-        runtime, _ = tax_populace._runtime_axiom_request(
+        runtime, _ = tax_microcosm._runtime_axiom_request(
             request, artifact_payload=_artifact(), rulespec_root=tmp_path,
         )
     assert request == before

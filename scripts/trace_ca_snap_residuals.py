@@ -539,7 +539,7 @@ def main() -> int:
     cases_by_id = {case.case_id: case for case in ca_cases}
     missing = sorted(case_ids - cases_by_id.keys())
     if missing:
-        raise ValueError(f"Live Populace loader is missing residual cases: {missing}")
+        raise ValueError(f"Live Microcosm loader is missing residual cases: {missing}")
     cases = [cases_by_id[row["case_id"]] for row in residuals]
 
     baseline = _result_values(

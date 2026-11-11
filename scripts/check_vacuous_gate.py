@@ -310,7 +310,7 @@ def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
 
 
 def _expected_projected_mismatch(row: object, concept: object) -> object:
-    """Derive one projected Populace mismatch row from its campaign row.
+    """Derive one projected Microcosm mismatch row from its campaign row.
 
     The projector keeps the campaign's fields and adds the v2 row identity
     dispositions select on (``case_id``, ``concept``, ``kind``) plus

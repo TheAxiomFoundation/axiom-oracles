@@ -13,7 +13,7 @@ import pandas as pd
 import pytest
 
 from axiom_oracles.adapters.axiom import tax_projection
-from axiom_oracles.bridges import state_tax_populace_runner, tax_populace
+from axiom_oracles.bridges import state_tax_populace_runner as state_tax_microcosm_runner, tax_populace as tax_microcosm
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
@@ -165,7 +165,7 @@ def _population() -> dict:
 
 
 def _tax_request(surface: str, artifact: dict | None = None) -> dict:
-    return tax_populace.build_axiom_request(
+    return tax_microcosm.build_axiom_request(
         pe_data=_population(),
         year=2026,
         surface=surface,
@@ -189,7 +189,7 @@ def test_federal_producers_follow_declared_roles_or_legacy_order(
     # Producers must work when the binder has no evidence with which to repair
     # their wire. Explicit construction is independently checked against slots.
     monkeypatch.setattr(
-        tax_populace, "bind_request_relations", lambda request, _: request
+        tax_microcosm, "bind_request_relations", lambda request, _: request
     )
     original = _tax_request(surface)
     names = {record["name"] for record in original["dataset"]["relations"]}
@@ -197,7 +197,7 @@ def test_federal_producers_follow_declared_roles_or_legacy_order(
     artifact = _artifact(names, current_slot, typed)
     request = _tax_request(surface, artifact if compiled_before_projection else None)
     original_request = deepcopy(request)
-    runtime, _ = tax_populace._runtime_axiom_request(
+    runtime, _ = tax_microcosm._runtime_axiom_request(
         request,
         artifact_payload=artifact,
         rulespec_root=tmp_path / "rulespec-us",
@@ -217,7 +217,7 @@ def test_federal_producers_follow_declared_roles_or_legacy_order(
 
 
 def _state_request(artifact: dict | None = None) -> dict:
-    runner = state_tax_populace_runner
+    runner = state_tax_microcosm_runner
     prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
     return runner._state_request(
         state="DC",
@@ -248,13 +248,13 @@ def test_state_producer_follows_declared_roles_or_legacy_order(
     typed,
 ):
     monkeypatch.setattr(
-        tax_populace, "bind_request_relations", lambda request, _: request
+        tax_microcosm, "bind_request_relations", lambda request, _: request
     )
     source = _state_request()
     names = {record["name"] for record in source["dataset"]["relations"]}
     artifact = _artifact(names, current_slot, typed)
     request = _state_request(artifact if compiled_before_projection else None)
-    runtime, _ = tax_populace._runtime_axiom_request(
+    runtime, _ = tax_microcosm._runtime_axiom_request(
         request,
         artifact_payload=artifact,
         rulespec_root=tmp_path / "rulespec-us-dc",
@@ -296,7 +296,7 @@ def test_tax_case_projection_carries_roles_for_every_relation_family(
     typed,
 ):
     monkeypatch.setattr(
-        tax_populace, "bind_request_relations", lambda request, _: request
+        tax_microcosm, "bind_request_relations", lambda request, _: request
     )
     projected = tax_projection.attach_axiom_tax_inputs_to_case(_case())
     records = projected.metadata["axiom_relations"]
@@ -312,7 +312,7 @@ def test_tax_case_projection_carries_roles_for_every_relation_family(
     }
     original = deepcopy(request)
     artifact = _artifact(names, current_slot, typed)
-    runtime, _ = tax_populace._runtime_axiom_request(
+    runtime, _ = tax_microcosm._runtime_axiom_request(
         request,
         artifact_payload=artifact,
         rulespec_root=tmp_path / "rulespec-us",

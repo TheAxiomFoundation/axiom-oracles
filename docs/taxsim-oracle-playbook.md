@@ -113,7 +113,7 @@ different profiles. Reports written before the runner recorded a binary
 record at most the `policyengine_taxsim` package version.
 
 **Scope.** The state income-tax liability grids
-(`scripts/generate_state_income_tax_liability.py`) and the Populace
+(`scripts/generate_state_income_tax_liability.py`) and the Microcosm
 state-tax leg (`bridges/state_tax_populace_runner.py`) still run the
 executable bundled in the installed `policyengine-taxsim` wheel and ignore
 `--taxsim-pin-profile` and `$AXIOM_TAXSIM_PIN_PROFILE`. Their provenance
@@ -154,9 +154,9 @@ re-verify an expired disposition and re-bind it, see
 
 | Lane | Population | Concepts | Column |
 | --- | --- | --- | --- |
-| `co-state-income-tax-taxsim` | CO Populace slice | CO state liability | `siitax` |
-| `co-tax-intersection-taxsim` | CO Populace slice | 9 federal + CO state | per mapping |
-| `fiit-taxsim-ecps` | national Populace | std deduction, EITC, FICA | per mapping |
+| `co-state-income-tax-taxsim` | CO Microcosm slice | CO state liability | `siitax` |
+| `co-tax-intersection-taxsim` | CO Microcosm slice | 9 federal + CO state | per mapping |
+| `fiit-taxsim-ecps` | national Microcosm | std deduction, EITC, FICA | per mapping |
 
 The national federal lane is scoped to itemization-*independent* concepts.
 Smoke-verified 2026-08-23: liability, taxable income, tax before credits,
@@ -169,7 +169,7 @@ intersection suite carries those concepts. CTC/CDCC are excluded from the
 national lane on signal grounds (the 2026 binary's child-credit gap makes
 every child row a known NBER artifact).
 | State grids (~39 suites) | 12-case synthetic grids | per-state liability concept | per mapping |
-| Populace campaign | national Populace, 43 jurisdictions | per-state output concept | per mapping, or skipped |
+| Microcosm campaign | national Microcosm, 43 jurisdictions | per-state output concept | per mapping, or skipped |
 
 **The graded output column is always resolved from
 `axiom_oracles/config/concept_mappings.yaml`**, never hardcoded:
@@ -180,7 +180,7 @@ every child row a known NBER artifact).
   siitax`. This is what upgraded UT and KY from "supplemental" to exact
   peers and gave AL, GA, AR, MS, and DE their first TAXSIM legs.
 - A concept with **no** `taxsim` mapping is **skipped, never guessed**. The
-  populace runner records these in `taxsim_skipped_states`. As of 2026-08-23
+  Microcosm runner records these in `taxsim_skipped_states`. As of 2026-08-23
   the only skip is CA (Behavioral Health Services Tax — no truthful TAXSIM
   surface exists; do not map it). CT/DC/KS/MN/OH were probe-verified and
   mapped to `staxbc` the same day; the probe notes live on their mapping
@@ -212,7 +212,7 @@ do not chase the Axiom encoding):
   over head+spouse only, while the Axiom/PolicyEngine side computes the
   full tax-unit value. The one-sided AGI gap equals the dependents'
   unearned income; it is a projection-surface limitation (all lanes,
-  ECPS and populace alike), not an oracle disagreement. Social-security
+  ECPS and Microcosm alike), not an oracle disagreement. Social-security
   benefits (`gssi`) follow the same rule: the §86 member is exactly
   0.85 × the non-earner members' benefits, plus the H.R.1 §70103
   senior-deduction phaseout knock-on of the shifted MAGI.
@@ -357,7 +357,7 @@ TAXSIM lane now fails CI.
 ## Extending coverage
 
 1. **New state, final-liability concept**: add `taxsim: siitax` to the
-   concept's mapping entry. The grid generator and populace leg pick it up
+   concept's mapping entry. The grid generator and Microcosm leg pick it up
    automatically.
 2. **New state, pre-credit concept**: verify `staxbc` semantics for that
    state against the pinned binary first (one probe case:

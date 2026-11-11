@@ -238,7 +238,7 @@ PDF p.18). Demonstration-state components
   `~/.cache/axiom-oracles/snap-qc/`. Point `AXIOM_SNAP_QC_DATA_DIR` at a directory
   that already holds `qc_pub_fy{YYYY}.csv` to skip the download entirely — that is
   also how the engine-gated live test and a local real run pick up the file. The
-  sha256 is verified after download with the populace-style remediation message.
+  sha256 is verified after download with the Microcosm-style remediation message.
 - The fy-2024-cola modules are on rulespec-us main (rulespec-us#760, merged
   2026-07-09), so any current main checkout serves. Point
   `AXIOM_SNAP_QC_RULESPEC_ROOT` at it when it is not the workspace default, and

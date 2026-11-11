@@ -10,7 +10,7 @@ import warnings
 from hypothesis import given, settings, strategies as st
 import pytest
 
-from axiom_oracles.bridges import efrs_uk, tax_populace
+from axiom_oracles.bridges import efrs_uk, tax_populace as tax_microcosm
 from axiom_oracles.bridges.relation_binding import RELATION_BINDING_SAMPLE_LIMIT
 
 
@@ -127,8 +127,8 @@ def test_uk_native_ambiguity_reaches_source_report_without_private_endpoints(
             } for query in wire_request["queries"]],
         }), "")
 
-    monkeypatch.setattr(tax_populace.subprocess, "run", run)
-    monkeypatch.setattr(tax_populace.tempfile, "tempdir", str(tmp_path))
+    monkeypatch.setattr(tax_microcosm.subprocess, "run", run)
+    monkeypatch.setattr(tax_microcosm.tempfile, "tempdir", str(tmp_path))
     with warnings.catch_warnings(record=True) as emitted:
         warnings.simplefilter("always")
         results = efrs_uk.run_axiom_surface(

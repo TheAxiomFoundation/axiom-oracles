@@ -1,6 +1,6 @@
 """Import-surface contract for the shared oracle-bridge package.
 
-Every bridge module must be importable WITHOUT PolicyEngine, populace-data,
+Every bridge module must be importable WITHOUT PolicyEngine, microcosm-data,
 huggingface-hub, or numpy installed (heavy dependencies are lazy, imported
 inside functions), and the documented public names must exist. axiom-encode
 re-exports these modules as thin shims, so a name disappearing here breaks
@@ -146,15 +146,15 @@ def test_shared_case_types_are_core_types() -> None:
     assert bridges.Entity is core_case.Entity
 
 
-def test_populace_us_pins_derive_from_bridge_pins() -> None:
+def test_microcosm_us_pins_derive_from_bridge_pins() -> None:
     """The populace:// pin table re-keys the shared certified pin table."""
     bridge_population = importlib.import_module("axiom_oracles.bridges.population")
-    populace_us = importlib.import_module("axiom_oracles.populations.populace_us")
+    microcosm_us = importlib.import_module("axiom_oracles.populations.populace_us")
     for pin in bridge_population.POPULACE_PINS.values():
-        derived = populace_us.POPULACE_PINS[(pin.repo_id, pin.filename)]
+        derived = microcosm_us.POPULACE_PINS[(pin.repo_id, pin.filename)]
         assert derived.revision == pin.revision
         assert derived.sha256 == pin.sha256
-    assert len(populace_us.POPULACE_PINS) == len(bridge_population.POPULACE_PINS)
+    assert len(microcosm_us.POPULACE_PINS) == len(bridge_population.POPULACE_PINS)
 
 
 def test_packaged_data_files_present() -> None:
