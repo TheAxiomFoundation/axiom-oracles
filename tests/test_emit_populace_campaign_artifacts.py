@@ -131,6 +131,45 @@ def test_configured_microcosm_reports_are_published_and_manifested():
     assert all((DASHBOARD_DATA / name).is_file() for name in required)
 
 
+def test_committed_state_report_descriptions_match_the_emitter():
+    """Each committed per-state description equals the emitter's text.
+
+    ``project_state`` writes ``_DESCRIPTION_BY_OUTPUT[concept]``, or its
+    fallback, into the report's aggregate, so rewording one of those
+    strings rewrites the committed description at the next emission.
+    """
+
+    paths = sorted(
+        DASHBOARD_DATA.glob("axiom-policyengine-*-income-tax-populace.json")
+    )
+    assert paths
+    differing = []
+    for path in paths:
+        report = json.loads(path.read_text())
+        state = report["suite"].split("-", 1)[0].upper()
+        for aggregate in report["aggregates"]:
+            concept = aggregate["concept"]
+            projected = project_state(
+                state,
+                {
+                    "compared_count": 1,
+                    "mismatch_count": 0,
+                    "output": concept,
+                    "program": concept.split("#", 1)[0],
+                    "policyengine_target": report["engines"]["policyengine"],
+                },
+                _campaign(),
+                "campaign.json",
+            )
+            expected = projected["aggregates"][0]["description"]
+            if aggregate["description"] != expected:
+                differing.append(
+                    (path.name, concept, aggregate["description"], expected)
+                )
+
+    assert differing == []
+
+
 def test_alabama_dashboard_description_names_narrow_schedule():
     output = (
         "us-al:policies/income_tax/"
