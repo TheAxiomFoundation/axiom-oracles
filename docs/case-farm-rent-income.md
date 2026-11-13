@@ -215,7 +215,7 @@ net loss can have gross rents over the limit.
 | TAXSIM grants no QBID on `otherprop` | TAXSIM | `docs/taxsim-oracle-playbook.md`, "no rental in the QBI base" |
 | TAXSIM reduces the childless EITC dollar for dollar above the investment-income limit instead of denying it | TAXSIM | disposition class `taxsim-2026-eitc-investment-limit-vintage` |
 | Tax-Calculator applies the 2026 §461(l) threshold of 256,000; the bridge and the pinned PolicyEngine apply 305,000 | bridge and pinned PolicyEngine | axiom-oracles#611 |
-| TAXSIM pays no EITC when AGI falls below zero, as a farm loss can make it | TAXSIM | [Suite A/B](#suite-ab), unit 111331 |
+| TAXSIM pays no EITC when AGI falls below zero, as a farm loss can make it | TAXSIM | axiom-oracles#692; [Suite A/B](#suite-ab), unit 111331 |
 | TAXSIM can report a standard deduction of 0 and deduct a smaller itemized amount | TAXSIM | axiom-oracles#689 |
 
 Engine runs on 2026-10-10 produced every figure in the first eight rows
@@ -233,8 +233,12 @@ The three Case tax suites ran twice on their pinned stack (PolicyEngine-US
 - once at `f4fef6fb7`, with it.
 
 This change's code is the same at the PR head. The merges of main since then
-changed only a docstring beside it. A unit has farm rent when its TAXSIM
-`otherprop` or Tax-Calculator `e27200` differs between the runs.
+changed only a docstring beside it. A unit counts as having farm rent when its
+TAXSIM `otherprop` or Tax-Calculator `e27200` differs between the runs. Both
+read the filers' farm rent only; a dependent's farm rent reaches only the
+head-of-household gross-income test. The last column counts moved rows on
+every other unit, so it would also catch a result moved by a dependent's
+farm rent alone.
 
 | Suite | Units | With farm rent (a loss) | Mismatch rows, before → after | Moved rows on units without farm rent |
 |---|---|---|---|---|
@@ -242,7 +246,10 @@ changed only a docstring beside it. A unit has farm rent when its TAXSIM
 | `co-tax-intersection-taxsim` | 1,201 | 9 (3) | 3,030 → 3,041 | 0 |
 | `taxcalc-fiit-ecps` | 31 | 0 | 20 → 20 | 0 |
 
-No engine value moved on a unit without farm rent. In both runs both TAXSIM
+No engine value moved on a unit without farm rent. The tables below round
+values to the cent, so a product of a rounded farm rent can differ by a cent
+from a difference of rounded values (137698: 0.2106 × 65.25212 = 13.7421
+= 1,730.3557 − 1,716.6136). In both runs both TAXSIM
 lanes have no Axiom `employee_fica` value on any unit (axiom-oracles#612).
 Farm rent moves no FICA row, because Form 4835 income is not
 self-employment income. Replaying each unit's persisted `taxsim_input` row
@@ -285,7 +292,7 @@ Axiom against TAXSIM on EITC and the standard deduction. Sixteen rows moved
   rent alone puts Worksheet 1 line 13 over $12,200, so line 14, the unit's
   investment income, passes the 2026 limit (Rev. Proc. 2025-32 section
   .06(2)). TAXSIM already paid 0, or phases out to 0 on 102899.
-- **111331: TAXSIM pays no EITC below zero AGI.** The unit is single, aged
+- **111331: TAXSIM pays no EITC below zero AGI (axiom-oracles#692).** The unit is single, aged
   25, with wages of 9,840.05 and a farm loss of 39,366.12. Setting
   `otherprop` so that AGI is 1, 0 and −1 gives a TAXSIM credit of 664, 664
   and 0.
@@ -312,7 +319,10 @@ Axiom against TAXSIM on EITC and the standard deduction. Sixteen rows moved
 
 Axiom against TAXSIM on federal taxable income, tax before credits and
 liability, and on Colorado liability. Twenty-six rows moved: eleven are new
-and fifteen changed. Differences are Axiom − TAXSIM.
+and fifteen changed. Differences are Axiom − TAXSIM. The ninth farm-rent unit,
+136357 (farm rent 14,880.66), moved no row. The composite terms below (+2.69
+on 136343, +0.09 on 136377, and 136208's Colorado arithmetic) come from the
+October classification; step 2 of the landing re-derives them.
 
 | Unit | Farm rent | Rows | Class |
 |---|---|---|---|
@@ -320,7 +330,7 @@ and fifteen changed. Differences are Axiom − TAXSIM.
 | 136377 | 716.98 | new: −143.39, −31.55, −31.55; changed: Colorado 932.48 → 926.26 | as 136343 (932.48 − 6.31 + 0.09) |
 | 136449 | 3,246.69 | new: taxable income −649.34, tax before credits −77.92, federal liability −77.92, Colorado −34.40 | new QBID farm-rent class at 12 percent, with its liability shadow; Colorado: 0.044 × −649.34 − (58.00 − 52.17), the second member a TABOR refund tier of the refundable-credit class |
 | 59064 | 27.06 | new: taxable income −5.41; changed: federal liability −3,400.00 → −3,401.20 | new QBID farm-rent class; liability stays in its composite entry |
-| 58339 | −12,824.43 | changed: taxable income −676.39 → −400.00; tax before credits and federal liability −162.34 → −96.00 | The farm loss zeroes total QBI, but the $400 minimum on active QBI (3,381.97 of Part I rent) remains. Taxable income and tax before credits (24 percent) move from the rental-convention classes to a new class; liability stays in its composite entry |
+| 58339 | −12,824.43 | changed: taxable income −676.39 → −400.00; tax before credits and federal liability −162.34 → −96.00 | The farm loss zeroes total QBI, but the $400 minimum on active QBI (3,381.97 of Part I rent) remains. Taxable income and tax before credits (24 percent) move from the rental-convention classes to a new class for a farm loss that leaves only the $400 minimum (not the QBID farm-rent class: the gap is the minimum, not 20 percent of the farm rent); liability stays in its composite entry |
 | 136208 | −15,421.78 | changed: taxable income 7,575.34 → 7,650.00; tax before credits 4,459.62 → 4,257.00; federal liability 1,324.76 → 1,708.17; Colorado 503.90 → 506.80 | same entries, with new arithmetic: 24,150 − 16,100 − 400 = 7,650 (TAXSIM's head-of-household deduction less the $400 minimum); TAXSIM's tax before credits is 52,382.85; Colorado 9,638.91 − 37.43 = 9,601.48 |
 | 160988 | 40,448.35 | changed: four rows; the taxable income (−400.00), tax before credits (−148.17) and Colorado (30.84) differences hold; federal liability −968,208.88 → −969,745.84 | same entries; TAXSIM's `niit` rises by 1,536.95, and the Axiom composition strips §1411 |
 | 59119 | −9,117.79 | changed: Colorado −98.23 → −99.71 | same entry (`taxsim-co-refundable-credit-vintage`); re-verify at the refresh |
@@ -347,15 +357,27 @@ row digests and counts in `selector_binding`, and `pinned` values. The
 committed TAXSIM-lane reports predate farm rent, and the zero-unexplained
 ratchet blocks a refresh while #612 leaves `employee_fica` missing on every
 unit; #664 plans the fix. So the entries above land with that refresh, not in
-this change. At the refresh:
+this change. At the refresh, in one commit with the refreshed report:
 
-1. Make the moves above and add the new entries. Without the moves two entries
-   would select the same row, which is a conservation error on a TAXSIM lane.
-2. Re-derive the arithmetic on the refreshed report. #664 also changes the
+1. Re-derive the arithmetic on the refreshed report. #664 also changes the
    bridge's §461(l) threshold (#611) and its QBI aggregation (#618), either of
    which can move 58339, 136208 and 160988.
-3. Stamp `attribution`, `oracle_binding` and the selector bindings
-   (`uv run scripts/bind_dispositions.py <suite>`).
+2. Settle #689 before routing 62306, 6565 and 139776 into
+   `taxsim-auto-itemized-standard-deduction-zeroed`: that class's mechanism
+   says TAXSIM itemizes when its deductions beat the standard deduction, and
+   its attribution is `convention`, both of which these rows contradict.
+   Rewrite the class (mechanism and attribution) or give the
+   below-the-standard-deduction rows their own entry.
+3. Make the moves above and add the new entries. Without the moves two entries
+   would select the same row, which is a conservation error on a TAXSIM lane.
+   Write each entry's `attribution` by hand; a TAXSIM lane requires it
+   (`axiom_oracles/comparison/dispositions.py`), and the 111331 entry takes
+   `taxsim` (#692).
+4. Stamp the bindings with `uv run scripts/bind_dispositions.py <suite>`. It
+   writes `pinned`, `selector_binding` and `oracle_binding`, not
+   `attribution`.
+5. Check: `bind_dispositions.py <suite> --check`, `apply_dispositions.py
+   --check` and `unexplained_ratchet.py --check`.
 
 ## Verification
 

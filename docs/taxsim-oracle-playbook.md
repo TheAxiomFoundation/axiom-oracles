@@ -280,7 +280,7 @@ do not chase the Axiom encoding):
     binary then pays no EITC. A single 25-year-old with 9,840.05 of wages
     gets 664 at AGI 1 and at AGI 0, and nothing at AGI −1. 26 USC 32(a)(2)
     phases the credit out on the greater of AGI and earned income, so a
-    negative AGI cannot reduce it, and Axiom pays 664.
+    negative AGI cannot reduce it, and Axiom pays 664 (axiom-oracles#692).
 - **§461(l)**: the binary DOES cap excess business losses, at its own
   projected 332,389.95 single / 664,779.90 joint, and it treats net
   positive capital gain as business gross income (the allowance grows
