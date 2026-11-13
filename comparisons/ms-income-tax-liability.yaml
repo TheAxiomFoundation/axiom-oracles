@@ -12,7 +12,7 @@ description: >-
   the historical modest grid. The RuleSpec does not construct taxable income,
   choose a filing method, apply credits, or claim final-return liability.
   TAXSIM independently constructs a broader filing-unit boundary and this grid
-  is retained only as supplemental triangulation; the canonical Populace
+  is retained only as supplemental triangulation; the canonical Microcosm
   campaign carries the protected engine executable provenance.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's

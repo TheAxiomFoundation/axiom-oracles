@@ -51,7 +51,7 @@ The current implementation includes:
 
 - generic engine result and comparison primitives
 - concept-keyed `Case` and `Entity` objects
-- the shared PolicyEngine/Populace oracle-bridge layer (`axiom_oracles/bridges/`,
+- the shared PolicyEngine/Microcosm oracle-bridge layer (`axiom_oracles/bridges/`,
   extracted from axiom-encode — see `axiom_oracles/bridges/README.md`)
 - Enhanced CPS-backed population loading through PolicyEngine microsimulation
 - ACCESS NYC Screening API payload mapper
@@ -596,33 +596,33 @@ name (`dataset="BE_2024_c1_2015_03_e2"`) while templating input rows
 from the bundled training schema (`template_dataset="BE_training_data"`)
 — no licensed file is ever read.
 
-### Population source: populace-us (the default)
+### Population source: Microcosm US (the default)
 
-The US representative population is the **certified populace-us artifact**
+The US representative population is the **certified Microcosm US artifact**
 (`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
 through the Hugging Face dataset repo). The reference is **content-pinned**
 to a specific Hugging Face revision with a verified sha256
 (`axiom_oracles/populations/populace_us.py::POPULACE_PINS`) — it does NOT
 follow HF-latest. Latest currently points at a sparse L0 refit that zeroes
 untargeted input bases (IRA/HSA/self-employed pension/childcare and ~80
-other engine inputs are dead in that artifact, PolicyEngine/populace#278),
+other engine inputs are dead in that artifact, PolicyEngine/microcosm#278),
 so a comparison run against latest would silently score against ~$0 bases.
 The pin is the dense release certified in PolicyEngine bundle 4.18.6/4.18.7;
 re-pin once the post-#279 rebuilt dense release is published and certified.
-The enhanced CPS is retired for every scope populace can serve; the one
-remaining eCPS-derived path is the NYC per-city file, because populace-us
-carries no place/county geography yet (PolicyEngine/populace#204) — it
-retires the moment the populace spine grows place grain. Override any run
+The enhanced CPS is retired for every scope Microcosm can serve; the one
+remaining eCPS-derived path is the NYC per-city file, because Microcosm US
+carries no place/county geography yet (PolicyEngine/microcosm#204) — it
+retires the moment the Microcosm spine grows place grain. Override any run
 with `--ecps-dataset` (CLI) or `ecps_dataset` (comparison config
 parameters); an override to a different `populace://…@revision` reference
 carries its own pin, and unpinned references resolve at HF-latest.
 
-Known populace-us gaps that shape which rule branches a comparison
+Known Microcosm US gaps that shape which rule branches a comparison
 exercises: the artifact stores no immigration/SSN columns (everyone
 defaults to citizen) and housing tenure is degenerate, so
 immigrant-status-sensitive eligibility paths and owner-shelter deductions
 see no coverage until those imputation stages land
-(PolicyEngine/populace#225).
+(PolicyEngine/microcosm#225).
 
 For the CLI, `axiom-oracles compare euromod axiom ...` reads
 `EUROMOD_MODEL_ROOT`, `EUROMOD_COUNTRY`, `EUROMOD_SYSTEM`,

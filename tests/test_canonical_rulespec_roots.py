@@ -26,7 +26,7 @@ from hypothesis import strategies as st
 
 from axiom_oracles import engine_compat
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
-from axiom_oracles.bridges import rulespec_overlay, snap_populace, tax_populace
+from axiom_oracles.bridges import rulespec_overlay, snap_populace as snap_microcosm, tax_populace as tax_microcosm
 from axiom_oracles.bridges.rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_repo_alias_parent,
@@ -459,7 +459,7 @@ def _via_runner(root, tmp, engine):
 
 def _via_snap_compile(root, tmp, engine, monkeypatch):
     monkeypatch.setattr(subprocess, "run", engine)
-    snap_populace.compile_program(
+    snap_microcosm.compile_program(
         engine.binary, _composition(tmp / "program.yaml"), tmp / "out.json",
         env=dict(os.environ), workspace_root=root,
     )
@@ -473,19 +473,19 @@ def _via_snap_env(root, tmp, engine, monkeypatch):
     """
     monkeypatch.setattr(subprocess, "run", engine)
     program = _composition(root / "us-co" / "program.yaml")
-    env = snap_populace.axiom_rules_env(program, root.parent)
-    snap_populace.compile_program(engine.binary, program, tmp / "out.json", env=env)
-    snap_populace._run_receipted_engine(
+    env = snap_microcosm.axiom_rules_env(program, root.parent)
+    snap_microcosm.compile_program(engine.binary, program, tmp / "out.json", env=env)
+    snap_microcosm._run_receipted_engine(
         [str(engine.binary), "run-compiled", "--artifact", str(tmp / "out.json")],
-        expected_receipt=snap_populace.engine_receipt(engine.binary),
+        expected_receipt=snap_microcosm.engine_receipt(engine.binary),
         env=env,
     )
 
 
-def _via_tax_populace(root, tmp, engine, monkeypatch):
+def _via_tax_microcosm(root, tmp, engine, monkeypatch):
     monkeypatch.setattr(subprocess, "run", engine)
     engine_root = engine.binary.parents[2]
-    tax_populace.run_axiom_program(
+    tax_microcosm.run_axiom_program(
         program=root / FIXTURE, request={"queries": []},
         rulespec_root=root, axiom_rules_path=engine_root,
     )
@@ -497,7 +497,7 @@ RUNTIME_PATHS = {
     "axiom_runner": _via_runner,
     "snap_compile_program": _via_snap_compile,
     "snap_axiom_rules_env": _via_snap_env,
-    "tax_populace": _via_tax_populace,
+    "tax_microcosm": _via_tax_microcosm,
 }
 
 
@@ -530,7 +530,7 @@ def _drive(path_name, kind, old, tmp_path, monkeypatch):
 
 #: Paths that hand the offered root over directly (always checked), as
 #: opposed to treating a non-country name as a workspace to search.
-DIRECT_PATHS = {"compile_with_engine", "tax_populace", "snap_axiom_rules_env"}
+DIRECT_PATHS = {"compile_with_engine", "tax_microcosm", "snap_axiom_rules_env"}
 
 
 def expected_refusal(path_name: str, root: Path) -> bool:

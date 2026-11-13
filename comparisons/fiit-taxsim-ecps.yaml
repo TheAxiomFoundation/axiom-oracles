@@ -34,7 +34,7 @@ title: Federal income tax — Axiom vs TAXSIM (national)
 description: >-
   Compares the composed oracle-bridge program's itemization-independent
   federal concepts — standard deduction, EITC, and employee-side FICA+SECA
-  — against NBER TAXSIM-35 over the national certified Populace US
+  — against NBER TAXSIM-35 over the national certified Microcosm US
   population at the 2026 law year. The itemization-dependent concepts stay
   Colorado-scoped in co-tax-intersection-taxsim until the state-income-tax
   bridge grows beyond Colorado.

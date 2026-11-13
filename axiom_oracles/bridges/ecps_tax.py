@@ -20,7 +20,7 @@ from __future__ import annotations
 import sys
 import warnings
 
-import axiom_oracles.bridges.tax_populace as _tax_populace
+import axiom_oracles.bridges.tax_populace as _tax_microcosm
 
 warnings.warn(
     "axiom_oracles.bridges.ecps_tax is deprecated; import "
@@ -30,4 +30,4 @@ warnings.warn(
     stacklevel=2,
 )
 
-sys.modules[__name__] = _tax_populace
+sys.modules[__name__] = _tax_microcosm

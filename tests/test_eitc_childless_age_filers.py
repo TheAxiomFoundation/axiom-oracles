@@ -66,7 +66,7 @@ STATUTE_CASES = [
 
 
 # ---------------------------------------------------------------------------
-# Populace bridge: project_eitc_tax_unit_inputs with explicit role flags.
+# Microcosm bridge: project_eitc_tax_unit_inputs with explicit role flags.
 # ---------------------------------------------------------------------------
 
 
@@ -177,7 +177,7 @@ def test_bridge_age_test_uses_source_roles_without_flags(persons, expected):
 
 
 def _unit_57137(*, flags):
-    """Populace unit 57137's shape: source DEPENDENT 85, HEAD 65, SPOUSE 64.
+    """Microcosm unit 57137's shape: source DEPENDENT 85, HEAD 65, SPOUSE 64.
 
     PolicyEngine-US 1.764.6's flags head the unit with 85 and make 65 the
     spouse. The dependent has 13,000 of interest; the source spouse has no
@@ -319,7 +319,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, dependents):
 
 @st.composite
 def flagged_units(draw, *, head_required=True):
-    """Rows as the Populace loader delivers them: PolicyEngine flags (at most
+    """Rows as the Microcosm loader delivers them: PolicyEngine flags (at most
     one head and one spouse) beside arbitrary constructor roles, SSNs and
     interest, in any order. With ``head_required=False`` the flags may name
     no head, which PolicyEngine-US 1.764.6 produces when no member is
@@ -367,7 +367,7 @@ def test_property_bridge_eitc_inputs_share_one_filer_list(unit):
 
 @PROPERTY_SETTINGS
 @given(unit=flagged_units())
-def test_property_populace_case_loader_agrees_with_the_bridge(unit):
+def test_property_microcosm_case_loader_agrees_with_the_bridge(unit):
     """The production Case path (populace_us._person_entity over the same
     PolicyEngine flags) projects the same age input as the bridge.
 
@@ -401,7 +401,7 @@ def test_property_populace_case_loader_agrees_with_the_bridge(unit):
         for index, row in enumerate(rows)
     )
     projected = attach_axiom_tax_inputs_to_case(
-        Case(case_id="populace-loader", period="2026", entities=entities)
+        Case(case_id="microcosm-loader", period="2026", entities=entities)
     )
     by_key = {
         (record["entity_id"], record["name"]): record["value"]

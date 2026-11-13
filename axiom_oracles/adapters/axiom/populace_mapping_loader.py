@@ -1,4 +1,4 @@
-"""Loader for the populace-to-input mapping YAML.
+"""Loader for the Microcosm-to-input mapping YAML.
 
 Reads ``axiom_oracles/data/populace_input_mapping.yaml`` and turns the
 declarative entries into an ``EcpsMapping`` — the callable-keyed dict that the

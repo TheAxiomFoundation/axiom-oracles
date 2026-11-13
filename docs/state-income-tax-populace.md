@@ -1,8 +1,8 @@
-# State income tax over the full US Populace
+# State income tax over the full US Microcosm
 
 This campaign extends current-law individual-income-tax pilot pipelines for 42
 states plus the District of Columbia from their six-case verification grids to
-the complete, sha256-pinned US Populace validation population. The historical
+the complete, sha256-pinned US Microcosm validation population. The historical
 `ecps` command name is retained for compatibility, but the dataset is the certified
 `populace-us` artifact rather than Enhanced CPS.
 
@@ -41,7 +41,7 @@ Every state contract records:
 - the source kind and evidence for each boundary; and
 - whether the state is ready for the declared campaign scope or blocked.
 
-Permitted source kinds are raw Populace leaves, independently derived
+Permitted source kinds are raw Microcosm leaves, independently derived
 transformations, source-backed statutory constants or schedules, RuleSpec
 imports, and explicitly disclosed upstream PolicyEngine boundaries. An upstream
 PolicyEngine boundary is permitted only when it is legally upstream of the
@@ -168,7 +168,7 @@ Audit all 87,519 tax units without executing blocked state programs:
 
 ```bash
 uv run --extra policyengine scripts/audit_state_tax_populace.py \
-  --sample-size-per-state 0 --output /tmp/state-tax-populace-routing.json
+  --sample-size-per-state 0 --output /tmp/state-tax-microcosm-routing.json
 ```
 
 Execute all currently ready states (Alabama, Arizona, Arkansas, Colorado, Connecticut,
@@ -183,7 +183,7 @@ uv run --extra policyengine scripts/run_state_tax_populace.py \
   --sample-size-per-state 0 \
   --rulespec-root /path/to/rulespec-us \
   --axiom-rules-path /path/to/axiom-rules-engine \
-  --output /tmp/state-tax-populace-report.json
+  --output /tmp/state-tax-microcosm-report.json
 ```
 
 North Carolina needs a newer policyengine-us than this extra installs, so this
@@ -199,7 +199,7 @@ uv run --extra policyengine scripts/run_state_tax_populace.py \
   --sample-size-per-state 0 \
   --rulespec-root /path/to/rulespec-us \
   --axiom-rules-path /path/to/axiom-rules-engine \
-  --output /tmp/nj-nm-state-tax-populace-report.json
+  --output /tmp/nj-nm-state-tax-microcosm-report.json
 ```
 
 The report records normalized requested abbreviations in `requested_states`.
@@ -240,7 +240,7 @@ uv pip install --python .venv-nc -e . \
   --sample-size-per-state 0 \
   --rulespec-root /path/to/rulespec-us \
   --axiom-rules-path /path/to/axiom-rules-engine \
-  --output /tmp/nc-state-tax-populace-report.json
+  --output /tmp/nc-state-tax-microcosm-report.json
 ```
 
 The engine rejects a RuleSpec root whose folder name is not

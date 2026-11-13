@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Trace NC resident-core Populace mismatches to PolicyEngine's components.
+"""Trace NC resident-core Microcosm mismatches to PolicyEngine's components.
 
-For every compared North Carolina TaxUnit in a state-tax Populace campaign
+For every compared North Carolina TaxUnit in a state-tax Microcosm campaign
 report, recompute the section 105-153.5 deduction from PolicyEngine's own
 component values two ways:
 
@@ -70,7 +70,7 @@ def main() -> int:
         identity, contract=load_state_tax_populace_contract()
     )
     if identity.get("revision") != campaign["dataset_identity"]["revision"]:
-        raise SystemExit("Populace revision differs from the campaign report")
+        raise SystemExit("Microcosm revision differs from the campaign report")
     from policyengine_us import Microsimulation
 
     sim = Microsimulation(dataset=dataset)

@@ -18,7 +18,7 @@ from axiom_oracles.populations.populace_us import (
     _PERSON_NON_WAGE_VARIABLES,
     _TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
     _clean_number,
-    _resolve_populace_dataset,
+    _resolve_microcosm_dataset,
     _scope_from_geography,
     dataset_for_scope,
     load_populace_us_cases,
@@ -44,7 +44,7 @@ def _artifact_file(tmp_path, contents: bytes):
     return str(path), hashlib.sha256(contents).hexdigest()
 
 
-def test_national_scope_defaults_to_the_populace_artifact() -> None:
+def test_national_scope_defaults_to_the_microcosm_artifact() -> None:
     assert dataset_for_scope(None) == POPULACE_US_DATASET
     assert dataset_for_scope(GeographyScope(type="census_state", geoid="06")) == (
         POPULACE_US_DATASET
@@ -53,16 +53,16 @@ def test_national_scope_defaults_to_the_populace_artifact() -> None:
 
 def test_nyc_scope_uses_nyc_enhanced_cps_dataset() -> None:
     # The one remaining eCPS-derived path: populace-us has no place grain
-    # yet (PolicyEngine/populace#204), so NYC keeps its dedicated file.
+    # yet (PolicyEngine/microcosm#204), so NYC keeps its dedicated file.
     assert (
         dataset_for_scope(GeographyScope(type="census_place", geoid="3651000"))
         == NYC_ENHANCED_CPS_DATASET
     )
 
 
-def test_certified_populace_us_artifact_is_pinned() -> None:
+def test_certified_microcosm_us_artifact_is_pinned() -> None:
     # The default US population must be content-pinned, not HF-latest: latest
-    # follows the sparse L0 refit with dead input bases (populace#278).
+    # follows the sparse L0 refit with dead input bases (microcosm#278).
     pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
     assert pin.revision == "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
     assert pin.sha256 == (
@@ -70,7 +70,7 @@ def test_certified_populace_us_artifact_is_pinned() -> None:
     )
 
 
-def test_populace_reference_resolves_pinned_revision_and_verifies_hash(
+def test_microcosm_reference_resolves_pinned_revision_and_verifies_hash(
     monkeypatch, tmp_path
 ) -> None:
     # huggingface_hub arrives with the policyengine extra; stub it so the
@@ -91,7 +91,7 @@ def test_populace_reference_resolves_pinned_revision_and_verifies_hash(
         return local
 
     _install_fake_hf(monkeypatch, on_download=fake_download)
-    path = _resolve_populace_dataset(POPULACE_US_DATASET)
+    path = _resolve_microcosm_dataset(POPULACE_US_DATASET)
     assert path == local
     # The pinned revision is passed through, and the repo is the dataset repo.
     assert calls == {
@@ -102,7 +102,7 @@ def test_populace_reference_resolves_pinned_revision_and_verifies_hash(
     }
 
 
-def test_populace_resolution_fails_loudly_on_sha256_mismatch(
+def test_microcosm_resolution_fails_loudly_on_sha256_mismatch(
     monkeypatch, tmp_path
 ) -> None:
     # A moved tag or corrupt transfer must raise, never silently swap the
@@ -120,7 +120,7 @@ def test_populace_resolution_fails_loudly_on_sha256_mismatch(
 
     _install_fake_hf(monkeypatch, on_download=fake_download)
     with pytest.raises(RuntimeError, match="failed its sha256 check"):
-        _resolve_populace_dataset(POPULACE_US_DATASET)
+        _resolve_microcosm_dataset(POPULACE_US_DATASET)
 
 
 def test_inline_revision_override_is_passed_through(monkeypatch, tmp_path) -> None:
@@ -134,7 +134,7 @@ def test_inline_revision_override_is_passed_through(monkeypatch, tmp_path) -> No
         return local
 
     _install_fake_hf(monkeypatch, on_download=fake_download)
-    path = _resolve_populace_dataset(
+    path = _resolve_microcosm_dataset(
         "populace://policyengine/populace-us-experiments/probe.h5@abc123"
     )
     assert path == local
@@ -149,7 +149,7 @@ def test_inline_revision_conflicting_with_pin_raises(monkeypatch, tmp_path) -> N
 
     _install_fake_hf(monkeypatch, on_download=fake_download)
     with pytest.raises(ValueError, match="ambiguous pin"):
-        _resolve_populace_dataset(POPULACE_US_DATASET + "@some-other-revision")
+        _resolve_microcosm_dataset(POPULACE_US_DATASET + "@some-other-revision")
 
 
 def test_unpinned_reference_resolves_latest_without_hashing(
@@ -165,7 +165,7 @@ def test_unpinned_reference_resolves_latest_without_hashing(
         return local
 
     _install_fake_hf(monkeypatch, on_download=fake_download)
-    path = _resolve_populace_dataset("populace://some/other-dataset/file.h5")
+    path = _resolve_microcosm_dataset("populace://some/other-dataset/file.h5")
     assert path == local
     assert calls == {"revision": None}
 
@@ -356,7 +356,7 @@ def test_clean_number_treats_unknown_as_missing() -> None:
     assert _clean_number("UNKNOWN") == 0
 
 
-def test_deprecated_enhanced_cps_aliases_resolve_to_the_populace_loader() -> None:
+def test_deprecated_enhanced_cps_aliases_resolve_to_the_microcosm_loader() -> None:
     # The module was renamed enhanced_cps -> populace_us (axiom-oracles#74).
     # External callers may still use the old module path and names; they must
     # resolve to the SAME objects and emit a DeprecationWarning, so encode (and

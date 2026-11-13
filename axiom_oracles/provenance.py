@@ -49,7 +49,7 @@ The block shape (``axiom_oracles.provenance.v1``)::
             law_years: {first: 1960, last: 2026}
             policyengine_taxsim: 2.30.0  # installed package version
             rows: 5000                 # input rows it was given
-      dataset:                         # reuse the pinned-populace identity (#80/#952)
+      dataset:                         # reuse the pinned-Microcosm identity (#80/#952)
         source: populace-hf
         repo_id: policyengine/populace-us
         filename: populace_us_2024.h5
@@ -912,10 +912,10 @@ def _crate_version(repo: Path) -> str | None:
 
 
 def dataset_provenance_from_identity(identity: dict[str, Any] | None) -> dict[str, Any] | None:
-    """Normalize the encode/populace ``dataset_identity`` block into provenance.
+    """Normalize the encode/Microcosm ``dataset_identity`` block into provenance.
 
-    Reuses the pinned-populace identity fields threaded from axiom-encode#952 /
-    populace#80 (``source``/``repo_id``/``filename``/``revision``/``sha256``/
+    Reuses the pinned-Microcosm identity fields threaded from axiom-encode#952 /
+    microcosm#80 (``source``/``repo_id``/``filename``/``revision``/``sha256``/
     ``built_with``). Returns None when identity is absent so the caller can omit
     the sub-block entirely.
     """

@@ -18,7 +18,7 @@ from types import SimpleNamespace
 import pytest
 from hypothesis import HealthCheck, given, settings, strategies as st
 
-from axiom_oracles.bridges import snap_populace, snap_qc_compare as sc
+from axiom_oracles.bridges import snap_populace as snap_microcosm, snap_qc_compare as sc
 from axiom_oracles.bridges.rulespec_overlay import (
     build_overlay,
     load_overlay_spec,
@@ -517,7 +517,7 @@ def test_build_report_has_v2_shape_and_localizes_first_divergent_stage() -> None
         tolerance=0.0,
         stage_tolerance=1.0,
         exclusion_log=exclusion_log,
-        period=snap_populace.month_period(2026, 1),
+        period=snap_microcosm.month_period(2026, 1),
         overlay_build=overlay_build,
         rulespec_root=Path("/rulespec-us"),
         axiom_binary=Path("/engine"),
@@ -685,7 +685,7 @@ def test_snap_checks_same_engine_bytes_at_compile_and_each_chunk(
         sc._run_cases(
             binary=binary, program_path=tmp_path / "program.yaml",
             cases=Cases([object(), object()]),
-            period=snap_populace.month_period(2026, 1), output_ids=[],
+            period=snap_microcosm.month_period(2026, 1), output_ids=[],
             config=sc.QC_JURISDICTIONS["us-co"], env={},
             expected_engine_receipt=expected_receipt,
         )
@@ -747,7 +747,7 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
         ),
     }
 
-    base_inputs = snap_populace.load_base_inputs(_RULESPEC_FY2024 / config.template)
+    base_inputs = snap_microcosm.load_base_inputs(_RULESPEC_FY2024 / config.template)
     base_member = sc._load_base_member(
         _RULESPEC_FY2024 / config.template, config.base.relation_id
     )
@@ -758,7 +758,7 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
     build = build_overlay(
         spec, _RULESPEC_FY2024, overlay_dir, nominal_month=sc.nominal_month()
     )
-    env = snap_populace.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
+    env = snap_microcosm.axiom_rules_env(build.program_path, _RULESPEC_FY2024.parent)
     env["AXIOM_RULESPEC_REPO_ROOTS"] = str(build.overlay_root)
 
     case = sc.map_qc_unit(
@@ -772,17 +772,17 @@ def test_live_engine_reproduces_worked_example(tmp_path: Path) -> None:
         binary=_ENGINE,
         program_path=build.program_path,
         cases=[case],
-        period=snap_populace.month_period(*sc.NOMINAL_PERIOD),
+        period=snap_microcosm.month_period(*sc.NOMINAL_PERIOD),
         output_ids=list(output_id_by_label.values()),
         config=config,
         env=env,
     )
 
-    references = snap_populace.outputs_by_reference(results[0]["outputs"])
+    references = snap_microcosm.outputs_by_reference(results[0]["outputs"])
 
     def value(label: str) -> float:
         output = references[output_id_by_label[label]]
-        return float(snap_populace.output_to_python(output))
+        return float(snap_microcosm.output_to_python(output))
 
     assert value("snap_regular_month_allotment") == 291
     assert value("snap_net_income") == 0

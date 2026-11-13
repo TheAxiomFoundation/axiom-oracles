@@ -1183,8 +1183,8 @@ def test_selector_cache_sees_an_edited_selector() -> None:
     assert not _entry_selects_row(plain, {"case_id": "c1", "concept": "us:test#income_tax"})
 
 
-def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> None:
-    """The Populace projector writes sorted indent-1 JSON; a merge keeps it."""
+def test_serialize_like_keeps_the_microcosm_projector_indent(tmp_path: Path) -> None:
+    """The Microcosm projector writes sorted indent-1 JSON; a merge keeps it."""
 
     module = _load_script_module()
     original = {"suite": "nc-income-tax-populace", "summary": {"match_count": 1}}

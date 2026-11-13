@@ -1,4 +1,4 @@
-"""Generic PE-US Populace comparisons for direct-variable RuleSpec mappings."""
+"""Generic PE-US Microcosm comparisons for direct-variable RuleSpec mappings."""
 
 from __future__ import annotations
 
@@ -190,7 +190,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--sample-size",
         type=int,
         default=100,
-        help="Number of matching Populace cases per variable; 0 compares all cases.",
+        help="Number of matching Microcosm cases per variable; 0 compares all cases.",
     )
     parser.add_argument(
         "--person-id",
@@ -198,7 +198,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         action="append",
         default=None,
         dest="person_ids",
-        help="Compare specific Populace person_id values.",
+        help="Compare specific Microcosm person_id values.",
     )
     parser.add_argument(
         "--state",
@@ -214,7 +214,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> argparse.ArgumentParser
         "--populace-year",
         type=int,
         default=DEFAULT_US_POPULACE_YEAR,
-        help="Published US Populace dataset year to load.",
+        help="Published US Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--tolerance",
@@ -900,7 +900,7 @@ def compare_outputs(
         output_summary=list(summary.values()),
         errors=errors,
         projection_notes=[
-            "US variable Populace comparison projects existing PolicyEngine component "
+            "US variable Microcosm comparison projects existing PolicyEngine component "
             "values into RuleSpec legal inputs and then executes the real Axiom "
             "Rust rules engine.",
             "Colorado OAP projects PE ssi + ssi_countable_income into the legal "
@@ -929,7 +929,7 @@ def print_report(
     relative_tolerance: float,
     max_differences: int,
 ) -> None:
-    print("PolicyEngine US Populace variable comparison")
+    print("PolicyEngine US Microcosm variable comparison")
     identity_line = format_dataset_identity(report.dataset_identity)
     if identity_line:
         print(identity_line)

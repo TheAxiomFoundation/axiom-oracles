@@ -1,8 +1,8 @@
-"""Shared PolicyEngine/Populace oracle-bridge layer.
+"""Shared PolicyEngine/Microcosm oracle-bridge layer.
 
 This package is the shared home of the oracle bridge code that previously
 lived inside the encoder as ``axiom_encode.oracles.policyengine`` (the ~19k
-LOC PolicyEngine/Populace comparison harnesses) plus the engine-neutral
+LOC PolicyEngine/Microcosm comparison harnesses) plus the engine-neutral
 ``Case``/``Concepts`` types that downstream repos otherwise duplicate.
 
 Modules mirror the encoder layout one-to-one and were copied verbatim from

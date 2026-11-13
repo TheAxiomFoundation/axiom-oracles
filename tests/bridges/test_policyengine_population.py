@@ -11,7 +11,7 @@ from axiom_oracles.bridges import population
 # ---------------------------------------------------------------------------
 # Test helpers
 # ---------------------------------------------------------------------------
-def _clear_populace_env(monkeypatch: pytest.MonkeyPatch) -> None:
+def _clear_microcosm_env(monkeypatch: pytest.MonkeyPatch) -> None:
     """Drop every AXIOM_POPULACE_* env var so tests start from a clean slate."""
     for key in _env_keys():
         monkeypatch.delenv(key, raising=False)
@@ -84,12 +84,12 @@ def test_pins_match_certified_bundle_values():
 
 
 def test_resolve_pin_defaults_to_baseline(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     assert population.resolve_populace_pin("us") == population.POPULACE_PINS["us"]
 
 
 def test_resolve_pin_applies_env_revision_and_sha_overrides(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv("AXIOM_POPULACE_US_REVISION", "custom-rev")
     monkeypatch.setenv("AXIOM_POPULACE_US_SHA256", "AABBCC")
 
@@ -103,7 +103,7 @@ def test_resolve_pin_applies_env_revision_and_sha_overrides(monkeypatch):
 
 
 def test_resolve_pin_partial_override_keeps_other_field(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv("AXIOM_POPULACE_US_REVISION", "only-rev")
 
     pin = population.resolve_populace_pin("us")
@@ -113,12 +113,12 @@ def test_resolve_pin_partial_override_keeps_other_field(monkeypatch):
 
 
 def test_resolve_pin_unknown_country_is_none(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     assert population.resolve_populace_pin("fr") is None
 
 
 def test_resolve_pin_whitespace_override_is_treated_as_unset(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv("AXIOM_POPULACE_US_REVISION", "   ")
     monkeypatch.setenv("AXIOM_POPULACE_US_SHA256", "\t")
 
@@ -130,7 +130,7 @@ def test_resolve_pin_whitespace_override_is_treated_as_unset(monkeypatch):
 # Resolution order: local override > pinned download > unpinned fallback
 # ---------------------------------------------------------------------------
 def test_load_prefers_pinned_download_by_default(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_bytes(b"pinned-bytes")
     captured = _install_fake_hf_hub(monkeypatch, artifact)
@@ -159,7 +159,7 @@ def test_load_prefers_pinned_download_by_default(monkeypatch, tmp_path):
 
 
 def test_local_override_takes_precedence_over_pin(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_bytes(b"local-bytes")
     monkeypatch.setenv("AXIOM_POPULACE_US_2024_H5", str(artifact))
@@ -186,7 +186,7 @@ def test_local_override_takes_precedence_over_pin(monkeypatch, tmp_path):
 
 
 def test_local_override_sha_mismatch_warns_but_loads(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_bytes(b"experimental-bytes")
     monkeypatch.setenv("AXIOM_POPULACE_US_2024_H5", str(artifact))
@@ -207,7 +207,7 @@ def test_local_override_sha_mismatch_warns_but_loads(monkeypatch, tmp_path):
 # sha256 verification of the pinned download is fatal on mismatch
 # ---------------------------------------------------------------------------
 def test_pinned_download_fails_on_sha_mismatch(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_bytes(b"tampered")
     _install_fake_hf_hub(monkeypatch, artifact)
@@ -225,7 +225,7 @@ def test_pinned_download_fails_on_sha_mismatch(monkeypatch, tmp_path):
 def test_pinned_download_missing_hf_hub_exits_with_install_message(
     monkeypatch, tmp_path
 ):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     _stub_instantiate(monkeypatch)
     # Force ``import huggingface_hub`` to fail inside pinned_populace_download.
     monkeypatch.setitem(sys.modules, "huggingface_hub", None)
@@ -240,7 +240,7 @@ def test_pinned_download_missing_hf_hub_exits_with_install_message(
 
 def test_pinned_download_verifies_real_sha256_end_to_end(monkeypatch, tmp_path):
     """Exercise the real file_sha256 path (no monkeypatched digest)."""
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     payload = b"real-artifact-bytes-for-hashing"
     import hashlib
 
@@ -267,7 +267,7 @@ def test_pinned_download_verifies_real_sha256_end_to_end(monkeypatch, tmp_path):
 # Unpinned escape hatch gating
 # ---------------------------------------------------------------------------
 def test_unpinned_fallback_disabled_by_default_raises_with_278(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     # Country with no pin -> pinned path is unavailable, so the loader must hit
     # the escape-hatch gate rather than silently falling through.
     with pytest.raises(SystemExit) as excinfo:
@@ -294,7 +294,7 @@ def _install_fake_populace(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_unpinned_fallback_allowed_warns_and_loads(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv(population.ALLOW_UNPINNED_ENV, "1")
     _install_fake_populace(monkeypatch)
 
@@ -314,7 +314,7 @@ def test_unpinned_fallback_allowed_warns_and_loads(monkeypatch):
 def test_unpinned_escape_hatch_overrides_pin_for_pinned_country(monkeypatch):
     """The escape hatch is checked *before* the pin, so an operator can force
     HF-latest even for a country (US) that has a certified pin."""
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv(population.ALLOW_UNPINNED_ENV, "1")
     _install_fake_populace(monkeypatch)
     # If the pinned path were taken it would import huggingface_hub; make it
@@ -335,7 +335,7 @@ def test_unpinned_escape_hatch_overrides_pin_for_pinned_country(monkeypatch):
 
 
 def test_unpinned_fallback_allowed_flag_variants(monkeypatch):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     for truthy in ("1", "true", "TRUE", "yes", "on"):
         monkeypatch.setenv(population.ALLOW_UNPINNED_ENV, truthy)
         assert population.unpinned_fallback_allowed() is True
@@ -347,8 +347,8 @@ def test_unpinned_fallback_allowed_flag_variants(monkeypatch):
 # ---------------------------------------------------------------------------
 # Existing local-artifact / env-override behavior (retained)
 # ---------------------------------------------------------------------------
-def test_local_populace_artifact_prefers_specific_env(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+def test_local_microcosm_artifact_prefers_specific_env(monkeypatch, tmp_path):
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_text("")
     monkeypatch.setenv("AXIOM_POPULACE_US_2024_H5", str(artifact))
@@ -356,8 +356,8 @@ def test_local_populace_artifact_prefers_specific_env(monkeypatch, tmp_path):
     assert population.local_populace_artifact_path("US", year=2024) == artifact
 
 
-def test_local_populace_artifact_rejects_missing_env_override(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+def test_local_microcosm_artifact_rejects_missing_env_override(monkeypatch, tmp_path):
+    _clear_microcosm_env(monkeypatch)
     missing = tmp_path / "missing.h5"
     monkeypatch.setenv("AXIOM_POPULACE_US_H5", str(missing))
 
@@ -365,8 +365,8 @@ def test_local_populace_artifact_rejects_missing_env_override(monkeypatch, tmp_p
         population.local_populace_artifact_path("us", year=2024)
 
 
-def test_load_populace_dataset_exits_for_missing_env_override(monkeypatch, tmp_path):
-    _clear_populace_env(monkeypatch)
+def test_load_microcosm_dataset_exits_for_missing_env_override(monkeypatch, tmp_path):
+    _clear_microcosm_env(monkeypatch)
     missing = tmp_path / "missing.h5"
     monkeypatch.setenv("AXIOM_POPULACE_US_H5", str(missing))
 
@@ -378,10 +378,10 @@ def test_load_populace_dataset_exits_for_missing_env_override(monkeypatch, tmp_p
         )
 
 
-def test_local_populace_artifact_no_longer_scans_hf_cache(monkeypatch, tmp_path):
+def test_local_microcosm_artifact_no_longer_scans_hf_cache(monkeypatch, tmp_path):
     """The default resolver returns None with no env override; the HF-cache scan
     moved behind the unpinned escape hatch (``unpinned_huggingface_cache_artifact``)."""
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     cache_root = tmp_path / "hub"
     repo = cache_root / "datasets--policyengine--populace-us"
     snapshot = repo / "snapshots" / "abc123"
@@ -411,10 +411,10 @@ def test_local_populace_artifact_no_longer_scans_hf_cache(monkeypatch, tmp_path)
     )
 
 
-def test_load_populace_dataset_uses_local_engine_dataset_without_populace_data(
+def test_load_microcosm_dataset_uses_local_engine_dataset_without_populace_data(
     monkeypatch, tmp_path
 ):
-    _clear_populace_env(monkeypatch)
+    _clear_microcosm_env(monkeypatch)
     artifact = tmp_path / "populace_us_2024.h5"
     artifact.write_bytes(b"local-artifact")
     monkeypatch.setenv("AXIOM_POPULACE_US_2024_H5", str(artifact))

@@ -15,7 +15,7 @@ description: >-
   their own surfaces and suites. Per-surface history:
   docs/uk-coverage-matrix.md.
 
-# Not CI-runnable: the pinned Populace UK artifact lives in the PRIVATE
+# Not CI-runnable: the pinned Microcosm UK artifact lives in the PRIVATE
 # Hugging Face repo policyengine/populace-uk-private, and the runner has no
 # HF credential -- the leg dies on `Failed to download pinned Populace UK
 # artifact ...: 401 Client Error` (verified in run 31073838536, 2026-08-06,

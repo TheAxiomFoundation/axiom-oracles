@@ -7,7 +7,7 @@ import pytest
 
 from axiom_oracles.rulespec_roots import NonCanonicalRuleSpecRoot
 
-import axiom_oracles.bridges.tax_populace as tax_populace
+import axiom_oracles.bridges.tax_populace as tax_microcosm
 from axiom_oracles.engine_identity import (
     ENGINE_RECEIPT_OUTPUT_ENV,
     EngineIdentityError,
@@ -121,7 +121,7 @@ def test_person_entity_id_is_stable_and_namespaced():
 
 
 def test_scalar_value_formats_scientific_float_as_decimal_literal():
-    value = tax_populace.scalar_value(1.105810581991662e-11)
+    value = tax_microcosm.scalar_value(1.105810581991662e-11)
 
     assert value == {
         "kind": "decimal",
@@ -131,7 +131,7 @@ def test_scalar_value_formats_scientific_float_as_decimal_literal():
 
 
 def test_scalar_value_keeps_plain_float_literal_format():
-    assert tax_populace.scalar_value(184500.0) == {
+    assert tax_microcosm.scalar_value(184500.0) == {
         "kind": "decimal",
         "value": "184500.0",
     }
@@ -200,9 +200,9 @@ def test_run_axiom_program_refuses_renamed_worktree_before_the_engine_runs(
         engine_calls.append(cmd)
         raise AssertionError(f"engine must not run: {cmd}")
 
-    monkeypatch.setattr(tax_populace.subprocess, "run", fake_run)
+    monkeypatch.setattr(tax_microcosm.subprocess, "run", fake_run)
     with pytest.raises(NonCanonicalRuleSpecRoot, match="rulespec-uk-worktree"):
-        tax_populace.run_axiom_program(
+        tax_microcosm.run_axiom_program(
             program=program,
             request={"queries": []},
             rulespec_root=rulespec_root,
@@ -1761,7 +1761,7 @@ def test_output_number_maps_axiom_judgments_to_boolean_numbers():
 
 def test_tax_ecps_parser_documents_full_sample_size():
     parser = argparse.ArgumentParser()
-    tax_populace.configure_parser(parser)
+    tax_microcosm.configure_parser(parser)
 
     sample_size_help = next(
         action.help for action in parser._actions if action.dest == "sample_size"
@@ -1908,7 +1908,7 @@ def test_tax_unit_positive_weight_mask_requires_person_household_tables():
 
 def test_compare_outputs_reports_max_relative_diff_for_large_float_noise():
     pd = pytest.importorskip("pandas")
-    report = tax_populace.compare_outputs(
+    report = tax_microcosm.compare_outputs(
         pe_data={
             "tax_units": pd.DataFrame(
                 [
@@ -2263,7 +2263,7 @@ def test_build_medicare_payroll_request_uses_projected_fica_wages():
 
 
 def test_policyengine_variables_for_payroll_surface_are_person_scoped():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_microcosm.policyengine_variables_for_surfaces(
         ["employee-medicare"]
     )
 
@@ -2278,7 +2278,7 @@ def test_policyengine_variables_for_payroll_surface_are_person_scoped():
 
 
 def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_microcosm.policyengine_variables_for_surfaces(
         ["employee-oasdi"],
         positive_ctc_only=True,
     )
@@ -2289,18 +2289,18 @@ def test_policyengine_variables_for_positive_ctc_payroll_surface_selects_ctc():
 
 
 def test_policyengine_variables_for_non_payroll_surfaces_use_legacy_sets():
-    assert tax_populace.policyengine_variables_for_surfaces(["ctc"]) == (
-        tax_populace.PE_TAX_UNIT_VARIABLES,
-        tax_populace.PE_PERSON_VARIABLES,
+    assert tax_microcosm.policyengine_variables_for_surfaces(["ctc"]) == (
+        tax_microcosm.PE_TAX_UNIT_VARIABLES,
+        tax_microcosm.PE_PERSON_VARIABLES,
     )
-    assert tax_populace.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
-        tax_populace.PE_TAX_UNIT_VARIABLES,
-        tax_populace.PE_PERSON_VARIABLES,
+    assert tax_microcosm.policyengine_variables_for_surfaces(["employee-oasdi", "ctc"]) == (
+        tax_microcosm.PE_TAX_UNIT_VARIABLES,
+        tax_microcosm.PE_PERSON_VARIABLES,
     )
 
 
 def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs():
-    tax_unit_variables, person_variables = tax_populace.policyengine_variables_for_surfaces(
+    tax_unit_variables, person_variables = tax_microcosm.policyengine_variables_for_surfaces(
         ["tax-before-credits"]
     )
 
@@ -2309,7 +2309,7 @@ def test_policyengine_variables_for_tax_before_credits_include_main_rates_inputs
     assert "unrecaptured_section_1250_gain" in tax_unit_variables
     assert "long_term_capital_gains" in person_variables
     assert "qualified_dividend_income" in person_variables
-    assert person_variables == tax_populace.PE_PERSON_VARIABLES
+    assert person_variables == tax_microcosm.PE_PERSON_VARIABLES
 
 
 def test_taxable_oasdi_wages_come_from_axiom_3121_results():
@@ -2418,8 +2418,8 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         "tax_unit_ids": [1],
         "person_ids": [7],
     }
-    monkeypatch.setattr(tax_populace, "require_numpy", lambda: None)
-    monkeypatch.setattr(tax_populace, "require_policyengine_versions", lambda **_: None)
+    monkeypatch.setattr(tax_microcosm, "require_numpy", lambda: None)
+    monkeypatch.setattr(tax_microcosm, "require_policyengine_versions", lambda **_: None)
 
     def fake_load_policyengine_tax_data(**kwargs):
         assert kwargs["tax_unit_variables"] == ()
@@ -2433,7 +2433,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
         return pe_data
 
     monkeypatch.setattr(
-        tax_populace, "load_policyengine_tax_data", fake_load_policyengine_tax_data
+        tax_microcosm, "load_policyengine_tax_data", fake_load_policyengine_tax_data
     )
 
     calls = []
@@ -2487,7 +2487,7 @@ def test_compare_oasdi_stage_runs_encoded_ssa_base_before_3121(
             }
         ]
 
-    monkeypatch.setattr(tax_populace, "run_axiom_program", fake_run_axiom_program)
+    monkeypatch.setattr(tax_microcosm, "run_axiom_program", fake_run_axiom_program)
 
     report = compare_tax_ecps(
         workspace_root=tmp_path,
@@ -2517,7 +2517,7 @@ def test_policyengine_version_guard_rejects_old_us_version(monkeypatch):
             return "1.722.99"
         raise AssertionError(package)
 
-    monkeypatch.setattr(tax_populace, "version", fake_version)
+    monkeypatch.setattr(tax_microcosm, "version", fake_version)
 
     with pytest.raises(SystemExit, match="policyengine-us>="):
         require_policyengine_versions()
@@ -2529,7 +2529,7 @@ def test_policyengine_version_guard_allows_newer_us_version(monkeypatch):
             return "1.739.2"
         raise AssertionError(package)
 
-    monkeypatch.setattr(tax_populace, "version", fake_version)
+    monkeypatch.setattr(tax_microcosm, "version", fake_version)
 
     require_policyengine_versions()
 
@@ -2540,21 +2540,21 @@ def test_policyengine_version_guard_allows_local_us_override(monkeypatch):
             return "1.722.99"
         raise AssertionError(package)
 
-    monkeypatch.setattr(tax_populace, "version", fake_version)
+    monkeypatch.setattr(tax_microcosm, "version", fake_version)
 
     require_policyengine_versions(allow_policyengine_us_version=True)
 
 
-def test_policyengine_data_certification_override_not_required_for_populace():
+def test_policyengine_data_certification_override_not_required_for_microcosm():
     assert policyengine_data_certification_override_required() is False
 
 
-def test_policyengine_data_certification_override_noop_for_populace(monkeypatch):
+def test_policyengine_data_certification_override_noop_for_microcosm(monkeypatch):
     monkeypatch.delenv("POLICYENGINE_SKIP_COUNTRY_IMPORTS", raising=False)
 
-    tax_populace._install_policyengine_data_certification_override()
+    tax_microcosm._install_policyengine_data_certification_override()
 
-    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+    assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_microcosm.os.environ
 
 
 def test_engine_timeouts_default_without_an_override(monkeypatch):
@@ -2630,7 +2630,7 @@ def _receipted_program_fixture(monkeypatch, tmp_path):
     }))
     journal = tmp_path / "execution.json"
     monkeypatch.setenv(ENGINE_RECEIPT_OUTPUT_ENV, str(journal))
-    monkeypatch.setattr(tax_populace, "_runtime_axiom_request", lambda request, **kwargs: (request, {}))
+    monkeypatch.setattr(tax_microcosm, "_runtime_axiom_request", lambda request, **kwargs: (request, {}))
     arguments = {
         "program": program, "request": {"queries": []},
         "rulespec_root": rulespec, "axiom_rules_path": engine,
@@ -2648,25 +2648,25 @@ def test_run_axiom_program_journals_compile_fallback_and_runtime_bytes(
         executed.append((command[1], Path(command[0]).read_bytes()))
         if command[1] == "compile":
             if "--rulespec-root" in command:
-                return tax_populace.subprocess.CompletedProcess(
+                return tax_microcosm.subprocess.CompletedProcess(
                     command, 1, stdout="", stderr="unknown compile argument",
                 )
             Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
-            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
-        return tax_populace.subprocess.CompletedProcess(
+            return tax_microcosm.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+        return tax_microcosm.subprocess.CompletedProcess(
             command, 0, stdout='{"results": []}', stderr="",
         )
 
-    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
-    real_record = tax_populace.record_engine_receipt
+    monkeypatch.setattr(tax_microcosm.subprocess, "run", execute)
+    real_record = tax_microcosm.record_engine_receipt
     observed = []
 
     def record(receipt):
         real_record(receipt)
         observed.append(json.loads(journal.read_text()))
 
-    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
-    assert tax_populace.run_axiom_program(**arguments) == []
+    monkeypatch.setattr(tax_microcosm, "record_engine_receipt", record)
+    assert tax_microcosm.run_axiom_program(**arguments) == []
     assert executed == [
         ("compile", b"original engine"), ("compile", b"original engine"),
         ("run-compiled", b"original engine"),
@@ -2695,22 +2695,22 @@ def test_run_axiom_program_rejects_changed_engine_at_each_invocation(
             if change_phase == "during_compile":
                 binary.write_bytes(b"replacement engine")
             if "--rulespec-root" in command:
-                return tax_populace.subprocess.CompletedProcess(
+                return tax_microcosm.subprocess.CompletedProcess(
                     command, 1, stdout="", stderr="unknown compile argument",
                 )
             Path(command[command.index("--output") + 1]).write_text('{"program": {}}')
-            return tax_populace.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+            return tax_microcosm.subprocess.CompletedProcess(command, 0, stdout="", stderr="")
         if change_phase == "during_run":
             binary.write_bytes(b"replacement engine")
         elif change_phase == "before_run":
             # A whole-program before/after check would miss this A -> B -> A.
             binary.write_bytes(b"original engine")
-        return tax_populace.subprocess.CompletedProcess(
+        return tax_microcosm.subprocess.CompletedProcess(
             command, 0, stdout='{"results": []}', stderr="",
         )
 
-    monkeypatch.setattr(tax_populace.subprocess, "run", execute)
-    real_record = tax_populace.record_engine_receipt
+    monkeypatch.setattr(tax_microcosm.subprocess, "run", execute)
+    real_record = tax_microcosm.record_engine_receipt
 
     def record(receipt):
         real_record(receipt)
@@ -2720,9 +2720,9 @@ def test_run_axiom_program_rejects_changed_engine_at_each_invocation(
         ):
             binary.write_bytes(b"replacement engine")
 
-    monkeypatch.setattr(tax_populace, "record_engine_receipt", record)
+    monkeypatch.setattr(tax_microcosm, "record_engine_receipt", record)
     with pytest.raises(EngineIdentityError, match="changed .*program invocation"):
-        tax_populace.run_axiom_program(**arguments)
+        tax_microcosm.run_axiom_program(**arguments)
     assert executed == expected_commands
     if change_phase == "during_compile":
         assert not journal.exists()

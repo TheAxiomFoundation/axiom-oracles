@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from axiom_oracles.bridges import snap_populace
+from axiom_oracles.bridges import snap_populace as snap_microcosm
 from axiom_oracles.bridges.snap_populace import (
     COMMON_AXIOM_OUTPUT_ID_BY_LABEL,
     JURISDICTION_CONFIGS,
@@ -71,9 +71,9 @@ def test_axiom_rules_env_forwards_only_canonical_checkouts(monkeypatch, tmp_path
     monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(inherited))
     monkeypatch.setenv("AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE", "1")
 
-    env = snap_populace.axiom_rules_env(program, workspace)
+    env = snap_microcosm.axiom_rules_env(program, workspace)
 
-    roots = env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep)
+    roots = env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_microcosm.os.pathsep)
     assert roots == [str(canonical.resolve())]
     assert "AXIOM_RULESPEC_REPO_ROOTS_EXCLUSIVE" not in env
 
@@ -87,9 +87,9 @@ def test_axiom_rules_env_leads_with_the_program_checkout(tmp_path):
     program.parent.mkdir(parents=True)
     program.write_text("format: rulespec/v1\nrules: []\n", encoding="utf-8")
 
-    env = snap_populace.axiom_rules_env(program, workspace)
+    env = snap_microcosm.axiom_rules_env(program, workspace)
 
-    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_microcosm.os.pathsep) == [
         str(active.resolve()),
         str((workspace / "rulespec-us").resolve()),
     ]
@@ -135,9 +135,9 @@ def test_axiom_rules_env_checks_the_checkout_the_os_opens(tmp_path):
         tmp_path, target_origin="https://github.com/evil/rulespec-us.git"
     )
 
-    env = snap_populace.axiom_rules_env(program, workspace)
+    env = snap_microcosm.axiom_rules_env(program, workspace)
 
-    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_microcosm.os.pathsep) == [
         str((workspace / "rulespec-us").resolve()),
     ]
 
@@ -148,9 +148,9 @@ def test_axiom_rules_env_leads_with_the_checkout_the_os_opens(tmp_path):
         tmp_path, target_origin="https://github.com/TheAxiomFoundation/rulespec-us.git"
     )
 
-    env = snap_populace.axiom_rules_env(program, workspace)
+    env = snap_microcosm.axiom_rules_env(program, workspace)
 
-    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_populace.os.pathsep) == [
+    assert env["AXIOM_RULESPEC_REPO_ROOTS"].split(snap_microcosm.os.pathsep) == [
         str((tmp_path / "b" / "rulespec-us").resolve()),
         str((workspace / "rulespec-us").resolve()),
     ]
@@ -257,7 +257,7 @@ def test_california_projectors_use_california_snap_input_surface():
     assert project_utility_allowance_type(config, "LUA", "") == {
         "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": False
     }
-    assert snap_populace.medical_expenses_for_deduction(150) == 185
+    assert snap_microcosm.medical_expenses_for_deduction(150) == 185
 
 
 def test_arizona_projection_uses_composed_financial_outputs_not_pe_values():
@@ -314,7 +314,7 @@ def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
         )
         for label, output_id in config.output_id_by_label.items()
     }
-    rows = snap_populace.compare(
+    rows = snap_microcosm.compare(
         [case],
         [{"outputs": outputs}],
         1.5,
@@ -326,8 +326,8 @@ def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
     assert "PolicyEngine eligibility" in rows[0]["not_comparable_reason"]
     assert rows[0]["match"] is False
     with pytest.raises(TypeError, match="config"):
-        snap_populace.compare([case], [{"outputs": outputs}], 1.5)
-    snap_populace.print_summary(rows, 1.5, 1)
+        snap_microcosm.compare([case], [{"outputs": outputs}], 1.5)
+    snap_microcosm.print_summary(rows, 1.5, 1)
     assert "No comparable rows; parity is not established" in capsys.readouterr().out
 
     add_snapscreener_results(
@@ -340,7 +340,7 @@ def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
     assert rows[0]["axiom_snapscreener_match"] is False
     assert rows[0]["pe_snapscreener_comparable"] is True
     assert rows[0]["pe_snapscreener_match"] is True
-    snap_populace.print_snapscreener_summary(rows, 1.5, 1)
+    snap_microcosm.print_snapscreener_summary(rows, 1.5, 1)
     summary = capsys.readouterr().out
     assert "PolicyEngine matches SnapScreener: 1/1" in summary
     assert "Axiom matches SnapScreener:" not in summary
@@ -386,15 +386,15 @@ def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
 
     def fake_run(cmd, **kwargs):
         assert "run-compiled" in cmd
-        runtime_requests.append(snap_populace.json.loads(kwargs["input"]))
-        return snap_populace.subprocess.CompletedProcess(
+        runtime_requests.append(snap_microcosm.json.loads(kwargs["input"]))
+        return snap_microcosm.subprocess.CompletedProcess(
             cmd,
             0,
-            stdout=snap_populace.json.dumps({"results": [{"outputs": {}}]}),
+            stdout=snap_microcosm.json.dumps({"results": [{"outputs": {}}]}),
             stderr="",
         )
 
-    monkeypatch.setattr(snap_populace.subprocess, "run", fake_run)
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", fake_run)
     period = Period(
         label="2026-01",
         year=2026,
@@ -406,7 +406,7 @@ def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
     relation_ids = (config.relation_id, *config.additional_relation_ids)
     artifact = tmp_path / "program.json"
     artifact.write_text(
-        snap_populace.json.dumps(
+        snap_microcosm.json.dumps(
             {
                 "program": {
                     "relations": [
@@ -665,7 +665,7 @@ var SnapAPI = {
     ]
 
 
-@pytest.mark.parametrize("jurisdiction", sorted(snap_populace.JURISDICTION_CONFIGS))
+@pytest.mark.parametrize("jurisdiction", sorted(snap_microcosm.JURISDICTION_CONFIGS))
 def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     jurisdiction, monkeypatch, tmp_path
 ):
@@ -676,7 +676,7 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     copy is missing or the bridge runs from inside the clone; the load then
     fails naming the monorepo path, instead of silently running frozen rules
     the affected map does not list."""
-    config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
+    config = snap_microcosm.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "TheAxiomFoundation"
     standalone = workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
     standalone.parent.mkdir(parents=True)
@@ -686,15 +686,15 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
         workspace / "rulespec-us" / jurisdiction / config.program_relative_path
     ).resolve()
 
-    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+    assert snap_microcosm.resolve_program_path(config, workspace, None) == expected
 
     expected.parent.mkdir(parents=True)
     expected.write_text("monorepo\n")
-    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+    assert snap_microcosm.resolve_program_path(config, workspace, None) == expected
 
     # Run from inside the archived clone, the monorepo copy still wins.
     monkeypatch.chdir(workspace / f"rulespec-{jurisdiction}")
-    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+    assert snap_microcosm.resolve_program_path(config, workspace, None) == expected
 
     # Run from inside a monorepo jurisdiction directory (e.g. a rulespec-us
     # worktree's us-co/), that directory's program wins.
@@ -704,23 +704,23 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     worktree_program.parent.mkdir(parents=True)
     worktree_program.write_text("worktree\n")
     monkeypatch.chdir(worktree_dir)
-    assert snap_populace.resolve_program_path(config, workspace, None) == (
+    assert snap_microcosm.resolve_program_path(config, workspace, None) == (
         worktree_program.resolve()
     )
 
     override = tmp_path / "explicit.yaml"
-    assert snap_populace.resolve_program_path(config, workspace, override) == (
+    assert snap_microcosm.resolve_program_path(config, workspace, override) == (
         override.resolve()
     )
 
 
-@pytest.mark.parametrize("jurisdiction", sorted(snap_populace.JURISDICTION_CONFIGS))
+@pytest.mark.parametrize("jurisdiction", sorted(snap_microcosm.JURISDICTION_CONFIGS))
 @pytest.mark.parametrize("cwd_kind", ["unrelated", "renamed-archived", "other-owner"])
 def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
     jurisdiction, cwd_kind, monkeypatch, tmp_path
 ):
     """A jurisdiction basename alone cannot establish live monorepo membership."""
-    config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
+    config = snap_microcosm.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "workspace"
     expected = workspace / "rulespec-us" / jurisdiction / config.program_relative_path
     expected.parent.mkdir(parents=True)
@@ -747,11 +747,11 @@ def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
         )
     monkeypatch.chdir(cwd)
 
-    assert snap_populace.resolve_program_path(config, workspace, None) == (
+    assert snap_microcosm.resolve_program_path(config, workspace, None) == (
         expected.resolve()
     )
     # Deliberately selecting a program remains an explicit supported exception.
-    assert snap_populace.resolve_program_path(config, workspace, cwd_program) == (
+    assert snap_microcosm.resolve_program_path(config, workspace, cwd_program) == (
         cwd_program.resolve()
     )
 
@@ -759,7 +759,7 @@ def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
 def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     monkeypatch, tmp_path
 ):
-    config = snap_populace.JURISDICTION_CONFIGS["us-co"]
+    config = snap_microcosm.JURISDICTION_CONFIGS["us-co"]
     checkout = tmp_path / "current-worktree"
     (checkout / "us").mkdir(parents=True)
     program = checkout / config.jurisdiction / config.program_relative_path
@@ -780,7 +780,7 @@ def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     )
     monkeypatch.chdir(checkout / config.jurisdiction)
 
-    assert snap_populace.resolve_program_path(config, tmp_path / "workspace", None) == (
+    assert snap_microcosm.resolve_program_path(config, tmp_path / "workspace", None) == (
         program.resolve()
     )
 
@@ -838,9 +838,9 @@ def test_compile_program_journals_each_fallback_invocation(monkeypatch, tmp_path
         receipts.append(dict(receipt))
         record_engine_receipt(receipt)
 
-    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
-    monkeypatch.setattr(snap_populace, "record_engine_receipt", record)
-    snap_populace.compile_program(binary, program, output, env={})
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", execute)
+    monkeypatch.setattr(snap_microcosm, "record_engine_receipt", record)
+    snap_microcosm.compile_program(binary, program, output, env={})
 
     assert [command[1] for command in commands] == ["compile-composed", "compile"]
     assert receipts == [engine_receipt(binary), engine_receipt(binary)]
@@ -864,10 +864,10 @@ def test_compile_program_rejects_swap_between_fallbacks(monkeypatch, tmp_path):
         record_engine_receipt(receipt)
         binary.write_bytes(b"different cached executable")
 
-    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
-    monkeypatch.setattr(snap_populace, "record_engine_receipt", replace_after_invocation)
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", execute)
+    monkeypatch.setattr(snap_microcosm, "record_engine_receipt", replace_after_invocation)
     with pytest.raises(EngineIdentityError, match="changed before SNAP execution"):
-        snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+        snap_microcosm.compile_program(binary, program, tmp_path / "compiled.json", env={})
     assert len(commands) == 1
     assert json.loads(journal.read_text()) == original
 
@@ -889,7 +889,7 @@ def test_snap_direct_execution_verifies_own_bytes_before_journaling(
             binary.write_bytes(b"changed during execution")
         return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
 
-    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", execute)
     if changed:
         with pytest.raises(EngineIdentityError, match="changed during SNAP execution"):
             run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))
@@ -911,8 +911,8 @@ def test_snap_journal_rejects_different_compile_and_runtime_engines(monkeypatch,
     def execute(command, **kwargs):
         return subprocess.CompletedProcess(command, 0, stdout='{"results": []}', stderr="")
 
-    monkeypatch.setattr(snap_populace.subprocess, "run", execute)
-    snap_populace.compile_program(binary, program, tmp_path / "compiled.json", env={})
+    monkeypatch.setattr(snap_microcosm.subprocess, "run", execute)
+    snap_microcosm.compile_program(binary, program, tmp_path / "compiled.json", env={})
     binary.write_bytes(b"replacement runtime engine")
     with pytest.raises(EngineIdentityError, match="identities disagree"):
         run_axiom_cases(**_snap_execution_arguments(tmp_path, binary))

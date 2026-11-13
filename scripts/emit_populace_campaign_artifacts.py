@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-"""Emit per-state dashboard reports from the state-tax Populace campaign.
+"""Emit per-state dashboard reports from the state-tax Microcosm campaign.
 
 The campaign runner (scripts/run_state_tax_populace.py) writes ONE
 campaign-level report covering every ready state over the full pinned US
-Populace. The dashboard is suite-keyed, so this script projects that
+Microcosm. The dashboard is suite-keyed, so this script projects that
 report into one slim axiom.comparison_report.v2 per state
 (``axiom-policyengine-<st>-income-tax-populace.json``) and registers each
 in ``dashboard/public/data/manifest.json``. Each projected report cites
@@ -544,7 +544,7 @@ CHUNK_SIZE = 500
 def configured_populace_reports(
     config_path: Path = POPULACE_SUITE_CONFIG,
 ) -> frozenset[str]:
-    """Return every dashboard report required by the Populace suite registry."""
+    """Return every dashboard report required by the Microcosm suite registry."""
 
     config = yaml.safe_load(config_path.read_text()) or {}
     suites = config.get("suites") or []
@@ -555,7 +555,7 @@ def configured_populace_reports(
     }
     if len(reports) != len(suites):
         raise ValueError(
-            "Populace suite registry must declare one unique report per suite"
+            "Microcosm suite registry must declare one unique report per suite"
         )
     return frozenset(reports)
 
@@ -579,7 +579,7 @@ def reconcile_manifest_reports(
     missing_required_entries = sorted(required_reports - set(reconciled))
     if missing_required_entries:
         raise ValueError(
-            "manifest is missing required configured Populace report(s): "
+            "manifest is missing required configured Microcosm report(s): "
             + ", ".join(missing_required_entries)
         )
     missing_files = sorted(

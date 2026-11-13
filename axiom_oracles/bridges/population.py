@@ -1,16 +1,16 @@
 """PolicyEngine population loaders for Axiom validation oracles.
 
-Loading is *pinned by default*. A published Populace artifact is only trusted
+Loading is *pinned by default*. A published Microcosm artifact is only trusted
 when it matches a verified ``(repo_id, filename, revision, sha256)`` pin, so an
 oracle run compares against known input bases rather than whatever Hugging Face
 currently serves as ``latest``. See :data:`POPULACE_PINS` for the certified pins
 and the resolution order documented on :func:`load_populace_dataset`.
 
-Why pinning matters: ``populace.data.load()`` (populace-data 0.1.0) always
+Why pinning matters: ``populace.data.load()`` (populace-data 0.1.0, now microcosm-data) always
 fetches the HF-latest revision with no pin. As of 2026-07-02 HF-latest for the
 US dataset is a *sparse* refit that zeroes untargeted input bases (IRA/HSA/
 self-employed pension/childcare and dozens of other engine inputs) per
-PolicyEngine/populace#278. Comparing an encoder oracle against that artifact
+PolicyEngine/microcosm#278. Comparing an encoder oracle against that artifact
 would silently score against ~$0 bases. The dense certified pin below is the
 last artifact verified to carry those inputs.
 """
@@ -54,7 +54,7 @@ SOURCE_UNPINNED = "unpinned"
 
 @dataclass(frozen=True)
 class PopulacePin:
-    """A verified Populace artifact pin.
+    """A verified Microcosm artifact pin.
 
     ``sha256`` is the digest of the artifact file itself (verified after
     download); ``built_with`` is the PolicyEngine model-package version the
@@ -75,15 +75,15 @@ class PopulacePin:
 # ---------------------------------------------------------------------------
 # UPGRADE NOTE
 # ---------------------------------------------------------------------------
-# These pins are the *dense* certified Populace artifacts (verified 2026-07-02
+# These pins are the *dense* certified Microcosm artifacts (verified 2026-07-02
 # against policyengine.py's certified bundle manifest at bundle 4.18.6 / tag
 # 4.18.0 history: src/policyengine/data/bundle/manifest.json). They intentionally
 # predate the sparse-l0-refit artifact that is currently HF-latest, because that
-# sparse artifact zeroes untargeted engine input bases (PolicyEngine/populace#278,
+# sparse artifact zeroes untargeted engine input bases (PolicyEngine/microcosm#278,
 # closed 2026-07-02 by pipeline-fix PR #279 — but the rebuilt dense-parity
 # artifact is not yet published/certified).
 #
-# RE-PIN WHEN: a post-#279 sparse (or dense-parity) Populace release is certified
+# RE-PIN WHEN: a post-#279 sparse (or dense-parity) Microcosm release is certified
 # as the default in the policyengine.py bundle. At that point, read the new
 # (repo_id, filename, revision, sha256, built_with_model_version) out of that
 # bundle's manifest.json certified_data_artifact/datasets block and update the
@@ -118,7 +118,7 @@ def load_populace_dataset(
     command: str,
     provenance: dict[str, Any] | None = None,
 ) -> Any:
-    """Load a published Populace artifact as a PolicyEngine dataset.
+    """Load a published Microcosm artifact as a PolicyEngine dataset.
 
     Resolution order (first match wins):
 
@@ -175,7 +175,7 @@ def load_populace_dataset(
         resolved_year = (
             year if year is not None else DEFAULT_POPULACE_YEARS.get(country)
         )
-        dataset = _load_unpinned_populace(country, resolved_year, command)
+        dataset = _load_unpinned_microcosm(country, resolved_year, command)
         _record_provenance(
             sink,
             source=SOURCE_UNPINNED,
@@ -255,14 +255,14 @@ def pinned_populace_download(pin: PopulacePin, *, command: str) -> Path:
         )
     except Exception as exc:  # pragma: no cover - depends on external HF access
         raise SystemExit(
-            f"Failed to download pinned Populace {pin.country.upper()} artifact "
+            f"Failed to download pinned Microcosm {pin.country.upper()} artifact "
             f"{pin.repo_id}/{pin.filename}@{pin.revision}: {exc}"
         ) from exc
     path = Path(downloaded)
     actual = file_sha256(path)
     if actual.lower() != pin.sha256.lower():
         raise SystemExit(
-            f"Pinned Populace {pin.country.upper()} artifact sha256 mismatch for "
+            f"Pinned Microcosm {pin.country.upper()} artifact sha256 mismatch for "
             f"{pin.repo_id}/{pin.filename}@{pin.revision}: expected {pin.sha256}, "
             f"got {actual}. Refusing to load an artifact that does not match the "
             f"pin. If you intentionally re-pinned, set AXIOM_POPULACE_"
@@ -277,7 +277,7 @@ def unpinned_fallback_allowed() -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def _load_unpinned_populace(country: str, year: int | None, command: str) -> Any:
+def _load_unpinned_microcosm(country: str, year: int | None, command: str) -> Any:
     """Load via the unpinned ``populace.data.load`` package (HF-latest)."""
     try:
         from populace.data import load
@@ -290,7 +290,7 @@ def _load_unpinned_populace(country: str, year: int | None, command: str) -> Any
     except Exception as exc:  # pragma: no cover - depends on external dataset access
         year_label = "latest" if year is None else str(year)
         raise SystemExit(
-            f"Failed to load Populace {country.upper()} {year_label} dataset: {exc}"
+            f"Failed to load Microcosm {country.upper()} {year_label} dataset: {exc}"
         ) from exc
 
 
@@ -304,7 +304,7 @@ def _instantiate_dataset(country: str, path: Path, command: str) -> Any:
         ) from exc
     except Exception as exc:  # pragma: no cover - depends on external dataset shape
         raise SystemExit(
-            f"Failed to load Populace {country.upper()} artifact {path}: {exc}"
+            f"Failed to load Microcosm {country.upper()} artifact {path}: {exc}"
         ) from exc
 
 
@@ -321,7 +321,7 @@ def _verify_local_override_against_pin(country: str, path: Path) -> str:
     if pin is None or actual.lower() == pin.sha256.lower():
         return actual
     warnings.warn(
-        f"Local Populace {country.upper()} override {path} sha256 {actual[:12]} "
+        f"Local Microcosm {country.upper()} override {path} sha256 {actual[:12]} "
         f"does not match the certified pin {pin.sha256[:12]} "
         f"(revision {pin.revision}). Loading the override anyway; oracle results "
         f"will reflect this unpinned artifact, not the certified dataset.",
@@ -397,7 +397,7 @@ def file_sha256(path: Path, *, chunk_size: int = 1024 * 1024) -> str:
 
 
 def load_policyengine_dataset_artifact(country: str, path: Path) -> Any:
-    """Load a local Populace H5 artifact using its PolicyEngine dataset class."""
+    """Load a local Microcosm H5 artifact using its PolicyEngine dataset class."""
     country = country.lower()
     dataset_spec = POLICYENGINE_DATASET_CLASSES.get(country)
     if dataset_spec is None:
@@ -415,7 +415,7 @@ def population_table(dataset: Any, name: str) -> Any:
     if table is None and hasattr(dataset, "data"):
         table = getattr(dataset.data, name, None)
     if table is None:
-        raise ValueError(f"Populace dataset does not expose {name!r} table.")
+        raise ValueError(f"Microcosm dataset does not expose {name!r} table.")
     return table.copy() if hasattr(table, "copy") else table
 
 
@@ -435,7 +435,7 @@ def local_populace_artifact_path(
     year: int | None = None,
     cache_root: Path | None = None,
 ) -> Path | None:
-    """Return the explicit local Populace artifact override for ``country``.
+    """Return the explicit local Microcosm artifact override for ``country``.
 
     Resolves *only* ``AXIOM_POPULACE_*`` env-var overrides. The Hugging Face
     cache scan is intentionally gated behind the unpinned escape hatch and lives
@@ -451,7 +451,7 @@ def local_populace_artifact_path(
         path = Path(override).expanduser()
         if not path.exists():
             raise FileNotFoundError(
-                f"{env_var} points to a missing Populace artifact: {path}"
+                f"{env_var} points to a missing Microcosm artifact: {path}"
             )
         return path
     return None
@@ -483,7 +483,7 @@ def unpinned_huggingface_cache_artifact(
     year: int | None = None,
     cache_root: Path | None = None,
 ) -> Path | None:
-    """Resolve a Populace artifact from the Hugging Face cache (unpinned).
+    """Resolve a Microcosm artifact from the Hugging Face cache (unpinned).
 
     This is the HF-latest cache scan. It is *not* part of the default pinned
     path; the unpinned fallback uses it only when
@@ -505,7 +505,7 @@ def huggingface_cache_populace_artifact(
     *,
     cache_root: Path | None = None,
 ) -> Path | None:
-    """Resolve a Populace artifact already present in the Hugging Face cache."""
+    """Resolve a Microcosm artifact already present in the Hugging Face cache."""
     root = cache_root or DEFAULT_HUGGINGFACE_CACHE_ROOT
     repo_cache = root / f"datasets--policyengine--populace-{country.lower()}"
     snapshots = repo_cache / "snapshots"
@@ -544,7 +544,7 @@ def huggingface_cache_refs(refs: Path) -> tuple[Path, ...]:
 
 def huggingface_hub_install_message(country: str, command: str) -> str:
     return (
-        "Pinned Populace validation requires huggingface-hub and the matching "
+        "Pinned Microcosm validation requires huggingface-hub and the matching "
         "PolicyEngine country engine. Run with: "
         f"uv run --with huggingface-hub --with {populace_data_requirement(country)} "
         f"axiom-encode {command}"
@@ -559,7 +559,7 @@ def unpinned_disallowed_message(country: str, command: str) -> str:
         else ""
     )
     return (
-        f"No pinned Populace {country.upper()} artifact could be loaded and the "
+        f"No pinned Microcosm {country.upper()} artifact could be loaded and the "
         f"unpinned fallback is disabled. Unpinned loading resolves to HF-latest, "
         f"which for the US dataset is the sparse artifact that zeroes untargeted "
         f"engine input bases (PolicyEngine/populace#278). To knowingly load "
@@ -569,7 +569,7 @@ def unpinned_disallowed_message(country: str, command: str) -> str:
 
 def unpinned_fallback_warning(country: str) -> str:
     return (
-        f"{ALLOW_UNPINNED_ENV} is set: loading UNPINNED Populace {country.upper()} "
+        f"{ALLOW_UNPINNED_ENV} is set: loading UNPINNED Microcosm {country.upper()} "
         f"data (HF-latest). For the US dataset this is the sparse refit that "
         f"zeroes untargeted engine input bases (PolicyEngine/populace#278); oracle "
         f"comparisons against it may score against ~$0 bases. Prefer the certified "
@@ -579,7 +579,7 @@ def unpinned_fallback_warning(country: str) -> str:
 
 def populace_install_message(country: str, command: str) -> str:
     return (
-        "Populace validation requires populace-data and the matching "
+        "Microcosm validation requires populace-data and the matching "
         "PolicyEngine country engine. Run with: "
         f"uv run --with {populace_data_requirement(country)} "
         f"axiom-encode {command}"
@@ -588,7 +588,7 @@ def populace_install_message(country: str, command: str) -> str:
 
 def policyengine_dataset_install_message(country: str, command: str) -> str:
     return (
-        "Populace validation found a local artifact but requires the matching "
+        "Microcosm validation found a local artifact but requires the matching "
         "PolicyEngine country engine. Run with: "
         f"uv run --with {populace_data_requirement(country)} "
         f"axiom-encode {command}"
@@ -596,7 +596,7 @@ def policyengine_dataset_install_message(country: str, command: str) -> str:
 
 
 def populace_data_requirement(country: str) -> str:
-    """Return the best uv requirement string for the local Populace data shard."""
+    """Return the best uv requirement string for the local Microcosm data shard."""
     country = country.lower()
     override = os.environ.get("AXIOM_POPULACE_DATA_PACKAGE")
     if override:

@@ -2,10 +2,10 @@
 
 This document covers the canonical recipe for comparing Axiom-encoded RuleSpec
 federal individual income tax (FIIT) outputs against PolicyEngine over the
-certified pinned **Populace US** population. The committed dashboard artifact
+certified pinned **Microcosm US** population. The committed dashboard artifact
 uses the full weighted slice (`--sample-size 0`) and runs against Python 3.13,
 PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.729.0 —
-the model version the certified pinned Populace artifact was built with, and
+the model version the certified pinned Microcosm artifact was built with, and
 the floor the tax harness now enforces (`>= 1.723`).
 
 Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
@@ -24,10 +24,10 @@ unattended regeneration scripts still attempt it, but the runner refuses unless
 the engine checkout it names is at the commit that file pins. Refreshed dashboard data publishes to `oracle-data`; `main` retains
 the reviewed baseline.
 
-## Population: pinned Populace, with recorded identity
+## Population: pinned Microcosm, with recorded identity
 
 The harness resolves its PolicyEngine oracle population from the **pinned**
-Populace artifact by default (axiom-encode#952): a fixed Hugging Face revision,
+Microcosm artifact by default (axiom-encode#952): a fixed Hugging Face revision,
 downloaded and sha256-verified, never HF-latest unless
 `AXIOM_POPULACE_ALLOW_UNPINNED` is deliberately set. That is the same
 verified-artifact discipline the in-repo `axiom-oracles-compare` runner gained

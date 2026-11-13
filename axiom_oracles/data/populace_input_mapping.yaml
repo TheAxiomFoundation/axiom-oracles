@@ -1,8 +1,8 @@
-# Populace-to-input mapping table — data, not code.
+# Microcosm-to-input mapping table — data, not code.
 #
 # Each entry declares HOW a single input slot in a compiled program gets
 # populated from population facts on a Case (the population is the certified
-# populace-us artifact — axiom-oracles#74). The generic projector
+# Microcosm US artifact — axiom-oracles#74). The generic projector
 # (axiom_oracles.adapters.axiom.generic_inputs) reads this table at startup,
 # builds an input mapping, and applies it to every compiled program it runs.
 #
@@ -571,7 +571,7 @@ mappings:
     source: { kind: derived, transform: ssi_couple_countable_income }
 
   # Resources (42 USC 1382b(a) countable resources, net of the statutory
-  # exclusions). The certified populace-us artifact DOES carry SSI countable
+  # exclusions). The certified Microcosm US artifact DOES carry SSI countable
   # resources: PolicyEngine reads them and screens the 1382(a)(1)(B) limit
   # ($2,000 individual / $3,000 couple), so Axiom must screen the same value.
   # Projected from PolicyEngine's person-level ssi_countable_resources (see
@@ -1707,7 +1707,7 @@ mappings:
 
   # AL TANF Appendix N §2 step-2 deduction: child care or care of an
   # incapacitated adult, deducted from gross earnings after the 20% work
-  # expense. Fed from the populace CHILDCARE_EXPENSES household fact (the
+  # expense. Fed from the Microcosm CHILDCARE_EXPENSES household fact (the
   # SPM-unit annual childcare_expenses PolicyEngine's own
   # al_tanf_countable_earned_income reads at MONTH period), so both engines
   # see the same observed spending. Closes rulespec-us#1184 / the 3

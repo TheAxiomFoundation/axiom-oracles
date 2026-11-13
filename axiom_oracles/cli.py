@@ -478,7 +478,7 @@ def sanity_check(
     help=(
         "Override the population dataset (path, hf:// URL, or populace:// "
         "dataset-repo reference). Defaults to the certified populace-us "
-        "artifact; NYC scopes keep their dedicated file until populace "
+        "artifact; NYC scopes keep their dedicated file until Microcosm "
         "grows place geography."
     ),
 )
@@ -744,7 +744,7 @@ def compare(
                     )
                 except RuntimeError as exc:
                     raise click.ClickException(str(exc)) from exc
-                return _populace_us_case_unit((), (), mappings=population_mappings)
+                return _microcosm_us_case_unit((), (), mappings=population_mappings)
 
         cases, dataset_identity = _load_population(
             population=population,
@@ -1425,7 +1425,7 @@ def _load_population_cases(
             period=period,
             sample_size=sample_size or None,
             dataset=ecps_dataset,
-            case_unit=_populace_us_case_unit(categories, concepts),
+            case_unit=_microcosm_us_case_unit(categories, concepts),
             case_unit_selector=case_unit_selector,
         )
     if population == "synthetic":
@@ -1524,7 +1524,7 @@ def _check_taxsim_csv_options(
         )
 
 
-def _populace_us_case_unit(
+def _microcosm_us_case_unit(
     categories: tuple[str, ...],
     concepts: tuple[str, ...],
     *,

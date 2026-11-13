@@ -20,7 +20,7 @@ from __future__ import annotations
 import sys
 import warnings
 
-import axiom_oracles.bridges.snap_populace as _snap_populace
+import axiom_oracles.bridges.snap_populace as _snap_microcosm
 
 warnings.warn(
     "axiom_oracles.bridges.ecps_snap is deprecated; import "
@@ -30,4 +30,4 @@ warnings.warn(
     stacklevel=2,
 )
 
-sys.modules[__name__] = _snap_populace
+sys.modules[__name__] = _snap_microcosm

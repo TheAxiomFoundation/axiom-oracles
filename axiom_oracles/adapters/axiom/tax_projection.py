@@ -3622,7 +3622,7 @@ def _tax_unit_input_records(
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
         # 32(i) disqualified income in Pub. 596 Worksheet 1 baskets, the same
-        # arithmetic as the populace lane's
+        # arithmetic as the Microcosm lane's
         # project_eitc_relevant_investment_income. Leaving it to
         # _TAX_UNIT_NUMERIC_DEFAULTS zeroed the input and granted EITC to
         # units above the $12,200 limit — the
@@ -3831,7 +3831,7 @@ def _tax_unit_input_records(
                 value,
             )
         )
-    # Raw section 112 combat-zone inputs, zero-defaulted from the populace
+    # Raw section 112 combat-zone inputs, zero-defaulted from Microcosm
     # bridge's shared table. Compositions built from rulespec-us vintages
     # whose 26/32 EITC closure imports the raw 26/112 machinery (e.g. the
     # pinned ca2d424f snapshot) require these on every tax unit; newer

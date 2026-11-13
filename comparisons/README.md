@@ -184,7 +184,7 @@ PolicyEngine version stack. The runner installs the local `axiom-encode`
 checkout with `--with-editable` so comparison configs can validate unmerged
 harness changes before they land.
 
-The oracle population is the pinned Populace US artifact (resolved and
+The oracle population is the pinned Microcosm US artifact (resolved and
 sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
 `dataset_identity` block in its `--json` output; the dashboard adapter threads
 it onto the generated v2 report so a checked-in report records which pinned
@@ -404,7 +404,7 @@ implementations live in the orchestrator.
 Every report `run_comparison.py` writes carries a `provenance` block
 (`axiom_oracles.provenance.v1`): the rulespec repos + SHAs the cases ran
 against, the Axiom engine SHA/version, the oracle stack identity, the pinned
-dataset identity (reused from `dataset_identity`, axiom-encode#952 / populace#80),
+dataset identity (reused from `dataset_identity`, axiom-encode#952 / microcosm#80),
 `generated_by`, `run_kind` (`weekly` | `pr-triggered` | `affected-rerun` |
 `manual`, from `$AXIOM_ORACLES_RUN_KIND`), and `generated_at`. It is additive —
 a checked-in report records exactly what produced it. `axiom_oracles/provenance.py`

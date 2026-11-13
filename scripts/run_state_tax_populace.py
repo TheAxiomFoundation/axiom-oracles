@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Compare every currently ready state over the pinned US Populace."""
+"""Compare every currently ready state over the pinned US Microcosm."""
 
 from __future__ import annotations
 
@@ -503,7 +503,7 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.populace_year != contract.populace_year:
         raise SystemExit(
-            f"campaign Populace year is {contract.populace_year}, "
+            f"campaign Microcosm year is {contract.populace_year}, "
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
@@ -570,7 +570,7 @@ def main(argv: list[str] | None = None) -> int:
         if source is not dataset:
             raise ValueError(
                 "the shared campaign Microsimulation is bound to the loaded "
-                "Populace dataset; refusing to serve a different source"
+                "Microcosm dataset; refusing to serve a different source"
             )
         if not _shared_sim:
             from policyengine_us import Microsimulation

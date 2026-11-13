@@ -1,10 +1,10 @@
 """US-representative population loader over the certified populace-us artifact.
 
-This module was named ``enhanced_cps`` in the pre-populace era, but every
+This module was formerly named ``enhanced_cps``, but every
 scope it serves now resolves the certified **populace-us** release
 (:data:`POPULACE_US_DATASET`, content-pinned via :data:`POPULACE_PINS`) — the
 sole exception is NYC, which keeps its dedicated Enhanced-CPS per-city file
-until the populace spine grows place geography (see
+until the Microcosm spine grows place geography (see
 :data:`NYC_ENHANCED_CPS_DATASET` and TheAxiomFoundation/axiom-oracles#74).
 
 The public names ``load_populace_us_cases`` / ``PopulaceUsCaseLoader`` replace
@@ -21,29 +21,29 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, Literal
 
-from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
+from ..bridges.population import POPULACE_PINS as _CERTIFIED_MICROCOSM_PINS
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
 
 # The certified populace-us artifact is the standing US population: Enhanced
-# CPS is retired for everything populace can serve (2026-07-02). The populace://
+# CPS is retired for everything Microcosm can serve (2026-07-02). The populace://
 # scheme resolves through the Hugging Face *dataset* repo (policyengine-us's
 # own hf:// loader only reaches model repos).
 POPULACE_US_DATASET = "populace://policyengine/populace-us/populace_us_2024.h5"
 #: PolicyEngine's *managed* Enhanced-CPS dataset identifier. Retained only as
 #: the managed-layer sentinel below: passing this literal as ``dataset`` is the
 #: one input that keeps ``allow_unmanaged=False``. No live path supplies it —
-#: the default is the populace artifact and NYC uses its own hf:// file — so it
+#: the default is the Microcosm artifact and NYC uses its own hf:// file — so it
 #: names the legacy eCPS managed dataset purely to gate against it, not to load
 #: it.
 ENHANCED_CPS_DATASET = "enhanced_cps_2024"
 #: The one remaining Enhanced-CPS-derived dependency in this repo: populace-us
 #: carries no place/county geography yet (its county_fips/place_fips are empty
 #: and in_nyc is degenerate), so NYC-scoped comparisons cannot filter a national
-#: populace artifact. This is the ONLY legacy-eCPS load left — every other scope
+#: Microcosm artifact. This is the ONLY legacy-eCPS load left — every other scope
 #: reads the pinned populace-us release below. Retire this the moment the
-#: populace spine grows place grain (PolicyEngine/populace#204), per
+#: Microcosm spine grows place grain (PolicyEngine/microcosm#204), per
 #: TheAxiomFoundation/axiom-oracles#74.
 NYC_ENHANCED_CPS_DATASET = "hf://policyengine/policyengine-us-data/cities/NYC.h5"
 
@@ -67,7 +67,7 @@ class PopulacePin:
 # ``(repo_id, filename)``. WITHOUT a pin the resolver falls back to HF-latest
 # (``main``), which is exactly the failure this table exists to prevent:
 # HF-latest for policyengine/populace-us currently points at the sparse L0
-# refit that zeroes untargeted input bases (PolicyEngine/populace#278), so a
+# refit that zeroes untargeted input bases (PolicyEngine/microcosm#278), so a
 # weekly comparison following latest would silently score Axiom against ~$0
 # bases and report spurious agreement.
 #
@@ -82,7 +82,7 @@ POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
         revision=pin.revision,
         sha256=pin.sha256,
     )
-    for pin in _CERTIFIED_POPULACE_PINS.values()
+    for pin in _CERTIFIED_MICROCOSM_PINS.values()
 }
 
 
@@ -98,7 +98,7 @@ def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
     return POPULACE_US_DATASET
 
 
-def _resolve_populace_dataset(dataset: str) -> str:
+def _resolve_microcosm_dataset(dataset: str) -> str:
     """Download a ``populace://`` artifact and return its verified local path.
 
     ``populace://<repo_id>/<filename>`` names a file in a Hugging Face
@@ -151,7 +151,7 @@ def _verify_sha256(path: str, *, expected: str, source: str) -> None:
     actual = digest.hexdigest()
     if actual != expected:
         raise RuntimeError(
-            f"populace artifact {source} at {path} failed its sha256 check: "
+            f"Microcosm artifact {source} at {path} failed its sha256 check: "
             f"expected {expected}, got {actual}. The pinned Hugging Face "
             "revision was moved or the download is corrupt — refusing to run a "
             "comparison against an unverified population. Clear the Hugging "
@@ -315,12 +315,12 @@ class PopulaceUsCaseLoader:
         if dataset.startswith("populace://"):
             # policyengine's managed layer validates references against its
             # vendored bundle manifest, which exists to enforce certified
-            # defaults — exactly what a populace override replaces. Build
+            # defaults — exactly what a Microcosm override replaces. Build
             # the engine dataset directly instead.
             from policyengine_us import Microsimulation
             from policyengine_us.data import USSingleYearDataset
 
-            local_path = _resolve_populace_dataset(dataset)
+            local_path = _resolve_microcosm_dataset(dataset)
             return Microsimulation(dataset=USSingleYearDataset(file_path=local_path))
         return pe.us.managed_microsimulation(
             dataset=dataset,

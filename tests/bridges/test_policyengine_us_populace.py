@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from axiom_oracles.bridges import us_populace
+from axiom_oracles.bridges import us_populace as us_microcosm
 from axiom_oracles.bridges.adapters import (
     SNAP_ALIMONY_PAYMENTS_INPUT,
     SNAP_CHILD_SUPPORT_ELECTION_INPUT,
@@ -48,7 +48,7 @@ rules:
 """,
     )
 
-    input_bases = us_populace.reachable_input_bases(
+    input_bases = us_microcosm.reachable_input_bases(
         program,
         rulespec_root=rulespec_root,
     )
@@ -99,7 +99,7 @@ rules:
         mapping_type="direct_variable",
         policyengine_variable="ca_capi",
     )
-    case = us_populace.USVariableCase(
+    case = us_microcosm.USVariableCase(
         variable="ca_capi",
         person_id=123,
         spm_unit_id=99,
@@ -111,7 +111,7 @@ rules:
         pe_outputs={"ca_capi": 600},
     )
 
-    request = us_populace.build_variable_request(
+    request = us_microcosm.build_variable_request(
         cases=[case],
         mappings=(mapping,),
         rulespec_root=rulespec_root,
@@ -149,7 +149,7 @@ rules:
         mapping_type="direct_variable",
         policyengine_variable="co_state_supplement",
     )
-    case = us_populace.USVariableCase(
+    case = us_microcosm.USVariableCase(
         variable="co_state_supplement",
         person_id=456,
         spm_unit_id=88,
@@ -161,7 +161,7 @@ rules:
         pe_outputs={"co_state_supplement": 894},
     )
 
-    request = us_populace.build_variable_request(
+    request = us_microcosm.build_variable_request(
         cases=[case],
         mappings=(mapping,),
         rulespec_root=rulespec_root,
@@ -187,7 +187,7 @@ def test_compare_outputs_flags_missing_axiom_row_as_mismatch():
         mapping_type="direct_variable",
         policyengine_variable="co_state_supplement",
     )
-    case = us_populace.USVariableCase(
+    case = us_microcosm.USVariableCase(
         variable="co_state_supplement",
         person_id=456,
         spm_unit_id=88,
@@ -196,7 +196,7 @@ def test_compare_outputs_flags_missing_axiom_row_as_mismatch():
         pe_outputs={"co_state_supplement": 894},
     )
 
-    report = us_populace.compare_outputs(
+    report = us_microcosm.compare_outputs(
         variables=("co_state_supplement",),
         cases_by_variable={"co_state_supplement": [case]},
         mappings_by_variable={"co_state_supplement": (mapping,)},
@@ -218,7 +218,7 @@ def test_compare_outputs_flags_missing_legal_output_as_mismatch():
         mapping_type="direct_variable",
         policyengine_variable="ca_capi",
     )
-    case = us_populace.USVariableCase(
+    case = us_microcosm.USVariableCase(
         variable="ca_capi",
         person_id=123,
         spm_unit_id=99,
@@ -227,7 +227,7 @@ def test_compare_outputs_flags_missing_legal_output_as_mismatch():
         pe_outputs={"ca_capi": 600},
     )
 
-    report = us_populace.compare_outputs(
+    report = us_microcosm.compare_outputs(
         variables=("ca_capi",),
         cases_by_variable={"ca_capi": [case]},
         mappings_by_variable={"ca_capi": (mapping,)},
@@ -246,7 +246,7 @@ def test_project_oap_combines_pe_ssi_sources_into_total_countable_income():
     adapter = get_pe_us_var_adapter("co_oap")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "co_oap",
         adapter,
         row={
@@ -269,7 +269,7 @@ def test_project_oap_prefers_annual_pe_ssi_sources_for_monthly_legal_input():
     adapter = get_pe_us_var_adapter("co_oap")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "co_oap",
         adapter,
         row={
@@ -290,7 +290,7 @@ def test_project_co_state_supplement_keeps_monthly_pe_income_monthly():
     adapter = get_pe_us_var_adapter("co_state_supplement")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "co_state_supplement",
         adapter,
         row={
@@ -312,7 +312,7 @@ def test_project_mn_mfip_spm_inputs_to_cash_portion_boundary():
     adapter = get_pe_us_var_adapter("mn_mfip")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "mn_mfip",
         adapter,
         row={},
@@ -342,7 +342,7 @@ def test_project_mn_mfip_skips_negative_unearned_income():
     adapter = get_pe_us_var_adapter("mn_mfip")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "mn_mfip",
         adapter,
         row={},
@@ -364,7 +364,7 @@ def test_project_mn_mfip_skips_ineligible_spm_units():
     adapter = get_pe_us_var_adapter("mn_mfip")
     assert adapter is not None
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "mn_mfip",
         adapter,
         row={},
@@ -394,7 +394,7 @@ def test_policyengine_target_period_uses_mapping_multiplier_before_monthly_adapt
     )
 
     assert (
-        us_populace.policyengine_target_period(
+        us_microcosm.policyengine_target_period(
             co_oap_adapter,
             co_oap_mapping,
             year=2026,
@@ -413,7 +413,7 @@ def test_policyengine_target_period_uses_mapping_multiplier_before_monthly_adapt
     )
 
     assert (
-        us_populace.policyengine_target_period(
+        us_microcosm.policyengine_target_period(
             co_ssp_adapter,
             co_ssp_mapping,
             year=2026,
@@ -449,7 +449,7 @@ def test_project_snap_child_support_uses_monthly_payments_and_the_state_election
 ):
     adapter = get_pe_us_var_adapter(variable)
 
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         variable,
         adapter,
         row={"state": state, "child_support_expense": 4200, "alimony_expense": 1200},
@@ -478,7 +478,7 @@ def test_project_snap_child_support_uses_monthly_payments_and_the_state_election
 def test_project_snap_child_support_skips_rows_without_a_state_election(
     row, parameters
 ):
-    projected, reason = us_populace.project_case_inputs(
+    projected, reason = us_microcosm.project_case_inputs(
         "snap_child_support_deduction",
         get_pe_us_var_adapter("snap_child_support_deduction"),
         row={"child_support_expense": 3600, **row},
@@ -494,13 +494,13 @@ def test_snap_countable_child_support_source_is_read_for_the_month():
     # direct_spm_overrides copy the source undivided into a monthly input; an
     # annual read would sum twelve months.
     assert (
-        us_populace.policyengine_source_period(
+        us_microcosm.policyengine_source_period(
             "snap_countable_child_support_expense", year=2026, month=3
         )
         == "2026-03"
     )
     assert (
-        us_populace.policyengine_source_period(
+        us_microcosm.policyengine_source_period(
             "child_support_expense", year=2026, month=3
         )
         == 2026
@@ -508,7 +508,7 @@ def test_snap_countable_child_support_source_is_read_for_the_month():
 
 
 def test_source_variables_for_adapters_excludes_target_variables():
-    source_vars = us_populace.source_variables_for_adapters(
+    source_vars = us_microcosm.source_variables_for_adapters(
         ("co_oap", "co_state_supplement", "ca_capi", "mn_mfip")
     )
 
@@ -522,9 +522,9 @@ def test_source_variables_for_adapters_excludes_target_variables():
     assert "mn_mfip_full_transitional_standard" in source_vars["spm_unit"]
 
 
-def test_configure_us_populace_parser_accepts_repeated_variables():
+def test_configure_us_microcosm_parser_accepts_repeated_variables():
     parser = argparse.ArgumentParser()
-    us_populace.configure_parser(parser)
+    us_microcosm.configure_parser(parser)
 
     args = parser.parse_args(
         ["--variable", "co_oap", "--variable", "co_state_supplement"]

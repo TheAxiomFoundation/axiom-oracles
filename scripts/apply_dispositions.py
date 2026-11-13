@@ -128,7 +128,7 @@ def _serialize_like(path: Path, original_text: str, report: dict) -> str:
     original = json.loads(original_text)
     if report_json_text(original) == original_text:
         return report_json_text(report)
-    # Indent 1 is the Populace campaign projector's format
+    # Indent 1 is the Microcosm campaign projector's format
     # (scripts/emit_populace_campaign_artifacts.py).
     for indent in (2, 1):
         plain = json.dumps(original, indent=indent, sort_keys=True)

@@ -220,7 +220,7 @@ def test_oklahoma_mapping_mirrors_campaign_contract() -> None:
     } == INPUTS
 
 
-def test_committed_oklahoma_populace_summary_is_bounded_and_exact() -> None:
+def test_committed_oklahoma_microcosm_summary_is_bounded_and_exact() -> None:
     concept = f"{MODULE}#{LIABILITY}"
     campaign = json.loads(
         (REPO_ROOT / "reports/state-tax-populace-campaign-2026-07-23.json").read_text()

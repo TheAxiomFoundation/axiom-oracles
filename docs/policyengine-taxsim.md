@@ -347,7 +347,7 @@ executable search or to an unpinned file. `compare`'s preflight checks the
 law years against the binaries the profile resolves on the host
 (`pins.require_profile_law_years`). `pins.require_law_years` keeps its
 resolver for the callers that still run the installed wheel's binary
-directly (the state generator and the Populace state leg): it hashes the
+directly (the state generator and the Microcosm state leg): it hashes the
 resolved file and uses only the range belonging to that hash, and an
 unpinned hash does not inherit the host platform's pinned range.
 

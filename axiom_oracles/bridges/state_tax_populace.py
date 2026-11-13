@@ -1,8 +1,8 @@
-"""Projection contracts for state income-tax Populace comparisons.
+"""Projection contracts for state income-tax Microcosm comparisons.
 
 This module deliberately owns no execution logic.  It loads and validates the
 declarative contract that a future runner will use to project the pinned US
-Populace dataset into the 44 merged state/DC pilot liability pipelines.
+Microcosm dataset into the 44 merged state/DC pilot liability pipelines.
 
 The validator is intentionally fail-closed: a pipeline is runnable only when
 every explicit input and relation has a documented, non-circular source.  An
@@ -907,7 +907,7 @@ _FORBIDDEN_ALIGNMENT_KEYS = frozenset(
 
 
 class StateTaxPopulaceContractError(ValueError):
-    """Raised when a state-tax Populace contract is unsafe or incomplete."""
+    """Raised when a state-tax Microcosm contract is unsafe or incomplete."""
 
 
 @dataclass(frozen=True)
@@ -1027,13 +1027,13 @@ def validate_state_tax_populace_contract(
         "population",
         errors,
     )
-    populace_country = _required_text(population, "country", "population", errors)
-    populace_year = _required_int(population, "year", "population", errors)
-    populace_repo_id = _required_text(population, "repo_id", "population", errors)
-    populace_filename = _required_text(population, "filename", "population", errors)
-    populace_revision = _required_text(population, "revision", "population", errors)
-    populace_sha256 = _required_text(population, "sha256", "population", errors)
-    populace_built_with = _required_text(
+    microcosm_country = _required_text(population, "country", "population", errors)
+    microcosm_year = _required_int(population, "year", "population", errors)
+    microcosm_repo_id = _required_text(population, "repo_id", "population", errors)
+    microcosm_filename = _required_text(population, "filename", "population", errors)
+    microcosm_revision = _required_text(population, "revision", "population", errors)
+    microcosm_sha256 = _required_text(population, "sha256", "population", errors)
+    microcosm_built_with = _required_text(
         population, "built_with", "population", errors
     )
     population_scope = document.get("population_scope")
@@ -1077,15 +1077,15 @@ def validate_state_tax_populace_contract(
     pinned_metadata = (
         ("schema_version", schema_version, CONTRACT_SCHEMA_VERSION),
         ("validation_year", validation_year, CONTRACT_VALIDATION_YEAR),
-        ("population.country", populace_country, CONTRACT_POPULACE_COUNTRY),
-        ("population.year", populace_year, CONTRACT_POPULACE_YEAR),
-        ("population.repo_id", populace_repo_id, CONTRACT_POPULACE_REPO_ID),
-        ("population.filename", populace_filename, CONTRACT_POPULACE_FILENAME),
-        ("population.revision", populace_revision, CONTRACT_POPULACE_REVISION),
-        ("population.sha256", populace_sha256, CONTRACT_POPULACE_SHA256),
+        ("population.country", microcosm_country, CONTRACT_POPULACE_COUNTRY),
+        ("population.year", microcosm_year, CONTRACT_POPULACE_YEAR),
+        ("population.repo_id", microcosm_repo_id, CONTRACT_POPULACE_REPO_ID),
+        ("population.filename", microcosm_filename, CONTRACT_POPULACE_FILENAME),
+        ("population.revision", microcosm_revision, CONTRACT_POPULACE_REVISION),
+        ("population.sha256", microcosm_sha256, CONTRACT_POPULACE_SHA256),
         (
             "population.built_with",
-            populace_built_with,
+            microcosm_built_with,
             CONTRACT_POPULACE_BUILT_WITH,
         ),
         ("population_scope.unit", scope_unit, CONTRACT_SCOPE_UNIT),
@@ -1203,13 +1203,13 @@ def validate_state_tax_populace_contract(
     return StateTaxPopulaceContract(
         schema_version=schema_version,
         validation_year=validation_year,
-        populace_country=populace_country,
-        populace_year=populace_year,
-        populace_repo_id=populace_repo_id,
-        populace_filename=populace_filename,
-        populace_revision=populace_revision,
-        populace_sha256=populace_sha256,
-        populace_built_with=populace_built_with,
+        populace_country=microcosm_country,
+        populace_year=microcosm_year,
+        populace_repo_id=microcosm_repo_id,
+        populace_filename=microcosm_filename,
+        populace_revision=microcosm_revision,
+        populace_sha256=microcosm_sha256,
+        populace_built_with=microcosm_built_with,
         scope_unit=scope_unit,
         scope_geography_source=scope_geography_source,
         scope_residency_model=scope_residency_model,
@@ -1588,7 +1588,7 @@ def _validate_slot(
             slot.slot,
         ) not in ALLOWED_ROUTE_BOOLEAN_INPUTS:
             errors.append(
-                f"{label}: raw Populace source is not in the independently "
+                f"{label}: raw Microcosm source is not in the independently "
                 "reviewed route/model Boolean allowlist"
             )
         if (
@@ -1598,7 +1598,7 @@ def _validate_slot(
             or slot.policyengine_transform
             or slot.constant_value is not None
         ):
-            errors.append(f"{label}: raw Populace source may not declare PE metadata")
+            errors.append(f"{label}: raw Microcosm source may not declare PE metadata")
     elif (
         slot.policyengine_variable
         or slot.policyengine_variables

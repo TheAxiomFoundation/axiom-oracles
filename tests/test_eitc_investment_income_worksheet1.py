@@ -51,7 +51,7 @@ EITC_INVESTMENT_INCOME_INPUT = (
 PROPERTY_SETTINGS = settings(max_examples=300, deadline=None, derandomize=True)
 
 # ---------------------------------------------------------------------------
-# Populace bridge: project_eitc_relevant_investment_income over filer rows.
+# Microcosm bridge: project_eitc_relevant_investment_income over filer rows.
 # ---------------------------------------------------------------------------
 
 BRIDGE_WORKSHEET_1_CASES = [
@@ -755,7 +755,7 @@ def test_property_dependents_never_change_the_tax_unit_input(filer, dependents):
 # farm-rent concept (the Axiom bridge has no gross-income slot; issue #566).
 # The review checked only PE-US 1.764.6: it has generic partnership and S-corp
 # inputs but no dedicated passive split. The original author reported no
-# passive-income column in the pinned Populace artifact; this test uses fakes
+# passive-income column in the pinned Microcosm artifact; this test uses fakes
 # and does not audit that artifact or other producer versions.
 CASE_FILER_AMOUNTS = st.fixed_dictionaries(
     {

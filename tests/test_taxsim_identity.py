@@ -812,7 +812,7 @@ def test_grid_generator_stops_on_linux_and_records_binaries(
     }
 
 
-def test_populace_campaign_stops_on_linux_before_loading_data(
+def test_microcosm_campaign_stops_on_linux_before_loading_data(
     on_host, monkeypatch, tmp_path
 ) -> None:
     from axiom_oracles.bridges import state_tax_populace_runner as runner

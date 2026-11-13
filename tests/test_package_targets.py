@@ -689,10 +689,10 @@ def test_euromod_bridge_runs_euromod_before_axiom() -> None:
 
 
 def test_tax_only_enhanced_cps_comparisons_use_tax_unit_cases() -> None:
-    from axiom_oracles.cli import _populace_us_case_unit
+    from axiom_oracles.cli import _microcosm_us_case_unit
 
-    assert _populace_us_case_unit(("tax",), ()) == "tax_unit"
-    assert _populace_us_case_unit((), ("us:tax/federal-income-tax#liability",)) == (
+    assert _microcosm_us_case_unit(("tax",), ()) == "tax_unit"
+    assert _microcosm_us_case_unit((), ("us:tax/federal-income-tax#liability",)) == (
         "tax_unit"
     )
-    assert _populace_us_case_unit(("tax", "food"), ()) == "household"
+    assert _microcosm_us_case_unit(("tax", "food"), ()) == "household"

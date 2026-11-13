@@ -6,7 +6,7 @@ Stage 1 attributed rows to ``investment`` when replacing Axiom's 26 USC
 differs, not why. The two aggregates differ in exactly five ways, each a
 switch in ``aggregate()`` below:
 
-- ``div_aggregate``: dividends. The pinned Populace artifact stores a
+- ``div_aggregate``: dividends. The pinned Microcosm artifact stores a
   ``dividend_income`` value beside ``qualified_dividend_income`` and
   ``non_qualified_dividend_income``, and the two disagree. PolicyEngine uses
   the stored aggregate; the bridge sums the components.

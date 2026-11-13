@@ -1,7 +1,7 @@
-"""Compare federal tax RuleSpec output against PolicyEngine over Populace.
+"""Compare federal tax RuleSpec output against PolicyEngine over Microcosm.
 
 This is the federal-tax counterpart to ``snap-populace-compare``. Each comparison
-surface has an explicit projection from Populace fields into Axiom inputs. The
+surface has an explicit projection from Microcosm fields into Axiom inputs. The
 projection is intentionally conservative: it does not use PE outputs for the
 surface under test as Axiom inputs.
 """
@@ -131,7 +131,7 @@ SECTION_7703_BASE = "us:statutes/26/7703"
 # contract"), and the bridge reads only output values. Explain builds each
 # query's trace by scanning every cached value in the request (engine
 # `evaluated_trace_instances`), so over a population request its cost grows
-# with the square of the number of tax units. The Medicaid and SNAP Populace
+# with the square of the number of tax units. The Medicaid and SNAP Microcosm
 # bridges already request fast.
 AXIOM_REQUEST_MODE = "fast"
 
@@ -659,7 +659,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         type=int,
         default=100,
         help=(
-            "Number of positive-weight Populace tax units to compare; "
+            "Number of positive-weight Microcosm tax units to compare; "
             "0 compares all eligible tax units"
         ),
     )
@@ -670,14 +670,14 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         default=None,
         dest="tax_unit_ids",
         help=(
-            "Compare a specific Populace tax_unit_id. Repeat to compare multiple "
+            "Compare a specific Microcosm tax_unit_id. Repeat to compare multiple "
             "known residual cases; when provided this bypasses --sample-size."
         ),
     )
     parser.add_argument(
         "--positive-ctc-only",
         action="store_true",
-        help="Restrict to Populace tax units with positive PolicyEngine CTC",
+        help="Restrict to Microcosm tax units with positive PolicyEngine CTC",
     )
     parser.add_argument(
         "--surface",
@@ -689,13 +689,13 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         "--data-folder",
         type=Path,
         default=Path(".axiom") / "policyengine-data",
-        help="Deprecated; Populace uses the Hugging Face cache.",
+        help="Deprecated; Microcosm uses the Hugging Face cache.",
     )
     parser.add_argument(
         "--populace-year",
         type=int,
         default=DEFAULT_US_POPULACE_YEAR,
-        help="Published US Populace dataset year to load.",
+        help="Published US Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--tolerance",
@@ -726,7 +726,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         "--allow-uncertified-policyengine-data",
         action="store_true",
         help=(
-            "Deprecated; Populace validation no longer loads policyengine.py microdata."
+            "Deprecated; Microcosm validation no longer loads policyengine.py microdata."
         ),
     )
     parser.add_argument(
@@ -948,7 +948,7 @@ def load_policyengine_tax_data(
 
     _ = data_folder
     _ = allow_uncertified_policyengine_data
-    log(f"Loading PolicyEngine Populace US {populace_year} dataset...")
+    log(f"Loading PolicyEngine Microcosm US {populace_year} dataset...")
     dataset_identity: dict[str, Any] = {}
     dataset = load_populace_dataset(
         "us",
@@ -1028,7 +1028,7 @@ def load_policyengine_tax_data(
 def remove_raw_columns_replaced_by_outputs(*, raw: Any, outputs: Any, key: str) -> Any:
     """Avoid suffixing while keeping period-aligned PolicyEngine values.
 
-    Populace stores source-year inputs, while the oracle may compare a later
+    Microcosm stores source-year inputs, while the oracle may compare a later
     tax year after PolicyEngine uprating. If a requested PE output shares a raw
     column name, drop the raw column before merging so projections use the
     period-specific PE value instead of stale source-year data.
@@ -1075,7 +1075,7 @@ def select_tax_unit_indices(
     raw_persons: Any | None = None,
     raw_households: Any | None = None,
 ) -> Any:
-    """Select Populace tax-unit row indices for oracle comparison."""
+    """Select Microcosm tax-unit row indices for oracle comparison."""
     mask = tax_unit_positive_weight_mask(
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
@@ -1105,12 +1105,12 @@ def select_tax_unit_indices(
             selected.append(index)
     if missing:
         raise SystemExit(
-            "Requested Populace tax_unit_id not found: "
+            "Requested Microcosm tax_unit_id not found: "
             + ", ".join(str(value) for value in missing)
         )
     if filtered:
         raise SystemExit(
-            "Requested Populace tax_unit_id is not eligible for this comparison: "
+            "Requested Microcosm tax_unit_id is not eligible for this comparison: "
             + ", ".join(str(value) for value in filtered)
         )
     return np.asarray(selected, dtype=int)
@@ -1122,7 +1122,7 @@ def tax_unit_positive_weight_mask(
     raw_persons: Any | None = None,
     raw_households: Any | None = None,
 ) -> np.ndarray:
-    """Return positive-weight tax-unit rows across legacy and Populace schemas."""
+    """Return positive-weight tax-unit rows across legacy and Microcosm schemas."""
 
     if "tax_unit_weight" in raw_tax_units.columns:
         return np.asarray(raw_tax_units["tax_unit_weight"]) > 0
@@ -1130,7 +1130,7 @@ def tax_unit_positive_weight_mask(
         return np.asarray(raw_tax_units["household_weight"]) > 0
     if raw_persons is None or raw_households is None:
         raise SystemExit(
-            "Populace tax-unit table has no tax_unit_weight; provide person and "
+            "Microcosm tax-unit table has no tax_unit_weight; provide person and "
             "household tables to derive weights from household_weight."
         )
 
@@ -1138,14 +1138,14 @@ def tax_unit_positive_weight_mask(
     missing_person_columns = required_person_columns - set(raw_persons.columns)
     if missing_person_columns:
         raise SystemExit(
-            "Populace person table is missing required tax-unit weight columns: "
+            "Microcosm person table is missing required tax-unit weight columns: "
             + ", ".join(sorted(missing_person_columns))
         )
     required_household_columns = {"household_id", "household_weight"}
     missing_household_columns = required_household_columns - set(raw_households.columns)
     if missing_household_columns:
         raise SystemExit(
-            "Populace household table is missing required tax-unit weight columns: "
+            "Microcosm household table is missing required tax-unit weight columns: "
             + ", ".join(sorted(missing_household_columns))
         )
 
@@ -1167,7 +1167,7 @@ def _install_policyengine_data_certification_override() -> None:
 
 
 def policyengine_data_certification_override_required() -> bool:
-    """Return whether Populace validation needs a PE.py data override."""
+    """Return whether Microcosm validation needs a PE.py data override."""
     return False
 
 
@@ -2092,11 +2092,11 @@ def taxable_oasdi_wages_by_person_id(
 
 
 def project_fica_wages(person: Any) -> float:
-    """Project IRC 3121(a) FICA wages from Populace leaf inputs.
+    """Project IRC 3121(a) FICA wages from Microcosm leaf inputs.
 
     PolicyEngine's payroll tax gross wages are the output being tested here, so
     use them only as a compatibility fallback for hand-built unit fixtures.
-    Populace rows should supply gross employment income plus Section 125
+    Microcosm rows should supply gross employment income plus Section 125
     deduction leaves.
     Traditional 401(k) and 403(b) deferrals reduce income-tax wages, but not
     FICA wages.
@@ -2578,7 +2578,7 @@ def project_eitc_relevant_investment_income(row: Any, persons: list[Any]) -> flo
     passive subset of partnership/S-corp income belongs in lines 11-13, so
     the undifferentiated ``partnership_income`` column is not read;
     ``passive_partnership_s_corp_income`` counts only when the row carries
-    it (the pinned Populace artifact and PolicyEngine-US 1.764.6 do not).
+    it (the pinned Microcosm artifact and PolicyEngine-US 1.764.6 do not).
     Form 4797 amounts (lines 6 and 11-12) and estate/trust passive income
     (Schedule E line 34) have no source column and are not modeled.
     """
@@ -2812,7 +2812,7 @@ def tax_unit_filers(persons: list[Any]) -> list[Any]:
     PolicyEngine role flags (``is_tax_unit_head`` / ``is_tax_unit_spouse``)
     use them, because the bridge also passes through PolicyEngine's filing
     status for that same unit. PolicyEngine-US before 2.34.0 derives those
-    flags by age, so it can file a head with an adult the Populace
+    flags by age, so it can file a head with an adult the Microcosm
     constructor marks a dependent; axiom-oracles#633 tracks moving the whole
     unit (filers and filing status) to the constructor's roles together.
     Rows with no role flags at all take the constructor's
@@ -2876,7 +2876,7 @@ def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
 
 
 # One engine call evaluates a whole surface over the selected population, so a
-# full Populace run on a loaded host can outlast the defaults; a population
+# full Microcosm run on a loaded host can outlast the defaults; a population
 # lane raises them through the environment rather than editing the bridge.
 ENGINE_COMPILE_TIMEOUT_ENV = "AXIOM_ENGINE_COMPILE_TIMEOUT_SECONDS"
 ENGINE_RUN_TIMEOUT_ENV = "AXIOM_ENGINE_RUN_TIMEOUT_SECONDS"
@@ -2935,7 +2935,7 @@ def run_axiom_program(
     # parent or renamed alias is forwarded (axiom_oracles.rulespec_roots).
     checkout = require_canonical_rulespec_root(rulespec_root)
     compile_program = program
-    with tempfile.TemporaryDirectory(prefix="axiom-tax-populace-") as tmpdir:
+    with tempfile.TemporaryDirectory(prefix="axiom-tax-microcosm-") as tmpdir:
         # The engine CLI requires an explicit --rulespec-root naming a
         # canonical rulespec-<country> checkout whose top level holds ONLY
         # jurisdiction directories. Upstream rulespec-us also
@@ -3376,10 +3376,10 @@ def compare_outputs(
         dataset_identity=pe_data.get("dataset_identity") or None,
         relation_binding_diagnostics=diagnostics if diagnostics.get("count") else None,
         projection_notes=[
-            "Current CTC projection uses Populace raw tax-unit membership, age, "
+            "Current CTC projection uses Microcosm raw tax-unit membership, age, "
             "student status, separation status, and SSN-card type to reconstruct "
             "the structural Section 152 facts needed by 26 USC 24.",
-            "Standard deduction projection uses Populace raw ages, blindness, and "
+            "Standard deduction projection uses Microcosm raw ages, blindness, and "
             "tax-unit membership to reconstruct aged-or-blind counts under "
             "26 USC 63(f).",
             "AGI remains a boundary input until upstream AGI rules are encoded "
@@ -3388,24 +3388,24 @@ def compare_outputs(
             "filing-status rule.",
             "The standard deduction comparison currently treats dependency by "
             "another taxpayer and earned income as boundary-false/zero because "
-            "those upstream facts are not yet encoded from Populace leaf inputs.",
+            "those upstream facts are not yet encoded from Microcosm leaf inputs.",
             "OASDI payroll projections run Axiom 3121(a)(1) before sections "
             "3101(a) and 3111(a), so taxable OASDI wages are no longer taken "
             "from PolicyEngine. The section 230 contribution-and-benefit base "
             "is resolved by running the encoded SSA automatic-determination "
             "RuleSpec before section 3121(a)(1).",
-            "Payroll projections derive FICA wages from Populace employment-income "
+            "Payroll projections derive FICA wages from Microcosm employment-income "
             "and Section 125 health/HSA payroll-deduction leaves instead of "
             "feeding Axiom from PolicyEngine payroll_tax_gross_wages. "
             "Traditional 401(k) and 403(b) elective deferrals are deliberately "
             "not subtracted from the FICA wage base.",
             "Capital-gain-definition projections compare Section 1(h) net and "
-            "adjusted net capital gain from Populace raw capital-gain, dividend, "
+            "adjusted net capital gain from Microcosm raw capital-gain, dividend, "
             "investment-income-election, and unrecaptured-section-1250 fields. "
             "The full capital-gains-tax surface waits on encoded upstream "
             "taxable income rather than using PolicyEngine taxable income as "
             "an Axiom input.",
-            "EITC projections supply Populace wage and self-employment leaf facts "
+            "EITC projections supply Microcosm wage and self-employment leaf facts "
             "including farm operations and partnership self-employment income "
             "to Sections 32(c)(2) and 1402(a); Section 32 earned income is "
             "computed by Axiom and compared as an output rather than passed in "
@@ -3417,7 +3417,7 @@ def compare_outputs(
             "boundary inputs until those federal tax chains are encoded "
             "end-to-end.",
             "AOTC projections run encoded 26 USC 25A math from "
-            "Populace/PolicyEngine adjusted qualified-tuition, enrollment, "
+            "Microcosm/PolicyEngine adjusted qualified-tuition, enrollment, "
             "credential, institution, prior-claim, and SSN-card facts. "
             "Educational assistance is not subtracted a second time because "
             "PolicyEngine exposes only the already creditable "
@@ -3443,7 +3443,7 @@ def compare_outputs(
 def print_report(
     report: TaxComparisonReport, *, tolerance: float, relative_tolerance: float
 ) -> None:
-    print("PolicyEngine tax Populace comparison")
+    print("PolicyEngine tax Microcosm comparison")
     identity_line = format_dataset_identity(report.dataset_identity)
     if identity_line:
         print(identity_line)

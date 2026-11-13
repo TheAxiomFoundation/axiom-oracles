@@ -1,4 +1,4 @@
-"""NC TY2026 resident-core Populace projection: contract, runtime pins, transforms."""
+"""NC TY2026 resident-core Microcosm projection: contract, runtime pins, transforms."""
 
 from __future__ import annotations
 

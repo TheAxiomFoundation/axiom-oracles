@@ -3186,7 +3186,7 @@ def test_filtered_delaware_person_comparison_preserves_national_tax_unit_univers
 
     with pytest.raises(
         StateTaxPopulationRoutingError,
-        match="DE: Populace people link to unknown tax_unit_id values: 99",
+        match="DE: Microcosm people link to unknown tax_unit_id values: 99",
     ):
         compare_ready_state_tax_units(
             **{
@@ -3504,7 +3504,7 @@ def test_runtime_provenance_uses_canonical_engine_repository(
 def test_campaign_rejects_engine_changed_between_state_executions(
     tmp_path, monkeypatch, change_before_first_execution
 ) -> None:
-    from axiom_oracles.bridges import tax_populace
+    from axiom_oracles.bridges import tax_populace as tax_microcosm
 
     engine_root = tmp_path / "engine"
     binary = engine_root / "target/release/axiom-rules-engine"
@@ -3536,7 +3536,7 @@ def test_campaign_rejects_engine_changed_between_state_executions(
             for query in kwargs["request"]["queries"]
         ]
 
-    monkeypatch.setattr(tax_populace, "run_axiom_program", execute)
+    monkeypatch.setattr(tax_microcosm, "run_axiom_program", execute)
     observe = state_tax_runner.engine_receipt
     observations = []
 
@@ -3611,7 +3611,7 @@ def test_compare_grades_taxsim_leg_and_reports_mismatches(tmp_path) -> None:
     )
 
     ut = report["states"]["UT"]
-    # UT's populace concept is a pre-credit schedule; the graded TAXSIM
+    # UT's Microcosm concept is a pre-credit schedule; the graded TAXSIM
     # column must resolve to staxbc via the concept mapping.
     assert ut["taxsim_target"] == "staxbc"
     assert ut["taxsim_mismatch_count"] == 1
@@ -3738,7 +3738,7 @@ def test_taxsim_target_column_is_mapping_declared_or_none() -> None:
     assert taxsim_target_column(by_state["CA"].output) is None
 
 
-def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
+def test_taxsim_person_table_mirrors_the_microcosm_tax_unit_loader() -> None:
     """The campaign's TAXSIM leg builds its Cases from its own person table;
     it must load the same concept -> PolicyEngine variable pairs as the
     Enhanced-CPS tax-unit loader, less the SSI benefit and resource facts
@@ -3746,11 +3746,11 @@ def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
     one silently goes missing from the other."""
     from axiom_oracles.adapters.taxsim.projection import taxsim_input_for_case
     from axiom_oracles.core.case import Case, Concepts, Entity
-    from axiom_oracles.populations import populace_us
+    from axiom_oracles.populations import populace_us as microcosm_us
 
     loader_tax_unit_table = {
-        **populace_us._PERSON_NON_WAGE_VARIABLES,
-        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+        **microcosm_us._PERSON_NON_WAGE_VARIABLES,
+        **microcosm_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
     }
     benefit_only = {Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES}
     campaign_table = {

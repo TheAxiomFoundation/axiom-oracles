@@ -1,7 +1,7 @@
-"""Compare UK RuleSpec output against PolicyEngine over Populace.
+"""Compare UK RuleSpec output against PolicyEngine over Microcosm.
 
-The UK counterpart to the US Populace comparators covers mapped surfaces whose
-RuleSpec inputs can be projected from PolicyEngine over Populace, plus scalar
+The UK counterpart to the US Microcosm comparators covers mapped surfaces whose
+RuleSpec inputs can be projected from PolicyEngine over Microcosm, plus scalar
 parameter surfaces whose generated RuleSpec values can be compared against
 PolicyEngine component outputs.
 """
@@ -1992,7 +1992,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         type=int,
         default=100,
         help=(
-            "Number of positive-weight Populace people to compare; "
+            "Number of positive-weight Microcosm people to compare; "
             "0 compares all eligible people"
         ),
     )
@@ -2003,7 +2003,7 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         default=None,
         dest="person_ids",
         help=(
-            "Compare a specific Populace person_id. Repeat to compare multiple "
+            "Compare a specific Microcosm person_id. Repeat to compare multiple "
             "known residual cases; when provided this bypasses --sample-size."
         ),
     )
@@ -2011,27 +2011,27 @@ def configure_parser(parser: argparse.ArgumentParser) -> None:
         "--surface",
         choices=["all", *SURFACE_SPECS],
         default="all",
-        help="UK Populace surface to compare; defaults to all implemented surfaces",
+        help="UK Microcosm surface to compare; defaults to all implemented surfaces",
     )
     parser.add_argument(
         "--dataset",
         default=DEFAULT_DATASET,
         help=(
             "Deprecated local .h5 override for debugging. Omit to load the "
-            "published Populace UK dataset."
+            "published Microcosm UK dataset."
         ),
     )
     parser.add_argument(
         "--data-folder",
         type=Path,
         default=Path(".axiom") / "policyengine-data",
-        help="Deprecated; Populace uses the Hugging Face cache.",
+        help="Deprecated; Microcosm uses the Hugging Face cache.",
     )
     parser.add_argument(
         "--populace-year",
         type=int,
         default=DEFAULT_UK_POPULACE_YEAR,
-        help="Published UK Populace dataset year to load.",
+        help="Published UK Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--universal-credit-program",
@@ -2116,20 +2116,20 @@ def configure_coverage_parser(parser: argparse.ArgumentParser) -> None:
         default=DEFAULT_DATASET,
         help=(
             "Deprecated local .h5 override for --with-populace-activity. "
-            "Omit to load the published Populace UK dataset."
+            "Omit to load the published Microcosm UK dataset."
         ),
     )
     parser.add_argument(
         "--data-folder",
         type=Path,
         default=Path(".axiom") / "policyengine-data",
-        help="Deprecated; Populace uses the Hugging Face cache.",
+        help="Deprecated; Microcosm uses the Hugging Face cache.",
     )
     parser.add_argument(
         "--populace-year",
         type=int,
         default=DEFAULT_UK_POPULACE_YEAR,
-        help="Published UK Populace dataset year to load.",
+        help="Published UK Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--top",
@@ -2143,7 +2143,7 @@ def configure_coverage_parser(parser: argparse.ArgumentParser) -> None:
         action="store_true",
         dest="with_populace_activity",
         help=(
-            "Run PolicyEngine over Populace for missing variables and rank by "
+            "Run PolicyEngine over Microcosm for missing variables and rank by "
             "observed activity"
         ),
     )
@@ -2157,20 +2157,20 @@ def configure_hbai_coverage_parser(parser: argparse.ArgumentParser) -> None:
         default=DEFAULT_DATASET,
         help=(
             "Deprecated local .h5 override for --with-populace-activity. "
-            "Omit to load the published Populace UK dataset."
+            "Omit to load the published Microcosm UK dataset."
         ),
     )
     parser.add_argument(
         "--data-folder",
         type=Path,
         default=Path(".axiom") / "policyengine-data",
-        help="Deprecated; Populace uses the Hugging Face cache.",
+        help="Deprecated; Microcosm uses the Hugging Face cache.",
     )
     parser.add_argument(
         "--populace-year",
         type=int,
         default=DEFAULT_UK_POPULACE_YEAR,
-        help="Published UK Populace dataset year to load.",
+        help="Published UK Microcosm dataset year to load.",
     )
     parser.add_argument(
         "--source-root",
@@ -2193,7 +2193,7 @@ def configure_hbai_coverage_parser(parser: argparse.ArgumentParser) -> None:
         action="store_true",
         dest="with_populace_activity",
         help=(
-            "Run PolicyEngine over Populace and add weighted household-level "
+            "Run PolicyEngine over Microcosm and add weighted household-level "
             "activity for each HBAI component"
         ),
     )
@@ -2458,7 +2458,7 @@ def load_policyengine_uk_data(
         command="uk-populace-compare",
         provenance=dataset_identity,
     )
-    log(f"Loading PolicyEngine Populace UK {populace_year} dataset...")
+    log(f"Loading PolicyEngine Microcosm UK {populace_year} dataset...")
     pe_data = load_policyengine_uk_dataset(
         pe_dataset=pe_dataset,
         year=year,
@@ -3218,7 +3218,7 @@ def policyengine_uk_hbai_activity(
         log("Loading local PolicyEngine UK dataset for HBAI activity...")
         pe_dataset = UKSingleYearDataset(file_path=str(local_dataset))
     else:
-        log("Loading PolicyEngine UK Populace for HBAI activity...")
+        log("Loading PolicyEngine UK Microcosm for HBAI activity...")
         pe_dataset = load_populace_dataset(
             "uk",
             year=populace_year,
@@ -3589,7 +3589,7 @@ def policyengine_uk_efrs_activity(
         log("Loading local PolicyEngine UK dataset for coverage activity...")
         pe_dataset = UKSingleYearDataset(file_path=str(local_dataset))
     else:
-        log("Loading PolicyEngine UK Populace for coverage activity...")
+        log("Loading PolicyEngine UK Microcosm for coverage activity...")
         pe_dataset = load_populace_dataset(
             "uk",
             year=populace_year,
@@ -3719,7 +3719,7 @@ def print_uk_efrs_coverage_report(
     *,
     top: int,
 ) -> None:
-    print("PolicyEngine UK Populace coverage")
+    print("PolicyEngine UK Microcosm coverage")
     print(
         "PolicyEngine versions: "
         + ", ".join(
@@ -3761,7 +3761,7 @@ def print_uk_efrs_coverage_report(
             print(f"  - {name}")
     if report.activity:
         print()
-        print(f"Top missing Populace-active PE variables (first {top:,}):")
+        print(f"Top missing Microcosm-active PE variables (first {top:,}):")
         activity_by_name = {item.name: item for item in report.activity}
         missing_by_name = {item.name: item for item in report.missing_variables}
         for activity in report.activity[:top]:
@@ -3775,7 +3775,7 @@ def print_uk_efrs_coverage_report(
                 f"nonfinite={activity.nonfinite_count:,}"
             )
         inactive_count = sum(1 for item in report.activity if item.nonzero_count == 0)
-        print(f"Missing variables with zero nonzero Populace rows: {inactive_count:,}")
+        print(f"Missing variables with zero nonzero Microcosm rows: {inactive_count:,}")
         if activity_by_name:
             print()
     print(f"Missing computed PE variables (first {top:,}):")
@@ -3880,7 +3880,7 @@ def select_person_indices(
         requested_ids=person_ids,
         id_column="person_id",
         weight_column="person_weight",
-        entity_label="Populace person_id",
+        entity_label="Microcosm person_id",
     )
 
 
@@ -3896,7 +3896,7 @@ def select_benunit_indices(
         requested_ids=benunit_ids,
         id_column="benunit_id",
         weight_column="benunit_weight",
-        entity_label="Populace benunit_id",
+        entity_label="Microcosm benunit_id",
     )
 
 
@@ -4254,7 +4254,7 @@ def build_axiom_request(
             year=year,
             surface=surface,
         )
-    raise ValueError(f"unsupported UK Populace surface: {surface}")
+    raise ValueError(f"unsupported UK Microcosm surface: {surface}")
 
 
 # Input entity kinds follow each RuleSpec's scope. A benefit-unit projection
@@ -6923,7 +6923,7 @@ def compare_outputs(
             "minimum_guarantee for the amount B reduction.",
             "Universal Credit Regulation 36 comparisons treat the generated "
             "RuleSpec outputs as component table amounts. PolicyEngine annual "
-            "Populace component outputs are divided by 12, and Populace category "
+            "Microcosm component outputs are divided by 12, and Microcosm category "
             "variables select the matching standard-allowance, child-element, "
             "carer, LCWRA, and childcare-cap rows.",
             "Welfare Reform Act 2012 section 8 Universal Credit award "
@@ -6944,7 +6944,7 @@ def compare_outputs(
             "PolicyEngine-aligned Carer's Allowance final comparison projects "
             "PolicyEngine UK's country and reported Carer's Allowance receipt "
             "into a final annual wrapper that uses the RuleSpec weekly rate, "
-            "age gate, and 35-hour care threshold. Current Populace care_hours "
+            "age gate, and 35-hour care threshold. Current Microcosm care_hours "
             "is zero on reported-receipt rows, so positive PolicyEngine or "
             "reported receipt is projected to the statutory minimum care "
             "hours and qualifying-disability-benefit fact; source age "
@@ -6953,7 +6953,7 @@ def compare_outputs(
             "Payment final comparisons project PolicyEngine final-award or "
             "reported-receipt gates into source-shaped runtime facts because "
             "PolicyEngine does not expose every underlying eligibility and "
-            "take-up predicate separately in the Populace oracle data.",
+            "take-up predicate separately in the Microcosm oracle data.",
             "PolicyEngine-aligned Disability Living Allowance final comparison "
             "projects PolicyEngine UK's DLA self-care and mobility category "
             "enums into boolean category leaves for under-16 rows, then "
@@ -7054,7 +7054,7 @@ def compare_outputs(
             "PolicyEngine's uc_childcare_work_condition.",
             "The protected LCWRA Regulation 36 table amount is compared only "
             "when PolicyEngine exposes the raw protected amount. Current "
-            "PolicyEngine UK Populace outputs apply the July 2025 UC rebalancing "
+            "PolicyEngine UK Microcosm outputs apply the July 2025 UC rebalancing "
             "scenario for existing claimants, so those rebalanced health-element "
             "values are not treated as the same surface.",
             "Income Tax Act 2007 section 23 net-income comparison projects "
@@ -7077,7 +7077,7 @@ def compare_outputs(
             "It uses UK income-tax thresholds and savings rates from "
             "PolicyEngine parameters to compare the section 11D band amounts "
             "and aggregate savings income tax, with a 25p output tolerance for "
-            "Populace float precision in PolicyEngine's savings-income arrays.",
+            "Microcosm float precision in PolicyEngine's savings-income arrays.",
             "Income Tax Act 2007 section 13 dividend-income comparison projects "
             "PolicyEngine's dividend tax formula directly: savings after income "
             "allowances occupies rate-band capacity before dividends, the used "
@@ -7363,7 +7363,7 @@ def print_report(
     tolerance: float,
     relative_tolerance: float,
 ) -> None:
-    print("PolicyEngine UK Populace comparison")
+    print("PolicyEngine UK Microcosm comparison")
     identity_line = format_dataset_identity(report.dataset_identity)
     if identity_line:
         print(identity_line)

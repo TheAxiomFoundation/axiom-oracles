@@ -2,7 +2,7 @@ schema_version: axiom.campaign_projection_suite_list.v1
 kind: campaign-projection-suite-list
 ci: manual
 description: >-
-  Dashboard suites projected from the pinned state-income-tax Populace
+  Dashboard suites projected from the pinned state-income-tax Microcosm
   campaign. These suites are emitted by
   scripts/emit_populace_campaign_artifacts.py rather than dispatched through
   scripts/run_comparison.py, so affected reruns remain manual.

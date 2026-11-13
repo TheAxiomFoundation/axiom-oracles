@@ -3,7 +3,7 @@
 The parsing tests write a small, schema-true CSV (real QC column names,
 hand-built rows with internally consistent SNAP arithmetic) so they never touch
 the real 92 MB file. Download tests stub ``requests`` through ``sys.modules``,
-mirroring ``tests/test_populace_us_population.py``'s fake-``huggingface_hub``
+mirroring the population loader tests' fake-``huggingface_hub``
 pattern. One env-gated live test exercises the real FY2024 file.
 """
 
