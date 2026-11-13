@@ -391,6 +391,68 @@ def test_policyengine_receives_farm_rent_income_per_person() -> None:
     }
 
 
+DEPENDENT_FLAG_INPUT = "us:tax/oracle-bridge#input.oracle_person_is_tax_unit_dependent"
+
+
+def _separate_return(child_farm_rent):
+    """One spouse's separate return (#563): the Case holds the filer and a
+    dependent child, never the other spouse."""
+    return Case(
+        case_id="farm-rent-separate",
+        period="2026",
+        facts={Concepts.MARRIED_FILING_SEPARATELY: True},
+        entities=(
+            _person(
+                "person-1",
+                "HeadOfHousehold",
+                45,
+                **{
+                    Concepts.YEARLY_EARNED_INCOME: 40_000,
+                    Concepts.FARM_RENT_INCOME: 7_000,
+                },
+            ),
+            _with_farm_rent(_person("person-3", "Child", 14), child_farm_rent),
+        ),
+        metadata={"state_code": "CO"},
+    )
+
+
+@pytest.mark.parametrize("child_farm_rent", [900, -900])
+def test_a_separate_returns_farm_rent_is_the_filers_on_every_engine(
+    child_farm_rent,
+) -> None:
+    """On a separate return the filer's farm rent reaches each engine as the
+    filer's alone, and the child's moves only the child's own input."""
+    case = _separate_return(child_farm_rent)
+
+    row = taxsim_input_for_case(case, taxsimid=1)
+    assert row["mstat"] == 6
+    assert row["otherprop"] == 7_000
+
+    taxcalc = taxcalc_input_for_case(case, record_id=1)
+    assert taxcalc["e27200"] == 7_000
+    assert taxcalc["e02000"] == 7_000
+
+    records = _by_key(case)
+    assert records[("person-1", PERSON_FARM_RENT_INPUT)] == 7_000
+    assert records[("person-1", DEPENDENT_FLAG_INPUT)] is False
+    assert records[("person-3", PERSON_FARM_RENT_INPUT)] == child_farm_rent
+    assert records[("person-3", DEPENDENT_FLAG_INPUT)] is True
+
+    without = _by_key(_separate_return(0))
+    assert set(without) == set(records)
+    assert {key for key in records if records[key] != without[key]} == {
+        ("person-3", PERSON_FARM_RENT_INPUT)
+    }
+    assert taxsim_input_for_case(_separate_return(0), taxsimid=1) == row
+    assert taxcalc_input_for_case(_separate_return(0), record_id=1) == taxcalc
+
+    situation = PolicyEngineRunner()._build_situation_from_case(case)
+    assert {
+        name: inputs["farm_rent_income"] for name, inputs in situation["people"].items()
+    } == {"person-1": {2026: 7_000}, "person-3": {2026: child_farm_rent}}
+
+
 # ---------------------------------------------------------------------------
 # Invariants (property-based, derandomized).
 # ---------------------------------------------------------------------------
