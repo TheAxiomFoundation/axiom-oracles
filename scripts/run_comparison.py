@@ -1961,7 +1961,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     """`axiom-encode tax-populace-compare` via uv run with the pinned PE stack.
 
     The encoder renamed the subcommand from tax-ecps-compare in its
-    ECPS→Microcosm rename (no alias survives on axiom-encode main); the runner
+    ECPS→Populace rename (no alias survives on axiom-encode main); the runner
     type keeps the old name so existing suite YAMLs stay valid.
     """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")
@@ -2085,7 +2085,7 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
     """`axiom-encode uk-populace-compare` via uv run with the pinned PE UK stack.
 
     The encoder renamed the subcommand from ``uk-efrs-compare`` in its
-    ECPS→Microcosm rename (axiom-encode #1108 hard cut; no alias survives on
+    ECPS→Populace rename (axiom-encode #1108 hard cut; no alias survives on
     axiom-encode main). The runner type keeps the old name so existing suite
     YAMLs stay valid — same convention as ``axiom-encode-tax-ecps-compare``.
     The implementation behind the subcommand is this repo's own
@@ -2380,7 +2380,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
     """`axiom-encode snap-populace-compare`, adapted from CSV to v2 JSON.
 
     The encoder renamed the subcommand from snap-ecps-compare in its
-    ECPS→Microcosm rename; the runner type keeps the old name so existing
+    ECPS→Populace rename; the runner type keeps the old name so existing
     suite YAMLs stay valid.
     """
     axiom_encode_repo = _resolve_path(runner["axiom_encode_repo"], "axiom_encode_repo")

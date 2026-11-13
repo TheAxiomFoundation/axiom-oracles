@@ -462,7 +462,7 @@ def load_policyengine_variable_data(
     except ImportError as exc:  # pragma: no cover - optional runtime dependency
         raise SystemExit(
             "Run with: uv run --with policyengine-us --with numpy "
-            "--with microcosm-data[us] axiom-encode us-populace-compare"
+            "--with populace-data[us] axiom-encode us-populace-compare"
         ) from exc
 
     dataset_identity: dict[str, Any] = {}

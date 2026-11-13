@@ -174,7 +174,7 @@ set for a probe that does not belong in the shared grid.
 ### `axiom-encode-tax-ecps-compare`
 
 Invokes `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`
-in the encoder's ECPS→Microcosm rename; no alias survives on axiom-encode main
+in the encoder's ECPS→Populace rename; no alias survives on axiom-encode main
 — the runner type keeps the old name so existing suite YAMLs stay valid) via
 `uv run`. Builds a release `axiom-rules-engine` binary if missing; clones
 `rulespec-us` fresh into a directory named exactly `rulespec-us` (required by
@@ -226,7 +226,7 @@ Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 ### `axiom-encode-uk-efrs-compare`
 
 Invokes `axiom-encode uk-populace-compare` (renamed from `uk-efrs-compare` in
-the encoder's ECPS→Microcosm hard cut, axiom-encode #1108; no alias survives
+the encoder's ECPS→Populace hard cut, axiom-encode #1108; no alias survives
 on axiom-encode main — the runner type keeps the old name so existing suite
 YAMLs stay valid) via `uv run` with the pinned PolicyEngine UK stack. The
 subcommand's implementation is this repo's own

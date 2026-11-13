@@ -1,6 +1,6 @@
 """Import-surface contract for the shared oracle-bridge package.
 
-Every bridge module must be importable WITHOUT PolicyEngine, microcosm-data,
+Every bridge module must be importable WITHOUT PolicyEngine, populace-data,
 huggingface-hub, or numpy installed (heavy dependencies are lazy, imported
 inside functions), and the documented public names must exist. axiom-encode
 re-exports these modules as thin shims, so a name disappearing here breaks

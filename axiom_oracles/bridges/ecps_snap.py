@@ -3,7 +3,7 @@
 The SNAP oracle bridge was renamed to ``snap_populace`` because every data
 path it drives resolves the certified **populace-us** artifact (via
 ``population.load_populace_dataset``), never Enhanced CPS — the ``ecps`` name
-was a naming lie left over from the pre-Microcosm era (see
+was a naming lie left over from the pre-populace era (see
 TheAxiomFoundation/axiom-oracles#74).
 
 This module is retained only so external callers that still import

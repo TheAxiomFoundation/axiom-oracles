@@ -53,7 +53,7 @@ nominal period all retire.
 
 Jurisdictions
 -------------
-Each :data:`QC_JURISDICTIONS` entry wraps a ``snap_microcosm``
+Each :data:`QC_JURISDICTIONS` entry wraps a ``snap_populace``
 ``JurisdictionConfig`` (composition, output ids, relations) with the QC
 specifics: the fiscal-year overlay, the QC ``STATE`` FIPS code, how the
 overlay's SUA patch rules map to QC utility tiers (and, for New York, to the
@@ -105,7 +105,7 @@ from axiom_oracles.engine_identity import engine_receipt
 import yaml
 
 from ..comparison.report import COMPARISON_REPORT_SCHEMA_VERSION, MismatchKind
-from . import snap_populace as snap_microcosm
+from . import snap_populace
 from ..rulespec_roots import engine_env
 from .rulespec_overlay import build_overlay, load_overlay_spec, rewrite_output_ids
 from .snap_populace import (
@@ -243,7 +243,7 @@ class QcJurisdiction:
     deduction inputs and compare gross unadjusted.
     """
 
-    base: snap_microcosm.JurisdictionConfig
+    base: snap_populace.JurisdictionConfig
     overlay: str
     template: Path
     program: Path
@@ -656,14 +656,14 @@ def map_qc_unit(
     for member in members:
         member_dict = dict(base_member)
         # The member's work-requirement age (7 CFR 273.7 and 273.24) is pinned to
-        # the exempting value 60, exactly as snap_microcosm models work-eligible
+        # the exempting value 60, exactly as snap_populace models work-eligible
         # members: at 60 the engine short-circuits the general and ABAWD work
         # tests, so no eligible QC case is screened out and no member work input
         # is required. The real QC age instead drives the elderly-or-disabled
         # flag below, which is what the benefit computation depends on (shelter
         # cap, medical deduction entitlement, gross-test exemption). This oracle
         # validates benefit computation, not work screening.
-        member_dict.update(snap_microcosm.project_work_member_inputs(True))
+        member_dict.update(snap_populace.project_work_member_inputs(True))
         if unit_ed is None:
             elderly = bool(
                 (member.age is not None and member.age >= 60)
@@ -1193,7 +1193,7 @@ def _run_cases(
     binary: Path,
     program_path: Path,
     cases: list[ProjectedCase],
-    period: snap_microcosm.Period,
+    period: snap_populace.Period,
     output_ids: list[str],
     config: QcJurisdiction,
     env: dict[str, str],
@@ -1278,7 +1278,7 @@ def _build_report(
     tolerance: float,
     stage_tolerance: float,
     exclusion_log: Any,
-    period: snap_microcosm.Period,
+    period: snap_populace.Period,
     overlay_build: Any,
     rulespec_root: Path,
     axiom_binary: Path,
@@ -1551,7 +1551,7 @@ def _oracle_provenance(
     overlay_build: Any,
     pins: Any,
     axiom_binary: Path,
-    period: snap_microcosm.Period,
+    period: snap_populace.Period,
     rulespec_root: Path,
     fiscal_year: int,
 ) -> dict:
@@ -1791,7 +1791,7 @@ def _source(member: Any, name: str) -> float:
 
 
 def _money(value: Any) -> float:
-    return snap_microcosm.money(value)
+    return snap_populace.money(value)
 
 
 def _float_or(value: Any, default: float) -> float:

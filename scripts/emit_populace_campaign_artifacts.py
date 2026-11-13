@@ -59,7 +59,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Alabama Code section 40-18-5 schedule before credits, computed from "
         "caller-supplied completed Alabama taxable income and the reviewed "
         "joint-or-surviving-spouse schedule classifier, over every routed tax "
-        "unit in the pinned US Microcosm"
+        "unit in the pinned US Populace"
     ),
     (
         "us-ar:policies/income_tax/pilot_liability_pipeline"
@@ -69,7 +69,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "nonrefundable credits, computed from caller-supplied completed "
         "Arkansas individual taxable income at Person grain and summed to "
         "TaxUnit only for comparison accounting over every routed tax unit and "
-        "linked person in the pinned US Microcosm; this bounded suite excludes "
+        "linked person in the pinned US Populace; this bounded suite excludes "
         "taxable-income construction, filing-unit aggregation or method "
         "selection, low-income tables, credits, payments, and final liability"
     ),
@@ -79,7 +79,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "#ct_pit_2026_resident_ordinary_tax_before_personal_credit"
     ): (
         "Connecticut resident ordinary section 12-700 tax before the "
-        "personal credit over every routed tax unit in the pinned US Microcosm"
+        "personal credit over every routed tax unit in the pinned US Populace"
     ),
     (
         "us-ca:policies/income_tax/pilot_liability_pipeline"
@@ -87,7 +87,7 @@ _DESCRIPTION_BY_OUTPUT = {
     ): (
         "California Behavioral Health Services Tax, computed as 1 percent of "
         "caller-supplied completed California taxable income above $1 million, "
-        "over every routed tax unit in the pinned US Microcosm; this component "
+        "over every routed tax unit in the pinned US Populace; this component "
         "suite does not claim broad California income-tax liability"
     ),
     (
@@ -98,7 +98,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "District of Columbia section 47-1806.03(a)(11) joint-method "
         "schedule before credits, computed from caller-supplied completed "
         "joint-method District taxable income, over every routed tax unit in "
-        "the pinned US Microcosm"
+        "the pinned US Populace"
     ),
     (
         "us-de:policies/income_tax/pilot_liability_pipeline"
@@ -108,7 +108,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "component before nonrefundable credits, computed from caller-supplied "
         "completed Delaware taxable income at Person grain and summed to "
         "TaxUnit only for comparison accounting over every routed tax unit and "
-        "linked person in the pinned US Microcosm; this bounded suite excludes "
+        "linked person in the pinned US Populace; this bounded suite excludes "
         "filing-method selection, combined-return computation, credits, "
         "payments, and final liability"
     ),
@@ -119,7 +119,7 @@ _DESCRIPTION_BY_OUTPUT = {
     ): (
         "Georgia section 48-7-20 annual tax before nonrefundable credits, "
         "computed from caller-supplied completed Georgia taxable net income, "
-        "over every routed tax unit in the pinned US Microcosm"
+        "over every routed tax unit in the pinned US Populace"
     ),
     (
         "us-ks:policies/income_tax/2026_k40es_schedule_before_credits"
@@ -128,7 +128,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Official Kansas tax-year-2026 K-40ES joint or all-other-filer "
         "schedule before credits, computed from caller-supplied completed "
         "Kansas taxable income, over every routed tax unit in the pinned US "
-        "Microcosm"
+        "Populace"
     ),
     (
         "us-il:policies/income_tax/pilot_liability_pipeline"
@@ -137,7 +137,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Illinois annual individual income tax before nonrefundable credits, "
         "computed from caller-supplied completed Illinois taxable income and "
         "completed investment-credit recapture over every routed tax unit in "
-        "the pinned US Microcosm; this bounded suite excludes taxable-income "
+        "the pinned US Populace; this bounded suite excludes taxable-income "
         "construction, credit computation, payments, and final annual "
         "liability"
     ),
@@ -148,7 +148,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Indiana adjusted-gross-income tax before credits and excluding county "
         "tax, computed by applying the tax-year-2026 2.95 percent state rate "
         "to caller-supplied completed Indiana adjusted gross income over every "
-        "routed tax unit in the pinned US Microcosm; this bounded suite excludes "
+        "routed tax unit in the pinned US Populace; this bounded suite excludes "
         "adjusted-gross-income construction, county tax, credits, payments, "
         "and final annual liability"
     ),
@@ -158,7 +158,7 @@ _DESCRIPTION_BY_OUTPUT = {
     ): (
         "Mississippi section 27-7-5 Person-grain calendar-year-2026 schedule "
         "tax, computed from caller-supplied completed Mississippi taxable "
-        "income and summed to tax units only for Microcosm accounting"
+        "income and summed to tax units only for Populace accounting"
     ),
     (
         "us-mn:policies/income_tax/pilot_liability_pipeline"
@@ -167,7 +167,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Minnesota tax-year-2026 continuous graduated schedule under section "
         "290.06, computed from caller-supplied completed Minnesota taxable net "
         "income and reviewed filing-status classifiers over every routed tax "
-        "unit in the pinned US Microcosm; this schedule suite does not claim "
+        "unit in the pinned US Populace; this schedule suite does not claim "
         "tax-table rounding, alternative minimum tax, net investment income "
         "tax, credits, payments, or final Minnesota liability"
     ),
@@ -179,7 +179,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "credits under MCA 15-30-2103, computed from caller-supplied completed "
         "Montana taxable income, its reviewed section 1222 net-long-term-"
         "capital-gain portion, and filing-status classifiers over every routed "
-        "tax unit in the pinned US Microcosm; this bounded suite excludes "
+        "tax unit in the pinned US Populace; this bounded suite excludes "
         "taxable-income construction, credits, payments, and final annual "
         "liability"
     ),
@@ -193,7 +193,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "deduction components (charitable contributions, medical expenses, "
         "qualified residence interest, real estate property taxes, child "
         "count, and taxable Social Security) over every routed tax unit in "
-        "the pinned US Microcosm; additions, subtractions, and itemized items "
+        "the pinned US Populace; additions, subtractions, and itemized items "
         "the population does not carry enter as reviewed zero constants, and "
         "credits, payments, and final liability are out of scope"
     ),
@@ -204,7 +204,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "New York Tax Law section 601 main resident individual-income-tax "
         "schedule, computed from caller-supplied completed New York taxable "
         "income and strict filing-status schedule classifiers over every "
-        "routed tax unit in the pinned US Microcosm; this bounded suite "
+        "routed tax unit in the pinned US Populace; this bounded suite "
         "excludes section 601(d-5) supplemental tax, credits, local taxes, "
         "payments, and final liability"
     ),
@@ -216,7 +216,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "from caller-supplied completed Oklahoma taxable income under the "
         "enacted single-or-separate or doubled-width joint, surviving-spouse, "
         "and head-of-household schedule over every routed tax unit in the "
-        "pinned US Microcosm; this bounded suite excludes taxable-income "
+        "pinned US Populace; this bounded suite excludes taxable-income "
         "construction, credits, payments, and final annual liability"
     ),
     (
@@ -226,7 +226,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Pennsylvania resident income tax before forgiveness, computed by "
         "applying the tax-year-2026 3.07 percent rate to caller-supplied "
         "completed Pennsylvania adjusted taxable income over every routed tax "
-        "unit in the pinned US Microcosm; the runtime fails closed unless every "
+        "unit in the pinned US Populace; the runtime fails closed unless every "
         "selected boundary is nonnegative, and this bounded suite excludes "
         "adjusted-taxable-income construction, forgiveness, credits, payments, "
         "and final annual liability"
@@ -238,7 +238,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "South Carolina tax-year-2026 individual income tax before "
         "nonrefundable credits, computed from caller-supplied completed South "
         "Carolina taxable income under the enacted two-bracket schedule over "
-        "every routed tax unit in the pinned US Microcosm; the runtime fails "
+        "every routed tax unit in the pinned US Populace; the runtime fails "
         "closed unless every selected boundary is nonnegative, and this "
         "bounded suite excludes taxable-income construction, nonrefundable "
         "credits, payments, and final annual liability"
@@ -250,7 +250,7 @@ _DESCRIPTION_BY_OUTPUT = {
         "Ohio Revised Code section 5747.02(A)(3)(c) tax-year-2026 "
         "nonbusiness-income schedule before nonrefundable credits, computed "
         "from caller-supplied completed Ohio taxable nonbusiness income, over "
-        "every routed tax unit in the pinned US Microcosm"
+        "every routed tax unit in the pinned US Populace"
     ),
     (
         "us-ut:policies/income_tax/"
@@ -259,7 +259,7 @@ _DESCRIPTION_BY_OUTPUT = {
     ): (
         "Utah section 59-10-104 full-year-resident tax before credits, "
         "including the section 59-10-104.1 exemption gate, over every routed "
-        "tax unit in the pinned US Microcosm"
+        "tax unit in the pinned US Populace"
     ),
 }
 
@@ -459,7 +459,7 @@ def project_state(
         concept,
         (
             "State income tax liability over every routed tax unit in the "
-            "pinned US Microcosm"
+            "pinned US Populace"
         ),
     )
     aggregate = {

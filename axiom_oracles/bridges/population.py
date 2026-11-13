@@ -6,7 +6,7 @@ oracle run compares against known input bases rather than whatever Hugging Face
 currently serves as ``latest``. See :data:`POPULACE_PINS` for the certified pins
 and the resolution order documented on :func:`load_populace_dataset`.
 
-Why pinning matters: ``microcosm.data.load()`` (microcosm-data 0.1.0) always
+Why pinning matters: ``populace.data.load()`` (populace-data 0.1.0, now microcosm-data) always
 fetches the HF-latest revision with no pin. As of 2026-07-02 HF-latest for the
 US dataset is a *sparse* refit that zeroes untargeted input bases (IRA/HSA/
 self-employed pension/childcare and dozens of other engine inputs) per
@@ -28,7 +28,7 @@ from typing import Any
 DEFAULT_US_POPULACE_YEAR = 2024
 DEFAULT_UK_POPULACE_YEAR = 2023
 DEFAULT_LOCAL_POPULACE_DATA_PACKAGE = (
-    Path.home() / "PolicyEngine" / "microcosm" / "packages" / "microcosm-data"
+    Path.home() / "PolicyEngine" / "populace" / "packages" / "populace-data"
 )
 DEFAULT_HUGGINGFACE_CACHE_ROOT = Path.home() / ".cache" / "huggingface" / "hub"
 DEFAULT_POPULACE_YEARS = {
@@ -41,7 +41,7 @@ POLICYENGINE_DATASET_CLASSES = {
 }
 
 #: Escape-hatch env var. When set truthy, the loader is allowed to fall back to
-#: the unpinned ``microcosm.data.load()`` package and the Hugging Face cache scan
+#: the unpinned ``populace.data.load()`` package and the Hugging Face cache scan
 #: (both of which resolve to HF-latest, i.e. the sparse #278 artifact for the US
 #: dataset). Off by default: unpinned data is opt-in, never a silent fallback.
 ALLOW_UNPINNED_ENV = "AXIOM_POPULACE_ALLOW_UNPINNED"
@@ -128,10 +128,10 @@ def load_populace_dataset(
        does not fail (local overrides are expected to differ from the pin).
        Recorded as ``source="local-override"``.
     2. **Unpinned escape hatch** — only when ``AXIOM_POPULACE_ALLOW_UNPINNED`` is
-       set truthy: ``microcosm.data.load()`` (and, via the cache scan, HF-latest —
+       set truthy: ``populace.data.load()`` (and, via the cache scan, HF-latest —
        the sparse #278 artifact for the US dataset). Checked *before* the pin so
        an operator can deliberately test a new release; emits a warning naming
-       microcosm#278. Recorded as ``source="unpinned"``. Never reached silently.
+       populace#278. Recorded as ``source="unpinned"``. Never reached silently.
     3. **Pinned Hugging Face download** (the default) — ``hf_hub_download`` at the
        pinned ``revision``, followed by sha256 verification against the pin. A
        mismatch is fatal. Recorded as ``source="pinned"``.
@@ -278,9 +278,9 @@ def unpinned_fallback_allowed() -> bool:
 
 
 def _load_unpinned_microcosm(country: str, year: int | None, command: str) -> Any:
-    """Load via the unpinned ``microcosm.data.load`` package (HF-latest)."""
+    """Load via the unpinned ``populace.data.load`` package (HF-latest)."""
     try:
-        from microcosm.data import load
+        from populace.data import load
     except ImportError as exc:  # pragma: no cover - optional runtime dependency
         raise SystemExit(populace_install_message(country, command)) from exc
     try:
@@ -562,7 +562,7 @@ def unpinned_disallowed_message(country: str, command: str) -> str:
         f"No pinned Microcosm {country.upper()} artifact could be loaded and the "
         f"unpinned fallback is disabled. Unpinned loading resolves to HF-latest, "
         f"which for the US dataset is the sparse artifact that zeroes untargeted "
-        f"engine input bases (PolicyEngine/microcosm#278). To knowingly load "
+        f"engine input bases (PolicyEngine/populace#278). To knowingly load "
         f"unpinned data, re-run with {ALLOW_UNPINNED_ENV}=1." + pin_hint
     )
 
@@ -571,7 +571,7 @@ def unpinned_fallback_warning(country: str) -> str:
     return (
         f"{ALLOW_UNPINNED_ENV} is set: loading UNPINNED Microcosm {country.upper()} "
         f"data (HF-latest). For the US dataset this is the sparse refit that "
-        f"zeroes untargeted engine input bases (PolicyEngine/microcosm#278); oracle "
+        f"zeroes untargeted engine input bases (PolicyEngine/populace#278); oracle "
         f"comparisons against it may score against ~$0 bases. Prefer the certified "
         f"pin unless you are deliberately testing the latest release."
     )
@@ -579,7 +579,7 @@ def unpinned_fallback_warning(country: str) -> str:
 
 def populace_install_message(country: str, command: str) -> str:
     return (
-        "Microcosm validation requires microcosm-data and the matching "
+        "Microcosm validation requires populace-data and the matching "
         "PolicyEngine country engine. Run with: "
         f"uv run --with {populace_data_requirement(country)} "
         f"axiom-encode {command}"
@@ -603,4 +603,4 @@ def populace_data_requirement(country: str) -> str:
         return f"{Path(override).expanduser()}[{country}]"
     if DEFAULT_LOCAL_POPULACE_DATA_PACKAGE.exists():
         return f"{DEFAULT_LOCAL_POPULACE_DATA_PACKAGE}[{country}]"
-    return f"microcosm-data[{country}]"
+    return f"populace-data[{country}]"

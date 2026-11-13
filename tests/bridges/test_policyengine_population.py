@@ -277,29 +277,29 @@ def test_unpinned_fallback_disabled_by_default_raises_with_278(monkeypatch):
             command="tax-populace-compare",
         )
     message = str(excinfo.value)
-    assert "microcosm#278" in message
+    assert "populace#278" in message
     assert population.ALLOW_UNPINNED_ENV in message
 
 
-def _install_fake_microcosm(monkeypatch: pytest.MonkeyPatch) -> None:
-    fake = ModuleType("microcosm")
-    data_module = ModuleType("microcosm.data")
+def _install_fake_populace(monkeypatch: pytest.MonkeyPatch) -> None:
+    fake = ModuleType("populace")
+    data_module = ModuleType("populace.data")
 
     def fake_load(country, year):
         return SimpleNamespace(country=country, year=year, unpinned=True)
 
     data_module.load = fake_load  # type: ignore[attr-defined]
-    monkeypatch.setitem(sys.modules, "microcosm", fake)
-    monkeypatch.setitem(sys.modules, "microcosm.data", data_module)
+    monkeypatch.setitem(sys.modules, "populace", fake)
+    monkeypatch.setitem(sys.modules, "populace.data", data_module)
 
 
 def test_unpinned_fallback_allowed_warns_and_loads(monkeypatch):
     _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv(population.ALLOW_UNPINNED_ENV, "1")
-    _install_fake_microcosm(monkeypatch)
+    _install_fake_populace(monkeypatch)
 
     provenance: dict[str, object] = {}
-    with pytest.warns(UserWarning, match="microcosm#278"):
+    with pytest.warns(UserWarning, match="populace#278"):
         dataset = population.load_populace_dataset(
             "fr",
             year=2024,
@@ -316,13 +316,13 @@ def test_unpinned_escape_hatch_overrides_pin_for_pinned_country(monkeypatch):
     HF-latest even for a country (US) that has a certified pin."""
     _clear_microcosm_env(monkeypatch)
     monkeypatch.setenv(population.ALLOW_UNPINNED_ENV, "1")
-    _install_fake_microcosm(monkeypatch)
+    _install_fake_populace(monkeypatch)
     # If the pinned path were taken it would import huggingface_hub; make it
     # absent so a regression that ignores the escape hatch fails loudly.
     monkeypatch.setitem(sys.modules, "huggingface_hub", None)
 
     provenance: dict[str, object] = {}
-    with pytest.warns(UserWarning, match="microcosm#278"):
+    with pytest.warns(UserWarning, match="populace#278"):
         dataset = population.load_populace_dataset(
             "us",
             year=2024,
@@ -411,7 +411,7 @@ def test_local_microcosm_artifact_no_longer_scans_hf_cache(monkeypatch, tmp_path
     )
 
 
-def test_load_microcosm_dataset_uses_local_engine_dataset_without_microcosm_data(
+def test_load_microcosm_dataset_uses_local_engine_dataset_without_populace_data(
     monkeypatch, tmp_path
 ):
     _clear_microcosm_env(monkeypatch)

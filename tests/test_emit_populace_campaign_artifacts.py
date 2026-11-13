@@ -214,7 +214,7 @@ def test_connecticut_dashboard_description_names_narrow_component():
     assert "ordinary section 12-700 tax before the personal credit" in description
     assert description != (
         "State income tax liability over every routed tax unit in the "
-        "pinned US Microcosm"
+        "pinned US Populace"
     )
 
 
@@ -1437,7 +1437,7 @@ def test_mississippi_dashboard_description_names_person_schedule():
     description = report["aggregates"][0]["description"]
     assert "section 27-7-5 Person-grain" in description
     assert "caller-supplied completed Mississippi taxable income" in description
-    assert "only for Microcosm accounting" in description
+    assert "only for Populace accounting" in description
     assert "liability" not in description.lower()
 
 

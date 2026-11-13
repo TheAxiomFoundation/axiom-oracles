@@ -1472,7 +1472,7 @@ def _validate_microcosm_validation(raw_surface: dict[str, Any], *, path: Path) -
         command = str(raw_validation.get("command") or "")
         if "populace" not in command:
             raise ValueError(
-                f"Validated PolicyEngine surface {variable} must cite a Microcosm "
+                f"Validated PolicyEngine surface {variable} must cite a *-populace-* "
                 f"comparison command: {path}"
             )
     if status in {"blocked", "not_applicable", "pending_validator"}:

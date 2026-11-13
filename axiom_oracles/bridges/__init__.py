@@ -10,7 +10,7 @@ TheAxiomFoundation/axiom-encode @ a314fc624967b4e990beb7d9ffc429dae6e26642
 (only intra-package imports were adjusted). See ``README.md`` in this
 directory for the public API and stability contract.
 
-PolicyEngine, microcosm-data, and huggingface-hub remain optional runtime
+PolicyEngine, populace-data, and huggingface-hub remain optional runtime
 dependencies: every module in this package imports them lazily, so the
 package (and this ``__init__``) is importable without any of them installed.
 """
