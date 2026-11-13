@@ -2132,6 +2132,10 @@ _NON_SEPARATE_PRE_MFS_DIGESTS = {
     ),
 }
 
+# The farm-rent person input (Schedule E line 40, axiom-oracles#566) postdates
+# 358f433b9. It adds one record per person, and these cases carry no farm rent.
+_FARM_RENT_INPUT = "us:tax/oracle-bridge#input.person_farm_rent_income"
+
 
 @pytest.mark.parametrize(
     "case",
@@ -2142,8 +2146,24 @@ def test_axiom_tax_projection_keeps_non_separate_inputs_byte_identical(
     case: Case,
 ) -> None:
     metadata = attach_axiom_tax_inputs_to_case(case).metadata
+    records = metadata["axiom_input_records"]
+    farm_rent = [record for record in records if record["name"] == _FARM_RENT_INPUT]
+    assert sorted(farm_rent, key=lambda record: record["entity_id"]) == [
+        {
+            "name": _FARM_RENT_INPUT,
+            "entity": "Person",
+            "entity_id": person.entity_id,
+            "value": 0.0,
+        }
+        for person in sorted(case.entities, key=lambda entity: entity.entity_id)
+        if person.kind == "person"
+    ]
+    # Every other record, and every relation, is byte-identical to main at
+    # 358f433b9.
     payload = {
-        "records": metadata["axiom_input_records"],
+        "records": [
+            record for record in records if record["name"] != _FARM_RENT_INPUT
+        ],
         "relations": metadata["axiom_relations"],
     }
     digest = hashlib.sha256(
