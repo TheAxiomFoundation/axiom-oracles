@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "89a9bf6ae4bfddc8f161ee40a0c5b7cc53756c176822310222abb3af7abd7655"
+      "sha256": "05381bf5ba52280f72ec12e3f21f00c820467bebfbefdeef6ee250c1bc4757ea"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
@@ -37,13 +37,13 @@
       "artifact": "dashboard/public/data/axiom-snapqc-co-snap.json",
       "claim": "suite:co-snap-qc",
       "mode": "computed",
-      "sha256": "31b9bfc6236e0226ca3db1ec2577119d492891f866c41188701273971e5caa2b"
+      "sha256": "5e1f8b90522b59b4a6a7c331f4cce2666abf957fa20e5904705ab172ad748cd0"
     },
     {
       "artifact": "dashboard/public/data/cases/co-snap-qc/index.json",
       "claim": "case-evidence-index:co-snap-qc",
       "mode": "computed",
-      "sha256": "84ca0c7e17522db18d78995d65439aa4e5d0a3cdd1a184b6d1805c7a466e9c99"
+      "sha256": "372eb4f295a4bb00124da9ee345b4859f87af88e4b7dffeec074883857aef5a3"
     }
   ],
   "period": "2026-01",
@@ -151,10 +151,10 @@
           "per_case_evidence_committed": false,
           "reconciliation": "cardinality",
           "registry_report": "dashboard/public/data/axiom-snapqc-co-snap.json",
-          "registry_report_sha256": "31b9bfc6236e0226ca3db1ec2577119d492891f866c41188701273971e5caa2b",
+          "registry_report_sha256": "5e1f8b90522b59b4a6a7c331f4cce2666abf957fa20e5904705ab172ad748cd0",
           "report": "dashboard/public/data/axiom-snapqc-co-snap.json",
           "report_identity_matches_registry": true,
-          "report_sha256": "31b9bfc6236e0226ca3db1ec2577119d492891f866c41188701273971e5caa2b",
+          "report_sha256": "5e1f8b90522b59b4a6a7c331f4cce2666abf957fa20e5904705ab172ad748cd0",
           "varied_fields": 0
         }
       },
