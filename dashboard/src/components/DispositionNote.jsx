@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { loadSuiteDispositions } from "../utils/caseData";
 import { engineLabel } from "../utils/format";
 import { southmodModel } from "../utils/suites";
+import { displayCauseLabel, displayTitle } from "../utils/dispositionDisplay.mjs";
 
 const DISPOSITION_LABELS = {
   explained_residual: "explained residual",
@@ -24,24 +25,20 @@ export function dispositionTag(disposition, row) {
   return DISPOSITION_LABELS[disposition] || disposition;
 }
 
-function humanizeSlug(id) {
-  const s = String(id || "").replaceAll("-", " ");
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
-
 /**
- * One recorded disposition: title (its yaml id), category tag, the
- * mechanism prose clamped to two lines until clicked, the arithmetic that
- * reproduces the delta, and the affected case / upstream issue.
+ * One recorded disposition: title (its display title, else its yaml id),
+ * tag (its display cause, else its category), the mechanism prose clamped to
+ * two lines until clicked, the arithmetic that reproduces the delta, and the
+ * affected case / upstream issue.
  */
 function DispositionEntry({ e, row }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <div className="v2-expl-entry">
       <div className="v2-expl-head">
-        <span className="v2-expl-title">{humanizeSlug(e.id)}</span>
+        <span className="v2-expl-title">{displayTitle(e)}</span>
         <span className="mono v2-expl-tag">
-          {dispositionTag(e.disposition, row)}
+          {displayCauseLabel(e) || dispositionTag(e.disposition, row)}
         </span>
       </div>
       {e.mechanism && (

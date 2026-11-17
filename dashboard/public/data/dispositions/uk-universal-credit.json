@@ -1,13 +1,13 @@
 {
  "suite": "uk-universal-credit",
- "updated": "2026-07-06",
+ "updated": "2026-11-16",
  "entries": [
   {
    "id": "takeup-correction-zeroes-couple-owner",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "UKMOD's benefit take-up correction (policies BTA_uk and random_uk seed a stochastic per-benefit-unit take-up draw i_rand_tu, gated in bsauc_uk) marks this hypothetical benefit unit as a non-taker on this run and returns a zero award rather than the statutory entitlement. The Axiom pipeline computes the couple standard allowance (666.97/month) as the full entitlement, which UKMOD pays whenever this unit draws take-up. Turning off the take-up policies does not suppress the draw (initialised in InitVars_uk), and the draw is stochastic per row rather than composition-determined (verified: ten identical copies of this household in one run receive different awards by position; see suite header), so this is a UKMOD modelling behaviour for hypothetical households, not an Axiom encoding gap.",
+   "mechanism": "UKMOD reported \u00a30 because this household drew no claim in UKMOD's take-up simulation; this comparison did not set the take-up rates to 100%. UKMOD decides whether each household claims Universal Credit by comparing a random draw with a take-up rate, and switching off its take-up policies (BTA_uk and random_uk), as this comparison did, does not stop the draw. Axiom computes the entitlement: the couple standard allowance of \u00a3666.97 a month. The committed run put every household in one batch. When a check on 5 July 2026 ran this household on its own, UKMOD paid the full \u00a3666.97, and ten identical copies of it in one run received \u00a3666.97 seven times and \u00a30 three times.",
    "cases": [
     "uk-uc-couple-owner"
    ],
@@ -17,14 +17,18 @@
      "equals": 0.0
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's take-up simulation: couple, home owners",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "takeup-correction-zeroes-couple-2child-owner",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "UKMOD's stochastic benefit take-up draw returns a zero award for this hypothetical benefit unit (couple with two children, owner-occupier) in place of the statutory entitlement, which the Axiom pipeline computes as the couple standard allowance plus two child elements (666.97 + 351.88 + 303.94 = 1,322.79/month) and which UKMOD pays whenever this unit draws take-up (this case resolves to the full award at --comparison-batch-size 1). Take-up is a UKMOD modelling behaviour, not an Axiom encoding gap.",
+   "mechanism": "UKMOD reported \u00a30 because this household drew no claim in UKMOD's take-up simulation; this comparison did not set the take-up rates to 100%. UKMOD decides whether each household claims Universal Credit by comparing a random draw with a take-up rate, and switching off its take-up policies (BTA_uk and random_uk), as this comparison did, does not stop the draw. Axiom computes the entitlement: the couple standard allowance of \u00a3666.97 plus child elements of \u00a3351.88 and \u00a3303.94, or \u00a31,322.79 a month. The committed run put every household in one batch. When a check on 5 July 2026 ran this household on its own, UKMOD paid the full award.",
    "cases": [
     "uk-uc-couple-2child-owner"
    ],
@@ -34,14 +38,18 @@
      "equals": 1322.79
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's take-up simulation: couple, two children, home owners",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "takeup-correction-zeroes-earn15000",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "UKMOD's stochastic benefit take-up draw returns a zero award for this earner benefit unit (couple, two children, social renter, 15,000 gross annual earnings), so the taper is not exercised on the UKMOD side on this run. The Axiom award applies the couple maximum (2,222.79/month) less the 55% taper on net earnings above the couple-with-housing work allowance (427/month): net earnings 1,193.30/month give a deduction of 421.4650 and an award of 1,801.325/month, which UKMOD pays whenever this unit draws take-up. (This case also drew non-take at --comparison-batch-size 1, but that persistence is itself a draw, not an income/composition rule; see suite header.) Take-up is a UKMOD modelling behaviour, not an Axiom encoding gap.",
+   "mechanism": "UKMOD reported \u00a30 because this household drew no claim in UKMOD's take-up simulation; this comparison did not set the take-up rates to 100%. UKMOD decides whether each household claims Universal Credit by comparing a random draw with a take-up rate, and switching off its take-up policies (BTA_uk and random_uk), as this comparison did, does not stop the draw. Axiom computes the entitlement: the household's maximum award of \u00a32,222.79 a month, less 55% of the \u00a3766.30 by which its net earnings of \u00a31,193.30 exceed the \u00a3427 work allowance, or \u00a31,801.33 a month. The committed run put every household in one batch. When a check on 5 July 2026 ran this household on its own, it again drew no claim.",
    "cases": [
     "uk-uc-couple-2child-renter-earn15000"
    ],
@@ -51,14 +59,18 @@
      "equals": 1801.325
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's take-up simulation: couple, two children, renting, earning \u00a315,000",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "takeup-correction-zeroes-earn30000",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "UKMOD's stochastic benefit take-up draw returns a zero award for this earner benefit unit (couple, two children, social renter, 30,000 gross annual earnings). The Axiom award applies the couple maximum (2,222.79/month) less the 55% taper on net earnings above the work allowance (427/month): net earnings 2,093.325/month give a deduction of 916.464 and an award of 1,306.325/month, which UKMOD pays whenever this unit draws take-up. (This case also drew non-take at --comparison-batch-size 1, but that persistence is itself a draw; see suite header.) Take-up is a UKMOD modelling behaviour, not an Axiom encoding gap.",
+   "mechanism": "UKMOD reported \u00a30 because this household drew no claim in UKMOD's take-up simulation; this comparison did not set the take-up rates to 100%. UKMOD decides whether each household claims Universal Credit by comparing a random draw with a take-up rate, and switching off its take-up policies (BTA_uk and random_uk), as this comparison did, does not stop the draw. Axiom computes the entitlement: the household's maximum award of \u00a32,222.79 a month, less 55% of the \u00a31,666.30 by which its net earnings of \u00a32,093.30 exceed the \u00a3427 work allowance, or \u00a31,306.33 a month. The committed run put every household in one batch. When a check on 5 July 2026 ran this household on its own, it again drew no claim.",
    "cases": [
     "uk-uc-couple-2child-renter-earn30000"
    ],
@@ -68,14 +80,18 @@
      "equals": 1306.325
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's take-up simulation: couple, two children, renting, earning \u00a330,000",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "takeup-correction-zeroes-single-owner-capital0",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "UKMOD's stochastic benefit take-up draw returns a zero award for this hypothetical benefit unit (single owner-occupier, no capital) in place of the single standard allowance (424.90/month) the Axiom pipeline computes, which UKMOD pays whenever this unit draws take-up. The zero is the take-up draw, not the capital test: at --comparison-batch-size 1 this case resolves to the full 424.90, and ten identical copies of the entitled single-owner-no-capital household in one run return different awards by position [424.90, 424.90, 0, 424.90, 424.90, 0, 0, 424.90, 424.90, 424.90] (see suite header). Take-up is a UKMOD modelling behaviour, not an Axiom encoding gap.",
+   "mechanism": "UKMOD reported \u00a30 because this household drew no claim in UKMOD's take-up simulation; this comparison did not set the take-up rates to 100%. UKMOD decides whether each household claims Universal Credit by comparing a random draw with a take-up rate, and switching off its take-up policies (BTA_uk and random_uk), as this comparison did, does not stop the draw. Axiom computes the entitlement: the single standard allowance of \u00a3424.90 a month. The household holds no capital, so the capital test plays no part. The committed run put every household in one batch. When a check on 5 July 2026 ran this household on its own, UKMOD paid the full \u00a3424.90, and ten identical copies of it in one run received \u00a3424.90 seven times and \u00a30 three times.",
    "cases": [
     "uk-uc-single-owner-capital0"
    ],
@@ -85,14 +101,18 @@
      "equals": 0.0
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's take-up simulation: single home owner, no capital",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "benefit-cap-not-applied-single-2child",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "The Axiom pipeline applies the regulation 80A benefit cap (22,020/year for a single claimant outside Greater London = 1,835/month), capping this award at 1,835. UKMOD does not apply the benefit cap to this hypothetical benefit unit: its award rises one-for-one with rent with no plateau (verified across a rent sweep), so it returns the uncapped maximum of 1,930.72/month. The cap difference is therefore exactly the UKMOD uncapped award less the cap.",
+   "mechanism": "The UKMOD output this comparison reads gives the Universal Credit award before the benefit cap: \u00a31,930.72 a month here. UKMOD records the cap's reduction in a separate output, which this comparison does not read. Axiom's \u00a31,835.00 is the award after its cap (\u00a322,020 a year divided by 12), so the \u00a395.72 difference is the part of UKMOD's award above the cap. Axiom's cap counts only Universal Credit and leaves out the child benefit that UKMOD's counts, so this comparison does not show whether the two agree after the cap.",
    "cases": [
     "uk-uc-single-2child-renter"
    ],
@@ -106,14 +126,18 @@
      "equals": 1835.0
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's award before the cap: single parent, two children, renting",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "benefit-cap-not-applied-couple-2child-renter",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "The Axiom pipeline caps this couple award at the regulation 80A cap (22,020/year outside Greater London = 1,835/month). UKMOD does not apply the benefit cap and returns the uncapped maximum: couple standard allowance 666.97 + first child 351.88 + subsequent child 303.94 + rent 900 = 2,222.79/month.",
+   "mechanism": "The UKMOD output this comparison reads gives the Universal Credit award before the benefit cap: \u00a32,222.79 a month here (couple standard allowance \u00a3666.97, child elements \u00a3351.88 and \u00a3303.94, rent \u00a3900). UKMOD records the cap's reduction in a separate output, which this comparison does not read. Axiom's \u00a31,835.00 is the award after its cap, so the \u00a3387.79 difference is the part of UKMOD's award above the cap. Axiom's cap counts only Universal Credit and leaves out the child benefit that UKMOD's counts, so this comparison does not show whether the two agree after the cap.",
    "cases": [
     "uk-uc-couple-2child-renter"
    ],
@@ -127,14 +151,18 @@
      "equals": 387.79
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's award before the cap: couple, two children, renting",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "benefit-cap-not-applied-couple-2child-renter-earn0",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Same benefit unit and composition as uk-uc-couple-2child-renter with earnings held at zero; the Axiom award is capped at 1,835/month while UKMOD returns the uncapped maximum 2,222.79/month because it does not apply the regulation 80A benefit cap.",
+   "mechanism": "The same household as the couple with two children renting, with earnings set to \u00a30. The UKMOD output this comparison reads gives the Universal Credit award before the benefit cap, \u00a32,222.79 a month, and UKMOD records the cap's reduction in a separate output, which this comparison does not read. Axiom's \u00a31,835.00 is the award after its cap, so the \u00a3387.79 difference is the part of UKMOD's award above the cap. Axiom's cap counts only Universal Credit and leaves out the child benefit that UKMOD's counts, so this comparison does not show whether the two agree after the cap.",
    "cases": [
     "uk-uc-couple-2child-renter-earn0"
    ],
@@ -148,14 +176,18 @@
      "equals": 387.79
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's award before the cap: couple, two children, renting, earnings set to \u00a30",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "benefit-cap-not-applied-couple-3child-renter",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "The Axiom pipeline caps this couple + three children award at the regulation 80A cap (1,835/month). UKMOD does not apply the benefit cap and returns the uncapped maximum: couple standard allowance 666.97 + first child 351.88 + two subsequent children 2 x 303.94 + rent 1,000 = 2,626.73/month. Both engines give every child a full element (the two-child limit was revoked from 6 April 2026), so the third child adds the subsequent-child rate.",
+   "mechanism": "The UKMOD output this comparison reads gives the Universal Credit award before the benefit cap: \u00a32,626.73 a month here (couple standard allowance \u00a3666.97, child elements \u00a3351.88, \u00a3303.94 and \u00a3303.94, rent \u00a31,000; both engines give every child an element, since the two-child limit ended on 6 April 2026). UKMOD records the cap's reduction in a separate output, which this comparison does not read. Axiom's \u00a31,835.00 is the award after its cap, so the \u00a3791.73 difference is the part of UKMOD's award above the cap. Axiom's cap counts only Universal Credit and leaves out the child benefit that UKMOD's counts, so this comparison does not show whether the two agree after the cap.",
    "cases": [
     "uk-uc-couple-3child-renter"
    ],
@@ -169,14 +201,18 @@
      "equals": 791.73
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "UKMOD's award before the cap: couple, three children, renting",
+    "cause": "comparison_setup"
+   }
   },
   {
    "id": "net-earnings-taper-nic-rounding-earn45000",
    "concept": "uk:policies/universal_credit_composed_award_pipeline#uc_pilot_award_amount",
    "kind": "amount_difference",
    "disposition": "explained_residual",
-   "mechanism": "Universal Credit tapers net earned income. The Axiom pipeline is supplied net-of-tax-and-NIC monthly earnings computed with the annual 2026-27 formula (45,000 gross less 6,486 income tax and 2,594.40 NIC = 35,919.60/year = 2,993.30/month), giving a couple award of 2,222.79 - 0.55 x (2,993.30 - 427) = 811.325/month. UKMOD nets earnings through its own tin_uk and tscee_tscse_uk policies, which compute NIC week by week on weekly-rounded thresholds, so its net earnings and hence its award differ by the same small weekly-rounding residual the single-employee NIC suite shows. The residual is 11.73/month.",
+   "mechanism": "UKMOD's award is \u00a311.73 a month lower than Axiom's. Universal Credit tapers net earnings. The comparison gives Axiom net earnings of \u00a32,993.30 a month from the annual formula (\u00a345,000 less \u00a36,486 income tax and \u00a32,594.40 National Insurance, divided by 12), so Axiom's award is \u00a32,222.79 less 55% of the \u00a32,566.30 by which those net earnings exceed the \u00a3427 work allowance, or \u00a3811.33. UKMOD works out National Insurance week by week. In the single-employee National Insurance comparison that method differs from the annual formula by about \u00a34 to \u00a36 a year, which through the 55% taper moves the award by less than \u00a30.30 a month. The files do not yet show what causes the rest of the difference.",
    "cases": [
     "uk-uc-couple-2child-renter-earn45000"
    ],
@@ -190,7 +226,11 @@
      "equals": 11.728
     }
    ],
-   "linked_issue": null
+   "linked_issue": null,
+   "display": {
+    "title": "Net-earnings difference: couple, two children, renting, earning \u00a345,000",
+    "cause": "open"
+   }
   },
   {
    "id": "capital-upper-limit-boundary-16000",

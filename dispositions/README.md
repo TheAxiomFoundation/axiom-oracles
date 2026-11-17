@@ -41,6 +41,29 @@ entries:
       right: 3386.87
 ```
 
+## Dashboard wording
+
+`display` changes how the dashboard words one entry and nothing else:
+
+```yaml
+display:
+  title: "UKMOD's take-up simulation: couple, home owners"
+  cause: comparison_setup
+```
+
+- `title` (one line, at most 120 characters) replaces the title the dashboard
+  derives from the entry `id`.
+- `cause` replaces the tag the dashboard derives from the class. It takes one
+  of `comparison_setup` (the comparison's own set-up produced the difference)
+  or `open` (the files do not yet show the cause). Entries classed
+  `axiom_encoding_gap` or `unexplained` may not set it, so the dashboard
+  always tags those by their class.
+
+Neither key reaches a report row, a rollup, a ratchet or the engine-identity
+record, so wording can change while a report's classes stay fixed.
+`scripts/emit_disposition_artifacts.py` ships the block only for entries
+that set it; every other entry's served JSON keeps its exact bytes.
+
 ## Disposition kinds
 
 | Kind | Meaning | Counts as explained |

@@ -63,6 +63,12 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   ``pinned`` engine values, the disposition only applies while the live
   mismatch row still shows those values; when the source engines change, the
   disposition expires instead of silently mislabeling a new residual.
+* ``display`` (optional) is dashboard-only wording: ``title`` (one trimmed
+  line, at most 120 characters) replaces the entry id as the title of the
+  dashboard's disposition note, and ``cause`` (one of ``DISPLAY_CAUSES``)
+  replaces the class tag. ``cause`` cannot relabel an ``axiom_encoding_gap``
+  or ``unexplained`` entry. Neither key reaches a report row, so wording can be
+  corrected on a report whose bytes may not change.
 
 Merge semantics
 ---------------
@@ -115,6 +121,16 @@ DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
 DEFAULT_PIN_TOLERANCE = 0.005
 
+#: ``display.cause`` values: the tag the dashboard shows in place of the
+#: class label. ``comparison_setup``: the comparison's own set-up produced the
+#: difference; ``open``: the cause is not established.
+DISPLAY_CAUSES = ("comparison_setup", "open")
+#: Classes whose own tag already says where the difference sits; a display
+#: cause may not stand in for them.
+_DISPLAY_CAUSE_EXCLUDED_KINDS = ("axiom_encoding_gap", "unexplained")
+_DISPLAY_KEYS = {"title", "cause"}
+_DISPLAY_TITLE_MAX = 120
+
 _ENTRY_KEYS = {
     "id",
     "concept",
@@ -137,6 +153,8 @@ _ENTRY_KEYS = {
     # axiom_oracles/comparison/pe_axiom_standard.py): exactly one of these.
     "axiom_companion",
     "axiom_encoding_debt",
+    # Dashboard-only wording; never reaches a report row (see _validate_display).
+    "display",
 }
 _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "upstream_url", "sources",
@@ -280,6 +298,48 @@ def _validate_sources(
         if repo_root is not None and not (repo_root / relative).exists():
             errors.append(
                 f"{source_label} cites a missing file: {relative}"
+            )
+    return errors
+
+
+def _validate_display(display: object, disposition: object, label: str) -> list[str]:
+    """Check an entry's dashboard-only ``display`` block.
+
+    ``display.title`` replaces the entry id as the dashboard title, and
+    ``display.cause`` replaces the class tag. Neither reaches a report row,
+    so the wording can be corrected without changing a committed report.
+    """
+
+    if not isinstance(display, dict) or not display:
+        return [f"{label} display must be a non-empty mapping"]
+    errors: list[str] = []
+    unknown = set(display) - _DISPLAY_KEYS
+    if unknown:
+        errors.append(f"{label} display has unknown keys: {sorted(unknown)}")
+    if "title" in display:
+        title = display["title"]
+        if (
+            not isinstance(title, str)
+            or not title.strip()
+            or title != title.strip()
+            or "\n" in title
+            or len(title) > _DISPLAY_TITLE_MAX
+        ):
+            errors.append(
+                f"{label} display.title must be one trimmed line of 1 to "
+                f"{_DISPLAY_TITLE_MAX} characters"
+            )
+    if "cause" in display:
+        cause = display["cause"]
+        if not isinstance(cause, str) or cause not in DISPLAY_CAUSES:
+            errors.append(
+                f"{label} display.cause must be one of "
+                f"{', '.join(DISPLAY_CAUSES)}; got {cause!r}"
+            )
+        elif disposition in _DISPLAY_CAUSE_EXCLUDED_KINDS:
+            errors.append(
+                f"{label} display.cause cannot relabel a {disposition} entry; "
+                "its class tag already names the cause"
             )
     return errors
 
@@ -472,6 +532,9 @@ def _validate_entry(
     sources = evidence.get("sources")
     if sources is not None:
         errors.extend(_validate_sources(sources, label, repo_root))
+
+    if "display" in entry:
+        errors.extend(_validate_display(entry.get("display"), disposition, label))
 
     has_reconciliation = bool(arithmetic)
     has_citation = bool(upstream_url) or bool(linked_issue) or bool(sources)

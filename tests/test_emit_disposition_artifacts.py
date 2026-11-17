@@ -127,3 +127,31 @@ def test_invalid_suite_slug_cannot_escape_dispositions_directory(
     assert module.main(["--check", "../outside"]) == 1
     assert not output.exists()
     assert "invalid suite slug '../outside'" in capsys.readouterr().err
+
+
+def test_display_block_ships_only_when_the_entry_sets_it(
+    tmp_path, monkeypatch
+):
+    module, dispositions, output = _isolated_module(tmp_path, monkeypatch)
+    _write_disposition(dispositions, "suite-a", mechanism="first")
+    _write_disposition(dispositions, "suite-b", mechanism="second")
+    labelled = dispositions / "suite-b.yaml"
+    labelled.write_text(
+        labelled.read_text().replace(
+            "    disposition: bridge_artifact\n",
+            "    disposition: bridge_artifact\n"
+            "    display:\n"
+            "      title: Plain title\n"
+            "      cause: comparison_setup\n",
+        )
+    )
+
+    assert module.main([]) == 0
+    plain = json.loads((output / "suite-a.json").read_text())
+    shown = json.loads((output / "suite-b.json").read_text())
+    assert "display" not in plain["entries"][0]
+    assert shown["entries"][0]["display"] == {
+        "title": "Plain title",
+        "cause": "comparison_setup",
+    }
+    assert module.main(["--check"]) == 0
