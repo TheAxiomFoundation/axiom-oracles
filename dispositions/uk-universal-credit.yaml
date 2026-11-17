@@ -343,7 +343,7 @@ entries:
     kind: amount_difference
     disposition: explained_residual
     display:
-      title: "Net-earnings difference: couple, two children, renting, earning £45,000"
+      title: "Award difference: couple, two children, renting, earning £45,000"
       cause: open
     evidence:
       mechanism: >-

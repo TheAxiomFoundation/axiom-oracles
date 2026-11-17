@@ -49,7 +49,9 @@ for (const entry of [
   assert.equal(displayCauseLabel(entry), null, JSON.stringify(entry));
 }
 
-// Every shipped artifact's display block is well formed and labelled.
+// Every shipped artifact's display block is well formed and labelled. A title
+// holds no line break of any kind (the characters Python's splitlines splits on).
+const LINE_BREAKS = [10, 11, 12, 13, 28, 29, 30, 133, 8232, 8233].map((c) => String.fromCharCode(c));
 const dir = "dashboard/public/data/dispositions/";
 let withDisplay = 0;
 let entries = 0;
@@ -69,7 +71,7 @@ for (const name of readdirSync(new URL(dir, root)).filter((n) => n.endsWith(".js
     if ("title" in display) {
       assert.equal(typeof display.title, "string", where);
       assert.equal(display.title, display.title.trim(), where);
-      assert.ok(display.title && !display.title.includes("\n") && display.title.length <= 120, where);
+      assert.ok(display.title && !LINE_BREAKS.some((c) => display.title.includes(c)) && display.title.length <= 120, where);
     }
     if ("cause" in display) {
       assert.ok(displayCauseLabel(entry), `${where}: no label for cause ${display.cause}`);

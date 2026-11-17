@@ -55,6 +55,8 @@ def test_display_block_is_optional_and_validated() -> None:
         ({"title": ""}, "title"),
         ({"title": " padded "}, "title"),
         ({"title": "two\nlines"}, "title"),
+        ({"title": "two\rlines"}, "title"),
+        ({"title": "two" + chr(0x2028) + "lines"}, "title"),
         ({"title": "x" * 121}, "title"),
         ({"title": 7}, "title"),
         ({"cause": "upstream"}, "cause"),
