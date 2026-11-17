@@ -5,7 +5,9 @@ triaged mismatch (evidence.mechanism, the linked upstream issue, the
 category). The comparison reports only stamp each mismatch with the entry
 id — so the dashboard could say "dispositioned" but never say WHY. This
 script ships the explanations: dashboard/public/data/dispositions/
-<suite>.json, one compact entry per disposition.
+<suite>.json, one compact entry per disposition. An entry's optional
+``display`` block (title, cause tag) ships as given; entries without one
+carry no ``display`` key.
 
 Usage:
     uv run scripts/emit_disposition_artifacts.py
@@ -45,7 +47,7 @@ def compact_entry(entry: dict) -> dict:
         for a in evidence.get("arithmetic") or []
         if a.get("expression") is not None
     ]
-    return {
+    compact = {
         "id": entry.get("id"),
         "concept": entry.get("concept"),
         "kind": entry.get("kind"),
@@ -56,6 +58,14 @@ def compact_entry(entry: dict) -> dict:
         "linked_issue": entry.get("linked_issue")
         or evidence.get("upstream_url"),
     }
+    # Dashboard-only wording (title, cause tag). Shipped only when the entry
+    # sets it, so every other suite's artifact keeps its exact bytes.
+    display = entry.get("display")
+    if display:
+        compact["display"] = {
+            key: display[key] for key in ("title", "cause") if key in display
+        }
+    return compact
 
 
 def _selected_paths(suites: list[str]) -> tuple[list[Path], list[str]]:

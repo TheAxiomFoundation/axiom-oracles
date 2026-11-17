@@ -123,6 +123,12 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
   ``case_ids_by_output``) lists, and values use the attribution vocabulary
   and differ from ``attribution``. Neither field reaches a report row or a
   dashboard render.
+* ``display`` (optional) is dashboard-only wording: ``title`` (one trimmed
+  line, at most 120 characters) replaces the entry id as the title of the
+  dashboard's disposition note, and ``cause`` (one of ``DISPLAY_CAUSES``)
+  replaces the class tag. ``cause`` cannot relabel an ``axiom_encoding_gap``
+  or ``unexplained`` entry. Neither key reaches a report row, so wording can be
+  corrected on a report whose bytes may not change.
 * ``oracle_binding`` records the oracle identity a classification was made
   against: ``taxsim_binary_sha256`` (non-empty list of 64-hex digests),
   ``policyengine_taxsim`` (package version string), and/or
@@ -214,6 +220,7 @@ from .selectors import (
 
 __all__ = [
     "ArithmeticEvaluationError",
+    "DISPLAY_CAUSES",
     "DispositionConservationError",
     "DispositionError",
     "SuiteContext",
@@ -241,6 +248,16 @@ DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 ATTRIBUTION_NON_ENGINE_VALUES = ("convention", "input", "two_sided")
 TAXSIM_ENGINE = "taxsim"
 AXIOM_ENGINE = "axiom"
+
+#: ``display.cause`` values: the tag the dashboard shows in place of the
+#: class label. ``comparison_setup``: the comparison's own set-up produced the
+#: difference; ``open``: the cause is not established.
+DISPLAY_CAUSES = ("comparison_setup", "open")
+#: Classes whose own tag already says where the difference sits; a display
+#: cause may not stand in for them.
+_DISPLAY_CAUSE_EXCLUDED_KINDS = ("axiom_encoding_gap", "unexplained")
+_DISPLAY_KEYS = {"title", "cause"}
+_DISPLAY_TITLE_MAX = 120
 
 #: Reason codes recorded in ``summary.dispositioned.expired_reasons``.
 EXPIRY_REASONS = (
@@ -291,6 +308,8 @@ _ENTRY_KEYS = {
     # axiom_oracles/comparison/pe_axiom_standard.py): exactly one of these.
     "axiom_companion",
     "axiom_encoding_debt",
+    # Dashboard-only wording; never reaches a report row (see _validate_display).
+    "display",
 }
 _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "row_arithmetic", "upstream_url", "sources",
@@ -656,6 +675,48 @@ def _listed_case_ids(entry: Mapping[str, Any]) -> set[str]:
     return listed
 
 
+def _validate_display(display: object, disposition: object, label: str) -> list[str]:
+    """Check an entry's dashboard-only ``display`` block.
+
+    ``display.title`` replaces the entry id as the dashboard title, and
+    ``display.cause`` replaces the class tag. Neither reaches a report row,
+    so the wording can be corrected without changing a committed report.
+    """
+
+    if not isinstance(display, dict) or not display:
+        return [f"{label} display must be a non-empty mapping"]
+    errors: list[str] = []
+    unknown = set(display) - _DISPLAY_KEYS
+    if unknown:
+        errors.append(f"{label} display has unknown keys: {sorted(unknown)}")
+    if "title" in display:
+        title = display["title"]
+        if (
+            not isinstance(title, str)
+            or not title.strip()
+            or title != title.strip()
+            or "\n" in title
+            or len(title) > _DISPLAY_TITLE_MAX
+        ):
+            errors.append(
+                f"{label} display.title must be one trimmed line of 1 to "
+                f"{_DISPLAY_TITLE_MAX} characters"
+            )
+    if "cause" in display:
+        cause = display["cause"]
+        if not isinstance(cause, str) or cause not in DISPLAY_CAUSES:
+            errors.append(
+                f"{label} display.cause must be one of "
+                f"{', '.join(DISPLAY_CAUSES)}; got {cause!r}"
+            )
+        elif disposition in _DISPLAY_CAUSE_EXCLUDED_KINDS:
+            errors.append(
+                f"{label} display.cause cannot relabel a {disposition} entry; "
+                "its class tag already names the cause"
+            )
+    return errors
+
+
 def _validate_attribution_by_case(
     by_case: object,
     entry: Mapping[str, Any],
@@ -945,6 +1006,9 @@ def _validate_entry(
                 by_case, entry, attribution, allowed_attribution, label
             )
         )
+
+    if "display" in entry:
+        errors.extend(_validate_display(entry.get("display"), disposition, label))
 
     oracle_binding = entry.get("oracle_binding")
     if oracle_binding is not None:
