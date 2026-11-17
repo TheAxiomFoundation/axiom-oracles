@@ -695,7 +695,7 @@ def _validate_display(display: object, disposition: object, label: str) -> list[
             not isinstance(title, str)
             or not title.strip()
             or title != title.strip()
-            or "\n" in title
+            or len(title.splitlines()) != 1
             or len(title) > _DISPLAY_TITLE_MAX
         ):
             errors.append(
