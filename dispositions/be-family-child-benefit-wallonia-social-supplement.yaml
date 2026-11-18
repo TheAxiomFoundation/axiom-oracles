@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: be-family-child-benefit-wallonia-social-supplement
-updated: "2026-07-05"
+updated: "2026-11-18"
 entries:
   - id: wallonia-pre-2020-low-income-indexed-article-13-supplement
     concept: be:statutes/family_benefits/child_benefit_base_2025#belgium_child_benefit_wallonia_2025_annual_amount_with_social_supplement
@@ -11,6 +11,8 @@ entries:
         - be-family-child-benefit-wallonia-social-supplement-low-income-age-18
     kind: amount_difference
     disposition: explained_residual
+    display:
+      title: "Our reading, not yet confirmed by EUROMOD's maintainers: pre-2020 Walloon children, low income"
     evidence:
       mechanism: >-
         Each low-income pre-2020 Walloon child residual equals the 2025-indexed
@@ -19,10 +21,11 @@ entries:
         8 February 2018, Article 13, be-wal/statutes/family_benefits/amounts.yaml);
         the applied 2025 amount is 68.39 EUR/month at pivot index 130.67 from
         the AVIQ February 2025 amount table
-        (be/statutes/family_benefits/child_benefit_base_2025.yaml). EUROMOD
-        BE_2025 cumulates this indexed supplement on top of the LGAF transition
-        amounts for pre-2020 children, contrary to Walloon Articles 120, 123,
-        and 128; the age-0 new-system control cases match exactly.
+        (be/statutes/family_benefits/child_benefit_base_2025.yaml). By our
+        reading, EUROMOD BE_2025 adds this indexed supplement to the LGAF
+        transition amounts for pre-2020 children, which Walloon Articles 120,
+        123 and 128 rule out; EUROMOD's maintainers have not yet confirmed
+        this reading. The age-0 new-system control cases match exactly.
       arithmetic:
         - expression: "68.39 * 12"
           equals: 820.68
@@ -46,14 +49,16 @@ entries:
         - be-family-child-benefit-wallonia-social-supplement-age-18
     kind: amount_difference
     disposition: explained_residual
+    display:
+      title: "Our reading, not yet confirmed by EUROMOD's maintainers: pre-2020 Walloon children, middle income"
     evidence:
       mechanism: >-
         Each middle-income pre-2020 Walloon child residual equals the
         2025-indexed Walloon Decree Article 13 middle-income monthly social
         supplement, annualized. The statutory base is 25 EUR/month; the applied
         2025 amount is 31.09 EUR/month from the AVIQ February 2025 amount
-        table. Same EUROMOD BE_2025 pre-2020 cumulation mechanism as the
-        low-income cases; the age-0 control case matches exactly.
+        table. Same reading as the low-income cases, also not yet confirmed by
+        EUROMOD's maintainers; the age-0 control case matches exactly.
       arithmetic:
         - expression: "31.09 * 12"
           equals: 373.08
