@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: be-family-child-benefit-base
-updated: "2026-11-18"
+updated: "2026-11-19"
 entries:
   - id: german-speaking-community-missing-bch-branch
     concept: be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount
@@ -9,29 +9,28 @@ entries:
     kind: amount_difference
     disposition: upstream_engine_gap
     display:
-      title: "Region code outside EUROMOD's coding: German-speaking Community children"
+      title: "Region code outside EUROMOD's Belgian coding: German-speaking Community children"
       cause: comparison_setup
     evidence:
       mechanism: >-
         EUROMOD returned 0 because this comparison coded the German-speaking
         Community households as region 4 (drgn1=4), a value EUROMOD's data
-        codebook never assigns and BE_2025 never tests. The J2.0 codebook
-        derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3
-        to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3
-        Wallonia, and its child-benefit conditions test only those three
+        codebook never assigns for Belgium and BE_2025 never tests. The J2.0
+        codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2
+        to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders
+        and 3 Wallonia, and its child-benefit conditions test only those three
         values, so a household coded 4 meets none of them. BE_2025 holds no
-        child-benefit rules of the Community's own. EUROMOD's Belgian
-        parameter file gives the Walloon arrondissements codes in the 300
-        series and codes the German-speaking part of the Verviers
-        arrondissement 335, though no BE_2025 policy uses these codes. Axiom
-        pays the Community decree amounts: the Article 8 base of 157 EUR a
-        month plus the Article 117 paragraph 4 annual supplement of 62.55 EUR
-        for 2025. The Brussels, Flanders and Wallonia cases in the same suite
-        match within the comparison's tolerance (1 EUR or 0.1 percent,
-        whichever is larger). From BE_2025's conditions we infer that a
-        household coded drgn1=3 would get EUROMOD's Walloon amounts, so the
-        comparison would set Axiom's Community rule against them; this
-        comparison has not run those cases.
+        child-benefit rules of the Community's own. EUROMOD's Belgian parameter
+        file gives the Walloon arrondissements codes in the 300 series and
+        codes the German-speaking part of the Verviers arrondissement 335,
+        though no BE_2025 policy uses these codes. Axiom pays the Community
+        decree amounts: the Article 8 base of 157 EUR a month plus the Article
+        117 paragraph 4 annual supplement of 62.55 EUR for 2025. The Brussels,
+        Flanders and Wallonia cases in the same suite match within the
+        comparison's tolerance (1 EUR or 0.1 percent, whichever is larger).
+        From BE_2025's conditions we infer that a household coded drgn1=3 would
+        get EUROMOD's Walloon amounts, so the comparison would set Axiom's
+        Community rule against them; this comparison has not run those cases.
       arithmetic:
         - expression: "157 * 12 + 62.55"
           equals: 1946.55

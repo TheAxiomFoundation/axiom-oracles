@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: be-family-birth-allowance
-updated: "2026-11-18"
+updated: "2026-11-19"
 entries:
   - id: german-speaking-community-missing-bchba-branch
     concept: be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount
@@ -8,18 +8,18 @@ entries:
     kind: amount_difference
     disposition: upstream_engine_gap
     display:
-      title: "Region code outside EUROMOD's coding: German-speaking Community newborn"
+      title: "Region code outside EUROMOD's Belgian coding: German-speaking Community newborn"
       cause: comparison_setup
     evidence:
       mechanism: >-
         EUROMOD returned 0 because this comparison coded the German-speaking
         Community household as region 4 (drgn1=4), a value EUROMOD's data
-        codebook never assigns and BE_2025 never tests. The J2.0 codebook
-        derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3
-        to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3
-        Wallonia, and its birth-allowance conditions test only those three
-        values, so a household coded 4 meets none of them. BE_2025 holds no
-        birth-allowance rules of the Community's own. EUROMOD's Belgian
+        codebook never assigns for Belgium and BE_2025 never tests. The J2.0
+        codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2
+        to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders
+        and 3 Wallonia, and its birth-allowance conditions test only those
+        three values, so a household coded 4 meets none of them. BE_2025 holds
+        no birth-allowance rules of the Community's own. EUROMOD's Belgian
         parameter file gives the Walloon arrondissements codes in the 300
         series and codes the German-speaking part of the Verviers
         arrondissement 335, though no BE_2025 policy uses these codes. Axiom
