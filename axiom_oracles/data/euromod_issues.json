@@ -520,7 +520,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_region_scope_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
-      "summary": "This comparison coded German-speaking Community rows as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and BE_2025 never tests. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bch_be tests only those values, so these rows got zero bch_s. BE_2025 holds no child-benefit rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community household coded drgn1=3 would get Walloon amounts. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 8 did when filed. Our 17 November 2026 comment on issue 8 corrects that and asks whether BE_2025 means to model the Community's own family benefits.",
+      "summary": "This comparison coded German-speaking Community rows as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and that BE_2025's family-benefit policies bch_be and bchba_be never test. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bch_be tests only those values, so these rows got zero bch_s. BE_2025 holds no child-benefit rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community household coded drgn1=3 would get Walloon amounts. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 8 did when filed. Our 17 November 2026 comment on issue 8 corrects that and asks whether BE_2025 means to model the Community's own family benefits.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -593,7 +593,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_region_scope_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
-      "summary": "This comparison coded the German-speaking Community newborn as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and BE_2025 never tests. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bchba_be tests only those values, so the row got zero bchba_s. BE_2025 holds no birth-allowance rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community newborn coded drgn1=3 would get the Walloon birth allowance. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 13 did when filed. Our 17 November 2026 comment on issue 13 corrects that, and we closed the issue.",
+      "summary": "This comparison coded the German-speaking Community newborn as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and that BE_2025's family-benefit policies bch_be and bchba_be never test. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bchba_be tests only those values, so the row got zero bchba_s. BE_2025 holds no birth-allowance rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community newborn coded drgn1=3 would get the Walloon birth allowance. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 13 did when filed. Our 17 November 2026 comment on issue 13 corrects that, and we closed the issue.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -613,9 +613,9 @@
           "residual": -1376.16
         },
         "control_regions": {
-          "drgn1_1_brussels": "matches bchba_s exactly",
-          "drgn1_2_flanders": "matches bchba_s exactly",
-          "drgn1_3_wallonia": "matches bchba_s exactly"
+          "drgn1_1_brussels": "matches bchba_s within the comparison's tolerance",
+          "drgn1_2_flanders": "matches bchba_s within the comparison's tolerance",
+          "drgn1_3_wallonia": "matches bchba_s within the comparison's tolerance"
         }
       },
       "euromod_xml_evidence": {

@@ -14,7 +14,8 @@ entries:
       mechanism: >-
         EUROMOD returned 0 because this comparison coded the German-speaking
         Community household as region 4 (drgn1=4), a value EUROMOD's data
-        codebook never assigns for Belgium and BE_2025 never tests. The J2.0
+        codebook never assigns for Belgium and that BE_2025's family-benefit
+        policies bch_be and bchba_be never test. The J2.0
         codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2
         to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders
         and 3 Wallonia, and its birth-allowance conditions test only those
