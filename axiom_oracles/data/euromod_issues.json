@@ -408,7 +408,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_transition_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/9",
-      "summary": "The Belgium BE_2025 child-benefit policy bch_be appears to apply the 2025-indexed Walloon Decree Article 13 social supplement to pre-2020 Walloon children. In low-income pre-2020 cases it also appears to retain the legacy LGAF supplement path, so the indexed decree supplement is cumulated on top of LGAF transition amounts contrary to the statutory no-cumulation rule.",
+      "summary": "By our reading, the Belgium BE_2025 child-benefit policy bch_be adds the 2025-indexed Walloon Decree Article 13 social supplement to the LGAF transition amounts for pre-2020 Walloon children, which Walloon Articles 120, 123 and 128 rule out. Each of the six residuals equals that monthly supplement times 12. EUROMOD's maintainers have not yet confirmed this reading.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -508,7 +508,7 @@
         "article_13_amount_surface_note": "The residual notes quote the applied 2025 indexed Article 13 amounts, 68.39 and 31.09 EUR/month, from child_benefit_base_2025.yaml and the AVIQ 2025 amount table. The raw Walloon Decree Article 13 amounts encoded in be-wal/statutes/family_benefits/amounts.yaml are 55 and 25 EUR/month before indexation."
       },
       "workaround": {
-        "description": "Keep the six pre-2020 Walloon child-benefit residuals visible in the household-level oracle report and do not alter RuleSpec away from the Walloon transition and no-cumulation provisions while the upstream EUROMOD issue is open. Treat the residual magnitudes as the 2025-indexed Article 13 values from child_benefit_base_2025.yaml, not the raw unindexed Article 13 decree amounts."
+        "description": "Keep the six pre-2020 Walloon child-benefit residuals visible in the household-level oracle report and do not alter RuleSpec away from the Walloon transition and no-cumulation provisions while issue 9 waits for an answer from EUROMOD's maintainers. Treat the residual magnitudes as the 2025-indexed Article 13 values from child_benefit_base_2025.yaml, not the raw unindexed Article 13 decree amounts."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
@@ -520,7 +520,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_region_scope_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/8",
-      "summary": "The Belgium BE_2025 child-benefit policy bch_be returns zero bch_s for synthetic German-speaking Community rows coded as drgn1=4, while the upstream German-speaking Community decree establishes nonzero base child benefit and annual-supplement amounts.",
+      "summary": "This comparison coded German-speaking Community rows as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and that BE_2025's family-benefit policies bch_be and bchba_be never test. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bch_be tests only those values, so these rows got zero bch_s. BE_2025 holds no child-benefit rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community household coded drgn1=3 would get Walloon amounts. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 8 did when filed. Our 17 November 2026 comment on issue 8 corrects that and asks whether BE_2025 means to model the Community's own family benefits.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -581,7 +581,7 @@
         "article_117_3_index_freeze": "No family-benefit adaptation for 2025 through 2027; skipped adjustments are not carried into later indexation."
       },
       "workaround": {
-        "description": "Keep German-speaking Community child-benefit statutory RuleSpec outputs separate from exact EUROMOD parity until BE_2025 documents the supported DG regional coding or implements the DG bch_be branch."
+        "description": "Re-run these cases with drgn1=3. We infer, without having run it, that EUROMOD will then pay Walloon amounts; keep any difference from Axiom's German-speaking Community rule separate from exact EUROMOD parity."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
@@ -593,7 +593,7 @@
       "status": "upstream_filed",
       "classification": "euromod_model_region_scope_issue",
       "upstream_url": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/13",
-      "summary": "The Belgium BE_2025 birth-allowance policy bchba_be returns zero bchba_s for a synthetic German-speaking Community newborn row coded as drgn1=4, while the upstream German-speaking Community decree and official amount guidance establish a nonzero birth premium.",
+      "summary": "This comparison coded the German-speaking Community newborn as drgn1=4, a value EUROMOD's data codebook never assigns for Belgium and that BE_2025's family-benefit policies bch_be and bchba_be never test. The J2.0 codebook derives drgn1 from the SILC NUTS-1 code db040 (BE1 to 1, BE2 to 2, BE3 to 3), BE_2025's own conditions name 1 Brussels, 2 Flanders and 3 Wallonia, and its bchba_be tests only those values, so the row got zero bchba_s. BE_2025 holds no birth-allowance rules of the Community's own. EUROMOD's Belgian parameter file gives the Walloon arrondissements codes in the 300 series and codes the German-speaking part of the Verviers arrondissement 335, though no BE_2025 policy uses these codes. From BE_2025's conditions we infer, without having run it, that a Community newborn coded drgn1=3 would get the Walloon birth allowance. As first written in July 2026, this entry read the zero as a missing EUROMOD branch for a Community code, as issue 13 did when filed. Our 17 November 2026 comment on issue 13 corrects that, and we closed the issue.",
       "observed_with": {
         "model_root": "EUROMOD_RELEASES_J2.0+",
         "country": "BE",
@@ -613,9 +613,9 @@
           "residual": -1376.16
         },
         "control_regions": {
-          "drgn1_1_brussels": "matches bchba_s exactly",
-          "drgn1_2_flanders": "matches bchba_s exactly",
-          "drgn1_3_wallonia": "matches bchba_s exactly"
+          "drgn1_1_brussels": "matches bchba_s within the comparison's tolerance",
+          "drgn1_2_flanders": "matches bchba_s within the comparison's tolerance",
+          "drgn1_3_wallonia": "matches bchba_s within the comparison's tolerance"
         }
       },
       "euromod_xml_evidence": {
@@ -629,7 +629,7 @@
           "drgn1=3 & dag=0 & sin01_s = nDepChildrenInTu",
           "drgn1=3 & dag=0 & sin01_s < nDepChildrenInTu"
         ],
-        "missing_condition": "No equivalent drgn1=4 newborn branch was found in bchba_be."
+        "missing_condition": "No bchba_be condition tests drgn1=4, a value EUROMOD's data codebook never assigns for Belgium."
       },
       "statutory_evidence": {
         "rulespec_module": "be/statutes/family_benefits/birth_allowance.yaml",
@@ -644,7 +644,7 @@
         "official_current_birth_premium": "1376.16 EUR per child"
       },
       "workaround": {
-        "description": "Keep the German-speaking Community birth-allowance residual visible in the household-level oracle report and do not alter RuleSpec away from the DG statute and official amount surface while the upstream EUROMOD issue is open."
+        "description": "Re-run the case with drgn1=3. BE_2025 sets the Walloon birth allowance at 1367.74 EUR, so we infer, without having run it, a difference from Axiom's 1376.16 EUR premium; keep it visible in the household-level report."
       },
       "oracle_scope": "household_level",
       "counts_as_axiom_gap": false
