@@ -166,7 +166,15 @@ def _module_text(marker: str) -> str:
 def commit(root: Path) -> str:
     def git(*args: str) -> str:
         return subprocess.run(
-            ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@example.invalid", *args],
+            [
+                "git",
+                "-C",
+                str(root),
+                # No background repacking: these repositories are copied.
+                "-c", "gc.auto=0", "-c", "maintenance.auto=false",
+                "-c", "user.name=t", "-c", "user.email=t@example.invalid",
+                *args,
+            ],  # fmt: skip
             check=True,
             capture_output=True,
             text=True,
