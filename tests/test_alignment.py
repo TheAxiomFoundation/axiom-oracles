@@ -1781,6 +1781,63 @@ def test_script_suites_from_the_campaign_contract_and_the_mapping_table(tmp_path
     assert "zz-income-tax-populace" not in again and "yy-income-tax-populace" in again
 
 
+def test_configuration_errors_name_their_cause(world):
+    """Several configuration faults end in the same error cause through a
+    later check; each must be reported by its own check."""
+
+    def detail(mutate) -> str:
+        report = world(M_UNREACHED, registry_edit=_coverage_edit(mutate))
+        assert_error(report, "coverage_declarations_unreadable")
+        return report["error"]["detail"]
+
+    assert "duplicate id" in detail(
+        lambda doc, reg: doc["declarations"].append(dict(doc["declarations"][0]))
+    )
+    assert "matches declarations ['zz-bridge', 'again']" in detail(
+        lambda doc, reg: doc["declarations"].append(
+            {"id": "again", "match": {"suites": ["zz-b*"]}, "roots": ["us/statutes/9/800.yaml"]}
+        )
+    )
+
+    def absent_script(doc, reg):
+        doc["script_suites"] = [
+            {"id": "s", "script": "scripts/absent.py", "suites": ["zz-s"], "roots": ["us/**"]}
+        ]
+
+    assert "script 'scripts/absent.py' does not exist" in detail(absent_script)
+
+
+def test_declaration_source_narrows_the_match(world):
+    """A declaration for the rows of one manifest does not match a suite file
+    of the same name pattern."""
+    edit = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0].update(
+            match={"suites": ["zz-bridge"], "source": "comparisons/some-manifest.yaml"}
+        )
+    )
+    report = world(M_ROOT, registry_edit=edit)
+    assert_error(report, "reference_unbound")
+    assert "zz-bridge" in report["error"]["detail"]
+
+
+def test_export_is_checked_against_the_resolved_commit(tmp_path, monkeypatch):
+    built = World(tmp_path / "w").build(M_BASE)
+    real = alignment.read_checkout
+
+    def elsewhere(root, side):
+        checkout = real(root, side)
+        return alignment.Checkout(checkout.root, "0" * 40, checkout.tree, checkout.blobs)
+
+    monkeypatch.setattr(alignment, "read_checkout", elsewhere)
+    with pytest.raises(AlignmentError) as excinfo:
+        export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    assert excinfo.value.cause == "checkout_failed"
+    monkeypatch.setattr(alignment, "read_checkout", real)
+    with pytest.raises(AlignmentError) as excinfo:
+        export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    assert "already exists" in excinfo.value.detail
+
+
 def test_stale_coverage_lists_every_glob_without_a_file(tmp_path):
     built = World(tmp_path / "w").build(M_BASE)
     checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
