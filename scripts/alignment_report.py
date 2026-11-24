@@ -216,6 +216,11 @@ def main(argv: list[str] | None = None) -> int:
         jobs=args.jobs,
         toolchain=toolchain,
     )
+    if setup_error is None and isinstance(compiler, ComposeEngineCompiler):
+        try:
+            compiler.prepare()
+        except AlignmentError as exc:
+            setup_error = exc
     if setup_error is not None:
         report = {
             "schema": "axiom_oracles.alignment_report.v1",
@@ -225,6 +230,8 @@ def main(argv: list[str] | None = None) -> int:
         }
     else:
         report = build_report(inputs)
+    if isinstance(compiler, ComposeEngineCompiler):
+        compiler.close()
     report["runtime_seconds"] = round(time.monotonic() - started, 1)
 
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"

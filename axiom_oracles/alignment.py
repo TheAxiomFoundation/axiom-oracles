@@ -317,6 +317,13 @@ class ComposeEngineCompiler:
         self.timeout = timeout
         self.cwd = cwd
         self._staged: dict[str, Path] = {}
+        self._stage_dirs: list[Path] = []
+
+    def close(self) -> None:
+        for stage_dir in self._stage_dirs:
+            shutil.rmtree(stage_dir, ignore_errors=True)
+        self._stage_dirs.clear()
+        self._staged.clear()
 
     def prepare(self) -> None:
         from axiom_oracles.engine_compat import stage_pure_root
@@ -331,9 +338,11 @@ class ComposeEngineCompiler:
                 if child.is_dir() and JURISDICTION_DIR.match(child.name)
             }
             try:
-                self._staged[side] = stage_pure_root(
-                    root, jurisdictions, self.work_dir / "staged" / side
-                )
+                # Staged under the system temp directory: the engine refuses
+                # a root that sits inside another repository's work tree.
+                stage_dir = Path(tempfile.mkdtemp(prefix=f"alignment-roots-{side}."))
+                self._stage_dirs.append(stage_dir)
+                self._staged[side] = stage_pure_root(root, jurisdictions, stage_dir)
             except ValueError as exc:
                 raise AlignmentError("rulespec_root_not_canonical", f"{side}: {exc}") from exc
 
@@ -341,7 +350,7 @@ class ComposeEngineCompiler:
         from axiom_oracles.engine_compat import compile_with_engine
 
         if side not in self._staged:
-            self.prepare()
+            raise AlignmentError("toolchain_missing", "prepare() was not called")
         slug = re.sub(r"[^A-Za-z0-9]+", "-", program.key).strip("-")
         out_dir = self.work_dir / "compiled" / side
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -542,15 +551,37 @@ def compile_programs(
     """
     tasks = [(side, program) for side in SIDES for program in programs.get(side, [])]
 
-    def one(task: tuple[str, ProgramFile]) -> CompiledProgram:
+    def one(task: tuple[str, ProgramFile]) -> CompiledProgram | AlignmentError:
         side, program = task
-        return index_compiled(program, side, compiler.compile(program, side))
+        try:
+            return index_compiled(program, side, compiler.compile(program, side))
+        except AlignmentError as exc:
+            return exc
 
     compiled: dict[str, dict[str, CompiledProgram]] = {side: {} for side in SIDES}
+    failures: list[AlignmentError] = []
     if tasks:
         with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
             for item in pool.map(one, tasks):
-                compiled[item.side][item.program.key] = item
+                if isinstance(item, AlignmentError):
+                    failures.append(item)
+                else:
+                    compiled[item.side][item.program.key] = item
+    if failures:
+        causes = {failure.cause for failure in failures}
+        raise AlignmentError(
+            causes.pop() if len(causes) == 1 else "program_compile_failed",
+            f"{len(failures)} of {len(tasks)} program compiles failed: "
+            + " | ".join(failure.detail for failure in failures),
+        )
+    return _count_check(programs, compiled)
+
+
+def _count_check(
+    programs: Mapping[str, Sequence[ProgramFile]],
+    compiled: dict[str, dict[str, CompiledProgram]],
+) -> tuple[dict[str, dict[str, CompiledProgram]], dict[str, dict[str, int]]]:
+    """Program files found against programs compiled, per side."""
     counts = {}
     for side in SIDES:
         found = len(programs.get(side, []))
