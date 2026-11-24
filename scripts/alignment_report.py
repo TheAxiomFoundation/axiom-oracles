@@ -48,6 +48,8 @@ from axiom_oracles.alignment import (  # noqa: E402
     RunComparisonExecutor,
     build_report,
     exit_code,
+    git_dirty,
+    git_head,
     materialize_checkout,
     sha256_file,
     temporary_work_dir,
@@ -76,6 +78,23 @@ class FixtureCompiler:
             raise AlignmentError(
                 "program_compile_failed", f"artifact for {program.key} ({side}): {exc}"
             ) from exc
+
+
+def compose_identity(binary: Path) -> dict[str, str | None]:
+    """What identifies an ``axiom-compose`` install: the launcher's bytes do
+    not change with the package, so the installed package is named too."""
+    identity: dict[str, str | None] = {"launcher_sha256": sha256_file(binary)}
+    venv = binary.resolve().parent.parent if binary.exists() else None
+    if venv is None:
+        return identity
+    source = git_head(venv.parent)
+    if source is not None:
+        identity["source_commit"] = source
+        identity["source_dirty"] = str(git_dirty(venv.parent))
+    records = sorted(venv.glob("lib/python*/site-packages/axiom_compose*.dist-info/RECORD"))
+    if records:
+        identity["dist_record_sha256"] = sha256_file(records[0])
+    return identity
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -197,7 +216,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         toolchain = {
             "compiler": "axiom-compose+axiom-rules-engine",
-            "compose_binary_sha256": sha256_file(args.compose_binary),
+            "compose": compose_identity(args.compose_binary),
             "engine_binary_sha256": sha256_file(args.engine_binary),
         }
 

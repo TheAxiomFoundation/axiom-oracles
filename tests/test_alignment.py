@@ -489,6 +489,34 @@ def test_persistent_cache_is_bound_to_inputs_and_toolchain(tmp_path):
     assert run("toolchain-a") == 1
 
 
+def test_cache_follows_what_a_compiled_module_imports(tmp_path):
+    """A module that contributes no rule to the artifact still feeds the
+    compile when a compiled module imports it."""
+    from axiom_oracles.alignment import CompileCache, TreeIndex, compile_programs, discover_programs
+
+    root = make_tree(
+        tmp_path / "rulespec-us",
+        edits={
+            M_NOSUITE: "imports:\n  - us:statutes/9/800\n",
+            M_UNBOUND_SUITE: "imports:\n  - us-zz:policies/manual/page#rule\n",
+        },
+    )
+    programs = {"base": discover_programs(root, "rulespec-us"), "candidate": []}
+    cache = CompileCache()
+
+    def run():
+        compiler = CountingCompiler(artifacts())
+        compile_programs(programs, compiler, trees={"base": TreeIndex(root)}, cache=cache)
+        return sorted(key for key, _ in compiler.calls)
+
+    assert len(run()) == 3
+    assert run() == []
+    _write(root / M_UNREACHED, _module_text("edited two imports away"))
+    assert run() == [P_NOSUITE]
+    _write(root / "us/statutes/9/100.test.yaml", "cases: [1]\n")
+    assert run() == []
+
+
 def test_tree_diff_and_explicit_list_agree(world):
     assert world(M_BASE)["reach"] == world(M_BASE, explicit=True)["reach"]
 
