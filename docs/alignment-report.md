@@ -89,6 +89,9 @@ The suites bound to a reaching program, each marked `runnable` or `manual`.
   `runnable`.
 * `compared_concepts_reach_change` says whether the suite's own concepts, not
   only its program's outputs, depend on the change.
+* A changed `<module>.test.yaml` file has no reach through a program, but a
+  harness can read it (the SNAP QC replay takes its case template from one),
+  so a suite or harness file that names that test file by path counts for it.
 * Any other suite with no program binding is expected when its own file names
   a changed module, or a module that names one (`binding: module_reference`).
 

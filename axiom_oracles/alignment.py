@@ -84,7 +84,7 @@ HARNESS_SCAN_SUFFIXES = (".py", ".yaml", ".yml", ".json")
 #: ``us-co/policies/cdhs/snap/x.yaml`` — a module named by its file path.
 MODULE_PATH_LITERAL = re.compile(
     r"(?<![A-Za-z0-9_.-])([a-z]{2}(?:-[a-z0-9]+)?)/"
-    r"((?:statutes|regulations|policies)/[A-Za-z0-9_.\-/]*?[A-Za-z0-9_])(?:\.test)?\.yaml"
+    r"((?:statutes|regulations|policies)/[A-Za-z0-9_.\-/]*?[A-Za-z0-9_])(\.test)?\.yaml"
 )
 #: Adjacent string literals split over two source lines.
 _SPLIT_LITERAL = re.compile(r"""["']\s*\n\s*["']""")
@@ -209,6 +209,14 @@ def classify_path(relpath: str) -> tuple[str, str | None]:
         jurisdiction, rest = relpath.split("/", 1)
         return "module", f"{jurisdiction}:{rest[: -len('.yaml')]}"
     return "other", None
+
+
+def companion_module(relpath: str) -> str | None:
+    """The module a ``<module>.test.yaml`` file belongs to, else ``None``."""
+    if not relpath.endswith(".test.yaml"):
+        return None
+    kind, module = classify_path(relpath[: -len(".test.yaml")] + ".yaml")
+    return module if kind == "module" else None
 
 
 def _tree_digests(root: Path) -> dict[str, str]:
@@ -825,6 +833,8 @@ class Suite:
     binding: str
     concepts: tuple[str, ...]
     module_literals: frozenset[str] = field(default_factory=frozenset)
+    #: Modules whose companion test file the suite (or its runner source) reads.
+    test_literals: frozenset[str] = field(default_factory=frozenset)
 
     @property
     def mode(self) -> str:
@@ -850,6 +860,19 @@ def _program_key_from_ref(ref: str) -> tuple[str | None, str]:
         if owner in ("axiom-oracles", ""):
             return f"{ORIGIN_REGISTRY}:{relpath}", "axiom_program"
     return None, "foreign_program"
+
+
+def companion_test_literals(text: str) -> set[str]:
+    """Modules whose companion ``.test.yaml`` file the text names by path."""
+    found: set[str] = set()
+    for source in (text, _SPLIT_LITERAL.sub("", text)):
+        found |= {
+            f"{m.group(1)}:{m.group(2)}"
+            for m in MODULE_PATH_LITERAL.finditer(source)
+            if m.group(3)
+        }
+    return found
+
 
 
 def module_literals(text: str, *, paths: bool = False) -> set[str]:
@@ -906,20 +929,25 @@ def load_suites(registry_root: Path) -> list[Suite]:
         if params.get("axiom_program"):
             program_key, binding = _program_key_from_ref(params["axiom_program"])
         literals = module_literals(text, paths=True)
+        tests = companion_test_literals(text)
         jurisdiction = params.get("jurisdiction")
         if binding == "unbound" and runner["type"] in RUNNER_SOURCES:
             binding = "runner_source_reference"
             for template in RUNNER_SOURCES[runner["type"]]:
                 source = Path(registry_root) / template.format(jurisdiction=jurisdiction)
                 try:
-                    named = module_literals(source.read_text(), paths=True)
+                    source_text = source.read_text()
                 except FileNotFoundError:
                     continue
                 except (OSError, UnicodeDecodeError) as exc:
                     raise AlignmentError("registry_unreadable", f"{source.name}: {exc}") from exc
+                named = module_literals(source_text, paths=True)
+                named_tests = companion_test_literals(source_text)
                 if isinstance(jurisdiction, str):
                     named = {m for m in named if m.split(":", 1)[0] == jurisdiction}
+                    named_tests = {m for m in named_tests if m.split(":", 1)[0] == jurisdiction}
                 literals |= named
+                tests |= named_tests
         concepts = params.get("concepts") or []
         if not isinstance(concepts, list) or not all(isinstance(c, str) for c in concepts):
             raise AlignmentError("registry_unreadable", f"{path.name}: concepts not a string list")
@@ -932,6 +960,7 @@ def load_suites(registry_root: Path) -> list[Suite]:
             binding=binding,
             concepts=tuple(concepts),
             module_literals=frozenset(literals),
+            test_literals=frozenset(tests),
         )
     if not suites:
         raise AlignmentError("registry_unreadable", "comparisons/ holds no runner-backed suite")
@@ -939,13 +968,14 @@ def load_suites(registry_root: Path) -> list[Suite]:
 
 
 def harness_module_references(
-    registry_root: Path, *, skip_files: Iterable[str] = ()
+    registry_root: Path, *, skip_files: Iterable[str] = (), test_files: bool = False
 ) -> dict[str, list[str]]:
     """``module id -> registry files`` that name it outside ``programs/``.
 
     Bridges and overlays compile RuleSpec modules without a program file. A
     module named there can be exercised by a suite this report cannot bind to
     a program, so the report must not call a change to it ``no_reference``.
+    With ``test_files`` only mentions of a module's ``.test.yaml`` file count.
     """
     skip = set(skip_files)
     references: dict[str, set[str]] = {}
@@ -964,7 +994,8 @@ def harness_module_references(
                 text = path.read_text()
             except (OSError, UnicodeDecodeError):
                 continue
-            for module in module_literals(text, paths=True):
+            named = companion_test_literals(text) if test_files else module_literals(text, paths=True)
+            for module in named:
                 references.setdefault(module, set()).add(rel)
     return {module: sorted(files) for module, files in sorted(references.items())}
 
@@ -1087,6 +1118,7 @@ def expected_suites(
     known_programs: set[str],
     suite_concept_reach: Mapping[str, Mapping[str, set[str]]],
     referenced_modules: set[str],
+    changed_test_modules: set[str] = frozenset(),
 ) -> list[dict[str, Any]]:
     """Suites bound to a reaching program, plus unbound suites whose own file
     names a changed module (or a module that imports one)."""
@@ -1114,7 +1146,10 @@ def expected_suites(
             if own_reach.get("unresolved_concepts"):
                 entry["unresolved_concepts"] = sorted(own_reach["unresolved_concepts"])
         elif suite.program_key is None or suite.program_key not in known_programs:
-            named = sorted(suite.module_literals & referenced_modules)
+            named = sorted(
+                (suite.module_literals & referenced_modules)
+                | (suite.test_literals & changed_test_modules)
+            )
             if named:
                 entry = {
                     "suite": suite.name,
@@ -1593,7 +1628,15 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
     referenced = trees["base"].referencing(changed_modules) | trees["candidate"].referencing(
         changed_modules
     )
-    expected = expected_suites(reach, suites, known_programs, suite_reach, referenced)
+    # A harness can read a module's companion test file (the SNAP QC replay
+    # takes its case template from one). Nothing imports a test file, so only
+    # a mention of that file by path counts for it.
+    test_modules = {
+        module for module in (companion_module(row["path"]) for row in reach) if module
+    }
+    expected = expected_suites(
+        reach, suites, known_programs, suite_reach, referenced, test_modules
+    )
     report["expected_suites"] = expected
     report["suites_with_missing_program"] = sorted(
         s.name
@@ -1605,6 +1648,13 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
 
     harness = harness_module_references(registry_root, skip_files={s.file for s in suites})
     hits = {module: harness[module] for module in sorted(referenced) if module in harness}
+    if test_modules:
+        harness_tests = harness_module_references(
+            registry_root, skip_files={s.file for s in suites}, test_files=True
+        )
+        for module in sorted(test_modules):
+            if module in harness_tests:
+                hits[module] = sorted(set(hits.get(module, [])) | set(harness_tests[module]))
     report["harness_references"] = {
         "modules_checked": len(referenced),
         "hits": hits,

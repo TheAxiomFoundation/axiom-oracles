@@ -383,6 +383,37 @@ def test_companion_test_file_has_no_reach_of_its_own(world):
     assert report["status"] == "no_reference"
 
 
+def test_companion_test_file_a_harness_reads_is_not_no_reference(world):
+    """The SNAP QC replay takes its case template from a module's test file."""
+
+    def bridge(registry: Path) -> None:
+        _write(
+            registry / "scripts/replay.py",
+            'TEMPLATE = "us/statutes/9/100.test.yaml"\n',
+        )
+
+    report = world("us/statutes/9/100.test.yaml", registry_edit=bridge)
+    assert_error(report, "reach_incomplete_harness_reference")
+
+    def unbound_suite(registry: Path) -> None:
+        _write(
+            registry / "comparisons/zz-template.yaml",
+            _suite_yaml("zz-template", ci="manual", program=None)
+            + "# template: us/statutes/9/100.test.yaml\n",
+        )
+
+    report = world("us/statutes/9/100.test.yaml", registry_edit=unbound_suite)
+    assert report["status"] == "reference_not_runnable"
+    assert report["manual_suites"] == ["zz-template"]
+
+    # Naming the module, not its test file, does not count for a test-only change.
+    def module_only(registry: Path) -> None:
+        _write(registry / "scripts/replay.py", 'PROGRAM = "us/statutes/9/100.yaml"\n')
+
+    report = world("us/statutes/9/100.test.yaml", registry_edit=module_only)
+    assert report["status"] == "no_reference"
+
+
 def test_reach_on_one_side_only_still_counts(world):
     """A candidate that unwires a module was still reached on base."""
 
