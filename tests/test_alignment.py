@@ -958,6 +958,24 @@ def test_exported_file_that_is_not_its_blob_is_an_error(tmp_path):
     assert M_MANUAL in excinfo.value.detail
 
 
+def test_exported_file_replaced_by_a_link_is_an_error(tmp_path):
+    """A link to a file with the same bytes reads the same, and is still not
+    the file the commit holds."""
+    built = World(tmp_path / "w").build(M_BASE)
+    checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    root = checkout.root
+    twin = tmp_path / "twin.yaml"
+    twin.write_bytes((root / M_MANUAL).read_bytes())
+    _git(root, "update-index", "--assume-unchanged", M_MANUAL)
+    (root / M_MANUAL).unlink()
+    os.symlink(twin, root / M_MANUAL)
+    assert _git(root, "status", "--porcelain") == ""
+    with pytest.raises(AlignmentError) as excinfo:
+        read_checkout(root, "base")
+    assert excinfo.value.cause == "rulespec_tree_not_byte_exact"
+    assert "is a link on disk" in excinfo.value.detail
+
+
 def test_blob_id_is_gits():
     assert alignment._blob_id(b"hello\n", 40) == "ce013625030ba8dba906f756967f9e9ca394464a"
     assert len(alignment._blob_id(b"hello\n", 64)) == 64
@@ -2727,6 +2745,19 @@ def test_suites_are_run_only_from_a_clean_registry(tmp_path):
     (built.registry / "dispositions/zz-demo.yaml").unlink()
     _write(built.registry / "comparisons/zz-demo.yaml", (built.registry / "comparisons/zz-demo.yaml").read_text() + "# edited\n")
     assert_error(built.report(executor=FakeExecutor(base, candidate)), "registry_dirty")
+
+
+def test_supplied_reports_are_read_with_a_dirty_registry(tmp_path):
+    """Only a run is refused from a dirty registry. Supplied reports are
+    unverified whatever the registry holds, and the dirt is recorded."""
+    built = World(tmp_path / "w").build(M_BENEFIT)
+    base = suite_report(ALL_MATCH, built.commits["base"])
+    candidate = suite_report(ALL_MATCH, built.commits["candidate"])
+    supplied = _supply(tmp_path / "ok", built, base, candidate)
+    _write(built.registry / "notes.txt", "untracked\n")
+    report = built.report(executor=alignment.ReportsDirExecutor(supplied, built.registry))
+    assert report["status"] == "aligned_unverified"
+    assert report["provenance"]["registry_dirty"] is True
 
 
 def test_supplied_report_is_not_read_before_the_manifest_is_checked(tmp_path):
