@@ -765,12 +765,34 @@ def test_identical_trees_are_an_error(world):
     assert_error(world(None), "no_changed_files")
 
 
-def test_suite_concept_missing_from_its_program_is_an_error(world):
+def test_unresolved_suite_concept_widens_reach_to_every_rule(world):
+    """A concept the walk cannot place makes every rule of the program count
+    as compared, so an orphan module is not called ``no_reference``."""
+
     def edit(registry: Path) -> None:
         path = registry / "comparisons/zz-demo.yaml"
-        path.write_text(path.read_text().replace(CONCEPT, "us:statutes/9/100#absent"))
+        path.write_text(path.read_text().replace(CONCEPT, "us:statutes/9/100#mapped_elsewhere"))
 
-    assert_error(world(M_UNREACHED, registry_edit=edit), "suite_concept_not_in_program")
+    assert world(M_ORPHAN)["status"] == "no_reference"
+    report = world(M_ORPHAN, registry_edit=edit)
+    assert report["status"] == "reference_not_executed"
+    hit = report["reach"][0]["reaching_programs"][0]
+    assert hit["via"] == "every_rule_unresolved_suite_concept"
+    (suite,) = report["expected_suites"]
+    assert suite["unresolved_concepts"] == ["us:statutes/9/100#mapped_elsewhere"]
+    # A module in no program stays unreached.
+    assert world(M_UNREACHED, registry_edit=edit)["status"] == "no_reference"
+
+
+def test_count_check_compares_files_found_with_programs_compiled(tmp_path):
+    root = make_tree(tmp_path / "rulespec-us")
+    programs = {"base": alignment.discover_programs(root, "rulespec-us"), "candidate": []}
+    compiled, counts = alignment.compile_programs(programs, FakeCompiler(artifacts()))
+    assert counts["base"]["program_files_found"] == counts["base"]["programs_compiled"] == 3
+    del compiled["base"][P_DEMO]
+    with pytest.raises(AlignmentError) as excinfo:
+        alignment._count_check(programs, compiled)
+    assert excinfo.value.cause == "program_count_mismatch"
 
 
 def test_harness_reference_blocks_no_reference(world):
@@ -787,8 +809,10 @@ def test_harness_reference_through_an_importing_module(world):
     def edit(candidate: Path) -> None:
         _write(candidate / M_HARNESS, "imports:\n  - us-zz:policies/manual/page\n")
 
-    report = world(M_UNREACHED, candidate_edit=edit)
+    # Only the page is listed as changed; the bridge-named module imports it.
+    report = world(M_UNREACHED, candidate_edit=edit, explicit=True)
     assert_error(report, "reach_incomplete_harness_reference")
+    assert list(report["harness_references"]["hits"]) == ["us:statutes/9/900"]
 
 
 def test_internal_failure_is_an_error(world, monkeypatch):

@@ -993,6 +993,8 @@ def compute_reach(
 
     reached: dict[str, dict[str, dict[str, set[str]]]] = {side: {} for side in SIDES}
     suite_reach: dict[str, dict[str, set[str]]] = {}
+    unresolved: dict[str, set[str]] = {}
+    widened: set[str] = set()
     for side in SIDES:
         for program in programs.get(side, []):
             unit = compiled[side].get(program.key)
@@ -1015,17 +1017,21 @@ def compute_reach(
                 for concept in suite.concepts:
                     name = unit.resolve_root(concept)
                     if name is None:
-                        raise AlignmentError(
-                            "suite_concept_not_in_program",
-                            f"suite {suite.name} compares {concept!r}, which "
-                            f"{program.key} ({side}) does not define",
-                        )
+                        # The suite compares something this walk cannot place
+                        # in the program (a concept the harness maps to another
+                        # rule name). Every rule of the program then counts as
+                        # compared: wider than the truth, never narrower.
+                        unresolved.setdefault(suite.name, set()).add(concept)
+                        concept_roots = list(unit.derived_by_name)
+                        break
                     concept_roots.append(name)
                 roots.extend(concept_roots)
                 suite_reach.setdefault(suite.name, {})[side] = set(
                     unit.reached_modules(concept_roots)
                 )
             reached[side][program.key] = unit.reached_modules(roots)
+            if any(s.name in unresolved for s in suites_by_program.get(program.key, [])):
+                widened.add(program.key)
 
     rows = []
     for item in changed:
@@ -1050,7 +1056,17 @@ def compute_reach(
                     if not names:
                         continue
                     hit = hits.setdefault(
-                        key, {"program": key, "sides": [], "via": "compared_outputs", "reached": set()}
+                        key,
+                        {
+                            "program": key,
+                            "sides": [],
+                            "via": (
+                                "every_rule_unresolved_suite_concept"
+                                if key in widened
+                                else "compared_outputs"
+                            ),
+                            "reached": set(),
+                        },
                     )
                     hit["sides"].append(side)
                     hit["reached"] |= names
@@ -1060,6 +1076,8 @@ def compute_reach(
                 hit["reached"] = sorted(hit["reached"])
             row["reaching_programs"].append(hit)
         rows.append(row)
+    for name, concepts in unresolved.items():
+        suite_reach.setdefault(name, {})["unresolved_concepts"] = set(concepts)
     return rows, suite_reach
 
 
@@ -1079,8 +1097,9 @@ def expected_suites(
         entry: dict[str, Any] | None = None
         if suite.program_key and suite.program_key in reaching:
             own = set()
-            for modules in suite_concept_reach.get(suite.name, {}).values():
-                own |= modules
+            own_reach = suite_concept_reach.get(suite.name, {})
+            for side in SIDES:
+                own |= own_reach.get(side, set())
             program_changed = any(
                 hit["program"] == suite.program_key and hit["via"] == "program_file"
                 for row in reach
@@ -1092,6 +1111,8 @@ def expected_suites(
                 "program": suite.program_key,
                 "compared_concepts_reach_change": bool(own & changed_modules) or program_changed,
             }
+            if own_reach.get("unresolved_concepts"):
+                entry["unresolved_concepts"] = sorted(own_reach["unresolved_concepts"])
         elif suite.program_key is None or suite.program_key not in known_programs:
             named = sorted(suite.module_literals & referenced_modules)
             if named:
