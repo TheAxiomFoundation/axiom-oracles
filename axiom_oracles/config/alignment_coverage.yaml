@@ -1,0 +1,211 @@
+# What each comparison suite can observe of a rulespec-us tree.
+#
+# Read by axiom_oracles/alignment.py. A suite needs no entry here when the
+# report derives its coverage:
+#
+#   * `runner.parameters.axiom_program` names a program file that compiles
+#     (coverage is the dependency walk of the compiled program);
+#   * the suite replays a pinned rulespec snapshot (`rulespec_upstream_sha` +
+#     `rulespec_upstream_tree`, or `axiom_rulespec_repo_roots_revision`): it
+#     cannot observe a candidate tree;
+#   * an `axiom-oracles-compare` suite with no Axiom side;
+#   * a suite of `comparisons/parameter-oracles.yaml` (coverage is the `file`
+#     of each of its comparisons).
+#
+# Every other suite must match exactly one declaration below. A suite that
+# matches none makes every report an error (`reference_unbound`): an
+# undeclared suite could cover anything, so nothing may be called
+# `no_reference` while one exists.
+#
+# A declaration says one of:
+#
+#   reads_rulespec_us: false
+#       The harness reads no rulespec-us file.
+#   roots: [glob, ...]
+#       The module files the harness compiles directly. The suite covers them
+#       and every module they name, transitively. Write them at least as wide
+#       as the harness reads: a wider glob only names the suite more often.
+#   paths: [glob, ...]
+#       Files the harness reads as files (a case template, a directory it
+#       globs). A change to any file matching one is covered.
+#
+# Globs are relative to the rulespec-us root; `*` stays inside one path
+# segment, `**` crosses segments. `@name` expands a set. `{jurisdiction}` is
+# the suite's `jurisdiction` parameter (`us-co`); `{state}` is its `state`
+# parameter, or a manifest suite's `jurisdiction`, lower-cased (`az`).
+#
+# `sources` names the registry files a declaration was read from.
+# tests/test_alignment.py checks that every module those files name by id or
+# by path is inside the declared globs.
+
+schema: axiom_oracles.alignment_coverage.v1
+
+sets:
+  federal_tax:
+    - us/statutes/26/**
+    - us/policies/irs/**
+    - us/policies/ssa/**
+    - us/policies/income_tax/**
+  federal_snap:
+    - us/policies/usda/snap/**
+    - us/regulations/7-cfr/273/**
+    - us/statutes/7/**
+
+declarations:
+  # --- SNAP QC replay: the state composition module, the state modules the
+  # --- population bridge binds, the federal SNAP chain, and the FY2024 overlay.
+  - id: snap-qc-az
+    match: {suites: [az-snap-qc]}
+    roots:
+      - us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.yaml
+      - us-az/policies/des/faa6/**
+      - "@federal_snap"
+    paths:
+      - us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.test.yaml
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-az-snap-fy2024.yaml
+  - id: snap-qc-ca
+    match: {suites: [ca-snap-qc]}
+    roots: [us-ca/policies/cdss/snap/**, "@federal_snap"]
+    paths: [us-ca/policies/cdss/snap/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-ca-snap-fy2024.yaml
+  - id: snap-qc-co
+    match: {suites: [co-snap-qc]}
+    roots:
+      - us-co/policies/cdhs/snap/**
+      - us-co/regulations/10-ccr-2506-1/**
+      - "@federal_snap"
+    paths: [us-co/policies/cdhs/snap/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-co-snap-fy2024.yaml
+  - id: snap-qc-ga
+    match: {suites: [ga-snap-qc]}
+    roots: [us-ga/policies/dfcs/snap/**, "@federal_snap"]
+    paths: [us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-ga-snap-fy2024.yaml
+  - id: snap-qc-md
+    match: {suites: [md-snap-qc]}
+    roots: [us-md/policies/dhs/fia/snap/**, "@federal_snap"]
+    paths: [us-md/policies/dhs/fia/snap/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-md-snap-fy2024.yaml
+  - id: snap-qc-ny
+    match: {suites: [ny-snap-qc]}
+    roots:
+      - us-ny/policies/otda/snap/**
+      - us-ny/regulations/18-nycrr/387/**
+      - "@federal_snap"
+    paths: [us-ny/policies/otda/snap/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-ny-snap-fy2024.yaml
+  - id: snap-qc-tx
+    match: {suites: [tx-snap-qc]}
+    roots: [us-tx/policies/hhs/texas-works-handbook/**, "@federal_snap"]
+    paths: [us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml]
+    sources:
+      - axiom_oracles/bridges/snap_qc_compare.py
+      - axiom_oracles/bridges/snap_populace.py
+      - axiom_oracles/bridges/overlays/us-tx-snap-fy2024.yaml
+
+  # --- SNAP population comparisons run by the axiom-encode harness. That
+  # --- harness is not in this repository, so the declaration is the whole
+  # --- jurisdiction plus the federal SNAP chain.
+  - id: snap-ecps-axiom-encode
+    match: {runner_type: axiom-encode-snap-ecps-compare}
+    roots: ["{jurisdiction}/**", "@federal_snap"]
+    paths: ["{jurisdiction}/**"]
+    sources: []
+
+  # --- ABAWD boundary grid: reads the 7 CFR 273.24 companion fixture and
+  # --- evaluates that module (unpinned: each run reads rulespec-us main).
+  - id: snap-abawd-grid
+    match: {runner_type: snap-abawd-boundary-grid}
+    roots: [us/regulations/7-cfr/273/**]
+    paths: [us/regulations/7-cfr/273/**]
+    sources: [scripts/generate_snap_abawd_boundary.py]
+
+  # --- Federal income tax population comparison (axiom-encode tax harness,
+  # --- rulespec-us cloned at its head).
+  - id: federal-tax-ecps
+    match: {runner_type: axiom-encode-tax-ecps-compare}
+    roots: ["@federal_tax"]
+    sources:
+      - axiom_oracles/bridges/tax_populace.py
+      - axiom_oracles/adapters/axiom/tax_projection.py
+
+  # --- State income tax: the state's tree, plus the federal tax modules the
+  # --- state pipelines and the tax bridge read.
+  - id: state-income-tax-grid
+    match: {runner_type: state-income-tax-liability-grid}
+    roots: ["us-{state}/**", "@federal_tax"]
+    paths: ["us-{state}/**"]
+    sources: [scripts/generate_state_income_tax_liability.py]
+  - id: state-income-tax-populace
+    match: {source: comparisons/state-income-tax-populace.yaml}
+    roots: ["us-{state}/**", "@federal_tax"]
+    paths: ["us-{state}/**"]
+    sources:
+      - axiom_oracles/bridges/state_tax_populace.py
+      - axiom_oracles/bridges/state_tax_populace_runner.py
+  - id: co-state-income-tax-taxsim
+    match: {suites: [co-state-income-tax-taxsim]}
+    roots: [us-co/**, "@federal_tax"]
+    paths: [us-co/**]
+    sources: []
+
+  # --- Tariff suites: the duty spine and the generated schedule chapters,
+  # --- which the schedule campaign reads by directory glob.
+  - id: us-tariff
+    match: {runner_type: [us-tariff-grid, us-tariff-panel, us-tariff-schedule]}
+    roots: [us/policies/cbp/**, us/policies/usitc/**]
+    paths:
+      - us/policies/cbp/**
+      - us/policies/usitc/**
+      - programs/us/us-tariff-duty/**
+      - programs/us/us-tariff-schedule/**
+    sources:
+      - axiom_oracles/suites/us_tariff.py
+      - axiom_oracles/suites/us_tariff_panel.py
+      - scripts/us_tariff_schedule_campaign.py
+
+  # --- Suites that read another country's RuleSpec tree, or none.
+  - id: euromod-platform
+    match: {runner_type: euromod-synthetic-compare}
+    reads_rulespec_us: false
+  - id: gettsim
+    match: {runner_type: gettsim-synthetic-compare}
+    reads_rulespec_us: false
+  - id: spsm-canada
+    match: {runner_type: spsm-ca-compare}
+    reads_rulespec_us: false
+  - id: uk-efrs
+    match: {runner_type: axiom-encode-uk-efrs-compare}
+    reads_rulespec_us: false
+  - id: uk-grids
+    match:
+      runner_type:
+        - uk-attendance-allowance-pe-grid
+        - uk-business-rates-grid
+        - uk-capital-gains-tax-grid
+        - uk-council-tax-reduction-grid
+        - uk-fuel-duty-grid
+        - uk-lbtt-ltt-grid
+        - uk-tax-free-childcare-pe-grid
+        - uk-tv-licence-grid
+        - uk-vat-grid
+        - uk-winter-fuel-payment-pe-grid
+    reads_rulespec_us: false

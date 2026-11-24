@@ -81,6 +81,10 @@ def _transitive_dependencies(
         seen.add(name)
         rule = derived_by_name[name]
         stack.extend(_input_derived_names(rule.get("expr")))
+        # A dated rule carries one expression per version beside the current
+        # one; a reference that only an earlier or later version makes is a
+        # dependency too.
+        stack.extend(_input_derived_names(rule.get("versions")))
         # Derived relations also reference predicates by derived name.
         derived_relation = rule.get("derived_relation") or rule.get("derivation")
         if isinstance(derived_relation, Mapping):

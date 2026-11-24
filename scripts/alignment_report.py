@@ -15,12 +15,15 @@ Two ways to name the two trees:
     # one repository and two revisions; clones are made under --work-dir
     scripts/alignment_report.py --rulespec-repo ~/rulespec-us --base main --candidate pr-head
 
-``--changed`` limits the report to the listed files (relative to the rulespec
-root); without it every file that differs between the two trees is reported.
+The changed files are always derived from the two commits. ``--changed`` is a
+cross-check: the listed files must be exactly that set, or the run is an
+error. Both trees must be clean, complete git checkouts.
 
 ``--execute`` runs each runnable expected suite on both trees through
 ``scripts/run_comparison.py --require-live``. ``--reports-dir`` reads
-already-produced reports from ``<dir>/{base,candidate}/<suite>.json`` instead.
+already-produced reports from ``<dir>/{base,candidate}/<suite>.json`` instead;
+``<dir>/manifest.json`` must bind them to this registry commit and these two
+rulespec-us commits (see docs/alignment-report.md).
 Without either, a change with a runnable expected suite reports
 ``reference_not_executed``.
 """
@@ -108,16 +111,15 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rulespec-repo", type=Path, help="rulespec-us repository to clone from")
     parser.add_argument("--base", help="base revision (with --rulespec-repo)")
     parser.add_argument("--candidate", help="candidate revision (with --rulespec-repo)")
-    parser.add_argument("--base-sha", help="base commit, when --base-root is not a git checkout")
-    parser.add_argument(
-        "--candidate-sha", help="candidate commit, when --candidate-root is not a git checkout"
-    )
     parser.add_argument(
         "--changed",
         action="append",
         default=None,
         metavar="PATH",
-        help="changed file relative to the rulespec root; repeatable",
+        help=(
+            "changed file relative to the rulespec root; repeatable. The list is "
+            "checked against the tree diff and must equal it"
+        ),
     )
     parser.add_argument(
         "--registry-root",
@@ -233,6 +235,19 @@ def main(argv: list[str] | None = None) -> int:
         )
         toolchain["suite_reports"] = "scripts/run_comparison.py --require-live"
 
+    # An artifact kept across reports is only as good as the name of the
+    # toolchain that made it. An axiom-compose installed from a source tree
+    # with uncommitted changes has no such name, so nothing is kept.
+    cache_dir = args.cache_dir
+    compose = toolchain.get("compose")
+    if cache_dir is not None and isinstance(compose, dict):
+        if compose.get("source_commit"):
+            named = compose.get("source_dirty") == "False"
+        else:
+            named = bool(compose.get("dist_record_sha256"))
+        if not named:
+            cache_dir = None
+            toolchain["cache"] = "disabled: the axiom-compose install has no stable identity"
     inputs = AlignmentInputs(
         base_root=base_root,
         candidate_root=candidate_root,
@@ -240,13 +255,11 @@ def main(argv: list[str] | None = None) -> int:
         compiler=compiler,
         changed=args.changed,
         executor=executor,
-        base_sha=args.base_sha,
-        candidate_sha=args.candidate_sha,
         include_registry_programs=not args.no_registry_programs,
         jobs=args.jobs,
         reuse_unchanged_programs=not args.recompile_all,
         cache=CompileCache(
-            args.cache_dir,
+            cache_dir,
             salt=json.dumps(
                 {k: v for k, v in toolchain.items() if k != "suite_reports"}, sort_keys=True
             ),
