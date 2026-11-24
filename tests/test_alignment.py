@@ -597,6 +597,45 @@ def test_unbound_suite_naming_the_module_is_expected(world):
     assert report["status"] == "reference_not_runnable"
 
 
+def test_runner_source_suite_is_expected_for_its_jurisdiction_only(world, monkeypatch):
+    monkeypatch.setitem(
+        alignment.RUNNER_SOURCES, "zz-bridge-compare", ("axiom_oracles/bridges/zz_bridge.py",)
+    )
+
+    def edit(registry: Path) -> None:
+        # Two adjacent literals, as a long path is written in bridge sources.
+        _write(
+            registry / "axiom_oracles/bridges/zz_bridge.py",
+            'A = Path(\n    "us-zz/policies/manual/"\n    "page.yaml"\n)\n'
+            'B = Path("us-yy/policies/manual/page.yaml")\n',
+        )
+        for name, jurisdiction in (("zz-bridge", "us-zz"), ("yy-bridge", "us-yy")):
+            _write(
+                registry / f"comparisons/{name}.yaml",
+                f"name: {name}\nci: snap-qc-replay\nrunner:\n  type: zz-bridge-compare\n"
+                f"  parameters:\n    jurisdiction: {jurisdiction}\n",
+            )
+
+    report = world(M_UNREACHED, registry_edit=edit)
+    (suite,) = report["expected_suites"]
+    assert (suite["suite"], suite["binding"], suite["mode"]) == (
+        "zz-bridge",
+        "runner_source_reference",
+        "runnable",
+    )
+    assert report["status"] == "reference_not_executed"
+
+
+def test_harness_reference_by_file_path(world):
+    def edit(registry: Path) -> None:
+        _write(
+            registry / "scripts/some_runner.py",
+            'PROGRAM = "us-zz/policies/manual/page.test.yaml"\n',
+        )
+
+    assert_error(world(M_UNREACHED, registry_edit=edit), "reach_incomplete_harness_reference")
+
+
 def test_suite_registry_counts(world):
     report = world(M_BENEFIT)
     assert report["suite_registry"] == {
@@ -1072,7 +1111,14 @@ def test_real_registry_loads_and_every_suite_has_a_mode():
     assert by_name["az-tanf-ecps"].program_key == "axiom-oracles:programs/us-az/tanf/fy-2026.yaml"
     assert by_name["ssi-ecps"].program_key == "axiom-oracles:programs/us/ssi/fy-2026.yaml"
     assert by_name["uk-universal-credit-efrs"].program_key is None
-    assert by_name["az-snap-qc"].program_key == "rulespec-us:programs/us-az/snap/fy-2026.yaml"
+    # SNAP QC suites compile a state composition module named in the bridge.
+    for name, jurisdiction in (("az-snap-qc", "us-az"), ("co-snap-qc", "us-co")):
+        suite = by_name[name]
+        assert (suite.program_key, suite.binding) == (None, "runner_source_reference")
+        assert suite.mode == "runnable"
+        assert suite.module_literals
+        assert {m.split(":", 1)[0] for m in suite.module_literals} == {jurisdiction}
+        assert any("fy-2026-benefit-calculation" in m for m in suite.module_literals)
     for suite in suites:
         if suite.mode == "manual":
             assert suite.ci == "manual"

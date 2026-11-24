@@ -81,9 +81,23 @@ MODULE_LITERAL = re.compile(
 #: outside any ``programs/**.yaml`` file (bridges, overlays, generated programs).
 HARNESS_SCAN_DIRS = ("axiom_oracles", "scripts", "comparisons")
 HARNESS_SCAN_SUFFIXES = (".py", ".yaml", ".yml", ".json")
-#: Runner types that compose ``programs/<jurisdiction>/snap/fy-2026.yaml`` from
-#: a ``jurisdiction`` parameter instead of naming the program file.
-JURISDICTION_SNAP_RUNNERS = ("snap-qc-compare",)
+#: ``us-co/policies/cdhs/snap/x.yaml`` — a module named by its file path.
+MODULE_PATH_LITERAL = re.compile(
+    r"(?<![A-Za-z0-9_.-])([a-z]{2}(?:-[a-z0-9]+)?)/"
+    r"((?:statutes|regulations|policies)/[A-Za-z0-9_.\-/]*?[A-Za-z0-9_])(?:\.test)?\.yaml"
+)
+#: Adjacent string literals split over two source lines.
+_SPLIT_LITERAL = re.compile(r"""["']\s*\n\s*["']""")
+#: Runner types that compile modules named in registry source files instead of
+#: a program file. A suite of such a runner is expected when one of those
+#: modules, limited to the suite's ``jurisdiction`` when it declares one, is
+#: the changed module or imports it.
+RUNNER_SOURCES: dict[str, tuple[str, ...]] = {
+    "snap-qc-compare": (
+        "axiom_oracles/bridges/snap_qc_compare.py",
+        "axiom_oracles/bridges/overlays/{jurisdiction}-snap-fy2024.yaml",
+    ),
+}
 
 
 class AlignmentError(Exception):
@@ -838,8 +852,16 @@ def _program_key_from_ref(ref: str) -> tuple[str | None, str]:
     return None, "foreign_program"
 
 
-def module_literals(text: str) -> set[str]:
-    return {f"{m.group(1)}:{m.group(2)}" for m in MODULE_LITERAL.finditer(text)}
+def module_literals(text: str, *, paths: bool = False) -> set[str]:
+    """Module ids written as ``us:path`` literals; with ``paths`` also modules
+    named by file path (``us/path.yaml``), as harness sources write them."""
+    found = {f"{m.group(1)}:{m.group(2)}" for m in MODULE_LITERAL.finditer(text)}
+    if paths:
+        joined = _SPLIT_LITERAL.sub("", text)
+        for source in (text, joined):
+            found |= {f"{m.group(1)}:{m.group(2)}" for m in MODULE_LITERAL.finditer(source)}
+            found |= {f"{m.group(1)}:{m.group(2)}" for m in MODULE_PATH_LITERAL.finditer(source)}
+    return found
 
 
 def load_suites(registry_root: Path) -> list[Suite]:
@@ -883,11 +905,21 @@ def load_suites(registry_root: Path) -> list[Suite]:
         binding = "unbound"
         if params.get("axiom_program"):
             program_key, binding = _program_key_from_ref(params["axiom_program"])
-        elif runner["type"] in JURISDICTION_SNAP_RUNNERS and params.get("jurisdiction"):
-            program_key = (
-                f"{ORIGIN_RULESPEC}:programs/{params['jurisdiction']}/snap/fy-2026.yaml"
-            )
-            binding = "jurisdiction_snap_program"
+        literals = module_literals(text, paths=True)
+        jurisdiction = params.get("jurisdiction")
+        if binding == "unbound" and runner["type"] in RUNNER_SOURCES:
+            binding = "runner_source_reference"
+            for template in RUNNER_SOURCES[runner["type"]]:
+                source = Path(registry_root) / template.format(jurisdiction=jurisdiction)
+                try:
+                    named = module_literals(source.read_text(), paths=True)
+                except FileNotFoundError:
+                    continue
+                except (OSError, UnicodeDecodeError) as exc:
+                    raise AlignmentError("registry_unreadable", f"{source.name}: {exc}") from exc
+                if isinstance(jurisdiction, str):
+                    named = {m for m in named if m.split(":", 1)[0] == jurisdiction}
+                literals |= named
         concepts = params.get("concepts") or []
         if not isinstance(concepts, list) or not all(isinstance(c, str) for c in concepts):
             raise AlignmentError("registry_unreadable", f"{path.name}: concepts not a string list")
@@ -899,7 +931,7 @@ def load_suites(registry_root: Path) -> list[Suite]:
             program_key=program_key,
             binding=binding,
             concepts=tuple(concepts),
-            module_literals=frozenset(module_literals(text)),
+            module_literals=frozenset(literals),
         )
     if not suites:
         raise AlignmentError("registry_unreadable", "comparisons/ holds no runner-backed suite")
@@ -932,7 +964,7 @@ def harness_module_references(
                 text = path.read_text()
             except (OSError, UnicodeDecodeError):
                 continue
-            for module in module_literals(text):
+            for module in module_literals(text, paths=True):
                 references.setdefault(module, set()).add(rel)
     return {module: sorted(files) for module, files in sorted(references.items())}
 
@@ -1065,7 +1097,11 @@ def expected_suites(
             if named:
                 entry = {
                     "suite": suite.name,
-                    "binding": "module_reference",
+                    "binding": (
+                        suite.binding
+                        if suite.binding == "runner_source_reference"
+                        else "module_reference"
+                    ),
                     "program": None,
                     "referenced_modules": named,
                 }
