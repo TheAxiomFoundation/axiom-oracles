@@ -1835,7 +1835,8 @@ def test_export_is_checked_against_the_resolved_commit(tmp_path, monkeypatch):
     monkeypatch.setattr(alignment, "read_checkout", real)
     with pytest.raises(AlignmentError) as excinfo:
         export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
-    assert "already exists" in excinfo.value.detail
+    # Refused before git is asked to write into it.
+    assert excinfo.value.detail == "base: rulespec-us already exists"
 
 
 def test_stale_coverage_lists_every_glob_without_a_file(tmp_path):
