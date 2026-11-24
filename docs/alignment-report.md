@@ -52,11 +52,24 @@ For each changed file, the program files whose compared outputs depend on it.
 * A changed program file reaches its own program.
 * Reach is per module, not per rule: a new rule in a module whose other rules
   are reached counts as reached. That errs toward naming a reference.
+* A rule written in the program file itself carries no module id; it belongs
+  to the program file, whose change reaches the program directly.
+* When a bound suite compares a concept that is not a rule name of its program
+  (the harness maps it elsewhere), every rule of that program counts as
+  compared (`via: every_rule_unresolved_suite_concept`). Wider than the truth,
+  never narrower.
 * `programs` records program files found and programs compiled per side. A
-  difference is an error. A candidate program whose inputs are byte-identical
-  to base (same program file, no changed file under any jurisdiction the base
-  artifact compiled from) reuses the base artifact; `--recompile-all` turns
-  that off.
+  difference is an error.
+
+Compiling is the slow step (146 program files per side at the time of
+writing). An artifact is reused when everything its compile read is
+byte-identical: the program file, the file of every module the artifact
+compiled from or the composed program imports, every module those name
+transitively, and the listing of each same-named directory. Within one report
+that makes an unchanged candidate program take the base artifact;
+`--cache-dir` keeps artifacts across reports, keyed also by the engine binary
+and the installed `axiom-compose`. `--recompile-all` reuses nothing.
+`programs.<side>.reused` counts the reused artifacts.
 
 ### `expected_suites`
 
@@ -64,15 +77,20 @@ The suites bound to a reaching program, each marked `runnable` or `manual`.
 
 * A suite is bound through `runner.parameters.axiom_program`
   (`.../rulespec-us/programs/...` or this repository's `programs/...`).
-  `snap-qc-compare` suites are bound through `jurisdiction` to
-  `programs/<jurisdiction>/snap/fy-2026.yaml`.
+* `snap-qc-compare` suites compile a state composition module, not a program
+  file. They are bound through the modules that
+  `axiom_oracles/bridges/snap_qc_compare.py` and the state's overlay name for
+  the suite's `jurisdiction` (`binding: runner_source_reference`): the suite is
+  expected when one of those modules is the changed module or names it,
+  directly or through other modules. This is a module-level text reference, so
+  it can name a suite that the change does not move.
 * `manual` is `ci: manual` in the suite file. Every other suite runs in a CI
   lane (the bare matrix, or a named lane such as `snap-qc-replay`) and is
   `runnable`.
 * `compared_concepts_reach_change` says whether the suite's own concepts, not
   only its program's outputs, depend on the change.
-* A suite with no program binding is expected when its own file names a
-  changed module, or a module that imports one (`binding: module_reference`).
+* Any other suite with no program binding is expected when its own file names
+  a changed module, or a module that names one (`binding: module_reference`).
 
 ### `status`
 
@@ -88,17 +106,19 @@ Exactly one of:
 
 An error is never reported as `no_reference`. Causes include an unreadable
 registry, a program that does not compile, a compiled count that differs from
-the files found, a declared output or suite concept the compiled program does
-not define, a suite run that fails, re-emits a committed report, returns zero
+the files found, a declared output the compiled program does not define, two
+trees that do not differ under the jurisdiction directories or `programs/`,
+a suite run that fails, re-emits a committed report, returns zero
 cases, or ran against another commit, a case count or case-id set that differs
 between base and candidate, and a timeout.
 
 One more cause guards `no_reference`:
 `reach_incomplete_harness_reference`. Bridges and overlays in this repository
-compile RuleSpec modules without a program file (the tax bridges, the SNAP QC
-overlays). When no suite is expected but a changed module, or a module that
-imports it, is named in `axiom_oracles/`, `scripts/` or an unbound suite file,
-a suite this report cannot bind may still exercise the change. That is
+compile RuleSpec modules without a program file (the tax bridges, the SNAP
+population bridge). When no suite is expected but a changed module, or a
+module that names it, is named in `axiom_oracles/`, `scripts/` or
+`comparisons/` (as `us:path` or as a `us/path.yaml` file path), a suite this
+report cannot bind may still exercise the change. That is
 unknown, so it is an error and not `no_reference`.
 
 ### `aligned` / `regressed`
@@ -129,8 +149,8 @@ Manual expected suites are listed in `manual_suites_not_run`.
 
 Registry commit and dirty flag, both rulespec-us commits, the sha256 of every
 compiled program per side, the sha256 of every changed file per side, the
-engine version the artifacts record, the sha256 of both binaries, and the tool
-version.
+engine version the artifacts record, the sha256 of the engine binary, the
+identity of the `axiom-compose` install, and the tool version.
 
 ## What this does not do
 
