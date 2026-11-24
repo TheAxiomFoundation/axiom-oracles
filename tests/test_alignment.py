@@ -1620,8 +1620,11 @@ def test_suite_run_failure_is_an_error(world, tmp_path):
     [
         (lambda c: c["provenance"].update(reemitted_report=True), "suite_run_failed"),
         (lambda c: c["provenance"].update(run_kind="reemitted"), "suite_run_failed"),
-        (lambda c: c.update(suite="zz-other"), "suite_run_failed"),
-        (lambda c: c.pop("suite"), "suite_run_failed"),
+        (lambda c: c["provenance"].pop("generated_by"), "suite_report_provenance_mismatch"),
+        (
+            lambda c: c["provenance"].update(generated_by="scripts/run_comparison.py::not-zz-demo"),
+            "suite_report_provenance_mismatch",
+        ),
         (lambda c: c.update(case_count=40), "suite_report_truncated"),
         (lambda c: c.pop("case_count"), "suite_report_truncated"),
         (lambda c: c.update(case_count=True), "suite_report_truncated"),
@@ -1675,6 +1678,16 @@ def test_report_that_is_not_one_live_run_of_the_suite_is_an_error(world, tamper,
         tamper(candidate)
 
     assert_error(world(reports=(ALL_MATCH, ALL_MATCH), report_edit=edit), cause)
+
+
+def test_report_suite_key_is_not_the_registry_name(world):
+    """A population comparison writes its case-set name in ``suite``; the
+    registry name is the one in ``provenance.generated_by``."""
+
+    def rename(base, candidate):
+        base["suite"] = candidate["suite"] = "some-case-set"
+
+    assert world(reports=(ALL_MATCH, ALL_MATCH), report_edit=rename)["status"] == "aligned"
 
 
 def test_base_report_is_checked_too(world):
@@ -2068,8 +2081,8 @@ def test_every_real_suite_has_exactly_one_binding(real):
     assert bound["us-niit-grid"].binding == "pinned_snapshot"
     assert bound["taxcalc-fiit-ecps"].binding == "no_axiom_side"
     assert bound["ga-health-thresholds"].binding == "parameter_files"
-    assert bound["az-income-tax-liability"].roots[0] == "us-az/**"
-    assert bound["al-income-tax-populace"].roots[0] == "us-al/**"
+    assert bound["az-income-tax-liability"].roots[0] == "us-az/policies/income_tax/**"
+    assert bound["al-income-tax-populace"].roots[0] == "us-al/policies/income_tax/**"
     assert bound["co-snap-ecps"].roots[0] == "us-co/**"
     assert bound["az-snap-qc"].suite.mode == "runnable"
     assert bound["us-snap-abawd-grid"].suite.mode == "runnable"

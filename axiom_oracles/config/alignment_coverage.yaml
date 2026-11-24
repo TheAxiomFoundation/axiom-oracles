@@ -147,24 +147,32 @@ declarations:
       - axiom_oracles/bridges/tax_populace.py
       - axiom_oracles/adapters/axiom/tax_projection.py
 
-  # --- State income tax: the state's tree, plus the federal tax modules the
-  # --- state pipelines and the tax bridge read.
+  # --- State income tax: the state's composed liability pipeline and its
+  # --- companion fixtures (`us-<st>/policies/income_tax/`, which the grid
+  # --- generator and the population bridge address by a built path), plus the
+  # --- federal tax modules the tax bridge reads. What a pipeline imports from
+  # --- the state's statutes is covered through the pipeline.
   - id: state-income-tax-grid
     match: {runner_type: state-income-tax-liability-grid}
-    roots: ["us-{state}/**", "@federal_tax"]
-    paths: ["us-{state}/**"]
+    roots:
+      - "us-{state}/policies/income_tax/**"
+      - "us-{state}/policies/income_tax.yaml"
+      - "@federal_tax"
     sources: [scripts/generate_state_income_tax_liability.py]
   - id: state-income-tax-populace
     match: {source: comparisons/state-income-tax-populace.yaml}
-    roots: ["us-{state}/**", "@federal_tax"]
-    paths: ["us-{state}/**"]
+    roots:
+      - "us-{state}/policies/income_tax/**"
+      - "us-{state}/policies/income_tax.yaml"
+      - "@federal_tax"
     sources:
       - axiom_oracles/bridges/state_tax_populace.py
       - axiom_oracles/bridges/state_tax_populace_runner.py
+  # Not read module by module: the Colorado state-tax surface of the
+  # `axiom-oracles-compare` tax projection.
   - id: co-state-income-tax-taxsim
     match: {suites: [co-state-income-tax-taxsim]}
-    roots: [us-co/**, "@federal_tax"]
-    paths: [us-co/**]
+    roots: [us-co/policies/income_tax/**, us-co/statutes/**, "@federal_tax"]
     sources: []
 
   # --- Tariff suites: the duty spine and the generated schedule chapters,

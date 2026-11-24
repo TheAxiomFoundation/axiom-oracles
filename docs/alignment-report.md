@@ -147,7 +147,9 @@ produced them. The result carries `evidence: supplied_reports`.
 
 Either way a report is accepted only when it:
 
-* names the suite in `suite` and in `provenance.generated_by`;
+* was stamped for the suite by the runner (`provenance.generated_by` ends
+  with `::<suite>`; the report's own `suite` key is the case-set name for a
+  population comparison and is not used);
 * is not a re-emitted committed report (`reemitted_report`, or a `run_kind`
   that says so);
 * records exactly one `provenance.rulespecs` row for
