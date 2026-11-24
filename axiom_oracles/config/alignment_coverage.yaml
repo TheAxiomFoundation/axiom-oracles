@@ -147,7 +147,10 @@ declarations:
     match: {suites: [tx-snap-qc]}
     roots: [us-tx/policies/hhs/texas-works-handbook/**, "@federal_snap"]
     paths:
-      - us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml
+      # The Texas composition and its template are not in rulespec-us yet
+      # (the suite is `ci: manual` while they are pending).
+      - glob: us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml
+        optional: true
       - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
