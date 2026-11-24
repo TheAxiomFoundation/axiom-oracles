@@ -3,29 +3,33 @@
 
 Prints and writes a JSON report with the reach of the change (which
 ``programs/**.yaml`` files have a compared output that depends on it), the
-comparison suites expected to cover it, and one status. It gates nothing: the
+comparison suites that can observe it, and one status. It gates nothing: the
 exit code is 0 for every completed derivation and 2 when the derivation
 failed (``status: error``).
 
-Two ways to name the two trees:
-
-    # two existing checkouts, each a directory named rulespec-us
-    scripts/alignment_report.py --base-root B/rulespec-us --candidate-root C/rulespec-us
-
-    # one repository and two revisions; clones are made under --work-dir
+    # two revisions of one repository
     scripts/alignment_report.py --rulespec-repo ~/rulespec-us --base main --candidate pr-head
+
+    # two repositories (the HEAD of each, or --base-rev / --candidate-rev)
+    scripts/alignment_report.py --base-repo B/rulespec-us --candidate-repo C/rulespec-us
+
+Both commits are exported from the object store of the named repository into
+the work directory, and only those exports are read. The work trees of the
+named repositories are never read, so an uncommitted or hidden change in them
+cannot reach the report.
 
 The changed files are always derived from the two commits. ``--changed`` is a
 cross-check: the listed files must be exactly that set, or the run is an
-error. Both trees must be clean, complete git checkouts.
+error.
 
 ``--execute`` runs each runnable expected suite on both trees through
 ``scripts/run_comparison.py --require-live``. ``--reports-dir`` reads
 already-produced reports from ``<dir>/{base,candidate}/<suite>.json`` instead;
-``<dir>/manifest.json`` must bind them to this registry commit and these two
-rulespec-us commits (see docs/alignment-report.md).
-Without either, a change with a runnable expected suite reports
-``reference_not_executed``.
+``<dir>/manifest.json`` must bind them to this registry commit, these two
+commits and the suite file. A result from supplied reports is
+``aligned_unverified`` or ``regressed_unverified``: only ``--execute`` gives
+``aligned`` or ``regressed``. Without either, a change with a runnable
+expected suite reports ``reference_not_executed``.
 """
 
 from __future__ import annotations
@@ -53,7 +57,6 @@ from axiom_oracles.alignment import (  # noqa: E402
     exit_code,
     git_dirty,
     git_head,
-    materialize_checkout,
     sha256_file,
     temporary_work_dir,
 )
@@ -104,13 +107,17 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument("--base-root", type=Path, help="rulespec-us tree at the base commit")
-    parser.add_argument(
-        "--candidate-root", type=Path, help="rulespec-us tree at the candidate commit"
-    )
-    parser.add_argument("--rulespec-repo", type=Path, help="rulespec-us repository to clone from")
+    parser.add_argument("--rulespec-repo", type=Path, help="repository that holds both commits")
     parser.add_argument("--base", help="base revision (with --rulespec-repo)")
     parser.add_argument("--candidate", help="candidate revision (with --rulespec-repo)")
+    parser.add_argument("--base-repo", type=Path, help="repository that holds the base commit")
+    parser.add_argument("--base-rev", default="HEAD", help="base revision in --base-repo")
+    parser.add_argument(
+        "--candidate-repo", type=Path, help="repository that holds the candidate commit"
+    )
+    parser.add_argument(
+        "--candidate-rev", default="HEAD", help="candidate revision in --candidate-repo"
+    )
     parser.add_argument(
         "--changed",
         action="append",
@@ -177,39 +184,31 @@ def main(argv: list[str] | None = None) -> int:
     if args.execute and args.reports_dir:
         print("--execute and --reports-dir are exclusive", file=sys.stderr)
         return 2
-    by_roots = args.base_root is not None and args.candidate_root is not None
+    by_repos = args.base_repo is not None and args.candidate_repo is not None
     by_revisions = bool(args.rulespec_repo and args.base and args.candidate)
-    if by_roots == by_revisions:
+    if by_repos == by_revisions:
         print(
-            "give either --base-root and --candidate-root, or --rulespec-repo "
-            "with --base and --candidate",
+            "give either --rulespec-repo with --base and --candidate, or "
+            "--base-repo and --candidate-repo",
             file=sys.stderr,
         )
         return 2
+    if by_revisions:
+        base_repo = candidate_repo = args.rulespec_repo
+        base_rev, candidate_rev = args.base, args.candidate
+    else:
+        base_repo, candidate_repo = args.base_repo, args.candidate_repo
+        base_rev, candidate_rev = args.base_rev, args.candidate_rev
 
     created_work_dir = args.work_dir is None
     work_dir = temporary_work_dir() if created_work_dir else args.work_dir.resolve()
     work_dir.mkdir(parents=True, exist_ok=True)
-    setup_error: AlignmentError | None = None
-    base_root = candidate_root = work_dir
-    try:
-        if by_revisions:
-            base_root = work_dir / "base" / "rulespec-us"
-            candidate_root = work_dir / "candidate" / "rulespec-us"
-            materialize_checkout(args.rulespec_repo, args.base, base_root)
-            materialize_checkout(args.rulespec_repo, args.candidate, candidate_root)
-        else:
-            base_root = args.base_root.resolve()
-            candidate_root = args.candidate_root.resolve()
-    except AlignmentError as exc:
-        setup_error = exc
 
     if args.compiled_dir is not None:
         compiler = FixtureCompiler(args.compiled_dir)
         toolchain = {"compiler": "precompiled_artifacts"}
     else:
         compiler = ComposeEngineCompiler(
-            roots={"base": base_root, "candidate": candidate_root},
             compose_binary=args.compose_binary,
             engine_binary=args.engine_binary,
             work_dir=work_dir,
@@ -224,12 +223,11 @@ def main(argv: list[str] | None = None) -> int:
 
     executor = None
     if args.reports_dir is not None:
-        executor = ReportsDirExecutor(args.reports_dir)
-        toolchain["suite_reports"] = "supplied"
+        executor = ReportsDirExecutor(args.reports_dir, args.registry_root)
+        toolchain["suite_reports"] = "supplied, not verified"
     elif args.execute:
         executor = RunComparisonExecutor(
             registry_root=args.registry_root,
-            homes={"base": base_root.parent, "candidate": candidate_root.parent},
             output_dir=work_dir / "suite-runs",
             timeout=args.suite_timeout,
         )
@@ -249,8 +247,11 @@ def main(argv: list[str] | None = None) -> int:
             cache_dir = None
             toolchain["cache"] = "disabled: the axiom-compose install has no stable identity"
     inputs = AlignmentInputs(
-        base_root=base_root,
-        candidate_root=candidate_root,
+        base_repo=base_repo,
+        candidate_repo=candidate_repo,
+        base_rev=base_rev,
+        candidate_rev=candidate_rev,
+        work_dir=work_dir,
         registry_root=args.registry_root,
         compiler=compiler,
         changed=args.changed,
@@ -266,20 +267,7 @@ def main(argv: list[str] | None = None) -> int:
         ),
         toolchain=toolchain,
     )
-    if setup_error is None and isinstance(compiler, ComposeEngineCompiler):
-        try:
-            compiler.prepare()
-        except AlignmentError as exc:
-            setup_error = exc
-    if setup_error is not None:
-        report = {
-            "schema": "axiom_oracles.alignment_report.v1",
-            "report_only": True,
-            "status": "error",
-            "error": {"cause": setup_error.cause, "detail": setup_error.detail},
-        }
-    else:
-        report = build_report(inputs)
+    report = build_report(inputs)
     if isinstance(compiler, ComposeEngineCompiler):
         compiler.close()
     report["runtime_seconds"] = round(time.monotonic() - started, 1)

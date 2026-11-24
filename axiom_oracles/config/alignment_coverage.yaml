@@ -1,25 +1,25 @@
-# What each comparison suite can observe of a rulespec-us tree.
+# What each comparison can observe of a rulespec-us tree.
 #
-# Read by axiom_oracles/alignment.py. A suite needs no entry here when the
-# report derives its coverage:
+# Read by axiom_oracles/alignment.py. A suite of comparisons/ needs no entry
+# here when the report derives its coverage:
 #
 #   * `runner.parameters.axiom_program` names a program file that compiles
 #     (coverage is the dependency walk of the compiled program);
-#   * the suite replays a pinned rulespec snapshot (`rulespec_upstream_sha` +
-#     `rulespec_upstream_tree`, or `axiom_rulespec_repo_roots_revision`): it
-#     cannot observe a candidate tree;
-#   * an `axiom-oracles-compare` suite with no Axiom side;
+#   * the suite replays a pinned rulespec snapshot and its runner enforces the
+#     pin (`alignment.PINNED_RUNNERS`): it cannot observe a candidate tree;
+#   * an `axiom-oracles-compare` suite between two engines that are not Axiom;
 #   * a suite of `comparisons/parameter-oracles.yaml` (coverage is the `file`
 #     of each of its comparisons).
 #
-# Every other suite must match exactly one declaration below. A suite bound
-# through a program file may match one too: the declaration then adds what the
-# suite's bridge reads outside that program. A suite that
+# Every other suite must match exactly one declaration below. A suite that
 # matches none makes every report an error (`reference_unbound`): an
 # undeclared suite could cover anything, so nothing may be called
-# `no_reference` while one exists.
+# `no_reference` while one exists. A suite bound through a program file may
+# match one too: the declaration then adds what the suite's bridge reads
+# outside that program.
 #
-# A declaration says one of:
+# A declaration names its suites in `match.suites`, by id or by a pattern
+# (`runner_type` and `source` only narrow that). It says one of:
 #
 #   reads_rulespec_us: false
 #       The harness reads no rulespec-us file.
@@ -28,17 +28,26 @@
 #       and every module they name, transitively. Write them at least as wide
 #       as the harness reads: a wider glob only names the suite more often.
 #   paths: [glob, ...]
-#       Files the harness reads as files (a case template, a directory it
-#       globs). A change to any file matching one is covered.
+#       Files the harness reads as files: a case template, a directory it
+#       globs, a tool it imports, a file that selects its engine.
 #
 # Globs are relative to the rulespec-us root; `*` stays inside one path
 # segment, `**` crosses segments. `@name` expands a set. `{jurisdiction}` is
 # the suite's `jurisdiction` parameter (`us-co`); `{state}` is its `state`
-# parameter, or a manifest suite's `jurisdiction`, lower-cased (`az`).
+# parameter, or a manifest suite's `jurisdiction`, lower-cased (`az`). A glob
+# that matches no tracked file in either tree is an error, unless it is
+# written `{glob: ..., optional: true}`.
 #
 # `sources` names the registry files a declaration was read from.
-# tests/test_alignment.py checks that every module those files name by id or
-# by path is inside the declared globs.
+# tests/test_alignment.py checks that every module, tool and `.axiom` file
+# those sources name is inside the declared globs.
+#
+# `script_suites` registers the comparisons that run outside comparisons/.
+# `evidence` lists the entry points and files that are no comparison of a
+# rulespec-us tree, each with a reason. Every dispositions file, dashboard
+# data file, dated report, comparison or campaign script and console command
+# must belong to a registered suite or to one of those lists, or the report is
+# an error (`comparison_evidence_unregistered`).
 
 schema: axiom_oracles.alignment_coverage.v1
 
@@ -56,7 +65,9 @@ sets:
 
 declarations:
   # --- SNAP QC replay: the state composition module, the state modules the
-  # --- population bridge binds, the federal SNAP chain, and the FY2024 overlay.
+  # --- population bridge binds, the federal SNAP chain and the FY2024 overlay.
+  # --- `.axiom/workflow-toolchain.toml` selects the engine the replay lane
+  # --- builds (.github/workflows/snap-qc-replay.yml).
   - id: snap-qc-az
     match: {suites: [az-snap-qc]}
     roots:
@@ -65,70 +76,92 @@ declarations:
       - "@federal_snap"
     paths:
       - us-az/policies/des/faa5/na-eligibility-and-benefit-determination/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-az-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-ca
     match: {suites: [ca-snap-qc]}
     roots: [us-ca/policies/cdss/snap/**, "@federal_snap"]
-    paths: [us-ca/policies/cdss/snap/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-ca/policies/cdss/snap/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-ca-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-co
     match: {suites: [co-snap-qc]}
     roots:
       - us-co/policies/cdhs/snap/**
       - us-co/regulations/10-ccr-2506-1/**
       - "@federal_snap"
-    paths: [us-co/policies/cdhs/snap/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-co/policies/cdhs/snap/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-co-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-ga
     match: {suites: [ga-snap-qc]}
     roots: [us-ga/policies/dfcs/snap/**, "@federal_snap"]
-    paths: [us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-ga/policies/dfcs/snap/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-ga-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-md
     match: {suites: [md-snap-qc]}
     roots: [us-md/policies/dhs/fia/snap/**, "@federal_snap"]
-    paths: [us-md/policies/dhs/fia/snap/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-md/policies/dhs/fia/snap/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-md-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-ny
     match: {suites: [ny-snap-qc]}
     roots:
       - us-ny/policies/otda/snap/**
       - us-ny/regulations/18-nycrr/387/**
       - "@federal_snap"
-    paths: [us-ny/policies/otda/snap/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-ny/policies/otda/snap/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-ny-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
   - id: snap-qc-tx
     match: {suites: [tx-snap-qc]}
     roots: [us-tx/policies/hhs/texas-works-handbook/**, "@federal_snap"]
-    paths: [us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml]
+    paths:
+      - us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.test.yaml
+      - .axiom/workflow-toolchain.toml
     sources:
       - axiom_oracles/bridges/snap_qc_compare.py
       - axiom_oracles/bridges/snap_populace.py
       - axiom_oracles/bridges/overlays/us-tx-snap-fy2024.yaml
+      - .github/workflows/snap-qc-replay.yml
 
   # --- SNAP population comparisons run by the axiom-encode harness. That
   # --- harness is not in this repository, so the declaration is the whole
   # --- jurisdiction plus the federal SNAP chain.
   - id: snap-ecps-axiom-encode
-    match: {runner_type: axiom-encode-snap-ecps-compare}
+    match:
+      suites: [co-snap-ecps, or-snap-ecps, ut-snap-ecps]
+      runner_type: axiom-encode-snap-ecps-compare
     roots: ["{jurisdiction}/**", "@federal_snap"]
     paths: ["{jurisdiction}/**"]
     sources: []
@@ -136,7 +169,7 @@ declarations:
   # --- ABAWD boundary grid: reads the 7 CFR 273.24 companion fixture and
   # --- evaluates that module (unpinned: each run reads rulespec-us main).
   - id: snap-abawd-grid
-    match: {runner_type: snap-abawd-boundary-grid}
+    match: {suites: [us-snap-abawd-grid], runner_type: snap-abawd-boundary-grid}
     roots: [us/regulations/7-cfr/273/**]
     paths: [us/regulations/7-cfr/273/**]
     sources: [scripts/generate_snap_abawd_boundary.py]
@@ -144,7 +177,7 @@ declarations:
   # --- Federal income tax population comparison (axiom-encode tax harness,
   # --- rulespec-us cloned at its head).
   - id: federal-tax-ecps
-    match: {runner_type: axiom-encode-tax-ecps-compare}
+    match: {suites: [fiit-ecps], runner_type: axiom-encode-tax-ecps-compare}
     roots: ["@federal_tax"]
     sources:
       - axiom_oracles/bridges/tax_populace.py
@@ -156,17 +189,19 @@ declarations:
   # --- federal tax modules the tax bridge reads. What a pipeline imports from
   # --- the state's statutes is covered through the pipeline.
   - id: state-income-tax-grid
-    match: {runner_type: state-income-tax-liability-grid}
+    match: {suites: ["??-income-tax-liability"], runner_type: state-income-tax-liability-grid}
     roots:
       - "us-{state}/policies/income_tax/**"
-      - "us-{state}/policies/income_tax.yaml"
+      - {glob: "us-{state}/policies/income_tax.yaml", optional: true}
       - "@federal_tax"
     sources: [scripts/generate_state_income_tax_liability.py]
   - id: state-income-tax-populace
-    match: {source: comparisons/state-income-tax-populace.yaml}
+    match:
+      suites: ["??-income-tax-populace"]
+      source: comparisons/state-income-tax-populace.yaml
     roots:
       - "us-{state}/policies/income_tax/**"
-      - "us-{state}/policies/income_tax.yaml"
+      - {glob: "us-{state}/policies/income_tax.yaml", optional: true}
       - "@federal_tax"
     sources:
       - axiom_oracles/bridges/state_tax_populace.py
@@ -179,19 +214,22 @@ declarations:
     sources: []
 
   # --- Tariff suites: the duty spine and the generated schedule chapters,
-  # --- which the schedule campaign reads by directory glob.
+  # --- which the schedule campaign reads by directory glob, and the
+  # --- entry-flag tool it imports from the rulespec tree and hashes.
   - id: us-tariff
-    match: {runner_type: [us-tariff-grid, us-tariff-panel, us-tariff-schedule]}
+    match: {suites: [us-tariff, us-tariff-panel, us-tariff-schedule]}
     roots: [us/policies/cbp/**, us/policies/usitc/**]
     paths:
       - us/policies/cbp/**
       - us/policies/usitc/**
       - programs/us/us-tariff-duty/**
       - programs/us/us-tariff-schedule/**
+      - tools/b16_entry_flags.py
     sources:
       - axiom_oracles/suites/us_tariff.py
       - axiom_oracles/suites/us_tariff_panel.py
       - scripts/us_tariff_schedule_campaign.py
+      - axiom_oracles/bridges/manifests/us-tariff-schedule.yaml
 
   # --- Medicaid MAGI population comparison. The suite names a program file,
   # --- so its coverage is that compiled program; this adds the modules the
@@ -206,19 +244,26 @@ declarations:
 
   # --- Suites that read another country's RuleSpec tree, or none.
   - id: euromod-platform
-    match: {runner_type: euromod-synthetic-compare}
+    match:
+      suites: ["be-*", "dk-*", "et-*", "gh-*", "rw-*", "ug-*", "uk-*", "zm-*"]
+      runner_type: euromod-synthetic-compare
     reads_rulespec_us: false
-  - id: gettsim
-    match: {runner_type: gettsim-synthetic-compare}
+  - id: germany
+    match:
+      suites: ["de-kindergeld-eligibility", "de-worker-dual-oracle*"]
+      runner_type: [gettsim-synthetic-compare, de-axiom-oracle-compare]
     reads_rulespec_us: false
   - id: spsm-canada
-    match: {runner_type: spsm-ca-compare}
+    match: {suites: [ca-federal-schedule-tax-spsm], runner_type: spsm-ca-compare}
     reads_rulespec_us: false
   - id: uk-efrs
-    match: {runner_type: axiom-encode-uk-efrs-compare}
+    match:
+      suites: [uk-tax-benefits-efrs, uk-universal-credit-efrs]
+      runner_type: axiom-encode-uk-efrs-compare
     reads_rulespec_us: false
   - id: uk-grids
     match:
+      suites: ["uk-*"]
       runner_type:
         - uk-attendance-allowance-pe-grid
         - uk-business-rates-grid
@@ -231,3 +276,134 @@ declarations:
         - uk-vat-grid
         - uk-winter-fuel-payment-pe-grid
     reads_rulespec_us: false
+
+# Comparisons that run outside comparisons/. Each is a manual suite.
+script_suites:
+  # State files found by a regular expression over `git ls-tree origin/main`,
+  # plus the shared federal module. It reads origin/main, so it sees a change
+  # only after the change lands.
+  - id: medicaid-thresholds
+    script: scripts/run_medicaid_thresholds_comparison.py
+    suites: [medicaid-thresholds-states]
+    reports: "axiom-policyengine-{suite}.json"
+    roots:
+      - us-*/policies/cms/*-medicaid-chip-bhp-eligibility-levels.yaml
+      - us/policies/cms/medicaid-chip-bhp-eligibility-levels.yaml
+  - id: ssa-parameters
+    script: scripts/run_ssa_parameter_comparison.py
+    suites: [ssa-parameters]
+    reports: "axiom-policyengine-{suite}.json"
+    roots: [us/policies/ssa/**]
+  # The two New York City income tax scripts. They read a separate
+  # rulespec-us-ny checkout and, for the population diagnostic, the composed
+  # pipeline in rulespec-us; the same modules live under us-ny/ here.
+  - id: nyc-income-tax-components
+    script: scripts/run_nyc_income_tax_component_comparison.py
+    suites: [nyc-income-tax-gap]
+    claims: [dashboard/public/data/axiom-policyengine-nyc-income-tax-components.json]
+    roots: [us-ny/policies/tax/**, us-ny/policies/income_tax/**, us-ny/statutes/NYC/**]
+  - id: nyc-income-tax-ecps
+    script: scripts/run_nyc_income_tax_ecps_diagnostic.py
+    suites: [nyc-income-tax-ecps-diagnostic]
+    claims: [dashboard/public/data/axiom-policyengine-nyc-income-tax-components-ecps.json]
+    roots: [us-ny/policies/tax/**, us-ny/policies/income_tax/**, us-ny/statutes/NYC/**]
+  # The state income tax population campaign. One suite per state of the
+  # campaign contract that comparisons/state-income-tax-populace.yaml does
+  # not already list (Delaware and the states whose report is on the
+  # dashboard without a manifest row).
+  - id: state-income-tax-populace-campaign
+    script: scripts/run_state_tax_populace.py
+    suites_from_campaign_contract: axiom_oracles/data/state_income_tax_populace.yaml
+    reports: "axiom-policyengine-{suite}.json"
+    claims: ["reports/state-tax-populace-*.json"]
+    roots:
+      - {glob: "us-{state}/policies/income_tax/**", optional: true}
+      - {glob: "us-{state}/policies/income_tax.yaml", optional: true}
+      - "@federal_tax"
+    sources:
+      - scripts/run_state_tax_populace.py
+      - scripts/emit_populace_campaign_artifacts.py
+      - axiom_oracles/bridges/state_tax_populace.py
+      - axiom_oracles/bridges/state_tax_populace_runner.py
+  # The `us-populace-compare` command of the population bridge compares any
+  # output that has a `direct_variable` mapping. Its roots are the modules of
+  # those mappings.
+  - id: us-populace-direct-variables
+    script: axiom_oracles/bridges/us_populace.py
+    suites: [us-populace-compare]
+    roots_from_direct_variable_mappings: axiom_oracles/bridges/mappings/us.yaml
+
+evidence:
+  # Scripts and commands that match the entry-point patterns
+  # (scripts/run_*comparison*.py, scripts/*campaign*.py, console commands)
+  # and are not themselves a script-run comparison.
+  entry_points:
+    scripts/run_comparison.py: >-
+      The dispatcher of the suite files of comparisons/; every suite it runs
+      is registered there.
+    scripts/run_parameter_comparisons.py: >-
+      Runs the suites of comparisons/parameter-oracles.yaml, which are
+      registered through that manifest (binding `parameter_files`). It reads
+      origin/main, so it sees a change only after the change lands.
+    scripts/us_tariff_schedule_campaign.py: >-
+      The generator of the registered suite us-tariff-schedule.
+    scripts/emit_populace_campaign_artifacts.py: >-
+      Projects the state income tax population campaign into the per-state
+      reports of the registered `*-income-tax-populace` suites.
+    scripts/run_canada_official_comparison.py: >-
+      Compares rulespec-ca against Canadian official calculators; reads no
+      rulespec-us file.
+    "console:axiom-oracles=axiom_oracles.cli:cli": >-
+      The package command line. Its `compare` command is the engine the
+      `axiom-oracles-compare` suites of comparisons/ run through; run by hand
+      it compares what its arguments name and writes no registered evidence.
+  exclusions:
+    - files:
+        - dashboard/public/data/cases/**
+        - dashboard/public/data/dispositions/**
+      reason: >-
+        Per-suite chunks of reports of suites that are not registered here by
+        that name; each belongs to one of the exclusions below or to a report
+        whose suite is registered under its dashboard name.
+    - files:
+        - dashboard/public/data/axiom-euromod-*.json
+        - dashboard/public/data/euromod-*.json
+        - dashboard/public/data/be-euromod-per-record-scorecard.json
+        - dispositions/be-*.yaml
+      reason: >-
+        EUROMOD-platform program reports for Belgium, the United Kingdom and
+        Denmark that have no suite file. EUROMOD models no United States
+        system; these compare rulespec-be, rulespec-uk and rulespec-dk.
+    - files:
+        - dashboard/public/data/nz-treasury-incomeexplorer.json
+        - dispositions/nz-treasury-incomeexplorer.yaml
+      reason: New Zealand Treasury IncomeExplorer comparison; reads rulespec-nz.
+    - files:
+        - dashboard/public/data/conformance_*.json
+        - dashboard/public/data/coverage_overview.json
+        - dashboard/public/data/freshness.json
+        - dashboard/public/data/known_causes.json
+        - dashboard/public/data/manifest.json
+        - dashboard/public/data/overview.json
+        - dashboard/public/data/programs.json
+        - dashboard/public/data/rule_verification*.json
+        - dashboard/public/data/run_log_*
+        - dashboard/public/data/southmod-issues.json
+      reason: >-
+        Dashboard indexes, scoreboards and logs built from the reports. They
+        are not the report of a comparison.
+    - files:
+        - dashboard/public/data/axiom-policyengine-co-health-thresholds.json
+        - dashboard/public/data/axiom-policyengine-co-tanf-coverage.json
+        - dashboard/public/data/axiom-policyengine.json
+        - dashboard/public/data/policyengine-taxsim.json
+      reason: >-
+        Committed reports that no suite file, manifest row or script of this
+        repository produces at this commit (two earlier Colorado parameter
+        reports and the two `nyc-synthetic` case-set reports). Nothing can
+        rerun them against a candidate.
+    - files:
+        - reports/fiit-ecps-eitc-attribution-*.json
+      reason: >-
+        A one-off attribution analysis of a fiit-ecps run, not a comparison
+        report.

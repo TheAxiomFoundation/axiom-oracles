@@ -65,6 +65,11 @@ STATUS_NOT_EXECUTED = "reference_not_executed"
 STATUS_ALIGNED = "aligned"
 STATUS_REGRESSED = "regressed"
 STATUS_ERROR = "error"
+#: What ``aligned`` and ``regressed`` become when the reports were supplied
+#: instead of run by this tool. Not gate-grade: see ``ReportsDirExecutor``.
+UNVERIFIED_SUFFIX = "_unverified"
+EVIDENCE_LIVE = "live_run"
+EVIDENCE_SUPPLIED = "supplied_reports_unverified"
 
 REASON_NO_PROGRAM = "no_program_reaches"
 REASON_NO_SUITE = "no_suite_for_reaching_programs"
@@ -84,10 +89,27 @@ BINDING_NO_AXIOM = "no_axiom_side"
 BINDING_PARAMETER_FILES = "parameter_files"
 BINDING_DECLARED = "declared"
 BINDING_NONE = "declared_reads_no_rulespec_us"
+BINDING_SCRIPT = "script_run"
+SCRIPT_RUNNER = "script-run"
 
 COVERAGE_FILE = "axiom_oracles/config/alignment_coverage.yaml"
 PARAMETER_MANIFEST_SCHEMA = "axiom_oracles.parameter_suite_list.v1"
 CAMPAIGN_MANIFEST_SCHEMA = "axiom.campaign_projection_suite_list.v1"
+
+#: Runner types whose runner refuses to run on anything but the rulespec
+#: snapshot the suite file pins, with the keys that state the pin. Only these
+#: are "pinned snapshot" suites. ``federal-tax-liability-grid``:
+#: ``_run_federal_tax_liability_grid`` sets aside any checkout whose tree is
+#: not the pinned one and materializes the pinned revision.
+#: ``axiom-oracles-compare``: ``_verify_declared_pins`` fails the run when the
+#: pre-materialized roots do not hold the declared revision.
+PINNED_RUNNERS: dict[str, tuple[str, ...]] = {
+    "federal-tax-liability-grid": ("rulespec_upstream_sha", "rulespec_upstream_tree"),
+    "axiom-oracles-compare": ("axiom_rulespec_repo_roots_revision", "axiom_rulespec_repo_roots"),
+}
+#: Engines that are not Axiom. An ``axiom-oracles-compare`` suite between two
+#: of these has no Axiom side.
+NON_AXIOM_ENGINES = frozenset({"policyengine", "taxsim", "taxcalc"})
 
 JURISDICTION_DIR = re.compile(r"^[a-z]{2}(-[a-z0-9]+)?$")
 #: ``us:statutes/7/2014/e/2`` — a RuleSpec module id written as a literal. A
@@ -151,7 +173,7 @@ def _tail(text: str, limit: int = 600) -> str:
 
 def _git(root: Path, *args: str, timeout: float = 300.0) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["git", "-C", str(root), *args],
+        ["git", "--no-replace-objects", "-C", str(root), *args],
         capture_output=True,
         check=False,
         timeout=timeout,
@@ -214,21 +236,24 @@ def glob_regex(pattern: str) -> re.Pattern[str]:
 
 @dataclass(frozen=True)
 class Checkout:
-    """A clean, complete git checkout: its commit and every tracked file."""
+    """One commit of rulespec-us, exported by this tool: the commit, its tree
+    id and every file the tree holds."""
 
     root: Path
     commit: str
+    tree: str
     blobs: Mapping[str, str]
 
 
 def read_checkout(root: Path, side: str) -> Checkout:
-    """Read ``root`` as a checkout and refuse one the report cannot trust.
+    """Read a work tree as the tree of its commit, or refuse it.
 
-    The work tree must be the top level of a git checkout, hold no staged,
-    unstaged or untracked change, and hold every file its commit tracks (a
-    sparse or partly deleted checkout is refused). The file list and the blob
-    ids then come from the commit, so the tree on disk is the tree of the
-    commit.
+    The file list and the blob ids come from the commit (``git ls-tree``,
+    replace refs ignored). The work tree must be the top level of a git
+    checkout, hold no staged, unstaged or untracked change, and hold every
+    file the commit tracks. The report only ever calls this on a work tree
+    that :func:`export_commit` has just written, so these refusals guard the
+    export itself; they are not what makes a caller's tree trustworthy.
     """
     root = Path(root)
     commit = git_head(root)
@@ -242,10 +267,11 @@ def read_checkout(root: Path, side: str) -> Checkout:
             "rulespec_tree_dirty", f"{side}: the checkout has uncommitted or untracked files"
         )
     try:
-        listing = _git(root, "ls-tree", "-r", "-z", "HEAD")
+        listing = _git(root, "ls-tree", "-r", "-z", commit)
+        tree = _git(root, "rev-parse", "--verify", f"{commit}^{{tree}}")
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise AlignmentError("rulespec_tree_unreadable", f"{side}: {exc}") from exc
-    if listing.returncode != 0:
+    if listing.returncode != 0 or tree.returncode != 0:
         raise AlignmentError("rulespec_tree_unreadable", f"{side}: git ls-tree failed")
     blobs: dict[str, str] = {}
     for entry in listing.stdout.split(b"\0"):
@@ -259,7 +285,8 @@ def read_checkout(root: Path, side: str) -> Checkout:
             path = raw_path.decode("utf-8")
         except UnicodeDecodeError as exc:
             raise AlignmentError("rulespec_tree_unreadable", f"{side}: {exc}") from exc
-        blobs[path] = f"{fields[1].decode()}:{fields[2].decode()}"
+        # Mode and object id: a file whose mode alone changes is a change.
+        blobs[path] = f"{fields[0].decode()}:{fields[2].decode()}"
     missing = [path for path in blobs if not os.path.lexists(root / path)]
     if missing:
         raise AlignmentError(
@@ -267,7 +294,63 @@ def read_checkout(root: Path, side: str) -> Checkout:
             f"{side}: {len(missing)} tracked files are absent from the work tree "
             f"(first: {sorted(missing)[0]})",
         )
-    return Checkout(root=root, commit=commit, blobs=blobs)
+    return Checkout(root=root, commit=commit, tree=tree.stdout.decode().strip(), blobs=blobs)
+
+
+def export_commit(source_repo: Path, revision: str, destination: Path, side: str) -> Checkout:
+    """Write one commit of ``source_repo`` into a new work tree and read it.
+
+    Every file the report reads comes from here, never from the caller's
+    work tree: the commit is resolved in the source repository, a new clone
+    is made (sharing the source's object store, with none of its index,
+    exclude file or replace refs), and the commit is checked out with replace
+    refs ignored. So an edit hidden behind ``--skip-worktree`` or
+    ``--assume-unchanged``, a file hidden by ``.git/info/exclude``, an
+    uncommitted change and a ``git replace`` ref in the source cannot reach
+    the report. The clone keeps the source's ``origin`` URL so the engine
+    accepts it as a canonical checkout. The source repository is only read.
+    """
+    source = Path(source_repo)
+    destination = Path(destination)
+    if git_head(source) is None:
+        raise AlignmentError(
+            "rulespec_source_not_a_repository", f"{side}: not the top level of a git repository"
+        )
+    if destination.exists():
+        raise AlignmentError("checkout_failed", f"{side}: {destination.name} already exists")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+
+    def run(*args: str) -> str:
+        try:
+            result = subprocess.run(
+                ["git", "--no-replace-objects", *args],
+                capture_output=True,
+                check=False,
+                timeout=900,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise AlignmentError("checkout_failed", f"{side}: git {args[0]}: {exc}") from exc
+        if result.returncode != 0:
+            raise AlignmentError(
+                "checkout_failed",
+                f"{side}: git {args[2] if args[0] == '-C' else args[0]}: "
+                f"{_tail(result.stderr.decode(errors='replace'))}",
+            )
+        return result.stdout.decode().strip()
+
+    commit = run("-C", str(source), "rev-parse", "--verify", f"{revision}^{{commit}}")
+    run("clone", "--quiet", "--shared", "--no-checkout", str(source), str(destination))
+    try:
+        origin = run("-C", str(source), "remote", "get-url", "origin")
+    except AlignmentError:
+        origin = ""
+    if origin:
+        run("-C", str(destination), "remote", "set-url", "origin", origin)
+    run("-C", str(destination), "checkout", "--quiet", "--detach", commit)
+    checkout = read_checkout(destination, side)
+    if checkout.commit != commit:
+        raise AlignmentError("checkout_failed", f"{side}: the export is not at {commit}")
+    return checkout
 
 
 def _is_jurisdiction_path(relpath: str) -> bool:
@@ -413,14 +496,13 @@ class ComposeEngineCompiler:
     def __init__(
         self,
         *,
-        roots: Mapping[str, Path],
         compose_binary: Path,
         engine_binary: Path,
         work_dir: Path,
         timeout: float = 600.0,
         cwd: Path | None = None,
     ) -> None:
-        self.roots = {side: Path(root) for side, root in roots.items()}
+        self.roots: dict[str, Path] = {}
         self.compose_binary = Path(compose_binary)
         self.engine_binary = Path(engine_binary)
         self.work_dir = Path(work_dir).resolve()
@@ -434,6 +516,12 @@ class ComposeEngineCompiler:
             shutil.rmtree(stage_dir, ignore_errors=True)
         self._stage_dirs.clear()
         self._staged.clear()
+
+    def use_roots(self, roots: Mapping[str, Path]) -> None:
+        """Compile against these exported trees (one per side)."""
+        self.close()
+        self.roots = {side: Path(root) for side, root in roots.items()}
+        self.prepare()
 
     def prepare(self) -> None:
         from axiom_oracles.engine_compat import stage_pure_root
@@ -705,10 +793,24 @@ class TreeIndex:
                     "rulespec_tree_unreadable", f"{relpath}: {type(exc).__name__}"
                 ) from exc
             self.references[module] = module_literals(text) - {module}
-        self._reverse: dict[str, set[str]] | None = None
+        self._ids = sorted(self.modules.values())
+        self._id_set = set(self._ids)
+
+    def modules_under(self, module: str) -> list[str]:
+        """The modules in the directory a module id names (``us:x/y`` for
+        ``us/x/y/``). A reference can name a directory of modules."""
+        prefix = f"{module}/"
+        start = bisect.bisect_left(self._ids, prefix)
+        out = []
+        for candidate in self._ids[start:]:
+            if not candidate.startswith(prefix):
+                break
+            out.append(candidate)
+        return out
 
     def closure(self, modules: Iterable[str]) -> set[str]:
-        """``modules`` plus every module they name, transitively."""
+        """``modules`` plus every module they name, transitively. A name that
+        is a directory stands for every module under it."""
         seen: set[str] = set()
         stack = list(modules)
         while stack:
@@ -716,25 +818,9 @@ class TreeIndex:
             if module in seen:
                 continue
             seen.add(module)
+            if module not in self._id_set:
+                stack.extend(self.modules_under(module))
             stack.extend(self.references.get(module, ()))
-        return seen
-
-    def referencing(self, modules: Iterable[str]) -> set[str]:
-        """``modules`` plus every module that names one of them, transitively."""
-        if self._reverse is None:
-            reverse: dict[str, set[str]] = {}
-            for module, targets in self.references.items():
-                for target in targets:
-                    reverse.setdefault(target, set()).add(module)
-            self._reverse = reverse
-        seen: set[str] = set()
-        stack = list(modules)
-        while stack:
-            module = stack.pop()
-            if module in seen:
-                continue
-            seen.add(module)
-            stack.extend(self._reverse.get(module, ()))
         return seen
 
     def _under(self, prefix: str) -> list[str]:
@@ -979,6 +1065,14 @@ class Suite:
     pinned: bool = False
     no_axiom_side: bool = False
     parameter_files: tuple[str, ...] = ()
+    #: Other names the suite's evidence is filed under (its dashboard name).
+    aliases: tuple[str, ...] = ()
+    #: Dashboard report file names the suite writes.
+    reports: tuple[str, ...] = ()
+    #: Prefix of the dated reports the suite writes under ``reports/``.
+    report_basename: str | None = None
+    #: Registry files a script-run comparison claims as its own evidence.
+    claims: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -988,6 +1082,8 @@ class BoundSuite:
     declaration: str | None = None
     roots: tuple[str, ...] = ()
     paths: tuple[str, ...] = ()
+    #: Globs that may match no tracked file (a file only some states have).
+    optional: frozenset[str] = frozenset()
 
 
 def _program_key_from_ref(ref: Any) -> str | None:
@@ -1048,11 +1144,13 @@ def _runner_suite(path: Path, doc: Mapping[str, Any]) -> Suite:
     concepts = params.get("concepts") or []
     if not isinstance(concepts, list) or not all(isinstance(c, str) for c in concepts):
         raise _registry_error(f"{path.name}: concepts not a string list")
-    pinned = bool(params.get("rulespec_upstream_sha") and params.get("rulespec_upstream_tree")) or bool(
-        params.get("axiom_rulespec_repo_roots_revision")
-        or runner.get("axiom_rulespec_repo_roots_revision")
+    pin_keys = PINNED_RUNNERS.get(runner["type"])
+    pinned = pin_keys is not None and all(
+        isinstance(params.get(key), str) and params[key].strip() for key in pin_keys
     )
     sides = (params.get("left"), params.get("right"))
+    dashboard = doc.get("dashboard") if isinstance(doc.get("dashboard"), Mapping) else {}
+    artifacts = doc.get("artifacts") if isinstance(doc.get("artifacts"), Mapping) else {}
     return Suite(
         name=name,
         file=f"comparisons/{path.name}",
@@ -1065,11 +1163,28 @@ def _runner_suite(path: Path, doc: Mapping[str, Any]) -> Suite:
         ),
         concepts=tuple(concepts),
         variables=_suite_variables(params),
+        aliases=tuple(
+            value for value in [dashboard.get("suite")] if isinstance(value, str) and value != name
+        ),
+        reports=tuple(
+            sorted(
+                {
+                    value
+                    for value in (dashboard.get("filename"), params.get("dashboard_filename"))
+                    if isinstance(value, str) and value
+                }
+            )
+        ),
+        report_basename=(
+            artifacts.get("report_basename")
+            if isinstance(artifacts.get("report_basename"), str)
+            else None
+        ),
         pinned=pinned,
         no_axiom_side=(
             runner["type"] == "axiom-oracles-compare"
-            and all(isinstance(side, str) for side in sides)
-            and "axiom" not in sides
+            and sides[0] in NON_AXIOM_ENGINES
+            and sides[1] in NON_AXIOM_ENGINES
         ),
     )
 
@@ -1115,6 +1230,11 @@ def _manifest_suites(path: Path, doc: Mapping[str, Any]) -> list[Suite]:
                 concepts=(),
                 variables=_suite_variables(row),
                 parameter_files=files,
+                reports=(
+                    str(row["report"])
+                    if isinstance(row.get("report"), str)
+                    else f"axiom-policyengine-{row['suite']}.json",
+                ),
             )
         )
     return out
@@ -1174,23 +1294,40 @@ def _looks_like_suite(path: Path) -> bool:
 class Declaration:
     id: str
     runner_types: tuple[str, ...] | None
-    suites: tuple[str, ...] | None
+    suites: tuple[str, ...]
     source: str | None
     reads_rulespec_us: bool
     roots: tuple[str, ...]
     paths: tuple[str, ...]
+    optional: frozenset[str]
     sources: tuple[str, ...]
 
     def matches(self, suite: Suite) -> bool:
-        if self.runner_types is not None and suite.runner_type not in self.runner_types:
+        if not any(fnmatch.fnmatchcase(suite.name, pattern) for pattern in self.suites):
             return False
-        if self.suites is not None and not any(
-            fnmatch.fnmatchcase(suite.name, pattern) for pattern in self.suites
-        ):
+        if self.runner_types is not None and suite.runner_type not in self.runner_types:
             return False
         if self.source is not None and suite.file != self.source:
             return False
         return True
+
+
+@dataclass(frozen=True)
+class CoverageConfig:
+    declarations: tuple[Declaration, ...]
+    #: Comparisons that run outside ``comparisons/``, already bound.
+    script_suites: tuple[BoundSuite, ...]
+    #: Script and command entry points, each with the reason it is no suite.
+    entry_points: Mapping[str, str]
+    #: ``(globs, reason)`` for registry files that are no comparison evidence.
+    exclusions: tuple[tuple[tuple[str, ...], str], ...]
+    #: The scripts the script-run comparisons name.
+    scripts: frozenset[str]
+    sha256: str
+
+
+def _config_error(detail: str) -> AlignmentError:
+    return AlignmentError("coverage_declarations_unreadable", detail)
 
 
 def _string_list(value: Any, label: str) -> tuple[str, ...]:
@@ -1199,88 +1336,137 @@ def _string_list(value: Any, label: str) -> tuple[str, ...]:
     if isinstance(value, str):
         return (value,)
     if not isinstance(value, list) or not all(isinstance(item, str) and item for item in value):
-        raise AlignmentError("coverage_declarations_unreadable", f"{label} is not a string list")
+        raise _config_error(f"{label} is not a string list")
     return tuple(value)
 
 
-def load_declarations(registry_root: Path) -> tuple[list[Declaration], str]:
-    """The coverage declarations and the sha256 of their file."""
-    path = Path(registry_root) / COVERAGE_FILE
+def _glob_list(
+    value: Any, label: str, named: Mapping[str, tuple[str, ...]]
+) -> tuple[tuple[str, ...], frozenset[str]]:
+    """Globs and the subset marked ``optional``. An item is a glob, an
+    ``@set`` name, or ``{glob: ..., optional: true}``."""
+    if value is None:
+        return (), frozenset()
+    if isinstance(value, str):
+        value = [value]
+    if not isinstance(value, list):
+        raise _config_error(f"{label} is not a list")
+    out: list[str] = []
+    optional: set[str] = set()
+    for item in value:
+        if isinstance(item, Mapping):
+            if set(item) - {"glob", "optional"} or not isinstance(item.get("glob"), str):
+                raise _config_error(f"{label}: bad glob entry")
+            if not isinstance(item.get("optional", False), bool):
+                raise _config_error(f"{label}: optional is not a boolean")
+            out.append(item["glob"])
+            if item.get("optional"):
+                optional.add(item["glob"])
+        elif isinstance(item, str) and item.startswith("@"):
+            if item[1:] not in named:
+                raise _config_error(f"{label}: unknown set {item}")
+            out.extend(named[item[1:]])
+        elif isinstance(item, str) and item:
+            out.append(item)
+        else:
+            raise _config_error(f"{label}: bad glob entry")
+    for pattern in out:
+        if pattern.startswith("/") or ".." in pattern.split("/"):
+            raise _config_error(f"{label}: bad glob {pattern!r}")
+    return tuple(out), frozenset(optional)
+
+
+def _campaign_contract_states(registry_root: Path, relpath: str, label: str) -> list[str]:
+    try:
+        doc = yaml.safe_load((Path(registry_root) / relpath).read_text())
+        states = [str(row["state"]).lower() for row in doc["jurisdictions"]]
+    except (OSError, UnicodeDecodeError, yaml.YAMLError, KeyError, TypeError) as exc:
+        raise _config_error(f"{label}: {relpath}: {type(exc).__name__}") from exc
+    if not states or not all(re.fullmatch(r"[a-z]{2}", state) for state in states):
+        raise _config_error(f"{label}: {relpath} lists no states")
+    return states
+
+
+def _direct_variable_modules(registry_root: Path, relpath: str, label: str) -> tuple[str, ...]:
+    try:
+        doc = yaml.safe_load((Path(registry_root) / relpath).read_text())
+        rows = doc["mappings"]
+    except (OSError, UnicodeDecodeError, yaml.YAMLError, KeyError, TypeError) as exc:
+        raise _config_error(f"{label}: {relpath}: {type(exc).__name__}") from exc
+    files = set()
+    for row in rows if isinstance(rows, list) else []:
+        if not isinstance(row, Mapping) or row.get("mapping_type") != "direct_variable":
+            continue
+        module = _module_of(str(row.get("legal_id") or ""))
+        if module and ":" in module:
+            files.add(module.replace(":", "/", 1) + ".yaml")
+    if not files:
+        raise _config_error(f"{label}: {relpath} holds no direct_variable mapping")
+    return tuple(sorted(files))
+
+
+def load_coverage(registry_root: Path, suites: Sequence[Suite] = ()) -> CoverageConfig:
+    """The coverage configuration: declarations for suites of ``comparisons/``,
+    the comparisons that run outside it, and the evidence exclusions."""
+    registry_root = Path(registry_root)
+    path = registry_root / COVERAGE_FILE
     try:
         raw = path.read_bytes()
         doc = yaml.safe_load(raw.decode("utf-8"))
     except (OSError, UnicodeDecodeError, yaml.YAMLError) as exc:
-        raise AlignmentError(
-            "coverage_declarations_unreadable", f"{COVERAGE_FILE}: {type(exc).__name__}"
-        ) from exc
+        raise _config_error(f"{COVERAGE_FILE}: {type(exc).__name__}") from exc
     if not isinstance(doc, Mapping) or doc.get("schema") != COVERAGE_SCHEMA:
-        raise AlignmentError("coverage_declarations_unreadable", "unknown schema")
+        raise _config_error("unknown schema")
+    unknown = set(doc) - {"schema", "sets", "declarations", "script_suites", "evidence"}
+    if unknown:
+        raise _config_error(f"unknown keys {sorted(unknown)}")
     sets = doc.get("sets") or {}
     if not isinstance(sets, Mapping):
-        raise AlignmentError("coverage_declarations_unreadable", "sets is not a mapping")
+        raise _config_error("sets is not a mapping")
     named = {str(key): _string_list(value, f"set {key}") for key, value in sets.items()}
 
-    def expand(values: tuple[str, ...], label: str) -> tuple[str, ...]:
-        out: list[str] = []
-        for value in values:
-            if value.startswith("@"):
-                if value[1:] not in named:
-                    raise AlignmentError(
-                        "coverage_declarations_unreadable", f"{label}: unknown set {value}"
-                    )
-                out.extend(named[value[1:]])
-            else:
-                out.append(value)
-        for pattern in out:
-            if pattern.startswith("/") or ".." in pattern.split("/") or not pattern:
-                raise AlignmentError(
-                    "coverage_declarations_unreadable", f"{label}: bad glob {pattern!r}"
-                )
-        return tuple(out)
+    def sources_of(row: Mapping[str, Any], label: str, default: tuple[str, ...] = ()) -> tuple[str, ...]:
+        sources = _string_list(row.get("sources"), f"{label} sources") or default
+        for source_file in sources:
+            if not (registry_root / source_file).is_file():
+                raise _config_error(f"{label}: source {source_file} does not exist")
+        return sources
 
     rows = doc.get("declarations")
     if not isinstance(rows, list):
-        raise AlignmentError("coverage_declarations_unreadable", "declarations is not a list")
+        raise _config_error("declarations is not a list")
     declarations: list[Declaration] = []
     seen: set[str] = set()
     for row in rows:
         if not isinstance(row, Mapping) or not isinstance(row.get("id"), str):
-            raise AlignmentError("coverage_declarations_unreadable", "declaration without an id")
+            raise _config_error("declaration without an id")
         label = f"declaration {row['id']}"
         if row["id"] in seen:
-            raise AlignmentError("coverage_declarations_unreadable", f"{label}: duplicate id")
+            raise _config_error(f"{label}: duplicate id")
         seen.add(row["id"])
         unknown = set(row) - {"id", "match", "reads_rulespec_us", "roots", "paths", "sources"}
         if unknown:
-            raise AlignmentError(
-                "coverage_declarations_unreadable", f"{label}: unknown keys {sorted(unknown)}"
-            )
+            raise _config_error(f"{label}: unknown keys {sorted(unknown)}")
         match = row.get("match")
-        if not isinstance(match, Mapping) or not match or set(match) - {
-            "runner_type",
-            "suites",
-            "source",
-        }:
-            raise AlignmentError("coverage_declarations_unreadable", f"{label}: bad match")
+        if not isinstance(match, Mapping) or set(match) - {"runner_type", "suites", "source"}:
+            raise _config_error(f"{label}: bad match")
+        # A declaration names its suites, by id or by an explicit pattern; a
+        # runner type alone would hand it to every later suite of that type.
+        suite_patterns = _string_list(match.get("suites"), f"{label} suites")
+        if not suite_patterns:
+            raise _config_error(f"{label}: match names no suites")
         reads = row.get("reads_rulespec_us", True)
         if not isinstance(reads, bool):
-            raise AlignmentError(
-                "coverage_declarations_unreadable", f"{label}: reads_rulespec_us is not a boolean"
-            )
-        roots = expand(_string_list(row.get("roots"), f"{label} roots"), label)
-        paths = expand(_string_list(row.get("paths"), f"{label} paths"), label)
+            raise _config_error(f"{label}: reads_rulespec_us is not a boolean")
+        roots, optional_roots = _glob_list(row.get("roots"), f"{label} roots", named)
+        paths, optional_paths = _glob_list(row.get("paths"), f"{label} paths", named)
         if reads and not (roots or paths):
-            raise AlignmentError(
-                "coverage_declarations_unreadable", f"{label}: declares no roots and no paths"
-            )
+            raise _config_error(f"{label}: declares no roots and no paths")
         if not reads and (roots or paths):
-            raise AlignmentError(
-                "coverage_declarations_unreadable",
-                f"{label}: reads_rulespec_us is false but globs are given",
-            )
+            raise _config_error(f"{label}: reads_rulespec_us is false but globs are given")
         source = match.get("source")
         if source is not None and not isinstance(source, str):
-            raise AlignmentError("coverage_declarations_unreadable", f"{label}: bad source")
+            raise _config_error(f"{label}: bad source")
         declarations.append(
             Declaration(
                 id=row["id"],
@@ -1289,21 +1475,131 @@ def load_declarations(registry_root: Path) -> tuple[list[Declaration], str]:
                     if "runner_type" in match
                     else None
                 ),
-                suites=_string_list(match["suites"], f"{label} suites") if "suites" in match else None,
+                suites=suite_patterns,
                 source=source,
                 reads_rulespec_us=reads,
                 roots=roots,
                 paths=paths,
-                sources=_string_list(row.get("sources"), f"{label} sources"),
+                optional=optional_roots | optional_paths,
+                sources=sources_of(row, label),
             )
         )
-        for source_file in declarations[-1].sources:
-            if not (Path(registry_root) / source_file).is_file():
-                raise AlignmentError(
-                    "coverage_declarations_unreadable",
-                    f"{label}: source {source_file} does not exist",
+
+    registered = {suite.name for suite in suites}
+    script_suites: list[BoundSuite] = []
+    script_rows = doc.get("script_suites") or []
+    if not isinstance(script_rows, list):
+        raise _config_error("script_suites is not a list")
+    for row in script_rows:
+        if not isinstance(row, Mapping) or not isinstance(row.get("id"), str):
+            raise _config_error("script suite without an id")
+        label = f"script suite {row['id']}"
+        if row["id"] in seen:
+            raise _config_error(f"{label}: duplicate id")
+        seen.add(row["id"])
+        unknown = set(row) - {
+            "id",
+            "script",
+            "suites",
+            "suites_from_campaign_contract",
+            "roots",
+            "roots_from_direct_variable_mappings",
+            "paths",
+            "sources",
+            "claims",
+            "reports",
+        }
+        if unknown:
+            raise _config_error(f"{label}: unknown keys {sorted(unknown)}")
+        script = row.get("script")
+        if not isinstance(script, str) or not (registry_root / script).is_file():
+            raise _config_error(f"{label}: script {script!r} does not exist")
+        roots, optional_roots = _glob_list(row.get("roots"), f"{label} roots", named)
+        paths, optional_paths = _glob_list(row.get("paths"), f"{label} paths", named)
+        optional = set(optional_roots | optional_paths)
+        if row.get("roots_from_direct_variable_mappings"):
+            derived = _direct_variable_modules(
+                registry_root, str(row["roots_from_direct_variable_mappings"]), label
+            )
+            roots += derived
+            # A mapping can name a module the tree does not hold yet.
+            optional |= set(derived)
+        if not (roots or paths):
+            raise _config_error(f"{label}: declares no roots and no paths")
+        names: list[tuple[str, dict[str, str]]] = [
+            (name, {}) for name in _string_list(row.get("suites"), f"{label} suites")
+        ]
+        if row.get("suites_from_campaign_contract"):
+            for state in _campaign_contract_states(
+                registry_root, str(row["suites_from_campaign_contract"]), label
+            ):
+                name = f"{state}-income-tax-populace"
+                if name not in registered:
+                    names.append((name, {"state": state, "jurisdiction": f"us-{state}"}))
+        if not names:
+            raise _config_error(f"{label}: names no suites")
+        declared_sources = sources_of(row, label, (script,))
+        claims = _string_list(row.get("claims"), f"{label} claims")
+        report_template = row.get("reports")
+        if report_template is not None and not isinstance(report_template, str):
+            raise _config_error(f"{label}: reports is not a string")
+        for name, variables in names:
+            if name in registered:
+                raise _config_error(f"{label}: suite {name} is already registered")
+            registered.add(name)
+            suite = Suite(
+                name=name,
+                file=COVERAGE_FILE,
+                ci="manual",
+                mode=MODE_MANUAL,
+                runner_type=SCRIPT_RUNNER,
+                program_key=None,
+                concepts=(),
+                variables=variables,
+                reports=(report_template.replace("{suite}", name),) if report_template else (),
+                claims=tuple(claim.replace("{suite}", name) for claim in claims),
+            )
+            placeholder = Declaration(
+                row["id"], None, (name,), None, True, roots, paths, frozenset(optional), declared_sources
+            )
+            script_suites.append(
+                BoundSuite(
+                    suite,
+                    BINDING_SCRIPT,
+                    row["id"],
+                    roots=_fill(roots, suite, placeholder),
+                    paths=_fill(paths, suite, placeholder),
+                    optional=frozenset(_fill(tuple(sorted(optional)), suite, placeholder)),
                 )
-    return declarations, sha256_bytes(raw)
+            )
+
+    evidence = doc.get("evidence") or {}
+    if not isinstance(evidence, Mapping) or set(evidence) - {"entry_points", "exclusions"}:
+        raise _config_error("evidence: bad section")
+    entry_points = evidence.get("entry_points") or {}
+    if not isinstance(entry_points, Mapping) or not all(
+        isinstance(key, str) and isinstance(value, str) and value.strip()
+        for key, value in entry_points.items()
+    ):
+        raise _config_error("evidence.entry_points must map a path to a reason")
+    exclusions: list[tuple[tuple[str, ...], str]] = []
+    for row in evidence.get("exclusions") or []:
+        if (
+            not isinstance(row, Mapping)
+            or set(row) != {"files", "reason"}
+            or not isinstance(row["reason"], str)
+            or not row["reason"].strip()
+        ):
+            raise _config_error("evidence.exclusions: each entry needs files and a reason")
+        exclusions.append((_string_list(row["files"], "exclusion files"), row["reason"]))
+    return CoverageConfig(
+        declarations=tuple(declarations),
+        script_suites=tuple(script_suites),
+        entry_points=dict(entry_points),
+        exclusions=tuple(exclusions),
+        scripts=frozenset(str(row["script"]) for row in script_rows),
+        sha256=sha256_bytes(raw),
+    )
 
 
 def _fill(patterns: tuple[str, ...], suite: Suite, declaration: Declaration) -> tuple[str, ...]:
@@ -1311,10 +1607,9 @@ def _fill(patterns: tuple[str, ...], suite: Suite, declaration: Declaration) -> 
     for pattern in patterns:
         for variable in re.findall(r"\{([a-z_]+)\}", pattern):
             if variable not in suite.variables:
-                raise AlignmentError(
-                    "coverage_declarations_unreadable",
+                raise _config_error(
                     f"declaration {declaration.id} needs {{{variable}}}, which suite "
-                    f"{suite.name} does not give",
+                    f"{suite.name} does not give"
                 )
             pattern = pattern.replace(f"{{{variable}}}", suite.variables[variable])
         out.append(pattern)
@@ -1322,7 +1617,7 @@ def _fill(patterns: tuple[str, ...], suite: Suite, declaration: Declaration) -> 
 
 
 def bind_suites(
-    suites: Sequence[Suite], known_programs: set[str], declarations: Sequence[Declaration]
+    suites: Sequence[Suite], known_programs: set[str], coverage: CoverageConfig
 ) -> list[BoundSuite]:
     """Give every suite the one way it covers a rulespec-us change.
 
@@ -1330,18 +1625,20 @@ def bind_suites(
     nothing. Otherwise a named program file that compiled binds the suite to
     that program (a declaration that also matches adds to it); a parameter
     manifest row is bound to its files; any other suite must match exactly
-    one declaration. A suite left without a binding
-    raises ``reference_unbound``: it could cover anything.
+    one declaration. A suite left without a binding raises
+    ``reference_unbound``: it could cover anything. The comparisons that run
+    outside ``comparisons/`` are appended, bound by their own entry.
     """
+    declarations = coverage.declarations
     bound: list[BoundSuite] = []
     unbound: list[str] = []
     for suite in suites:
         matching = [d for d in declarations if d.matches(suite)]
         if len(matching) > 1:
-            raise AlignmentError(
-                "coverage_declarations_unreadable",
-                f"suite {suite.name} matches declarations {[d.id for d in matching]}",
+            raise _config_error(
+                f"suite {suite.name} matches declarations {[d.id for d in matching]}"
             )
+        declared = matching[0] if matching else None
         if suite.pinned:
             bound.append(BoundSuite(suite, BINDING_PINNED))
         elif suite.no_axiom_side:
@@ -1349,37 +1646,41 @@ def bind_suites(
         elif suite.program_key is not None and suite.program_key in known_programs:
             # A declaration beside a program binding adds what the suite's
             # bridge reads outside the program file.
-            if matching and not matching[0].reads_rulespec_us:
-                raise AlignmentError(
-                    "coverage_declarations_unreadable",
+            if declared is not None and not declared.reads_rulespec_us:
+                raise _config_error(
                     f"suite {suite.name} compiles a rulespec-us program, but declaration "
-                    f"{matching[0].id} says it reads no rulespec-us file",
+                    f"{declared.id} says it reads no rulespec-us file"
                 )
             bound.append(
                 BoundSuite(
                     suite,
                     BINDING_PROGRAM,
-                    matching[0].id if matching else None,
-                    roots=_fill(matching[0].roots, suite, matching[0]) if matching else (),
-                    paths=_fill(matching[0].paths, suite, matching[0]) if matching else (),
+                    declared.id if declared else None,
+                    roots=_fill(declared.roots, suite, declared) if declared else (),
+                    paths=_fill(declared.paths, suite, declared) if declared else (),
+                    optional=(
+                        frozenset(_fill(tuple(sorted(declared.optional)), suite, declared))
+                        if declared
+                        else frozenset()
+                    ),
                 )
             )
         elif suite.parameter_files:
-            bound.append(
-                BoundSuite(suite, BINDING_PARAMETER_FILES, roots=suite.parameter_files)
-            )
-        elif matching:
-            declaration = matching[0]
-            if not declaration.reads_rulespec_us:
-                bound.append(BoundSuite(suite, BINDING_NONE, declaration.id))
+            bound.append(BoundSuite(suite, BINDING_PARAMETER_FILES, roots=suite.parameter_files))
+        elif declared is not None:
+            if not declared.reads_rulespec_us:
+                bound.append(BoundSuite(suite, BINDING_NONE, declared.id))
             else:
                 bound.append(
                     BoundSuite(
                         suite,
                         BINDING_DECLARED,
-                        declaration.id,
-                        roots=_fill(declaration.roots, suite, declaration),
-                        paths=_fill(declaration.paths, suite, declaration),
+                        declared.id,
+                        roots=_fill(declared.roots, suite, declared),
+                        paths=_fill(declared.paths, suite, declared),
+                        optional=frozenset(
+                            _fill(tuple(sorted(declared.optional)), suite, declared)
+                        ),
                     )
                 )
         else:
@@ -1390,7 +1691,136 @@ def bind_suites(
             f"{len(unbound)} suites have no program binding and no coverage declaration "
             f"in {COVERAGE_FILE}: {', '.join(sorted(unbound))}",
         )
-    return bound
+    used = {item.declaration for item in bound}
+    stale = sorted(d.id for d in declarations if d.id not in used)
+    if stale:
+        raise _config_error(f"declarations that match no suite: {', '.join(stale)}")
+    return bound + list(coverage.script_suites)
+
+
+def stale_coverage(bound: Sequence[BoundSuite], trees: Mapping[str, "TreeIndex"]) -> list[str]:
+    """Declared globs and parameter files that match no tracked file in
+    either tree. A glob that matches nothing covers nothing: the file it was
+    written for was moved or never existed."""
+    paths = sorted({path for tree in trees.values() for path in tree.paths})
+    verdict: dict[str, bool] = {}
+    stale = []
+    for item in bound:
+        for pattern in (*item.roots, *item.paths):
+            if pattern in item.optional:
+                continue
+            if pattern not in verdict:
+                regex = glob_regex(pattern)
+                verdict[pattern] = any(regex.match(path) for path in paths)
+            if not verdict[pattern]:
+                stale.append(f"{item.suite.name}: {pattern}")
+    return sorted(set(stale))
+
+
+EVIDENCE_DIRECTORIES = ("dispositions", "dashboard/public/data", "reports")
+ENTRY_POINT_GLOBS = ("scripts/run_*comparison*.py", "scripts/*campaign*.py")
+
+
+def unregistered_evidence(
+    registry_root: Path, bound: Sequence[BoundSuite], coverage: CoverageConfig
+) -> list[str]:
+    """Registry files that show a comparison no registered suite accounts for.
+
+    Every dispositions file, every dashboard data file, every dated report
+    under ``reports/``, every comparison or campaign script and every console
+    command must belong to a registered suite or to an exclusion that gives a
+    reason. An exclusion or claim that matches no file is reported too, so
+    the lists cannot outlive what they were written for.
+    """
+    registry_root = Path(registry_root)
+    names: set[str] = set()
+    reports: set[str] = set()
+    basenames: list[str] = []
+    claims: list[str] = []
+    for item in bound:
+        names.add(item.suite.name)
+        names.update(item.suite.aliases)
+        reports.update(item.suite.reports)
+        if item.suite.report_basename:
+            basenames.append(item.suite.report_basename)
+        claims.extend(item.suite.claims)
+    scripts = coverage.scripts
+    problems: list[str] = []
+
+    exclusion_globs = [pattern for globs, _ in coverage.exclusions for pattern in globs]
+    used: set[str] = set()
+
+    def matches(patterns: Iterable[str], relpath: str) -> bool:
+        hit = False
+        for pattern in patterns:
+            if glob_regex(pattern).match(relpath):
+                used.add(pattern)
+                hit = True
+        return hit
+
+    for directory in EVIDENCE_DIRECTORIES:
+        base = registry_root / directory
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*")):
+            if not path.is_file():
+                continue
+            relpath = path.relative_to(registry_root).as_posix()
+            inner = path.relative_to(base).as_posix()
+            if directory == "dispositions":
+                if path.suffix not in (".yaml", ".yml"):
+                    continue
+                if "/" not in inner and path.stem in names:
+                    continue
+            elif directory == "dashboard/public/data":
+                if inner in reports:
+                    continue
+                # Per-suite chunks of a report: cases/<suite>/..., dispositions/<suite>.json.
+                parts = inner.split("/")
+                if parts[0] == "cases" and len(parts) > 2 and parts[1] in names:
+                    continue
+                if parts[0] == "dispositions" and len(parts) == 2 and Path(parts[1]).stem in names:
+                    continue
+            else:
+                if path.suffix != ".json":
+                    continue
+                if any(inner.startswith(f"{basename}-") for basename in basenames):
+                    continue
+            if matches(claims, relpath) or matches(exclusion_globs, relpath):
+                continue
+            problems.append(f"{relpath}: no registered suite and no exclusion")
+
+    entry_points = set()
+    for pattern in ENTRY_POINT_GLOBS:
+        directory, _, name = pattern.rpartition("/")
+        entry_points |= {
+            path.relative_to(registry_root).as_posix()
+            for path in (registry_root / directory).glob(name)
+            if path.is_file()
+        }
+    pyproject = registry_root / "pyproject.toml"
+    if pyproject.is_file():
+        import tomllib
+
+        try:
+            project = tomllib.loads(pyproject.read_text()).get("project", {})
+        except (OSError, UnicodeDecodeError, tomllib.TOMLDecodeError) as exc:
+            raise AlignmentError("registry_unreadable", f"pyproject.toml: {exc}") from exc
+        for command, target in (project.get("scripts") or {}).items():
+            entry_points.add(f"console:{command}={target}")
+    for entry in sorted(entry_points):
+        if entry in scripts or entry in coverage.entry_points:
+            continue
+        problems.append(f"{entry}: a comparison entry point with no suite and no reason")
+    for entry in sorted(coverage.entry_points):
+        if entry not in entry_points and not (registry_root / entry).is_file():
+            problems.append(f"{entry}: listed entry point does not exist")
+    for pattern in sorted(set(claims) | set(exclusion_globs)):
+        if pattern not in used and any(
+            (registry_root / directory).is_dir() for directory in EVIDENCE_DIRECTORIES
+        ):
+            problems.append(f"{pattern}: claim or exclusion that matches no file")
+    return problems
 
 
 # ---------------------------------------------------------------------------
@@ -1588,7 +2018,10 @@ def expected_suites(
             if declared:
                 entry["covered_files"] = declared
                 entry["declaration"] = bound.declaration
-        elif bound.binding in (BINDING_DECLARED, BINDING_PARAMETER_FILES) and declared:
+        elif (
+            bound.binding in (BINDING_DECLARED, BINDING_PARAMETER_FILES, BINDING_SCRIPT)
+            and declared
+        ):
             entry = {"binding": bound.binding, "covered_files": declared}
             if bound.declaration:
                 entry["declaration"] = bound.declaration
@@ -1626,15 +2059,19 @@ class ReportsDirExecutor:
     """Read already-produced reports from ``<dir>/<side>/<suite>.json``.
 
     ``<dir>/manifest.json`` must name the registry commit and both rulespec-us
-    commits the reports were produced with and the sha256 of every report
-    file. The manifest is the supplier's own statement: it binds the files to
-    one run of this report, it does not prove who ran them.
+    commits the reports were produced with, the sha256 of every report file
+    and the sha256 of the suite file. The manifest is the supplier's own
+    statement: it binds the files to one run of this report, it does not
+    prove who ran them or that they ran at all. A result from supplied
+    reports is therefore ``aligned_unverified`` or ``regressed_unverified``,
+    never ``aligned`` or ``regressed``; a gate may only use ``--execute``.
     """
 
-    evidence = "supplied_reports"
+    evidence = EVIDENCE_SUPPLIED
 
-    def __init__(self, directory: Path) -> None:
+    def __init__(self, directory: Path, registry_root: Path) -> None:
         self.directory = Path(directory)
+        self.registry_root = Path(registry_root)
         self._manifest: Mapping[str, Any] | None = None
 
     def bind(self, registry_commit: str, commits: Mapping[str, str]) -> None:
@@ -1681,6 +2118,19 @@ class ReportsDirExecutor:
                 "supplied_reports_unbound",
                 f"the {side} report of suite {suite} is not the file the manifest lists",
             )
+        suite_file = next(
+            (
+                self.registry_root / "comparisons" / f"{suite}{suffix}"
+                for suffix in (".yaml", ".yml")
+                if (self.registry_root / "comparisons" / f"{suite}{suffix}").is_file()
+            ),
+            None,
+        )
+        if suite_file is None or listed.get("suite_file_sha256") != sha256_file(suite_file):
+            raise AlignmentError(
+                "supplied_reports_unbound",
+                f"suite {suite}: the reports were not produced with this suite file",
+            )
         try:
             return json.loads(raw)
         except ValueError as exc:
@@ -1697,7 +2147,7 @@ class RunComparisonExecutor:
     checkout. Tool repositories and caches of the real home are linked in.
     """
 
-    evidence = "live_run"
+    evidence = EVIDENCE_LIVE
     LINKED = ("axiom-compose", "axiom-rules-engine", "axiom-rules", "axiom-encode")
     CACHE_ENV = {
         "UV_CACHE_DIR": ".cache/uv",
@@ -1711,19 +2161,22 @@ class RunComparisonExecutor:
         self,
         *,
         registry_root: Path,
-        homes: Mapping[str, Path],
         output_dir: Path,
         timeout: float = 3600.0,
         runner: Callable[..., Any] = subprocess.run,
     ) -> None:
         self.registry_root = Path(registry_root)
-        self.homes = {side: Path(home) for side, home in homes.items()}
+        self.homes: dict[str, Path] = {}
         self.output_dir = Path(output_dir)
         self.timeout = timeout
         self.runner = runner
 
     def bind(self, registry_commit: str, commits: Mapping[str, str]) -> None:
         return None
+
+    def use_roots(self, roots: Mapping[str, Path]) -> None:
+        """Each side's home is the directory that holds its exported tree."""
+        self.homes = {side: Path(root).parent for side, root in roots.items()}
 
     def _environment(self, side: str) -> dict[str, str]:
         real_home = Path(os.environ.get("HOME", str(Path.home())))
@@ -1791,6 +2244,8 @@ class ParsedReport:
     shape: str
     engine: Any
     oracle: Any
+    #: What decides a match: the report's tolerance and concept table.
+    settings: Any = None
 
 
 def _positive(value: Any) -> bool:
@@ -1822,7 +2277,7 @@ def parse_report(report: Mapping[str, Any], suite: str, side: str, commit: str) 
     # report's own ``suite`` key is not it: a population comparison writes
     # the name of its case set there.
     generated_by = provenance.get("generated_by")
-    if not isinstance(generated_by, str) or not generated_by.endswith(f"::{suite}"):
+    if generated_by != f"scripts/run_comparison.py::{suite}":
         raise fail("suite_report_provenance_mismatch", f"generated by {generated_by!r}")
     rows = provenance.get("rulespecs")
     ours = [
@@ -1891,18 +2346,34 @@ def parse_report(report: Mapping[str, Any], suite: str, side: str, commit: str) 
                 state = "match"
             else:
                 raise fail("suite_run_failed", f"case {case_id!r} compared nothing")
-        elif isinstance(case.get("matched"), bool) or isinstance(case.get("match"), bool):
-            flag = case["matched"] if isinstance(case.get("matched"), bool) else case["match"]
-            shape = "replay" if "matched" in case else "grid"
+        elif "matched" in case and (
+            isinstance(case["matched"], bool)
+            or (case["matched"] is None and case.get("stage") == "error")
+        ):
+            # The SNAP QC replay and the boundary grids. The replay writes
+            # ``matched: None, stage: "error"`` for a case one side of which
+            # is missing; that is this shape's error state.
+            shape = "replay"
+            flag = case["matched"]
             if case.get("yrmonth") is not None:
                 case_id = f"{case_id}@{case['yrmonth']}"
+            compared = {str(case.get("concept") or report.get("concept") or "*")}
+            if flag is None:
+                state, mismatched = "error", set()
+            else:
+                state = "match" if flag else "mismatch"
+                mismatched = (
+                    set() if flag else (top_by_case.get(case["case_id"]) or {UNATTRIBUTED})
+                )
+        elif isinstance(case.get("match"), bool):
+            shape = "grid"
             if run_errors:
                 raise fail(
                     "suite_run_failed",
                     "the run recorded errors, and this report shape does not say which cases",
                 )
-            concept = str(case.get("concept") or report.get("concept") or "*")
-            compared = {concept}
+            flag = case["match"]
+            compared = {str(case.get("concept") or report.get("concept") or "*")}
             state = "match" if flag else "mismatch"
             mismatched = set() if flag else (top_by_case.get(case["case_id"]) or {UNATTRIBUTED})
         else:
@@ -1917,7 +2388,11 @@ def parse_report(report: Mapping[str, Any], suite: str, side: str, commit: str) 
     if len(shapes) != 1:
         raise fail("suite_report_shape_unsupported", f"mixed case shapes {sorted(shapes)}")
     return ParsedReport(
-        cases=parsed, shape=shapes.pop(), engine=provenance.get("engine"), oracle=dict(oracle)
+        cases=parsed,
+        shape=shapes.pop(),
+        engine=provenance.get("engine"),
+        oracle=dict(oracle),
+        settings={"tolerance": report.get("tolerance"), "concepts": report.get("concepts")},
     )
 
 
@@ -1946,6 +2421,7 @@ def compare_suite_reports(
     dispositions: Mapping[str, Any] | None = None,
     *,
     commits: Mapping[str, str],
+    require_engine_identity: bool = False,
 ) -> dict[str, Any]:
     """Per-case comparison of a suite's base and candidate reports.
 
@@ -1976,6 +2452,17 @@ def compare_suite_reports(
         raise AlignmentError(
             "suite_report_provenance_mismatch",
             f"suite {suite}: base and candidate ran with different engine identities",
+        )
+    if before_report.settings != after_report.settings:
+        raise AlignmentError(
+            "suite_report_provenance_mismatch",
+            f"suite {suite}: base and candidate were compared with different tolerances "
+            "or concept tables",
+        )
+    if require_engine_identity and not before_report.engine:
+        raise AlignmentError(
+            "suite_report_provenance_mismatch",
+            f"suite {suite}: the reports record no engine identity",
         )
     if len(before) != len(after):
         raise AlignmentError(
@@ -2110,10 +2597,16 @@ def derive_status(
 
 @dataclass
 class AlignmentInputs:
-    base_root: Path
-    candidate_root: Path
+    #: Git repositories the two commits are exported from. The work trees of
+    #: these repositories are never read.
+    base_repo: Path
+    candidate_repo: Path
     registry_root: Path
     compiler: Compiler
+    #: Empty scratch directory the two commits are exported into.
+    work_dir: Path
+    base_rev: str = "HEAD"
+    candidate_rev: str = "HEAD"
     changed: Sequence[str] | None = None
     executor: SuiteExecutor | None = None
     include_registry_programs: bool = True
@@ -2149,17 +2642,30 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
     provenance["registry_commit"] = registry_sha
     provenance["registry_dirty"] = git_dirty(registry_root)
 
+    work_dir = Path(inputs.work_dir)
     checkouts = {
-        "base": read_checkout(inputs.base_root, "base"),
-        "candidate": read_checkout(inputs.candidate_root, "candidate"),
+        "base": export_commit(
+            inputs.base_repo, inputs.base_rev, work_dir / "base" / "rulespec-us", "base"
+        ),
+        "candidate": export_commit(
+            inputs.candidate_repo,
+            inputs.candidate_rev,
+            work_dir / "candidate" / "rulespec-us",
+            "candidate",
+        ),
     }
     commits = {side: checkouts[side].commit for side in SIDES}
+    roots = {side: checkouts[side].root for side in SIDES}
     provenance["rulespec_commit"] = dict(commits)
+    provenance["rulespec_tree"] = {side: checkouts[side].tree for side in SIDES}
     provenance["rulespec_tree_files"] = {side: len(checkouts[side].blobs) for side in SIDES}
+    for user in (inputs.compiler, inputs.executor):
+        if user is not None and hasattr(user, "use_roots"):
+            user.use_roots(roots)
 
     suites = load_suites(registry_root)
-    declarations, declarations_sha = load_declarations(registry_root)
-    provenance["coverage_declarations_sha256"] = declarations_sha
+    coverage_config = load_coverage(registry_root, suites)
+    provenance["coverage_declarations_sha256"] = coverage_config.sha256
 
     changed = changed_files(checkouts["base"], checkouts["candidate"], inputs.changed)
     if not changed:
@@ -2194,14 +2700,28 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
     )
 
     known_programs = {key for side in SIDES for key in compiled[side]}
-    bound = bind_suites(suites, known_programs, declarations)
+    bound = bind_suites(suites, known_programs, coverage_config)
+    unregistered = unregistered_evidence(registry_root, bound, coverage_config)
+    if unregistered:
+        raise AlignmentError(
+            "comparison_evidence_unregistered",
+            f"{len(unregistered)} registry files or entry points belong to no registered "
+            f"suite and no exclusion: {'; '.join(unregistered[:12])}",
+        )
+    stale = stale_coverage(bound, trees)
+    if stale:
+        raise AlignmentError(
+            "coverage_declaration_stale",
+            f"{len(stale)} declared globs match no tracked file in either tree: "
+            f"{'; '.join(stale[:12])}",
+        )
     by_binding: dict[str, int] = {}
     for item in bound:
         by_binding[item.binding] = by_binding.get(item.binding, 0) + 1
     report["suite_registry"] = {
-        "suites": len(suites),
-        "runnable": sum(s.mode == MODE_RUNNABLE for s in suites),
-        "manual": sum(s.mode == MODE_MANUAL for s in suites),
+        "suites": len(bound),
+        "runnable": sum(item.suite.mode == MODE_RUNNABLE for item in bound),
+        "manual": sum(item.suite.mode == MODE_MANUAL for item in bound),
         "by_binding": dict(sorted(by_binding.items())),
         "pinned_snapshot_suites": sorted(
             item.suite.name for item in bound if item.binding == BINDING_PINNED
@@ -2227,12 +2747,19 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
                 candidate,
                 _load_dispositions(registry_root, suite),
                 commits=commits,
+                require_engine_identity=inputs.executor.evidence != EVIDENCE_LIVE,
             )
             result["evidence"] = inputs.executor.evidence
             executions.append(result)
         report["executions"] = executions
 
-    report.update(derive_status(reach, expected, executions))
+    status = derive_status(reach, expected, executions)
+    if executions is not None:
+        report["evidence"] = inputs.executor.evidence
+        if inputs.executor.evidence != EVIDENCE_LIVE:
+            # Reports this tool did not run cannot carry a gate-grade status.
+            status["status"] += UNVERIFIED_SUFFIX
+    report.update(status)
 
 
 def build_report(inputs: AlignmentInputs) -> dict[str, Any]:
@@ -2267,33 +2794,6 @@ def _mark_error(report: dict[str, Any], cause: str, detail: str) -> None:
 def exit_code(report: Mapping[str, Any]) -> int:
     """``0`` for every completed derivation (report only), ``2`` for an error."""
     return 2 if report.get("status") == STATUS_ERROR else 0
-
-
-def materialize_checkout(source_repo: Path, revision: str, destination: Path) -> str:
-    """Clone ``source_repo`` at ``revision`` into ``destination``.
-
-    The clone keeps the source's ``origin`` URL so it is a canonical checkout
-    for the engine. The source repository is only read.
-    """
-    destination = Path(destination)
-    if destination.exists():
-        raise AlignmentError("checkout_failed", f"{destination.name} already exists")
-    destination.parent.mkdir(parents=True, exist_ok=True)
-
-    def git(*args: str) -> str:
-        result = subprocess.run(
-            ["git", *args], text=True, capture_output=True, check=False, timeout=900
-        )
-        if result.returncode != 0:
-            raise AlignmentError("checkout_failed", f"git {args[0]}: {_tail(result.stderr)}")
-        return result.stdout.strip()
-
-    origin = git("-C", str(source_repo), "remote", "get-url", "origin")
-    sha = git("-C", str(source_repo), "rev-parse", "--verify", f"{revision}^{{commit}}")
-    git("clone", "--quiet", "--shared", "--no-checkout", str(source_repo), str(destination))
-    git("-C", str(destination), "remote", "set-url", "origin", origin)
-    git("-C", str(destination), "checkout", "--quiet", "--detach", sha)
-    return sha
 
 
 def temporary_work_dir() -> Path:

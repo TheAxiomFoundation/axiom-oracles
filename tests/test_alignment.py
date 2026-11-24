@@ -33,11 +33,14 @@ from axiom_oracles.alignment import (
     compile_programs,
     derive_status,
     exit_code,
+    export_commit,
     glob_regex,
-    load_declarations,
+    load_coverage,
     load_suites,
     module_literals,
     read_checkout,
+    stale_coverage,
+    unregistered_evidence,
 )
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -176,6 +179,12 @@ def commit(root: Path) -> str:
     return git("rev-parse", "HEAD")
 
 
+def _head(root: Path) -> str:
+    return subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+    ).stdout.strip()
+
+
 def write_tree(root: Path) -> Path:
     for index, rel in enumerate(
         (M_BENEFIT, M_BASE, M_RATES, M_ORPHAN, M_NOSUITE, M_MANUAL, M_UNREACHED, M_ROOT_IMPORT_2)
@@ -223,14 +232,14 @@ COVERAGE = {
     "declarations": [
         {
             "id": "zz-bridge",
-            "match": {"runner_type": "zz-bridge-compare"},
+            "match": {"suites": ["zz-bridge"], "runner_type": "zz-bridge-compare"},
             "roots": ["us/statutes/9/800.yaml"],
             "paths": ["us/statutes/9/800.test.yaml"],
             "sources": ["axiom_oracles/bridges/zz_bridge.py"],
         },
         {
             "id": "zz-foreign",
-            "match": {"runner_type": ["zz-foreign-compare"]},
+            "match": {"suites": ["zz-for*"], "runner_type": ["zz-foreign-compare"]},
             "reads_rulespec_us": False,
         },
     ],
@@ -260,7 +269,10 @@ def write_registry(root: Path, *, demo_ci: str | None = None, dispositions: dict
             "zz-pinned",
             ci=None,
             program="programs/us-zz/demo/fy-2026.yaml",
-            extra_params="    axiom_rulespec_repo_roots_revision: abc1234\n",
+            extra_params=(
+                "    axiom_rulespec_repo_roots_revision: abc1234\n"
+                "    axiom_rulespec_repo_roots: $HOME/oracle-pins\n"
+            ),
         ),
     )
     _write(
@@ -410,6 +422,21 @@ def disposition_file(case_ids: list[str], concept: str = CONCEPT) -> dict:
     }
 
 
+_TEMPLATES: dict[str, Path] = {}
+
+
+def _template(kind: str) -> Path:
+    """A committed scratch repository, built once and copied per test."""
+    if kind not in _TEMPLATES:
+        import tempfile
+
+        root = Path(tempfile.mkdtemp(prefix=f"alignment-{kind}-")) / kind
+        (write_tree if kind == "tree" else write_registry)(root)
+        commit(root)
+        _TEMPLATES[kind] = root
+    return _TEMPLATES[kind]
+
+
 class World:
     """Three scratch repositories: base tree, candidate tree, registry."""
 
@@ -420,6 +447,7 @@ class World:
         self.registry = home / "registry"
         self.commits: dict[str, str] = {}
         self.registry_commit = ""
+        self.exports = 0
 
     def build(
         self,
@@ -433,8 +461,9 @@ class World:
         both_edit=None,
     ) -> "World":
         paths = [changed] if isinstance(changed, str) else list(changed or [])
+        template = _template("tree")
         for root in (self.base, self.candidate):
-            write_tree(root)
+            shutil.copytree(template, root, symlinks=True)
             if both_edit:
                 both_edit(root)
         if base_edit:
@@ -448,18 +477,31 @@ class World:
             )
         if candidate_edit:
             candidate_edit(self.candidate)
-        self.commits = {"base": commit(self.base), "candidate": commit(self.candidate)}
-        write_registry(self.registry, demo_ci=demo_ci, dispositions=dispositions)
-        if registry_edit:
-            registry_edit(self.registry)
-        self.registry_commit = commit(self.registry)
+        self.commits = {
+            "base": commit(self.base) if (both_edit or base_edit) else _head(self.base),
+            "candidate": (
+                commit(self.candidate)
+                if (both_edit or candidate_edit or paths)
+                else _head(self.candidate)
+            ),
+        }
+        shutil.copytree(_template("registry"), self.registry, symlinks=True)
+        if demo_ci is not None or dispositions is not None or registry_edit:
+            write_registry(self.registry, demo_ci=demo_ci, dispositions=dispositions)
+            if registry_edit:
+                registry_edit(self.registry)
+            self.registry_commit = commit(self.registry)
+        else:
+            self.registry_commit = _head(self.registry)
         return self
 
     def report(self, *, compiler=None, executor=None, explicit=None, cache=None) -> dict:
+        self.exports += 1
         return build_report(
             AlignmentInputs(
-                base_root=self.base,
-                candidate_root=self.candidate,
+                base_repo=self.base,
+                candidate_repo=self.candidate,
+                work_dir=self.home / f"export{self.exports}",
                 registry_root=self.registry,
                 compiler=compiler or FakeCompiler(artifacts()),
                 changed=explicit,
@@ -750,31 +792,167 @@ def test_identical_trees_are_an_error(world):
     assert_error(world(None), "no_changed_files")
 
 
-def test_tree_with_uncommitted_change_is_an_error(tmp_path):
-    for side, edit in (
-        ("base", lambda root: _write(root / M_BASE, "edited\n")),
-        ("candidate", lambda root: _write(root / "us/statutes/9/new.yaml", "untracked\n")),
-        ("candidate", lambda root: _write(root / "notes.txt", "untracked elsewhere\n")),
-    ):
-        built = World(tmp_path / f"{side}{len(list(tmp_path.iterdir()))}").build(M_BASE)
-        edit(getattr(built, side))
-        assert_error(built.report(), "rulespec_tree_dirty")
+def _git(root: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", "-C", str(root), "-c", "user.name=t", "-c", "user.email=t@example.invalid", *args],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
 
 
-def test_tree_that_is_not_a_checkout_is_an_error(tmp_path):
+def test_report_reads_the_commits_not_the_work_trees(tmp_path):
+    """Whatever the caller's work tree holds, the report reads the commit."""
+    clean = World(tmp_path / "clean").build(M_BASE).report()
+    built = World(tmp_path / "dirty").build(M_BASE)
+    # An edit git is told to ignore, an edit it would see, an untracked rule
+    # file, a file hidden from status, a deleted program and a staged change.
+    _git(built.candidate, "update-index", "--skip-worktree", M_MANUAL)
+    _write(built.candidate / M_MANUAL, "imports:\n  - us:statutes/9/100\n")
+    _git(built.base, "update-index", "--assume-unchanged", M_BENEFIT)
+    _write(built.base / M_BENEFIT, "hidden edit\n")
+    _write(built.candidate / M_ORPHAN, "visible edit\n")
+    _write(built.candidate / "us/statutes/9/untracked.yaml", _module_text("untracked"))
+    _write(built.candidate / ".git/info/exclude", "us/statutes/9/hidden.yaml\n")
+    _write(built.candidate / "us/statutes/9/hidden.yaml", _module_text("hidden"))
+    (built.base / "programs/us-zz/demo/fy-2026.yaml").unlink()
+    _write(built.base / M_RATES, "staged\n")
+    _git(built.base, "add", M_RATES)
+    dirty = built.report()
+
+    def comparable(report: dict) -> dict:
+        keep = {k: v for k, v in report.items() if k not in ("provenance",)}
+        keep["changed"] = [
+            (row["path"], row["base_sha256"], row["candidate_sha256"])
+            for row in report["provenance"]["changed_files"]
+        ]
+        return keep
+
+    assert dirty["status"] == "reference_not_executed"
+    assert dirty["provenance"]["rulespec_commit"] == built.commits
+    reference = World(tmp_path / "ref").build(M_BASE)
+    assert comparable(dirty) == comparable(reference.report()) == comparable(clean)
+
+
+def test_replace_refs_in_the_source_are_ignored(tmp_path):
+    """``git replace`` can make a commit read as another tree."""
+    built = World(tmp_path / "w").build(M_BASE)
+    honest = built.report()
+    other = World(tmp_path / "other").build(M_UNREACHED)
+    # Bring the other candidate commit into this repository and replace ours with it.
+    _git(built.candidate, "fetch", "-q", str(other.candidate), "HEAD")
+    foreign = _git(built.candidate, "rev-parse", "FETCH_HEAD")
+    _git(built.candidate, "replace", built.commits["candidate"], foreign)
+    assert _git(built.candidate, "show", "--stat", "--format=", "HEAD") != ""
+    replaced = built.report()
+    assert [row["path"] for row in replaced["reach"]] == [M_BASE]
+    assert replaced["provenance"]["rulespec_tree"] == honest["provenance"]["rulespec_tree"]
+    assert replaced["status"] == honest["status"]
+
+
+def test_provenance_records_the_tree_ids(tmp_path):
+    built = World(tmp_path / "w").build(M_BASE)
+    trees = built.report()["provenance"]["rulespec_tree"]
+    assert trees == {
+        side: _git(getattr(built, side), "rev-parse", "HEAD^{tree}") for side in ("base", "candidate")
+    }
+
+
+def test_named_revisions_are_exported(tmp_path):
+    built = World(tmp_path / "w").build(M_BASE)
+    # One repository that holds both commits, addressed by revision.
+    _git(built.base, "fetch", "-q", str(built.candidate), "HEAD")
+    report = build_report(
+        AlignmentInputs(
+            base_repo=built.base,
+            candidate_repo=built.base,
+            base_rev="HEAD",
+            candidate_rev=built.commits["candidate"],
+            work_dir=tmp_path / "export",
+            registry_root=built.registry,
+            compiler=FakeCompiler(artifacts()),
+            include_registry_programs=False,
+        )
+    )
+    assert report["provenance"]["rulespec_commit"] == built.commits
+    assert [row["path"] for row in report["reach"]] == [M_BASE]
+
+
+def test_source_that_is_not_a_repository_is_an_error(tmp_path):
     built = World(tmp_path / "w").build(M_BASE)
     shutil.rmtree(built.candidate / ".git")
-    assert_error(built.report(), "rulespec_tree_not_a_checkout")
+    assert_error(built.report(), "rulespec_source_not_a_repository")
+    # A directory inside a repository is not one.
+    built = World(tmp_path / "v").build(M_BASE)
+    built.candidate = built.candidate / "us"
+    assert_error(built.report(), "rulespec_source_not_a_repository")
 
 
-def test_sparse_or_partly_deleted_tree_is_an_error(tmp_path):
-    """Files the commit tracks but the work tree lacks, with a clean status."""
+def test_unknown_revision_and_used_work_directory_are_errors(tmp_path):
     built = World(tmp_path / "w").build(M_BASE)
-    git = ["git", "-C", str(built.base)]
-    subprocess.run([*git, "update-index", "--skip-worktree", M_MANUAL], check=True)
-    (built.base / M_MANUAL).unlink()
-    assert subprocess.run([*git, "status", "--porcelain"], capture_output=True).stdout == b""
-    assert_error(built.report(), "rulespec_tree_incomplete")
+    inputs = dict(
+        base_repo=built.base,
+        candidate_repo=built.candidate,
+        registry_root=built.registry,
+        compiler=FakeCompiler(artifacts()),
+        include_registry_programs=False,
+    )
+    report = build_report(AlignmentInputs(work_dir=tmp_path / "a", candidate_rev="no-such", **inputs))
+    assert_error(report, "checkout_failed")
+    assert build_report(AlignmentInputs(work_dir=tmp_path / "b", **inputs))["status"] != "error"
+    assert_error(build_report(AlignmentInputs(work_dir=tmp_path / "b", **inputs)), "checkout_failed")
+
+
+def test_read_checkout_refuses_a_tree_that_is_not_its_commit(tmp_path):
+    """The guards on the export itself."""
+    built = World(tmp_path / "w").build(M_BASE)
+    checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    assert checkout.commit == built.commits["base"]
+    assert checkout.tree == _git(built.base, "rev-parse", "HEAD^{tree}")
+    root = checkout.root
+
+    def cause(path: Path) -> str:
+        with pytest.raises(AlignmentError) as excinfo:
+            read_checkout(path, "base")
+        return excinfo.value.cause
+
+    assert cause(root / "us") == "rulespec_tree_not_a_checkout"
+    _write(root / "us/statutes/9/new.yaml", "untracked\n")
+    assert cause(root) == "rulespec_tree_dirty"
+    (root / "us/statutes/9/new.yaml").unlink()
+    _write(root / M_BASE, "edited\n")
+    assert cause(root) == "rulespec_tree_dirty"
+    _git(root, "checkout", "--", M_BASE)
+    _git(root, "update-index", "--skip-worktree", M_MANUAL)
+    (root / M_MANUAL).unlink()
+    assert _git(root, "status", "--porcelain") == ""
+    assert cause(root) == "rulespec_tree_incomplete"
+
+
+def test_git_status_failure_is_not_read_as_clean(tmp_path, monkeypatch):
+    built = World(tmp_path / "w").build(M_BASE)
+    monkeypatch.setattr(alignment, "git_dirty", lambda root: None)
+    with pytest.raises(AlignmentError) as excinfo:
+        read_checkout(built.base, "base")
+    assert excinfo.value.cause == "rulespec_tree_unreadable"
+
+
+def test_mode_change_alone_is_a_change(tmp_path):
+    built = World(tmp_path / "w")
+
+    def executable(root: Path) -> None:
+        os.chmod(root / M_BASE, 0o755)
+
+    built.build(None, candidate_edit=executable)
+    report = built.report()
+    assert [row["path"] for row in report["reach"]] == [M_BASE]
+    assert reaching(report, M_BASE) == [P_DEMO]
+
+
+def test_dot_directory_other_than_axiom_holds_modules():
+    assert classify_path("us/.hidden/rule.yaml") == ("module", "us:.hidden/rule")
+    assert classify_path("us/policies/.staging/rule.yaml")[0] == "module"
+    assert classify_path("us/policies/.axiom/x.yaml") == ("other", None)
 
 
 def test_tree_without_programs_is_an_error(world):
@@ -794,7 +972,7 @@ def test_tree_without_programs_is_an_error(world):
 
 def test_program_listing_comes_from_the_commit(tmp_path):
     built = World(tmp_path / "w").build(M_BASE)
-    checkout = read_checkout(built.base, "base")
+    checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
     assert [p.relpath for p in alignment.checkout_programs(checkout)] == [
         "programs/us-zz/demo/fy-2026.yaml",
         "programs/us-zz/manual/fy-2026.yaml",
@@ -1123,7 +1301,7 @@ def test_manifest_suite_uses_a_declaration_with_its_state(world):
         doc["declarations"].append(
             {
                 "id": "campaign",
-                "match": {"source": "comparisons/campaign.yaml"},
+                "match": {"suites": ["zz-camp*"], "source": "comparisons/campaign.yaml"},
                 "roots": ["us-{state}/**"],
             }
         )
@@ -1197,6 +1375,418 @@ def test_module_id_with_a_colon_is_followed(world):
     report = world("us-la/statutes/47:294.yaml", both_edit=tree)
     assert report["reach"][0]["module"] == "us-la:statutes/47:294"
     assert expected(report) == ["zz-bridge"]
+
+
+# ---------------------------------------------------------------------------
+# Review round 2: pins, explicit suites, stale globs, script-run comparisons
+# ---------------------------------------------------------------------------
+
+
+def _pinned_variant(params: str, runner: str = "axiom-oracles-compare", program: bool = True):
+    def edit(registry: Path) -> None:
+        _write(
+            registry / "comparisons/zz-pinned.yaml",
+            _suite_yaml(
+                "zz-pinned",
+                ci=None,
+                program="programs/us-zz/demo/fy-2026.yaml" if program else None,
+                runner=runner,
+                extra_params=params,
+            ),
+        )
+
+    return edit
+
+
+def test_pin_keys_count_only_where_the_runner_enforces_them(world):
+    # The revision without the pre-materialized roots it pins: not a pin.
+    report = world(
+        M_BENEFIT, registry_edit=_pinned_variant("    axiom_rulespec_repo_roots_revision: abc1234\n")
+    )
+    assert expected(report) == ["zz-demo", "zz-pinned"]
+    assert report["suite_registry"]["pinned_snapshot_suites"] == []
+    # A grid pin needs the commit and the tree.
+    sha_only = _pinned_variant(
+        "    rulespec_upstream_sha: abc1234\n", runner="federal-tax-liability-grid", program=False
+    )
+    assert_error(world(M_UNREACHED, registry_edit=sha_only), "reference_unbound")
+    both = _pinned_variant(
+        "    rulespec_upstream_sha: abc1234\n    rulespec_upstream_tree: def5678\n",
+        runner="federal-tax-liability-grid",
+        program=False,
+    )
+    report = world(M_UNREACHED, registry_edit=both)
+    assert report["suite_registry"]["pinned_snapshot_suites"] == ["zz-pinned"]
+    # The same keys on a runner type that does not enforce a pin.
+    other = _pinned_variant(
+        "    rulespec_upstream_sha: abc1234\n    rulespec_upstream_tree: def5678\n",
+        runner="zz-unknown-compare",
+        program=False,
+    )
+    assert_error(world(M_UNREACHED, registry_edit=other), "reference_unbound")
+    blank = _pinned_variant(
+        "    rulespec_upstream_sha: ''\n    rulespec_upstream_tree: def5678\n",
+        runner="federal-tax-liability-grid",
+        program=False,
+    )
+    assert_error(world(M_UNREACHED, registry_edit=blank), "reference_unbound")
+
+
+def _sides(left: str | None, right: str | None, runner: str = "axiom-oracles-compare"):
+    def edit(registry: Path) -> None:
+        lines = ["name: zz-sides", "ci: manual", "runner:", f"  type: {runner}", "  parameters:"]
+        lines += [f"    left: {left}"] if left else []
+        lines += [f"    right: {right}"] if right else []
+        lines += ["    period: '2026'"]
+        _write(registry / "comparisons/zz-sides.yaml", "\n".join(lines) + "\n")
+
+    return edit
+
+
+def test_no_axiom_side_needs_two_named_other_engines(world):
+    report = world(M_UNREACHED, registry_edit=_sides("policyengine", "taxsim"))
+    assert report["suite_registry"]["by_binding"]["no_axiom_side"] == 1
+    for left, right, runner in (
+        (None, "policyengine", "axiom-oracles-compare"),  # a side is missing
+        ("policyengine", None, "axiom-oracles-compare"),
+        ("policyengine", "some-new-engine", "axiom-oracles-compare"),
+        ("axiom", "policyengine", "axiom-oracles-compare"),
+        ("policyengine", "taxsim", "zz-unknown-compare"),  # another runner type
+    ):
+        assert_error(
+            world(M_UNREACHED, registry_edit=_sides(left, right, runner)), "reference_unbound"
+        )
+
+
+def test_declaration_must_name_its_suites(world):
+    for match in ({"runner_type": "zz-bridge-compare"}, {}, {"suites": []}):
+        edit = _coverage_edit(lambda doc, reg, match=match: doc["declarations"][0].update(match=match))
+        assert_error(world(M_UNREACHED, registry_edit=edit), "coverage_declarations_unreadable")
+
+
+def test_new_suite_of_a_declared_runner_type_does_not_inherit(world):
+    edit = _add_suite("zz-bridge-two", ci="manual", runner="zz-bridge-compare")
+    report = world(M_ROOT, registry_edit=edit)
+    assert_error(report, "reference_unbound")
+    assert "zz-bridge-two" in report["error"]["detail"]
+
+
+def test_declaration_that_matches_no_suite_is_an_error(world):
+    def edit(registry: Path) -> None:
+        (registry / "comparisons/zz-foreign.yaml").unlink()
+
+    assert_error(world(M_UNREACHED, registry_edit=edit), "coverage_declarations_unreadable")
+
+
+def test_declared_glob_that_matches_no_tracked_file_is_an_error(world):
+    stale = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0]["roots"].append("us/statutes/9/moved-away.yaml")
+    )
+    report = world(M_UNREACHED, registry_edit=stale)
+    assert_error(report, "coverage_declaration_stale")
+    assert "us/statutes/9/moved-away.yaml" in report["error"]["detail"]
+    stale_path = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0].update(paths=["tools/gone.py"])
+    )
+    assert_error(world(M_UNREACHED, registry_edit=stale_path), "coverage_declaration_stale")
+    optional = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0]["roots"].append(
+            {"glob": "us/statutes/9/moved-away.yaml", "optional": True}
+        )
+    )
+    assert world(M_UNREACHED, registry_edit=optional)["status"] == "no_reference"
+    # A file only the candidate adds is tracked in one tree: not stale.
+    added = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0]["roots"].append("us/statutes/9/999.yaml")
+    )
+    assert expected(world("us/statutes/9/999.yaml", registry_edit=added)) == ["zz-bridge"]
+    bad = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0]["roots"].append({"glob": "us/**", "maybe": True})
+    )
+    assert_error(world(M_UNREACHED, registry_edit=bad), "coverage_declarations_unreadable")
+
+
+def test_parameter_manifest_file_that_is_not_tracked_is_an_error(world):
+    def edit(registry: Path) -> None:
+        path = registry / PARAMETER_MANIFEST
+        path.write_text(path.read_text().replace("us/policies/demo/rates.yaml", "us/policies/demo/gone.yaml"))
+
+    assert_error(world(M_UNREACHED, registry_edit=edit), "coverage_declaration_stale")
+
+
+def test_reference_to_a_directory_covers_the_modules_in_it(world):
+    def tree(root: Path) -> None:
+        _write(root / M_ROOT_IMPORT, "imports:\n  - us:statutes/9/chapter\n")
+        _write(root / "us/statutes/9/chapter/a.yaml", _module_text("a"))
+        _write(root / "us/statutes/9/chapter/sub/b.yaml", _module_text("b"))
+        _write(root / "us/statutes/9/chapterhouse.yaml", _module_text("c"))
+
+    for changed in ("us/statutes/9/chapter/a.yaml", "us/statutes/9/chapter/sub/b.yaml"):
+        report = world(changed, both_edit=tree)
+        assert report["expected_suites"][0]["covered_files"] == {changed: "declared_root_closure"}
+    assert world("us/statutes/9/chapterhouse.yaml", both_edit=tree)["status"] == "no_reference"
+
+
+def test_declared_suite_covers_an_import_the_candidate_adds(world):
+    def add_import(root: Path) -> None:
+        _write(root / M_ROOT_IMPORT_2, "imports:\n  - us-zz:policies/manual/page\n")
+
+    report = world(M_UNREACHED, candidate_edit=add_import)
+    assert report["expected_suites"][0]["covered_files"][M_UNREACHED] == "declared_root_closure"
+    assert world(M_UNREACHED)["status"] == "no_reference"
+
+
+def test_declared_path_can_name_a_file_that_is_no_module(world):
+    """A tool the harness imports from the rulespec tree, a file that picks
+    its engine."""
+
+    def tree(root: Path) -> None:
+        _write(root / "tools/entry_flags.py", "FLAGS = 1\n")
+        _write(root / ".axiom/workflow-toolchain.toml", "engine = 'a'\n")
+
+    edit = _coverage_edit(
+        lambda doc, reg: doc["declarations"][0].update(
+            paths=["tools/entry_flags.py", ".axiom/workflow-toolchain.toml"]
+        )
+    )
+    for changed in ("tools/entry_flags.py", ".axiom/workflow-toolchain.toml"):
+        report = world(changed, both_edit=tree, registry_edit=edit)
+        assert report["reach"][0]["kind"] == "other"
+        assert report["expected_suites"][0]["covered_files"] == {changed: "declared_path"}
+        assert world(changed, both_edit=tree)["status"] == "no_reference"
+
+
+def test_report_with_two_case_shapes_is_an_error(world):
+    def mix(base, candidate):
+        for report in (base, candidate):
+            report["cases"][0] = {"case_id": "a", "concept": CONCEPT, "match": True}
+
+    assert_error(
+        world(reports=(ALL_MATCH, ALL_MATCH), report_edit=mix), "suite_report_shape_unsupported"
+    )
+
+
+SCRIPT_SUITES = [
+    {
+        "id": "zz-script",
+        "script": "scripts/run_zz_comparison.py",
+        "suites": ["zz-script-suite"],
+        "reports": "axiom-policyengine-{suite}.json",
+        "claims": ["reports/zz-script-*.json"],
+        "roots": ["us-zz/policies/manual/*.yaml"],
+        "paths": [{"glob": "tools/*.py", "optional": True}],
+    }
+]
+
+
+def _evidence_registry(extra=None, *, script_suites=SCRIPT_SUITES, evidence=None, drop=()):
+    def edit(registry: Path) -> None:
+        _write(registry / "scripts/run_zz_comparison.py", "# compares us-zz/policies/manual\n")
+        _write(registry / "scripts/run_comparison.py", "# dispatcher\n")
+        _write(registry / "dispositions/zz-script-suite.yaml", "schema: x\n")
+        _write(registry / "dispositions/zz-demo.yaml", "schema: x\n")
+        _write(registry / "dashboard/public/data/axiom-policyengine-zz-script-suite.json", "{}")
+        _write(registry / "dashboard/public/data/cases/zz-demo/0.json", "{}")
+        _write(registry / "dashboard/public/data/dispositions/zz-demo.json", "{}")
+        _write(registry / "dashboard/public/data/overview.json", "{}")
+        _write(registry / "reports/zz-script-2026-01-01.json", "{}")
+        _write(registry / "reports/notes.md", "notes\n")
+        _write(registry / "pyproject.toml", '[project]\nname = "x"\n[project.scripts]\nzz = "x.cli:main"\n')
+        for rel in drop:
+            (registry / rel).unlink()
+        doc = copy.deepcopy(COVERAGE)
+        doc["script_suites"] = copy.deepcopy(script_suites)
+        doc["evidence"] = evidence if evidence is not None else {
+            "entry_points": {
+                "scripts/run_comparison.py": "dispatcher of comparisons/",
+                "console:zz=x.cli:main": "package command line",
+            },
+            "exclusions": [
+                {"files": ["dashboard/public/data/overview.json"], "reason": "an index"}
+            ],
+        }
+        if extra:
+            extra(registry, doc)
+        _write(registry / alignment.COVERAGE_FILE, yaml.safe_dump(doc, sort_keys=False))
+
+    return edit
+
+
+def test_script_run_comparison_is_a_registered_manual_suite(world):
+    report = world(M_UNREACHED, registry_edit=_evidence_registry())
+    (suite,) = report["expected_suites"]
+    assert (suite["suite"], suite["binding"], suite["mode"], suite["runner_type"]) == (
+        "zz-script-suite",
+        "script_run",
+        "manual",
+        "script-run",
+    )
+    assert suite["covered_files"] == {M_UNREACHED: "declared_path"}
+    assert report["status"] == "reference_not_runnable"
+    assert report["suite_registry"]["by_binding"]["script_run"] == 1
+    assert report["suite_registry"]["suites"] == 7
+    # A non-module file the script reads.
+    def tool(root: Path) -> None:
+        _write(root / "tools/helper.py", "x = 1\n")
+
+    report = world("tools/helper.py", both_edit=tool, registry_edit=_evidence_registry())
+    assert report["manual_suites"] == ["zz-script-suite"]
+
+
+@pytest.mark.parametrize(
+    "extra, named",
+    [
+        (lambda reg, doc: _write(reg / "dispositions/zz-unknown.yaml", "schema: x\n"), "dispositions/zz-unknown.yaml"),
+        (
+            lambda reg, doc: _write(reg / "dashboard/public/data/axiom-policyengine-zz-other.json", "{}"),
+            "axiom-policyengine-zz-other.json",
+        ),
+        (
+            lambda reg, doc: _write(reg / "dashboard/public/data/cases/zz-unknown/0.json", "{}"),
+            "cases/zz-unknown/0.json",
+        ),
+        (
+            lambda reg, doc: _write(reg / "dashboard/public/data/dispositions/zz-unknown.json", "{}"),
+            "dispositions/zz-unknown.json",
+        ),
+        (lambda reg, doc: _write(reg / "reports/zz-other-2026.json", "{}"), "reports/zz-other-2026.json"),
+        (
+            lambda reg, doc: _write(reg / "scripts/run_other_comparison.py", "# x\n"),
+            "scripts/run_other_comparison.py",
+        ),
+        (lambda reg, doc: _write(reg / "scripts/zz_campaign.py", "# x\n"), "scripts/zz_campaign.py"),
+        (
+            lambda reg, doc: _write(
+                reg / "pyproject.toml",
+                '[project]\nname = "x"\n[project.scripts]\nzz = "x.cli:main"\nyy = "x.cli:compare"\n',
+            ),
+            "console:yy=x.cli:compare",
+        ),
+        # An exclusion and an entry point that outlived their file.
+        (
+            lambda reg, doc: doc["evidence"]["exclusions"].append(
+                {"files": ["dashboard/public/data/gone.json"], "reason": "x"}
+            ),
+            "dashboard/public/data/gone.json",
+        ),
+        (
+            lambda reg, doc: doc["evidence"]["entry_points"].update({"scripts/gone.py": "x"}),
+            "scripts/gone.py",
+        ),
+        (lambda reg, doc: (reg / "reports/zz-script-2026-01-01.json").unlink(), "reports/zz-script-*.json"),
+    ],
+)
+def test_comparison_evidence_without_a_registered_suite_is_an_error(world, extra, named):
+    """A comparison the model does not know could cover the change."""
+    report = world(M_NOSUITE, registry_edit=_evidence_registry(extra))
+    assert_error(report, "comparison_evidence_unregistered")
+    assert named in report["error"]["detail"]
+
+
+def test_registered_and_excluded_evidence_passes(world):
+    def more(registry: Path, doc: dict) -> None:
+        # A dated report of a suite file, by its report basename.
+        path = registry / "comparisons/zz-demo.yaml"
+        path.write_text(
+            path.read_text()
+            + "artifacts:\n  report_basename: axiom-oracle-zz-demo\n"
+            + "dashboard:\n  filename: axiom-oracle-zz-demo.json\n  suite: zz-demo-dashboard\n"
+        )
+        _write(registry / "reports/axiom-oracle-zz-demo-all-2026.json", "{}")
+        _write(registry / "dashboard/public/data/axiom-oracle-zz-demo.json", "{}")
+        _write(registry / "dispositions/zz-demo-dashboard.yaml", "schema: x\n")
+        _write(registry / "dashboard/public/data/cases/zz-demo-dashboard/0.json", "{}")
+
+    report = world(M_NOSUITE, registry_edit=_evidence_registry(more))
+    assert (report["status"], report["reason"]) == (
+        "no_reference",
+        "no_suite_for_reaching_programs",
+    )
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        lambda rows, ev: rows[0].update(script="scripts/absent.py"),
+        lambda rows, ev: rows[0].update(roots=[], paths=[]),
+        lambda rows, ev: rows[0].update(suites=[]),
+        lambda rows, ev: rows[0].update(suites=["zz-demo"]),  # already a suite
+        lambda rows, ev: rows[0].update(id="zz-bridge"),  # the id of a declaration
+        lambda rows, ev: rows[0].update(runner="x"),
+        lambda rows, ev: ev.update(entry_points={"scripts/run_comparison.py": ""}),
+        lambda rows, ev: ev.update(exclusions=[{"files": ["dashboard/**"]}]),
+        lambda rows, ev: ev.update(other=1),
+    ],
+)
+def test_unreadable_script_suites_and_evidence_are_an_error(world, mutate):
+    rows = copy.deepcopy(SCRIPT_SUITES)
+    evidence = {"entry_points": {"scripts/run_comparison.py": "dispatcher"}, "exclusions": []}
+    mutate(rows, evidence)
+    edit = _evidence_registry(script_suites=rows, evidence=evidence)
+    assert_error(world(M_UNREACHED, registry_edit=edit), "coverage_declarations_unreadable")
+
+
+def test_script_suites_from_the_campaign_contract_and_the_mapping_table(tmp_path):
+    registry = write_registry(tmp_path / "registry")
+    _write(registry / "scripts/run_campaign.py", "# x\n")
+    _write(
+        registry / "data/contract.yaml",
+        yaml.safe_dump({"jurisdictions": [{"state": "ZZ"}, {"state": "YY"}]}),
+    )
+    _write(
+        registry / "data/mappings.yaml",
+        yaml.safe_dump(
+            {
+                "mappings": [
+                    {"legal_id": "us:statutes/9/500#manual_amount", "mapping_type": "direct_variable"},
+                    {"legal_id": "us:statutes/9/400#other_amount", "mapping_type": "not_comparable"},
+                ]
+            }
+        ),
+    )
+    doc = copy.deepcopy(COVERAGE)
+    doc["script_suites"] = [
+        {
+            "id": "campaign",
+            "script": "scripts/run_campaign.py",
+            "suites_from_campaign_contract": "data/contract.yaml",
+            "roots": [{"glob": "us-{state}/policies/**", "optional": True}],
+        },
+        {
+            "id": "direct",
+            "script": "scripts/run_campaign.py",
+            "suites": ["zz-direct"],
+            "roots_from_direct_variable_mappings": "data/mappings.yaml",
+        },
+    ]
+    _write(registry / alignment.COVERAGE_FILE, yaml.safe_dump(doc, sort_keys=False))
+    suites = load_suites(registry)
+    coverage = load_coverage(registry, suites)
+    by_name = {item.suite.name: item for item in coverage.script_suites}
+    assert sorted(by_name) == ["yy-income-tax-populace", "zz-direct", "zz-income-tax-populace"]
+    assert by_name["zz-income-tax-populace"].roots == ("us-zz/policies/**",)
+    assert by_name["zz-income-tax-populace"].optional == {"us-zz/policies/**"}
+    assert by_name["zz-direct"].roots == ("us/statutes/9/500.yaml",)
+    # A state the manifest already lists gets no second suite.
+    listed = [*suites, alignment.Suite("zz-income-tax-populace", "x", "manual", "manual", None, None, (), {})]
+    again = {item.suite.name for item in load_coverage(registry, listed).script_suites}
+    assert "zz-income-tax-populace" not in again and "yy-income-tax-populace" in again
+
+
+def test_stale_coverage_lists_every_glob_without_a_file(tmp_path):
+    built = World(tmp_path / "w").build(M_BASE)
+    checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    trees = {"base": TreeIndex(checkout)}
+    suite = alignment.Suite("s", "f", "manual", "manual", None, None, (), {})
+    bound = alignment.BoundSuite(
+        suite,
+        "declared",
+        roots=("us/statutes/9/*.yaml", "us/none/**", "us/maybe/**"),
+        paths=("tools/none.py",),
+        optional=frozenset({"us/maybe/**"}),
+    )
+    assert stale_coverage([bound], trees) == ["s: tools/none.py", "s: us/none/**"]
+
 
 
 # ---------------------------------------------------------------------------
@@ -1559,14 +2149,44 @@ def test_replay_mismatch_without_a_report_level_row_cannot_be_dispositioned(worl
     assert report["executions"][0]["regressions"][0]["concepts"] == ["<unattributed>"]
 
 
-def test_replay_run_that_recorded_errors_is_an_error(world):
+def test_replay_error_rows_are_the_error_state(world):
+    """``snap_qc_compare`` writes ``matched: None, stage: "error"`` for a case
+    one side of which is missing, and counts it in ``case_count``."""
+
+    def error_row(report: dict, case_id: str) -> None:
+        row = next(c for c in report["cases"] if c["case_id"] == case_id)
+        row.update(matched=None, stage="error")
+        report["summary"]["error_case_count"] = 1
+
+    same = {"a": True, "b": True}
+    report = world(reports=(same, same, replay_report), report_edit=lambda b, c: error_row(c, "a"))
+    assert report["status"] == "regressed"
+    assert report["counts"]["newly_errored"] == 1
+    report = world(
+        reports=(same, same, replay_report),
+        report_edit=lambda b, c: (error_row(b, "a"), error_row(c, "a")),
+    )
+    assert (report["status"], report["counts"]["matched_after"]) == ("aligned", 1)
+    report = world(reports=(same, same, replay_report), report_edit=lambda b, c: error_row(b, "a"))
+    assert (report["status"], report["counts"]["newly_matched"]) == ("aligned", 1)
+
+    # ``matched: None`` without the error stage is no state this shape has.
+    def odd(base, candidate):
+        candidate["cases"][0].update(matched=None, stage="benefit")
+
+    assert_error(
+        world(reports=(same, same, replay_report), report_edit=odd), "suite_report_shape_unsupported"
+    )
+
+
+def test_grid_run_that_recorded_errors_is_an_error(world):
     for key in ("error_case_count", "error_count"):
 
         def errors(base, candidate, key=key):
             candidate["summary"][key] = 2
 
         assert_error(
-            world(reports=({"a": True}, {"a": True}, replay_report), report_edit=errors),
+            world(reports=({"a": True}, {"a": True}, grid_report), report_edit=errors),
             "suite_run_failed",
         )
 
@@ -1574,8 +2194,28 @@ def test_replay_run_that_recorded_errors_is_an_error(world):
         candidate["errors"] = [{"engine": "axiom", "message": "x"}]
 
     assert_error(
-        world(reports=({"a": True}, {"a": True}, replay_report), report_edit=listed),
+        world(reports=({"a": True}, {"a": True}, grid_report), report_edit=listed),
         "suite_run_failed",
+    )
+
+
+def test_reports_must_share_tolerance_and_concept_table(world):
+    def tolerance(base, candidate):
+        base["tolerance"] = {"absolute": 1}
+        candidate["tolerance"] = {"absolute": 50}
+
+    assert_error(
+        world(reports=(ALL_MATCH, ALL_MATCH), report_edit=tolerance),
+        "suite_report_provenance_mismatch",
+    )
+
+    def concepts(base, candidate):
+        base["concepts"] = [{"id": CONCEPT, "tolerance": 1}]
+        candidate["concepts"] = [{"id": CONCEPT, "tolerance": 7}]
+
+    assert_error(
+        world(reports=(ALL_MATCH, ALL_MATCH), report_edit=concepts),
+        "suite_report_provenance_mismatch",
     )
 
 
@@ -1770,6 +2410,9 @@ def _supply(directory: Path, built: World, base: dict, candidate: dict, **overri
         text = json.dumps(report)
         _write(directory / side / "zz-demo.json", text)
         digests[side] = hashlib.sha256(text.encode()).hexdigest()
+    digests["suite_file_sha256"] = hashlib.sha256(
+        (built.registry / "comparisons/zz-demo.yaml").read_bytes()
+    ).hexdigest()
     manifest = {
         "schema": "axiom_oracles.alignment_supplied_reports.v1",
         "registry_commit": built.registry_commit,
@@ -1787,11 +2430,19 @@ def test_supplied_reports_are_bound_by_a_manifest(tmp_path):
     candidate = suite_report({**ALL_MATCH, "b": "mismatch"}, built.commits["candidate"])
 
     def run(directory):
-        return built.report(executor=alignment.ReportsDirExecutor(directory))
+        return built.report(executor=alignment.ReportsDirExecutor(directory, built.registry))
 
     report = run(_supply(tmp_path / "ok", built, base, candidate))
-    assert report["status"] == "regressed"
-    assert report["executions"][0]["evidence"] == "supplied_reports"
+    # Supplied reports never give a gate-grade status.
+    assert report["status"] == "regressed_unverified"
+    assert report["evidence"] == "supplied_reports_unverified"
+    assert report["executions"][0]["evidence"] == "supplied_reports_unverified"
+    assert report["executions"][0]["status"] == "regressed"
+    aligned = run(_supply(tmp_path / "same", built, base, suite_report(ALL_MATCH, built.commits["candidate"])))
+    assert aligned["status"] == "aligned_unverified"
+    # The same reports from a live run keep the plain status.
+    live = built.report(executor=FakeExecutor(base, candidate))
+    assert (live["status"], live["evidence"]) == ("regressed", "live_run")
 
     assert_error(run(tmp_path / "absent"), "supplied_reports_unbound")
     assert_error(
@@ -1816,11 +2467,24 @@ def test_supplied_reports_are_bound_by_a_manifest(tmp_path):
     missing = _supply(tmp_path / "m", built, base, candidate)
     (missing / "base/zz-demo.json").unlink()
     assert_error(run(missing), "suite_run_failed")
+    # Reports made with another version of the suite file.
+    stale = _supply(tmp_path / "f", built, base, candidate)
+    manifest = json.loads((stale / "manifest.json").read_text())
+    manifest["reports"]["zz-demo"]["suite_file_sha256"] = "0" * 64
+    _write(stale / "manifest.json", json.dumps(manifest))
+    assert_error(run(stale), "supplied_reports_unbound")
+    # Supplied reports must record the engine that ran them.
+    for report in (base, candidate):
+        report["provenance"]["engine"] = {}
+    assert_error(
+        run(_supply(tmp_path / "g", built, base, candidate)), "suite_report_provenance_mismatch"
+    )
+    assert built.report(executor=FakeExecutor(base, candidate))["status"] == "regressed"
 
 
 def test_supplied_report_is_not_read_before_the_manifest_is_checked(tmp_path):
     with pytest.raises(AlignmentError) as excinfo:
-        alignment.ReportsDirExecutor(tmp_path).run("zz-demo", "base")
+        alignment.ReportsDirExecutor(tmp_path, tmp_path).run("zz-demo", "base")
     assert excinfo.value.cause == "supplied_reports_unbound"
 
 
@@ -2068,8 +2732,8 @@ def test_cli_end_to_end_with_supplied_reports(tmp_path):
         suite_report({**ALL_MATCH, "b": "mismatch"}, built.commits["candidate"]),
     )
     common = [
-        "--base-root", str(built.base),
-        "--candidate-root", str(built.candidate),
+        "--base-repo", str(built.base),
+        "--candidate-repo", str(built.candidate),
         "--registry-root", str(built.registry),
         "--compiled-dir", str(tmp_path / "compiled"),
         "--no-registry-programs",
@@ -2080,7 +2744,7 @@ def test_cli_end_to_end_with_supplied_reports(tmp_path):
     printed = json.loads(result.stdout)
     written = json.loads(output.read_text())
     assert printed == written
-    assert written["status"] == "regressed"
+    assert written["status"] == "regressed_unverified"
     assert written["schema"] == "axiom_oracles.alignment_report.v1"
     assert written["provenance"]["toolchain"]["compiler"] == "precompiled_artifacts"
     assert written["provenance"]["rulespec_commit"] == built.commits
@@ -2099,7 +2763,8 @@ def test_cli_end_to_end_with_supplied_reports(tmp_path):
 
 
 def test_cli_rejects_an_incomplete_tree_choice(tmp_path):
-    assert _cli("--base-root", str(tmp_path)).returncode == 2
+    assert _cli("--base-repo", str(tmp_path)).returncode == 2
+    assert _cli("--base-root", str(tmp_path), "--candidate-root", str(tmp_path)).returncode == 2
 
 
 def test_cli_has_no_commit_override():
@@ -2114,16 +2779,16 @@ def test_cli_has_no_commit_override():
 @pytest.fixture(scope="module")
 def real():
     suites = load_suites(REPO_ROOT)
-    declarations, _ = load_declarations(REPO_ROOT)
+    coverage = load_coverage(REPO_ROOT, suites)
     known = {suite.program_key for suite in suites if suite.program_key}
     known -= {key for key in known if "uk/" in key}
-    bound = bind_suites(suites, known, declarations)
-    return suites, declarations, {item.suite.name: item for item in bound}
+    bound = bind_suites(suites, known, coverage)
+    return suites, coverage, {item.suite.name: item for item in bound}
 
 
 def test_every_real_suite_has_exactly_one_binding(real):
-    suites, _, bound = real
-    assert len(suites) == len(bound) > 200
+    suites, coverage, bound = real
+    assert len(bound) == len(suites) + len(coverage.script_suites) > 250
     assert {suite.mode for suite in suites} == {"runnable", "manual"}
     for suite in suites:
         if suite.mode == "manual":
@@ -2133,7 +2798,9 @@ def test_every_real_suite_has_exactly_one_binding(real):
     assert bound["az-tanf-ecps"].suite.program_key == "axiom-oracles:programs/us-az/tanf/fy-2026.yaml"
     assert bound["ssi-ecps"].suite.program_key == "axiom-oracles:programs/us/ssi/fy-2026.yaml"
     assert bound["uk-universal-credit-efrs"].binding == "declared_reads_no_rulespec_us"
+    assert bound["de-worker-dual-oracle-axiom-gettsim"].binding == "declared_reads_no_rulespec_us"
     assert bound["us-niit-grid"].binding == "pinned_snapshot"
+    assert bound["fiit-taxsim-ecps"].binding == "pinned_snapshot"
     assert bound["taxcalc-fiit-ecps"].binding == "no_axiom_side"
     assert bound["ga-health-thresholds"].binding == "parameter_files"
     assert bound["az-income-tax-liability"].roots[0] == "us-az/policies/income_tax/**"
@@ -2141,20 +2808,43 @@ def test_every_real_suite_has_exactly_one_binding(real):
     assert bound["co-snap-ecps"].roots[0] == "us-co/**"
     assert bound["az-snap-qc"].suite.mode == "runnable"
     assert bound["us-snap-abawd-grid"].suite.mode == "runnable"
+    for name in ("medicaid-thresholds-states", "ssa-parameters", "nyc-income-tax-gap", "us-populace-compare"):
+        assert (bound[name].binding, bound[name].suite.mode) == ("script_run", "manual"), name
+    assert bound["de-income-tax-populace"].roots[0] == "us-de/policies/income_tax/**"
+    assert "tools/b16_entry_flags.py" in bound["us-tariff-schedule"].paths
+    assert ".axiom/workflow-toolchain.toml" in bound["co-snap-qc"].paths
 
 
 def test_real_registry_with_an_unknown_program_is_unbound(real):
-    suites, declarations, _ = real
+    suites, coverage, _ = real
     with pytest.raises(AlignmentError) as excinfo:
-        bind_suites(suites, set(), declarations)
+        bind_suites(suites, set(), coverage)
     assert excinfo.value.cause == "reference_unbound"
     assert "az-snap-ecps" in excinfo.value.detail
 
 
-def test_every_real_declaration_is_used(real):
-    suites, declarations, bound = real
-    used = {item.declaration for item in bound.values() if item.declaration}
-    assert used == {declaration.id for declaration in declarations}
+def test_every_piece_of_real_comparison_evidence_is_registered(real):
+    """Every dispositions file, dashboard data file, dated report, comparison
+    or campaign script and console command of this repository belongs to a
+    registered suite or to an exclusion with a reason."""
+    _, coverage, bound = real
+    assert unregistered_evidence(REPO_ROOT, list(bound.values()), coverage) == []
+    for _, reason in coverage.exclusions:
+        assert len(reason.split()) >= 5
+    for reason in coverage.entry_points.values():
+        assert len(reason.split()) >= 5
+
+
+def test_every_state_of_the_campaign_contract_has_a_suite(real):
+    _, _, bound = real
+    contract = yaml.safe_load(
+        (REPO_ROOT / "axiom_oracles/data/state_income_tax_populace.yaml").read_text()
+    )
+    states = [row["state"].lower() for row in contract["jurisdictions"]]
+    assert len(states) > 40
+    for state in states:
+        item = bound[f"{state}-income-tax-populace"]
+        assert f"us-{state}/policies/income_tax/**" in item.roots, state
 
 
 def _affected_map() -> dict[str, dict]:
@@ -2168,35 +2858,77 @@ def test_real_bindings_agree_with_the_affected_map(real):
     ``us-tariff-schedule``, which reads the generated tariff chapters."""
     _, _, bound = real
     rows = _affected_map()
+    checked = 0
     for name, item in bound.items():
-        row = rows.get(name)
+        row = rows.get(name) or next(
+            (rows[alias] for alias in item.suite.aliases if alias in rows), None
+        )
         if row is None:
             continue
+        checked += 1
         reads_us = "TheAxiomFoundation/rulespec-us" in row["repos"]
         if item.binding == "pinned_snapshot":
             assert row.get("pinned"), name
-        else:
+        elif reads_us:
             assert not row.get("pinned"), name
         if item.binding in ("declared_reads_no_rulespec_us", "no_axiom_side"):
             assert not reads_us, name
         elif item.binding != "pinned_snapshot" and name != "us-tariff-schedule":
             assert reads_us, name
+    assert checked > 200
     assert bound["us-tariff-schedule"].binding == "declared"
+
+
+#: Files of the rulespec tree that are no module, as harness sources name them:
+#: a tool imported after ``sys.path.insert(0, rulespec_root)``, or a path.
+_TOOL_IMPORT = alignment.re.compile(r"from tools\.([a-z0-9_]+) import|import tools\.([a-z0-9_]+)")
+_TREE_FILE = alignment.re.compile(
+    r"(?<![A-Za-z0-9_/.-])(tools/[A-Za-z0-9_./-]+\.[a-z]+)|(?<![A-Za-z0-9_.-])(\.axiom/[A-Za-z0-9_./-]+\.[a-z]+)"
+)
+
+
+def _non_module_references(text: str) -> set[str]:
+    found = {f"tools/{a or b}.py" for a, b in _TOOL_IMPORT.findall(text)}
+    return found | {a or b for a, b in _TREE_FILE.findall(text)}
+
+
+def test_non_module_reference_scan():
+    text = (
+        "sys.path.insert(0, str(rulespec_root))\n"
+        "from tools.b16_entry_flags import entry_flags\n"
+        'x = rulespec_root / "tools/other_tool.py"\n'
+        "pin: rulespec-us/.axiom/workflow-toolchain.toml\n"
+        "from axiom_oracles.tools import x\n"
+    )
+    assert _non_module_references(text) == {
+        "tools/b16_entry_flags.py",
+        "tools/other_tool.py",
+        ".axiom/workflow-toolchain.toml",
+    }
 
 
 def test_real_declarations_cover_what_their_sources_name(real):
     """Every module a declaration's source files name, by id or by path, for
-    a jurisdiction the declaration's suites read, is inside its globs."""
-    suites, declarations, bound = real
-    checked = 0
-    for declaration in declarations:
-        if not declaration.sources:
+    a jurisdiction the declaration's suites read, and every tool or `.axiom`
+    file of the rulespec tree they name, is inside its globs."""
+    suites, coverage, bound = real
+    entries = [(d.id, d.sources) for d in coverage.declarations]
+    doc = yaml.safe_load((REPO_ROOT / alignment.COVERAGE_FILE).read_text())
+    entries += [
+        (row["id"], tuple(row.get("sources") or [row["script"]])) for row in doc["script_suites"]
+    ]
+    checked = other = 0
+    for identifier, sources in entries:
+        if not sources:
             continue
         named: set[str] = set()
-        for source in declaration.sources:
-            named |= module_literals((REPO_ROOT / source).read_text(), paths=True)
-        members = [item for item in bound.values() if item.declaration == declaration.id]
-        assert members, declaration.id
+        files: set[str] = set()
+        for source in sources:
+            text = (REPO_ROOT / source).read_text()
+            named |= module_literals(text, paths=True)
+            files |= _non_module_references(text)
+        members = [item for item in bound.values() if item.declaration == identifier]
+        assert members, identifier
         globs = [glob_regex(p) for item in members for p in (*item.roots, *item.paths)]
         jurisdictions = {"us"} | {
             item.suite.variables.get("jurisdiction", "us") for item in members
@@ -2208,9 +2940,13 @@ def test_real_declarations_cover_what_their_sources_name(real):
             if rest.split("/", 1)[0] not in ("statutes", "regulations", "policies"):
                 continue  # a concept id of the comparison vocabulary, not a module
             path = f"{jurisdiction}/{rest}.yaml"
-            assert any(regex.match(path) for regex in globs), (declaration.id, path)
+            assert any(regex.match(path) for regex in globs), (identifier, path)
             checked += 1
+        for path in sorted(files):
+            assert any(regex.match(path) for regex in globs), (identifier, path)
+            other += 1
     assert checked > 100
+    assert other >= 8  # the tariff tool, and the toolchain file for seven SNAP QC suites
 
 
 def test_snap_qc_declarations_match_the_bridge_configuration(real):
