@@ -986,6 +986,42 @@ def test_declared_bridge_suite_is_expected_beside_a_program_suite(world):
     assert report["manual_suites"] == ["zz-bridge"]
 
 
+def test_declaration_adds_to_a_program_binding(world):
+    """A bridge can read modules beside the program file its suite names."""
+
+    def edit(registry: Path) -> None:
+        doc = copy.deepcopy(COVERAGE)
+        doc["declarations"].append(
+            {"id": "manual-bridge", "match": {"suites": ["zz-manual"]}, "roots": ["us-zz/**"]}
+        )
+        _write(registry / alignment.COVERAGE_FILE, yaml.safe_dump(doc, sort_keys=False))
+
+    report = world(M_UNREACHED, registry_edit=edit)
+    (suite,) = report["expected_suites"]
+    assert (suite["suite"], suite["binding"], suite["declaration"]) == (
+        "zz-manual",
+        "program",
+        "manual-bridge",
+    )
+    assert suite["covered_files"] == {M_UNREACHED: "declared_path"}
+    assert report["status"] == "reference_not_runnable"
+    # The program binding still works on its own.
+    report = world(M_MANUAL, registry_edit=edit)
+    assert report["manual_suites"] == ["zz-manual"]
+    assert "covered_files" not in report["expected_suites"][0]
+
+    def contradiction(registry: Path) -> None:
+        doc = copy.deepcopy(COVERAGE)
+        doc["declarations"].append(
+            {"id": "manual-none", "match": {"suites": ["zz-manual"]}, "reads_rulespec_us": False}
+        )
+        _write(registry / alignment.COVERAGE_FILE, yaml.safe_dump(doc, sort_keys=False))
+
+    assert_error(
+        world(M_UNREACHED, registry_edit=contradiction), "coverage_declarations_unreadable"
+    )
+
+
 def test_suite_that_reads_no_rulespec_us_is_never_expected(world):
     report = world([M_BENEFIT, M_ROOT, M_RATES, M_MANUAL])
     assert "zz-foreign" not in expected(report)

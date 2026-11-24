@@ -1328,8 +1328,9 @@ def bind_suites(
 
     A suite that replays a pinned snapshot, or has no Axiom side, covers
     nothing. Otherwise a named program file that compiled binds the suite to
-    that program; a parameter manifest row is bound to its files; any other
-    suite must match exactly one declaration. A suite left without a binding
+    that program (a declaration that also matches adds to it); a parameter
+    manifest row is bound to its files; any other suite must match exactly
+    one declaration. A suite left without a binding
     raises ``reference_unbound``: it could cover anything.
     """
     bound: list[BoundSuite] = []
@@ -1346,7 +1347,23 @@ def bind_suites(
         elif suite.no_axiom_side:
             bound.append(BoundSuite(suite, BINDING_NO_AXIOM))
         elif suite.program_key is not None and suite.program_key in known_programs:
-            bound.append(BoundSuite(suite, BINDING_PROGRAM))
+            # A declaration beside a program binding adds what the suite's
+            # bridge reads outside the program file.
+            if matching and not matching[0].reads_rulespec_us:
+                raise AlignmentError(
+                    "coverage_declarations_unreadable",
+                    f"suite {suite.name} compiles a rulespec-us program, but declaration "
+                    f"{matching[0].id} says it reads no rulespec-us file",
+                )
+            bound.append(
+                BoundSuite(
+                    suite,
+                    BINDING_PROGRAM,
+                    matching[0].id if matching else None,
+                    roots=_fill(matching[0].roots, suite, matching[0]) if matching else (),
+                    paths=_fill(matching[0].paths, suite, matching[0]) if matching else (),
+                )
+            )
         elif suite.parameter_files:
             bound.append(
                 BoundSuite(suite, BINDING_PARAMETER_FILES, roots=suite.parameter_files)
@@ -1545,7 +1562,13 @@ def expected_suites(
     for bound in bound_suites:
         suite = bound.suite
         entry: dict[str, Any] | None = None
-        if bound.binding == BINDING_PROGRAM and suite.program_key in reaching:
+        declared = {}
+        if bound.roots or bound.paths:
+            for row in reach:
+                how = coverage.covers(bound, row)
+                if how:
+                    declared[row["path"]] = how
+        if bound.binding == BINDING_PROGRAM and (suite.program_key in reaching or declared):
             own: set[str] = set()
             own_reach = suite_concept_reach.get(suite.name, {})
             for side in SIDES:
@@ -1562,16 +1585,13 @@ def expected_suites(
             }
             if own_reach.get("unresolved_concepts"):
                 entry["unresolved_concepts"] = sorted(own_reach["unresolved_concepts"])
-        elif bound.binding in (BINDING_DECLARED, BINDING_PARAMETER_FILES):
-            covered = {}
-            for row in reach:
-                how = coverage.covers(bound, row)
-                if how:
-                    covered[row["path"]] = how
-            if covered:
-                entry = {"binding": bound.binding, "covered_files": covered}
-                if bound.declaration:
-                    entry["declaration"] = bound.declaration
+            if declared:
+                entry["covered_files"] = declared
+                entry["declaration"] = bound.declaration
+        elif bound.binding in (BINDING_DECLARED, BINDING_PARAMETER_FILES) and declared:
+            entry = {"binding": bound.binding, "covered_files": declared}
+            if bound.declaration:
+                entry["declaration"] = bound.declaration
         if entry is not None:
             out.append(
                 {

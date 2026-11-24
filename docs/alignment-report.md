@@ -92,6 +92,10 @@ exactly one binding:
 | `pinned_snapshot` | The suite replays a pinned rulespec snapshot (`rulespec_upstream_sha` + `rulespec_upstream_tree`, or `axiom_rulespec_repo_roots_revision`). It cannot observe a candidate. Never expected; listed in `suite_registry.pinned_snapshot_suites`. |
 | `no_axiom_side` | An `axiom-oracles-compare` suite between two other engines. Never expected. |
 
+A suite bound through a program file may also match a declaration; the
+declaration then adds what the suite's bridge reads outside that program
+(the Medicaid population bridge is the one case today).
+
 A suite with none of these is an error for every report
 (`reference_unbound`), whatever changed: an undeclared suite could cover
 anything, so nothing may be called `no_reference` while one exists. That

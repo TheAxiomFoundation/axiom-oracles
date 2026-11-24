@@ -12,7 +12,9 @@
 #   * a suite of `comparisons/parameter-oracles.yaml` (coverage is the `file`
 #     of each of its comparisons).
 #
-# Every other suite must match exactly one declaration below. A suite that
+# Every other suite must match exactly one declaration below. A suite bound
+# through a program file may match one too: the declaration then adds what the
+# suite's bridge reads outside that program. A suite that
 # matches none makes every report an error (`reference_unbound`): an
 # undeclared suite could cover anything, so nothing may be called
 # `no_reference` while one exists.
@@ -46,6 +48,7 @@ sets:
     - us/policies/irs/**
     - us/policies/ssa/**
     - us/policies/income_tax/**
+    - us/policies/aca/**
   federal_snap:
     - us/policies/usda/snap/**
     - us/regulations/7-cfr/273/**
@@ -189,6 +192,17 @@ declarations:
       - axiom_oracles/suites/us_tariff.py
       - axiom_oracles/suites/us_tariff_panel.py
       - scripts/us_tariff_schedule_campaign.py
+
+  # --- Medicaid MAGI population comparison. The suite names a program file,
+  # --- so its coverage is that compiled program; this adds the modules the
+  # --- population bridge names beside it.
+  - id: medicaid-magi-bridge
+    match: {suites: [medicaid-magi-co-ecps]}
+    roots:
+      - us/regulations/42-cfr/435/**
+      - us/statutes/42/1396a/**
+      - us/statutes/42/1396d/**
+    sources: [axiom_oracles/bridges/medicaid_populace.py]
 
   # --- Suites that read another country's RuleSpec tree, or none.
   - id: euromod-platform
