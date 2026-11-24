@@ -927,6 +927,8 @@ def test_glob_regex():
     assert not glob_regex("us/*.yaml").match("us/a/b.yaml")
     assert glob_regex("us-??/x.yaml").match("us-co/x.yaml")
     assert not glob_regex("us/x.yaml").match("us/xxyaml")
+    assert not glob_regex("us/statutes/9/800").match("us/statutes/9/800.yaml")
+    assert not glob_regex("us/*").match("us/a.yaml/b")
 
 
 @pytest.mark.parametrize(
@@ -1726,6 +1728,16 @@ def test_report_suite_key_is_not_the_registry_name(world):
     assert world(reports=(ALL_MATCH, ALL_MATCH), report_edit=rename)["status"] == "aligned"
 
 
+def test_report_without_an_oracle_identity_on_both_sides_is_an_error(world):
+    def strip(base, candidate):
+        base["provenance"]["oracle"] = {}
+        candidate["provenance"]["oracle"] = {}
+
+    assert_error(
+        world(reports=(ALL_MATCH, ALL_MATCH), report_edit=strip), "suite_report_provenance_mismatch"
+    )
+
+
 def test_base_report_is_checked_too(world):
     def edit(base, candidate):
         base["provenance"]["rulespecs"][0]["sha"] = _commit_of(candidate)
@@ -2000,6 +2012,13 @@ def test_cache_entry_that_is_not_whole_is_recompiled(tmp_path):
     assert with_entry(lambda e: e.update(schema="other")) == [P_MANUAL]
     assert with_entry(lambda e: e.pop("artifact")) == [P_MANUAL]
     assert with_entry(lambda e: e["artifact"].pop("composed_imports")) == [P_MANUAL]
+
+    # An artifact that does not say what it imported, with a matching digest.
+    def no_imports(entry):
+        entry["artifact"].pop("composed_imports")
+        entry["artifact_sha256"] = alignment.canonical_json_sha256(entry["artifact"])
+
+    assert with_entry(no_imports) == [P_MANUAL]
     assert with_entry(lambda e: e["inputs"].update(program=P_DEMO)) == [P_MANUAL]
     entry_path.write_text("{not json")
     assert bench.run() == [P_MANUAL]
