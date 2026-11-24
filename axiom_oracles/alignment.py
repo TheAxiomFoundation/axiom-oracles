@@ -74,8 +74,8 @@ SIDES = ("base", "candidate")
 JURISDICTION_DIR = re.compile(r"^[a-z]{2}(-[a-z0-9]+)?$")
 #: ``us:statutes/7/2014/e/2`` — a RuleSpec module id written as a literal.
 MODULE_LITERAL = re.compile(
-    r"(?<![A-Za-z0-9_/-])([a-z]{2}(?:-[a-z0-9]+)?):"
-    r"((?:statutes|regulations|policies)/[A-Za-z0-9_.\-/]*[A-Za-z0-9_])"
+    r"(?<![A-Za-z0-9_/.:-])([a-z]{2}(?:-[a-z0-9]+)?):"
+    r"([A-Za-z0-9_][A-Za-z0-9_.\-]*/[A-Za-z0-9_.\-/]*[A-Za-z0-9_])"
 )
 #: Registry directories whose files can name a module the harness compiles
 #: outside any ``programs/**.yaml`` file (bridges, overlays, generated programs).
@@ -217,6 +217,8 @@ def changed_files(
     base_root: Path,
     candidate_root: Path,
     explicit: Sequence[str] | None = None,
+    *,
+    trees: Mapping[str, "TreeIndex"] | None = None,
 ) -> list[dict[str, Any]]:
     """The changed files with both digests, from a tree diff or a given list.
 
@@ -225,8 +227,8 @@ def changed_files(
     the base and candidate of that change.
     """
     if explicit is None:
-        base = _tree_digests(base_root)
-        candidate = _tree_digests(candidate_root)
+        base = trees["base"].digests if trees else _tree_digests(base_root)
+        candidate = trees["candidate"].digests if trees else _tree_digests(candidate_root)
         paths = sorted(p for p in set(base) | set(candidate) if base.get(p) != candidate.get(p))
         rows = [(p, base.get(p), candidate.get(p)) for p in paths]
     else:
@@ -288,7 +290,11 @@ def discover_programs(root: Path, origin: str) -> list[ProgramFile]:
 
 class Compiler(Protocol):
     def compile(self, program: ProgramFile, side: str) -> Mapping[str, Any]:
-        """Return the compiled artifact (the engine's JSON) for one program."""
+        """Return the compiled artifact (the engine's JSON) for one program.
+
+        A compiler that also sets ``composed_imports`` (the module ids the
+        composed program imports) lets an identical-input compile be reused.
+        """
 
 
 class ComposeEngineCompiler:
@@ -403,11 +409,16 @@ class ComposeEngineCompiler:
                 "program_compile_failed", f"compile of {program.key} ({side}): {_tail(str(exc))}"
             ) from exc
         try:
-            return json.loads(compiled.read_text())
+            artifact = json.loads(compiled.read_text())
         except (OSError, ValueError) as exc:
             raise AlignmentError(
                 "program_compile_failed", f"artifact of {program.key} ({side}) unreadable: {exc}"
             ) from exc
+        if isinstance(artifact, dict):
+            artifact["composed_imports"] = [
+                entry for entry in composed_doc.get("imports") or [] if isinstance(entry, str)
+            ]
+        return artifact
 
 
 def _tail(text: str, limit: int = 600) -> str:
@@ -460,6 +471,10 @@ class CompiledProgram:
     engine_version: str | None
     derived_by_name: dict[str, Mapping[str, Any]]
     parameter_ids: dict[str, list[str]]
+    #: Modules the artifact compiled from plus the composed imports, or
+    #: ``None`` when the compiler did not report the imports.
+    seed_modules: frozenset[str] | None = None
+    reused: bool = False
 
     def resolve_root(self, root: str) -> str | None:
         """The derived-rule name for an output or a ``module#name`` concept."""
@@ -479,12 +494,10 @@ class CompiledProgram:
         for name in names:
             rule = self.derived_by_name[name]
             module = _module_of(str(rule.get("id") or ""))
-            if module is None:
-                raise AlignmentError(
-                    "compiled_program_unattributed",
-                    f"{self.program.key} ({self.side}): derived rule {name!r} has no module id",
-                )
-            reached.setdefault(module, set()).add(name)
+            # A rule without a module id is written in the program file
+            # itself; a change to that file reaches the program directly.
+            if module is not None:
+                reached.setdefault(module, set()).add(name)
             parameters: set[str] = set()
             relations: set[str] = set()
             _walk_refs({k: v for k, v in rule.items() if k not in ("id", "name")}, parameters, relations)
@@ -526,7 +539,22 @@ def index_compiled(program: ProgramFile, side: str, artifact: Mapping[str, Any])
     for parameter in body.get("parameters") or []:
         if isinstance(parameter, Mapping) and isinstance(parameter.get("name"), str):
             parameter_ids.setdefault(parameter["name"], []).append(str(parameter.get("id") or ""))
+    identifiers = [str(rule.get("id") or "") for rule in derived]
+    identifiers += [i for ids in parameter_ids.values() for i in ids]
+    identifiers += [
+        str(relation.get("name") or "")
+        for relation in body.get("relations") or []
+        if isinstance(relation, Mapping)
+    ]
+    imports = artifact.get("composed_imports")
+    seeds: frozenset[str] | None = None
+    if isinstance(imports, list):
+        seeds = frozenset(
+            {m for m in (_module_of(i) for i in identifiers) if m}
+            | {str(i).split("#", 1)[0] for i in imports if isinstance(i, str) and ":" in i}
+        )
     return CompiledProgram(
+        seed_modules=seeds,
         program=program,
         side=side,
         sha256=canonical_json_sha256(body),
@@ -538,29 +566,198 @@ def index_compiled(program: ProgramFile, side: str, artifact: Mapping[str, Any])
     )
 
 
+class TreeIndex:
+    """File digests and module references of one rulespec tree."""
+
+    def __init__(self, root: Path) -> None:
+        self.root = Path(root)
+        self.digests = _tree_digests(self.root)
+        self.paths = sorted(self.digests)
+        self.references: dict[str, set[str]] = {}
+        for relpath in self.paths:
+            kind, module = classify_path(relpath)
+            if kind != "module" or module is None:
+                continue
+            try:
+                text = (self.root / relpath).read_text()
+            except (OSError, UnicodeDecodeError):
+                continue
+            self.references[module] = module_literals(text) - {module}
+
+    def closure(self, modules: Iterable[str]) -> set[str]:
+        """``modules`` plus every module they name, transitively."""
+        seen: set[str] = set()
+        stack = list(modules)
+        while stack:
+            module = stack.pop()
+            if module in seen:
+                continue
+            seen.add(module)
+            stack.extend(self.references.get(module, ()))
+        return seen
+
+    def referencing(self, modules: Iterable[str]) -> set[str]:
+        """``modules`` plus every module that names one of them, transitively."""
+        reverse: dict[str, set[str]] = {}
+        for module, targets in self.references.items():
+            for target in targets:
+                reverse.setdefault(target, set()).add(module)
+        seen: set[str] = set()
+        stack = list(modules)
+        while stack:
+            module = stack.pop()
+            if module in seen:
+                continue
+            seen.add(module)
+            stack.extend(reverse.get(module, ()))
+        return seen
+
+    def _under(self, prefix: str) -> list[str]:
+        import bisect
+
+        start = bisect.bisect_left(self.paths, prefix)
+        out = []
+        for path in self.paths[start:]:
+            if not path.startswith(prefix):
+                break
+            if not path.endswith(".test.yaml"):
+                out.append(path)
+        return out
+
+    def program_inputs(self, program: ProgramFile, seeds: Iterable[str]) -> dict[str, Any]:
+        """Digests of everything a compile of ``program`` can read here.
+
+        The program file, the file of every module in the closure of
+        ``seeds``, and the listing of the directory of the same name (an
+        import may name a directory of modules).
+        """
+        files: dict[str, str | None] = {}
+        dirs: dict[str, str] = {}
+        for module in sorted(self.closure(seeds)):
+            jurisdiction, rest = module.split(":", 1)
+            stem = f"{jurisdiction}/{rest}"
+            files[f"{stem}.yaml"] = self.digests.get(f"{stem}.yaml")
+            listing = [(path, self.digests[path]) for path in self._under(f"{stem}/")]
+            dirs[f"{stem}/"] = canonical_json_sha256(listing)
+        return {
+            "program": program.key,
+            "program_sha256": sha256_file(program.path),
+            "files": files,
+            "dirs": dirs,
+        }
+
+    def matches(self, program: ProgramFile, recorded: Mapping[str, Any]) -> bool:
+        if recorded.get("program") != program.key:
+            return False
+        if recorded.get("program_sha256") != sha256_file(program.path):
+            return False
+        for path, digest in (recorded.get("files") or {}).items():
+            if self.digests.get(path) != digest:
+                return False
+        for prefix, digest in (recorded.get("dirs") or {}).items():
+            listing = [(path, self.digests[path]) for path in self._under(prefix)]
+            if canonical_json_sha256(listing) != digest:
+                return False
+        return True
+
+
+class CompileCache:
+    """Compiled artifacts keyed by the bytes of everything the compile read.
+
+    Always in memory for one report, so a candidate program whose inputs equal
+    base is not compiled twice. With ``directory`` the entries persist across
+    reports. ``salt`` names the toolchain; entries of another toolchain are
+    never read.
+    """
+
+    def __init__(self, directory: Path | None = None, salt: str = "") -> None:
+        self.directory = Path(directory) if directory is not None else None
+        self.salt = salt
+        self._memory: dict[str, list[tuple[Mapping[str, Any], Mapping[str, Any]]]] = {}
+
+    def _slot(self, program: ProgramFile) -> str:
+        return sha256_bytes(f"{self.salt}\0{program.key}".encode())
+
+    def get(self, program: ProgramFile, tree: TreeIndex) -> Mapping[str, Any] | None:
+        slot = self._slot(program)
+        for recorded, artifact in self._memory.get(slot, []):
+            if tree.matches(program, recorded):
+                return artifact
+        if self.directory is None:
+            return None
+        for path in sorted((self.directory / slot).glob("*.json")):
+            try:
+                entry = json.loads(path.read_text())
+            except (OSError, ValueError):
+                continue
+            if isinstance(entry, dict) and tree.matches(program, entry.get("inputs") or {}):
+                self._memory.setdefault(slot, []).append((entry["inputs"], entry["artifact"]))
+                return entry["artifact"]
+        return None
+
+    def put(
+        self, program: ProgramFile, tree: TreeIndex, unit: "CompiledProgram", artifact: Mapping[str, Any]
+    ) -> None:
+        if unit.seed_modules is None:
+            return
+        recorded = tree.program_inputs(program, unit.seed_modules)
+        slot = self._slot(program)
+        self._memory.setdefault(slot, []).append((recorded, artifact))
+        if self.directory is None:
+            return
+        target = self.directory / slot
+        target.mkdir(parents=True, exist_ok=True)
+        name = canonical_json_sha256(recorded)[:24]
+        temporary = target / f".{name}.{os.getpid()}.tmp"
+        temporary.write_text(json.dumps({"inputs": recorded, "artifact": artifact}))
+        temporary.replace(target / f"{name}.json")
+
+
 def compile_programs(
     programs: Mapping[str, Sequence[ProgramFile]],
     compiler: Compiler,
     *,
     jobs: int = 4,
+    trees: Mapping[str, TreeIndex] | None = None,
+    cache: CompileCache | None = None,
 ) -> tuple[dict[str, dict[str, CompiledProgram]], dict[str, dict[str, int]]]:
     """Compile every program on every side. Any failure raises.
 
     Returns ``(compiled[side][key], counts[side])``. A side whose compiled
     count differs from the number of program files found is an error.
+
+    With ``trees`` and ``cache`` a program is not compiled again when the
+    cache holds an artifact whose recorded inputs are byte-identical in this
+    side's tree. Base is compiled first, so an unchanged candidate program
+    takes the base artifact.
     """
-    tasks = [(side, program) for side in SIDES for program in programs.get(side, [])]
 
     def one(task: tuple[str, ProgramFile]) -> CompiledProgram | AlignmentError:
         side, program = task
         try:
-            return index_compiled(program, side, compiler.compile(program, side))
+            tree = trees.get(side) if trees is not None else None
+            if cache is not None and tree is not None:
+                cached = cache.get(program, tree)
+                if cached is not None:
+                    unit = index_compiled(program, side, cached)
+                    unit.reused = True
+                    return unit
+            artifact = compiler.compile(program, side)
+            unit = index_compiled(program, side, artifact)
+            if cache is not None and tree is not None:
+                cache.put(program, tree, unit, artifact)
+            return unit
         except AlignmentError as exc:
             return exc
 
     compiled: dict[str, dict[str, CompiledProgram]] = {side: {} for side in SIDES}
     failures: list[AlignmentError] = []
-    if tasks:
+    attempted = 0
+    for side in SIDES:
+        tasks = [(side, program) for program in programs.get(side, [])]
+        attempted += len(tasks)
+        if not tasks:
+            continue
         with ThreadPoolExecutor(max_workers=max(1, jobs)) as pool:
             for item in pool.map(one, tasks):
                 if isinstance(item, AlignmentError):
@@ -571,7 +768,7 @@ def compile_programs(
         causes = {failure.cause for failure in failures}
         raise AlignmentError(
             causes.pop() if len(causes) == 1 else "program_compile_failed",
-            f"{len(failures)} of {len(tasks)} program compiles failed: "
+            f"{len(failures)} of {attempted} program compiles failed: "
             + " | ".join(failure.detail for failure in failures),
         )
     return _count_check(programs, compiled)
@@ -586,7 +783,11 @@ def _count_check(
     for side in SIDES:
         found = len(programs.get(side, []))
         done = len(compiled[side])
-        counts[side] = {"program_files_found": found, "programs_compiled": done}
+        counts[side] = {
+            "program_files_found": found,
+            "programs_compiled": done,
+            "reused": sum(unit.reused for unit in compiled[side].values()),
+        }
         if found != done:
             raise AlignmentError(
                 "program_count_mismatch",
@@ -734,41 +935,6 @@ def harness_module_references(
             for module in module_literals(text):
                 references.setdefault(module, set()).add(rel)
     return {module: sorted(files) for module, files in sorted(references.items())}
-
-
-def importing_modules(roots: Iterable[Path], modules: Iterable[str]) -> set[str]:
-    """``modules`` plus every module that names one of them, transitively.
-
-    Read from the module files as text (any module-id literal counts as a
-    reference), over every given tree. An over-approximation by design.
-    """
-    reverse: dict[str, set[str]] = {}
-    for root in roots:
-        for child in sorted(Path(root).iterdir()) if Path(root).is_dir() else []:
-            if not child.is_dir() or not JURISDICTION_DIR.match(child.name):
-                continue
-            for path in child.rglob("*.yaml"):
-                if path.name.endswith(".test.yaml"):
-                    continue
-                kind, module = classify_path(path.relative_to(root).as_posix())
-                if kind != "module" or module is None:
-                    continue
-                try:
-                    text = path.read_text()
-                except (OSError, UnicodeDecodeError):
-                    continue
-                for target in module_literals(text):
-                    if target != module:
-                        reverse.setdefault(target, set()).add(module)
-    seen: set[str] = set()
-    stack = list(modules)
-    while stack:
-        module = stack.pop()
-        if module in seen:
-            continue
-        seen.add(module)
-        stack.extend(reverse.get(module, ()))
-    return seen
 
 
 # ---------------------------------------------------------------------------
@@ -1290,6 +1456,8 @@ class AlignmentInputs:
     candidate_sha: str | None = None
     include_registry_programs: bool = True
     jobs: int = 4
+    reuse_unchanged_programs: bool = True
+    cache: CompileCache | None = None
     toolchain: Mapping[str, Any] = field(default_factory=dict)
 
 
@@ -1332,7 +1500,10 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
         "program_bound": sum(s.program_key is not None for s in suites),
     }
 
-    changed = changed_files(inputs.base_root, inputs.candidate_root, inputs.changed)
+    trees = {"base": TreeIndex(inputs.base_root), "candidate": TreeIndex(inputs.candidate_root)}
+    changed = changed_files(
+        inputs.base_root, inputs.candidate_root, inputs.changed, trees=trees
+    )
     if not changed:
         raise AlignmentError("no_changed_files", "base and candidate do not differ")
     provenance["changed_files"] = changed
@@ -1342,7 +1513,13 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
         programs[side] = discover_programs(Path(root), ORIGIN_RULESPEC)
         if inputs.include_registry_programs:
             programs[side] += discover_programs(registry_root, ORIGIN_REGISTRY)
-    compiled, counts = compile_programs(programs, inputs.compiler, jobs=inputs.jobs)
+    compiled, counts = compile_programs(
+        programs,
+        inputs.compiler,
+        jobs=inputs.jobs,
+        trees=trees if inputs.reuse_unchanged_programs else None,
+        cache=(inputs.cache or CompileCache()) if inputs.reuse_unchanged_programs else None,
+    )
     report["programs"] = counts
     provenance["compiled_programs"] = {
         side: {key: unit.sha256 for key, unit in sorted(compiled[side].items())} for side in SIDES
@@ -1356,7 +1533,9 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
 
     known_programs = {key for side in SIDES for key in compiled[side]}
     changed_modules = {row["module"] for row in reach if row["module"]}
-    referenced = importing_modules([inputs.base_root, inputs.candidate_root], changed_modules)
+    referenced = trees["base"].referencing(changed_modules) | trees["candidate"].referencing(
+        changed_modules
+    )
     expected = expected_suites(reach, suites, known_programs, suite_reach, referenced)
     report["expected_suites"] = expected
     report["suites_with_missing_program"] = sorted(

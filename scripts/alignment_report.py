@@ -42,6 +42,7 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.alignment import (  # noqa: E402
     AlignmentError,
     AlignmentInputs,
+    CompileCache,
     ComposeEngineCompiler,
     ReportsDirExecutor,
     RunComparisonExecutor,
@@ -131,7 +132,17 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--reports-dir", type=Path, help="read suite reports instead of running")
     parser.add_argument("--work-dir", type=Path, help="scratch directory (default: a temp dir)")
     parser.add_argument("--keep-work-dir", action="store_true")
-    parser.add_argument("--jobs", type=int, default=4)
+    parser.add_argument(
+        "--cache-dir",
+        type=Path,
+        help="keep compiled artifacts here, keyed by the bytes of their inputs and the toolchain",
+    )
+    parser.add_argument(
+        "--recompile-all",
+        action="store_true",
+        help="compile every program on both sides; reuse nothing",
+    )
+    parser.add_argument("--jobs", type=int, default=os.cpu_count() or 4)
     parser.add_argument("--compile-timeout", type=float, default=600.0)
     parser.add_argument("--suite-timeout", type=float, default=3600.0)
     parser.add_argument("--output", type=Path, help="write the JSON report here")
@@ -214,6 +225,13 @@ def main(argv: list[str] | None = None) -> int:
         candidate_sha=args.candidate_sha,
         include_registry_programs=not args.no_registry_programs,
         jobs=args.jobs,
+        reuse_unchanged_programs=not args.recompile_all,
+        cache=CompileCache(
+            args.cache_dir,
+            salt=json.dumps(
+                {k: v for k, v in toolchain.items() if k != "suite_reports"}, sort_keys=True
+            ),
+        ),
         toolchain=toolchain,
     )
     if setup_error is None and isinstance(compiler, ComposeEngineCompiler):

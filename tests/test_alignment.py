@@ -357,8 +357,9 @@ def test_classify_path():
 def test_reach_follows_compared_outputs(world, module, programs):
     report = world(module)
     assert reaching(report, module) == programs
-    assert report["programs"]["base"] == {"program_files_found": 3, "programs_compiled": 3}
-    assert report["programs"]["candidate"] == {"program_files_found": 3, "programs_compiled": 3}
+    for side in ("base", "candidate"):
+        assert report["programs"][side]["program_files_found"] == 3
+        assert report["programs"][side]["programs_compiled"] == 3
 
 
 def test_reach_names_the_reached_rules(world):
@@ -395,6 +396,97 @@ def test_reach_on_one_side_only_still_counts(world):
     hit = report["reach"][0]["reaching_programs"][0]
     assert hit["sides"] == ["base"]
     assert report["status"] == "reference_not_executed"
+
+
+class CountingCompiler(FakeCompiler):
+    """Reports composed imports, so identical-input compiles can be reused."""
+
+    def __init__(self, artifacts):
+        super().__init__(artifacts)
+        self.calls = []
+
+    def compile(self, program, side):
+        self.calls.append((program.key, side))
+        return {**super().compile(program, side), "composed_imports": []}
+
+    def candidate_calls(self):
+        return sorted(key for key, side in self.calls if side == "candidate")
+
+
+def test_candidate_program_is_recompiled_only_when_its_inputs_changed(world):
+    # A module no program reads: every candidate program takes the base artifact.
+    compiler = CountingCompiler(artifacts())
+    report = world(M_UNREACHED, compiler=compiler)
+    assert report["programs"]["candidate"]["reused"] == 3
+    assert report["programs"]["base"]["reused"] == 0
+    assert compiler.candidate_calls() == []
+    assert report["provenance"]["compiled_programs"]["candidate"] == (
+        report["provenance"]["compiled_programs"]["base"]
+    )
+
+    # A module only the demo program compiled from: only that one is recompiled.
+    compiler = CountingCompiler(artifacts())
+    report = world(M_ORPHAN, compiler=compiler)
+    assert compiler.candidate_calls() == [P_DEMO]
+
+    # A program file changes: that program is recompiled.
+    compiler = CountingCompiler(artifacts())
+    world("programs/us-zz/demo/fy-2026.yaml", compiler=compiler)
+    assert compiler.candidate_calls() == [P_DEMO]
+
+    # A module that a compiled module names (an import) changes.
+    compiler = CountingCompiler(artifacts())
+
+    def importing(candidate: Path) -> None:
+        _write(candidate / M_NOSUITE, "imports:\n  - us-zz:policies/manual/page\n")
+
+    world(M_UNREACHED, compiler=compiler, candidate_edit=importing)
+    assert compiler.candidate_calls() == [P_NOSUITE]
+
+
+def test_new_file_in_an_imported_directory_forces_a_recompile(world):
+    compiler = CountingCompiler(artifacts())
+
+    def add(candidate: Path) -> None:
+        _write(candidate / "us/statutes/9/100/extra.yaml", _module_text("new"))
+
+    world(M_UNREACHED, compiler=compiler, candidate_edit=add)
+    assert compiler.candidate_calls() == [P_DEMO]
+
+
+def test_compiler_that_reports_no_imports_is_never_reused(world):
+    class Counting(FakeCompiler):
+        calls = 0
+
+        def compile(self, program, side):
+            Counting.calls += 1
+            return super().compile(program, side)
+
+    report = world(M_UNREACHED, compiler=Counting(artifacts()))
+    assert Counting.calls == 6
+    assert report["programs"]["candidate"]["reused"] == 0
+
+
+def test_persistent_cache_is_bound_to_inputs_and_toolchain(tmp_path):
+    from axiom_oracles.alignment import CompileCache, TreeIndex, compile_programs, discover_programs
+
+    root = make_tree(tmp_path / "rulespec-us")
+    programs = {"base": discover_programs(root, "rulespec-us"), "candidate": []}
+    trees = {"base": TreeIndex(root)}
+
+    def run(salt):
+        compiler = CountingCompiler(artifacts())
+        compile_programs(
+            programs, compiler, trees=trees, cache=CompileCache(tmp_path / "cache", salt=salt)
+        )
+        return len(compiler.calls)
+
+    assert run("toolchain-a") == 3
+    assert run("toolchain-a") == 0
+    assert run("toolchain-b") == 3
+    _write(root / M_BENEFIT, _module_text("edited"))
+    trees["base"] = TreeIndex(root)
+    assert run("toolchain-a") == 1
 
 
 def test_tree_diff_and_explicit_list_agree(world):
@@ -538,10 +630,10 @@ def test_compile_failure_is_an_error_not_no_reference(world):
 def test_compiled_count_mismatch_is_an_error(world, monkeypatch):
     real = alignment.compile_programs
 
-    def dropping(programs, compiler, *, jobs=4):
+    def dropping(programs, compiler, **kwargs):
         trimmed = {side: list(items)[:-1] for side, items in programs.items()}
-        compiled, _ = real(trimmed, compiler, jobs=jobs)
-        return real.__globals__["_count_check"](programs, compiled)
+        compiled, _ = real(trimmed, compiler, **kwargs)
+        return alignment._count_check(programs, compiled)
 
     monkeypatch.setattr(alignment, "compile_programs", dropping)
     assert_error(world(M_UNREACHED), "program_count_mismatch")
