@@ -6,7 +6,8 @@
 #   * `runner.parameters.axiom_program` names a program file that compiles
 #     (coverage is the dependency walk of the compiled program);
 #   * the suite replays a pinned rulespec snapshot and its runner enforces the
-#     pin (`alignment.PINNED_RUNNERS`): it cannot observe a candidate tree;
+#     pin (`alignment.PINNED_RUNNERS`, full object ids, nothing else read): it
+#     cannot observe a candidate tree;
 #   * an `axiom-oracles-compare` suite between two engines that are not Axiom;
 #   * a suite of `comparisons/parameter-oracles.yaml` (coverage is the `file`
 #     of each of its comparisons).
@@ -215,6 +216,25 @@ declarations:
     match: {suites: [co-state-income-tax-taxsim]}
     roots: [us-co/policies/income_tax/**, us-co/statutes/**, "@federal_tax"]
     sources: []
+
+  # --- Tax projection suites that name a rulespec revision by an abbreviated
+  # --- id. An abbreviation is not accepted as a pin (it names whatever commit
+  # --- comes to share it), so these are bound to what the tax projection
+  # --- reads: the federal tax set and, for the Colorado suites, the state's
+  # --- pipeline and statutes. Not read module by module.
+  - id: tax-projection-abbreviated-pin
+    match:
+      suites:
+        - co-state-income-tax-ecps
+        - co-tax-intersection-taxsim
+        - fiit-taxsim-ecps
+        - us-mfs-policyengine
+        - us-mfs-taxsim
+      runner_type: axiom-oracles-compare
+    roots: [us-co/policies/income_tax/**, us-co/statutes/**, "@federal_tax"]
+    sources:
+      - axiom_oracles/bridges/tax_populace.py
+      - axiom_oracles/adapters/axiom/tax_projection.py
 
   # --- Tariff suites: the duty spine and the generated schedule chapters,
   # --- which the schedule campaign reads by directory glob, and the

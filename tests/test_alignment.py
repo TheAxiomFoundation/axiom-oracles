@@ -234,6 +234,13 @@ def _suite_yaml(
     return "\n".join(lines) + "\n" + extra_params
 
 
+FULL_ID = "abc1234" + "0" * 33
+#: A pin the runner enforces: a full revision and the pre-materialized roots.
+PIN = (
+    f"    axiom_rulespec_repo_roots_revision: {FULL_ID}\n"
+    "    axiom_rulespec_repo_roots: $HOME/oracle-pins\n"
+)
+
 COVERAGE = {
     "schema": "axiom_oracles.alignment_coverage.v1",
     "sets": {"nine_hundreds": ["us/statutes/9/9*.yaml"]},
@@ -273,15 +280,7 @@ def write_registry(root: Path, *, demo_ci: str | None = None, dispositions: dict
     )
     _write(
         root / "comparisons/zz-pinned.yaml",
-        _suite_yaml(
-            "zz-pinned",
-            ci=None,
-            program="programs/us-zz/demo/fy-2026.yaml",
-            extra_params=(
-                "    axiom_rulespec_repo_roots_revision: abc1234\n"
-                "    axiom_rulespec_repo_roots: $HOME/oracle-pins\n"
-            ),
-        ),
+        _suite_yaml("zz-pinned", ci=None, extra_params=PIN),
     )
     _write(
         root / PARAMETER_MANIFEST,
@@ -911,6 +910,73 @@ def test_unknown_revision_and_used_work_directory_are_errors(tmp_path):
     assert_error(build_report(AlignmentInputs(work_dir=tmp_path / "b", **inputs)), "checkout_failed")
 
 
+def test_export_is_byte_exact_whatever_git_would_convert(tmp_path, monkeypatch):
+    """Committed attributes and the caller's configuration can make a
+    checkout write other bytes than the commit holds."""
+    built = World(tmp_path / "w")
+
+    def attributes(root: Path) -> None:
+        _write(root / ".gitattributes", "*.yaml text eol=crlf\n*.md filter=shout\n")
+
+    built.build(M_BASE, both_edit=attributes)
+    home = tmp_path / "home"
+    _write(
+        home / ".gitconfig",
+        "[core]\n\tautocrlf = true\n[filter \"shout\"]\n\tsmudge = tr a-z A-Z\n\tclean = cat\n",
+    )
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.delenv("GIT_CONFIG_GLOBAL", raising=False)
+    # What a plain clone of the candidate writes with that configuration.
+    plain = tmp_path / "plain"
+    subprocess.run(["git", "clone", "-q", str(built.candidate), str(plain)], check=True, capture_output=True)
+    assert b"\r\n" in (plain / M_BASE).read_bytes()
+    assert (plain / "README.md").read_text() == "FIXTURE\n"
+    # What the report reads.
+    checkout = export_commit(built.candidate, "HEAD", tmp_path / "x" / "rulespec-us", "candidate")
+    committed = subprocess.run(
+        ["git", "-C", str(built.candidate), "cat-file", "blob", f"HEAD:{M_BASE}"],
+        check=True,
+        capture_output=True,
+    ).stdout
+    assert (checkout.root / M_BASE).read_bytes() == committed
+    assert b"\r\n" not in committed
+    assert (checkout.root / "README.md").read_text() == "fixture\n"
+    assert built.report()["status"] == "reference_not_executed"
+
+
+def test_exported_file_that_is_not_its_blob_is_an_error(tmp_path):
+    built = World(tmp_path / "w").build(M_BASE)
+    checkout = export_commit(built.base, "HEAD", tmp_path / "x" / "rulespec-us", "base")
+    root = checkout.root
+    # Bytes changed behind a flag that keeps `git status` quiet.
+    _git(root, "update-index", "--assume-unchanged", M_MANUAL)
+    (root / M_MANUAL).write_bytes((root / M_MANUAL).read_bytes().replace(b"\n", b"\r\n"))
+    assert _git(root, "status", "--porcelain") == ""
+    with pytest.raises(AlignmentError) as excinfo:
+        read_checkout(root, "base")
+    assert excinfo.value.cause == "rulespec_tree_not_byte_exact"
+    assert M_MANUAL in excinfo.value.detail
+
+
+def test_blob_id_is_gits():
+    assert alignment._blob_id(b"hello\n", 40) == "ce013625030ba8dba906f756967f9e9ca394464a"
+    assert len(alignment._blob_id(b"hello\n", 64)) == 64
+
+
+def test_symlink_that_leaves_the_tree_is_refused(tmp_path):
+    def link(target: str):
+        def edit(root: Path) -> None:
+            os.symlink(target, root / "us/statutes/9/linked.yaml")
+
+        return edit
+
+    for target in ("../../../../outside.yaml", "/etc/hosts"):
+        built = World(tmp_path / f"w{len(list(tmp_path.iterdir()))}").build(M_BASE, both_edit=link(target))
+        assert_error(built.report(), "rulespec_tree_symlink_escapes")
+    built = World(tmp_path / "inside").build(M_BASE, both_edit=link("100.yaml"))
+    assert built.report()["status"] == "reference_not_executed"
+
+
 def test_read_checkout_refuses_a_tree_that_is_not_its_commit(tmp_path):
     """The guards on the export itself."""
     built = World(tmp_path / "w").build(M_BASE)
@@ -1069,10 +1135,63 @@ def test_mixed_expected_suites_list_both(world):
 
 
 def test_pinned_suite_cannot_observe_a_candidate(world):
-    """zz-pinned names the demo program but replays a pinned snapshot."""
+    """zz-pinned replays a pinned snapshot and reads nothing else."""
     report = world(M_BENEFIT)
     assert expected(report) == ["zz-demo"]
     assert report["suite_registry"]["pinned_snapshot_suites"] == ["zz-pinned"]
+
+
+def test_pinned_suite_that_also_reads_the_candidate_is_not_pinned(world):
+    """A pin beside a program file or rulespec roots outside the pinned
+    directory: the suite reads the candidate."""
+    program = _pinned_variant(PIN)  # also names the demo program in rulespec-us
+    report = world(M_BENEFIT, registry_edit=program)
+    assert expected(report) == ["zz-demo", "zz-pinned"]
+    assert report["suite_registry"]["pinned_snapshot_suites"] == []
+
+    roots = _pinned_variant(PIN + "    rulespec_roots:\n      - $HOME/rulespec-us\n", program=False)
+    assert_error(world(M_UNREACHED, registry_edit=roots), "reference_unbound")
+    one_root = _pinned_variant(PIN + "    rulespec_roots: $HOME/rulespec-us\n", program=False)
+    assert_error(world(M_UNREACHED, registry_edit=one_root), "reference_unbound")
+
+    inside = _pinned_variant(
+        PIN
+        + "    rulespec_roots:\n      - $HOME/oracle-pins/rulespec-us\n"
+        + "    axiom_program: $HOME/oracle-pins/rulespec-us/programs/x.yaml\n",
+        program=False,
+    )
+    report = world(M_UNREACHED, registry_edit=inside)
+    assert report["suite_registry"]["pinned_snapshot_suites"] == ["zz-pinned"]
+    # A directory that only starts with the pinned one is another directory.
+    sibling = _pinned_variant(
+        PIN + "    rulespec_roots:\n      - $HOME/oracle-pins-other/rulespec-us\n", program=False
+    )
+    assert_error(world(M_UNREACHED, registry_edit=sibling), "reference_unbound")
+
+
+def test_pin_must_be_a_full_object_id(world):
+    def pin(revision: str) -> str:
+        return (
+            f"    axiom_rulespec_repo_roots_revision: {revision}\n"
+            "    axiom_rulespec_repo_roots: $HOME/oracle-pins\n"
+        )
+
+    for revision in ("abc1234", FULL_ID[:39], FULL_ID + "0", FULL_ID.upper(), "main", "12345678"):
+        edit = _pinned_variant(pin(revision), program=False)
+        assert_error(world(M_UNREACHED, registry_edit=edit), "reference_unbound")
+    grid = "    rulespec_upstream_sha: {}\n    rulespec_upstream_tree: {}\n"
+    for sha, tree in ((FULL_ID, "def5678"), ("abc1234", FULL_ID), (1234567, FULL_ID)):
+        edit = _pinned_variant(
+            grid.format(sha, tree), runner="federal-tax-liability-grid", program=False
+        )
+        assert_error(world(M_UNREACHED, registry_edit=edit), "reference_unbound")
+    # A number is not a pin, whatever its digits.
+    number = _pinned_variant(
+        "    axiom_rulespec_repo_roots_revision: 1234567890123456789012345678901234567890\n"
+        "    axiom_rulespec_repo_roots: $HOME/oracle-pins\n",
+        program=False,
+    )
+    assert_error(world(M_UNREACHED, registry_edit=number), "reference_unbound")
 
 
 def test_parameter_manifest_suite_covers_its_files(world):
@@ -1408,32 +1527,22 @@ def _pinned_variant(params: str, runner: str = "axiom-oracles-compare", program:
 
 def test_pin_keys_count_only_where_the_runner_enforces_them(world):
     # The revision without the pre-materialized roots it pins: not a pin.
-    report = world(
-        M_BENEFIT, registry_edit=_pinned_variant("    axiom_rulespec_repo_roots_revision: abc1234\n")
-    )
-    assert expected(report) == ["zz-demo", "zz-pinned"]
-    assert report["suite_registry"]["pinned_snapshot_suites"] == []
+    lone = _pinned_variant(f"    axiom_rulespec_repo_roots_revision: {FULL_ID}\n", program=False)
+    assert_error(world(M_UNREACHED, registry_edit=lone), "reference_unbound")
     # A grid pin needs the commit and the tree.
     sha_only = _pinned_variant(
-        "    rulespec_upstream_sha: abc1234\n", runner="federal-tax-liability-grid", program=False
+        f"    rulespec_upstream_sha: {FULL_ID}\n", runner="federal-tax-liability-grid", program=False
     )
     assert_error(world(M_UNREACHED, registry_edit=sha_only), "reference_unbound")
-    both = _pinned_variant(
-        "    rulespec_upstream_sha: abc1234\n    rulespec_upstream_tree: def5678\n",
-        runner="federal-tax-liability-grid",
-        program=False,
-    )
+    grid = f"    rulespec_upstream_sha: {FULL_ID}\n    rulespec_upstream_tree: {FULL_ID}\n"
+    both = _pinned_variant(grid, runner="federal-tax-liability-grid", program=False)
     report = world(M_UNREACHED, registry_edit=both)
     assert report["suite_registry"]["pinned_snapshot_suites"] == ["zz-pinned"]
     # The same keys on a runner type that does not enforce a pin.
-    other = _pinned_variant(
-        "    rulespec_upstream_sha: abc1234\n    rulespec_upstream_tree: def5678\n",
-        runner="zz-unknown-compare",
-        program=False,
-    )
+    other = _pinned_variant(grid, runner="zz-unknown-compare", program=False)
     assert_error(world(M_UNREACHED, registry_edit=other), "reference_unbound")
     blank = _pinned_variant(
-        "    rulespec_upstream_sha: ''\n    rulespec_upstream_tree: def5678\n",
+        f"    rulespec_upstream_sha: ''\n    rulespec_upstream_tree: {FULL_ID}\n",
         runner="federal-tax-liability-grid",
         program=False,
     )
@@ -1658,6 +1767,11 @@ def test_script_run_comparison_is_a_registered_manual_suite(world):
             "dispositions/zz-unknown.json",
         ),
         (lambda reg, doc: _write(reg / "reports/zz-other-2026.json", "{}"), "reports/zz-other-2026.json"),
+        # A file in a subdirectory is not the dispositions file of that suite.
+        (
+            lambda reg, doc: _write(reg / "dispositions/archive/zz-demo.yaml", "schema: x\n"),
+            "dispositions/archive/zz-demo.yaml",
+        ),
         (
             lambda reg, doc: _write(reg / "scripts/run_other_comparison.py", "# x\n"),
             "scripts/run_other_comparison.py",
@@ -1711,6 +1825,15 @@ def test_registered_and_excluded_evidence_passes(world):
         "no_suite_for_reaching_programs",
     )
 
+    # A dated report belongs to a suite by `<basename>-`, not by a shared prefix.
+    def lookalike(registry: Path, doc: dict) -> None:
+        more(registry, doc)
+        _write(registry / "reports/axiom-oracle-zz-demonstration-2026.json", "{}")
+
+    report = world(M_NOSUITE, registry_edit=_evidence_registry(lookalike))
+    assert_error(report, "comparison_evidence_unregistered")
+    assert "axiom-oracle-zz-demonstration-2026.json" in report["error"]["detail"]
+
 
 @pytest.mark.parametrize(
     "mutate",
@@ -1723,6 +1846,8 @@ def test_registered_and_excluded_evidence_passes(world):
         lambda rows, ev: rows[0].update(runner="x"),
         lambda rows, ev: ev.update(entry_points={"scripts/run_comparison.py": ""}),
         lambda rows, ev: ev.update(exclusions=[{"files": ["dashboard/**"]}]),
+        lambda rows, ev: ev.update(exclusions=[{"files": ["dashboard/**"], "reason": "   "}]),
+        lambda rows, ev: ev.update(exclusions=[{"files": ["dashboard/**"], "reason": 7}]),
         lambda rows, ev: ev.update(other=1),
     ],
 )
@@ -1775,6 +1900,8 @@ def test_script_suites_from_the_campaign_contract_and_the_mapping_table(tmp_path
     assert by_name["zz-income-tax-populace"].roots == ("us-zz/policies/**",)
     assert by_name["zz-income-tax-populace"].optional == {"us-zz/policies/**"}
     assert by_name["zz-direct"].roots == ("us/statutes/9/500.yaml",)
+    # A mapping can name a module the tree does not hold: derived roots are optional.
+    assert by_name["zz-direct"].optional == {"us/statutes/9/500.yaml"}
     # A state the manifest already lists gets no second suite.
     listed = [*suites, alignment.Suite("zz-income-tax-populace", "x", "manual", "manual", None, None, (), {})]
     again = {item.suite.name for item in load_coverage(registry, listed).script_suites}
@@ -2217,17 +2344,20 @@ def test_replay_mismatch_without_a_report_level_row_cannot_be_dispositioned(worl
 
 def test_replay_error_rows_are_the_error_state(world):
     """``snap_qc_compare`` writes ``matched: None, stage: "error"`` for a case
-    one side of which is missing, and counts it in ``case_count``."""
+    one side of which is missing. The row is in ``cases``; ``case_count``
+    counts compared cases only and ``summary.error_case_count`` the rest."""
 
     def error_row(report: dict, case_id: str) -> None:
         row = next(c for c in report["cases"] if c["case_id"] == case_id)
         row.update(matched=None, stage="error")
-        report["summary"]["error_case_count"] = 1
+        report["case_count"] -= 1
+        report["summary"]["error_case_count"] = report["summary"].get("error_case_count", 0) + 1
 
     same = {"a": True, "b": True}
     report = world(reports=(same, same, replay_report), report_edit=lambda b, c: error_row(c, "a"))
     assert report["status"] == "regressed"
     assert report["counts"]["newly_errored"] == 1
+    assert report["counts"]["cases"] == 2
     report = world(
         reports=(same, same, replay_report),
         report_edit=lambda b, c: (error_row(b, "a"), error_row(c, "a")),
@@ -2235,6 +2365,32 @@ def test_replay_error_rows_are_the_error_state(world):
     assert (report["status"], report["counts"]["matched_after"]) == ("aligned", 1)
     report = world(reports=(same, same, replay_report), report_edit=lambda b, c: error_row(b, "a"))
     assert (report["status"], report["counts"]["newly_matched"]) == ("aligned", 1)
+
+    # An error row that case_count also counts is not the bridge's shape.
+    def counted(base, candidate):
+        error_row(candidate, "a")
+        candidate["case_count"] += 1
+
+    assert_error(
+        world(reports=(same, same, replay_report), report_edit=counted), "suite_report_truncated"
+    )
+
+    # Error rows without the matching error_case_count.
+    def uncounted(base, candidate):
+        error_row(candidate, "a")
+        candidate["summary"]["error_case_count"] = 0
+
+    assert_error(
+        world(reports=(same, same, replay_report), report_edit=uncounted), "suite_report_truncated"
+    )
+
+    # A dropped compared row is still caught.
+    def dropped(base, candidate):
+        candidate["cases"] = candidate["cases"][:1]
+
+    assert_error(
+        world(reports=(same, same, replay_report), report_edit=dropped), "suite_report_truncated"
+    )
 
     # ``matched: None`` without the error stage is no state this shape has.
     def odd(base, candidate):
@@ -2545,7 +2701,32 @@ def test_supplied_reports_are_bound_by_a_manifest(tmp_path):
     assert_error(
         run(_supply(tmp_path / "g", built, base, candidate)), "suite_report_provenance_mismatch"
     )
-    assert built.report(executor=FakeExecutor(base, candidate))["status"] == "regressed"
+    # ... and so must a live run.
+    assert_error(
+        built.report(executor=FakeExecutor(base, candidate)), "suite_report_provenance_mismatch"
+    )
+
+
+def test_suites_are_run_only_from_a_clean_registry(tmp_path):
+    built = World(tmp_path / "w").build(M_BENEFIT)
+    base = suite_report(ALL_MATCH, built.commits["base"])
+    candidate = suite_report(ALL_MATCH, built.commits["candidate"])
+    assert built.report(executor=FakeExecutor(base, candidate))["status"] == "aligned"
+    _write(built.registry / "dispositions/zz-demo.yaml", yaml.safe_dump(disposition_file(["a"])))
+    executor = FakeExecutor(base, candidate)
+    report = built.report(executor=executor)
+    assert_error(report, "registry_dirty")
+    assert report["provenance"]["registry_dirty"] is True
+    assert executor.calls == []
+    # Without a run the dirty registry is recorded, not refused.
+    report = built.report()
+    assert (report["status"], report["provenance"]["registry_dirty"]) == (
+        "reference_not_executed",
+        True,
+    )
+    (built.registry / "dispositions/zz-demo.yaml").unlink()
+    _write(built.registry / "comparisons/zz-demo.yaml", (built.registry / "comparisons/zz-demo.yaml").read_text() + "# edited\n")
+    assert_error(built.report(executor=FakeExecutor(base, candidate)), "registry_dirty")
 
 
 def test_supplied_report_is_not_read_before_the_manifest_is_checked(tmp_path):
@@ -2866,7 +3047,9 @@ def test_every_real_suite_has_exactly_one_binding(real):
     assert bound["uk-universal-credit-efrs"].binding == "declared_reads_no_rulespec_us"
     assert bound["de-worker-dual-oracle-axiom-gettsim"].binding == "declared_reads_no_rulespec_us"
     assert bound["us-niit-grid"].binding == "pinned_snapshot"
-    assert bound["fiit-taxsim-ecps"].binding == "pinned_snapshot"
+    # An abbreviated revision is not accepted as a pin.
+    assert bound["fiit-taxsim-ecps"].binding == "declared"
+    assert bound["us-mfs-taxsim"].declaration == "tax-projection-abbreviated-pin"
     assert bound["taxcalc-fiit-ecps"].binding == "no_axiom_side"
     assert bound["ga-health-thresholds"].binding == "parameter_files"
     assert bound["az-income-tax-liability"].roots[0] == "us-az/policies/income_tax/**"
@@ -2935,7 +3118,7 @@ def test_real_bindings_agree_with_the_affected_map(real):
         reads_us = "TheAxiomFoundation/rulespec-us" in row["repos"]
         if item.binding == "pinned_snapshot":
             assert row.get("pinned"), name
-        elif reads_us:
+        elif reads_us and item.declaration != "tax-projection-abbreviated-pin":
             assert not row.get("pinned"), name
         if item.binding in ("declared_reads_no_rulespec_us", "no_axiom_side"):
             assert not reads_us, name

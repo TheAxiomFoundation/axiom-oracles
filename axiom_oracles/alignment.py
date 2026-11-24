@@ -107,6 +107,10 @@ PINNED_RUNNERS: dict[str, tuple[str, ...]] = {
     "federal-tax-liability-grid": ("rulespec_upstream_sha", "rulespec_upstream_tree"),
     "axiom-oracles-compare": ("axiom_rulespec_repo_roots_revision", "axiom_rulespec_repo_roots"),
 }
+#: The pin keys that hold a commit or tree id.
+PIN_OBJECT_KEYS = frozenset(
+    {"rulespec_upstream_sha", "rulespec_upstream_tree", "axiom_rulespec_repo_roots_revision"}
+)
 #: Engines that are not Axiom. An ``axiom-oracles-compare`` suite between two
 #: of these has no Axiom side.
 NON_AXIOM_ENGINES = frozenset({"policyengine", "taxsim", "taxcalc"})
@@ -171,13 +175,40 @@ def _tail(text: str, limit: int = 600) -> str:
     return text[-limit:] if len(text) > limit else text
 
 
+#: Options for every git call: replace refs ignored, and no end-of-line
+#: conversion from configuration.
+GIT_OPTIONS = ("--no-replace-objects", "-c", "core.autocrlf=false", "-c", "core.eol=lf")
+
+
+def _git_env() -> dict[str, str]:
+    """An environment in which git reads no user or system configuration and
+    no system attributes, so the caller's settings cannot change what a
+    checkout writes."""
+    env = dict(os.environ)
+    env.update(
+        GIT_CONFIG_GLOBAL=os.devnull,
+        GIT_CONFIG_SYSTEM=os.devnull,
+        GIT_CONFIG_NOSYSTEM="1",
+        GIT_ATTR_NOSYSTEM="1",
+    )
+    return env
+
+
 def _git(root: Path, *args: str, timeout: float = 300.0) -> subprocess.CompletedProcess:
     return subprocess.run(
-        ["git", "--no-replace-objects", "-C", str(root), *args],
+        ["git", *GIT_OPTIONS, "-C", str(root), *args],
         capture_output=True,
         check=False,
         timeout=timeout,
+        env=_git_env(),
     )
+
+
+def _blob_id(data: bytes, length: int) -> str:
+    """The git object id of ``data`` as a blob (sha1, or sha256 for a
+    repository that uses it)."""
+    digest = hashlib.sha1 if length == 40 else hashlib.sha256  # noqa: S324 - git's object id
+    return digest(b"blob %d\0" % len(data) + data).hexdigest()
 
 
 def git_head(root: Path) -> str | None:
@@ -294,6 +325,39 @@ def read_checkout(root: Path, side: str) -> Checkout:
             f"{side}: {len(missing)} tracked files are absent from the work tree "
             f"(first: {sorted(missing)[0]})",
         )
+    # Every file on disk must be, byte for byte, the blob the commit names:
+    # an end-of-line conversion or a smudge filter would pass `git status`.
+    resolved_root = root.resolve()
+    for path, identity in blobs.items():
+        mode, object_id = identity.split(":", 1)
+        target = root / path
+        if mode == "160000":
+            continue  # a submodule commit, not a file of this tree
+        try:
+            if mode == "120000":
+                link = os.readlink(target)
+                destination = (target.parent / link).resolve()
+                if os.path.isabs(link) or resolved_root not in (destination, *destination.parents):
+                    raise AlignmentError(
+                        "rulespec_tree_symlink_escapes",
+                        f"{side}: {path} links outside the tree",
+                    )
+                data = os.fsencode(link)
+            else:
+                if target.is_symlink():
+                    raise AlignmentError(
+                        "rulespec_tree_not_byte_exact", f"{side}: {path} is a link on disk"
+                    )
+                data = target.read_bytes()
+        except OSError as exc:
+            raise AlignmentError(
+                "rulespec_tree_unreadable", f"{side}: {path}: {type(exc).__name__}"
+            ) from exc
+        if _blob_id(data, len(object_id)) != object_id:
+            raise AlignmentError(
+                "rulespec_tree_not_byte_exact",
+                f"{side}: {path} on disk is not the blob the commit names",
+            )
     return Checkout(root=root, commit=commit, tree=tree.stdout.decode().strip(), blobs=blobs)
 
 
@@ -304,7 +368,9 @@ def export_commit(source_repo: Path, revision: str, destination: Path, side: str
     work tree: the commit is resolved in the source repository, a new clone
     is made (sharing the source's object store, with none of its index,
     exclude file or replace refs), and the commit is checked out with replace
-    refs ignored. So an edit hidden behind ``--skip-worktree`` or
+    refs ignored, with the caller's git configuration and the tree's own
+    conversion attributes switched off; each exported file is then checked,
+    byte for byte, against the blob id the commit names. So an edit hidden behind ``--skip-worktree`` or
     ``--assume-unchanged``, a file hidden by ``.git/info/exclude``, an
     uncommitted change and a ``git replace`` ref in the source cannot reach
     the report. The clone keeps the source's ``origin`` URL so the engine
@@ -323,10 +389,11 @@ def export_commit(source_repo: Path, revision: str, destination: Path, side: str
     def run(*args: str) -> str:
         try:
             result = subprocess.run(
-                ["git", "--no-replace-objects", *args],
+                ["git", *GIT_OPTIONS, *args],
                 capture_output=True,
                 check=False,
                 timeout=900,
+                env=_git_env(),
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise AlignmentError("checkout_failed", f"{side}: git {args[0]}: {exc}") from exc
@@ -346,6 +413,11 @@ def export_commit(source_repo: Path, revision: str, destination: Path, side: str
         origin = ""
     if origin:
         run("-C", str(destination), "remote", "set-url", "origin", origin)
+    # Attributes committed in the tree (`text`, `eol`, `filter`, `ident`)
+    # would rewrite files on checkout. This file outranks them.
+    attributes = destination / ".git" / "info" / "attributes"
+    attributes.parent.mkdir(parents=True, exist_ok=True)
+    attributes.write_text("* -text -eol -filter -ident -working-tree-encoding\n")
     run("-C", str(destination), "checkout", "--quiet", "--detach", commit)
     checkout = read_checkout(destination, side)
     if checkout.commit != commit:
@@ -1128,6 +1200,47 @@ def _suite_variables(params: Mapping[str, Any]) -> dict[str, str]:
     return variables
 
 
+_FULL_OBJECT_ID = re.compile(r"[0-9a-f]{40}\Z")
+
+
+def _is_pinned(runner_type: str, params: Mapping[str, Any]) -> bool:
+    """Whether the suite can only ever run on the rulespec snapshot it pins.
+
+    The runner type must be one whose runner enforces the pin, every pin key
+    must be given, and a revision or tree must be a full object id (an
+    abbreviation names whatever commit comes to share it). An
+    ``axiom-oracles-compare`` suite that also names a program file or
+    rulespec roots outside the pinned directory reads those too, so it is
+    not pinned.
+    """
+    keys = PINNED_RUNNERS.get(runner_type)
+    if keys is None:
+        return False
+    values = [params.get(key) for key in keys]
+    if not all(isinstance(value, str) and value.strip() for value in values):
+        return False
+    for key, value in zip(keys, values):
+        if key in PIN_OBJECT_KEYS and not _FULL_OBJECT_ID.match(value):
+            return False
+    if runner_type == "axiom-oracles-compare":
+        pinned_root = str(params["axiom_rulespec_repo_roots"]).rstrip("/")
+        others = [params.get("axiom_program"), *(_as_list(params.get("rulespec_roots")))]
+        for other in others:
+            if other is None:
+                continue
+            if not isinstance(other, str) or not (
+                other == pinned_root or other.startswith(f"{pinned_root}/")
+            ):
+                return False
+    return True
+
+
+def _as_list(value: Any) -> list[Any]:
+    if value is None:
+        return []
+    return list(value) if isinstance(value, (list, tuple)) else [value]
+
+
 def _runner_suite(path: Path, doc: Mapping[str, Any]) -> Suite:
     runner = doc.get("runner")
     name = doc.get("name")
@@ -1144,10 +1257,7 @@ def _runner_suite(path: Path, doc: Mapping[str, Any]) -> Suite:
     concepts = params.get("concepts") or []
     if not isinstance(concepts, list) or not all(isinstance(c, str) for c in concepts):
         raise _registry_error(f"{path.name}: concepts not a string list")
-    pin_keys = PINNED_RUNNERS.get(runner["type"])
-    pinned = pin_keys is not None and all(
-        isinstance(params.get(key), str) and params[key].strip() for key in pin_keys
-    )
+    pinned = _is_pinned(runner["type"], params)
     sides = (params.get("left"), params.get("right"))
     dashboard = doc.get("dashboard") if isinstance(doc.get("dashboard"), Mapping) else {}
     artifacts = doc.get("artifacts") if isinstance(doc.get("artifacts"), Mapping) else {}
@@ -2311,11 +2421,6 @@ def parse_report(report: Mapping[str, Any], suite: str, side: str, commit: str) 
     declared = report.get("case_count")
     if not isinstance(declared, int) or isinstance(declared, bool):
         raise fail("suite_report_truncated", "the report records no case_count")
-    if declared != len(cases):
-        raise fail(
-            "suite_report_truncated",
-            f"case_count is {declared} but {len(cases)} case rows are present",
-        )
 
     top_rows = [row for row in (report.get("mismatches") or []) if isinstance(row, Mapping)]
     top_by_case: dict[str, set[str]] = {}
@@ -2387,6 +2492,24 @@ def parse_report(report: Mapping[str, Any], suite: str, side: str, commit: str) 
         parsed[case_id] = {"state": state, "mismatched": mismatched, "compared": compared}
     if len(shapes) != 1:
         raise fail("suite_report_shape_unsupported", f"mixed case shapes {sorted(shapes)}")
+    # ``case_count`` against the rows present. The replay counts compared
+    # cases only: its error rows are in ``cases`` but not in ``case_count``,
+    # and ``summary.error_case_count`` counts them.
+    counted = len(cases)
+    if "replay" in shapes:
+        errored = sum(item["state"] == "error" for item in parsed.values())
+        counted -= errored
+        if errored and summary.get("error_case_count") != errored:
+            raise fail(
+                "suite_report_truncated",
+                f"{errored} error rows are present but error_case_count is "
+                f"{summary.get('error_case_count')!r}",
+            )
+    if declared != counted:
+        raise fail(
+            "suite_report_truncated",
+            f"case_count is {declared} but {counted} counted case rows are present",
+        )
     return ParsedReport(
         cases=parsed,
         shape=shapes.pop(),
@@ -2736,6 +2859,14 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
     executions: list[dict[str, Any]] | None = None
     runnable = [s["suite"] for s in expected if s["mode"] == MODE_RUNNABLE]
     if inputs.executor is not None and runnable:
+        if inputs.executor.evidence == EVIDENCE_LIVE and provenance["registry_dirty"] is not False:
+            # A run is evidence for the registry commit the report names only
+            # when the runner, suite files and dispositions are that commit.
+            raise AlignmentError(
+                "registry_dirty",
+                "the registry has uncommitted or untracked files; suites are run "
+                "only from a clean registry checkout",
+            )
         inputs.executor.bind(registry_sha, commits)
         executions = []
         for suite in runnable:
@@ -2747,7 +2878,7 @@ def _derive(inputs: AlignmentInputs, report: dict[str, Any]) -> None:
                 candidate,
                 _load_dispositions(registry_root, suite),
                 commits=commits,
-                require_engine_identity=inputs.executor.evidence != EVIDENCE_LIVE,
+                require_engine_identity=True,
             )
             result["evidence"] = inputs.executor.evidence
             executions.append(result)

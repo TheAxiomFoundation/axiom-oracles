@@ -28,15 +28,23 @@ uv run python scripts/alignment_report.py \
 ```
 
 **The report reads commits, not work trees.** Each commit is resolved in the
-named repository and exported into a new clone under the work directory, with
-`git --no-replace-objects`. The file list, the blob ids and the tree id are
-read from the commit. Programs are compiled against the export, and suites run
-against it. So an uncommitted change, an untracked file, an edit hidden behind
-`--skip-worktree` or `--assume-unchanged`, a file hidden by
-`.git/info/exclude`, and a `git replace` ref in the named repository cannot
-reach the report. A dirty work tree in the named repository is therefore no
-longer refused: it is not read. The export itself is still checked (it must be
-clean and hold every tracked file), and the tree ids are recorded.
+named repository and exported into a new clone under the work directory. The
+file list, the blob ids and the tree id are read from the commit. Programs are
+compiled against the export, and suites run against it. So an uncommitted
+change, an untracked file, an edit hidden behind `--skip-worktree` or
+`--assume-unchanged`, a file hidden by `.git/info/exclude`, and a
+`git replace` ref in the named repository cannot reach the report. A dirty
+work tree in the named repository is not refused: it is not read.
+
+**The export is byte-exact, and that is checked.** Every git call runs without
+the user's and the system's configuration and without system attributes, with
+end-of-line conversion off, and with replace refs ignored. The clone gets an
+attributes file that switches off the conversions the tree itself asks for
+(`text`, `eol`, `filter`, `ident`, `working-tree-encoding`). After the
+checkout every exported file is hashed as a git blob and compared with the
+blob id the commit names; a difference is an error
+(`rulespec_tree_not_byte_exact`). A symbolic link that points outside the tree
+is an error (`rulespec_tree_symlink_escapes`). The tree ids are recorded.
 
 The changed files are always the files whose mode or content differs between
 the two commits, over the whole repository. `--changed` is a cross-check only:
@@ -103,8 +111,14 @@ registered in the coverage configuration:
 to run on any other tree, named in `alignment.PINNED_RUNNERS`:
 `federal-tax-liability-grid` with both `rulespec_upstream_sha` and
 `rulespec_upstream_tree`, and `axiom-oracles-compare` with both
-`axiom_rulespec_repo_roots_revision` and `axiom_rulespec_repo_roots`. The same
-keys on any other runner type, or only one of them, are not a pin.
+`axiom_rulespec_repo_roots_revision` and `axiom_rulespec_repo_roots`. Each
+revision or tree must be a full 40-character object id. An
+`axiom-oracles-compare` suite that also names `axiom_program` or
+`rulespec_roots` outside the pinned directory reads those too and is not
+pinned. The same keys on any other runner type, only one of them, or an
+abbreviated id, are not a pin; the suite then needs another binding. Five tax
+projection suites name an abbreviated revision today and are bound by a
+declaration instead.
 
 A suite with none of these is an error for every report
 (`reference_unbound`), whatever changed: an undeclared suite could cover
@@ -169,14 +183,19 @@ point is `error`.
 
 With `--execute`, each runnable expected suite is run on both trees with
 `scripts/run_comparison.py <suite> --require-live`, with `HOME` set to a
-directory that holds that side's `rulespec-us` checkout.
+directory that holds that side's exported tree. Suites are run only from a
+clean registry: when `--registry-root` has an uncommitted or untracked file
+the run is an error (`registry_dirty`), because the runner, the suite files
+and the dispositions would then not be the registry commit the report names.
+Without a run, a dirty registry is recorded (`provenance.registry_dirty`) and
+not refused.
 
 With `--reports-dir DIR`, reports are read from
 `DIR/{base,candidate}/<suite>.json`. `DIR/manifest.json` must hold
 `schema: axiom_oracles.alignment_supplied_reports.v1`, the `registry_commit`,
 the `rulespec_commit` of both sides, and under `reports.<suite>` the sha256 of
 both files and of the suite file (`suite_file_sha256`). All must equal what
-this run sees, and the reports must record an engine identity. The manifest is
+this run sees. The manifest is
 the supplier's own statement: it ties the files to one run, it does not prove
 who produced them or that anything ran. **A gate may only use `--execute`
 evidence.** A result from supplied reports has `evidence:
@@ -192,10 +211,10 @@ Either way a report is accepted only when it:
   that says so);
 * records exactly one `provenance.rulespecs` row for
   `TheAxiomFoundation/rulespec-us`, with the side's commit and `dirty: false`;
-* records an oracle identity, the same on both sides, the same engine
-  identity on both sides, and the same tolerance and concept table;
-* records `case_count` equal to the case rows present, and is not a truncated
-  dashboard copy;
+* records an oracle identity and an engine identity, each the same on both
+  sides, and the same tolerance and concept table;
+* records `case_count` equal to the case rows it counts, and is not a
+  truncated dashboard copy;
 * has at least one case, the same case ids on both sides, and in every case
   compares at least the outputs base compared.
 
@@ -204,8 +223,10 @@ Three case shapes are read: the population comparison (`matches`,
 the ABAWD boundary grid (`matched` per case), and the federal tax grids
 (`match` per case). In the last two a mismatching case takes its concepts from
 the report-level mismatch rows. The replay writes `matched: null, stage:
-"error"` for a case one side of which is missing and counts it in
-`case_count`; that row is the error state of the case. A grid run that
+"error"` for a case one side of which is missing; that row is the error state
+of the case. The replay leaves such rows out of `case_count` and counts them
+in `summary.error_case_count`, so for this shape `case_count` must equal the
+other rows and `error_case_count` the error rows. A grid run that
 recorded errors is an error, because that shape does not say which cases
 errored. Any other shape is an
 error (`suite_report_shape_unsupported`).
@@ -274,21 +295,22 @@ this report; each limits what a result from it can mean.
 
 ## What must hold before this may gate a landing
 
-This report does not gate. The list is what two independent reviews asked for
-before it could, with the state of each item after review round 2. Round 2
-has not been re-reviewed.
+This report does not gate. Three independent reviews read it; the third found
+it ready as a report-only tool. The nine items below are what those reviews
+asked for before it could gate, with the state of each after review round 3.
+The changes of round 3 have not been re-reviewed.
 
 | requirement | state |
 | --- | --- |
 | 1. `no_reference` only through a completed computation with a truly empty expected set | Built by construction: every comparison has a binding, or the run is an error. Holds only as far as each declaration is at least as wide as its harness. |
-| 2. Every comparison of the repository is in the model, also those outside `comparisons/` | Script-run comparisons are registered suites. A completeness check fails the run when a dispositions file, dashboard file, dated report, comparison or campaign script, or console command belongs to no suite and no reasoned exclusion. It finds a comparison by those traces; a comparison that leaves none of them is not found. |
-| 3. Files that are no module (tools, toolchain file, fixtures) are covered when a harness reads them | Declarations name them in `paths`; a test checks the tools and `.axiom` files the named sources reference. Other kinds of file a harness might read are not searched for. |
-| 4. Pinned and no-Axiom-side suites are exempt only when that is certain | Pins count only for the two runner types whose runner enforces them, with all their keys. No-Axiom-side needs two named other engines. |
-| 5. The bytes read are the bytes of the named commits | Both commits are exported from the object store with replace refs ignored; the work tree of the caller is never read; tree ids are recorded. |
+| 2. Every comparison of the repository is in the model, also those outside `comparisons/` | Script-run comparisons are registered suites. A completeness check fails the run when a dispositions file, dashboard file, dated report, comparison or campaign script, or console command belongs to no suite and no reasoned exclusion. It finds a comparison by those traces; one that leaves none of them is not found. The exclusion of the per-suite chunk directories is broad. |
+| 3. Files that are no module are covered when a harness reads them | Declarations name them in `paths`; a test checks the tools and `.axiom` files the named sources reference. Other kinds of file a harness might read are not searched for. |
+| 4. Exempt suites, and the registry the evidence comes from, are certain | A pin counts only for the two runner types whose runner enforces it, with all keys, full object ids, and nothing else read. No-Axiom-side needs two named other engines. `--execute` refuses a dirty registry and requires an engine identity in the reports. Without `--execute` a dirty registry is only recorded, so a status without a run describes the registry files on disk, not a commit. |
+| 5. The bytes read are the bytes of the named commits | Both commits are exported from the object store with the caller's configuration and the tree's conversion attributes off, and every exported file is checked against its blob id. Submodule commits are not followed. The compose and engine binaries are identified by digest, not built from a pinned source. |
 | 6. Supplied reports cannot stand in for a run | They give `aligned_unverified` / `regressed_unverified` only. Signed evidence is not built. |
 | 7. Declarations cannot go stale silently | A glob or manifest file that matches no tracked file is an error; a declaration that matches no suite is an error; a new suite does not inherit a declaration by runner type. |
 | 8. Declared coverage is what the harness reads | Checked against the literal ids and paths in the named sources. **Not** checked against what a harness reads at run time. Harnesses in `axiom-encode` are declared wide and are not verified. Module references are read as `xx:path` text, not through the engine's resolver. |
-| 9. `aligned` means the candidate was compared | True only for a suite that evaluates the candidate tree. See the three facts above: pinned suites and fixture-reading grids would not. Today the only runnable suites that read a candidate are the six SNAP QC replays and the ABAWD grid. `--execute` has not been run against a real suite. |
+| 9. `aligned` means the candidate was compared | True only for a suite that evaluates the candidate tree. See the three facts above: pinned suites and fixture-reading grids would not. Today the only runnable suites that read a candidate are the six SNAP QC replays and the ABAWD grid. `--execute` has not been run against a real suite, so the report shape of a real SNAP QC run is read here only from the bridge's source. |
 
 ## What this does not do
 
