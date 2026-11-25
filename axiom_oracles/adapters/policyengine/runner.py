@@ -67,6 +67,34 @@ _SPM_UNIT_CASE_CONCEPT_TO_PE = {
     Concepts.RENT_PAID: "housing_cost",
 }
 
+# Screener facts (see Concepts in core/case.py). Only synthetic screener
+# suites set them; each PolicyEngine input is written only when its Case fact
+# is present, so population Cases build the same situation as before. A
+# screener Case sets every one of them (zero or False when absent from the
+# household), so a batch of screener Cases has uniform columns.
+_SCREENER_PERSON_CONCEPT_TO_PE = {
+    Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS: "social_security_disability",
+    Concepts.OUT_OF_POCKET_MEDICAL_EXPENSES: "other_medical_expenses",
+    Concepts.CHILD_SUPPORT_PAID: "child_support_expense",
+}
+# Case-level facts that PolicyEngine reads from a person: on the head.
+_SCREENER_HEAD_CONCEPT_TO_PE = {
+    Concepts.LIQUID_ASSETS: "bank_account_assets",
+}
+_SCREENER_SPM_UNIT_CONCEPT_TO_PE = {
+    Concepts.HEATING_COOLING_EXPENSE: "heating_cooling_expense",
+    Concepts.ELECTRICITY_EXPENSE: "pre_subsidy_electricity_expense",
+    Concepts.WATER_EXPENSE: "water_expense",
+    Concepts.PHONE_EXPENSE: "phone_expense",
+    # Out-of-pocket dependent care: overrides PolicyEngine's
+    # childcare_expenses formula (pre-subsidy cost less modeled subsidies).
+    Concepts.DEPENDENT_CARE_PAID: "childcare_expenses",
+}
+_SCREENER_HOUSEHOLD_CONCEPT_TO_PE = {
+    Concepts.HOMELESS: "is_homeless",
+}
+_SCREENER_BOOLEAN_INPUTS = frozenset({"is_homeless"})
+
 _TAX_FILER_ADULT_AGE = 18
 
 # PolicyEngine inputs for a married-filing-separately return: the filer's
@@ -394,6 +422,10 @@ class PolicyEngineRunner(EngineAdapter):
                         person_inputs[pe_variable] = {year: float(value)}
                 for pe_variable, value in head_separate_inputs.items():
                     person_inputs[pe_variable] = {year: value}
+            for pe_variable, value in _screener_person_inputs(
+                case, entity, is_head=entity is head
+            ).items():
+                person_inputs[pe_variable] = {year: value}
             people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
@@ -404,6 +436,8 @@ class PolicyEngineRunner(EngineAdapter):
         if scope_inputs:
             for variable, value in scope_inputs.items():
                 household_inputs[variable] = {year: value}
+        for variable, value in _screener_household_inputs(case).items():
+            household_inputs[variable] = {year: value}
 
         tax_unit_inputs: dict[str, Any] = {"members": person_names}
         for concept, pe_variable in _TAX_UNIT_CONCEPT_TO_PE.items():
@@ -418,6 +452,8 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 spm_unit_inputs[pe_variable] = {year: float(value)}
+        for pe_variable, value in _screener_spm_unit_inputs(case).items():
+            spm_unit_inputs[pe_variable] = {year: value}
 
         return {
             "people": people,
@@ -459,6 +495,9 @@ class PolicyEngineRunner(EngineAdapter):
                     if value is not None:
                         person_inputs[pe_variable] = float(value)
                 person_inputs.update(head_separate_inputs)
+            person_inputs.update(
+                _screener_person_inputs(case, entity, is_head=entity is head)
+            )
             people.append(person_inputs)
 
         household_inputs: dict[str, Any] = {}
@@ -467,6 +506,7 @@ class PolicyEngineRunner(EngineAdapter):
             household_inputs["state_code"] = str(state_code)
         for variable, value in _scope_inputs_for_variables(case, variables).items():
             household_inputs[variable] = value
+        household_inputs.update(_screener_household_inputs(case))
 
         tax_unit_inputs: dict[str, Any] = {}
         for concept, pe_variable in _TAX_UNIT_CONCEPT_TO_PE.items():
@@ -480,6 +520,7 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 spm_unit_inputs[pe_variable] = float(value)
+        spm_unit_inputs.update(_screener_spm_unit_inputs(case))
 
         return {
             "people": people,
@@ -824,6 +865,7 @@ class PolicyEngineRunner(EngineAdapter):
             if state_code is not None:
                 household_row["state_code"] = str(state_code)
             household_row.update(_scope_inputs_for_variables(case, variables))
+            household_row.update(_screener_household_inputs(case))
             household_rows.append(household_row)
             marital_unit_rows.append(
                 {"marital_unit_id": marital_unit_id, "marital_unit_weight": weight}
@@ -839,6 +881,7 @@ class PolicyEngineRunner(EngineAdapter):
                 value = case.fact(concept)
                 if value is not None:
                     spm_unit_row[pe_variable] = float(value)
+            spm_unit_row.update(_screener_spm_unit_inputs(case))
             spm_unit_rows.append(spm_unit_row)
             person_entities = list(case.entities_of_kind("person"))
             head, spouse = _tax_filers(person_entities)
@@ -904,6 +947,9 @@ class PolicyEngineRunner(EngineAdapter):
                         if value is not None:
                             person_row[pe_variable] = float(value)
                     person_row.update(head_separate_inputs)
+                person_row.update(
+                    _screener_person_inputs(case, entity, is_head=entity is head)
+                )
                 person_rows.append(person_row)
 
             entity_ids_by_case.append(
@@ -929,6 +975,24 @@ class PolicyEngineRunner(EngineAdapter):
             if any(pe_variable in row for row in rows):
                 for row in rows:
                     row.setdefault(pe_variable, False)
+        # Screener inputs carry no safe batch-wide default: several (for
+        # example childcare_expenses) are PolicyEngine formulas, and a filled
+        # zero would override them. Refuse a batch that mixes Cases with and
+        # without them instead of letting pandas fill NaN.
+        for rows, columns in (
+            (person_rows, set(_SCREENER_PERSON_CONCEPT_TO_PE.values())
+             | set(_SCREENER_HEAD_CONCEPT_TO_PE.values())),
+            (spm_unit_rows, set(_SCREENER_SPM_UNIT_CONCEPT_TO_PE.values())),
+            (household_rows, set(_SCREENER_HOUSEHOLD_CONCEPT_TO_PE.values())),
+        ):
+            for column in columns:
+                carried = sum(column in row for row in rows)
+                if 0 < carried < len(rows):
+                    raise RuntimeError(
+                        f"PolicyEngine batch mixes rows with and without the "
+                        f"screener input {column!r}; run screener Cases in "
+                        "their own batches"
+                    )
 
         return (
             person_rows,
@@ -1026,6 +1090,45 @@ def _person_income_inputs(entity: Entity) -> dict[str, float]:
         entity.fact(Concepts.DIVIDEND_INCOME, 0) or 0
     ) + float(entity.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0) or 0)
     return inputs
+
+
+def _screener_value(pe_variable: str, value: object) -> float | bool:
+    if pe_variable in _SCREENER_BOOLEAN_INPUTS:
+        return bool(value)
+    return float(value or 0)
+
+
+def _screener_person_inputs(
+    case: Case, entity: Entity, *, is_head: bool
+) -> dict[str, float | bool]:
+    inputs = {
+        pe_variable: _screener_value(pe_variable, entity.fact(concept))
+        for concept, pe_variable in _SCREENER_PERSON_CONCEPT_TO_PE.items()
+        if entity.fact(concept) is not None
+    }
+    for concept, pe_variable in _SCREENER_HEAD_CONCEPT_TO_PE.items():
+        value = case.fact(concept)
+        if value is not None:
+            inputs[pe_variable] = _screener_value(
+                pe_variable, value if is_head else 0
+            )
+    return inputs
+
+
+def _screener_spm_unit_inputs(case: Case) -> dict[str, float | bool]:
+    return {
+        pe_variable: _screener_value(pe_variable, case.fact(concept))
+        for concept, pe_variable in _SCREENER_SPM_UNIT_CONCEPT_TO_PE.items()
+        if case.fact(concept) is not None
+    }
+
+
+def _screener_household_inputs(case: Case) -> dict[str, float | bool]:
+    return {
+        pe_variable: _screener_value(pe_variable, case.fact(concept))
+        for concept, pe_variable in _SCREENER_HOUSEHOLD_CONCEPT_TO_PE.items()
+        if case.fact(concept) is not None
+    }
 
 
 def _namespaced_entity_id(prefix: str, entity_id: str) -> str:

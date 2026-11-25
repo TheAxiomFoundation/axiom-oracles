@@ -262,11 +262,136 @@ mappings:
     source: { kind: constant, value: false }
 
   # ECPS doesn't track household financial resources / countable assets.
-  # Default to 0 so SNAP's resource test passes; revise when ECPS exposes
-  # an assets column.
+  # Population Cases carry no LIQUID_ASSETS, so they keep 0 and pass SNAP's
+  # resource test; screener Cases supply the amount.
   - match: { kind: substring, value: snap_countable_financial_resources }
     scope: household
-    source: { kind: constant, value: 0 }
+    source: { kind: fact, name: LIQUID_ASSETS, default: 0 }
+
+  # -------------------------------------------------------------------
+  # Screener facts (core/case.py). Only synthetic screener suites carry
+  # them; on population Cases every entry below yields the slot's old
+  # default (0 or false), so population projections do not change.
+  # -------------------------------------------------------------------
+
+  # Federal 7 CFR 273.10 operands (all states): homeless shelter claim,
+  # child support paid, and excess medical expenses.
+  # The claim is the monthly shelter cost of a homeless household; the
+  # federal rule caps it at the homeless shelter deduction.
+  - match: { kind: exact, value: snap_claimed_homeless_shelter_deduction }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_if_flag
+      flag: HOMELESS
+      from_facts: [RENT_PAID]
+
+  - match: { kind: exact, value: snap_allowable_monthly_child_support_payments }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly
+      from_facts: [CHILD_SUPPORT_PAID]
+      aggregate: sum_over_people
+
+  # Medical expenses of members the projection treats as elderly or disabled
+  # (the same test as snap_member_is_elderly_or_disabled). Where a
+  # ProgramSpec binds a state medical deduction these slots are derived and
+  # no longer read.
+  - match: { kind: exact, value: snap_total_medical_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_sum_over_elderly_or_disabled
+      from_facts: [OUT_OF_POCKET_MEDICAL_EXPENSES]
+
+  - match: { kind: exact, value: household_entitled_to_excess_medical_deduction }
+    scope: household
+    source:
+      kind: derived
+      transform: any_positive_over_elderly_or_disabled
+      from_facts: [OUT_OF_POCKET_MEDICAL_EXPENSES]
+
+  # Arizona utility allowances (FAA5 NA Utility Expenses and Allowances,
+  # FAA6 amounts). Heating or cooling selects the SUA; two or more other
+  # bills the LUA; a telephone bill alone the telephone allowance.
+  # ASSUMPTION of this comparison: a bill the household pays is billed
+  # separately, owed, and verified.
+  - match: { kind: exact, value: budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis }
+    scope: household
+    source: { kind: derived, transform: positive, from_facts: [HEATING_COOLING_EXPENSE] }
+
+  - match: { kind: exact, value: budgetary_unit_heating_or_cooling_expenses_exceed_energy_assistance_payments }
+    scope: household
+    source: { kind: derived, transform: positive, from_facts: [HEATING_COOLING_EXPENSE] }
+
+  - match: { kind: exact, value: budgetary_unit_obligated_to_pay_at_least_two_non_heating_or_non_cooling_utility_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: count_positive_at_least
+      threshold: 2
+      from_facts: [ELECTRICITY_EXPENSE, WATER_EXPENSE, PHONE_EXPENSE]
+
+  - match: { kind: exact, value: budgetary_unit_obligated_to_pay_only_telephone_expense }
+    scope: household
+    source:
+      kind: derived
+      transform: sum_positive_and_zero
+      from_facts: [PHONE_EXPENSE]
+      zero_facts: [HEATING_COOLING_EXPENSE, ELECTRICITY_EXPENSE, WATER_EXPENSE]
+
+  - match: { kind: exact, value: budgetary_unit_billed_separately_for_utility_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [HEATING_COOLING_EXPENSE, ELECTRICITY_EXPENSE, WATER_EXPENSE, PHONE_EXPENSE]
+
+  - match: { kind: exact, value: budgetary_unit_obligated_to_pay_allowable_utility_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [HEATING_COOLING_EXPENSE, ELECTRICITY_EXPENSE, WATER_EXPENSE, PHONE_EXPENSE]
+
+  - match: { kind: exact, value: budgetary_unit_has_verified_allowable_utility_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: positive
+      from_facts: [HEATING_COOLING_EXPENSE, ELECTRICITY_EXPENSE, WATER_EXPENSE, PHONE_EXPENSE]
+
+  # FAA6 amounts change with the number of participants; the projection's
+  # budgetary unit is the whole household.
+  - match: { kind: exact, value: az_utility_allowance_participant_count }
+    scope: household
+    source: { kind: derived, transform: hh_size }
+
+  # Arizona dependent care (FAA5 Dependent Care Expense): one payment for
+  # the youngest member's care, needed for employment.
+  # ASSUMPTION of this comparison: the paid amount is billed, allowable,
+  # and needed so a member can work (screener households with dependent
+  # care have earnings).
+  - match: { kind: exact, value: billed_for_dependent_care }
+    scope: household
+    source: { kind: derived, transform: positive, from_facts: [DEPENDENT_CARE_PAID] }
+
+  - match: { kind: exact, value: billed_dependent_care_expense_amount }
+    scope: household
+    source: { kind: derived, transform: monthly, from_facts: [DEPENDENT_CARE_PAID] }
+
+  - match: { kind: exact, value: care_recipient_is_dependent_child }
+    scope: household
+    source: { kind: derived, transform: positive, from_facts: [DEPENDENT_CARE_PAID] }
+
+  - match: { kind: exact, value: care_recipient_age }
+    scope: household
+    source: { kind: derived, transform: youngest_age }
+
+  - match: { kind: exact, value: necessary_to_seek_accept_or_continue_employment }
+    scope: household
+    source: { kind: derived, transform: positive, from_facts: [DEPENDENT_CARE_PAID] }
 
   # ECPS annual datasets represent ordinary benefit months, not SNAP initial
   # issuance months. This keeps 7 CFR 273.10(e)(2)(ii)'s minimum-benefit branch

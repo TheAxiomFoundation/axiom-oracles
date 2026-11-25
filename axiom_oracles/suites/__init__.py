@@ -142,6 +142,10 @@ from .uk_worker import (
     uk_worker_nic_cases,
     uk_worker_pit_cases,
 )
+from .us_az_snap_screener import (
+    us_az_snap_screener_cases,
+    us_az_snap_screener_fy2027_cases,
+)
 from .us_mfs import us_mfs_cases
 from .us_tariff import us_tariff_cases
 
@@ -217,6 +221,8 @@ def available_suites() -> tuple[str, ...]:
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
         "us-mfs",
+        "us-az-snap-screener",
+        "us-az-snap-screener-fy2027",
         "gh-income-tax-rate-schedule",
         "gh-personal-reliefs",
         "gh-ssnit-contributions",
@@ -400,6 +406,10 @@ def load_suite(name: str):
         return uk_income_tax_mixed_cases()
     if name == "us-mfs":
         return us_mfs_cases()
+    if name == "us-az-snap-screener":
+        return us_az_snap_screener_cases()
+    if name == "us-az-snap-screener-fy2027":
+        return us_az_snap_screener_fy2027_cases()
     if name == "gh-income-tax-rate-schedule":
         return gh_income_tax_rate_schedule_cases()
     if name == "gh-personal-reliefs":
@@ -592,6 +602,8 @@ __all__ = [
     "uk_universal_credit_cases",
     "uk_worker_nic_cases",
     "uk_worker_pit_cases",
+    "us_az_snap_screener_cases",
+    "us_az_snap_screener_fy2027_cases",
     "us_mfs_cases",
     "us_tariff_cases",
 ]
