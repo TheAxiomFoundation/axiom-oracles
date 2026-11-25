@@ -3,7 +3,7 @@
 The Arizona medical-deduction slots read SNAP medical expenses that
 PolicyEngine prices on the Case surface its leg compares. These tests pin
 three things without PolicyEngine installed: the facts land on the right
-people, the mapping turns them into the four Arizona inputs, and the CLI
+people, the mapping turns them into the three Arizona inputs, and the CLI
 runs PolicyEngine for them only when the compiled program reads them.
 """
 
@@ -31,8 +31,12 @@ ELDERLY_OR_DISABLED = Concepts.USDA_ELDERLY_OR_DISABLED
 AZ_MEDICAL_SLOTS = (
     "monthly_combined_out_of_pocket_medical_expenses",
     "verified_out_of_pocket_medical_expenses",
-    "budgetary_unit_includes_elderly_or_disabled_participant_with_medical_expenses",
     "medical_expenses_belong_to_and_are_billed_to_elderly_or_disabled_participant",
+)
+# Derived by the wired ProgramSpec (rulespec-us#2389) from the federal
+# elderly-or-disabled member flag; an unread input before it. Never projected.
+AZ_DERIVED_BY_WIRING_SLOT = (
+    "budgetary_unit_includes_elderly_or_disabled_participant_with_medical_expenses"
 )
 AZ_DEFAULT_FALSE_SLOTS = (
     "deceased_participant_would_have_been_eligible_in_month_expense_was_billed",
@@ -149,7 +153,9 @@ def test_attach_refuses_mixed_periods() -> None:
 
 
 def test_default_yaml_projects_arizona_medical_slots_from_case_surface_facts() -> None:
-    program = _program([*AZ_MEDICAL_SLOTS, *AZ_DEFAULT_FALSE_SLOTS])
+    program = _program(
+        [*AZ_MEDICAL_SLOTS, AZ_DERIVED_BY_WIRING_SLOT, *AZ_DEFAULT_FALSE_SLOTS]
+    )
     mapping = load_populace_mapping_for_program(program)
     people = [
         {MEDICAL: 2434.8, ELDERLY_OR_DISABLED: True},
@@ -168,7 +174,7 @@ def test_default_yaml_projects_arizona_medical_slots_from_case_surface_facts() -
         assert mapping[slot](case_facts, None) is True
         assert mapping[slot]({"__people__": people[2:]}, None) is False
     assert monthly({"__people__": people[2:]}, None) == 0
-    for slot in AZ_DEFAULT_FALSE_SLOTS:
+    for slot in (AZ_DERIVED_BY_WIRING_SLOT, *AZ_DEFAULT_FALSE_SLOTS):
         assert slot not in mapping
 
 

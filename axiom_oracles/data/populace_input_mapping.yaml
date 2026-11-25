@@ -78,6 +78,13 @@ mappings:
   # least $35.01 for the SMD, all of them above $180).
   # The deceased-participant and SSI-recipient branches of block 2 stay at
   # their false defaults: PolicyEngine prices neither.
+  # budgetary_unit_includes_elderly_or_disabled_participant_with_medical_expenses
+  # has no entry on purpose. The wiring (rulespec-us#2389) derives it from
+  # the federal snap_household_has_elderly_or_disabled_member, which reads
+  # each member's snap_member_is_elderly_or_disabled (projected below), so
+  # it is not an input of the wired program. Before the wiring it is an
+  # input that no compared output reads, and its false default is enough
+  # (axiom-oracles#705).
   - match: { kind: exact, value: monthly_combined_out_of_pocket_medical_expenses }
     scope: household
     source:
@@ -91,14 +98,6 @@ mappings:
     source:
       kind: derived
       transform: monthly_sum_where
-      from_facts: [SNAP_ALLOWABLE_MEDICAL_EXPENSES]
-      where_fact: USDA_ELDERLY_OR_DISABLED
-
-  - match: { kind: exact, value: budgetary_unit_includes_elderly_or_disabled_participant_with_medical_expenses }
-    scope: household
-    source:
-      kind: derived
-      transform: any_positive_where
       from_facts: [SNAP_ALLOWABLE_MEDICAL_EXPENSES]
       where_fact: USDA_ELDERLY_OR_DISABLED
 
