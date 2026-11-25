@@ -1605,6 +1605,10 @@ def _prepare_cases_for_engines(
                 for case in prepared
                 if _household_in_jurisdiction(case, jurisdiction_fips)
             ]
+            if "policyengine" in engines:
+                prepared = _attach_case_surface_facts_if_read(
+                    prepared, axiom_compiled_program, concept_ids
+                )
             prepared = attach_generic_inputs(
                 prepared,
                 compiled_program_path=axiom_compiled_program,
@@ -1634,6 +1638,37 @@ def _prepare_cases_for_engines(
             compiled_program_path=axiom_compiled_program,
         )
     return prepared
+
+
+def _attach_case_surface_facts_if_read(
+    cases: list[Case],
+    compiled_program_path: Path,
+    concept_ids: tuple[str, ...],
+) -> list[Case]:
+    """Attach PolicyEngine case-surface facts when the program reads them.
+
+    The facts (adapters/policyengine/case_surface_facts.py) cost one extra
+    PolicyEngine situation run per batch, so a compiled program whose
+    projection reads none of them skips the run and projects as before.
+    """
+    if not cases:
+        return cases
+    from .adapters.axiom.populace_mapping_loader import facts_read_by_program
+    from .adapters.policyengine.case_surface_facts import (
+        attach_policyengine_case_surface_facts,
+        program_reads_case_surface_facts,
+    )
+
+    compiled = json.loads(Path(compiled_program_path).read_text())
+    program = compiled.get("program", compiled)
+    if not program_reads_case_surface_facts(facts_read_by_program(program)):
+        return cases
+    return attach_policyengine_case_surface_facts(
+        cases,
+        policyengine_variables=PolicyEngineRunner._policyengine_variables(
+            concept_ids
+        ),
+    )
 
 
 def _household_in_jurisdiction(case: Case, fips_prefix: str) -> bool:
