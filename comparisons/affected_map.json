@@ -95,6 +95,15 @@
       "lane": "snap-qc-replay"
     },
     {
+      "suite": "az-snap-screener",
+      "name": null,
+      "report": "axiom-policyengine-az-snap-screener.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/az-snap-screener.yaml"
+    },
+    {
       "suite": "az-tanf-deductions",
       "name": null,
       "report": "axiom-policyengine-az-tanf-deductions.json",

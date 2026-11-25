@@ -69,9 +69,7 @@ _SPM_UNIT_CASE_CONCEPT_TO_PE = {
 
 # Screener facts (see Concepts in core/case.py). Only synthetic screener
 # suites set them; each PolicyEngine input is written only when its Case fact
-# is present, so population Cases build the same situation as before. A
-# screener Case sets every one of them (zero or False when absent from the
-# household), so a batch of screener Cases has uniform columns.
+# is present, so population Cases build the same situation as before.
 _SCREENER_PERSON_CONCEPT_TO_PE = {
     Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS: "social_security_disability",
     Concepts.OUT_OF_POCKET_MEDICAL_EXPENSES: "other_medical_expenses",
@@ -94,6 +92,7 @@ _SCREENER_HOUSEHOLD_CONCEPT_TO_PE = {
     Concepts.HOMELESS: "is_homeless",
 }
 _SCREENER_BOOLEAN_INPUTS = frozenset({"is_homeless"})
+_SCREENER_FORMULA_INPUTS = frozenset({"childcare_expenses"})
 
 _TAX_FILER_ADULT_AGE = 18
 
@@ -975,24 +974,29 @@ class PolicyEngineRunner(EngineAdapter):
             if any(pe_variable in row for row in rows):
                 for row in rows:
                     row.setdefault(pe_variable, False)
-        # Screener inputs carry no safe batch-wide default: several (for
-        # example childcare_expenses) are PolicyEngine formulas, and a filled
-        # zero would override them. Refuse a batch that mixes Cases with and
-        # without them instead of letting pandas fill NaN.
+        # Screener inputs: a Case carries only the non-zero ones, so give
+        # every other row of a batch PolicyEngine's own default for the
+        # plain inputs. childcare_expenses is a PolicyEngine formula: a
+        # filled zero would override it, so a batch that mixes Cases with
+        # and without DEPENDENT_CARE_PAID is refused instead.
         for rows, columns in (
-            (person_rows, set(_SCREENER_PERSON_CONCEPT_TO_PE.values())
-             | set(_SCREENER_HEAD_CONCEPT_TO_PE.values())),
-            (spm_unit_rows, set(_SCREENER_SPM_UNIT_CONCEPT_TO_PE.values())),
-            (household_rows, set(_SCREENER_HOUSEHOLD_CONCEPT_TO_PE.values())),
+            (person_rows, (*_SCREENER_PERSON_CONCEPT_TO_PE.values(),
+                           *_SCREENER_HEAD_CONCEPT_TO_PE.values())),
+            (spm_unit_rows, tuple(_SCREENER_SPM_UNIT_CONCEPT_TO_PE.values())),
+            (household_rows, tuple(_SCREENER_HOUSEHOLD_CONCEPT_TO_PE.values())),
         ):
             for column in columns:
                 carried = sum(column in row for row in rows)
-                if 0 < carried < len(rows):
+                if not carried or carried == len(rows):
+                    continue
+                if column in _SCREENER_FORMULA_INPUTS:
                     raise RuntimeError(
-                        f"PolicyEngine batch mixes rows with and without the "
+                        "PolicyEngine batch mixes rows with and without the "
                         f"screener input {column!r}; run screener Cases in "
                         "their own batches"
                     )
+                for row in rows:
+                    row.setdefault(column, _screener_value(column, 0))
 
         return (
             person_rows,

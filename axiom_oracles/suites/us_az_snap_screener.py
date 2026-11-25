@@ -22,11 +22,13 @@ PolicyEngine's modeled Part B premium stays out), or 45 with Social Security
 disability benefits (disabled). Monthly gross income is a percentage of the
 monthly HHS poverty guideline for ``n`` (48 states and DC), unrounded.
 
-Income placement uses the FY2026 guideline year (2025 HHS guidelines) in
-``us-az-snap-screener`` and the FY2027 year (2026 guidelines) in
-``us-az-snap-screener-fy2027``. The shelter, minimum-benefit and resource
-blocks place their edges with FY2026 SNAP amounts (``FY2026``); at other
-periods those rows sit near, not on, the edge.
+Income placement uses the FY2026 guideline year (2025 HHS guidelines), the
+year in force at the comparison period 2026-01. ``households("fy2027")``
+places the same grid on the FY2027 year (2026 guidelines) for a local run at
+an FY2027 period; it is not a registered suite, so the canonical grid file
+carries one copy. The shelter, minimum-benefit and resource blocks place
+their edges with FY2026 SNAP amounts (``FY2026``); at other periods those
+rows sit near, not on, the edge.
 
 ``PATHS`` records, for each block, the Axiom rules and PolicyEngine
 variables it is meant to exercise. ``docs/az-snap-screener-grid.md`` explains
@@ -41,7 +43,6 @@ from typing import Any
 from ..core.case import Case, Concepts, Entity
 
 SUITE_NAME = "us-az-snap-screener"
-SUITE_NAME_FY2027 = "us-az-snap-screener-fy2027"
 PERIOD = "2026-01"
 AZ_SCOPE = {"type": "census_state", "geoid": "04"}
 AZ_METADATA = {"locale": "US", "scope": AZ_SCOPE}
@@ -557,7 +558,9 @@ def us_az_snap_screener_cases() -> list[Case]:
 
 
 def us_az_snap_screener_fy2027_cases() -> list[Case]:
-    """Screener grid with income placed on the FY2027 guideline year."""
+    """Screener grid with income placed on the FY2027 guideline year.
+
+    Not registered as a suite (see the module docstring)."""
     return [_case(row) for row in households("fy2027")]
 
 
@@ -571,23 +574,16 @@ def _case(row: _Household) -> Case:
     head_facts: dict[str, Any] = {
         Concepts.PERSON_AGE: age,
         Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
-        Concepts.DISABLED: disabled,
-        Concepts.YEARLY_EARNED_INCOME: earned,
-        Concepts.OUT_OF_POCKET_MEDICAL_EXPENSES: _money(row.medical * 12),
-        Concepts.CHILD_SUPPORT_PAID: _money(row.child_support * 12),
-        Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS: 0.0,
     }
-    if row.head_kind == "disabled":
-        # USDA disability needs a disability benefit: give the head at least
+    if disabled:
+        head_facts[Concepts.DISABLED] = True
+        # USDA disability needs a disability benefit: the head gets at least
         # $100 a month of Social Security disability, inside gross income.
-        ssdi = max(unearned, min(1_200.0, annual_gross))
-        if ssdi > unearned:
-            earned = _money(annual_gross - ssdi)
-            head_facts[Concepts.YEARLY_EARNED_INCOME] = earned
-        unearned = _money(ssdi)
-        if unearned > 0:
-            head_facts[Concepts.SOCIAL_SECURITY_BENEFITS] = unearned
-            head_facts[Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS] = unearned
+        ssdi = _money(max(unearned, min(1_200.0, annual_gross)))
+        earned = _money(annual_gross - ssdi)
+        if ssdi > 0:
+            head_facts[Concepts.SOCIAL_SECURITY_BENEFITS] = ssdi
+            head_facts[Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS] = ssdi
     elif unearned > 0:
         concept = (
             Concepts.SOCIAL_SECURITY_BENEFITS
@@ -595,6 +591,13 @@ def _case(row: _Household) -> Case:
             else Concepts.UNEMPLOYMENT_INSURANCE_INCOME
         )
         head_facts[concept] = unearned
+    head_facts[Concepts.YEARLY_EARNED_INCOME] = earned
+    for concept, monthly in (
+        (Concepts.OUT_OF_POCKET_MEDICAL_EXPENSES, row.medical),
+        (Concepts.CHILD_SUPPORT_PAID, row.child_support),
+    ):
+        if monthly:
+            head_facts[concept] = _money(monthly * 12)
     entities = [Entity(entity_id="head", kind="person", facts=head_facts)]
     child_ages = list(CHILD_AGES[: row.size - 1])
     if row.youngest_child_age is not None and child_ages:
@@ -610,35 +613,34 @@ def _case(row: _Household) -> Case:
                 facts={
                     Concepts.PERSON_AGE: child_age,
                     Concepts.HOUSEHOLD_RELATION: "Child",
-                    Concepts.OUT_OF_POCKET_MEDICAL_EXPENSES: 0.0,
-                    Concepts.CHILD_SUPPORT_PAID: 0.0,
-                    Concepts.SOCIAL_SECURITY_DISABILITY_BENEFITS: 0.0,
                 },
             )
         )
-    facts = {
+    # Every screener Case sets DEPENDENT_CARE_PAID, even at 0: it overrides
+    # PolicyEngine's childcare_expenses formula. The other screener facts
+    # appear only when non-zero (absent reads as 0 or false on both sides).
+    facts: dict[str, Any] = {
         Concepts.STATE_CODE: "AZ",
-        Concepts.CASH_ON_HAND: 0,
-        Concepts.RENT_PAID: _money(row.rent * 12),
-        Concepts.CHILDCARE_EXPENSES: 0.0,
-        Concepts.HEATING_COOLING_EXPENSE: _money(row.heating * 12),
-        Concepts.ELECTRICITY_EXPENSE: _money(row.electricity * 12),
-        Concepts.WATER_EXPENSE: _money(row.water * 12),
-        Concepts.PHONE_EXPENSE: _money(row.phone * 12),
         Concepts.DEPENDENT_CARE_PAID: _money(row.dependent_care * 12),
-        Concepts.LIQUID_ASSETS: _money(row.assets),
-        Concepts.HOMELESS: row.homeless,
     }
+    for concept, value in (
+        (Concepts.RENT_PAID, _money(row.rent * 12)),
+        (Concepts.HEATING_COOLING_EXPENSE, _money(row.heating * 12)),
+        (Concepts.ELECTRICITY_EXPENSE, _money(row.electricity * 12)),
+        (Concepts.WATER_EXPENSE, _money(row.water * 12)),
+        (Concepts.PHONE_EXPENSE, _money(row.phone * 12)),
+        (Concepts.LIQUID_ASSETS, _money(row.assets)),
+    ):
+        if value:
+            facts[concept] = value
+    if row.homeless:
+        facts[Concepts.HOMELESS] = True
     return Case(
         case_id=row.case_id,
         period=PERIOD,
         facts=facts,
         entities=tuple(entities),
-        metadata={
-            **AZ_METADATA,
-            "screener_path": row.path,
-            "household_weight": 1,
-        },
+        metadata={**AZ_METADATA, "screener_path": row.path},
     )
 
 
@@ -649,7 +651,6 @@ def path_of(case: Case) -> str:
 __all__ = [
     "PATHS",
     "SUITE_NAME",
-    "SUITE_NAME_FY2027",
     "households",
     "path_of",
     "us_az_snap_screener_cases",
