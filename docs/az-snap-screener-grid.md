@@ -17,8 +17,11 @@ grid to remove a mismatch; record the mismatch and its cause.
   45 with Social Security disability benefits (`disabled`; at least $100 a
   month, so PolicyEngine's USDA disability test holds).
 - Monthly gross income is a percentage of the monthly HHS poverty guideline
-  for the household size (48 states and DC). `us-az-snap-screener` uses the
-  FY2026 guideline year; `us-az-snap-screener-fy2027` uses FY2027.
+  for the household size (48 states and DC). The registered suite
+  `us-az-snap-screener` uses the FY2026 guideline year. For a local run at
+  an FY2027 period, `us_az_snap_screener_fy2027_cases()` in the suite module
+  places the same grid on the FY2027 guideline year; it is not a registered
+  suite.
 - Each path block crosses only its own factors (a full cross product of the
   values below). All other factors stay at the base. This is the pairing
   rule: one block per path, nothing random, ids that name the factors.
@@ -59,6 +62,19 @@ present, so population comparisons project as before.
   payment; countable resources. The mapping comments state each assumption
   (a paid bill is billed separately, owed and verified; dependent care is
   needed for work; a homeless household claims its shelter cost).
+
+The medical block depends on how the Arizona ProgramSpec is composed:
+
+- While `snap_total_medical_expenses` and
+  `household_entitled_to_excess_medical_deduction` are program inputs, the
+  mapping fills them from the screener's medical expenses.
+- Once the ProgramSpec binds Arizona's medical deduction (rulespec-us#952),
+  those two operands are derived and the program reads the Arizona
+  medical-deduction inputs instead. The screener mapping does not fill
+  those. The case-surface projection (axiom-oracles#703) does: it reads the
+  amount PolicyEngine prices on the same Case, which includes the screener's
+  medical expenses. Without that projection Axiom applies no medical
+  deduction on this block.
 
 ## Reading a run
 
