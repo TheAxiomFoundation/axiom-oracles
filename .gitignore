@@ -13,3 +13,4 @@ reports/.*.tmp
 data/.cache/
 data/county_fips_2020.csv.gz
 .claude/
+.cache/al-income-tax-2025/
