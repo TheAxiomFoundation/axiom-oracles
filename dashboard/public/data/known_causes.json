@@ -215,27 +215,59 @@
   },
   {
    "concept": "us:tax/federal-income-tax#eitc",
-   "description": "All 172 remaining federal mismatches (of 299,993 compared values) are EITC: 113 `eitc_earned_income` and 59 `eitc_reduction`, every one a joint return. Axiom's live RuleSpec still shapes 26 USC 1402(a), 1402(b), and 32(c)(2) around aggregate tax-unit self-employment inputs, while PE computes the SE-tax deduction per filer and sums non-dependent filers, which changes the OASDI wage-cap interaction. All other federal surfaces (CTC, standard deduction, tax before credits, capital gains, CDCC, AOTC, capped credits, OASDI/Medicare) match 100%.",
+   "description": "Axiom and PolicyEngine disagree on 17,424 of the 962,709 EITC values the comparison checks, across 11,902 tax units. The dispositions class 16,331 of them as bridge artifacts, where the comparison feeds the two engines different inputs. Of those, 7,627 concern self-employment earnings after the self-employment tax deduction, 4,618 partnership earnings and 4,086 dividend income. The dispositions class the other 1,093 as gaps in PolicyEngine-US 1.729.0, 890 in its investment-income definition and 203 in its childless age test.",
    "drivers": [
     {
-     "description": "Every Axiom `eitc_earned_income` residual value matches an aggregate Section 1402(b)/164(f) model; the per-filer OASDI cap is what PE applies differently.",
+     "description": "The comparison's bridge builds Axiom's 26 USC 32(c)(2) input from each filer's self-employment amount. It floors the amount at zero and deducts a flat 0.07064775 of it, one-half of 15.3% of 92.35%. PolicyEngine-US 1.729.0 sums the non-dependents' gross amounts and subtracts each filer's deduction for half of self-employment tax, which stops at the OASDI contribution base.",
      "evidence": [
-      "45 of the 113 earned-income residual tax units have PE's Social Security SE taxable income capped below Medicare SE income for at least one filer.",
-      "Max absolute diff: $11,439.03 (eitc_earned_income), $2,409.04 (eitc_reduction)."
+      "The dispositions class 7,627 rows over 5,719 tax units as bridge artifacts: 5,719 `eitc_earned_income`, 1,248 `eitc_reduction` and 660 `eitc_phased_in`.",
+      "The counterfactual re-run in reports/fiit-ecps-eitc-attribution-2026-10-14.json computes the input as PolicyEngine does, with the other mechanisms applied, and clears all 7,627 rows. It clears 3,556 on the deduction alone, 971 on summing before flooring alone and 3,100 with both.",
+      "axiom-oracles#640 tracks the projection."
      ],
-     "label": "Person-level SE tax chain collapsed to the tax unit"
+     "label": "Self-employment input to 26 USC 32(c)(2)"
     },
     {
-     "description": "Replacing the encoded earned-income chain with PE's helper would hide the entity-shape boundary. Encoder guardrails block new unit-scope formulas composing the stale 1402(a) imports; the staged person-scoped re-encode of 1402(a)/(b), 164(f), and 32(c)(2) has not yet landed.",
+     "description": "The pinned Populace artifact stores K-1 partnership self-employment earnings as `partnership_se_income`. PolicyEngine-US 1.729.0 reads them from `partnership_self_employment_net_earnings`, the name PolicyEngine-US #8614 gave the variable. The artifact does not store that variable, so PolicyEngine counts $0 of partnership earnings while the bridge feeds Axiom the stored amount.",
      "evidence": [
-      "A no-manual 26 USC 1402(a) rerun deferred on unresolved exception branches; a narrower 1402(a)(12) rerun failed validation and was not applied."
+      "The dispositions class 4,618 rows over 3,181 tax units as bridge artifacts: 3,164 `eitc_earned_income`, 1,275 `eitc_phased_in` and 179 `eitc_reduction`.",
+      "The re-run clears all 4,618 rows when it sets Axiom's `partnership_se_income` to 0, the amount PolicyEngine reads.",
+      "ecps-tax_unit_154343: Axiom 117,741.43 (126,691.93 of partnership earnings less the flat 0.07064775 share) vs PolicyEngine 0.",
+      "PolicyEngine/microcosm#35 asked for the rename in the data, and the pinned build does not carry it."
      ],
-     "label": "Kept visible pending person-scoped re-encode"
+     "label": "Partnership earnings PolicyEngine reads as zero"
+    },
+    {
+     "description": "The pinned Populace artifact stores `dividend_income` beside its qualified and non-qualified components, and in these tax units the stored total disagrees with their sum. PolicyEngine reads the stored total into its EITC investment income, and the bridge sums the components into Axiom's 26 USC 32(i)(2) input.",
+     "evidence": [
+      "The dispositions class 4,086 rows over 2,589 tax units as bridge artifacts: 2,589 `eitc_investment_income_eligible` and 1,497 `eitc_eligible`.",
+      "The re-run clears all 4,086 rows when it gives Axiom the stored total, with the other mechanisms applied.",
+      "ecps-tax_unit_100004: the components give Axiom investment income of 11,681.91, under the $12,200 limit, and the stored total gives PolicyEngine 16,261.71, over it."
+     ],
+     "label": "Stored dividend total versus its components"
+    },
+    {
+     "description": "PolicyEngine-US 1.729.0 computes EITC investment income differently from 26 USC 32(i)(2) and Pub. 596 Worksheet 1 in four ways. It leaves out capital gain distributions and farm rental income, nets rental losses against other income, and counts dependents' amounts. The bridge follows Worksheet 1.",
+     "evidence": [
+      "The dispositions class 890 rows over 582 tax units as PolicyEngine gaps: 582 `eitc_investment_income_eligible` and 308 `eitc_eligible`.",
+      "In the re-run, each of the 890 rows clears with a smallest set of changes that holds one of the four.",
+      "ecps-tax_unit_101289: Axiom 24,108.76 (interest of 1,923.04 plus farm rent of 22,185.72) vs PolicyEngine 1,923.04.",
+      "The dispositions cite PolicyEngine-US #9567 and #9635, and rulespec-us#1416 records Axiom's encoding debt."
+     ],
+     "label": "PolicyEngine-US 1.729.0 investment-income definition"
+    },
+    {
+     "description": "Under 26 USC 32(c)(1)(A)(ii)(II), a childless filer qualifies on the filer's own age or, if married, on either spouse's. PolicyEngine-US 1.729.0 applies the age window to every member of the tax unit, dependents included, and the bridge tests the filers' ages for Axiom. In all 120 tax units PolicyEngine counts no qualifying children, every filer has reached 65 and a dependent falls between 25 and 64.",
+     "evidence": [
+      "The dispositions class 203 rows over 120 tax units as PolicyEngine gaps: 120 `eitc_demographic_eligible` and 83 `eitc_eligible`.",
+      "The re-run clears all 203 rows when it computes Axiom's input over every member, as PolicyEngine does, 11 of them with the investment-income change as well.",
+      "PolicyEngine limits the test to non-dependents from release 1.779.8 (PolicyEngine-US #9132), and rulespec-us#1776 records Axiom's encoding debt."
+     ],
+     "label": "PolicyEngine counts dependents in the childless age test"
     }
    ],
    "fix_owner": "rulespec-us",
    "kind": "amount_difference",
-   "label": "Joint-return self-employment deduction entity shape",
+   "label": "Bridge self-employment and dividend inputs; two PolicyEngine gaps",
    "suite": "fiit-ecps"
   },
   {
