@@ -221,13 +221,13 @@
      "description": "The comparison's bridge builds Axiom's 26 USC 32(c)(2) input from each filer's self-employment amount. It floors the amount at zero and deducts a flat 0.07064775 of it, one-half of 15.3% of 92.35%. PolicyEngine-US 1.729.0 sums the non-dependents' gross amounts and subtracts each filer's deduction for half of self-employment tax, which stops at the OASDI contribution base.",
      "evidence": [
       "The dispositions class 7,627 rows over 5,719 tax units as bridge artifacts: 5,719 `eitc_earned_income`, 1,248 `eitc_reduction` and 660 `eitc_phased_in`.",
-      "The counterfactual re-run in reports/fiit-ecps-eitc-attribution-2026-10-14.json applies every other mechanism, computes the input as PolicyEngine does and clears all 7,627 rows. It clears 3,556 on the deduction alone, 971 on summing before flooring alone and 3,100 with both.",
+      "The counterfactual re-run in reports/fiit-ecps-eitc-attribution-2026-10-14.json applies every other mechanism, computes the input as PolicyEngine does and clears all 7,627 rows. It clears 3,556 on the deduction alone and 971 on summing before flooring alone, and the other 3,100 need both.",
       "axiom-oracles#640 tracks the projection."
      ],
      "label": "Self-employment input to 26 USC 32(c)(2)"
     },
     {
-     "description": "The pinned Populace artifact stores K-1 partnership self-employment earnings as `partnership_se_income`. PolicyEngine-US 1.729.0 reads them from `partnership_self_employment_net_earnings`, the name PolicyEngine-US #8614 gave the variable. The artifact does not store that variable, so PolicyEngine counts $0 of partnership earnings while the bridge feeds Axiom the stored amount.",
+     "description": "The pinned Microcosm US artifact stores K-1 partnership self-employment earnings as `partnership_se_income`. PolicyEngine-US 1.729.0 reads them from `partnership_self_employment_net_earnings`, the name PolicyEngine-US #8614 gave the variable. The artifact does not store that variable, so PolicyEngine counts $0 of partnership earnings while the bridge feeds Axiom the stored amount.",
      "evidence": [
       "The dispositions class 4,618 rows over 3,181 tax units as bridge artifacts: 3,164 `eitc_earned_income`, 1,275 `eitc_phased_in` and 179 `eitc_reduction`.",
       "The re-run clears all 4,618 rows when it sets Axiom's `partnership_se_income` to 0, the amount PolicyEngine reads.",
@@ -237,7 +237,7 @@
      "label": "Partnership earnings PolicyEngine reads as zero"
     },
     {
-     "description": "The pinned Populace artifact stores `dividend_income` beside its qualified and non-qualified components, and in these tax units the stored total disagrees with their sum. PolicyEngine reads the stored total into its EITC investment income, and the bridge sums the components into Axiom's 26 USC 32(i)(2) input.",
+     "description": "The pinned Microcosm US artifact stores `dividend_income` beside its qualified and non-qualified components, and in these tax units the stored total disagrees with their sum. PolicyEngine reads the stored total into its EITC investment income, and the bridge sums the components into Axiom's 26 USC 32(i)(2) input.",
      "evidence": [
       "The dispositions class 4,086 rows over 2,589 tax units as bridge artifacts: 2,589 `eitc_investment_income_eligible` and 1,497 `eitc_eligible`.",
       "The re-run applies every other mechanism and clears all 4,086 rows when it gives Axiom the stored total.",
