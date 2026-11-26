@@ -221,7 +221,7 @@
      "description": "The comparison's bridge builds Axiom's 26 USC 32(c)(2) input from each filer's self-employment amount. It floors the amount at zero and deducts a flat 0.07064775 of it, one-half of 15.3% of 92.35%. PolicyEngine-US 1.729.0 sums the non-dependents' gross amounts and subtracts each filer's deduction for half of self-employment tax, which stops at the OASDI contribution base.",
      "evidence": [
       "The dispositions class 7,627 rows over 5,719 tax units as bridge artifacts: 5,719 `eitc_earned_income`, 1,248 `eitc_reduction` and 660 `eitc_phased_in`.",
-      "The counterfactual re-run in reports/fiit-ecps-eitc-attribution-2026-10-14.json computes the input as PolicyEngine does, with the other mechanisms applied, and clears all 7,627 rows. It clears 3,556 on the deduction alone, 971 on summing before flooring alone and 3,100 with both.",
+      "The counterfactual re-run in reports/fiit-ecps-eitc-attribution-2026-10-14.json applies every other mechanism, computes the input as PolicyEngine does and clears all 7,627 rows. It clears 3,556 on the deduction alone, 971 on summing before flooring alone and 3,100 with both.",
       "axiom-oracles#640 tracks the projection."
      ],
      "label": "Self-employment input to 26 USC 32(c)(2)"
@@ -240,7 +240,7 @@
      "description": "The pinned Populace artifact stores `dividend_income` beside its qualified and non-qualified components, and in these tax units the stored total disagrees with their sum. PolicyEngine reads the stored total into its EITC investment income, and the bridge sums the components into Axiom's 26 USC 32(i)(2) input.",
      "evidence": [
       "The dispositions class 4,086 rows over 2,589 tax units as bridge artifacts: 2,589 `eitc_investment_income_eligible` and 1,497 `eitc_eligible`.",
-      "The re-run clears all 4,086 rows when it gives Axiom the stored total, with the other mechanisms applied.",
+      "The re-run applies every other mechanism and clears all 4,086 rows when it gives Axiom the stored total.",
       "ecps-tax_unit_100004: the components give Axiom investment income of 11,681.91, under the $12,200 limit, and the stored total gives PolicyEngine 16,261.71, over it."
      ],
      "label": "Stored dividend total versus its components"
@@ -249,14 +249,14 @@
      "description": "PolicyEngine-US 1.729.0 computes EITC investment income differently from 26 USC 32(i)(2) and Pub. 596 Worksheet 1 in four ways. It leaves out capital gain distributions and farm rental income, nets rental losses against other income, and counts dependents' amounts. The bridge follows Worksheet 1.",
      "evidence": [
       "The dispositions class 890 rows over 582 tax units as PolicyEngine gaps: 582 `eitc_investment_income_eligible` and 308 `eitc_eligible`.",
-      "In the re-run, each of the 890 rows clears with a smallest set of changes that holds one of the four.",
-      "ecps-tax_unit_101289: Axiom 24,108.76 (interest of 1,923.04 plus farm rent of 22,185.72) vs PolicyEngine 1,923.04.",
+      "The re-run clears each of the 890 rows with a smallest set of changes that includes one of the four.",
+      "ecps-tax_unit_101289: Axiom investment income 24,108.76 (interest of 1,923.04 plus farm rent of 22,185.72) vs PolicyEngine 1,923.04.",
       "The dispositions cite PolicyEngine-US #9567 and #9635, and rulespec-us#1416 records Axiom's encoding debt."
      ],
      "label": "PolicyEngine-US 1.729.0 investment-income definition"
     },
     {
-     "description": "Under 26 USC 32(c)(1)(A)(ii)(II), a childless filer qualifies on the filer's own age or, if married, on either spouse's. PolicyEngine-US 1.729.0 applies the age window to every member of the tax unit, dependents included, and the bridge tests the filers' ages for Axiom. In all 120 tax units PolicyEngine counts no qualifying children, every filer has reached 65 and a dependent falls between 25 and 64.",
+     "description": "Under 26 USC 32(c)(1)(A)(ii)(II), a childless filer meets the age test on the filer's own age or, if married, on either spouse's. PolicyEngine-US 1.729.0 applies the age window to every member of the tax unit, including dependents, and the bridge tests the filers' ages for Axiom. In all 120 tax units, PolicyEngine counts no qualifying children, every filer has reached 65 and a dependent falls between 25 and 64.",
      "evidence": [
       "The dispositions class 203 rows over 120 tax units as PolicyEngine gaps: 120 `eitc_demographic_eligible` and 83 `eitc_eligible`.",
       "The re-run clears all 203 rows when it computes Axiom's input over every member, as PolicyEngine does, 11 of them with the investment-income change as well.",
@@ -267,7 +267,7 @@
    ],
    "fix_owner": "rulespec-us",
    "kind": "amount_difference",
-   "label": "Bridge self-employment and dividend inputs; two PolicyEngine gaps",
+   "label": "Bridge artifacts in self-employment and dividend inputs; two PolicyEngine gaps",
    "suite": "fiit-ecps"
   },
   {
