@@ -8,14 +8,19 @@ every combination. Each makes the bridge's
 ``net_earnings_from_self_employment_after_self_employment_tax_deduction``
 input what PolicyEngine-US 1.729.0's ``eitc_earned_income`` uses:
 
-- ``se_loss``: sum the filers' self-employment amounts before flooring.
-  The bridge floors each filer at zero, so a filer's self-employment loss
-  never reduces their wages; PolicyEngine sums the non-dependents' gross
-  amounts and floors only the total.
+- ``se_loss``: sum the filers' self-employment profits and losses with no
+  per-filer floor. The bridge floors each filer at zero, so a filer's
+  self-employment loss never reduces their wages; PolicyEngine sums wages
+  and self-employment profits and losses across the non-dependents,
+  subtracts the ``seca`` deduction below and applies its zero floor to
+  the result.
 - ``seca``: subtract PolicyEngine's own ``self_employment_tax_ald_person``
-  summed over the filers, instead of the bridge's flat one-half-of-15.3%-
-  of-92.35% fraction. PolicyEngine's deduction is one-half of the SECA tax
-  it computes, which stops at the OASDI contribution base.
+  summed over the filers, in place of the bridge's flat one-half-of-15.3%-
+  of-92.35% fraction. PolicyEngine deducts one-half of each person's
+  self-employment tax. It sets that tax to zero below $400 of net
+  earnings. At $400 or more, it applies the Social Security rate to net
+  earnings up to the contribution base less the person's Social Security
+  taxable wages, and the regular Medicare rate to all of them.
 
 A row is attributed to the smallest stage-2 mechanism set that clears it on
 top of the stage-1 base; a row nothing clears stays residual. The base

@@ -2427,14 +2427,18 @@ def project_section_32_c_2_tax_unit_inputs(
     persons: list[Any],
     contexts: list[PersonProjectionContext],
 ) -> dict[str, Any]:
-    # 26 USC 32(c)(2)(A)(ii): net earnings from self-employment determined
-    # with regard to the 164(f)/1402(a)(12) deduction — NESE net of one-half
-    # of the combined 1401(a)+(b)(1) rates.
-    # One-half of the SECA tax actually imposed (the section 164(f)
-    # deduction the 32(c)(2)(A)(ii) parenthetical points at): the combined
-    # 1401 rates apply to 92.35% of profits, so the deduction is
-    # 0.5 x 15.3% x 92.35% of raw self-employment income — the IRS
-    # Schedule SE -> EIC worksheet convention PolicyEngine also follows.
+    # Under 26 USC 32(c)(2)(A)(ii), earned income includes the taxpayer's
+    # net earnings from self-employment, less the section 164(f) deduction.
+    # Section 164(f)(1) allows a deduction of one-half of the section 1401
+    # SECA tax, other than the 1401(b)(2) Additional Medicare Tax.
+    # This projection approximates that deduction with a flat
+    # 0.5 x 15.3% x 92.35% of the filers' self-employment income, after
+    # flooring each filer's amount at zero. The flat share ignores the
+    # 1402(b)(2) $400 threshold and the 1402(b)(1) contribution base, both
+    # of which limit the tax itself. PolicyEngine-US 1.729.0 subtracts
+    # one-half of each person's computed self-employment tax
+    # (self_employment_tax_ald_person). Issue axiom-oracles#640 tracks
+    # replacing the flat share.
     seca_deduction_fraction = 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029))
     net_earnings_after_deduction = sum(
         max(
