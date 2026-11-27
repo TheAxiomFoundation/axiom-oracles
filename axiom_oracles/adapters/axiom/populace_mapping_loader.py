@@ -450,6 +450,49 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
                 for person in people
             )
 
+        if transform == "count_positive_at_least":
+            # True when at least source.threshold of from_facts are positive
+            # (e.g. two or more separately billed non-heating utilities).
+            facts = person_facts if scope == "person" else (case_facts or {})
+            positive = sum(
+                1 for key in from_facts if float((facts or {}).get(key, 0) or 0) > 0
+            )
+            return positive >= int(source.get("threshold", 1))
+
+        if transform == "monthly_if_flag":
+            # Monthly from_facts sum when the case fact source.flag is true,
+            # else 0 (e.g. the shelter cost a homeless household claims).
+            facts = case_facts or {}
+            if not bool(facts.get(_resolve_concept(str(source.get("flag", ""))))):
+                return 0.0
+            value = _gather_facts(from_facts, case_facts, person_facts, aggregate)
+            return round(float(value) / 12, 2)
+
+        if transform == "youngest_age":
+            # Age of the youngest person in the case (0 with no people).
+            people = (case_facts or {}).get("__people__") or []
+            ages = [float(p.get(Concepts.PERSON_AGE, 0) or 0) for p in people]
+            return int(min(ages)) if ages else 0
+
+        if transform in {
+            "monthly_sum_over_elderly_or_disabled",
+            "any_positive_over_elderly_or_disabled",
+        }:
+            # from_facts summed over people the elderly_or_disabled transform
+            # accepts (age >= 60 or DISABLED); the monthly variant divides
+            # the annual sum by 12 (2dp), the other tests it for > 0.
+            people = (case_facts or {}).get("__people__") or []
+            total = sum(
+                float(p.get(key, 0) or 0)
+                for p in people
+                if float(p.get(Concepts.PERSON_AGE, 0) or 0) >= 60
+                or bool(p.get(Concepts.DISABLED, False) or False)
+                for key in from_facts
+            )
+            if transform == "any_positive_over_elderly_or_disabled":
+                return total > 0
+            return round(total / 12, 2)
+
         if transform == "scope_geoid_in":
             metadata = (case_facts or {}).get("__metadata__") or {}
             case_scope = metadata.get("scope") or {}

@@ -1,0 +1,63 @@
+# Arizona SNAP / Food Assistance -- Axiom vs PolicyEngine on the synthetic
+# screener grid (axiom-oracles#700).
+#
+# 1,211 synthetic Arizona households from axiom_oracles/suites/
+# us_az_snap_screener.py: each screener path (income limits, medical
+# deduction band, shelter cap, utility allowance tiers, homeless deduction,
+# dependent care, child support paid, earned/unearned mix, resources,
+# minimum benefit) at its edges. No microdata. PATHS in that module names
+# the Axiom rules and PolicyEngine variables each path is meant to exercise;
+# docs/az-snap-screener-grid.md explains how to read a run.
+#
+# Report-only. The grid exists to show where the two engines differ on the
+# paths a screener collects, not to gate anything: the mismatch table is the
+# product. Do not tune the grid to remove mismatches.
+#
+# Same composed program and pins as az-snap-ecps; manual for the same
+# reason (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+name: az-snap-screener
+title: Arizona SNAP screener grid -- Axiom vs PolicyEngine
+description: Compares Arizona SNAP eligibility and benefit amount from the
+  composed axiom-programs/us-az/snap/fy-2026 spec against PolicyEngine on
+  1,211 synthetic screener-shaped households at each screener path's edges.
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    concepts:
+      - us:statutes/7/2014/o#snap_eligible
+      - us:statutes/7/2014/u#snap_benefit
+    population: synthetic
+    # The registered case suite the CLI loads (`--suite`); `suite` below is
+    # the report label.
+    case_suite: us-az-snap-screener
+    suite: az-snap-screener
+    sample_size: 0
+    period: 2026-01
+    # Full evidence (recorded inputs and every Axiom output) so a report
+    # alone attributes each mismatch to a rule.
+    include_case_inputs: true
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/rulespec-us/programs/us-az/snap/fy-2026.yaml
+    axiom_composed_program: /tmp/az-snap-screener-composed.yaml
+    axiom_compiled_program: /tmp/az-snap-screener-compiled.json
+    axiom_rulespec_repo_roots: $HOME
+    rulespec_roots:
+      - $HOME/rulespec-us
+    jurisdiction_fips: "04"
+
+artifacts:
+  report_basename: axiom-policyengine-az-snap-screener
+
+dashboard:
+  filename: axiom-policyengine-az-snap-screener.json
+  suite: az-snap-screener

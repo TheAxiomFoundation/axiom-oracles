@@ -99,6 +99,31 @@ class Concepts:
     # the certified populace-us artifact, so Axiom must screen the same value.
     SSI_COUNTABLE_RESOURCES = "axiom:resources/person#ssi_countable_resources"
 
+    # Screener facts: what a SNAP benefits screener asks and the populace
+    # artifact does not carry. Only synthetic suites set them (the Arizona
+    # screener grid, axiom_oracles/suites/us_az_snap_screener.py); projections
+    # read them only when present, so population Cases project as before.
+    # Amounts are annual USD, like the income facts above.
+    # Person level: Social Security disability benefits (a subset of
+    # SOCIAL_SECURITY_BENEFITS, which must also carry them), out-of-pocket
+    # medical expenses, and child support the person pays.
+    SOCIAL_SECURITY_DISABILITY_BENEFITS = (
+        "axiom:income/person#social_security_disability_benefits"
+    )
+    OUT_OF_POCKET_MEDICAL_EXPENSES = (
+        "axiom:expenses/person#out_of_pocket_medical_expenses"
+    )
+    CHILD_SUPPORT_PAID = "axiom:expenses/person#child_support_paid"
+    # Household level: utility bills paid separately from rent, dependent
+    # care paid out of pocket, liquid resources, and homelessness.
+    HEATING_COOLING_EXPENSE = "axiom:housing/household#heating_cooling_expense"
+    ELECTRICITY_EXPENSE = "axiom:housing/household#electricity_expense"
+    WATER_EXPENSE = "axiom:housing/household#water_expense"
+    PHONE_EXPENSE = "axiom:housing/household#phone_expense"
+    DEPENDENT_CARE_PAID = "axiom:expenses/household#dependent_care_paid"
+    LIQUID_ASSETS = "axiom:assets/household#liquid_assets"
+    HOMELESS = "axiom:housing/household#homeless"
+
     # Itemization / household-level inputs (annual)
     PROPERTY_TAX_PAID = "axiom:housing/household#property_tax_paid"
     MORTGAGE_INTEREST_PAID = "axiom:housing/household#mortgage_interest_paid"
