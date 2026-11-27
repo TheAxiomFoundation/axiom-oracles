@@ -6153,7 +6153,7 @@
       "version": "0.1.2",
       "working_tree": "clean"
     },
-    "generated_at": "2026-11-26T06:48:57Z",
+    "generated_at": "2026-11-27T00:52:02Z",
     "generated_by": "scripts/run_comparison.py::ny-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6165,7 +6165,7 @@
       {
         "dirty": false,
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "a5c5716ad45c477cf1587f371cc16f6a6f1a5c67",
+        "sha": "673513349b52025906584c6a79ce46af5d1adbc5",
         "sha_toplevel": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us",
         "worktree_toplevel": "/home/runner/work/axiom-oracles/axiom-oracles/rulespec-us"
       }
