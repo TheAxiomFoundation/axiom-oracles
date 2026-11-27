@@ -57,6 +57,37 @@ def load_populace_mapping_for_program(
     return mapping
 
 
+def facts_read_by_program(
+    compiled_program: Mapping[str, Any],
+    *,
+    mapping_path: Path | None = None,
+) -> set[str]:
+    """Return the Case fact concepts the mapping reads for this program.
+
+    Only the first matching rule of each input slot counts, as in
+    :func:`load_populace_mapping_for_program`. Callers use it to attach a
+    fact only when a compiled program consumes it.
+    """
+    path = mapping_path or _DEFAULT_MAPPING_PATH
+    config = yaml.safe_load(Path(path).read_text())
+    rules = list(config.get("mappings", []))
+    facts: set[str] = set()
+    for slot in enumerate_inputs(compiled_program):
+        rule = _first_matching_rule(slot.name, rules)
+        if rule is None:
+            continue
+        source = rule.get("source", {})
+        names: list[str] = []
+        if source.get("name"):
+            names.append(str(source["name"]))
+        if source.get("where_fact"):
+            names.append(str(source["where_fact"]))
+        for entry in source.get("from_facts", []):
+            names.append(str(entry["fact"]) if isinstance(entry, dict) else str(entry))
+        facts.update(_resolve_concept(name) for name in names)
+    return facts
+
+
 # ---------------------------------------------------------------------------
 # Match resolution
 # ---------------------------------------------------------------------------
@@ -422,6 +453,23 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
                 scales=fact_scales,
             )
             return round(float(value) / 12, 2)
+
+        if transform in {"monthly_sum_where", "any_positive_where"}:
+            # Household sum of from_facts over the members whose where_fact
+            # is true (e.g. medical expenses of elderly or disabled members).
+            # monthly_sum_where returns the annual sum / 12 (2dp);
+            # any_positive_where returns whether that sum is positive.
+            people = (case_facts or {}).get("__people__") or []
+            where_key = _resolve_concept(str(source.get("where_fact", "")))
+            total = sum(
+                float(person.get(key, 0) or 0) * fact_scales.get(key, 1.0)
+                for person in people
+                if bool(person.get(where_key, False) or False)
+                for key in from_facts
+            )
+            if transform == "any_positive_where":
+                return total > 0
+            return round(total / 12, 2)
 
         if transform == "weekly":
             value = _gather_facts(from_facts, case_facts, person_facts, aggregate)

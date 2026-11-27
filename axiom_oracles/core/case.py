@@ -99,6 +99,19 @@ class Concepts:
     # the certified populace-us artifact, so Axiom must screen the same value.
     SSI_COUNTABLE_RESOURCES = "axiom:resources/person#ssi_countable_resources"
 
+    # SNAP medical expenses as PolicyEngine prices them on the Case surface
+    # (see adapters/policyengine/case_surface_facts.py). Annual USD: the
+    # person's ``snap_allowable_medical_expenses``, the amount PolicyEngine's
+    # excess medical deduction sums. The flag is PolicyEngine's USDA
+    # elderly-or-disabled test (``is_usda_elderly`` or ``is_usda_disabled``),
+    # the members whose expenses that deduction counts. Neither is loaded
+    # from the population; the comparison attaches both only when the
+    # compiled program reads them.
+    SNAP_ALLOWABLE_MEDICAL_EXPENSES = (
+        "axiom:medical/person#snap_allowable_medical_expenses"
+    )
+    USDA_ELDERLY_OR_DISABLED = "axiom:demographics/person#usda_elderly_or_disabled"
+
     # Itemization / household-level inputs (annual)
     PROPERTY_TAX_PAID = "axiom:housing/household#property_tax_paid"
     MORTGAGE_INTEREST_PAID = "axiom:housing/household#mortgage_interest_paid"

@@ -35,6 +35,15 @@
 #                  transform: positive_to_constant  (constant if value>0)
 #                  transform: all_people_any_positive  (every person has at
 #                              least one positive fact from from_facts)
+#                  transform: monthly_sum_where  (sum of from_facts over the
+#                              people whose `where_fact` is true, ÷12, 2dp)
+#                  transform: any_positive_where  (that same sum > 0)
+#
+# Case-surface facts: SNAP_ALLOWABLE_MEDICAL_EXPENSES and
+# USDA_ELDERLY_OR_DISABLED are not population facts. The compare CLI computes
+# them with PolicyEngine on the Case surface its PolicyEngine leg prices, and
+# only for a compiled program whose slots read them
+# (adapters/policyengine/case_surface_facts.py).
 #
 # Scope:
 #   scope: person | household
@@ -52,6 +61,53 @@ mappings:
     source:
       kind: derived
       transform: hh_size
+
+  # Arizona SNAP medical deduction (FAA5 NA Medical Expenses and Deduction,
+  # block 2; rulespec-us#952). Exact names: only that module declares them.
+  # The module is in scope on rulespec-us main, but no compared output reads
+  # it until a ProgramSpec binds it into the net-income chain, so these
+  # slots move no compared output before that binding.
+  # The amount is PolicyEngine's snap_allowable_medical_expenses as its leg
+  # prices the Case (annual, so /12), summed over the members PolicyEngine's
+  # deduction counts (is_usda_elderly or is_usda_disabled). That restriction
+  # is also why the expenses "belong to and are billed to" an elderly or
+  # disabled participant here.
+  # ASSUMPTION of this comparison: every projected expense is verified.
+  # PolicyEngine has no verification concept, so the verified amount is the
+  # same amount. Arizona allows the deduction only on verified expenses (at
+  # least $35.01 for the SMD, all of them above $180).
+  # The deceased-participant and SSI-recipient branches of block 2 stay at
+  # their false defaults: PolicyEngine prices neither.
+  # budgetary_unit_includes_elderly_or_disabled_participant_with_medical_expenses
+  # has no entry on purpose. The wiring (rulespec-us#2389) derives it from
+  # the federal snap_household_has_elderly_or_disabled_member, which reads
+  # each member's snap_member_is_elderly_or_disabled (projected below), so
+  # it is not an input of the wired program. Before the wiring it is an
+  # input that no compared output reads, and its false default is enough
+  # (axiom-oracles#705).
+  - match: { kind: exact, value: monthly_combined_out_of_pocket_medical_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_sum_where
+      from_facts: [SNAP_ALLOWABLE_MEDICAL_EXPENSES]
+      where_fact: USDA_ELDERLY_OR_DISABLED
+
+  - match: { kind: exact, value: verified_out_of_pocket_medical_expenses }
+    scope: household
+    source:
+      kind: derived
+      transform: monthly_sum_where
+      from_facts: [SNAP_ALLOWABLE_MEDICAL_EXPENSES]
+      where_fact: USDA_ELDERLY_OR_DISABLED
+
+  - match: { kind: exact, value: medical_expenses_belong_to_and_are_billed_to_elderly_or_disabled_participant }
+    scope: household
+    source:
+      kind: derived
+      transform: any_positive_where
+      from_facts: [SNAP_ALLOWABLE_MEDICAL_EXPENSES]
+      where_fact: USDA_ELDERLY_OR_DISABLED
 
   - match: { kind: substring, value: employee_wages_received }
     scope: household
