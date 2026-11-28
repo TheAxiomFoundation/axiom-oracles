@@ -2427,18 +2427,18 @@ def project_section_32_c_2_tax_unit_inputs(
     persons: list[Any],
     contexts: list[PersonProjectionContext],
 ) -> dict[str, Any]:
-    # Under 26 USC 32(c)(2)(A)(ii), earned income includes the taxpayer's
-    # net earnings from self-employment, less the section 164(f) deduction.
-    # Section 164(f)(1) allows a deduction of one-half of the section 1401
-    # SECA tax, other than the 1401(b)(2) Additional Medicare Tax.
-    # This projection approximates that deduction with a flat
-    # 0.5 x 15.3% x 92.35% of the filers' self-employment income, after
-    # flooring each filer's amount at zero. The flat share ignores the
-    # 1402(b)(2) $400 threshold and the 1402(b)(1) contribution base, both
-    # of which limit the tax itself. PolicyEngine-US 1.729.0 subtracts
-    # one-half of each person's computed self-employment tax
-    # (self_employment_tax_ald_person). Issue axiom-oracles#640 tracks
-    # replacing the flat share.
+    # For EITC earned income, the taxpayer determines net earnings from
+    # self-employment under section 1402(a), taking the section 164(f)
+    # deduction into account (26 USC 32(c)(2)(A)(ii)). Under section
+    # 164(f)(1), the taxpayer deducts one-half of the section 1401 SECA tax,
+    # other than the 1401(b)(2) Additional Medicare Tax. The bridge floors
+    # each filer's self-employment income at zero and approximates that
+    # deduction as 0.5 x 15.3% x 92.35% of the floored amount. It applies
+    # that flat share without the $400 net earnings threshold in section
+    # 1402(b)(2) or the Social Security contribution base in section
+    # 1402(b)(1). PolicyEngine-US 1.729.0 subtracts one-half of each
+    # person's computed self-employment tax (self_employment_tax_ald_person).
+    # Issue axiom-oracles#640 tracks replacing the flat share.
     seca_deduction_fraction = 0.5 * (0.124 + 0.029) * (1 - 0.5 * (0.124 + 0.029))
     net_earnings_after_deduction = sum(
         max(

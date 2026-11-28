@@ -4,23 +4,23 @@ Stage 1 (counterfactuals.py) applied every combination of the age,
 partnership and investment mechanisms. Here those three are applied
 together as a fixed base, so their effects are already neutralized, and two
 further mechanisms in Axiom's 26 USC 32(c)(2) input are layered on top in
-every combination. Each makes the bridge's
+every combination. Stage 2 varies the bridge's
 ``net_earnings_from_self_employment_after_self_employment_tax_deduction``
-input what PolicyEngine-US 1.729.0's ``eitc_earned_income`` uses:
+input in two ways:
 
-- ``se_loss``: sum the filers' self-employment profits and losses with no
-  per-filer floor. The bridge floors each filer at zero, so a filer's
-  self-employment loss never reduces their wages; PolicyEngine sums wages
-  and self-employment profits and losses across the non-dependents,
-  subtracts the ``seca`` deduction below and applies its zero floor to
-  the result.
-- ``seca``: subtract PolicyEngine's own ``self_employment_tax_ald_person``
-  summed over the filers, in place of the bridge's flat one-half-of-15.3%-
-  of-92.35% fraction. PolicyEngine deducts one-half of each person's
-  self-employment tax. It sets that tax to zero below $400 of net
-  earnings. At $400 or more, it applies the Social Security rate to net
-  earnings up to the contribution base less the person's Social Security
-  taxable wages, and the regular Medicare rate to all of them.
+- ``se_loss`` sums the filers' self-employment profits and losses with no
+  per-filer floor. The bridge floors each filer's amount at zero, so a
+  self-employment loss cannot offset wages. PolicyEngine-US 1.729.0 sums
+  wages and self-employment profits and losses across the non-dependents,
+  subtracts their ``self_employment_tax_ald_person`` and floors the result
+  at zero.
+- ``seca`` replaces the bridge's flat 0.5 x 15.3% x 92.35% deduction with
+  PolicyEngine's ``self_employment_tax_ald_person`` summed over the
+  filers. PolicyEngine deducts one-half of each person's self-employment
+  tax. It sets that tax to zero below $400 of net earnings. At $400 or
+  more, it applies the Social Security rate to net earnings up to the
+  contribution base less the person's Social Security taxable wages. It
+  applies the regular Medicare rate to all the net earnings.
 
 A row is attributed to the smallest stage-2 mechanism set that clears it on
 top of the stage-1 base; a row nothing clears stays residual. The base
