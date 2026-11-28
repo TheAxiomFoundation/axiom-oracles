@@ -488,12 +488,22 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
     inv_sub = collections.Counter(
         rows[key]["stage3"] for key, entry in assignment.items() if entry == "pe_investment"
     )
-    # Rows for which the dividend artifact alone is an equally small clearing set.
+    # Rows for which the stored dividend total alone is a minimal clearing set.
     inv_dividend_ties = sum(
         count
         for mechanism, count in inv_sub.items()
         if mechanism.startswith("ambiguous:")
         and "div_aggregate" in mechanism.removeprefix("ambiguous:").split("|")
+    )
+    # Rows whose every minimal clearing set, and so every clearing set, holds
+    # the stored dividend total.
+    inv_dividend_needed = sum(
+        count
+        for mechanism, count in inv_sub.items()
+        if all(
+            "div_aggregate" in minimal.split("+")
+            for minimal in mechanism.removeprefix("ambiguous:").split("|")
+        )
     )
 
     def src(entry):
@@ -521,20 +531,33 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
                 "mechanism": (
                     "The bridge computes Axiom's 26 USC 32(c)(2) boundary input "
                     "net_earnings_from_self_employment_after_self_employment_tax_deduction "
-                    "by flooring each filer's self-employment amount at zero and "
-                    f"deducting a flat {FLAT_SECA_FRACTION:.8f} of it (one-half of "
-                    "15.3% of 92.35%). PolicyEngine-US 1.729.0's eitc_earned_income "
-                    "sums the non-dependents' gross amounts and subtracts each "
-                    "filer's self_employment_tax_ald_person, which is one-half of "
-                    "the SECA tax it computes and so stops at the OASDI "
-                    "contribution base (26 USC 164(f)(1), 1402(b)). Per-row "
-                    "counterfactual with every other mechanism applied: "
+                    "from each filer's self-employment profits and losses and "
+                    "supplies wages separately. It floors each filer's amount at "
+                    f"zero and deducts a flat {FLAT_SECA_FRACTION:.8f} of it (one-half "
+                    "of 15.3% of 92.35%). PolicyEngine-US 1.729.0 sums wages and "
+                    "self-employment profits and losses across the non-dependents "
+                    "to compute eitc_earned_income. It subtracts half of each "
+                    "non-dependent's computed self-employment tax "
+                    "(self_employment_tax_ald_person, 26 USC 164(f)(1)). It floors "
+                    "the resulting earned income at zero, so a self-employment loss "
+                    "can offset "
+                    "wages. PolicyEngine sets a person's self-employment tax to "
+                    "zero when net earnings fall below $400 (1402(b)(2)). At $400 "
+                    "or more, it applies the Social Security rate to net earnings "
+                    "up to the contribution base less the person's Social Security "
+                    "taxable wages (1402(b)(1)). It applies the regular Medicare "
+                    "rate to all the net earnings. The stage-2 counterfactual "
+                    "re-run uses PolicyEngine's age test and investment income for "
+                    "Axiom and sets partnership self-employment earnings to zero. "
+                    f"On that base, the re-run clears {se_sub['seca']} rows by "
+                    "using PolicyEngine's deduction alone and "
+                    f"{se_sub['se_loss']} by dropping the bridge's per-filer floor "
+                    f"alone. It clears the other {se_sub['se_loss+seca']} of the "
                     f"{counts['se_projection']} rows over {units['se_projection']} "
-                    f"tax units clear when the input is computed as PolicyEngine "
-                    f"does; {se_sub['seca']} on the deduction alone, "
-                    f"{se_sub['se_loss']} on summing before flooring alone, and "
-                    f"{se_sub['se_loss+seca']} only on both. Tracked in "
-                    "TheAxiomFoundation/axiom-oracles#640."
+                    "tax units with both changes together. "
+                    "TheAxiomFoundation/axiom-oracles#640 tracks "
+                    "replacing the flat deduction and settling the treatment of "
+                    "self-employment losses."
                 ),
                 "sources": [src("se_projection")],
                 "upstream_url": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/640",
@@ -618,27 +641,46 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
             **head("pe_investment"),
             "evidence": {
                 "mechanism": (
-                    "PolicyEngine-US 1.729.0's eitc_relevant_investment_income "
-                    "(net_investment_income plus tax-exempt interest, with "
-                    "max(0, net_capital_gains) for capital gains) departs from "
-                    "26 USC 32(i)(2) and Pub. 596 Worksheet 1 in four ways, all "
-                    "fixed upstream since: it leaves out capital gain "
-                    "distributions and nets rental losses against other income "
-                    "(PolicyEngine/policyengine-us#9572, closing #9567), counts "
-                    "dependents' amounts (#9883) and leaves out farm rental "
-                    "income (#9889; both tracked in #9635). The bridge follows "
-                    "Worksheet 1. Per-row counterfactual with every other "
-                    f"mechanism applied: {counts['pe_investment']} rows over "
-                    f"{units['pe_investment']} tax units each have a smallest "
-                    "clearing set that holds one of these four ("
+                    "PolicyEngine-US 1.729.0 computes "
+                    "eitc_relevant_investment_income as net_investment_income plus "
+                    "tax-exempt interest, replacing the loss-limited capital gains "
+                    "in net_investment_income with max(0, net_capital_gains). "
+                    "PolicyEngine reads the stored dividend total, and the bridge "
+                    "sums the qualified and non-qualified dividend components. "
+                    "Beyond that input, PolicyEngine and the bridge compute 26 USC "
+                    "32(i)(2) investment income differently at four points. "
+                    "PolicyEngine leaves out capital gain distributions reported "
+                    "without Schedule D and nets rental losses against other "
+                    "investment income (PolicyEngine/policyengine-us#9572 changes "
+                    "both, closing #9567). It adds dependents' amounts to the "
+                    "filers' (#9883 drops them) and leaves out farm rental income "
+                    "(#9889 adds it; issue #9635 covers both). The bridge counts "
+                    "capital gain distributions reported without Schedule D and "
+                    "floors net passive income at zero, following Pub. 596 "
+                    "Worksheet 1. It counts the whole farm_rent_income field as "
+                    "passive income. It sums the filers' amounts and has no input "
+                    "for the Form 8814 amounts a parent enters on Worksheet 1 after "
+                    "electing to report a child's income. The stage-3 "
+                    "counterfactual re-run holds the age, partnership and "
+                    "self-employment changes fixed. It then tries every "
+                    "combination of five changes to Axiom's input: the stored "
+                    "dividend total and PolicyEngine's treatment at each of the "
+                    "four points. It labels each row with its minimal clearing "
+                    "combinations, those with no proper subset that also clears "
+                    "the row ("
                     + ", ".join(f"{k} {v}" for k, v in sorted(inv_sub.items()))
-                    + f"). For {inv_dividend_ties} of them the Populace dividend "
-                    "artifact alone (div_aggregate) is an equally small "
-                    "clearing set, and a row listed with div_aggregate+ needs "
-                    "the dividend artifact as well. Tax unit "
-                    "101289: Axiom 24,108.76 = interest 1,923.04 + farm rent "
-                    "22,185.72; PolicyEngine 1,923.04. Tax unit 31656: "
-                    "PolicyEngine adds a dependent's 690.67 of interest."
+                    + f"). Each of the {counts['pe_investment']} rows over "
+                    f"{units['pe_investment']} tax units has at least one minimal "
+                    "combination that includes a change at one of the four points. "
+                    f"Of these rows, {inv_dividend_ties} also clear when the re-run "
+                    "gives Axiom the stored dividend total alone (div_aggregate). "
+                    f"For another {inv_dividend_needed}, every clearing combination "
+                    "includes the stored dividend total. For example, Axiom counts "
+                    "24,108.76 of investment income for tax unit 101289: 1,923.04 "
+                    "of taxable interest and 22,185.72 of farm rent. PolicyEngine "
+                    "leaves out the farm rent and counts 1,923.04. For tax unit "
+                    "31656, PolicyEngine adds 690.67 of a dependent's investment "
+                    "income."
                 ),
                 "arithmetic": [
                     {
